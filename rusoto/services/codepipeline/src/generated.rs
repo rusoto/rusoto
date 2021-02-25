@@ -85,7 +85,7 @@ pub struct AcknowledgeJobOutput {
     /// <p>Whether the job worker has received the specified job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobStatus>,
 }
 
 /// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
@@ -110,7 +110,127 @@ pub struct AcknowledgeThirdPartyJobOutput {
     /// <p>The status information for the third party job, if any.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<JobStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionCategory {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionCategory {
+    Approval,
+    Build,
+    Deploy,
+    Invoke,
+    Source,
+    Test,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionCategory),
+}
+
+impl Default for ActionCategory {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionCategory {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionCategory {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionCategory {
+    fn into(self) -> String {
+        match self {
+            ActionCategory::Approval => "Approval".to_string(),
+            ActionCategory::Build => "Build".to_string(),
+            ActionCategory::Deploy => "Deploy".to_string(),
+            ActionCategory::Invoke => "Invoke".to_string(),
+            ActionCategory::Source => "Source".to_string(),
+            ActionCategory::Test => "Test".to_string(),
+            ActionCategory::UnknownVariant(UnknownActionCategory { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionCategory {
+    fn into(self) -> &'a str {
+        match self {
+            ActionCategory::Approval => &"Approval",
+            ActionCategory::Build => &"Build",
+            ActionCategory::Deploy => &"Deploy",
+            ActionCategory::Invoke => &"Invoke",
+            ActionCategory::Source => &"Source",
+            ActionCategory::Test => &"Test",
+            ActionCategory::UnknownVariant(UnknownActionCategory { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionCategory {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approval" => ActionCategory::Approval,
+            "Build" => ActionCategory::Build,
+            "Deploy" => ActionCategory::Deploy,
+            "Invoke" => ActionCategory::Invoke,
+            "Source" => ActionCategory::Source,
+            "Test" => ActionCategory::Test,
+            _ => ActionCategory::UnknownVariant(UnknownActionCategory {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionCategory {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approval" => ActionCategory::Approval,
+            "Build" => ActionCategory::Build,
+            "Deploy" => ActionCategory::Deploy,
+            "Invoke" => ActionCategory::Invoke,
+            "Source" => ActionCategory::Source,
+            "Test" => ActionCategory::Test,
+            _ => ActionCategory::UnknownVariant(UnknownActionCategory { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionCategory {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionCategory {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents information about an action configuration.</p>
@@ -149,7 +269,120 @@ pub struct ActionConfigurationProperty {
     /// <p>The type of the configuration property.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ActionConfigurationPropertyType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionConfigurationPropertyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionConfigurationPropertyType {
+    Boolean,
+    Number,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionConfigurationPropertyType),
+}
+
+impl Default for ActionConfigurationPropertyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionConfigurationPropertyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionConfigurationPropertyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionConfigurationPropertyType {
+    fn into(self) -> String {
+        match self {
+            ActionConfigurationPropertyType::Boolean => "Boolean".to_string(),
+            ActionConfigurationPropertyType::Number => "Number".to_string(),
+            ActionConfigurationPropertyType::String => "String".to_string(),
+            ActionConfigurationPropertyType::UnknownVariant(
+                UnknownActionConfigurationPropertyType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionConfigurationPropertyType {
+    fn into(self) -> &'a str {
+        match self {
+            ActionConfigurationPropertyType::Boolean => &"Boolean",
+            ActionConfigurationPropertyType::Number => &"Number",
+            ActionConfigurationPropertyType::String => &"String",
+            ActionConfigurationPropertyType::UnknownVariant(
+                UnknownActionConfigurationPropertyType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionConfigurationPropertyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Boolean" => ActionConfigurationPropertyType::Boolean,
+            "Number" => ActionConfigurationPropertyType::Number,
+            "String" => ActionConfigurationPropertyType::String,
+            _ => ActionConfigurationPropertyType::UnknownVariant(
+                UnknownActionConfigurationPropertyType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ActionConfigurationPropertyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Boolean" => ActionConfigurationPropertyType::Boolean,
+            "Number" => ActionConfigurationPropertyType::Number,
+            "String" => ActionConfigurationPropertyType::String,
+            _ => ActionConfigurationPropertyType::UnknownVariant(
+                UnknownActionConfigurationPropertyType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionConfigurationPropertyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionConfigurationPropertyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionConfigurationPropertyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the context of an action in the stage of a pipeline to a job worker.</p>
@@ -240,7 +473,7 @@ pub struct ActionExecution {
     /// <p>The status of the action, or for a completed action, the last status of the action.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionExecutionStatus>,
     /// <p>A summary of the run of the action.</p>
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -294,7 +527,7 @@ pub struct ActionExecutionDetail {
     /// <p> The status of the action execution. Status categories are <code>InProgress</code>, <code>Succeeded</code>, and <code>Failed</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionExecutionStatus>,
 }
 
 /// <p>Filter values for the action execution.</p>
@@ -376,6 +609,226 @@ pub struct ActionExecutionResult {
     pub external_execution_url: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionExecutionStatus {
+    Abandoned,
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionExecutionStatus),
+}
+
+impl Default for ActionExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            ActionExecutionStatus::Abandoned => "Abandoned".to_string(),
+            ActionExecutionStatus::Failed => "Failed".to_string(),
+            ActionExecutionStatus::InProgress => "InProgress".to_string(),
+            ActionExecutionStatus::Succeeded => "Succeeded".to_string(),
+            ActionExecutionStatus::UnknownVariant(UnknownActionExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ActionExecutionStatus::Abandoned => &"Abandoned",
+            ActionExecutionStatus::Failed => &"Failed",
+            ActionExecutionStatus::InProgress => &"InProgress",
+            ActionExecutionStatus::Succeeded => &"Succeeded",
+            ActionExecutionStatus::UnknownVariant(UnknownActionExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Abandoned" => ActionExecutionStatus::Abandoned,
+            "Failed" => ActionExecutionStatus::Failed,
+            "InProgress" => ActionExecutionStatus::InProgress,
+            "Succeeded" => ActionExecutionStatus::Succeeded,
+            _ => ActionExecutionStatus::UnknownVariant(UnknownActionExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Abandoned" => ActionExecutionStatus::Abandoned,
+            "Failed" => ActionExecutionStatus::Failed,
+            "InProgress" => ActionExecutionStatus::InProgress,
+            "Succeeded" => ActionExecutionStatus::Succeeded,
+            _ => ActionExecutionStatus::UnknownVariant(UnknownActionExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ActionExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionOwner {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionOwner {
+    Aws,
+    Custom,
+    ThirdParty,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionOwner),
+}
+
+impl Default for ActionOwner {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionOwner {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionOwner {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionOwner {
+    fn into(self) -> String {
+        match self {
+            ActionOwner::Aws => "AWS".to_string(),
+            ActionOwner::Custom => "Custom".to_string(),
+            ActionOwner::ThirdParty => "ThirdParty".to_string(),
+            ActionOwner::UnknownVariant(UnknownActionOwner { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionOwner {
+    fn into(self) -> &'a str {
+        match self {
+            ActionOwner::Aws => &"AWS",
+            ActionOwner::Custom => &"Custom",
+            ActionOwner::ThirdParty => &"ThirdParty",
+            ActionOwner::UnknownVariant(UnknownActionOwner { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionOwner {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => ActionOwner::Aws,
+            "Custom" => ActionOwner::Custom,
+            "ThirdParty" => ActionOwner::ThirdParty,
+            _ => ActionOwner::UnknownVariant(UnknownActionOwner {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionOwner {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => ActionOwner::Aws,
+            "Custom" => ActionOwner::Custom,
+            "ThirdParty" => ActionOwner::ThirdParty,
+            _ => ActionOwner::UnknownVariant(UnknownActionOwner { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionOwner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionOwner {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionOwner {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents information about the version (or revision) of an action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionRevision {
@@ -444,10 +897,10 @@ pub struct ActionType {
 pub struct ActionTypeId {
     /// <p><p>A category defines what kind of action can be taken in the stage, and constrains the provider type for the action. Valid categories are limited to one of the following values. </p> <ul> <li> <p>Source</p> </li> <li> <p>Build</p> </li> <li> <p>Test</p> </li> <li> <p>Deploy</p> </li> <li> <p>Invoke</p> </li> <li> <p>Approval</p> </li> </ul></p>
     #[serde(rename = "category")]
-    pub category: String,
+    pub category: ActionCategory,
     /// <p>The creator of the action being called. There are three valid values for the <code>Owner</code> field in the action category section within your pipeline structure: <code>AWS</code>, <code>ThirdParty</code>, and <code>Custom</code>. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
     #[serde(rename = "owner")]
-    pub owner: String,
+    pub owner: ActionOwner,
     /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
     #[serde(rename = "provider")]
     pub provider: String,
@@ -483,10 +936,111 @@ pub struct ActionTypeSettings {
 pub struct ApprovalResult {
     /// <p>The response submitted by a reviewer assigned to an approval action request.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ApprovalStatus,
     /// <p>The summary of the current status of the approval request.</p>
     #[serde(rename = "summary")]
     pub summary: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApprovalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApprovalStatus {
+    Approved,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApprovalStatus),
+}
+
+impl Default for ApprovalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApprovalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApprovalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApprovalStatus {
+    fn into(self) -> String {
+        match self {
+            ApprovalStatus::Approved => "Approved".to_string(),
+            ApprovalStatus::Rejected => "Rejected".to_string(),
+            ApprovalStatus::UnknownVariant(UnknownApprovalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApprovalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApprovalStatus::Approved => &"Approved",
+            ApprovalStatus::Rejected => &"Rejected",
+            ApprovalStatus::UnknownVariant(UnknownApprovalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApprovalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approved" => ApprovalStatus::Approved,
+            "Rejected" => ApprovalStatus::Rejected,
+            _ => ApprovalStatus::UnknownVariant(UnknownApprovalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApprovalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approved" => ApprovalStatus::Approved,
+            "Rejected" => ApprovalStatus::Rejected,
+            _ => ApprovalStatus::UnknownVariant(UnknownApprovalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApprovalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApprovalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ApprovalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents information about an artifact that is worked on by actions in the pipeline.</p>
@@ -543,7 +1097,107 @@ pub struct ArtifactLocation {
     /// <p>The type of artifact in the location.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ArtifactLocationType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactLocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactLocationType {
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactLocationType),
+}
+
+impl Default for ArtifactLocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactLocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactLocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactLocationType {
+    fn into(self) -> String {
+        match self {
+            ArtifactLocationType::S3 => "S3".to_string(),
+            ArtifactLocationType::UnknownVariant(UnknownArtifactLocationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactLocationType {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactLocationType::S3 => &"S3",
+            ArtifactLocationType::UnknownVariant(UnknownArtifactLocationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ArtifactLocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "S3" => ArtifactLocationType::S3,
+            _ => ArtifactLocationType::UnknownVariant(UnknownArtifactLocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactLocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "S3" => ArtifactLocationType::S3,
+            _ => ArtifactLocationType::UnknownVariant(UnknownArtifactLocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactLocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ArtifactLocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactLocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents revision details of an artifact. </p>
@@ -588,7 +1242,106 @@ pub struct ArtifactStore {
     pub location: String,
     /// <p>The type of the artifact store, such as S3.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ArtifactStoreType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactStoreType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactStoreType {
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactStoreType),
+}
+
+impl Default for ArtifactStoreType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactStoreType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactStoreType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactStoreType {
+    fn into(self) -> String {
+        match self {
+            ArtifactStoreType::S3 => "S3".to_string(),
+            ArtifactStoreType::UnknownVariant(UnknownArtifactStoreType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactStoreType {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactStoreType::S3 => &"S3",
+            ArtifactStoreType::UnknownVariant(UnknownArtifactStoreType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ArtifactStoreType {
+    fn from(name: &str) -> Self {
+        match name {
+            "S3" => ArtifactStoreType::S3,
+            _ => ArtifactStoreType::UnknownVariant(UnknownArtifactStoreType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactStoreType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "S3" => ArtifactStoreType::S3,
+            _ => ArtifactStoreType::UnknownVariant(UnknownArtifactStoreType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactStoreType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArtifactStoreType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactStoreType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Reserved for future use.</p>
@@ -599,7 +1352,102 @@ pub struct BlockerDeclaration {
     pub name: String,
     /// <p>Reserved for future use.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: BlockerType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBlockerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BlockerType {
+    Schedule,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBlockerType),
+}
+
+impl Default for BlockerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BlockerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BlockerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BlockerType {
+    fn into(self) -> String {
+        match self {
+            BlockerType::Schedule => "Schedule".to_string(),
+            BlockerType::UnknownVariant(UnknownBlockerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BlockerType {
+    fn into(self) -> &'a str {
+        match self {
+            BlockerType::Schedule => &"Schedule",
+            BlockerType::UnknownVariant(UnknownBlockerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BlockerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Schedule" => BlockerType::Schedule,
+            _ => BlockerType::UnknownVariant(UnknownBlockerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BlockerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Schedule" => BlockerType::Schedule,
+            _ => BlockerType::UnknownVariant(UnknownBlockerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlockerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BlockerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BlockerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
@@ -608,7 +1456,7 @@ pub struct BlockerDeclaration {
 pub struct CreateCustomActionTypeInput {
     /// <p>The category of the custom action, such as a build action or a test action.</p>
     #[serde(rename = "category")]
-    pub category: String,
+    pub category: ActionCategory,
     /// <p><p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note></p>
     #[serde(rename = "configurationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -701,7 +1549,7 @@ pub struct CurrentRevision {
 pub struct DeleteCustomActionTypeInput {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
     #[serde(rename = "category")]
-    pub category: String,
+    pub category: ActionCategory,
     /// <p>The provider of the service used in the custom action, such as AWS CodeDeploy.</p>
     #[serde(rename = "provider")]
     pub provider: String,
@@ -759,7 +1607,7 @@ pub struct DisableStageTransitionInput {
     pub stage_name: String,
     /// <p>Specifies whether artifacts are prevented from transitioning into the stage and being processed by the actions in that stage (inbound), or prevented from transitioning from the stage after they have been processed by the actions in that stage (outbound).</p>
     #[serde(rename = "transitionType")]
-    pub transition_type: String,
+    pub transition_type: StageTransitionType,
 }
 
 /// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
@@ -774,7 +1622,7 @@ pub struct EnableStageTransitionInput {
     pub stage_name: String,
     /// <p>Specifies whether artifacts are allowed to enter the stage and be processed by the actions in that stage (inbound) or whether already processed artifacts are allowed to transition to the next stage (outbound).</p>
     #[serde(rename = "transitionType")]
-    pub transition_type: String,
+    pub transition_type: StageTransitionType,
 }
 
 /// <p>Represents information about the key used to encrypt data in the artifact store, such as an AWS Key Management Service (AWS KMS) key.</p>
@@ -785,7 +1633,106 @@ pub struct EncryptionKey {
     pub id: String,
     /// <p>The type of encryption key, such as an AWS Key Management Service (AWS KMS) key. When creating or updating a pipeline, the value must be set to 'KMS'.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: EncryptionKeyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionKeyType {
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionKeyType),
+}
+
+impl Default for EncryptionKeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionKeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionKeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionKeyType {
+    fn into(self) -> String {
+        match self {
+            EncryptionKeyType::Kms => "KMS".to_string(),
+            EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionKeyType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionKeyType::Kms => &"KMS",
+            EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionKeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KMS" => EncryptionKeyType::Kms,
+            _ => EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionKeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KMS" => EncryptionKeyType::Kms,
+            _ => EncryptionKeyType::UnknownVariant(UnknownEncryptionKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionKeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionKeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionKeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents information about an error in AWS CodePipeline.</p>
@@ -831,7 +1778,7 @@ pub struct ExecutionTrigger {
     /// <p>The type of change-detection method, command, or user interaction that started a pipeline execution.</p>
     #[serde(rename = "triggerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub trigger_type: Option<String>,
+    pub trigger_type: Option<TriggerType>,
 }
 
 /// <p>Represents information about failure details.</p>
@@ -847,7 +1794,128 @@ pub struct FailureDetails {
     pub message: String,
     /// <p>The type of the failure.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FailureType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailureType {
+    ConfigurationError,
+    JobFailed,
+    PermissionError,
+    RevisionOutOfSync,
+    RevisionUnavailable,
+    SystemUnavailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailureType),
+}
+
+impl Default for FailureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailureType {
+    fn into(self) -> String {
+        match self {
+            FailureType::ConfigurationError => "ConfigurationError".to_string(),
+            FailureType::JobFailed => "JobFailed".to_string(),
+            FailureType::PermissionError => "PermissionError".to_string(),
+            FailureType::RevisionOutOfSync => "RevisionOutOfSync".to_string(),
+            FailureType::RevisionUnavailable => "RevisionUnavailable".to_string(),
+            FailureType::SystemUnavailable => "SystemUnavailable".to_string(),
+            FailureType::UnknownVariant(UnknownFailureType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailureType {
+    fn into(self) -> &'a str {
+        match self {
+            FailureType::ConfigurationError => &"ConfigurationError",
+            FailureType::JobFailed => &"JobFailed",
+            FailureType::PermissionError => &"PermissionError",
+            FailureType::RevisionOutOfSync => &"RevisionOutOfSync",
+            FailureType::RevisionUnavailable => &"RevisionUnavailable",
+            FailureType::SystemUnavailable => &"SystemUnavailable",
+            FailureType::UnknownVariant(UnknownFailureType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FailureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ConfigurationError" => FailureType::ConfigurationError,
+            "JobFailed" => FailureType::JobFailed,
+            "PermissionError" => FailureType::PermissionError,
+            "RevisionOutOfSync" => FailureType::RevisionOutOfSync,
+            "RevisionUnavailable" => FailureType::RevisionUnavailable,
+            "SystemUnavailable" => FailureType::SystemUnavailable,
+            _ => FailureType::UnknownVariant(UnknownFailureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ConfigurationError" => FailureType::ConfigurationError,
+            "JobFailed" => FailureType::JobFailed,
+            "PermissionError" => FailureType::PermissionError,
+            "RevisionOutOfSync" => FailureType::RevisionOutOfSync,
+            "RevisionUnavailable" => FailureType::RevisionUnavailable,
+            "SystemUnavailable" => FailureType::SystemUnavailable,
+            _ => FailureType::UnknownVariant(UnknownFailureType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FailureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FailureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
@@ -1061,6 +2129,132 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobStatus {
+    Created,
+    Dispatched,
+    Failed,
+    InProgress,
+    Queued,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobStatus),
+}
+
+impl Default for JobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobStatus {
+    fn into(self) -> String {
+        match self {
+            JobStatus::Created => "Created".to_string(),
+            JobStatus::Dispatched => "Dispatched".to_string(),
+            JobStatus::Failed => "Failed".to_string(),
+            JobStatus::InProgress => "InProgress".to_string(),
+            JobStatus::Queued => "Queued".to_string(),
+            JobStatus::Succeeded => "Succeeded".to_string(),
+            JobStatus::TimedOut => "TimedOut".to_string(),
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            JobStatus::Created => &"Created",
+            JobStatus::Dispatched => &"Dispatched",
+            JobStatus::Failed => &"Failed",
+            JobStatus::InProgress => &"InProgress",
+            JobStatus::Queued => &"Queued",
+            JobStatus::Succeeded => &"Succeeded",
+            JobStatus::TimedOut => &"TimedOut",
+            JobStatus::UnknownVariant(UnknownJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Created" => JobStatus::Created,
+            "Dispatched" => JobStatus::Dispatched,
+            "Failed" => JobStatus::Failed,
+            "InProgress" => JobStatus::InProgress,
+            "Queued" => JobStatus::Queued,
+            "Succeeded" => JobStatus::Succeeded,
+            "TimedOut" => JobStatus::TimedOut,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Created" => JobStatus::Created,
+            "Dispatched" => JobStatus::Dispatched,
+            "Failed" => JobStatus::Failed,
+            "InProgress" => JobStatus::InProgress,
+            "Queued" => JobStatus::Queued,
+            "Succeeded" => JobStatus::Succeeded,
+            "TimedOut" => JobStatus::TimedOut,
+            _ => JobStatus::UnknownVariant(UnknownJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for JobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionExecutionsInput {
@@ -1101,7 +2295,7 @@ pub struct ListActionTypesInput {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
     #[serde(rename = "actionOwnerFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_owner_filter: Option<String>,
+    pub action_owner_filter: Option<ActionOwner>,
     /// <p>An identifier that was returned from the previous list action types call, which can be used to return the next set of action types in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1346,7 +2540,132 @@ pub struct PipelineExecution {
     /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PipelineExecutionStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineExecutionStatus {
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    Succeeded,
+    Superseded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineExecutionStatus),
+}
+
+impl Default for PipelineExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            PipelineExecutionStatus::Failed => "Failed".to_string(),
+            PipelineExecutionStatus::InProgress => "InProgress".to_string(),
+            PipelineExecutionStatus::Stopped => "Stopped".to_string(),
+            PipelineExecutionStatus::Stopping => "Stopping".to_string(),
+            PipelineExecutionStatus::Succeeded => "Succeeded".to_string(),
+            PipelineExecutionStatus::Superseded => "Superseded".to_string(),
+            PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineExecutionStatus::Failed => &"Failed",
+            PipelineExecutionStatus::InProgress => &"InProgress",
+            PipelineExecutionStatus::Stopped => &"Stopped",
+            PipelineExecutionStatus::Stopping => &"Stopping",
+            PipelineExecutionStatus::Succeeded => &"Succeeded",
+            PipelineExecutionStatus::Superseded => &"Superseded",
+            PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => PipelineExecutionStatus::Failed,
+            "InProgress" => PipelineExecutionStatus::InProgress,
+            "Stopped" => PipelineExecutionStatus::Stopped,
+            "Stopping" => PipelineExecutionStatus::Stopping,
+            "Succeeded" => PipelineExecutionStatus::Succeeded,
+            "Superseded" => PipelineExecutionStatus::Superseded,
+            _ => PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PipelineExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => PipelineExecutionStatus::Failed,
+            "InProgress" => PipelineExecutionStatus::InProgress,
+            "Stopped" => PipelineExecutionStatus::Stopped,
+            "Stopping" => PipelineExecutionStatus::Stopping,
+            "Succeeded" => PipelineExecutionStatus::Succeeded,
+            "Superseded" => PipelineExecutionStatus::Superseded,
+            _ => PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PipelineExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about a pipeline execution.</p>
@@ -1372,7 +2691,7 @@ pub struct PipelineExecutionSummary {
     /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PipelineExecutionStatus>,
     /// <p>The interaction that stopped a pipeline execution.</p>
     #[serde(rename = "stopTrigger")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1658,7 +2977,7 @@ pub struct RetryStageExecutionInput {
     pub pipeline_name: String,
     /// <p>The scope of the retry attempt. Currently, the only supported value is FAILED_ACTIONS.</p>
     #[serde(rename = "retryMode")]
-    pub retry_mode: String,
+    pub retry_mode: StageRetryMode,
     /// <p>The name of the failed stage to be retried.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
@@ -1755,7 +3074,223 @@ pub struct StageExecution {
     pub pipeline_execution_id: String,
     /// <p>The status of the stage, or for a completed stage, the last status of the stage.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: StageExecutionStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStageExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StageExecutionStatus {
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStageExecutionStatus),
+}
+
+impl Default for StageExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StageExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StageExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StageExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            StageExecutionStatus::Failed => "Failed".to_string(),
+            StageExecutionStatus::InProgress => "InProgress".to_string(),
+            StageExecutionStatus::Stopped => "Stopped".to_string(),
+            StageExecutionStatus::Stopping => "Stopping".to_string(),
+            StageExecutionStatus::Succeeded => "Succeeded".to_string(),
+            StageExecutionStatus::UnknownVariant(UnknownStageExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StageExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StageExecutionStatus::Failed => &"Failed",
+            StageExecutionStatus::InProgress => &"InProgress",
+            StageExecutionStatus::Stopped => &"Stopped",
+            StageExecutionStatus::Stopping => &"Stopping",
+            StageExecutionStatus::Succeeded => &"Succeeded",
+            StageExecutionStatus::UnknownVariant(UnknownStageExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StageExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => StageExecutionStatus::Failed,
+            "InProgress" => StageExecutionStatus::InProgress,
+            "Stopped" => StageExecutionStatus::Stopped,
+            "Stopping" => StageExecutionStatus::Stopping,
+            "Succeeded" => StageExecutionStatus::Succeeded,
+            _ => StageExecutionStatus::UnknownVariant(UnknownStageExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StageExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => StageExecutionStatus::Failed,
+            "InProgress" => StageExecutionStatus::InProgress,
+            "Stopped" => StageExecutionStatus::Stopped,
+            "Stopping" => StageExecutionStatus::Stopping,
+            "Succeeded" => StageExecutionStatus::Succeeded,
+            _ => StageExecutionStatus::UnknownVariant(UnknownStageExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StageExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StageExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStageRetryMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StageRetryMode {
+    FailedActions,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStageRetryMode),
+}
+
+impl Default for StageRetryMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StageRetryMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StageRetryMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StageRetryMode {
+    fn into(self) -> String {
+        match self {
+            StageRetryMode::FailedActions => "FAILED_ACTIONS".to_string(),
+            StageRetryMode::UnknownVariant(UnknownStageRetryMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StageRetryMode {
+    fn into(self) -> &'a str {
+        match self {
+            StageRetryMode::FailedActions => &"FAILED_ACTIONS",
+            StageRetryMode::UnknownVariant(UnknownStageRetryMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StageRetryMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED_ACTIONS" => StageRetryMode::FailedActions,
+            _ => StageRetryMode::UnknownVariant(UnknownStageRetryMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StageRetryMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED_ACTIONS" => StageRetryMode::FailedActions,
+            _ => StageRetryMode::UnknownVariant(UnknownStageRetryMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageRetryMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StageRetryMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StageRetryMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents information about the state of the stage.</p>
@@ -1781,6 +3316,111 @@ pub struct StageState {
     #[serde(rename = "stageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStageTransitionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StageTransitionType {
+    Inbound,
+    Outbound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStageTransitionType),
+}
+
+impl Default for StageTransitionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StageTransitionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StageTransitionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StageTransitionType {
+    fn into(self) -> String {
+        match self {
+            StageTransitionType::Inbound => "Inbound".to_string(),
+            StageTransitionType::Outbound => "Outbound".to_string(),
+            StageTransitionType::UnknownVariant(UnknownStageTransitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StageTransitionType {
+    fn into(self) -> &'a str {
+        match self {
+            StageTransitionType::Inbound => &"Inbound",
+            StageTransitionType::Outbound => &"Outbound",
+            StageTransitionType::UnknownVariant(UnknownStageTransitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StageTransitionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Inbound" => StageTransitionType::Inbound,
+            "Outbound" => StageTransitionType::Outbound,
+            _ => StageTransitionType::UnknownVariant(UnknownStageTransitionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StageTransitionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Inbound" => StageTransitionType::Inbound,
+            "Outbound" => StageTransitionType::Outbound,
+            _ => StageTransitionType::UnknownVariant(UnknownStageTransitionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StageTransitionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StageTransitionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StageTransitionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
@@ -1962,6 +3602,127 @@ pub struct TransitionState {
     pub last_changed_by: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTriggerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TriggerType {
+    CloudWatchEvent,
+    CreatePipeline,
+    PollForSourceChanges,
+    PutActionRevision,
+    StartPipelineExecution,
+    Webhook,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTriggerType),
+}
+
+impl Default for TriggerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TriggerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TriggerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TriggerType {
+    fn into(self) -> String {
+        match self {
+            TriggerType::CloudWatchEvent => "CloudWatchEvent".to_string(),
+            TriggerType::CreatePipeline => "CreatePipeline".to_string(),
+            TriggerType::PollForSourceChanges => "PollForSourceChanges".to_string(),
+            TriggerType::PutActionRevision => "PutActionRevision".to_string(),
+            TriggerType::StartPipelineExecution => "StartPipelineExecution".to_string(),
+            TriggerType::Webhook => "Webhook".to_string(),
+            TriggerType::UnknownVariant(UnknownTriggerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TriggerType {
+    fn into(self) -> &'a str {
+        match self {
+            TriggerType::CloudWatchEvent => &"CloudWatchEvent",
+            TriggerType::CreatePipeline => &"CreatePipeline",
+            TriggerType::PollForSourceChanges => &"PollForSourceChanges",
+            TriggerType::PutActionRevision => &"PutActionRevision",
+            TriggerType::StartPipelineExecution => &"StartPipelineExecution",
+            TriggerType::Webhook => &"Webhook",
+            TriggerType::UnknownVariant(UnknownTriggerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TriggerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CloudWatchEvent" => TriggerType::CloudWatchEvent,
+            "CreatePipeline" => TriggerType::CreatePipeline,
+            "PollForSourceChanges" => TriggerType::PollForSourceChanges,
+            "PutActionRevision" => TriggerType::PutActionRevision,
+            "StartPipelineExecution" => TriggerType::StartPipelineExecution,
+            "Webhook" => TriggerType::Webhook,
+            _ => TriggerType::UnknownVariant(UnknownTriggerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TriggerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CloudWatchEvent" => TriggerType::CloudWatchEvent,
+            "CreatePipeline" => TriggerType::CreatePipeline,
+            "PollForSourceChanges" => TriggerType::PollForSourceChanges,
+            "PutActionRevision" => TriggerType::PutActionRevision,
+            "StartPipelineExecution" => TriggerType::StartPipelineExecution,
+            "Webhook" => TriggerType::Webhook,
+            _ => TriggerType::UnknownVariant(UnknownTriggerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TriggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TriggerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TriggerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
@@ -2009,12 +3770,123 @@ pub struct WebhookAuthConfiguration {
     pub secret_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWebhookAuthenticationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WebhookAuthenticationType {
+    GithubHmac,
+    Ip,
+    Unauthenticated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWebhookAuthenticationType),
+}
+
+impl Default for WebhookAuthenticationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WebhookAuthenticationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WebhookAuthenticationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WebhookAuthenticationType {
+    fn into(self) -> String {
+        match self {
+            WebhookAuthenticationType::GithubHmac => "GITHUB_HMAC".to_string(),
+            WebhookAuthenticationType::Ip => "IP".to_string(),
+            WebhookAuthenticationType::Unauthenticated => "UNAUTHENTICATED".to_string(),
+            WebhookAuthenticationType::UnknownVariant(UnknownWebhookAuthenticationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WebhookAuthenticationType {
+    fn into(self) -> &'a str {
+        match self {
+            WebhookAuthenticationType::GithubHmac => &"GITHUB_HMAC",
+            WebhookAuthenticationType::Ip => &"IP",
+            WebhookAuthenticationType::Unauthenticated => &"UNAUTHENTICATED",
+            WebhookAuthenticationType::UnknownVariant(UnknownWebhookAuthenticationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WebhookAuthenticationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GITHUB_HMAC" => WebhookAuthenticationType::GithubHmac,
+            "IP" => WebhookAuthenticationType::Ip,
+            "UNAUTHENTICATED" => WebhookAuthenticationType::Unauthenticated,
+            _ => WebhookAuthenticationType::UnknownVariant(UnknownWebhookAuthenticationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WebhookAuthenticationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GITHUB_HMAC" => WebhookAuthenticationType::GithubHmac,
+            "IP" => WebhookAuthenticationType::Ip,
+            "UNAUTHENTICATED" => WebhookAuthenticationType::Unauthenticated,
+            _ => {
+                WebhookAuthenticationType::UnknownVariant(UnknownWebhookAuthenticationType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookAuthenticationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WebhookAuthenticationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WebhookAuthenticationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents information about a webhook and its definition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebhookDefinition {
     /// <p><p>Supported options are GITHUB<em>HMAC, IP, and UNAUTHENTICATED.</p> <ul> <li> <p>For information about the authentication scheme implemented by GITHUB</em>HMAC, see <a href="https://developer.github.com/webhooks/securing/">Securing your webhooks</a> on the GitHub Developer website.</p> </li> <li> <p> IP rejects webhooks trigger requests unless they originate from an IP address in the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED accepts all webhook trigger requests regardless of origin.</p> </li> </ul></p>
     #[serde(rename = "authentication")]
-    pub authentication: String,
+    pub authentication: WebhookAuthenticationType,
     /// <p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the <code>SecretToken </code>property must be set. For IP, only the <code>AllowedIPRange </code>property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>
     #[serde(rename = "authenticationConfiguration")]
     pub authentication_configuration: WebhookAuthConfiguration,

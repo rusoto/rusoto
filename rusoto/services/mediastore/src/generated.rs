@@ -77,7 +77,217 @@ pub struct Container {
     /// <p>The status of container creation or deletion. The status is one of the following: <code>CREATING</code>, <code>ACTIVE</code>, or <code>DELETING</code>. While the service is creating the container, the status is <code>CREATING</code>. When the endpoint is available, the status changes to <code>ACTIVE</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ContainerStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerLevelMetrics {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerLevelMetrics {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerLevelMetrics),
+}
+
+impl Default for ContainerLevelMetrics {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerLevelMetrics {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerLevelMetrics {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerLevelMetrics {
+    fn into(self) -> String {
+        match self {
+            ContainerLevelMetrics::Disabled => "DISABLED".to_string(),
+            ContainerLevelMetrics::Enabled => "ENABLED".to_string(),
+            ContainerLevelMetrics::UnknownVariant(UnknownContainerLevelMetrics {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerLevelMetrics {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerLevelMetrics::Disabled => &"DISABLED",
+            ContainerLevelMetrics::Enabled => &"ENABLED",
+            ContainerLevelMetrics::UnknownVariant(UnknownContainerLevelMetrics {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerLevelMetrics {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ContainerLevelMetrics::Disabled,
+            "ENABLED" => ContainerLevelMetrics::Enabled,
+            _ => ContainerLevelMetrics::UnknownVariant(UnknownContainerLevelMetrics {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerLevelMetrics {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ContainerLevelMetrics::Disabled,
+            "ENABLED" => ContainerLevelMetrics::Enabled,
+            _ => ContainerLevelMetrics::UnknownVariant(UnknownContainerLevelMetrics { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerLevelMetrics {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerLevelMetrics {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerLevelMetrics {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerStatus {
+    Active,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerStatus),
+}
+
+impl Default for ContainerStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerStatus {
+    fn into(self) -> String {
+        match self {
+            ContainerStatus::Active => "ACTIVE".to_string(),
+            ContainerStatus::Creating => "CREATING".to_string(),
+            ContainerStatus::Deleting => "DELETING".to_string(),
+            ContainerStatus::UnknownVariant(UnknownContainerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerStatus::Active => &"ACTIVE",
+            ContainerStatus::Creating => &"CREATING",
+            ContainerStatus::Deleting => &"DELETING",
+            ContainerStatus::UnknownVariant(UnknownContainerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ContainerStatus::Active,
+            "CREATING" => ContainerStatus::Creating,
+            "DELETING" => ContainerStatus::Deleting,
+            _ => ContainerStatus::UnknownVariant(UnknownContainerStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ContainerStatus::Active,
+            "CREATING" => ContainerStatus::Creating,
+            "DELETING" => ContainerStatus::Deleting,
+            _ => ContainerStatus::UnknownVariant(UnknownContainerStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContainerStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A rule for a CORS policy. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p>
@@ -89,7 +299,7 @@ pub struct CorsRule {
     /// <p>Identifies an HTTP method that the origin that is specified in the rule is allowed to execute.</p> <p>Each CORS rule must contain at least one <code>AllowedMethods</code> and one <code>AllowedOrigins</code> element.</p>
     #[serde(rename = "AllowedMethods")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_methods: Option<Vec<String>>,
+    pub allowed_methods: Option<Vec<MethodName>>,
     /// <p>One or more response headers that you want users to be able to access from their applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p> <p>Each CORS rule must have at least one <code>AllowedOrigins</code> element. The string value can include only one wildcard character (*), for example, http://*.example.com. Additionally, you can specify only one wildcard character to allow cross-origin access for all origins.</p>
     #[serde(rename = "AllowedOrigins")]
     pub allowed_origins: Vec<String>,
@@ -307,12 +517,122 @@ pub struct ListTagsForResourceOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMethodName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MethodName {
+    Delete,
+    Get,
+    Head,
+    Put,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMethodName),
+}
+
+impl Default for MethodName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MethodName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MethodName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MethodName {
+    fn into(self) -> String {
+        match self {
+            MethodName::Delete => "DELETE".to_string(),
+            MethodName::Get => "GET".to_string(),
+            MethodName::Head => "HEAD".to_string(),
+            MethodName::Put => "PUT".to_string(),
+            MethodName::UnknownVariant(UnknownMethodName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MethodName {
+    fn into(self) -> &'a str {
+        match self {
+            MethodName::Delete => &"DELETE",
+            MethodName::Get => &"GET",
+            MethodName::Head => &"HEAD",
+            MethodName::Put => &"PUT",
+            MethodName::UnknownVariant(UnknownMethodName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MethodName {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => MethodName::Delete,
+            "GET" => MethodName::Get,
+            "HEAD" => MethodName::Head,
+            "PUT" => MethodName::Put,
+            _ => MethodName::UnknownVariant(UnknownMethodName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MethodName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => MethodName::Delete,
+            "GET" => MethodName::Get,
+            "HEAD" => MethodName::Head,
+            "PUT" => MethodName::Put,
+            _ => MethodName::UnknownVariant(UnknownMethodName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MethodName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MethodName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MethodName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The metric policy that is associated with the container. A metric policy allows AWS Elemental MediaStore to send metrics to Amazon CloudWatch. In the policy, you must indicate whether you want MediaStore to send container-level metrics. You can also include rules to define groups of objects that you want MediaStore to send object-level metrics for.</p> <p>To view examples of how to construct a metric policy for your use case, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-metric-examples.html">Example Metric Policies</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricPolicy {
     /// <p>A setting to enable or disable metrics at the container level.</p>
     #[serde(rename = "ContainerLevelMetrics")]
-    pub container_level_metrics: String,
+    pub container_level_metrics: ContainerLevelMetrics,
     /// <p>A parameter that holds an array of rules that enable metrics at the object level. This parameter is optional, but if you choose to include it, you must also include at least one rule. By default, you can include up to five rules. You can also <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-1#!/services/mediastore/quotas">request a quota increase</a> to allow up to 300 rules per policy.</p>
     #[serde(rename = "MetricPolicyRules")]
     #[serde(skip_serializing_if = "Option::is_none")]

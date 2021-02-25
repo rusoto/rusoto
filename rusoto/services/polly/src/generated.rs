@@ -43,7 +43,7 @@ pub struct DescribeVoicesInput {
     /// <p>Specifies the engine (<code>standard</code> or <code>neural</code>) used by Amazon Polly when processing input text for speech synthesis. </p>
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine: Option<String>,
+    pub engine: Option<Engine>,
     /// <p>Boolean value indicating whether to return any bilingual voices that use the specified language as an additional language. For instance, if you request all languages that use US English (es-US), and there is an Italian voice that speaks both Italian (it-IT) and US English, that voice will be included if you specify <code>yes</code> but not if you specify <code>no</code>.</p>
     #[serde(rename = "IncludeAdditionalLanguageCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -51,7 +51,7 @@ pub struct DescribeVoicesInput {
     /// <p> The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. </p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>An opaque pagination token returned from the previous <code>DescribeVoices</code> operation. If present, this indicates where to continue the listing.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -69,6 +69,207 @@ pub struct DescribeVoicesOutput {
     #[serde(rename = "Voices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voices: Option<Vec<Voice>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEngine {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Engine {
+    Neural,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEngine),
+}
+
+impl Default for Engine {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Engine {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Engine {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Engine {
+    fn into(self) -> String {
+        match self {
+            Engine::Neural => "neural".to_string(),
+            Engine::Standard => "standard".to_string(),
+            Engine::UnknownVariant(UnknownEngine { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Engine {
+    fn into(self) -> &'a str {
+        match self {
+            Engine::Neural => &"neural",
+            Engine::Standard => &"standard",
+            Engine::UnknownVariant(UnknownEngine { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Engine {
+    fn from(name: &str) -> Self {
+        match name {
+            "neural" => Engine::Neural,
+            "standard" => Engine::Standard,
+            _ => Engine::UnknownVariant(UnknownEngine {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Engine {
+    fn from(name: String) -> Self {
+        match &*name {
+            "neural" => Engine::Neural,
+            "standard" => Engine::Standard,
+            _ => Engine::UnknownVariant(UnknownEngine { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Engine {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Engine {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Engine {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGender {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Gender {
+    Female,
+    Male,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGender),
+}
+
+impl Default for Gender {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Gender {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Gender {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Gender {
+    fn into(self) -> String {
+        match self {
+            Gender::Female => "Female".to_string(),
+            Gender::Male => "Male".to_string(),
+            Gender::UnknownVariant(UnknownGender { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Gender {
+    fn into(self) -> &'a str {
+        match self {
+            Gender::Female => &"Female",
+            Gender::Male => &"Male",
+            Gender::UnknownVariant(UnknownGender { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Gender {
+    fn from(name: &str) -> Self {
+        match name {
+            "Female" => Gender::Female,
+            "Male" => Gender::Male,
+            _ => Gender::UnknownVariant(UnknownGender {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Gender {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Female" => Gender::Female,
+            "Male" => Gender::Male,
+            _ => Gender::UnknownVariant(UnknownGender { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Gender {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Gender {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Gender {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -109,6 +310,241 @@ pub struct GetSpeechSynthesisTaskOutput {
     pub synthesis_task: Option<SynthesisTask>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLanguageCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LanguageCode {
+    Arb,
+    CmnCN,
+    CyGB,
+    DaDK,
+    DeDE,
+    EnAU,
+    EnGB,
+    EnGBWLS,
+    EnIN,
+    EnUS,
+    EsES,
+    EsMX,
+    EsUS,
+    FrCA,
+    FrFR,
+    HiIN,
+    IsIS,
+    ItIT,
+    JaJP,
+    KoKR,
+    NbNO,
+    NlNL,
+    PlPL,
+    PtBR,
+    PtPT,
+    RoRO,
+    RuRU,
+    SvSE,
+    TrTR,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLanguageCode),
+}
+
+impl Default for LanguageCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LanguageCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LanguageCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LanguageCode {
+    fn into(self) -> String {
+        match self {
+            LanguageCode::Arb => "arb".to_string(),
+            LanguageCode::CmnCN => "cmn-CN".to_string(),
+            LanguageCode::CyGB => "cy-GB".to_string(),
+            LanguageCode::DaDK => "da-DK".to_string(),
+            LanguageCode::DeDE => "de-DE".to_string(),
+            LanguageCode::EnAU => "en-AU".to_string(),
+            LanguageCode::EnGB => "en-GB".to_string(),
+            LanguageCode::EnGBWLS => "en-GB-WLS".to_string(),
+            LanguageCode::EnIN => "en-IN".to_string(),
+            LanguageCode::EnUS => "en-US".to_string(),
+            LanguageCode::EsES => "es-ES".to_string(),
+            LanguageCode::EsMX => "es-MX".to_string(),
+            LanguageCode::EsUS => "es-US".to_string(),
+            LanguageCode::FrCA => "fr-CA".to_string(),
+            LanguageCode::FrFR => "fr-FR".to_string(),
+            LanguageCode::HiIN => "hi-IN".to_string(),
+            LanguageCode::IsIS => "is-IS".to_string(),
+            LanguageCode::ItIT => "it-IT".to_string(),
+            LanguageCode::JaJP => "ja-JP".to_string(),
+            LanguageCode::KoKR => "ko-KR".to_string(),
+            LanguageCode::NbNO => "nb-NO".to_string(),
+            LanguageCode::NlNL => "nl-NL".to_string(),
+            LanguageCode::PlPL => "pl-PL".to_string(),
+            LanguageCode::PtBR => "pt-BR".to_string(),
+            LanguageCode::PtPT => "pt-PT".to_string(),
+            LanguageCode::RoRO => "ro-RO".to_string(),
+            LanguageCode::RuRU => "ru-RU".to_string(),
+            LanguageCode::SvSE => "sv-SE".to_string(),
+            LanguageCode::TrTR => "tr-TR".to_string(),
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LanguageCode {
+    fn into(self) -> &'a str {
+        match self {
+            LanguageCode::Arb => &"arb",
+            LanguageCode::CmnCN => &"cmn-CN",
+            LanguageCode::CyGB => &"cy-GB",
+            LanguageCode::DaDK => &"da-DK",
+            LanguageCode::DeDE => &"de-DE",
+            LanguageCode::EnAU => &"en-AU",
+            LanguageCode::EnGB => &"en-GB",
+            LanguageCode::EnGBWLS => &"en-GB-WLS",
+            LanguageCode::EnIN => &"en-IN",
+            LanguageCode::EnUS => &"en-US",
+            LanguageCode::EsES => &"es-ES",
+            LanguageCode::EsMX => &"es-MX",
+            LanguageCode::EsUS => &"es-US",
+            LanguageCode::FrCA => &"fr-CA",
+            LanguageCode::FrFR => &"fr-FR",
+            LanguageCode::HiIN => &"hi-IN",
+            LanguageCode::IsIS => &"is-IS",
+            LanguageCode::ItIT => &"it-IT",
+            LanguageCode::JaJP => &"ja-JP",
+            LanguageCode::KoKR => &"ko-KR",
+            LanguageCode::NbNO => &"nb-NO",
+            LanguageCode::NlNL => &"nl-NL",
+            LanguageCode::PlPL => &"pl-PL",
+            LanguageCode::PtBR => &"pt-BR",
+            LanguageCode::PtPT => &"pt-PT",
+            LanguageCode::RoRO => &"ro-RO",
+            LanguageCode::RuRU => &"ru-RU",
+            LanguageCode::SvSE => &"sv-SE",
+            LanguageCode::TrTR => &"tr-TR",
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LanguageCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "arb" => LanguageCode::Arb,
+            "cmn-CN" => LanguageCode::CmnCN,
+            "cy-GB" => LanguageCode::CyGB,
+            "da-DK" => LanguageCode::DaDK,
+            "de-DE" => LanguageCode::DeDE,
+            "en-AU" => LanguageCode::EnAU,
+            "en-GB" => LanguageCode::EnGB,
+            "en-GB-WLS" => LanguageCode::EnGBWLS,
+            "en-IN" => LanguageCode::EnIN,
+            "en-US" => LanguageCode::EnUS,
+            "es-ES" => LanguageCode::EsES,
+            "es-MX" => LanguageCode::EsMX,
+            "es-US" => LanguageCode::EsUS,
+            "fr-CA" => LanguageCode::FrCA,
+            "fr-FR" => LanguageCode::FrFR,
+            "hi-IN" => LanguageCode::HiIN,
+            "is-IS" => LanguageCode::IsIS,
+            "it-IT" => LanguageCode::ItIT,
+            "ja-JP" => LanguageCode::JaJP,
+            "ko-KR" => LanguageCode::KoKR,
+            "nb-NO" => LanguageCode::NbNO,
+            "nl-NL" => LanguageCode::NlNL,
+            "pl-PL" => LanguageCode::PlPL,
+            "pt-BR" => LanguageCode::PtBR,
+            "pt-PT" => LanguageCode::PtPT,
+            "ro-RO" => LanguageCode::RoRO,
+            "ru-RU" => LanguageCode::RuRU,
+            "sv-SE" => LanguageCode::SvSE,
+            "tr-TR" => LanguageCode::TrTR,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LanguageCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "arb" => LanguageCode::Arb,
+            "cmn-CN" => LanguageCode::CmnCN,
+            "cy-GB" => LanguageCode::CyGB,
+            "da-DK" => LanguageCode::DaDK,
+            "de-DE" => LanguageCode::DeDE,
+            "en-AU" => LanguageCode::EnAU,
+            "en-GB" => LanguageCode::EnGB,
+            "en-GB-WLS" => LanguageCode::EnGBWLS,
+            "en-IN" => LanguageCode::EnIN,
+            "en-US" => LanguageCode::EnUS,
+            "es-ES" => LanguageCode::EsES,
+            "es-MX" => LanguageCode::EsMX,
+            "es-US" => LanguageCode::EsUS,
+            "fr-CA" => LanguageCode::FrCA,
+            "fr-FR" => LanguageCode::FrFR,
+            "hi-IN" => LanguageCode::HiIN,
+            "is-IS" => LanguageCode::IsIS,
+            "it-IT" => LanguageCode::ItIT,
+            "ja-JP" => LanguageCode::JaJP,
+            "ko-KR" => LanguageCode::KoKR,
+            "nb-NO" => LanguageCode::NbNO,
+            "nl-NL" => LanguageCode::NlNL,
+            "pl-PL" => LanguageCode::PlPL,
+            "pt-BR" => LanguageCode::PtBR,
+            "pt-PT" => LanguageCode::PtPT,
+            "ro-RO" => LanguageCode::RoRO,
+            "ru-RU" => LanguageCode::RuRU,
+            "sv-SE" => LanguageCode::SvSE,
+            "tr-TR" => LanguageCode::TrTR,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LanguageCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LanguageCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides lexicon name and lexicon content in string format. For more information, see <a href="https://www.w3.org/TR/pronunciation-lexicon/">Pronunciation Lexicon Specification (PLS) Version 1.0</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -134,7 +570,7 @@ pub struct LexiconAttributes {
     /// <p>Language code that the lexicon applies to. A lexicon with a language code such as "en" would be applied to all English languages (en-GB, en-US, en-AUS, en-WLS, and so on.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>Date lexicon was last modified (a timestamp value).</p>
     #[serde(rename = "LastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,7 +639,7 @@ pub struct ListSpeechSynthesisTasksInput {
     /// <p>Status of the speech synthesis tasks returned in a List operation</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TaskStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -217,6 +653,116 @@ pub struct ListSpeechSynthesisTasksOutput {
     #[serde(rename = "SynthesisTasks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub synthesis_tasks: Option<Vec<SynthesisTask>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutputFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutputFormat {
+    Json,
+    Mp3,
+    OggVorbis,
+    Pcm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutputFormat),
+}
+
+impl Default for OutputFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutputFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutputFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutputFormat {
+    fn into(self) -> String {
+        match self {
+            OutputFormat::Json => "json".to_string(),
+            OutputFormat::Mp3 => "mp3".to_string(),
+            OutputFormat::OggVorbis => "ogg_vorbis".to_string(),
+            OutputFormat::Pcm => "pcm".to_string(),
+            OutputFormat::UnknownVariant(UnknownOutputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutputFormat {
+    fn into(self) -> &'a str {
+        match self {
+            OutputFormat::Json => &"json",
+            OutputFormat::Mp3 => &"mp3",
+            OutputFormat::OggVorbis => &"ogg_vorbis",
+            OutputFormat::Pcm => &"pcm",
+            OutputFormat::UnknownVariant(UnknownOutputFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OutputFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "json" => OutputFormat::Json,
+            "mp3" => OutputFormat::Mp3,
+            "ogg_vorbis" => OutputFormat::OggVorbis,
+            "pcm" => OutputFormat::Pcm,
+            _ => OutputFormat::UnknownVariant(UnknownOutputFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OutputFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "json" => OutputFormat::Json,
+            "mp3" => OutputFormat::Mp3,
+            "ogg_vorbis" => OutputFormat::OggVorbis,
+            "pcm" => OutputFormat::Pcm,
+            _ => OutputFormat::UnknownVariant(UnknownOutputFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutputFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OutputFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OutputFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -234,24 +780,134 @@ pub struct PutLexiconInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLexiconOutput {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSpeechMarkType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SpeechMarkType {
+    Sentence,
+    Ssml,
+    Viseme,
+    Word,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSpeechMarkType),
+}
+
+impl Default for SpeechMarkType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SpeechMarkType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SpeechMarkType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SpeechMarkType {
+    fn into(self) -> String {
+        match self {
+            SpeechMarkType::Sentence => "sentence".to_string(),
+            SpeechMarkType::Ssml => "ssml".to_string(),
+            SpeechMarkType::Viseme => "viseme".to_string(),
+            SpeechMarkType::Word => "word".to_string(),
+            SpeechMarkType::UnknownVariant(UnknownSpeechMarkType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SpeechMarkType {
+    fn into(self) -> &'a str {
+        match self {
+            SpeechMarkType::Sentence => &"sentence",
+            SpeechMarkType::Ssml => &"ssml",
+            SpeechMarkType::Viseme => &"viseme",
+            SpeechMarkType::Word => &"word",
+            SpeechMarkType::UnknownVariant(UnknownSpeechMarkType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SpeechMarkType {
+    fn from(name: &str) -> Self {
+        match name {
+            "sentence" => SpeechMarkType::Sentence,
+            "ssml" => SpeechMarkType::Ssml,
+            "viseme" => SpeechMarkType::Viseme,
+            "word" => SpeechMarkType::Word,
+            _ => SpeechMarkType::UnknownVariant(UnknownSpeechMarkType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SpeechMarkType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "sentence" => SpeechMarkType::Sentence,
+            "ssml" => SpeechMarkType::Ssml,
+            "viseme" => SpeechMarkType::Viseme,
+            "word" => SpeechMarkType::Word,
+            _ => SpeechMarkType::UnknownVariant(UnknownSpeechMarkType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpeechMarkType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SpeechMarkType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SpeechMarkType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSpeechSynthesisTaskInput {
     /// <p>Specifies the engine (<code>standard</code> or <code>neural</code>) for Amazon Polly to use when processing input text for speech synthesis. Using a voice that is not supported for the engine selected will result in an error.</p>
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine: Option<String>,
+    pub engine: Option<Engine>,
     /// <p>Optional language code for the Speech Synthesis request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_names: Option<Vec<String>>,
     /// <p>The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
     #[serde(rename = "OutputFormat")]
-    pub output_format: String,
+    pub output_format: OutputFormat,
     /// <p>Amazon S3 bucket name to which the output file will be saved.</p>
     #[serde(rename = "OutputS3BucketName")]
     pub output_s3_bucket_name: String,
@@ -270,17 +926,17 @@ pub struct StartSpeechSynthesisTaskInput {
     /// <p>The type of speech marks returned for the input text.</p>
     #[serde(rename = "SpeechMarkTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub speech_mark_types: Option<Vec<String>>,
+    pub speech_mark_types: Option<Vec<SpeechMarkType>>,
     /// <p>The input text to synthesize. If you specify ssml as the TextType, follow the SSML format for the input text. </p>
     #[serde(rename = "Text")]
     pub text: String,
     /// <p>Specifies whether the input text is plain text or SSML. The default value is plain text. </p>
     #[serde(rename = "TextType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_type: Option<String>,
+    pub text_type: Option<TextType>,
     /// <p>Voice ID to use for the synthesis. </p>
     #[serde(rename = "VoiceId")]
-    pub voice_id: String,
+    pub voice_id: VoiceId,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -303,11 +959,11 @@ pub struct SynthesisTask {
     /// <p>Specifies the engine (<code>standard</code> or <code>neural</code>) for Amazon Polly to use when processing input text for speech synthesis. Using a voice that is not supported for the engine selected will result in an error.</p>
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine: Option<String>,
+    pub engine: Option<Engine>,
     /// <p>Optional language code for a synthesis task. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -315,7 +971,7 @@ pub struct SynthesisTask {
     /// <p>The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
     #[serde(rename = "OutputFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_format: Option<String>,
+    pub output_format: Option<OutputFormat>,
     /// <p>Pathway for the output speech file.</p>
     #[serde(rename = "OutputUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -335,7 +991,7 @@ pub struct SynthesisTask {
     /// <p>The type of speech marks returned for the input text.</p>
     #[serde(rename = "SpeechMarkTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub speech_mark_types: Option<Vec<String>>,
+    pub speech_mark_types: Option<Vec<SpeechMarkType>>,
     /// <p>The Amazon Polly generated identifier for a speech synthesis task.</p>
     #[serde(rename = "TaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -343,7 +999,7 @@ pub struct SynthesisTask {
     /// <p>Current status of the individual speech synthesis task.</p>
     #[serde(rename = "TaskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub task_status: Option<String>,
+    pub task_status: Option<TaskStatus>,
     /// <p>Reason for the current status of a specific speech synthesis task, including errors if the task has failed.</p>
     #[serde(rename = "TaskStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -351,11 +1007,11 @@ pub struct SynthesisTask {
     /// <p>Specifies whether the input text is plain text or SSML. The default value is plain text. </p>
     #[serde(rename = "TextType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_type: Option<String>,
+    pub text_type: Option<TextType>,
     /// <p>Voice ID to use for the synthesis. </p>
     #[serde(rename = "VoiceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub voice_id: Option<String>,
+    pub voice_id: Option<VoiceId>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -364,18 +1020,18 @@ pub struct SynthesizeSpeechInput {
     /// <p>Specifies the engine (<code>standard</code> or <code>neural</code>) for Amazon Polly to use when processing input text for speech synthesis. For information on Amazon Polly voices and which voices are available in standard-only, NTTS-only, and both standard and NTTS formats, see <a href="https://docs.aws.amazon.com/polly/latest/dg/voicelist.html">Available Voices</a>.</p> <p> <b>NTTS-only voices</b> </p> <p>When using NTTS-only voices such as Kevin (en-US), this parameter is required and must be set to <code>neural</code>. If the engine is not specified, or is set to <code>standard</code>, this will result in an error. </p> <p>Type: String</p> <p>Valid Values: <code>standard</code> | <code>neural</code> </p> <p>Required: Yes</p> <p> <b>Standard voices</b> </p> <p>For standard voices, this is not required; the engine parameter defaults to <code>standard</code>. If the engine is not specified, or is set to <code>standard</code> and an NTTS-only voice is selected, this will result in an error. </p>
     #[serde(rename = "Engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine: Option<String>,
+    pub engine: Option<Engine>,
     /// <p>Optional language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. For information about storing lexicons, see <a href="https://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html">PutLexicon</a>.</p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_names: Option<Vec<String>>,
     /// <p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p> <p>When pcm is used, the content returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p>
     #[serde(rename = "OutputFormat")]
-    pub output_format: String,
+    pub output_format: OutputFormat,
     /// <p>The audio frequency specified in Hz.</p> <p>The valid values for mp3 and ogg_vorbis are "8000", "16000", "22050", and "24000". The default value for standard voices is "22050". The default value for neural voices is "24000".</p> <p>Valid values for pcm are "8000" and "16000" The default value is "16000". </p>
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,17 +1039,17 @@ pub struct SynthesizeSpeechInput {
     /// <p>The type of speech marks returned for the input text.</p>
     #[serde(rename = "SpeechMarkTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub speech_mark_types: Option<Vec<String>>,
+    pub speech_mark_types: Option<Vec<SpeechMarkType>>,
     /// <p> Input text to synthesize. If you specify <code>ssml</code> as the <code>TextType</code>, follow the SSML format for the input text. </p>
     #[serde(rename = "Text")]
     pub text: String,
     /// <p> Specifies whether the input text is plain text or SSML. The default value is plain text. For more information, see <a href="https://docs.aws.amazon.com/polly/latest/dg/ssml.html">Using SSML</a>.</p>
     #[serde(rename = "TextType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub text_type: Option<String>,
+    pub text_type: Option<TextType>,
     /// <p> Voice ID to use for the synthesis. You can get a list of available voice IDs by calling the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation. </p>
     #[serde(rename = "VoiceId")]
-    pub voice_id: String,
+    pub voice_id: VoiceId,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -406,6 +1062,216 @@ pub struct SynthesizeSpeechOutput {
     pub request_characters: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Scheduled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskStatus),
+}
+
+impl Default for TaskStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskStatus {
+    fn into(self) -> String {
+        match self {
+            TaskStatus::Completed => "completed".to_string(),
+            TaskStatus::Failed => "failed".to_string(),
+            TaskStatus::InProgress => "inProgress".to_string(),
+            TaskStatus::Scheduled => "scheduled".to_string(),
+            TaskStatus::UnknownVariant(UnknownTaskStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TaskStatus::Completed => &"completed",
+            TaskStatus::Failed => &"failed",
+            TaskStatus::InProgress => &"inProgress",
+            TaskStatus::Scheduled => &"scheduled",
+            TaskStatus::UnknownVariant(UnknownTaskStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "completed" => TaskStatus::Completed,
+            "failed" => TaskStatus::Failed,
+            "inProgress" => TaskStatus::InProgress,
+            "scheduled" => TaskStatus::Scheduled,
+            _ => TaskStatus::UnknownVariant(UnknownTaskStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "completed" => TaskStatus::Completed,
+            "failed" => TaskStatus::Failed,
+            "inProgress" => TaskStatus::InProgress,
+            "scheduled" => TaskStatus::Scheduled,
+            _ => TaskStatus::UnknownVariant(UnknownTaskStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TaskStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTextType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TextType {
+    Ssml,
+    Text,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTextType),
+}
+
+impl Default for TextType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TextType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TextType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TextType {
+    fn into(self) -> String {
+        match self {
+            TextType::Ssml => "ssml".to_string(),
+            TextType::Text => "text".to_string(),
+            TextType::UnknownVariant(UnknownTextType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TextType {
+    fn into(self) -> &'a str {
+        match self {
+            TextType::Ssml => &"ssml",
+            TextType::Text => &"text",
+            TextType::UnknownVariant(UnknownTextType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TextType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ssml" => TextType::Ssml,
+            "text" => TextType::Text,
+            _ => TextType::UnknownVariant(UnknownTextType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TextType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ssml" => TextType::Ssml,
+            "text" => TextType::Text,
+            _ => TextType::UnknownVariant(UnknownTextType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TextType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TextType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Description of the voice.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -413,19 +1279,19 @@ pub struct Voice {
     /// <p>Additional codes for languages available for the specified voice in addition to its default language. </p> <p>For example, the default language for Aditi is Indian English (en-IN) because it was first used for that language. Since Aditi is bilingual and fluent in both Indian English and Hindi, this parameter would show the code <code>hi-IN</code>.</p>
     #[serde(rename = "AdditionalLanguageCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_language_codes: Option<Vec<String>>,
+    pub additional_language_codes: Option<Vec<LanguageCode>>,
     /// <p>Gender of the voice.</p>
     #[serde(rename = "Gender")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gender: Option<String>,
+    pub gender: Option<Gender>,
     /// <p>Amazon Polly assigned voice ID. This is the ID that you specify when calling the <code>SynthesizeSpeech</code> operation.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: Option<VoiceId>,
     /// <p>Language code of the voice.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>Human readable name of the language in English.</p>
     #[serde(rename = "LanguageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -437,7 +1303,407 @@ pub struct Voice {
     /// <p>Specifies which engines (<code>standard</code> or <code>neural</code>) that are supported by a given voice.</p>
     #[serde(rename = "SupportedEngines")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_engines: Option<Vec<String>>,
+    pub supported_engines: Option<Vec<Engine>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVoiceId {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VoiceId {
+    Aditi,
+    Amy,
+    Astrid,
+    Bianca,
+    Brian,
+    Camila,
+    Carla,
+    Carmen,
+    Celine,
+    Chantal,
+    Conchita,
+    Cristiano,
+    Dora,
+    Emma,
+    Enrique,
+    Ewa,
+    Filiz,
+    Geraint,
+    Giorgio,
+    Gwyneth,
+    Hans,
+    Ines,
+    Ivy,
+    Jacek,
+    Jan,
+    Joanna,
+    Joey,
+    Justin,
+    Karl,
+    Kendra,
+    Kevin,
+    Kimberly,
+    Lea,
+    Liv,
+    Lotte,
+    Lucia,
+    Lupe,
+    Mads,
+    Maja,
+    Marlene,
+    Mathieu,
+    Matthew,
+    Maxim,
+    Mia,
+    Miguel,
+    Mizuki,
+    Naja,
+    Nicole,
+    Olivia,
+    Penelope,
+    Raveena,
+    Ricardo,
+    Ruben,
+    Russell,
+    Salli,
+    Seoyeon,
+    Takumi,
+    Tatyana,
+    Vicki,
+    Vitoria,
+    Zeina,
+    Zhiyu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVoiceId),
+}
+
+impl Default for VoiceId {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VoiceId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VoiceId {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VoiceId {
+    fn into(self) -> String {
+        match self {
+            VoiceId::Aditi => "Aditi".to_string(),
+            VoiceId::Amy => "Amy".to_string(),
+            VoiceId::Astrid => "Astrid".to_string(),
+            VoiceId::Bianca => "Bianca".to_string(),
+            VoiceId::Brian => "Brian".to_string(),
+            VoiceId::Camila => "Camila".to_string(),
+            VoiceId::Carla => "Carla".to_string(),
+            VoiceId::Carmen => "Carmen".to_string(),
+            VoiceId::Celine => "Celine".to_string(),
+            VoiceId::Chantal => "Chantal".to_string(),
+            VoiceId::Conchita => "Conchita".to_string(),
+            VoiceId::Cristiano => "Cristiano".to_string(),
+            VoiceId::Dora => "Dora".to_string(),
+            VoiceId::Emma => "Emma".to_string(),
+            VoiceId::Enrique => "Enrique".to_string(),
+            VoiceId::Ewa => "Ewa".to_string(),
+            VoiceId::Filiz => "Filiz".to_string(),
+            VoiceId::Geraint => "Geraint".to_string(),
+            VoiceId::Giorgio => "Giorgio".to_string(),
+            VoiceId::Gwyneth => "Gwyneth".to_string(),
+            VoiceId::Hans => "Hans".to_string(),
+            VoiceId::Ines => "Ines".to_string(),
+            VoiceId::Ivy => "Ivy".to_string(),
+            VoiceId::Jacek => "Jacek".to_string(),
+            VoiceId::Jan => "Jan".to_string(),
+            VoiceId::Joanna => "Joanna".to_string(),
+            VoiceId::Joey => "Joey".to_string(),
+            VoiceId::Justin => "Justin".to_string(),
+            VoiceId::Karl => "Karl".to_string(),
+            VoiceId::Kendra => "Kendra".to_string(),
+            VoiceId::Kevin => "Kevin".to_string(),
+            VoiceId::Kimberly => "Kimberly".to_string(),
+            VoiceId::Lea => "Lea".to_string(),
+            VoiceId::Liv => "Liv".to_string(),
+            VoiceId::Lotte => "Lotte".to_string(),
+            VoiceId::Lucia => "Lucia".to_string(),
+            VoiceId::Lupe => "Lupe".to_string(),
+            VoiceId::Mads => "Mads".to_string(),
+            VoiceId::Maja => "Maja".to_string(),
+            VoiceId::Marlene => "Marlene".to_string(),
+            VoiceId::Mathieu => "Mathieu".to_string(),
+            VoiceId::Matthew => "Matthew".to_string(),
+            VoiceId::Maxim => "Maxim".to_string(),
+            VoiceId::Mia => "Mia".to_string(),
+            VoiceId::Miguel => "Miguel".to_string(),
+            VoiceId::Mizuki => "Mizuki".to_string(),
+            VoiceId::Naja => "Naja".to_string(),
+            VoiceId::Nicole => "Nicole".to_string(),
+            VoiceId::Olivia => "Olivia".to_string(),
+            VoiceId::Penelope => "Penelope".to_string(),
+            VoiceId::Raveena => "Raveena".to_string(),
+            VoiceId::Ricardo => "Ricardo".to_string(),
+            VoiceId::Ruben => "Ruben".to_string(),
+            VoiceId::Russell => "Russell".to_string(),
+            VoiceId::Salli => "Salli".to_string(),
+            VoiceId::Seoyeon => "Seoyeon".to_string(),
+            VoiceId::Takumi => "Takumi".to_string(),
+            VoiceId::Tatyana => "Tatyana".to_string(),
+            VoiceId::Vicki => "Vicki".to_string(),
+            VoiceId::Vitoria => "Vitoria".to_string(),
+            VoiceId::Zeina => "Zeina".to_string(),
+            VoiceId::Zhiyu => "Zhiyu".to_string(),
+            VoiceId::UnknownVariant(UnknownVoiceId { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VoiceId {
+    fn into(self) -> &'a str {
+        match self {
+            VoiceId::Aditi => &"Aditi",
+            VoiceId::Amy => &"Amy",
+            VoiceId::Astrid => &"Astrid",
+            VoiceId::Bianca => &"Bianca",
+            VoiceId::Brian => &"Brian",
+            VoiceId::Camila => &"Camila",
+            VoiceId::Carla => &"Carla",
+            VoiceId::Carmen => &"Carmen",
+            VoiceId::Celine => &"Celine",
+            VoiceId::Chantal => &"Chantal",
+            VoiceId::Conchita => &"Conchita",
+            VoiceId::Cristiano => &"Cristiano",
+            VoiceId::Dora => &"Dora",
+            VoiceId::Emma => &"Emma",
+            VoiceId::Enrique => &"Enrique",
+            VoiceId::Ewa => &"Ewa",
+            VoiceId::Filiz => &"Filiz",
+            VoiceId::Geraint => &"Geraint",
+            VoiceId::Giorgio => &"Giorgio",
+            VoiceId::Gwyneth => &"Gwyneth",
+            VoiceId::Hans => &"Hans",
+            VoiceId::Ines => &"Ines",
+            VoiceId::Ivy => &"Ivy",
+            VoiceId::Jacek => &"Jacek",
+            VoiceId::Jan => &"Jan",
+            VoiceId::Joanna => &"Joanna",
+            VoiceId::Joey => &"Joey",
+            VoiceId::Justin => &"Justin",
+            VoiceId::Karl => &"Karl",
+            VoiceId::Kendra => &"Kendra",
+            VoiceId::Kevin => &"Kevin",
+            VoiceId::Kimberly => &"Kimberly",
+            VoiceId::Lea => &"Lea",
+            VoiceId::Liv => &"Liv",
+            VoiceId::Lotte => &"Lotte",
+            VoiceId::Lucia => &"Lucia",
+            VoiceId::Lupe => &"Lupe",
+            VoiceId::Mads => &"Mads",
+            VoiceId::Maja => &"Maja",
+            VoiceId::Marlene => &"Marlene",
+            VoiceId::Mathieu => &"Mathieu",
+            VoiceId::Matthew => &"Matthew",
+            VoiceId::Maxim => &"Maxim",
+            VoiceId::Mia => &"Mia",
+            VoiceId::Miguel => &"Miguel",
+            VoiceId::Mizuki => &"Mizuki",
+            VoiceId::Naja => &"Naja",
+            VoiceId::Nicole => &"Nicole",
+            VoiceId::Olivia => &"Olivia",
+            VoiceId::Penelope => &"Penelope",
+            VoiceId::Raveena => &"Raveena",
+            VoiceId::Ricardo => &"Ricardo",
+            VoiceId::Ruben => &"Ruben",
+            VoiceId::Russell => &"Russell",
+            VoiceId::Salli => &"Salli",
+            VoiceId::Seoyeon => &"Seoyeon",
+            VoiceId::Takumi => &"Takumi",
+            VoiceId::Tatyana => &"Tatyana",
+            VoiceId::Vicki => &"Vicki",
+            VoiceId::Vitoria => &"Vitoria",
+            VoiceId::Zeina => &"Zeina",
+            VoiceId::Zhiyu => &"Zhiyu",
+            VoiceId::UnknownVariant(UnknownVoiceId { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VoiceId {
+    fn from(name: &str) -> Self {
+        match name {
+            "Aditi" => VoiceId::Aditi,
+            "Amy" => VoiceId::Amy,
+            "Astrid" => VoiceId::Astrid,
+            "Bianca" => VoiceId::Bianca,
+            "Brian" => VoiceId::Brian,
+            "Camila" => VoiceId::Camila,
+            "Carla" => VoiceId::Carla,
+            "Carmen" => VoiceId::Carmen,
+            "Celine" => VoiceId::Celine,
+            "Chantal" => VoiceId::Chantal,
+            "Conchita" => VoiceId::Conchita,
+            "Cristiano" => VoiceId::Cristiano,
+            "Dora" => VoiceId::Dora,
+            "Emma" => VoiceId::Emma,
+            "Enrique" => VoiceId::Enrique,
+            "Ewa" => VoiceId::Ewa,
+            "Filiz" => VoiceId::Filiz,
+            "Geraint" => VoiceId::Geraint,
+            "Giorgio" => VoiceId::Giorgio,
+            "Gwyneth" => VoiceId::Gwyneth,
+            "Hans" => VoiceId::Hans,
+            "Ines" => VoiceId::Ines,
+            "Ivy" => VoiceId::Ivy,
+            "Jacek" => VoiceId::Jacek,
+            "Jan" => VoiceId::Jan,
+            "Joanna" => VoiceId::Joanna,
+            "Joey" => VoiceId::Joey,
+            "Justin" => VoiceId::Justin,
+            "Karl" => VoiceId::Karl,
+            "Kendra" => VoiceId::Kendra,
+            "Kevin" => VoiceId::Kevin,
+            "Kimberly" => VoiceId::Kimberly,
+            "Lea" => VoiceId::Lea,
+            "Liv" => VoiceId::Liv,
+            "Lotte" => VoiceId::Lotte,
+            "Lucia" => VoiceId::Lucia,
+            "Lupe" => VoiceId::Lupe,
+            "Mads" => VoiceId::Mads,
+            "Maja" => VoiceId::Maja,
+            "Marlene" => VoiceId::Marlene,
+            "Mathieu" => VoiceId::Mathieu,
+            "Matthew" => VoiceId::Matthew,
+            "Maxim" => VoiceId::Maxim,
+            "Mia" => VoiceId::Mia,
+            "Miguel" => VoiceId::Miguel,
+            "Mizuki" => VoiceId::Mizuki,
+            "Naja" => VoiceId::Naja,
+            "Nicole" => VoiceId::Nicole,
+            "Olivia" => VoiceId::Olivia,
+            "Penelope" => VoiceId::Penelope,
+            "Raveena" => VoiceId::Raveena,
+            "Ricardo" => VoiceId::Ricardo,
+            "Ruben" => VoiceId::Ruben,
+            "Russell" => VoiceId::Russell,
+            "Salli" => VoiceId::Salli,
+            "Seoyeon" => VoiceId::Seoyeon,
+            "Takumi" => VoiceId::Takumi,
+            "Tatyana" => VoiceId::Tatyana,
+            "Vicki" => VoiceId::Vicki,
+            "Vitoria" => VoiceId::Vitoria,
+            "Zeina" => VoiceId::Zeina,
+            "Zhiyu" => VoiceId::Zhiyu,
+            _ => VoiceId::UnknownVariant(UnknownVoiceId {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VoiceId {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Aditi" => VoiceId::Aditi,
+            "Amy" => VoiceId::Amy,
+            "Astrid" => VoiceId::Astrid,
+            "Bianca" => VoiceId::Bianca,
+            "Brian" => VoiceId::Brian,
+            "Camila" => VoiceId::Camila,
+            "Carla" => VoiceId::Carla,
+            "Carmen" => VoiceId::Carmen,
+            "Celine" => VoiceId::Celine,
+            "Chantal" => VoiceId::Chantal,
+            "Conchita" => VoiceId::Conchita,
+            "Cristiano" => VoiceId::Cristiano,
+            "Dora" => VoiceId::Dora,
+            "Emma" => VoiceId::Emma,
+            "Enrique" => VoiceId::Enrique,
+            "Ewa" => VoiceId::Ewa,
+            "Filiz" => VoiceId::Filiz,
+            "Geraint" => VoiceId::Geraint,
+            "Giorgio" => VoiceId::Giorgio,
+            "Gwyneth" => VoiceId::Gwyneth,
+            "Hans" => VoiceId::Hans,
+            "Ines" => VoiceId::Ines,
+            "Ivy" => VoiceId::Ivy,
+            "Jacek" => VoiceId::Jacek,
+            "Jan" => VoiceId::Jan,
+            "Joanna" => VoiceId::Joanna,
+            "Joey" => VoiceId::Joey,
+            "Justin" => VoiceId::Justin,
+            "Karl" => VoiceId::Karl,
+            "Kendra" => VoiceId::Kendra,
+            "Kevin" => VoiceId::Kevin,
+            "Kimberly" => VoiceId::Kimberly,
+            "Lea" => VoiceId::Lea,
+            "Liv" => VoiceId::Liv,
+            "Lotte" => VoiceId::Lotte,
+            "Lucia" => VoiceId::Lucia,
+            "Lupe" => VoiceId::Lupe,
+            "Mads" => VoiceId::Mads,
+            "Maja" => VoiceId::Maja,
+            "Marlene" => VoiceId::Marlene,
+            "Mathieu" => VoiceId::Mathieu,
+            "Matthew" => VoiceId::Matthew,
+            "Maxim" => VoiceId::Maxim,
+            "Mia" => VoiceId::Mia,
+            "Miguel" => VoiceId::Miguel,
+            "Mizuki" => VoiceId::Mizuki,
+            "Naja" => VoiceId::Naja,
+            "Nicole" => VoiceId::Nicole,
+            "Olivia" => VoiceId::Olivia,
+            "Penelope" => VoiceId::Penelope,
+            "Raveena" => VoiceId::Raveena,
+            "Ricardo" => VoiceId::Ricardo,
+            "Ruben" => VoiceId::Ruben,
+            "Russell" => VoiceId::Russell,
+            "Salli" => VoiceId::Salli,
+            "Seoyeon" => VoiceId::Seoyeon,
+            "Takumi" => VoiceId::Takumi,
+            "Tatyana" => VoiceId::Tatyana,
+            "Vicki" => VoiceId::Vicki,
+            "Vitoria" => VoiceId::Vitoria,
+            "Zeina" => VoiceId::Zeina,
+            "Zhiyu" => VoiceId::Zhiyu,
+            _ => VoiceId::UnknownVariant(UnknownVoiceId { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VoiceId {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VoiceId {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VoiceId {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by DeleteLexicon

@@ -103,8 +103,14 @@ impl AddHeaderActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "HeaderName"), &obj.header_name);
-        params.put(&format!("{}{}", prefix, "HeaderValue"), &obj.header_value);
+        params.put(
+            &format!("{}{}", prefix, "HeaderName"),
+            &obj.header_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "HeaderValue"),
+            &obj.header_value.to_string(),
+        );
     }
 }
 
@@ -141,7 +147,7 @@ impl AddressListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -154,12 +160,122 @@ impl AmazonResourceNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBehaviorOnMXFailure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BehaviorOnMXFailure {
+    RejectMessage,
+    UseDefaultValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBehaviorOnMXFailure),
+}
+
+impl Default for BehaviorOnMXFailure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BehaviorOnMXFailure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BehaviorOnMXFailure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BehaviorOnMXFailure {
+    fn into(self) -> String {
+        match self {
+            BehaviorOnMXFailure::RejectMessage => "RejectMessage".to_string(),
+            BehaviorOnMXFailure::UseDefaultValue => "UseDefaultValue".to_string(),
+            BehaviorOnMXFailure::UnknownVariant(UnknownBehaviorOnMXFailure { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BehaviorOnMXFailure {
+    fn into(self) -> &'a str {
+        match self {
+            BehaviorOnMXFailure::RejectMessage => &"RejectMessage",
+            BehaviorOnMXFailure::UseDefaultValue => &"UseDefaultValue",
+            BehaviorOnMXFailure::UnknownVariant(UnknownBehaviorOnMXFailure { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BehaviorOnMXFailure {
+    fn from(name: &str) -> Self {
+        match name {
+            "RejectMessage" => BehaviorOnMXFailure::RejectMessage,
+            "UseDefaultValue" => BehaviorOnMXFailure::UseDefaultValue,
+            _ => BehaviorOnMXFailure::UnknownVariant(UnknownBehaviorOnMXFailure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BehaviorOnMXFailure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RejectMessage" => BehaviorOnMXFailure::RejectMessage,
+            "UseDefaultValue" => BehaviorOnMXFailure::UseDefaultValue,
+            _ => BehaviorOnMXFailure::UnknownVariant(UnknownBehaviorOnMXFailure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BehaviorOnMXFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BehaviorOnMXFailure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BehaviorOnMXFailure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BehaviorOnMXFailure, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Represents the body of the message. You can specify text, HTML, or both. If you use both, then the message should display correctly in the widest variety of email clients.</p>
@@ -254,17 +370,26 @@ impl BounceActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Message"), &obj.message);
-        params.put(&format!("{}{}", prefix, "Sender"), &obj.sender);
+        params.put(
+            &format!("{}{}", prefix, "Message"),
+            &obj.message.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Sender"), &obj.sender.to_string());
         params.put(
             &format!("{}{}", prefix, "SmtpReplyCode"),
-            &obj.smtp_reply_code,
+            &obj.smtp_reply_code.to_string(),
         );
         if let Some(ref field_value) = obj.status_code {
-            params.put(&format!("{}{}", prefix, "StatusCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StatusCode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -293,12 +418,135 @@ impl BounceStatusCodeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBounceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BounceType {
+    ContentRejected,
+    DoesNotExist,
+    ExceededQuota,
+    MessageTooLarge,
+    TemporaryFailure,
+    Undefined,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBounceType),
+}
+
+impl Default for BounceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BounceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BounceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BounceType {
+    fn into(self) -> String {
+        match self {
+            BounceType::ContentRejected => "ContentRejected".to_string(),
+            BounceType::DoesNotExist => "DoesNotExist".to_string(),
+            BounceType::ExceededQuota => "ExceededQuota".to_string(),
+            BounceType::MessageTooLarge => "MessageTooLarge".to_string(),
+            BounceType::TemporaryFailure => "TemporaryFailure".to_string(),
+            BounceType::Undefined => "Undefined".to_string(),
+            BounceType::UnknownVariant(UnknownBounceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BounceType {
+    fn into(self) -> &'a str {
+        match self {
+            BounceType::ContentRejected => &"ContentRejected",
+            BounceType::DoesNotExist => &"DoesNotExist",
+            BounceType::ExceededQuota => &"ExceededQuota",
+            BounceType::MessageTooLarge => &"MessageTooLarge",
+            BounceType::TemporaryFailure => &"TemporaryFailure",
+            BounceType::Undefined => &"Undefined",
+            BounceType::UnknownVariant(UnknownBounceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BounceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ContentRejected" => BounceType::ContentRejected,
+            "DoesNotExist" => BounceType::DoesNotExist,
+            "ExceededQuota" => BounceType::ExceededQuota,
+            "MessageTooLarge" => BounceType::MessageTooLarge,
+            "TemporaryFailure" => BounceType::TemporaryFailure,
+            "Undefined" => BounceType::Undefined,
+            _ => BounceType::UnknownVariant(UnknownBounceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BounceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ContentRejected" => BounceType::ContentRejected,
+            "DoesNotExist" => BounceType::DoesNotExist,
+            "ExceededQuota" => BounceType::ExceededQuota,
+            "MessageTooLarge" => BounceType::MessageTooLarge,
+            "TemporaryFailure" => BounceType::TemporaryFailure,
+            "Undefined" => BounceType::Undefined,
+            _ => BounceType::UnknownVariant(UnknownBounceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BounceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BounceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BounceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Recipient-related information to include in the Delivery Status Notification (DSN) when an email that Amazon SES receives on your behalf bounces.</p> <p>For information about receiving email through Amazon SES, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BouncedRecipientInfo {
     /// <p>The reason for the bounce. You must provide either this parameter or <code>RecipientDsnFields</code>.</p>
-    pub bounce_type: Option<String>,
+    pub bounce_type: Option<BounceType>,
     /// <p>The email address of the recipient of the bounced email.</p>
     pub recipient: String,
     /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to receive email for the recipient of the bounced email. For more information about sending authorization, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
@@ -317,11 +565,20 @@ impl BouncedRecipientInfoSerializer {
         }
 
         if let Some(ref field_value) = obj.bounce_type {
-            params.put(&format!("{}{}", prefix, "BounceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "BounceType"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Recipient"), &obj.recipient);
+        params.put(
+            &format!("{}{}", prefix, "Recipient"),
+            &obj.recipient.to_string(),
+        );
         if let Some(ref field_value) = obj.recipient_arn {
-            params.put(&format!("{}{}", prefix, "RecipientArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RecipientArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.recipient_dsn_fields {
             RecipientDsnFieldsSerializer::serialize(
@@ -379,7 +636,7 @@ impl BulkEmailDestinationSerializer {
         if let Some(ref field_value) = obj.replacement_template_data {
             params.put(
                 &format!("{}{}", prefix, "ReplacementTemplateData"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -405,7 +662,7 @@ pub struct BulkEmailDestinationStatus {
     /// <p>The unique message identifier returned from the <code>SendBulkTemplatedEmail</code> operation.</p>
     pub message_id: Option<String>,
     /// <p><p>The status of a message sent using the <code>SendBulkTemplatedEmail</code> operation.</p> <p>Possible values for this parameter include:</p> <ul> <li> <p> <code>Success</code>: Amazon SES accepted the message, and will attempt to deliver it to the recipients.</p> </li> <li> <p> <code>MessageRejected</code>: The message was rejected because it contained a virus.</p> </li> <li> <p> <code>MailFromDomainNotVerified</code>: The sender&#39;s email address or domain was not verified.</p> </li> <li> <p> <code>ConfigurationSetDoesNotExist</code>: The configuration set you specified does not exist.</p> </li> <li> <p> <code>TemplateDoesNotExist</code>: The template you specified does not exist.</p> </li> <li> <p> <code>AccountSuspended</code>: Your account has been shut down because of issues related to your email sending practices.</p> </li> <li> <p> <code>AccountThrottled</code>: The number of emails you can send has been reduced because your account has exceeded its allocated sending limit.</p> </li> <li> <p> <code>AccountDailyQuotaExceeded</code>: You have reached or exceeded the maximum number of emails you can send from your account in a 24-hour period.</p> </li> <li> <p> <code>InvalidSendingPoolName</code>: The configuration set you specified refers to an IP pool that does not exist.</p> </li> <li> <p> <code>AccountSendingPaused</code>: Email sending for the Amazon SES account was disabled using the <a>UpdateAccountSendingEnabled</a> operation.</p> </li> <li> <p> <code>ConfigurationSetSendingPaused</code>: Email sending for this configuration set was disabled using the <a>UpdateConfigurationSetSendingEnabled</a> operation.</p> </li> <li> <p> <code>InvalidParameterValue</code>: One or more of the parameters you specified when calling this operation was invalid. See the error message for additional information.</p> </li> <li> <p> <code>TransientFailure</code>: Amazon SES was unable to process your request because of a temporary issue.</p> </li> <li> <p> <code>Failed</code>: Amazon SES was unable to process your request. See the error message for additional information.</p> </li> </ul></p>
-    pub status: Option<String>,
+    pub status: Option<BulkEmailStatus>,
 }
 
 #[allow(dead_code)]
@@ -459,12 +716,182 @@ impl BulkEmailDestinationStatusListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBulkEmailStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BulkEmailStatus {
+    AccountDailyQuotaExceeded,
+    AccountSendingPaused,
+    AccountSuspended,
+    AccountThrottled,
+    ConfigurationSetDoesNotExist,
+    ConfigurationSetSendingPaused,
+    Failed,
+    InvalidParameterValue,
+    InvalidSendingPoolName,
+    MailFromDomainNotVerified,
+    MessageRejected,
+    Success,
+    TemplateDoesNotExist,
+    TransientFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBulkEmailStatus),
+}
+
+impl Default for BulkEmailStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BulkEmailStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BulkEmailStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BulkEmailStatus {
+    fn into(self) -> String {
+        match self {
+            BulkEmailStatus::AccountDailyQuotaExceeded => "AccountDailyQuotaExceeded".to_string(),
+            BulkEmailStatus::AccountSendingPaused => "AccountSendingPaused".to_string(),
+            BulkEmailStatus::AccountSuspended => "AccountSuspended".to_string(),
+            BulkEmailStatus::AccountThrottled => "AccountThrottled".to_string(),
+            BulkEmailStatus::ConfigurationSetDoesNotExist => {
+                "ConfigurationSetDoesNotExist".to_string()
+            }
+            BulkEmailStatus::ConfigurationSetSendingPaused => {
+                "ConfigurationSetSendingPaused".to_string()
+            }
+            BulkEmailStatus::Failed => "Failed".to_string(),
+            BulkEmailStatus::InvalidParameterValue => "InvalidParameterValue".to_string(),
+            BulkEmailStatus::InvalidSendingPoolName => "InvalidSendingPoolName".to_string(),
+            BulkEmailStatus::MailFromDomainNotVerified => "MailFromDomainNotVerified".to_string(),
+            BulkEmailStatus::MessageRejected => "MessageRejected".to_string(),
+            BulkEmailStatus::Success => "Success".to_string(),
+            BulkEmailStatus::TemplateDoesNotExist => "TemplateDoesNotExist".to_string(),
+            BulkEmailStatus::TransientFailure => "TransientFailure".to_string(),
+            BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BulkEmailStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BulkEmailStatus::AccountDailyQuotaExceeded => &"AccountDailyQuotaExceeded",
+            BulkEmailStatus::AccountSendingPaused => &"AccountSendingPaused",
+            BulkEmailStatus::AccountSuspended => &"AccountSuspended",
+            BulkEmailStatus::AccountThrottled => &"AccountThrottled",
+            BulkEmailStatus::ConfigurationSetDoesNotExist => &"ConfigurationSetDoesNotExist",
+            BulkEmailStatus::ConfigurationSetSendingPaused => &"ConfigurationSetSendingPaused",
+            BulkEmailStatus::Failed => &"Failed",
+            BulkEmailStatus::InvalidParameterValue => &"InvalidParameterValue",
+            BulkEmailStatus::InvalidSendingPoolName => &"InvalidSendingPoolName",
+            BulkEmailStatus::MailFromDomainNotVerified => &"MailFromDomainNotVerified",
+            BulkEmailStatus::MessageRejected => &"MessageRejected",
+            BulkEmailStatus::Success => &"Success",
+            BulkEmailStatus::TemplateDoesNotExist => &"TemplateDoesNotExist",
+            BulkEmailStatus::TransientFailure => &"TransientFailure",
+            BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BulkEmailStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccountDailyQuotaExceeded" => BulkEmailStatus::AccountDailyQuotaExceeded,
+            "AccountSendingPaused" => BulkEmailStatus::AccountSendingPaused,
+            "AccountSuspended" => BulkEmailStatus::AccountSuspended,
+            "AccountThrottled" => BulkEmailStatus::AccountThrottled,
+            "ConfigurationSetDoesNotExist" => BulkEmailStatus::ConfigurationSetDoesNotExist,
+            "ConfigurationSetSendingPaused" => BulkEmailStatus::ConfigurationSetSendingPaused,
+            "Failed" => BulkEmailStatus::Failed,
+            "InvalidParameterValue" => BulkEmailStatus::InvalidParameterValue,
+            "InvalidSendingPoolName" => BulkEmailStatus::InvalidSendingPoolName,
+            "MailFromDomainNotVerified" => BulkEmailStatus::MailFromDomainNotVerified,
+            "MessageRejected" => BulkEmailStatus::MessageRejected,
+            "Success" => BulkEmailStatus::Success,
+            "TemplateDoesNotExist" => BulkEmailStatus::TemplateDoesNotExist,
+            "TransientFailure" => BulkEmailStatus::TransientFailure,
+            _ => BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BulkEmailStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccountDailyQuotaExceeded" => BulkEmailStatus::AccountDailyQuotaExceeded,
+            "AccountSendingPaused" => BulkEmailStatus::AccountSendingPaused,
+            "AccountSuspended" => BulkEmailStatus::AccountSuspended,
+            "AccountThrottled" => BulkEmailStatus::AccountThrottled,
+            "ConfigurationSetDoesNotExist" => BulkEmailStatus::ConfigurationSetDoesNotExist,
+            "ConfigurationSetSendingPaused" => BulkEmailStatus::ConfigurationSetSendingPaused,
+            "Failed" => BulkEmailStatus::Failed,
+            "InvalidParameterValue" => BulkEmailStatus::InvalidParameterValue,
+            "InvalidSendingPoolName" => BulkEmailStatus::InvalidSendingPoolName,
+            "MailFromDomainNotVerified" => BulkEmailStatus::MailFromDomainNotVerified,
+            "MessageRejected" => BulkEmailStatus::MessageRejected,
+            "Success" => BulkEmailStatus::Success,
+            "TemplateDoesNotExist" => BulkEmailStatus::TemplateDoesNotExist,
+            "TransientFailure" => BulkEmailStatus::TransientFailure,
+            _ => BulkEmailStatus::UnknownVariant(UnknownBulkEmailStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BulkEmailStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BulkEmailStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BulkEmailStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BulkEmailStatusDeserializer;
 impl BulkEmailStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BulkEmailStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -496,9 +923,12 @@ impl CloneReceiptRuleSetRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OriginalRuleSetName"),
-            &obj.original_rule_set_name,
+            &obj.original_rule_set_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -585,7 +1015,7 @@ pub struct CloudWatchDimensionConfiguration {
     /// <p><p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub dimension_name: String,
     /// <p>The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. If you want Amazon SES to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code>/<code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want Amazon SES to use your own email headers, choose <code>emailHeader</code>.</p>
-    pub dimension_value_source: String,
+    pub dimension_value_source: DimensionValueSource,
 }
 
 #[allow(dead_code)]
@@ -637,15 +1067,15 @@ impl CloudWatchDimensionConfigurationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DefaultDimensionValue"),
-            &obj.default_dimension_value,
+            &obj.default_dimension_value.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "DimensionName"),
-            &obj.dimension_name,
+            &obj.dimension_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "DimensionValueSource"),
-            &obj.dimension_value_source,
+            &obj.dimension_value_source.to_string(),
         );
     }
 }
@@ -720,17 +1150,135 @@ impl ConfigurationSetSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationSetAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationSetAttribute {
+    DeliveryOptions,
+    EventDestinations,
+    ReputationOptions,
+    TrackingOptions,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationSetAttribute),
+}
+
+impl Default for ConfigurationSetAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationSetAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationSetAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationSetAttribute {
+    fn into(self) -> String {
+        match self {
+            ConfigurationSetAttribute::DeliveryOptions => "deliveryOptions".to_string(),
+            ConfigurationSetAttribute::EventDestinations => "eventDestinations".to_string(),
+            ConfigurationSetAttribute::ReputationOptions => "reputationOptions".to_string(),
+            ConfigurationSetAttribute::TrackingOptions => "trackingOptions".to_string(),
+            ConfigurationSetAttribute::UnknownVariant(UnknownConfigurationSetAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationSetAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationSetAttribute::DeliveryOptions => &"deliveryOptions",
+            ConfigurationSetAttribute::EventDestinations => &"eventDestinations",
+            ConfigurationSetAttribute::ReputationOptions => &"reputationOptions",
+            ConfigurationSetAttribute::TrackingOptions => &"trackingOptions",
+            ConfigurationSetAttribute::UnknownVariant(UnknownConfigurationSetAttribute {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationSetAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "deliveryOptions" => ConfigurationSetAttribute::DeliveryOptions,
+            "eventDestinations" => ConfigurationSetAttribute::EventDestinations,
+            "reputationOptions" => ConfigurationSetAttribute::ReputationOptions,
+            "trackingOptions" => ConfigurationSetAttribute::TrackingOptions,
+            _ => ConfigurationSetAttribute::UnknownVariant(UnknownConfigurationSetAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationSetAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "deliveryOptions" => ConfigurationSetAttribute::DeliveryOptions,
+            "eventDestinations" => ConfigurationSetAttribute::EventDestinations,
+            "reputationOptions" => ConfigurationSetAttribute::ReputationOptions,
+            "trackingOptions" => ConfigurationSetAttribute::TrackingOptions,
+            _ => {
+                ConfigurationSetAttribute::UnknownVariant(UnknownConfigurationSetAttribute { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationSetAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ConfigurationSetAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConfigurationSetAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
 /// Serialize `ConfigurationSetAttributeList` contents to a `SignedRequest`.
 struct ConfigurationSetAttributeListSerializer;
 impl ConfigurationSetAttributeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ConfigurationSetAttribute>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -781,9 +1329,12 @@ impl ContentSerializer {
         }
 
         if let Some(ref field_value) = obj.charset {
-            params.put(&format!("{}{}", prefix, "Charset"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Charset"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Data"), &obj.data);
+        params.put(&format!("{}{}", prefix, "Data"), &obj.data.to_string());
     }
 }
 
@@ -820,7 +1371,7 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         EventDestinationSerializer::serialize(
             params,
@@ -923,7 +1474,7 @@ impl CreateConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         TrackingOptionsSerializer::serialize(
             params,
@@ -988,24 +1539,27 @@ impl CreateCustomVerificationEmailTemplateRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "FailureRedirectionURL"),
-            &obj.failure_redirection_url,
+            &obj.failure_redirection_url.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "FromEmailAddress"),
-            &obj.from_email_address,
+            &obj.from_email_address.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "SuccessRedirectionURL"),
-            &obj.success_redirection_url,
+            &obj.success_redirection_url.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "TemplateContent"),
-            &obj.template_content,
+            &obj.template_content.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "TemplateSubject"),
-            &obj.template_subject,
+            &obj.template_subject.to_string(),
         );
     }
 }
@@ -1075,10 +1629,13 @@ impl CreateReceiptRuleRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.after {
-            params.put(&format!("{}{}", prefix, "After"), &field_value);
+            params.put(&format!("{}{}", prefix, "After"), &field_value.to_string());
         }
         ReceiptRuleSerializer::serialize(params, &format!("{}{}", prefix, "Rule"), &obj.rule);
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -1121,7 +1678,10 @@ impl CreateReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -1189,12 +1749,132 @@ impl CreateTemplateResponseDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomMailFromStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomMailFromStatus {
+    Failed,
+    Pending,
+    Success,
+    TemporaryFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomMailFromStatus),
+}
+
+impl Default for CustomMailFromStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomMailFromStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomMailFromStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomMailFromStatus {
+    fn into(self) -> String {
+        match self {
+            CustomMailFromStatus::Failed => "Failed".to_string(),
+            CustomMailFromStatus::Pending => "Pending".to_string(),
+            CustomMailFromStatus::Success => "Success".to_string(),
+            CustomMailFromStatus::TemporaryFailure => "TemporaryFailure".to_string(),
+            CustomMailFromStatus::UnknownVariant(UnknownCustomMailFromStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomMailFromStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CustomMailFromStatus::Failed => &"Failed",
+            CustomMailFromStatus::Pending => &"Pending",
+            CustomMailFromStatus::Success => &"Success",
+            CustomMailFromStatus::TemporaryFailure => &"TemporaryFailure",
+            CustomMailFromStatus::UnknownVariant(UnknownCustomMailFromStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomMailFromStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => CustomMailFromStatus::Failed,
+            "Pending" => CustomMailFromStatus::Pending,
+            "Success" => CustomMailFromStatus::Success,
+            "TemporaryFailure" => CustomMailFromStatus::TemporaryFailure,
+            _ => CustomMailFromStatus::UnknownVariant(UnknownCustomMailFromStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CustomMailFromStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => CustomMailFromStatus::Failed,
+            "Pending" => CustomMailFromStatus::Pending,
+            "Success" => CustomMailFromStatus::Success,
+            "TemporaryFailure" => CustomMailFromStatus::TemporaryFailure,
+            _ => CustomMailFromStatus::UnknownVariant(UnknownCustomMailFromStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomMailFromStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CustomMailFromStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CustomMailFromStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomMailFromStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -1324,11 +2004,11 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "EventDestinationName"),
-            &obj.event_destination_name,
+            &obj.event_destination_name.to_string(),
         );
     }
 }
@@ -1374,7 +2054,7 @@ impl DeleteConfigurationSetRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
     }
 }
@@ -1424,7 +2104,7 @@ impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
     }
 }
@@ -1472,7 +2152,10 @@ impl DeleteCustomVerificationEmailTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -1495,8 +2178,14 @@ impl DeleteIdentityPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -1539,7 +2228,10 @@ impl DeleteIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
     }
 }
 
@@ -1582,7 +2274,10 @@ impl DeleteReceiptFilterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "FilterName"), &obj.filter_name);
+        params.put(
+            &format!("{}{}", prefix, "FilterName"),
+            &obj.filter_name.to_string(),
+        );
     }
 }
 
@@ -1627,8 +2322,14 @@ impl DeleteReceiptRuleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleName"),
+            &obj.rule_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -1671,7 +2372,10 @@ impl DeleteReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -1714,7 +2418,10 @@ impl DeleteTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -1756,7 +2463,10 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
+        params.put(
+            &format!("{}{}", prefix, "EmailAddress"),
+            &obj.email_address.to_string(),
+        );
     }
 }
 
@@ -1766,7 +2476,7 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeliveryOptions {
     /// <p>Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is <code>Require</code>, messages are only delivered if a TLS connection can be established. If the value is <code>Optional</code>, messages can be delivered in plain text if a TLS connection can't be established.</p>
-    pub tls_policy: Option<String>,
+    pub tls_policy: Option<TlsPolicy>,
 }
 
 #[allow(dead_code)]
@@ -1799,7 +2509,10 @@ impl DeliveryOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.tls_policy {
-            params.put(&format!("{}{}", prefix, "TlsPolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TlsPolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1865,7 +2578,7 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationSetRequest {
     /// <p>A list of configuration set attributes to return.</p>
-    pub configuration_set_attribute_names: Option<Vec<String>>,
+    pub configuration_set_attribute_names: Option<Vec<ConfigurationSetAttribute>>,
     /// <p>The name of the configuration set to describe.</p>
     pub configuration_set_name: String,
 }
@@ -1888,7 +2601,7 @@ impl DescribeConfigurationSetRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
     }
 }
@@ -1976,8 +2689,14 @@ impl DescribeReceiptRuleRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleName"),
+            &obj.rule_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -2029,7 +2748,10 @@ impl DescribeReceiptRuleSetRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -2126,12 +2848,127 @@ impl DimensionNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDimensionValueSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DimensionValueSource {
+    EmailHeader,
+    LinkTag,
+    MessageTag,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDimensionValueSource),
+}
+
+impl Default for DimensionValueSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DimensionValueSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DimensionValueSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DimensionValueSource {
+    fn into(self) -> String {
+        match self {
+            DimensionValueSource::EmailHeader => "emailHeader".to_string(),
+            DimensionValueSource::LinkTag => "linkTag".to_string(),
+            DimensionValueSource::MessageTag => "messageTag".to_string(),
+            DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DimensionValueSource {
+    fn into(self) -> &'a str {
+        match self {
+            DimensionValueSource::EmailHeader => &"emailHeader",
+            DimensionValueSource::LinkTag => &"linkTag",
+            DimensionValueSource::MessageTag => &"messageTag",
+            DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DimensionValueSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "emailHeader" => DimensionValueSource::EmailHeader,
+            "linkTag" => DimensionValueSource::LinkTag,
+            "messageTag" => DimensionValueSource::MessageTag,
+            _ => DimensionValueSource::UnknownVariant(UnknownDimensionValueSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DimensionValueSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "emailHeader" => DimensionValueSource::EmailHeader,
+            "linkTag" => DimensionValueSource::LinkTag,
+            "messageTag" => DimensionValueSource::MessageTag,
+            _ => DimensionValueSource::UnknownVariant(UnknownDimensionValueSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DimensionValueSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DimensionValueSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DimensionValueSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DimensionValueSource, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -2158,6 +2995,124 @@ impl DkimAttributesDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDsnAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DsnAction {
+    Delayed,
+    Delivered,
+    Expanded,
+    Failed,
+    Relayed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDsnAction),
+}
+
+impl Default for DsnAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DsnAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DsnAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DsnAction {
+    fn into(self) -> String {
+        match self {
+            DsnAction::Delayed => "delayed".to_string(),
+            DsnAction::Delivered => "delivered".to_string(),
+            DsnAction::Expanded => "expanded".to_string(),
+            DsnAction::Failed => "failed".to_string(),
+            DsnAction::Relayed => "relayed".to_string(),
+            DsnAction::UnknownVariant(UnknownDsnAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DsnAction {
+    fn into(self) -> &'a str {
+        match self {
+            DsnAction::Delayed => &"delayed",
+            DsnAction::Delivered => &"delivered",
+            DsnAction::Expanded => &"expanded",
+            DsnAction::Failed => &"failed",
+            DsnAction::Relayed => &"relayed",
+            DsnAction::UnknownVariant(UnknownDsnAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DsnAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "delayed" => DsnAction::Delayed,
+            "delivered" => DsnAction::Delivered,
+            "expanded" => DsnAction::Expanded,
+            "failed" => DsnAction::Failed,
+            "relayed" => DsnAction::Relayed,
+            _ => DsnAction::UnknownVariant(UnknownDsnAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DsnAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "delayed" => DsnAction::Delayed,
+            "delivered" => DsnAction::Delivered,
+            "expanded" => DsnAction::Expanded,
+            "failed" => DsnAction::Failed,
+            "relayed" => DsnAction::Relayed,
+            _ => DsnAction::UnknownVariant(UnknownDsnAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DsnAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DsnAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DsnAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EnabledDeserializer;
 impl EnabledDeserializer {
@@ -2186,7 +3141,7 @@ pub struct EventDestination {
     /// <p>An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p>
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     /// <p>The type of email sending events to publish to the event destination.</p>
-    pub matching_event_types: Vec<String>,
+    pub matching_event_types: Vec<EventType>,
     /// <p><p>The name of the event destination. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
     /// <p>An object that contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p>
@@ -2274,7 +3229,7 @@ impl EventDestinationSerializer {
             &format!("{}{}", prefix, "MatchingEventTypes"),
             &obj.matching_event_types,
         );
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.sns_destination {
             SNSDestinationSerializer::serialize(
                 params,
@@ -2311,12 +3266,148 @@ impl EventDestinationsDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    Bounce,
+    Click,
+    Complaint,
+    Delivery,
+    Open,
+    Reject,
+    RenderingFailure,
+    Send,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::Bounce => "bounce".to_string(),
+            EventType::Click => "click".to_string(),
+            EventType::Complaint => "complaint".to_string(),
+            EventType::Delivery => "delivery".to_string(),
+            EventType::Open => "open".to_string(),
+            EventType::Reject => "reject".to_string(),
+            EventType::RenderingFailure => "renderingFailure".to_string(),
+            EventType::Send => "send".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::Bounce => &"bounce",
+            EventType::Click => &"click",
+            EventType::Complaint => &"complaint",
+            EventType::Delivery => &"delivery",
+            EventType::Open => &"open",
+            EventType::Reject => &"reject",
+            EventType::RenderingFailure => &"renderingFailure",
+            EventType::Send => &"send",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "bounce" => EventType::Bounce,
+            "click" => EventType::Click,
+            "complaint" => EventType::Complaint,
+            "delivery" => EventType::Delivery,
+            "open" => EventType::Open,
+            "reject" => EventType::Reject,
+            "renderingFailure" => EventType::RenderingFailure,
+            "send" => EventType::Send,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "bounce" => EventType::Bounce,
+            "click" => EventType::Click,
+            "complaint" => EventType::Complaint,
+            "delivery" => EventType::Delivery,
+            "open" => EventType::Open,
+            "reject" => EventType::Reject,
+            "renderingFailure" => EventType::RenderingFailure,
+            "send" => EventType::Send,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EventType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -2326,7 +3417,7 @@ impl EventTypesDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<EventType>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "member" {
                 obj.push(EventTypeDeserializer::deserialize("member", stack)?);
@@ -2341,10 +3432,10 @@ impl EventTypesDeserializer {
 /// Serialize `EventTypes` contents to a `SignedRequest`.
 struct EventTypesSerializer;
 impl EventTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<EventType>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2368,8 +3459,8 @@ impl ExtensionFieldSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -2448,7 +3539,10 @@ impl GetCustomVerificationEmailTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -2728,7 +3822,10 @@ impl GetIdentityPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
         PolicyNameListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "PolicyNames"),
@@ -2922,7 +4019,10 @@ impl GetTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -2992,7 +4092,7 @@ pub struct IdentityDkimAttributes {
     /// <p>A set of character strings that represent the domain's identity. Using these tokens, you need to create DNS CNAME records that point to DKIM public keys that are hosted by Amazon SES. Amazon Web Services eventually detects that you've updated your DNS records. This detection process might take up to 72 hours. After successful detection, Amazon SES is able to DKIM-sign email originating from that domain. (This only applies to domain identities, not email address identities.)</p> <p>For more information about creating DNS records using DKIM tokens, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     pub dkim_tokens: Option<Vec<String>>,
     /// <p>Describes whether Amazon SES has successfully verified the DKIM DNS records (tokens) published in the domain name's DNS. (This only applies to domain identities, not email address identities.)</p>
-    pub dkim_verification_status: String,
+    pub dkim_verification_status: VerificationStatus,
 }
 
 #[allow(dead_code)]
@@ -3050,7 +4150,7 @@ impl IdentityListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3060,11 +4160,11 @@ impl IdentityListSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IdentityMailFromDomainAttributes {
     /// <p>The action that Amazon SES takes if it cannot successfully read the required MX record when you send an email. A value of <code>UseDefaultValue</code> indicates that if Amazon SES cannot read the required MX record, it uses amazonses.com (or a subdomain of that) as the MAIL FROM domain. A value of <code>RejectMessage</code> indicates that if Amazon SES cannot read the required MX record, Amazon SES returns a <code>MailFromDomainNotVerified</code> error and does not send the email.</p> <p>The custom MAIL FROM setup states that result in this behavior are <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code>.</p>
-    pub behavior_on_mx_failure: String,
+    pub behavior_on_mx_failure: BehaviorOnMXFailure,
     /// <p>The custom MAIL FROM domain that the identity is configured to use.</p>
     pub mail_from_domain: String,
     /// <p>The state that indicates whether Amazon SES has successfully read the MX record required for custom MAIL FROM domain setup. If the state is <code>Success</code>, Amazon SES uses the specified custom MAIL FROM domain when the verified identity sends an email. All other states indicate that Amazon SES takes the action described by <code>BehaviorOnMXFailure</code>.</p>
-    pub mail_from_domain_status: String,
+    pub mail_from_domain_status: CustomMailFromStatus,
 }
 
 #[allow(dead_code)]
@@ -3181,12 +4281,115 @@ impl IdentityNotificationAttributesDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityType {
+    Domain,
+    EmailAddress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityType),
+}
+
+impl Default for IdentityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityType {
+    fn into(self) -> String {
+        match self {
+            IdentityType::Domain => "Domain".to_string(),
+            IdentityType::EmailAddress => "EmailAddress".to_string(),
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityType::Domain => &"Domain",
+            IdentityType::EmailAddress => &"EmailAddress",
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Domain" => IdentityType::Domain,
+            "EmailAddress" => IdentityType::EmailAddress,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Domain" => IdentityType::Domain,
+            "EmailAddress" => IdentityType::EmailAddress,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for IdentityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IdentityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the verification attributes of a single identity.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct IdentityVerificationAttributes {
     /// <p>The verification status of the identity: "Pending", "Success", "Failed", or "TemporaryFailure".</p>
-    pub verification_status: String,
+    pub verification_status: VerificationStatus,
     /// <p>The verification token for a domain identity. Null for email address identities.</p>
     pub verification_token: Option<String>,
 }
@@ -3223,12 +4426,118 @@ impl IdentityVerificationAttributesDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvocationType {
+    Event,
+    RequestResponse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvocationType),
+}
+
+impl Default for InvocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvocationType {
+    fn into(self) -> String {
+        match self {
+            InvocationType::Event => "Event".to_string(),
+            InvocationType::RequestResponse => "RequestResponse".to_string(),
+            InvocationType::UnknownVariant(UnknownInvocationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvocationType {
+    fn into(self) -> &'a str {
+        match self {
+            InvocationType::Event => &"Event",
+            InvocationType::RequestResponse => &"RequestResponse",
+            InvocationType::UnknownVariant(UnknownInvocationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InvocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Event" => InvocationType::Event,
+            "RequestResponse" => InvocationType::RequestResponse,
+            _ => InvocationType::UnknownVariant(UnknownInvocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InvocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Event" => InvocationType::Event,
+            "RequestResponse" => InvocationType::RequestResponse,
+            _ => InvocationType::UnknownVariant(UnknownInvocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InvocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InvocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InvocationType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p> <p>Event destinations, such as Amazon Kinesis Firehose, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -3284,9 +4593,12 @@ impl KinesisFirehoseDestinationSerializer {
 
         params.put(
             &format!("{}{}", prefix, "DeliveryStreamARN"),
-            &obj.delivery_stream_arn,
+            &obj.delivery_stream_arn.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "IAMRoleARN"), &obj.iam_role_arn);
+        params.put(
+            &format!("{}{}", prefix, "IAMRoleARN"),
+            &obj.iam_role_arn.to_string(),
+        );
     }
 }
 
@@ -3298,7 +4610,7 @@ pub struct LambdaAction {
     /// <p>The Amazon Resource Name (ARN) of the AWS Lambda function. An example of an AWS Lambda function ARN is <code>arn:aws:lambda:us-west-2:account-id:function:MyFunction</code>. For more information about AWS Lambda, see the <a href="https://docs.aws.amazon.com/lambda/latest/dg/welcome.html">AWS Lambda Developer Guide</a>.</p>
     pub function_arn: String,
     /// <p><p>The invocation type of the AWS Lambda function. An invocation type of <code>RequestResponse</code> means that the execution of the function will immediately result in a response, and a value of <code>Event</code> means that the function will be invoked asynchronously. The default value is <code>Event</code>. For information about AWS Lambda invocation types, see the <a href="https://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html">AWS Lambda Developer Guide</a>.</p> <important> <p>There is a 30-second timeout on <code>RequestResponse</code> invocations. You should use <code>Event</code> invocation in most cases. Use <code>RequestResponse</code> only when you want to make a mail flow decision, such as whether to stop the receipt rule or the receipt rule set.</p> </important></p>
-    pub invocation_type: Option<String>,
+    pub invocation_type: Option<InvocationType>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the Lambda action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: Option<String>,
 }
@@ -3344,12 +4656,21 @@ impl LambdaActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "FunctionArn"), &obj.function_arn);
+        params.put(
+            &format!("{}{}", prefix, "FunctionArn"),
+            &obj.function_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.invocation_type {
-            params.put(&format!("{}{}", prefix, "InvocationType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "InvocationType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3385,7 +4706,10 @@ impl ListConfigurationSetsRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3456,7 +4780,10 @@ impl ListCustomVerificationEmailTemplatesRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3508,7 +4835,7 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIdentitiesRequest {
     /// <p>The type of the identities to list. Possible values are "EmailAddress" and "Domain". If this parameter is omitted, then all identities will be listed.</p>
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>The maximum number of identities per page. Possible values are 1-1000 inclusive.</p>
     pub max_items: Option<i64>,
     /// <p>The token to use for pagination.</p>
@@ -3525,13 +4852,19 @@ impl ListIdentitiesRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.identity_type {
-            params.put(&format!("{}{}", prefix, "IdentityType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IdentityType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.max_items {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3586,7 +4919,10 @@ impl ListIdentityPoliciesRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
     }
 }
 
@@ -3692,7 +5028,10 @@ impl ListReceiptRuleSetsRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3758,7 +5097,10 @@ impl ListTemplatesRequestSerializer {
             params.put(&format!("{}{}", prefix, "MaxItems"), &field_value);
         }
         if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3933,7 +5275,10 @@ impl MessageDsnSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "ReportingMta"), &obj.reporting_mta);
+        params.put(
+            &format!("{}{}", prefix, "ReportingMta"),
+            &obj.reporting_mta.to_string(),
+        );
     }
 }
 
@@ -3964,8 +5309,8 @@ impl MessageTagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
-        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value.to_string());
     }
 }
 
@@ -4021,6 +5366,118 @@ impl NotificationTopicDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationType {
+    Bounce,
+    Complaint,
+    Delivery,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationType),
+}
+
+impl Default for NotificationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationType {
+    fn into(self) -> String {
+        match self {
+            NotificationType::Bounce => "Bounce".to_string(),
+            NotificationType::Complaint => "Complaint".to_string(),
+            NotificationType::Delivery => "Delivery".to_string(),
+            NotificationType::UnknownVariant(UnknownNotificationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationType {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationType::Bounce => &"Bounce",
+            NotificationType::Complaint => &"Complaint",
+            NotificationType::Delivery => &"Delivery",
+            NotificationType::UnknownVariant(UnknownNotificationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NotificationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bounce" => NotificationType::Bounce,
+            "Complaint" => NotificationType::Complaint,
+            "Delivery" => NotificationType::Delivery,
+            _ => NotificationType::UnknownVariant(UnknownNotificationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bounce" => NotificationType::Bounce,
+            "Complaint" => NotificationType::Complaint,
+            "Delivery" => NotificationType::Delivery,
+            _ => NotificationType::UnknownVariant(UnknownNotificationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for NotificationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotificationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PolicyDeserializer;
 impl PolicyDeserializer {
@@ -4086,7 +5543,7 @@ impl PolicyNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4112,7 +5569,7 @@ impl PutConfigurationSetDeliveryOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         if let Some(ref field_value) = obj.delivery_options {
             DeliveryOptionsSerializer::serialize(
@@ -4167,9 +5624,15 @@ impl PutIdentityPolicyRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
-        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy);
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
+        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy.to_string());
+        params.put(
+            &format!("{}{}", prefix, "PolicyName"),
+            &obj.policy_name.to_string(),
+        );
     }
 }
 
@@ -4430,7 +5893,7 @@ impl ReceiptFilterSerializer {
             &format!("{}{}", prefix, "IpFilter"),
             &obj.ip_filter,
         );
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
     }
 }
 
@@ -4460,12 +5923,122 @@ impl ReceiptFilterNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReceiptFilterPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReceiptFilterPolicy {
+    Allow,
+    Block,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReceiptFilterPolicy),
+}
+
+impl Default for ReceiptFilterPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReceiptFilterPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReceiptFilterPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReceiptFilterPolicy {
+    fn into(self) -> String {
+        match self {
+            ReceiptFilterPolicy::Allow => "Allow".to_string(),
+            ReceiptFilterPolicy::Block => "Block".to_string(),
+            ReceiptFilterPolicy::UnknownVariant(UnknownReceiptFilterPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReceiptFilterPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            ReceiptFilterPolicy::Allow => &"Allow",
+            ReceiptFilterPolicy::Block => &"Block",
+            ReceiptFilterPolicy::UnknownVariant(UnknownReceiptFilterPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReceiptFilterPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Allow" => ReceiptFilterPolicy::Allow,
+            "Block" => ReceiptFilterPolicy::Block,
+            _ => ReceiptFilterPolicy::UnknownVariant(UnknownReceiptFilterPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReceiptFilterPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Allow" => ReceiptFilterPolicy::Allow,
+            "Block" => ReceiptFilterPolicy::Block,
+            _ => ReceiptFilterPolicy::UnknownVariant(UnknownReceiptFilterPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReceiptFilterPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReceiptFilterPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReceiptFilterPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReceiptFilterPolicy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A receipt IP address filter enables you to specify whether to accept or reject mail originating from an IP address or range of IP addresses.</p> <p>For information about setting up IP address filters, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p>
@@ -4476,7 +6049,7 @@ pub struct ReceiptIpFilter {
     /// <p>A single IP address or a range of IP addresses that you want to block or allow, specified in Classless Inter-Domain Routing (CIDR) notation. An example of a single email address is 10.0.0.1. An example of a range of IP addresses is 10.0.0.1/24. For more information about CIDR notation, see <a href="https://tools.ietf.org/html/rfc2317">RFC 2317</a>.</p>
     pub cidr: String,
     /// <p>Indicates whether to block or allow incoming mail from the specified IP addresses.</p>
-    pub policy: String,
+    pub policy: ReceiptFilterPolicy,
 }
 
 #[allow(dead_code)]
@@ -4511,8 +6084,8 @@ impl ReceiptIpFilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr);
-        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy);
+        params.put(&format!("{}{}", prefix, "Cidr"), &obj.cidr.to_string());
+        params.put(&format!("{}{}", prefix, "Policy"), &obj.policy.to_string());
     }
 }
 
@@ -4532,7 +6105,7 @@ pub struct ReceiptRule {
     /// <p>If <code>true</code>, then messages that this receipt rule applies to are scanned for spam and viruses. The default value is <code>false</code>.</p>
     pub scan_enabled: Option<bool>,
     /// <p>Specifies whether Amazon SES should require that incoming email is delivered over a connection encrypted with Transport Layer Security (TLS). If this parameter is set to <code>Require</code>, Amazon SES will bounce emails that are not received over TLS. The default is <code>Optional</code>.</p>
-    pub tls_policy: Option<String>,
+    pub tls_policy: Option<TlsPolicy>,
 }
 
 #[allow(dead_code)]
@@ -4594,7 +6167,7 @@ impl ReceiptRuleSerializer {
         if let Some(ref field_value) = obj.enabled {
             params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.recipients {
             RecipientsListSerializer::serialize(
                 params,
@@ -4606,7 +6179,10 @@ impl ReceiptRuleSerializer {
             params.put(&format!("{}{}", prefix, "ScanEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.tls_policy {
-            params.put(&format!("{}{}", prefix, "TlsPolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TlsPolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4626,7 +6202,7 @@ impl ReceiptRuleNamesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4725,7 +6301,7 @@ impl RecipientDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecipientDsnFields {
     /// <p>The action performed by the reporting mail transfer agent (MTA) as a result of its attempt to deliver the message to the recipient address. This is required by <a href="https://tools.ietf.org/html/rfc3464">RFC 3464</a>.</p>
-    pub action: String,
+    pub action: DsnAction,
     /// <p>An extended explanation of what went wrong; this is usually an SMTP response. See <a href="https://tools.ietf.org/html/rfc3463">RFC 3463</a> for the correct formatting of this parameter.</p>
     pub diagnostic_code: Option<String>,
     /// <p>Additional X-headers to include in the DSN.</p>
@@ -4749,9 +6325,12 @@ impl RecipientDsnFieldsSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Action"), &obj.action);
+        params.put(&format!("{}{}", prefix, "Action"), &obj.action.to_string());
         if let Some(ref field_value) = obj.diagnostic_code {
-            params.put(&format!("{}{}", prefix, "DiagnosticCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DiagnosticCode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.extension_fields {
             ExtensionFieldListSerializer::serialize(
@@ -4761,15 +6340,21 @@ impl RecipientDsnFieldsSerializer {
             );
         }
         if let Some(ref field_value) = obj.final_recipient {
-            params.put(&format!("{}{}", prefix, "FinalRecipient"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "FinalRecipient"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.last_attempt_date {
             params.put(&format!("{}{}", prefix, "LastAttemptDate"), &field_value);
         }
         if let Some(ref field_value) = obj.remote_mta {
-            params.put(&format!("{}{}", prefix, "RemoteMta"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RemoteMta"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status.to_string());
     }
 }
 
@@ -4798,7 +6383,7 @@ impl RecipientsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4835,7 +6420,10 @@ impl ReorderReceiptRuleSetRequestSerializer {
             &format!("{}{}", prefix, "RuleNames"),
             &obj.rule_names,
         );
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -4966,15 +6554,27 @@ impl S3ActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BucketName"), &obj.bucket_name);
+        params.put(
+            &format!("{}{}", prefix, "BucketName"),
+            &obj.bucket_name.to_string(),
+        );
         if let Some(ref field_value) = obj.kms_key_arn {
-            params.put(&format!("{}{}", prefix, "KmsKeyArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.object_key_prefix {
-            params.put(&format!("{}{}", prefix, "ObjectKeyPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ObjectKeyPrefix"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5001,7 +6601,7 @@ impl S3KeyPrefixDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SNSAction {
     /// <p>The encoding to use for the email within the Amazon SNS notification. UTF-8 is easier to use, but may not preserve all special characters when a message was encoded with a different encoding format. Base64 preserves all special characters. The default value is UTF-8.</p>
-    pub encoding: Option<String>,
+    pub encoding: Option<SNSActionEncoding>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: String,
 }
@@ -5041,9 +6641,121 @@ impl SNSActionSerializer {
         }
 
         if let Some(ref field_value) = obj.encoding {
-            params.put(&format!("{}{}", prefix, "Encoding"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Encoding"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TopicArn"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicArn"),
+            &obj.topic_arn.to_string(),
+        );
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSNSActionEncoding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SNSActionEncoding {
+    Base64,
+    Utf8,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSNSActionEncoding),
+}
+
+impl Default for SNSActionEncoding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SNSActionEncoding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SNSActionEncoding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SNSActionEncoding {
+    fn into(self) -> String {
+        match self {
+            SNSActionEncoding::Base64 => "Base64".to_string(),
+            SNSActionEncoding::Utf8 => "UTF-8".to_string(),
+            SNSActionEncoding::UnknownVariant(UnknownSNSActionEncoding { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SNSActionEncoding {
+    fn into(self) -> &'a str {
+        match self {
+            SNSActionEncoding::Base64 => &"Base64",
+            SNSActionEncoding::Utf8 => &"UTF-8",
+            SNSActionEncoding::UnknownVariant(UnknownSNSActionEncoding { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SNSActionEncoding {
+    fn from(name: &str) -> Self {
+        match name {
+            "Base64" => SNSActionEncoding::Base64,
+            "UTF-8" => SNSActionEncoding::Utf8,
+            _ => SNSActionEncoding::UnknownVariant(UnknownSNSActionEncoding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SNSActionEncoding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Base64" => SNSActionEncoding::Base64,
+            "UTF-8" => SNSActionEncoding::Utf8,
+            _ => SNSActionEncoding::UnknownVariant(UnknownSNSActionEncoding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SNSActionEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SNSActionEncoding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SNSActionEncoding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -5051,8 +6763,11 @@ impl SNSActionSerializer {
 struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SNSActionEncoding, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p> <p>Event destinations, such as Amazon SNS, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -5093,7 +6808,10 @@ impl SNSDestinationSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TopicARN"), &obj.topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "TopicARN"),
+            &obj.topic_arn.to_string(),
+        );
     }
 }
 
@@ -5124,9 +6842,15 @@ impl SendBounceRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BounceSender"), &obj.bounce_sender);
+        params.put(
+            &format!("{}{}", prefix, "BounceSender"),
+            &obj.bounce_sender.to_string(),
+        );
         if let Some(ref field_value) = obj.bounce_sender_arn {
-            params.put(&format!("{}{}", prefix, "BounceSenderArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "BounceSenderArn"),
+                &field_value.to_string(),
+            );
         }
         BouncedRecipientInfoListSerializer::serialize(
             params,
@@ -5134,7 +6858,10 @@ impl SendBounceRequestSerializer {
             &obj.bounced_recipient_info_list,
         );
         if let Some(ref field_value) = obj.explanation {
-            params.put(&format!("{}{}", prefix, "Explanation"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Explanation"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.message_dsn {
             MessageDsnSerializer::serialize(
@@ -5145,7 +6872,7 @@ impl SendBounceRequestSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "OriginalMessageId"),
-            &obj.original_message_id,
+            &obj.original_message_id.to_string(),
         );
     }
 }
@@ -5217,7 +6944,7 @@ impl SendBulkTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.default_tags {
@@ -5230,7 +6957,7 @@ impl SendBulkTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.default_template_data {
             params.put(
                 &format!("{}{}", prefix, "DefaultTemplateData"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         BulkEmailDestinationListSerializer::serialize(
@@ -5246,18 +6973,33 @@ impl SendBulkTemplatedEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source.to_string());
         if let Some(ref field_value) = obj.source_arn {
-            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Template"), &obj.template);
+        params.put(
+            &format!("{}{}", prefix, "Template"),
+            &obj.template.to_string(),
+        );
         if let Some(ref field_value) = obj.template_arn {
-            params.put(&format!("{}{}", prefix, "TemplateArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5319,11 +7061,17 @@ impl SendCustomVerificationEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "EmailAddress"),
+            &obj.email_address.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -5461,7 +7209,7 @@ impl SendEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         DestinationSerializer::serialize(
@@ -5478,14 +7226,23 @@ impl SendEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source.to_string());
         if let Some(ref field_value) = obj.source_arn {
-            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -5558,7 +7315,7 @@ impl SendRawEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.destinations {
@@ -5569,7 +7326,10 @@ impl SendRawEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.from_arn {
-            params.put(&format!("{}{}", prefix, "FromArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "FromArn"),
+                &field_value.to_string(),
+            );
         }
         RawMessageSerializer::serialize(
             params,
@@ -5577,13 +7337,19 @@ impl SendRawEmailRequestSerializer {
             &obj.raw_message,
         );
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.source_arn {
-            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -5662,7 +7428,7 @@ impl SendTemplatedEmailRequestSerializer {
         if let Some(ref field_value) = obj.configuration_set_name {
             params.put(
                 &format!("{}{}", prefix, "ConfigurationSetName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         DestinationSerializer::serialize(
@@ -5678,14 +7444,23 @@ impl SendTemplatedEmailRequestSerializer {
             );
         }
         if let Some(ref field_value) = obj.return_path {
-            params.put(&format!("{}{}", prefix, "ReturnPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.return_path_arn {
-            params.put(&format!("{}{}", prefix, "ReturnPathArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Source"), &obj.source);
+        params.put(&format!("{}{}", prefix, "Source"), &obj.source.to_string());
         if let Some(ref field_value) = obj.source_arn {
-            params.put(&format!("{}{}", prefix, "SourceArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             MessageTagListSerializer::serialize(
@@ -5694,11 +7469,20 @@ impl SendTemplatedEmailRequestSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "Template"), &obj.template);
+        params.put(
+            &format!("{}{}", prefix, "Template"),
+            &obj.template.to_string(),
+        );
         if let Some(ref field_value) = obj.template_arn {
-            params.put(&format!("{}{}", prefix, "TemplateArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TemplateData"), &obj.template_data);
+        params.put(
+            &format!("{}{}", prefix, "TemplateData"),
+            &obj.template_data.to_string(),
+        );
     }
 }
 
@@ -5758,7 +7542,10 @@ impl SetActiveReceiptRuleSetRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.rule_set_name {
-            params.put(&format!("{}{}", prefix, "RuleSetName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RuleSetName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5805,7 +7592,10 @@ impl SetIdentityDkimEnabledRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "DkimEnabled"), &obj.dkim_enabled);
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
     }
 }
 
@@ -5858,7 +7648,10 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
             &format!("{}{}", prefix, "ForwardingEnabled"),
             &obj.forwarding_enabled,
         );
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
     }
 }
 
@@ -5893,7 +7686,7 @@ pub struct SetIdentityHeadersInNotificationsEnabledRequest {
     /// <p>The identity for which to enable or disable headers in notifications. Examples: <code>user@example.com</code>, <code>example.com</code>.</p>
     pub identity: String,
     /// <p>The notification type for which to enable or disable headers in notifications. </p>
-    pub notification_type: String,
+    pub notification_type: NotificationType,
 }
 
 /// Serialize `SetIdentityHeadersInNotificationsEnabledRequest` contents to a `SignedRequest`.
@@ -5910,10 +7703,13 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "NotificationType"),
-            &obj.notification_type,
+            &obj.notification_type.to_string(),
         );
     }
 }
@@ -5945,7 +7741,7 @@ impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIdentityMailFromDomainRequest {
     /// <p>The action that you want Amazon SES to take if it cannot successfully read the required MX record when you send an email. If you choose <code>UseDefaultValue</code>, Amazon SES will use amazonses.com (or a subdomain of that) as the MAIL FROM domain. If you choose <code>RejectMessage</code>, Amazon SES will return a <code>MailFromDomainNotVerified</code> error and not send the email.</p> <p>The action specified in <code>BehaviorOnMXFailure</code> is taken when the custom MAIL FROM domain setup is in the <code>Pending</code>, <code>Failed</code>, and <code>TemporaryFailure</code> states.</p>
-    pub behavior_on_mx_failure: Option<String>,
+    pub behavior_on_mx_failure: Option<BehaviorOnMXFailure>,
     /// <p>The verified identity for which you want to enable or disable the specified custom MAIL FROM domain.</p>
     pub identity: String,
     /// <p>The custom MAIL FROM domain that you want the verified identity to use. The MAIL FROM domain must 1) be a subdomain of the verified identity, 2) not be used in a "From" address if the MAIL FROM domain is the destination of email feedback forwarding (for more information, see the <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html">Amazon SES Developer Guide</a>), and 3) not be used to receive emails. A value of <code>null</code> disables the custom MAIL FROM setting for the identity.</p>
@@ -5964,12 +7760,18 @@ impl SetIdentityMailFromDomainRequestSerializer {
         if let Some(ref field_value) = obj.behavior_on_mx_failure {
             params.put(
                 &format!("{}{}", prefix, "BehaviorOnMXFailure"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
         if let Some(ref field_value) = obj.mail_from_domain {
-            params.put(&format!("{}{}", prefix, "MailFromDomain"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MailFromDomain"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6003,7 +7805,7 @@ pub struct SetIdentityNotificationTopicRequest {
     /// <p>The identity (email address or domain) that you want to set the Amazon SNS topic for.</p> <important> <p>You can only specify a verified identity for this parameter.</p> </important> <p>You can specify an identity by using its name or by using its Amazon Resource Name (ARN). The following examples are all valid identities: <code>sender@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>
     pub identity: String,
     /// <p>The type of notifications that will be published to the specified Amazon SNS topic.</p>
-    pub notification_type: String,
+    pub notification_type: NotificationType,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic. If the parameter is omitted from the request or a null value is passed, <code>SnsTopic</code> is cleared and publishing is disabled.</p>
     pub sns_topic: Option<String>,
 }
@@ -6017,13 +7819,19 @@ impl SetIdentityNotificationTopicRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Identity"), &obj.identity);
+        params.put(
+            &format!("{}{}", prefix, "Identity"),
+            &obj.identity.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "NotificationType"),
-            &obj.notification_type,
+            &obj.notification_type.to_string(),
         );
         if let Some(ref field_value) = obj.sns_topic {
-            params.put(&format!("{}{}", prefix, "SnsTopic"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnsTopic"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6072,10 +7880,16 @@ impl SetReceiptRulePositionRequestSerializer {
         }
 
         if let Some(ref field_value) = obj.after {
-            params.put(&format!("{}{}", prefix, "After"), &field_value);
+            params.put(&format!("{}{}", prefix, "After"), &field_value.to_string());
         }
-        params.put(&format!("{}{}", prefix, "RuleName"), &obj.rule_name);
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleName"),
+            &obj.rule_name.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -6107,7 +7921,7 @@ impl SetReceiptRulePositionResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAction {
     /// <p>The scope of the StopAction. The only acceptable value is <code>RuleSet</code>.</p>
-    pub scope: String,
+    pub scope: StopScope,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the stop action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="https://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: Option<String>,
 }
@@ -6146,10 +7960,110 @@ impl StopActionSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Scope"), &obj.scope);
+        params.put(&format!("{}{}", prefix, "Scope"), &obj.scope.to_string());
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStopScope {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StopScope {
+    RuleSet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStopScope),
+}
+
+impl Default for StopScope {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StopScope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StopScope {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StopScope {
+    fn into(self) -> String {
+        match self {
+            StopScope::RuleSet => "RuleSet".to_string(),
+            StopScope::UnknownVariant(UnknownStopScope { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StopScope {
+    fn into(self) -> &'a str {
+        match self {
+            StopScope::RuleSet => &"RuleSet",
+            StopScope::UnknownVariant(UnknownStopScope { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StopScope {
+    fn from(name: &str) -> Self {
+        match name {
+            "RuleSet" => StopScope::RuleSet,
+            _ => StopScope::UnknownVariant(UnknownStopScope {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StopScope {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RuleSet" => StopScope::RuleSet,
+            _ => StopScope::UnknownVariant(UnknownStopScope { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StopScope {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StopScope {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6157,8 +8071,11 @@ impl StopActionSerializer {
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopScope, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6241,14 +8158,26 @@ impl TemplateSerializer {
         }
 
         if let Some(ref field_value) = obj.html_part {
-            params.put(&format!("{}{}", prefix, "HtmlPart"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HtmlPart"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.subject_part {
-            params.put(&format!("{}{}", prefix, "SubjectPart"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SubjectPart"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
         if let Some(ref field_value) = obj.text_part {
-            params.put(&format!("{}{}", prefix, "TextPart"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TextPart"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6340,8 +8269,14 @@ impl TestRenderTemplateRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "TemplateData"), &obj.template_data);
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateData"),
+            &obj.template_data.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
     }
 }
 
@@ -6394,12 +8329,118 @@ impl TimestampDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTlsPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TlsPolicy {
+    Optional,
+    Require,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTlsPolicy),
+}
+
+impl Default for TlsPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TlsPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TlsPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TlsPolicy {
+    fn into(self) -> String {
+        match self {
+            TlsPolicy::Optional => "Optional".to_string(),
+            TlsPolicy::Require => "Require".to_string(),
+            TlsPolicy::UnknownVariant(UnknownTlsPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TlsPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            TlsPolicy::Optional => &"Optional",
+            TlsPolicy::Require => &"Require",
+            TlsPolicy::UnknownVariant(UnknownTlsPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TlsPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Optional" => TlsPolicy::Optional,
+            "Require" => TlsPolicy::Require,
+            _ => TlsPolicy::UnknownVariant(UnknownTlsPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TlsPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Optional" => TlsPolicy::Optional,
+            "Require" => TlsPolicy::Require,
+            _ => TlsPolicy::UnknownVariant(UnknownTlsPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TlsPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TlsPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TlsPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TlsPolicy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A domain that is used to redirect email recipients to an Amazon SES-operated domain. This domain captures open and click events generated by Amazon SES emails.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <i>Amazon SES Developer Guide</i>.</p>
@@ -6447,7 +8488,7 @@ impl TrackingOptionsSerializer {
         if let Some(ref field_value) = obj.custom_redirect_domain {
             params.put(
                 &format!("{}{}", prefix, "CustomRedirectDomain"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -6501,7 +8542,7 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         EventDestinationSerializer::serialize(
             params,
@@ -6558,7 +8599,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
     }
@@ -6589,7 +8630,7 @@ impl UpdateConfigurationSetSendingEnabledRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         params.put(&format!("{}{}", prefix, "Enabled"), &obj.enabled);
     }
@@ -6619,7 +8660,7 @@ impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ConfigurationSetName"),
-            &obj.configuration_set_name,
+            &obj.configuration_set_name.to_string(),
         );
         TrackingOptionsSerializer::serialize(
             params,
@@ -6685,24 +8726,36 @@ impl UpdateCustomVerificationEmailTemplateRequestSerializer {
         if let Some(ref field_value) = obj.failure_redirection_url {
             params.put(
                 &format!("{}{}", prefix, "FailureRedirectionURL"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.from_email_address {
-            params.put(&format!("{}{}", prefix, "FromEmailAddress"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "FromEmailAddress"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.success_redirection_url {
             params.put(
                 &format!("{}{}", prefix, "SuccessRedirectionURL"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.template_content {
-            params.put(&format!("{}{}", prefix, "TemplateContent"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateContent"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "TemplateName"), &obj.template_name);
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.to_string(),
+        );
         if let Some(ref field_value) = obj.template_subject {
-            params.put(&format!("{}{}", prefix, "TemplateSubject"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TemplateSubject"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -6727,7 +8780,10 @@ impl UpdateReceiptRuleRequestSerializer {
         }
 
         ReceiptRuleSerializer::serialize(params, &format!("{}{}", prefix, "Rule"), &obj.rule);
-        params.put(&format!("{}{}", prefix, "RuleSetName"), &obj.rule_set_name);
+        params.put(
+            &format!("{}{}", prefix, "RuleSetName"),
+            &obj.rule_set_name.to_string(),
+        );
     }
 }
 
@@ -6818,12 +8874,137 @@ impl VerificationAttributesDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVerificationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VerificationStatus {
+    Failed,
+    NotStarted,
+    Pending,
+    Success,
+    TemporaryFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVerificationStatus),
+}
+
+impl Default for VerificationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VerificationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VerificationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VerificationStatus {
+    fn into(self) -> String {
+        match self {
+            VerificationStatus::Failed => "Failed".to_string(),
+            VerificationStatus::NotStarted => "NotStarted".to_string(),
+            VerificationStatus::Pending => "Pending".to_string(),
+            VerificationStatus::Success => "Success".to_string(),
+            VerificationStatus::TemporaryFailure => "TemporaryFailure".to_string(),
+            VerificationStatus::UnknownVariant(UnknownVerificationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VerificationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            VerificationStatus::Failed => &"Failed",
+            VerificationStatus::NotStarted => &"NotStarted",
+            VerificationStatus::Pending => &"Pending",
+            VerificationStatus::Success => &"Success",
+            VerificationStatus::TemporaryFailure => &"TemporaryFailure",
+            VerificationStatus::UnknownVariant(UnknownVerificationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for VerificationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => VerificationStatus::Failed,
+            "NotStarted" => VerificationStatus::NotStarted,
+            "Pending" => VerificationStatus::Pending,
+            "Success" => VerificationStatus::Success,
+            "TemporaryFailure" => VerificationStatus::TemporaryFailure,
+            _ => VerificationStatus::UnknownVariant(UnknownVerificationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VerificationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => VerificationStatus::Failed,
+            "NotStarted" => VerificationStatus::NotStarted,
+            "Pending" => VerificationStatus::Pending,
+            "Success" => VerificationStatus::Success,
+            "TemporaryFailure" => VerificationStatus::TemporaryFailure,
+            _ => VerificationStatus::UnknownVariant(UnknownVerificationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VerificationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for VerificationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for VerificationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VerificationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6869,7 +9050,7 @@ impl VerifyDomainDkimRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
+        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain.to_string());
     }
 }
 
@@ -6925,7 +9106,7 @@ impl VerifyDomainIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain);
+        params.put(&format!("{}{}", prefix, "Domain"), &obj.domain.to_string());
     }
 }
 
@@ -6978,7 +9159,10 @@ impl VerifyEmailAddressRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
+        params.put(
+            &format!("{}{}", prefix, "EmailAddress"),
+            &obj.email_address.to_string(),
+        );
     }
 }
 
@@ -6999,7 +9183,10 @@ impl VerifyEmailIdentityRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "EmailAddress"), &obj.email_address);
+        params.put(
+            &format!("{}{}", prefix, "EmailAddress"),
+            &obj.email_address.to_string(),
+        );
     }
 }
 
@@ -7073,10 +9260,13 @@ impl WorkmailActionSerializer {
 
         params.put(
             &format!("{}{}", prefix, "OrganizationArn"),
-            &obj.organization_arn,
+            &obj.organization_arn.to_string(),
         );
         if let Some(ref field_value) = obj.topic_arn {
-            params.put(&format!("{}{}", prefix, "TopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TopicArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }

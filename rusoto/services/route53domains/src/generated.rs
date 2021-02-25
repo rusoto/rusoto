@@ -92,7 +92,7 @@ pub struct BillingRecord {
     /// <p>The operation that you were charged for.</p>
     #[serde(rename = "Operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation: Option<String>,
+    pub operation: Option<OperationType>,
     /// <p>The price that you were charged for the operation, in US dollars.</p> <p>Example value: 12.0</p>
     #[serde(rename = "Price")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -137,7 +137,7 @@ pub struct CheckDomainAvailabilityRequest {
 pub struct CheckDomainAvailabilityResponse {
     /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can register only domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
-    pub availability: String,
+    pub availability: DomainAvailability,
 }
 
 /// <p>The CheckDomainTransferability request contains the following elements.</p>
@@ -180,11 +180,11 @@ pub struct ContactDetail {
     /// <p><p>Indicates whether the contact is a person, company, association, or public organization. Note the following:</p> <ul> <li> <p>If you specify a value other than <code>PERSON</code>, you must also specify a value for <code>OrganizationName</code>.</p> </li> <li> <p>For some TLDs, the privacy protection available depends on the value that you specify for <code>Contact Type</code>. For the privacy protection settings for your TLD, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html">Domains that You Can Register with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i> </p> </li> <li> <p>For .es domains, if you specify <code>PERSON</code>, you must specify <code>INDIVIDUAL</code> for the value of <code>ES<em>LEGAL</em>FORM</code>.</p> </li> </ul></p>
     #[serde(rename = "ContactType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_type: Option<String>,
+    pub contact_type: Option<ContactType>,
     /// <p>Code for the country of the contact's address.</p>
     #[serde(rename = "CountryCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub country_code: Option<String>,
+    pub country_code: Option<CountryCode>,
     /// <p>Email address of the contact.</p>
     #[serde(rename = "Email")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -221,6 +221,1356 @@ pub struct ContactDetail {
     #[serde(rename = "ZipCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zip_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactType {
+    Association,
+    Company,
+    Person,
+    PublicBody,
+    Reseller,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactType),
+}
+
+impl Default for ContactType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactType {
+    fn into(self) -> String {
+        match self {
+            ContactType::Association => "ASSOCIATION".to_string(),
+            ContactType::Company => "COMPANY".to_string(),
+            ContactType::Person => "PERSON".to_string(),
+            ContactType::PublicBody => "PUBLIC_BODY".to_string(),
+            ContactType::Reseller => "RESELLER".to_string(),
+            ContactType::UnknownVariant(UnknownContactType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactType {
+    fn into(self) -> &'a str {
+        match self {
+            ContactType::Association => &"ASSOCIATION",
+            ContactType::Company => &"COMPANY",
+            ContactType::Person => &"PERSON",
+            ContactType::PublicBody => &"PUBLIC_BODY",
+            ContactType::Reseller => &"RESELLER",
+            ContactType::UnknownVariant(UnknownContactType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSOCIATION" => ContactType::Association,
+            "COMPANY" => ContactType::Company,
+            "PERSON" => ContactType::Person,
+            "PUBLIC_BODY" => ContactType::PublicBody,
+            "RESELLER" => ContactType::Reseller,
+            _ => ContactType::UnknownVariant(UnknownContactType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSOCIATION" => ContactType::Association,
+            "COMPANY" => ContactType::Company,
+            "PERSON" => ContactType::Person,
+            "PUBLIC_BODY" => ContactType::PublicBody,
+            "RESELLER" => ContactType::Reseller,
+            _ => ContactType::UnknownVariant(UnknownContactType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCountryCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CountryCode {
+    Ad,
+    Ae,
+    Af,
+    Ag,
+    Ai,
+    Al,
+    Am,
+    An,
+    Ao,
+    Aq,
+    Ar,
+    As,
+    At,
+    Au,
+    Aw,
+    Az,
+    Ba,
+    Bb,
+    Bd,
+    Be,
+    Bf,
+    Bg,
+    Bh,
+    Bi,
+    Bj,
+    Bl,
+    Bm,
+    Bn,
+    Bo,
+    Br,
+    Bs,
+    Bt,
+    Bw,
+    By,
+    Bz,
+    Ca,
+    Cc,
+    Cd,
+    Cf,
+    Cg,
+    Ch,
+    Ci,
+    Ck,
+    Cl,
+    Cm,
+    Cn,
+    Co,
+    Cr,
+    Cu,
+    Cv,
+    Cx,
+    Cy,
+    Cz,
+    De,
+    Dj,
+    Dk,
+    Dm,
+    Do,
+    Dz,
+    Ec,
+    Ee,
+    Eg,
+    Er,
+    Es,
+    Et,
+    Fi,
+    Fj,
+    Fk,
+    Fm,
+    Fo,
+    Fr,
+    Ga,
+    Gb,
+    Gd,
+    Ge,
+    Gh,
+    Gi,
+    Gl,
+    Gm,
+    Gn,
+    Gq,
+    Gr,
+    Gt,
+    Gu,
+    Gw,
+    Gy,
+    Hk,
+    Hn,
+    Hr,
+    Ht,
+    Hu,
+    Id,
+    Ie,
+    Il,
+    Im,
+    In,
+    Iq,
+    Ir,
+    Is,
+    It,
+    Jm,
+    Jo,
+    Jp,
+    Ke,
+    Kg,
+    Kh,
+    Ki,
+    Km,
+    Kn,
+    Kp,
+    Kr,
+    Kw,
+    Ky,
+    Kz,
+    La,
+    Lb,
+    Lc,
+    Li,
+    Lk,
+    Lr,
+    Ls,
+    Lt,
+    Lu,
+    Lv,
+    Ly,
+    Ma,
+    Mc,
+    Md,
+    Me,
+    Mf,
+    Mg,
+    Mh,
+    Mk,
+    Ml,
+    Mm,
+    Mn,
+    Mo,
+    Mp,
+    Mr,
+    Ms,
+    Mt,
+    Mu,
+    Mv,
+    Mw,
+    Mx,
+    My,
+    Mz,
+    Na,
+    Nc,
+    Ne,
+    Ng,
+    Ni,
+    Nl,
+    No,
+    Np,
+    Nr,
+    Nu,
+    Nz,
+    Om,
+    Pa,
+    Pe,
+    Pf,
+    Pg,
+    Ph,
+    Pk,
+    Pl,
+    Pm,
+    Pn,
+    Pr,
+    Pt,
+    Pw,
+    Py,
+    Qa,
+    Ro,
+    Rs,
+    Ru,
+    Rw,
+    Sa,
+    Sb,
+    Sc,
+    Sd,
+    Se,
+    Sg,
+    Sh,
+    Si,
+    Sk,
+    Sl,
+    Sm,
+    Sn,
+    So,
+    Sr,
+    St,
+    Sv,
+    Sy,
+    Sz,
+    Tc,
+    Td,
+    Tg,
+    Th,
+    Tj,
+    Tk,
+    Tl,
+    Tm,
+    Tn,
+    To,
+    Tr,
+    Tt,
+    Tv,
+    Tw,
+    Tz,
+    Ua,
+    Ug,
+    Us,
+    Uy,
+    Uz,
+    Va,
+    Vc,
+    Ve,
+    Vg,
+    Vi,
+    Vn,
+    Vu,
+    Wf,
+    Ws,
+    Ye,
+    Yt,
+    Za,
+    Zm,
+    Zw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCountryCode),
+}
+
+impl Default for CountryCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CountryCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CountryCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CountryCode {
+    fn into(self) -> String {
+        match self {
+            CountryCode::Ad => "AD".to_string(),
+            CountryCode::Ae => "AE".to_string(),
+            CountryCode::Af => "AF".to_string(),
+            CountryCode::Ag => "AG".to_string(),
+            CountryCode::Ai => "AI".to_string(),
+            CountryCode::Al => "AL".to_string(),
+            CountryCode::Am => "AM".to_string(),
+            CountryCode::An => "AN".to_string(),
+            CountryCode::Ao => "AO".to_string(),
+            CountryCode::Aq => "AQ".to_string(),
+            CountryCode::Ar => "AR".to_string(),
+            CountryCode::As => "AS".to_string(),
+            CountryCode::At => "AT".to_string(),
+            CountryCode::Au => "AU".to_string(),
+            CountryCode::Aw => "AW".to_string(),
+            CountryCode::Az => "AZ".to_string(),
+            CountryCode::Ba => "BA".to_string(),
+            CountryCode::Bb => "BB".to_string(),
+            CountryCode::Bd => "BD".to_string(),
+            CountryCode::Be => "BE".to_string(),
+            CountryCode::Bf => "BF".to_string(),
+            CountryCode::Bg => "BG".to_string(),
+            CountryCode::Bh => "BH".to_string(),
+            CountryCode::Bi => "BI".to_string(),
+            CountryCode::Bj => "BJ".to_string(),
+            CountryCode::Bl => "BL".to_string(),
+            CountryCode::Bm => "BM".to_string(),
+            CountryCode::Bn => "BN".to_string(),
+            CountryCode::Bo => "BO".to_string(),
+            CountryCode::Br => "BR".to_string(),
+            CountryCode::Bs => "BS".to_string(),
+            CountryCode::Bt => "BT".to_string(),
+            CountryCode::Bw => "BW".to_string(),
+            CountryCode::By => "BY".to_string(),
+            CountryCode::Bz => "BZ".to_string(),
+            CountryCode::Ca => "CA".to_string(),
+            CountryCode::Cc => "CC".to_string(),
+            CountryCode::Cd => "CD".to_string(),
+            CountryCode::Cf => "CF".to_string(),
+            CountryCode::Cg => "CG".to_string(),
+            CountryCode::Ch => "CH".to_string(),
+            CountryCode::Ci => "CI".to_string(),
+            CountryCode::Ck => "CK".to_string(),
+            CountryCode::Cl => "CL".to_string(),
+            CountryCode::Cm => "CM".to_string(),
+            CountryCode::Cn => "CN".to_string(),
+            CountryCode::Co => "CO".to_string(),
+            CountryCode::Cr => "CR".to_string(),
+            CountryCode::Cu => "CU".to_string(),
+            CountryCode::Cv => "CV".to_string(),
+            CountryCode::Cx => "CX".to_string(),
+            CountryCode::Cy => "CY".to_string(),
+            CountryCode::Cz => "CZ".to_string(),
+            CountryCode::De => "DE".to_string(),
+            CountryCode::Dj => "DJ".to_string(),
+            CountryCode::Dk => "DK".to_string(),
+            CountryCode::Dm => "DM".to_string(),
+            CountryCode::Do => "DO".to_string(),
+            CountryCode::Dz => "DZ".to_string(),
+            CountryCode::Ec => "EC".to_string(),
+            CountryCode::Ee => "EE".to_string(),
+            CountryCode::Eg => "EG".to_string(),
+            CountryCode::Er => "ER".to_string(),
+            CountryCode::Es => "ES".to_string(),
+            CountryCode::Et => "ET".to_string(),
+            CountryCode::Fi => "FI".to_string(),
+            CountryCode::Fj => "FJ".to_string(),
+            CountryCode::Fk => "FK".to_string(),
+            CountryCode::Fm => "FM".to_string(),
+            CountryCode::Fo => "FO".to_string(),
+            CountryCode::Fr => "FR".to_string(),
+            CountryCode::Ga => "GA".to_string(),
+            CountryCode::Gb => "GB".to_string(),
+            CountryCode::Gd => "GD".to_string(),
+            CountryCode::Ge => "GE".to_string(),
+            CountryCode::Gh => "GH".to_string(),
+            CountryCode::Gi => "GI".to_string(),
+            CountryCode::Gl => "GL".to_string(),
+            CountryCode::Gm => "GM".to_string(),
+            CountryCode::Gn => "GN".to_string(),
+            CountryCode::Gq => "GQ".to_string(),
+            CountryCode::Gr => "GR".to_string(),
+            CountryCode::Gt => "GT".to_string(),
+            CountryCode::Gu => "GU".to_string(),
+            CountryCode::Gw => "GW".to_string(),
+            CountryCode::Gy => "GY".to_string(),
+            CountryCode::Hk => "HK".to_string(),
+            CountryCode::Hn => "HN".to_string(),
+            CountryCode::Hr => "HR".to_string(),
+            CountryCode::Ht => "HT".to_string(),
+            CountryCode::Hu => "HU".to_string(),
+            CountryCode::Id => "ID".to_string(),
+            CountryCode::Ie => "IE".to_string(),
+            CountryCode::Il => "IL".to_string(),
+            CountryCode::Im => "IM".to_string(),
+            CountryCode::In => "IN".to_string(),
+            CountryCode::Iq => "IQ".to_string(),
+            CountryCode::Ir => "IR".to_string(),
+            CountryCode::Is => "IS".to_string(),
+            CountryCode::It => "IT".to_string(),
+            CountryCode::Jm => "JM".to_string(),
+            CountryCode::Jo => "JO".to_string(),
+            CountryCode::Jp => "JP".to_string(),
+            CountryCode::Ke => "KE".to_string(),
+            CountryCode::Kg => "KG".to_string(),
+            CountryCode::Kh => "KH".to_string(),
+            CountryCode::Ki => "KI".to_string(),
+            CountryCode::Km => "KM".to_string(),
+            CountryCode::Kn => "KN".to_string(),
+            CountryCode::Kp => "KP".to_string(),
+            CountryCode::Kr => "KR".to_string(),
+            CountryCode::Kw => "KW".to_string(),
+            CountryCode::Ky => "KY".to_string(),
+            CountryCode::Kz => "KZ".to_string(),
+            CountryCode::La => "LA".to_string(),
+            CountryCode::Lb => "LB".to_string(),
+            CountryCode::Lc => "LC".to_string(),
+            CountryCode::Li => "LI".to_string(),
+            CountryCode::Lk => "LK".to_string(),
+            CountryCode::Lr => "LR".to_string(),
+            CountryCode::Ls => "LS".to_string(),
+            CountryCode::Lt => "LT".to_string(),
+            CountryCode::Lu => "LU".to_string(),
+            CountryCode::Lv => "LV".to_string(),
+            CountryCode::Ly => "LY".to_string(),
+            CountryCode::Ma => "MA".to_string(),
+            CountryCode::Mc => "MC".to_string(),
+            CountryCode::Md => "MD".to_string(),
+            CountryCode::Me => "ME".to_string(),
+            CountryCode::Mf => "MF".to_string(),
+            CountryCode::Mg => "MG".to_string(),
+            CountryCode::Mh => "MH".to_string(),
+            CountryCode::Mk => "MK".to_string(),
+            CountryCode::Ml => "ML".to_string(),
+            CountryCode::Mm => "MM".to_string(),
+            CountryCode::Mn => "MN".to_string(),
+            CountryCode::Mo => "MO".to_string(),
+            CountryCode::Mp => "MP".to_string(),
+            CountryCode::Mr => "MR".to_string(),
+            CountryCode::Ms => "MS".to_string(),
+            CountryCode::Mt => "MT".to_string(),
+            CountryCode::Mu => "MU".to_string(),
+            CountryCode::Mv => "MV".to_string(),
+            CountryCode::Mw => "MW".to_string(),
+            CountryCode::Mx => "MX".to_string(),
+            CountryCode::My => "MY".to_string(),
+            CountryCode::Mz => "MZ".to_string(),
+            CountryCode::Na => "NA".to_string(),
+            CountryCode::Nc => "NC".to_string(),
+            CountryCode::Ne => "NE".to_string(),
+            CountryCode::Ng => "NG".to_string(),
+            CountryCode::Ni => "NI".to_string(),
+            CountryCode::Nl => "NL".to_string(),
+            CountryCode::No => "NO".to_string(),
+            CountryCode::Np => "NP".to_string(),
+            CountryCode::Nr => "NR".to_string(),
+            CountryCode::Nu => "NU".to_string(),
+            CountryCode::Nz => "NZ".to_string(),
+            CountryCode::Om => "OM".to_string(),
+            CountryCode::Pa => "PA".to_string(),
+            CountryCode::Pe => "PE".to_string(),
+            CountryCode::Pf => "PF".to_string(),
+            CountryCode::Pg => "PG".to_string(),
+            CountryCode::Ph => "PH".to_string(),
+            CountryCode::Pk => "PK".to_string(),
+            CountryCode::Pl => "PL".to_string(),
+            CountryCode::Pm => "PM".to_string(),
+            CountryCode::Pn => "PN".to_string(),
+            CountryCode::Pr => "PR".to_string(),
+            CountryCode::Pt => "PT".to_string(),
+            CountryCode::Pw => "PW".to_string(),
+            CountryCode::Py => "PY".to_string(),
+            CountryCode::Qa => "QA".to_string(),
+            CountryCode::Ro => "RO".to_string(),
+            CountryCode::Rs => "RS".to_string(),
+            CountryCode::Ru => "RU".to_string(),
+            CountryCode::Rw => "RW".to_string(),
+            CountryCode::Sa => "SA".to_string(),
+            CountryCode::Sb => "SB".to_string(),
+            CountryCode::Sc => "SC".to_string(),
+            CountryCode::Sd => "SD".to_string(),
+            CountryCode::Se => "SE".to_string(),
+            CountryCode::Sg => "SG".to_string(),
+            CountryCode::Sh => "SH".to_string(),
+            CountryCode::Si => "SI".to_string(),
+            CountryCode::Sk => "SK".to_string(),
+            CountryCode::Sl => "SL".to_string(),
+            CountryCode::Sm => "SM".to_string(),
+            CountryCode::Sn => "SN".to_string(),
+            CountryCode::So => "SO".to_string(),
+            CountryCode::Sr => "SR".to_string(),
+            CountryCode::St => "ST".to_string(),
+            CountryCode::Sv => "SV".to_string(),
+            CountryCode::Sy => "SY".to_string(),
+            CountryCode::Sz => "SZ".to_string(),
+            CountryCode::Tc => "TC".to_string(),
+            CountryCode::Td => "TD".to_string(),
+            CountryCode::Tg => "TG".to_string(),
+            CountryCode::Th => "TH".to_string(),
+            CountryCode::Tj => "TJ".to_string(),
+            CountryCode::Tk => "TK".to_string(),
+            CountryCode::Tl => "TL".to_string(),
+            CountryCode::Tm => "TM".to_string(),
+            CountryCode::Tn => "TN".to_string(),
+            CountryCode::To => "TO".to_string(),
+            CountryCode::Tr => "TR".to_string(),
+            CountryCode::Tt => "TT".to_string(),
+            CountryCode::Tv => "TV".to_string(),
+            CountryCode::Tw => "TW".to_string(),
+            CountryCode::Tz => "TZ".to_string(),
+            CountryCode::Ua => "UA".to_string(),
+            CountryCode::Ug => "UG".to_string(),
+            CountryCode::Us => "US".to_string(),
+            CountryCode::Uy => "UY".to_string(),
+            CountryCode::Uz => "UZ".to_string(),
+            CountryCode::Va => "VA".to_string(),
+            CountryCode::Vc => "VC".to_string(),
+            CountryCode::Ve => "VE".to_string(),
+            CountryCode::Vg => "VG".to_string(),
+            CountryCode::Vi => "VI".to_string(),
+            CountryCode::Vn => "VN".to_string(),
+            CountryCode::Vu => "VU".to_string(),
+            CountryCode::Wf => "WF".to_string(),
+            CountryCode::Ws => "WS".to_string(),
+            CountryCode::Ye => "YE".to_string(),
+            CountryCode::Yt => "YT".to_string(),
+            CountryCode::Za => "ZA".to_string(),
+            CountryCode::Zm => "ZM".to_string(),
+            CountryCode::Zw => "ZW".to_string(),
+            CountryCode::UnknownVariant(UnknownCountryCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CountryCode {
+    fn into(self) -> &'a str {
+        match self {
+            CountryCode::Ad => &"AD",
+            CountryCode::Ae => &"AE",
+            CountryCode::Af => &"AF",
+            CountryCode::Ag => &"AG",
+            CountryCode::Ai => &"AI",
+            CountryCode::Al => &"AL",
+            CountryCode::Am => &"AM",
+            CountryCode::An => &"AN",
+            CountryCode::Ao => &"AO",
+            CountryCode::Aq => &"AQ",
+            CountryCode::Ar => &"AR",
+            CountryCode::As => &"AS",
+            CountryCode::At => &"AT",
+            CountryCode::Au => &"AU",
+            CountryCode::Aw => &"AW",
+            CountryCode::Az => &"AZ",
+            CountryCode::Ba => &"BA",
+            CountryCode::Bb => &"BB",
+            CountryCode::Bd => &"BD",
+            CountryCode::Be => &"BE",
+            CountryCode::Bf => &"BF",
+            CountryCode::Bg => &"BG",
+            CountryCode::Bh => &"BH",
+            CountryCode::Bi => &"BI",
+            CountryCode::Bj => &"BJ",
+            CountryCode::Bl => &"BL",
+            CountryCode::Bm => &"BM",
+            CountryCode::Bn => &"BN",
+            CountryCode::Bo => &"BO",
+            CountryCode::Br => &"BR",
+            CountryCode::Bs => &"BS",
+            CountryCode::Bt => &"BT",
+            CountryCode::Bw => &"BW",
+            CountryCode::By => &"BY",
+            CountryCode::Bz => &"BZ",
+            CountryCode::Ca => &"CA",
+            CountryCode::Cc => &"CC",
+            CountryCode::Cd => &"CD",
+            CountryCode::Cf => &"CF",
+            CountryCode::Cg => &"CG",
+            CountryCode::Ch => &"CH",
+            CountryCode::Ci => &"CI",
+            CountryCode::Ck => &"CK",
+            CountryCode::Cl => &"CL",
+            CountryCode::Cm => &"CM",
+            CountryCode::Cn => &"CN",
+            CountryCode::Co => &"CO",
+            CountryCode::Cr => &"CR",
+            CountryCode::Cu => &"CU",
+            CountryCode::Cv => &"CV",
+            CountryCode::Cx => &"CX",
+            CountryCode::Cy => &"CY",
+            CountryCode::Cz => &"CZ",
+            CountryCode::De => &"DE",
+            CountryCode::Dj => &"DJ",
+            CountryCode::Dk => &"DK",
+            CountryCode::Dm => &"DM",
+            CountryCode::Do => &"DO",
+            CountryCode::Dz => &"DZ",
+            CountryCode::Ec => &"EC",
+            CountryCode::Ee => &"EE",
+            CountryCode::Eg => &"EG",
+            CountryCode::Er => &"ER",
+            CountryCode::Es => &"ES",
+            CountryCode::Et => &"ET",
+            CountryCode::Fi => &"FI",
+            CountryCode::Fj => &"FJ",
+            CountryCode::Fk => &"FK",
+            CountryCode::Fm => &"FM",
+            CountryCode::Fo => &"FO",
+            CountryCode::Fr => &"FR",
+            CountryCode::Ga => &"GA",
+            CountryCode::Gb => &"GB",
+            CountryCode::Gd => &"GD",
+            CountryCode::Ge => &"GE",
+            CountryCode::Gh => &"GH",
+            CountryCode::Gi => &"GI",
+            CountryCode::Gl => &"GL",
+            CountryCode::Gm => &"GM",
+            CountryCode::Gn => &"GN",
+            CountryCode::Gq => &"GQ",
+            CountryCode::Gr => &"GR",
+            CountryCode::Gt => &"GT",
+            CountryCode::Gu => &"GU",
+            CountryCode::Gw => &"GW",
+            CountryCode::Gy => &"GY",
+            CountryCode::Hk => &"HK",
+            CountryCode::Hn => &"HN",
+            CountryCode::Hr => &"HR",
+            CountryCode::Ht => &"HT",
+            CountryCode::Hu => &"HU",
+            CountryCode::Id => &"ID",
+            CountryCode::Ie => &"IE",
+            CountryCode::Il => &"IL",
+            CountryCode::Im => &"IM",
+            CountryCode::In => &"IN",
+            CountryCode::Iq => &"IQ",
+            CountryCode::Ir => &"IR",
+            CountryCode::Is => &"IS",
+            CountryCode::It => &"IT",
+            CountryCode::Jm => &"JM",
+            CountryCode::Jo => &"JO",
+            CountryCode::Jp => &"JP",
+            CountryCode::Ke => &"KE",
+            CountryCode::Kg => &"KG",
+            CountryCode::Kh => &"KH",
+            CountryCode::Ki => &"KI",
+            CountryCode::Km => &"KM",
+            CountryCode::Kn => &"KN",
+            CountryCode::Kp => &"KP",
+            CountryCode::Kr => &"KR",
+            CountryCode::Kw => &"KW",
+            CountryCode::Ky => &"KY",
+            CountryCode::Kz => &"KZ",
+            CountryCode::La => &"LA",
+            CountryCode::Lb => &"LB",
+            CountryCode::Lc => &"LC",
+            CountryCode::Li => &"LI",
+            CountryCode::Lk => &"LK",
+            CountryCode::Lr => &"LR",
+            CountryCode::Ls => &"LS",
+            CountryCode::Lt => &"LT",
+            CountryCode::Lu => &"LU",
+            CountryCode::Lv => &"LV",
+            CountryCode::Ly => &"LY",
+            CountryCode::Ma => &"MA",
+            CountryCode::Mc => &"MC",
+            CountryCode::Md => &"MD",
+            CountryCode::Me => &"ME",
+            CountryCode::Mf => &"MF",
+            CountryCode::Mg => &"MG",
+            CountryCode::Mh => &"MH",
+            CountryCode::Mk => &"MK",
+            CountryCode::Ml => &"ML",
+            CountryCode::Mm => &"MM",
+            CountryCode::Mn => &"MN",
+            CountryCode::Mo => &"MO",
+            CountryCode::Mp => &"MP",
+            CountryCode::Mr => &"MR",
+            CountryCode::Ms => &"MS",
+            CountryCode::Mt => &"MT",
+            CountryCode::Mu => &"MU",
+            CountryCode::Mv => &"MV",
+            CountryCode::Mw => &"MW",
+            CountryCode::Mx => &"MX",
+            CountryCode::My => &"MY",
+            CountryCode::Mz => &"MZ",
+            CountryCode::Na => &"NA",
+            CountryCode::Nc => &"NC",
+            CountryCode::Ne => &"NE",
+            CountryCode::Ng => &"NG",
+            CountryCode::Ni => &"NI",
+            CountryCode::Nl => &"NL",
+            CountryCode::No => &"NO",
+            CountryCode::Np => &"NP",
+            CountryCode::Nr => &"NR",
+            CountryCode::Nu => &"NU",
+            CountryCode::Nz => &"NZ",
+            CountryCode::Om => &"OM",
+            CountryCode::Pa => &"PA",
+            CountryCode::Pe => &"PE",
+            CountryCode::Pf => &"PF",
+            CountryCode::Pg => &"PG",
+            CountryCode::Ph => &"PH",
+            CountryCode::Pk => &"PK",
+            CountryCode::Pl => &"PL",
+            CountryCode::Pm => &"PM",
+            CountryCode::Pn => &"PN",
+            CountryCode::Pr => &"PR",
+            CountryCode::Pt => &"PT",
+            CountryCode::Pw => &"PW",
+            CountryCode::Py => &"PY",
+            CountryCode::Qa => &"QA",
+            CountryCode::Ro => &"RO",
+            CountryCode::Rs => &"RS",
+            CountryCode::Ru => &"RU",
+            CountryCode::Rw => &"RW",
+            CountryCode::Sa => &"SA",
+            CountryCode::Sb => &"SB",
+            CountryCode::Sc => &"SC",
+            CountryCode::Sd => &"SD",
+            CountryCode::Se => &"SE",
+            CountryCode::Sg => &"SG",
+            CountryCode::Sh => &"SH",
+            CountryCode::Si => &"SI",
+            CountryCode::Sk => &"SK",
+            CountryCode::Sl => &"SL",
+            CountryCode::Sm => &"SM",
+            CountryCode::Sn => &"SN",
+            CountryCode::So => &"SO",
+            CountryCode::Sr => &"SR",
+            CountryCode::St => &"ST",
+            CountryCode::Sv => &"SV",
+            CountryCode::Sy => &"SY",
+            CountryCode::Sz => &"SZ",
+            CountryCode::Tc => &"TC",
+            CountryCode::Td => &"TD",
+            CountryCode::Tg => &"TG",
+            CountryCode::Th => &"TH",
+            CountryCode::Tj => &"TJ",
+            CountryCode::Tk => &"TK",
+            CountryCode::Tl => &"TL",
+            CountryCode::Tm => &"TM",
+            CountryCode::Tn => &"TN",
+            CountryCode::To => &"TO",
+            CountryCode::Tr => &"TR",
+            CountryCode::Tt => &"TT",
+            CountryCode::Tv => &"TV",
+            CountryCode::Tw => &"TW",
+            CountryCode::Tz => &"TZ",
+            CountryCode::Ua => &"UA",
+            CountryCode::Ug => &"UG",
+            CountryCode::Us => &"US",
+            CountryCode::Uy => &"UY",
+            CountryCode::Uz => &"UZ",
+            CountryCode::Va => &"VA",
+            CountryCode::Vc => &"VC",
+            CountryCode::Ve => &"VE",
+            CountryCode::Vg => &"VG",
+            CountryCode::Vi => &"VI",
+            CountryCode::Vn => &"VN",
+            CountryCode::Vu => &"VU",
+            CountryCode::Wf => &"WF",
+            CountryCode::Ws => &"WS",
+            CountryCode::Ye => &"YE",
+            CountryCode::Yt => &"YT",
+            CountryCode::Za => &"ZA",
+            CountryCode::Zm => &"ZM",
+            CountryCode::Zw => &"ZW",
+            CountryCode::UnknownVariant(UnknownCountryCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CountryCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AD" => CountryCode::Ad,
+            "AE" => CountryCode::Ae,
+            "AF" => CountryCode::Af,
+            "AG" => CountryCode::Ag,
+            "AI" => CountryCode::Ai,
+            "AL" => CountryCode::Al,
+            "AM" => CountryCode::Am,
+            "AN" => CountryCode::An,
+            "AO" => CountryCode::Ao,
+            "AQ" => CountryCode::Aq,
+            "AR" => CountryCode::Ar,
+            "AS" => CountryCode::As,
+            "AT" => CountryCode::At,
+            "AU" => CountryCode::Au,
+            "AW" => CountryCode::Aw,
+            "AZ" => CountryCode::Az,
+            "BA" => CountryCode::Ba,
+            "BB" => CountryCode::Bb,
+            "BD" => CountryCode::Bd,
+            "BE" => CountryCode::Be,
+            "BF" => CountryCode::Bf,
+            "BG" => CountryCode::Bg,
+            "BH" => CountryCode::Bh,
+            "BI" => CountryCode::Bi,
+            "BJ" => CountryCode::Bj,
+            "BL" => CountryCode::Bl,
+            "BM" => CountryCode::Bm,
+            "BN" => CountryCode::Bn,
+            "BO" => CountryCode::Bo,
+            "BR" => CountryCode::Br,
+            "BS" => CountryCode::Bs,
+            "BT" => CountryCode::Bt,
+            "BW" => CountryCode::Bw,
+            "BY" => CountryCode::By,
+            "BZ" => CountryCode::Bz,
+            "CA" => CountryCode::Ca,
+            "CC" => CountryCode::Cc,
+            "CD" => CountryCode::Cd,
+            "CF" => CountryCode::Cf,
+            "CG" => CountryCode::Cg,
+            "CH" => CountryCode::Ch,
+            "CI" => CountryCode::Ci,
+            "CK" => CountryCode::Ck,
+            "CL" => CountryCode::Cl,
+            "CM" => CountryCode::Cm,
+            "CN" => CountryCode::Cn,
+            "CO" => CountryCode::Co,
+            "CR" => CountryCode::Cr,
+            "CU" => CountryCode::Cu,
+            "CV" => CountryCode::Cv,
+            "CX" => CountryCode::Cx,
+            "CY" => CountryCode::Cy,
+            "CZ" => CountryCode::Cz,
+            "DE" => CountryCode::De,
+            "DJ" => CountryCode::Dj,
+            "DK" => CountryCode::Dk,
+            "DM" => CountryCode::Dm,
+            "DO" => CountryCode::Do,
+            "DZ" => CountryCode::Dz,
+            "EC" => CountryCode::Ec,
+            "EE" => CountryCode::Ee,
+            "EG" => CountryCode::Eg,
+            "ER" => CountryCode::Er,
+            "ES" => CountryCode::Es,
+            "ET" => CountryCode::Et,
+            "FI" => CountryCode::Fi,
+            "FJ" => CountryCode::Fj,
+            "FK" => CountryCode::Fk,
+            "FM" => CountryCode::Fm,
+            "FO" => CountryCode::Fo,
+            "FR" => CountryCode::Fr,
+            "GA" => CountryCode::Ga,
+            "GB" => CountryCode::Gb,
+            "GD" => CountryCode::Gd,
+            "GE" => CountryCode::Ge,
+            "GH" => CountryCode::Gh,
+            "GI" => CountryCode::Gi,
+            "GL" => CountryCode::Gl,
+            "GM" => CountryCode::Gm,
+            "GN" => CountryCode::Gn,
+            "GQ" => CountryCode::Gq,
+            "GR" => CountryCode::Gr,
+            "GT" => CountryCode::Gt,
+            "GU" => CountryCode::Gu,
+            "GW" => CountryCode::Gw,
+            "GY" => CountryCode::Gy,
+            "HK" => CountryCode::Hk,
+            "HN" => CountryCode::Hn,
+            "HR" => CountryCode::Hr,
+            "HT" => CountryCode::Ht,
+            "HU" => CountryCode::Hu,
+            "ID" => CountryCode::Id,
+            "IE" => CountryCode::Ie,
+            "IL" => CountryCode::Il,
+            "IM" => CountryCode::Im,
+            "IN" => CountryCode::In,
+            "IQ" => CountryCode::Iq,
+            "IR" => CountryCode::Ir,
+            "IS" => CountryCode::Is,
+            "IT" => CountryCode::It,
+            "JM" => CountryCode::Jm,
+            "JO" => CountryCode::Jo,
+            "JP" => CountryCode::Jp,
+            "KE" => CountryCode::Ke,
+            "KG" => CountryCode::Kg,
+            "KH" => CountryCode::Kh,
+            "KI" => CountryCode::Ki,
+            "KM" => CountryCode::Km,
+            "KN" => CountryCode::Kn,
+            "KP" => CountryCode::Kp,
+            "KR" => CountryCode::Kr,
+            "KW" => CountryCode::Kw,
+            "KY" => CountryCode::Ky,
+            "KZ" => CountryCode::Kz,
+            "LA" => CountryCode::La,
+            "LB" => CountryCode::Lb,
+            "LC" => CountryCode::Lc,
+            "LI" => CountryCode::Li,
+            "LK" => CountryCode::Lk,
+            "LR" => CountryCode::Lr,
+            "LS" => CountryCode::Ls,
+            "LT" => CountryCode::Lt,
+            "LU" => CountryCode::Lu,
+            "LV" => CountryCode::Lv,
+            "LY" => CountryCode::Ly,
+            "MA" => CountryCode::Ma,
+            "MC" => CountryCode::Mc,
+            "MD" => CountryCode::Md,
+            "ME" => CountryCode::Me,
+            "MF" => CountryCode::Mf,
+            "MG" => CountryCode::Mg,
+            "MH" => CountryCode::Mh,
+            "MK" => CountryCode::Mk,
+            "ML" => CountryCode::Ml,
+            "MM" => CountryCode::Mm,
+            "MN" => CountryCode::Mn,
+            "MO" => CountryCode::Mo,
+            "MP" => CountryCode::Mp,
+            "MR" => CountryCode::Mr,
+            "MS" => CountryCode::Ms,
+            "MT" => CountryCode::Mt,
+            "MU" => CountryCode::Mu,
+            "MV" => CountryCode::Mv,
+            "MW" => CountryCode::Mw,
+            "MX" => CountryCode::Mx,
+            "MY" => CountryCode::My,
+            "MZ" => CountryCode::Mz,
+            "NA" => CountryCode::Na,
+            "NC" => CountryCode::Nc,
+            "NE" => CountryCode::Ne,
+            "NG" => CountryCode::Ng,
+            "NI" => CountryCode::Ni,
+            "NL" => CountryCode::Nl,
+            "NO" => CountryCode::No,
+            "NP" => CountryCode::Np,
+            "NR" => CountryCode::Nr,
+            "NU" => CountryCode::Nu,
+            "NZ" => CountryCode::Nz,
+            "OM" => CountryCode::Om,
+            "PA" => CountryCode::Pa,
+            "PE" => CountryCode::Pe,
+            "PF" => CountryCode::Pf,
+            "PG" => CountryCode::Pg,
+            "PH" => CountryCode::Ph,
+            "PK" => CountryCode::Pk,
+            "PL" => CountryCode::Pl,
+            "PM" => CountryCode::Pm,
+            "PN" => CountryCode::Pn,
+            "PR" => CountryCode::Pr,
+            "PT" => CountryCode::Pt,
+            "PW" => CountryCode::Pw,
+            "PY" => CountryCode::Py,
+            "QA" => CountryCode::Qa,
+            "RO" => CountryCode::Ro,
+            "RS" => CountryCode::Rs,
+            "RU" => CountryCode::Ru,
+            "RW" => CountryCode::Rw,
+            "SA" => CountryCode::Sa,
+            "SB" => CountryCode::Sb,
+            "SC" => CountryCode::Sc,
+            "SD" => CountryCode::Sd,
+            "SE" => CountryCode::Se,
+            "SG" => CountryCode::Sg,
+            "SH" => CountryCode::Sh,
+            "SI" => CountryCode::Si,
+            "SK" => CountryCode::Sk,
+            "SL" => CountryCode::Sl,
+            "SM" => CountryCode::Sm,
+            "SN" => CountryCode::Sn,
+            "SO" => CountryCode::So,
+            "SR" => CountryCode::Sr,
+            "ST" => CountryCode::St,
+            "SV" => CountryCode::Sv,
+            "SY" => CountryCode::Sy,
+            "SZ" => CountryCode::Sz,
+            "TC" => CountryCode::Tc,
+            "TD" => CountryCode::Td,
+            "TG" => CountryCode::Tg,
+            "TH" => CountryCode::Th,
+            "TJ" => CountryCode::Tj,
+            "TK" => CountryCode::Tk,
+            "TL" => CountryCode::Tl,
+            "TM" => CountryCode::Tm,
+            "TN" => CountryCode::Tn,
+            "TO" => CountryCode::To,
+            "TR" => CountryCode::Tr,
+            "TT" => CountryCode::Tt,
+            "TV" => CountryCode::Tv,
+            "TW" => CountryCode::Tw,
+            "TZ" => CountryCode::Tz,
+            "UA" => CountryCode::Ua,
+            "UG" => CountryCode::Ug,
+            "US" => CountryCode::Us,
+            "UY" => CountryCode::Uy,
+            "UZ" => CountryCode::Uz,
+            "VA" => CountryCode::Va,
+            "VC" => CountryCode::Vc,
+            "VE" => CountryCode::Ve,
+            "VG" => CountryCode::Vg,
+            "VI" => CountryCode::Vi,
+            "VN" => CountryCode::Vn,
+            "VU" => CountryCode::Vu,
+            "WF" => CountryCode::Wf,
+            "WS" => CountryCode::Ws,
+            "YE" => CountryCode::Ye,
+            "YT" => CountryCode::Yt,
+            "ZA" => CountryCode::Za,
+            "ZM" => CountryCode::Zm,
+            "ZW" => CountryCode::Zw,
+            _ => CountryCode::UnknownVariant(UnknownCountryCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CountryCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AD" => CountryCode::Ad,
+            "AE" => CountryCode::Ae,
+            "AF" => CountryCode::Af,
+            "AG" => CountryCode::Ag,
+            "AI" => CountryCode::Ai,
+            "AL" => CountryCode::Al,
+            "AM" => CountryCode::Am,
+            "AN" => CountryCode::An,
+            "AO" => CountryCode::Ao,
+            "AQ" => CountryCode::Aq,
+            "AR" => CountryCode::Ar,
+            "AS" => CountryCode::As,
+            "AT" => CountryCode::At,
+            "AU" => CountryCode::Au,
+            "AW" => CountryCode::Aw,
+            "AZ" => CountryCode::Az,
+            "BA" => CountryCode::Ba,
+            "BB" => CountryCode::Bb,
+            "BD" => CountryCode::Bd,
+            "BE" => CountryCode::Be,
+            "BF" => CountryCode::Bf,
+            "BG" => CountryCode::Bg,
+            "BH" => CountryCode::Bh,
+            "BI" => CountryCode::Bi,
+            "BJ" => CountryCode::Bj,
+            "BL" => CountryCode::Bl,
+            "BM" => CountryCode::Bm,
+            "BN" => CountryCode::Bn,
+            "BO" => CountryCode::Bo,
+            "BR" => CountryCode::Br,
+            "BS" => CountryCode::Bs,
+            "BT" => CountryCode::Bt,
+            "BW" => CountryCode::Bw,
+            "BY" => CountryCode::By,
+            "BZ" => CountryCode::Bz,
+            "CA" => CountryCode::Ca,
+            "CC" => CountryCode::Cc,
+            "CD" => CountryCode::Cd,
+            "CF" => CountryCode::Cf,
+            "CG" => CountryCode::Cg,
+            "CH" => CountryCode::Ch,
+            "CI" => CountryCode::Ci,
+            "CK" => CountryCode::Ck,
+            "CL" => CountryCode::Cl,
+            "CM" => CountryCode::Cm,
+            "CN" => CountryCode::Cn,
+            "CO" => CountryCode::Co,
+            "CR" => CountryCode::Cr,
+            "CU" => CountryCode::Cu,
+            "CV" => CountryCode::Cv,
+            "CX" => CountryCode::Cx,
+            "CY" => CountryCode::Cy,
+            "CZ" => CountryCode::Cz,
+            "DE" => CountryCode::De,
+            "DJ" => CountryCode::Dj,
+            "DK" => CountryCode::Dk,
+            "DM" => CountryCode::Dm,
+            "DO" => CountryCode::Do,
+            "DZ" => CountryCode::Dz,
+            "EC" => CountryCode::Ec,
+            "EE" => CountryCode::Ee,
+            "EG" => CountryCode::Eg,
+            "ER" => CountryCode::Er,
+            "ES" => CountryCode::Es,
+            "ET" => CountryCode::Et,
+            "FI" => CountryCode::Fi,
+            "FJ" => CountryCode::Fj,
+            "FK" => CountryCode::Fk,
+            "FM" => CountryCode::Fm,
+            "FO" => CountryCode::Fo,
+            "FR" => CountryCode::Fr,
+            "GA" => CountryCode::Ga,
+            "GB" => CountryCode::Gb,
+            "GD" => CountryCode::Gd,
+            "GE" => CountryCode::Ge,
+            "GH" => CountryCode::Gh,
+            "GI" => CountryCode::Gi,
+            "GL" => CountryCode::Gl,
+            "GM" => CountryCode::Gm,
+            "GN" => CountryCode::Gn,
+            "GQ" => CountryCode::Gq,
+            "GR" => CountryCode::Gr,
+            "GT" => CountryCode::Gt,
+            "GU" => CountryCode::Gu,
+            "GW" => CountryCode::Gw,
+            "GY" => CountryCode::Gy,
+            "HK" => CountryCode::Hk,
+            "HN" => CountryCode::Hn,
+            "HR" => CountryCode::Hr,
+            "HT" => CountryCode::Ht,
+            "HU" => CountryCode::Hu,
+            "ID" => CountryCode::Id,
+            "IE" => CountryCode::Ie,
+            "IL" => CountryCode::Il,
+            "IM" => CountryCode::Im,
+            "IN" => CountryCode::In,
+            "IQ" => CountryCode::Iq,
+            "IR" => CountryCode::Ir,
+            "IS" => CountryCode::Is,
+            "IT" => CountryCode::It,
+            "JM" => CountryCode::Jm,
+            "JO" => CountryCode::Jo,
+            "JP" => CountryCode::Jp,
+            "KE" => CountryCode::Ke,
+            "KG" => CountryCode::Kg,
+            "KH" => CountryCode::Kh,
+            "KI" => CountryCode::Ki,
+            "KM" => CountryCode::Km,
+            "KN" => CountryCode::Kn,
+            "KP" => CountryCode::Kp,
+            "KR" => CountryCode::Kr,
+            "KW" => CountryCode::Kw,
+            "KY" => CountryCode::Ky,
+            "KZ" => CountryCode::Kz,
+            "LA" => CountryCode::La,
+            "LB" => CountryCode::Lb,
+            "LC" => CountryCode::Lc,
+            "LI" => CountryCode::Li,
+            "LK" => CountryCode::Lk,
+            "LR" => CountryCode::Lr,
+            "LS" => CountryCode::Ls,
+            "LT" => CountryCode::Lt,
+            "LU" => CountryCode::Lu,
+            "LV" => CountryCode::Lv,
+            "LY" => CountryCode::Ly,
+            "MA" => CountryCode::Ma,
+            "MC" => CountryCode::Mc,
+            "MD" => CountryCode::Md,
+            "ME" => CountryCode::Me,
+            "MF" => CountryCode::Mf,
+            "MG" => CountryCode::Mg,
+            "MH" => CountryCode::Mh,
+            "MK" => CountryCode::Mk,
+            "ML" => CountryCode::Ml,
+            "MM" => CountryCode::Mm,
+            "MN" => CountryCode::Mn,
+            "MO" => CountryCode::Mo,
+            "MP" => CountryCode::Mp,
+            "MR" => CountryCode::Mr,
+            "MS" => CountryCode::Ms,
+            "MT" => CountryCode::Mt,
+            "MU" => CountryCode::Mu,
+            "MV" => CountryCode::Mv,
+            "MW" => CountryCode::Mw,
+            "MX" => CountryCode::Mx,
+            "MY" => CountryCode::My,
+            "MZ" => CountryCode::Mz,
+            "NA" => CountryCode::Na,
+            "NC" => CountryCode::Nc,
+            "NE" => CountryCode::Ne,
+            "NG" => CountryCode::Ng,
+            "NI" => CountryCode::Ni,
+            "NL" => CountryCode::Nl,
+            "NO" => CountryCode::No,
+            "NP" => CountryCode::Np,
+            "NR" => CountryCode::Nr,
+            "NU" => CountryCode::Nu,
+            "NZ" => CountryCode::Nz,
+            "OM" => CountryCode::Om,
+            "PA" => CountryCode::Pa,
+            "PE" => CountryCode::Pe,
+            "PF" => CountryCode::Pf,
+            "PG" => CountryCode::Pg,
+            "PH" => CountryCode::Ph,
+            "PK" => CountryCode::Pk,
+            "PL" => CountryCode::Pl,
+            "PM" => CountryCode::Pm,
+            "PN" => CountryCode::Pn,
+            "PR" => CountryCode::Pr,
+            "PT" => CountryCode::Pt,
+            "PW" => CountryCode::Pw,
+            "PY" => CountryCode::Py,
+            "QA" => CountryCode::Qa,
+            "RO" => CountryCode::Ro,
+            "RS" => CountryCode::Rs,
+            "RU" => CountryCode::Ru,
+            "RW" => CountryCode::Rw,
+            "SA" => CountryCode::Sa,
+            "SB" => CountryCode::Sb,
+            "SC" => CountryCode::Sc,
+            "SD" => CountryCode::Sd,
+            "SE" => CountryCode::Se,
+            "SG" => CountryCode::Sg,
+            "SH" => CountryCode::Sh,
+            "SI" => CountryCode::Si,
+            "SK" => CountryCode::Sk,
+            "SL" => CountryCode::Sl,
+            "SM" => CountryCode::Sm,
+            "SN" => CountryCode::Sn,
+            "SO" => CountryCode::So,
+            "SR" => CountryCode::Sr,
+            "ST" => CountryCode::St,
+            "SV" => CountryCode::Sv,
+            "SY" => CountryCode::Sy,
+            "SZ" => CountryCode::Sz,
+            "TC" => CountryCode::Tc,
+            "TD" => CountryCode::Td,
+            "TG" => CountryCode::Tg,
+            "TH" => CountryCode::Th,
+            "TJ" => CountryCode::Tj,
+            "TK" => CountryCode::Tk,
+            "TL" => CountryCode::Tl,
+            "TM" => CountryCode::Tm,
+            "TN" => CountryCode::Tn,
+            "TO" => CountryCode::To,
+            "TR" => CountryCode::Tr,
+            "TT" => CountryCode::Tt,
+            "TV" => CountryCode::Tv,
+            "TW" => CountryCode::Tw,
+            "TZ" => CountryCode::Tz,
+            "UA" => CountryCode::Ua,
+            "UG" => CountryCode::Ug,
+            "US" => CountryCode::Us,
+            "UY" => CountryCode::Uy,
+            "UZ" => CountryCode::Uz,
+            "VA" => CountryCode::Va,
+            "VC" => CountryCode::Vc,
+            "VE" => CountryCode::Ve,
+            "VG" => CountryCode::Vg,
+            "VI" => CountryCode::Vi,
+            "VN" => CountryCode::Vn,
+            "VU" => CountryCode::Vu,
+            "WF" => CountryCode::Wf,
+            "WS" => CountryCode::Ws,
+            "YE" => CountryCode::Ye,
+            "YT" => CountryCode::Yt,
+            "ZA" => CountryCode::Za,
+            "ZM" => CountryCode::Zm,
+            "ZW" => CountryCode::Zw,
+            _ => CountryCode::UnknownVariant(UnknownCountryCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CountryCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CountryCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CountryCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The DeleteTagsForDomainRequest includes the following elements.</p>
@@ -269,6 +1619,141 @@ pub struct DisableDomainTransferLockResponse {
     pub operation_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainAvailability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainAvailability {
+    Available,
+    AvailablePreorder,
+    AvailableReserved,
+    DontKnow,
+    Reserved,
+    Unavailable,
+    UnavailablePremium,
+    UnavailableRestricted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainAvailability),
+}
+
+impl Default for DomainAvailability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainAvailability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainAvailability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainAvailability {
+    fn into(self) -> String {
+        match self {
+            DomainAvailability::Available => "AVAILABLE".to_string(),
+            DomainAvailability::AvailablePreorder => "AVAILABLE_PREORDER".to_string(),
+            DomainAvailability::AvailableReserved => "AVAILABLE_RESERVED".to_string(),
+            DomainAvailability::DontKnow => "DONT_KNOW".to_string(),
+            DomainAvailability::Reserved => "RESERVED".to_string(),
+            DomainAvailability::Unavailable => "UNAVAILABLE".to_string(),
+            DomainAvailability::UnavailablePremium => "UNAVAILABLE_PREMIUM".to_string(),
+            DomainAvailability::UnavailableRestricted => "UNAVAILABLE_RESTRICTED".to_string(),
+            DomainAvailability::UnknownVariant(UnknownDomainAvailability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainAvailability {
+    fn into(self) -> &'a str {
+        match self {
+            DomainAvailability::Available => &"AVAILABLE",
+            DomainAvailability::AvailablePreorder => &"AVAILABLE_PREORDER",
+            DomainAvailability::AvailableReserved => &"AVAILABLE_RESERVED",
+            DomainAvailability::DontKnow => &"DONT_KNOW",
+            DomainAvailability::Reserved => &"RESERVED",
+            DomainAvailability::Unavailable => &"UNAVAILABLE",
+            DomainAvailability::UnavailablePremium => &"UNAVAILABLE_PREMIUM",
+            DomainAvailability::UnavailableRestricted => &"UNAVAILABLE_RESTRICTED",
+            DomainAvailability::UnknownVariant(UnknownDomainAvailability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DomainAvailability {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DomainAvailability::Available,
+            "AVAILABLE_PREORDER" => DomainAvailability::AvailablePreorder,
+            "AVAILABLE_RESERVED" => DomainAvailability::AvailableReserved,
+            "DONT_KNOW" => DomainAvailability::DontKnow,
+            "RESERVED" => DomainAvailability::Reserved,
+            "UNAVAILABLE" => DomainAvailability::Unavailable,
+            "UNAVAILABLE_PREMIUM" => DomainAvailability::UnavailablePremium,
+            "UNAVAILABLE_RESTRICTED" => DomainAvailability::UnavailableRestricted,
+            _ => DomainAvailability::UnknownVariant(UnknownDomainAvailability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainAvailability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DomainAvailability::Available,
+            "AVAILABLE_PREORDER" => DomainAvailability::AvailablePreorder,
+            "AVAILABLE_RESERVED" => DomainAvailability::AvailableReserved,
+            "DONT_KNOW" => DomainAvailability::DontKnow,
+            "RESERVED" => DomainAvailability::Reserved,
+            "UNAVAILABLE" => DomainAvailability::Unavailable,
+            "UNAVAILABLE_PREMIUM" => DomainAvailability::UnavailablePremium,
+            "UNAVAILABLE_RESTRICTED" => DomainAvailability::UnavailableRestricted,
+            _ => DomainAvailability::UnknownVariant(UnknownDomainAvailability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainAvailability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainAvailability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainAvailability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about one suggested domain name.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -310,7 +1795,7 @@ pub struct DomainSummary {
 pub struct DomainTransferability {
     #[serde(rename = "Transferable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transferable: Option<String>,
+    pub transferable: Option<Transferable>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -348,10 +1833,247 @@ pub struct EnableDomainTransferLockResponse {
 pub struct ExtraParam {
     /// <p>The name of an additional parameter that is required by a top-level domain. Here are the top-level domains that require additional parameters and the names of the parameters that they require:</p> <dl> <dt>.com.au and .net.au</dt> <dd> <ul> <li> <p> <code>AU_ID_NUMBER</code> </p> </li> <li> <p> <code>AU_ID_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>ABN</code> (Australian business number)</p> </li> <li> <p> <code>ACN</code> (Australian company number)</p> </li> <li> <p> <code>TM</code> (Trademark number)</p> </li> </ul> </li> </ul> </dd> <dt>.ca</dt> <dd> <ul> <li> <p> <code>BRAND_NUMBER</code> </p> </li> <li> <p> <code>CA_BUSINESS_ENTITY_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>BANK</code> (Bank)</p> </li> <li> <p> <code>COMMERCIAL_COMPANY</code> (Commercial company)</p> </li> <li> <p> <code>COMPANY</code> (Company)</p> </li> <li> <p> <code>COOPERATION</code> (Cooperation)</p> </li> <li> <p> <code>COOPERATIVE</code> (Cooperative)</p> </li> <li> <p> <code>COOPRIX</code> (Cooprix)</p> </li> <li> <p> <code>CORP</code> (Corporation)</p> </li> <li> <p> <code>CREDIT_UNION</code> (Credit union)</p> </li> <li> <p> <code>FOMIA</code> (Federation of mutual insurance associations)</p> </li> <li> <p> <code>INC</code> (Incorporated)</p> </li> <li> <p> <code>LTD</code> (Limited)</p> </li> <li> <p> <code>LTEE</code> (Limitée)</p> </li> <li> <p> <code>LLC</code> (Limited liability corporation)</p> </li> <li> <p> <code>LLP</code> (Limited liability partnership)</p> </li> <li> <p> <code>LTE</code> (Lte.)</p> </li> <li> <p> <code>MBA</code> (Mutual benefit association)</p> </li> <li> <p> <code>MIC</code> (Mutual insurance company)</p> </li> <li> <p> <code>NFP</code> (Not-for-profit corporation)</p> </li> <li> <p> <code>SA</code> (S.A.)</p> </li> <li> <p> <code>SAVINGS_COMPANY</code> (Savings company)</p> </li> <li> <p> <code>SAVINGS_UNION</code> (Savings union)</p> </li> <li> <p> <code>SARL</code> (Société à responsabilité limitée)</p> </li> <li> <p> <code>TRUST</code> (Trust)</p> </li> <li> <p> <code>ULC</code> (Unlimited liability corporation)</p> </li> </ul> </li> <li> <p> <code>CA_LEGAL_TYPE</code> </p> <p>When <code>ContactType</code> is <code>PERSON</code>, valid values include the following:</p> <ul> <li> <p> <code>ABO</code> (Aboriginal Peoples indigenous to Canada)</p> </li> <li> <p> <code>CCT</code> (Canadian citizen)</p> </li> <li> <p> <code>LGR</code> (Legal Representative of a Canadian Citizen or Permanent Resident)</p> </li> <li> <p> <code>RES</code> (Permanent resident of Canada)</p> </li> </ul> <p>When <code>ContactType</code> is a value other than <code>PERSON</code>, valid values include the following:</p> <ul> <li> <p> <code>ASS</code> (Canadian unincorporated association)</p> </li> <li> <p> <code>CCO</code> (Canadian corporation)</p> </li> <li> <p> <code>EDU</code> (Canadian educational institution)</p> </li> <li> <p> <code>GOV</code> (Government or government entity in Canada)</p> </li> <li> <p> <code>HOP</code> (Canadian Hospital)</p> </li> <li> <p> <code>INB</code> (Indian Band recognized by the Indian Act of Canada)</p> </li> <li> <p> <code>LAM</code> (Canadian Library, Archive, or Museum)</p> </li> <li> <p> <code>MAJ</code> (Her/His Majesty the Queen/King)</p> </li> <li> <p> <code>OMK</code> (Official mark registered in Canada)</p> </li> <li> <p> <code>PLT</code> (Canadian Political Party)</p> </li> <li> <p> <code>PRT</code> (Partnership Registered in Canada)</p> </li> <li> <p> <code>TDM</code> (Trademark registered in Canada)</p> </li> <li> <p> <code>TRD</code> (Canadian Trade Union)</p> </li> <li> <p> <code>TRS</code> (Trust established in Canada)</p> </li> </ul> </li> </ul> </dd> <dt>.es</dt> <dd> <ul> <li> <p> <code>ES_IDENTIFICATION</code> </p> <p>Specify the applicable value:</p> <ul> <li> <p> <b>For contacts inside Spain:</b> Enter your passport ID.</p> </li> <li> <p> <b>For contacts outside of Spain:</b> Enter the VAT identification number for the company.</p> <note> <p>For .es domains, the value of <code>ContactType</code> must be <code>PERSON</code>.</p> </note> </li> </ul> </li> <li> <p> <code>ES_IDENTIFICATION_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>DNI_AND_NIF</code> (For Spanish contacts)</p> </li> <li> <p> <code>NIE</code> (For foreigners with legal residence)</p> </li> <li> <p> <code>OTHER</code> (For contacts outside of Spain)</p> </li> </ul> </li> <li> <p> <code>ES_LEGAL_FORM</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>ASSOCIATION</code> </p> </li> <li> <p> <code>CENTRAL_GOVERNMENT_BODY</code> </p> </li> <li> <p> <code>CIVIL_SOCIETY</code> </p> </li> <li> <p> <code>COMMUNITY_OF_OWNERS</code> </p> </li> <li> <p> <code>COMMUNITY_PROPERTY</code> </p> </li> <li> <p> <code>CONSULATE</code> </p> </li> <li> <p> <code>COOPERATIVE</code> </p> </li> <li> <p> <code>DESIGNATION_OF_ORIGIN_SUPERVISORY_COUNCIL</code> </p> </li> <li> <p> <code>ECONOMIC_INTEREST_GROUP</code> </p> </li> <li> <p> <code>EMBASSY</code> </p> </li> <li> <p> <code>ENTITY_MANAGING_NATURAL_AREAS</code> </p> </li> <li> <p> <code>FARM_PARTNERSHIP</code> </p> </li> <li> <p> <code>FOUNDATION</code> </p> </li> <li> <p> <code>GENERAL_AND_LIMITED_PARTNERSHIP</code> </p> </li> <li> <p> <code>GENERAL_PARTNERSHIP</code> </p> </li> <li> <p> <code>INDIVIDUAL</code> </p> </li> <li> <p> <code>LIMITED_COMPANY</code> </p> </li> <li> <p> <code>LOCAL_AUTHORITY</code> </p> </li> <li> <p> <code>LOCAL_PUBLIC_ENTITY</code> </p> </li> <li> <p> <code>MUTUAL_INSURANCE_COMPANY</code> </p> </li> <li> <p> <code>NATIONAL_PUBLIC_ENTITY</code> </p> </li> <li> <p> <code>ORDER_OR_RELIGIOUS_INSTITUTION</code> </p> </li> <li> <p> <code>OTHERS (Only for contacts outside of Spain)</code> </p> </li> <li> <p> <code>POLITICAL_PARTY</code> </p> </li> <li> <p> <code>PROFESSIONAL_ASSOCIATION</code> </p> </li> <li> <p> <code>PUBLIC_LAW_ASSOCIATION</code> </p> </li> <li> <p> <code>PUBLIC_LIMITED_COMPANY</code> </p> </li> <li> <p> <code>REGIONAL_GOVERNMENT_BODY</code> </p> </li> <li> <p> <code>REGIONAL_PUBLIC_ENTITY</code> </p> </li> <li> <p> <code>SAVINGS_BANK</code> </p> </li> <li> <p> <code>SPANISH_OFFICE</code> </p> </li> <li> <p> <code>SPORTS_ASSOCIATION</code> </p> </li> <li> <p> <code>SPORTS_FEDERATION</code> </p> </li> <li> <p> <code>SPORTS_LIMITED_COMPANY</code> </p> </li> <li> <p> <code>TEMPORARY_ALLIANCE_OF_ENTERPRISES</code> </p> </li> <li> <p> <code>TRADE_UNION</code> </p> </li> <li> <p> <code>WORKER_OWNED_COMPANY</code> </p> </li> <li> <p> <code>WORKER_OWNED_LIMITED_COMPANY</code> </p> </li> </ul> </li> </ul> </dd> <dt>.fi</dt> <dd> <ul> <li> <p> <code>BIRTH_DATE_IN_YYYY_MM_DD</code> </p> </li> <li> <p> <code>FI_BUSINESS_NUMBER</code> </p> </li> <li> <p> <code>FI_ID_NUMBER</code> </p> </li> <li> <p> <code>FI_NATIONALITY</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>FINNISH</code> </p> </li> <li> <p> <code>NOT_FINNISH</code> </p> </li> </ul> </li> <li> <p> <code>FI_ORGANIZATION_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>COMPANY</code> </p> </li> <li> <p> <code>CORPORATION</code> </p> </li> <li> <p> <code>GOVERNMENT</code> </p> </li> <li> <p> <code>INSTITUTION</code> </p> </li> <li> <p> <code>POLITICAL_PARTY</code> </p> </li> <li> <p> <code>PUBLIC_COMMUNITY</code> </p> </li> <li> <p> <code>TOWNSHIP</code> </p> </li> </ul> </li> </ul> </dd> <dt>.fr</dt> <dd> <ul> <li> <p> <code>BIRTH_CITY</code> </p> </li> <li> <p> <code>BIRTH_COUNTRY</code> </p> </li> <li> <p> <code>BIRTH_DATE_IN_YYYY_MM_DD</code> </p> </li> <li> <p> <code>BIRTH_DEPARTMENT</code>: Specify the INSEE code that corresponds with the department where the contact was born. If the contact was born somewhere other than France or its overseas departments, specify <code>99</code>. For more information, including a list of departments and the corresponding INSEE numbers, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Departments_of_France">Departments of France</a>.</p> </li> <li> <p> <code>BRAND_NUMBER</code> </p> </li> </ul> </dd> <dt>.it</dt> <dd> <ul> <li> <p> <code>IT_NATIONALITY</code> </p> </li> <li> <p> <code>IT_PIN</code> </p> </li> <li> <p> <code>IT_REGISTRANT_ENTITY_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>FOREIGNERS</code> </p> </li> <li> <p> <code>FREELANCE_WORKERS</code> (Freelance workers and professionals)</p> </li> <li> <p> <code>ITALIAN_COMPANIES</code> (Italian companies and one-person companies)</p> </li> <li> <p> <code>NON_PROFIT_ORGANIZATIONS</code> </p> </li> <li> <p> <code>OTHER_SUBJECTS</code> </p> </li> <li> <p> <code>PUBLIC_ORGANIZATIONS</code> </p> </li> </ul> </li> </ul> </dd> <dt>.ru</dt> <dd> <ul> <li> <p> <code>BIRTH_DATE_IN_YYYY_MM_DD</code> </p> </li> <li> <p> <code>RU_PASSPORT_DATA</code> </p> </li> </ul> </dd> <dt>.se</dt> <dd> <ul> <li> <p> <code>BIRTH_COUNTRY</code> </p> </li> <li> <p> <code>SE_ID_NUMBER</code> </p> </li> </ul> </dd> <dt>.sg</dt> <dd> <ul> <li> <p> <code>SG_ID_NUMBER</code> </p> </li> </ul> </dd> <dt>.co.uk, .me.uk, and .org.uk</dt> <dd> <ul> <li> <p> <code>UK_CONTACT_TYPE</code> </p> <p>Valid values include the following:</p> <ul> <li> <p> <code>CRC</code> (UK Corporation by Royal Charter)</p> </li> <li> <p> <code>FCORP</code> (Non-UK Corporation)</p> </li> <li> <p> <code>FIND</code> (Non-UK Individual, representing self)</p> </li> <li> <p> <code>FOTHER</code> (Non-UK Entity that does not fit into any other category)</p> </li> <li> <p> <code>GOV</code> (UK Government Body)</p> </li> <li> <p> <code>IND</code> (UK Individual (representing self))</p> </li> <li> <p> <code>IP</code> (UK Industrial/Provident Registered Company)</p> </li> <li> <p> <code>LLP</code> (UK Limited Liability Partnership)</p> </li> <li> <p> <code>LTD</code> (UK Limited Company)</p> </li> <li> <p> <code>OTHER</code> (UK Entity that does not fit into any other category)</p> </li> <li> <p> <code>PLC</code> (UK Public Limited Company)</p> </li> <li> <p> <code>PTNR</code> (UK Partnership)</p> </li> <li> <p> <code>RCHAR</code> (UK Registered Charity)</p> </li> <li> <p> <code>SCH</code> (UK School)</p> </li> <li> <p> <code>STAT</code> (UK Statutory Body)</p> </li> <li> <p> <code>STRA</code> (UK Sole Trader)</p> </li> </ul> </li> <li> <p> <code>UK_COMPANY_NUMBER</code> </p> </li> </ul> </dd> </dl> <p>In addition, many TLDs require a <code>VAT_NUMBER</code>.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: ExtraParamName,
     /// <p>The value that corresponds with the name of an extra parameter.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExtraParamName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExtraParamName {
+    AuIdNumber,
+    AuIdType,
+    BirthCity,
+    BirthCountry,
+    BirthDateInYyyyMmDd,
+    BirthDepartment,
+    BrandNumber,
+    CaBusinessEntityType,
+    CaLegalRepresentative,
+    CaLegalRepresentativeCapacity,
+    CaLegalType,
+    DocumentNumber,
+    DunsNumber,
+    EsIdentification,
+    EsIdentificationType,
+    EsLegalForm,
+    FiBusinessNumber,
+    FiIdNumber,
+    FiNationality,
+    FiOrganizationType,
+    ItNationality,
+    ItPin,
+    ItRegistrantEntityType,
+    RuPassportData,
+    SeIdNumber,
+    SgIdNumber,
+    UkCompanyNumber,
+    UkContactType,
+    VatNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExtraParamName),
+}
+
+impl Default for ExtraParamName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExtraParamName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExtraParamName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExtraParamName {
+    fn into(self) -> String {
+        match self {
+            ExtraParamName::AuIdNumber => "AU_ID_NUMBER".to_string(),
+            ExtraParamName::AuIdType => "AU_ID_TYPE".to_string(),
+            ExtraParamName::BirthCity => "BIRTH_CITY".to_string(),
+            ExtraParamName::BirthCountry => "BIRTH_COUNTRY".to_string(),
+            ExtraParamName::BirthDateInYyyyMmDd => "BIRTH_DATE_IN_YYYY_MM_DD".to_string(),
+            ExtraParamName::BirthDepartment => "BIRTH_DEPARTMENT".to_string(),
+            ExtraParamName::BrandNumber => "BRAND_NUMBER".to_string(),
+            ExtraParamName::CaBusinessEntityType => "CA_BUSINESS_ENTITY_TYPE".to_string(),
+            ExtraParamName::CaLegalRepresentative => "CA_LEGAL_REPRESENTATIVE".to_string(),
+            ExtraParamName::CaLegalRepresentativeCapacity => {
+                "CA_LEGAL_REPRESENTATIVE_CAPACITY".to_string()
+            }
+            ExtraParamName::CaLegalType => "CA_LEGAL_TYPE".to_string(),
+            ExtraParamName::DocumentNumber => "DOCUMENT_NUMBER".to_string(),
+            ExtraParamName::DunsNumber => "DUNS_NUMBER".to_string(),
+            ExtraParamName::EsIdentification => "ES_IDENTIFICATION".to_string(),
+            ExtraParamName::EsIdentificationType => "ES_IDENTIFICATION_TYPE".to_string(),
+            ExtraParamName::EsLegalForm => "ES_LEGAL_FORM".to_string(),
+            ExtraParamName::FiBusinessNumber => "FI_BUSINESS_NUMBER".to_string(),
+            ExtraParamName::FiIdNumber => "FI_ID_NUMBER".to_string(),
+            ExtraParamName::FiNationality => "FI_NATIONALITY".to_string(),
+            ExtraParamName::FiOrganizationType => "FI_ORGANIZATION_TYPE".to_string(),
+            ExtraParamName::ItNationality => "IT_NATIONALITY".to_string(),
+            ExtraParamName::ItPin => "IT_PIN".to_string(),
+            ExtraParamName::ItRegistrantEntityType => "IT_REGISTRANT_ENTITY_TYPE".to_string(),
+            ExtraParamName::RuPassportData => "RU_PASSPORT_DATA".to_string(),
+            ExtraParamName::SeIdNumber => "SE_ID_NUMBER".to_string(),
+            ExtraParamName::SgIdNumber => "SG_ID_NUMBER".to_string(),
+            ExtraParamName::UkCompanyNumber => "UK_COMPANY_NUMBER".to_string(),
+            ExtraParamName::UkContactType => "UK_CONTACT_TYPE".to_string(),
+            ExtraParamName::VatNumber => "VAT_NUMBER".to_string(),
+            ExtraParamName::UnknownVariant(UnknownExtraParamName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExtraParamName {
+    fn into(self) -> &'a str {
+        match self {
+            ExtraParamName::AuIdNumber => &"AU_ID_NUMBER",
+            ExtraParamName::AuIdType => &"AU_ID_TYPE",
+            ExtraParamName::BirthCity => &"BIRTH_CITY",
+            ExtraParamName::BirthCountry => &"BIRTH_COUNTRY",
+            ExtraParamName::BirthDateInYyyyMmDd => &"BIRTH_DATE_IN_YYYY_MM_DD",
+            ExtraParamName::BirthDepartment => &"BIRTH_DEPARTMENT",
+            ExtraParamName::BrandNumber => &"BRAND_NUMBER",
+            ExtraParamName::CaBusinessEntityType => &"CA_BUSINESS_ENTITY_TYPE",
+            ExtraParamName::CaLegalRepresentative => &"CA_LEGAL_REPRESENTATIVE",
+            ExtraParamName::CaLegalRepresentativeCapacity => &"CA_LEGAL_REPRESENTATIVE_CAPACITY",
+            ExtraParamName::CaLegalType => &"CA_LEGAL_TYPE",
+            ExtraParamName::DocumentNumber => &"DOCUMENT_NUMBER",
+            ExtraParamName::DunsNumber => &"DUNS_NUMBER",
+            ExtraParamName::EsIdentification => &"ES_IDENTIFICATION",
+            ExtraParamName::EsIdentificationType => &"ES_IDENTIFICATION_TYPE",
+            ExtraParamName::EsLegalForm => &"ES_LEGAL_FORM",
+            ExtraParamName::FiBusinessNumber => &"FI_BUSINESS_NUMBER",
+            ExtraParamName::FiIdNumber => &"FI_ID_NUMBER",
+            ExtraParamName::FiNationality => &"FI_NATIONALITY",
+            ExtraParamName::FiOrganizationType => &"FI_ORGANIZATION_TYPE",
+            ExtraParamName::ItNationality => &"IT_NATIONALITY",
+            ExtraParamName::ItPin => &"IT_PIN",
+            ExtraParamName::ItRegistrantEntityType => &"IT_REGISTRANT_ENTITY_TYPE",
+            ExtraParamName::RuPassportData => &"RU_PASSPORT_DATA",
+            ExtraParamName::SeIdNumber => &"SE_ID_NUMBER",
+            ExtraParamName::SgIdNumber => &"SG_ID_NUMBER",
+            ExtraParamName::UkCompanyNumber => &"UK_COMPANY_NUMBER",
+            ExtraParamName::UkContactType => &"UK_CONTACT_TYPE",
+            ExtraParamName::VatNumber => &"VAT_NUMBER",
+            ExtraParamName::UnknownVariant(UnknownExtraParamName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExtraParamName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AU_ID_NUMBER" => ExtraParamName::AuIdNumber,
+            "AU_ID_TYPE" => ExtraParamName::AuIdType,
+            "BIRTH_CITY" => ExtraParamName::BirthCity,
+            "BIRTH_COUNTRY" => ExtraParamName::BirthCountry,
+            "BIRTH_DATE_IN_YYYY_MM_DD" => ExtraParamName::BirthDateInYyyyMmDd,
+            "BIRTH_DEPARTMENT" => ExtraParamName::BirthDepartment,
+            "BRAND_NUMBER" => ExtraParamName::BrandNumber,
+            "CA_BUSINESS_ENTITY_TYPE" => ExtraParamName::CaBusinessEntityType,
+            "CA_LEGAL_REPRESENTATIVE" => ExtraParamName::CaLegalRepresentative,
+            "CA_LEGAL_REPRESENTATIVE_CAPACITY" => ExtraParamName::CaLegalRepresentativeCapacity,
+            "CA_LEGAL_TYPE" => ExtraParamName::CaLegalType,
+            "DOCUMENT_NUMBER" => ExtraParamName::DocumentNumber,
+            "DUNS_NUMBER" => ExtraParamName::DunsNumber,
+            "ES_IDENTIFICATION" => ExtraParamName::EsIdentification,
+            "ES_IDENTIFICATION_TYPE" => ExtraParamName::EsIdentificationType,
+            "ES_LEGAL_FORM" => ExtraParamName::EsLegalForm,
+            "FI_BUSINESS_NUMBER" => ExtraParamName::FiBusinessNumber,
+            "FI_ID_NUMBER" => ExtraParamName::FiIdNumber,
+            "FI_NATIONALITY" => ExtraParamName::FiNationality,
+            "FI_ORGANIZATION_TYPE" => ExtraParamName::FiOrganizationType,
+            "IT_NATIONALITY" => ExtraParamName::ItNationality,
+            "IT_PIN" => ExtraParamName::ItPin,
+            "IT_REGISTRANT_ENTITY_TYPE" => ExtraParamName::ItRegistrantEntityType,
+            "RU_PASSPORT_DATA" => ExtraParamName::RuPassportData,
+            "SE_ID_NUMBER" => ExtraParamName::SeIdNumber,
+            "SG_ID_NUMBER" => ExtraParamName::SgIdNumber,
+            "UK_COMPANY_NUMBER" => ExtraParamName::UkCompanyNumber,
+            "UK_CONTACT_TYPE" => ExtraParamName::UkContactType,
+            "VAT_NUMBER" => ExtraParamName::VatNumber,
+            _ => ExtraParamName::UnknownVariant(UnknownExtraParamName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExtraParamName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AU_ID_NUMBER" => ExtraParamName::AuIdNumber,
+            "AU_ID_TYPE" => ExtraParamName::AuIdType,
+            "BIRTH_CITY" => ExtraParamName::BirthCity,
+            "BIRTH_COUNTRY" => ExtraParamName::BirthCountry,
+            "BIRTH_DATE_IN_YYYY_MM_DD" => ExtraParamName::BirthDateInYyyyMmDd,
+            "BIRTH_DEPARTMENT" => ExtraParamName::BirthDepartment,
+            "BRAND_NUMBER" => ExtraParamName::BrandNumber,
+            "CA_BUSINESS_ENTITY_TYPE" => ExtraParamName::CaBusinessEntityType,
+            "CA_LEGAL_REPRESENTATIVE" => ExtraParamName::CaLegalRepresentative,
+            "CA_LEGAL_REPRESENTATIVE_CAPACITY" => ExtraParamName::CaLegalRepresentativeCapacity,
+            "CA_LEGAL_TYPE" => ExtraParamName::CaLegalType,
+            "DOCUMENT_NUMBER" => ExtraParamName::DocumentNumber,
+            "DUNS_NUMBER" => ExtraParamName::DunsNumber,
+            "ES_IDENTIFICATION" => ExtraParamName::EsIdentification,
+            "ES_IDENTIFICATION_TYPE" => ExtraParamName::EsIdentificationType,
+            "ES_LEGAL_FORM" => ExtraParamName::EsLegalForm,
+            "FI_BUSINESS_NUMBER" => ExtraParamName::FiBusinessNumber,
+            "FI_ID_NUMBER" => ExtraParamName::FiIdNumber,
+            "FI_NATIONALITY" => ExtraParamName::FiNationality,
+            "FI_ORGANIZATION_TYPE" => ExtraParamName::FiOrganizationType,
+            "IT_NATIONALITY" => ExtraParamName::ItNationality,
+            "IT_PIN" => ExtraParamName::ItPin,
+            "IT_REGISTRANT_ENTITY_TYPE" => ExtraParamName::ItRegistrantEntityType,
+            "RU_PASSPORT_DATA" => ExtraParamName::RuPassportData,
+            "SE_ID_NUMBER" => ExtraParamName::SeIdNumber,
+            "SG_ID_NUMBER" => ExtraParamName::SgIdNumber,
+            "UK_COMPANY_NUMBER" => ExtraParamName::UkCompanyNumber,
+            "UK_CONTACT_TYPE" => ExtraParamName::UkContactType,
+            "VAT_NUMBER" => ExtraParamName::VatNumber,
+            _ => ExtraParamName::UnknownVariant(UnknownExtraParamName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExtraParamName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExtraParamName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExtraParamName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -373,7 +2095,7 @@ pub struct GetContactReachabilityStatusResponse {
     /// <p><p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven&#39;t received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReachabilityStatus>,
 }
 
 /// <p>The GetDomainDetail request includes the following element.</p>
@@ -521,7 +2243,7 @@ pub struct GetOperationDetailResponse {
     /// <p>The current status of the requested operation in the system.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OperationStatus>,
     /// <p>The date when the request was submitted.</p>
     #[serde(rename = "SubmittedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -529,7 +2251,7 @@ pub struct GetOperationDetailResponse {
     /// <p>The type of operation that was requested.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<OperationType>,
 }
 
 /// <p>The ListDomains request includes the following elements.</p>
@@ -620,6 +2342,122 @@ pub struct Nameserver {
     pub name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationStatus {
+    Error,
+    Failed,
+    InProgress,
+    Submitted,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationStatus),
+}
+
+impl Default for OperationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        match self {
+            OperationStatus::Error => "ERROR".to_string(),
+            OperationStatus::Failed => "FAILED".to_string(),
+            OperationStatus::InProgress => "IN_PROGRESS".to_string(),
+            OperationStatus::Submitted => "SUBMITTED".to_string(),
+            OperationStatus::Successful => "SUCCESSFUL".to_string(),
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OperationStatus::Error => &"ERROR",
+            OperationStatus::Failed => &"FAILED",
+            OperationStatus::InProgress => &"IN_PROGRESS",
+            OperationStatus::Submitted => &"SUBMITTED",
+            OperationStatus::Successful => &"SUCCESSFUL",
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => OperationStatus::Error,
+            "FAILED" => OperationStatus::Failed,
+            "IN_PROGRESS" => OperationStatus::InProgress,
+            "SUBMITTED" => OperationStatus::Submitted,
+            "SUCCESSFUL" => OperationStatus::Successful,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => OperationStatus::Error,
+            "FAILED" => OperationStatus::Failed,
+            "IN_PROGRESS" => OperationStatus::InProgress,
+            "SUBMITTED" => OperationStatus::Submitted,
+            "SUCCESSFUL" => OperationStatus::Successful,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>OperationSummary includes the following elements.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -629,13 +2467,304 @@ pub struct OperationSummary {
     pub operation_id: String,
     /// <p>The current status of the requested operation in the system.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: OperationStatus,
     /// <p>The date when the request was submitted.</p>
     #[serde(rename = "SubmittedDate")]
     pub submitted_date: f64,
     /// <p>Type of the action requested.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: OperationType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationType {
+    AddDnssec,
+    ChangeDomainOwner,
+    ChangePrivacyProtection,
+    DeleteDomain,
+    DisableAutorenew,
+    DomainLock,
+    EnableAutorenew,
+    ExpireDomain,
+    InternalTransferInDomain,
+    InternalTransferOutDomain,
+    PushDomain,
+    RegisterDomain,
+    RemoveDnssec,
+    RenewDomain,
+    TransferInDomain,
+    TransferOutDomain,
+    UpdateDomainContact,
+    UpdateNameserver,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationType),
+}
+
+impl Default for OperationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        match self {
+            OperationType::AddDnssec => "ADD_DNSSEC".to_string(),
+            OperationType::ChangeDomainOwner => "CHANGE_DOMAIN_OWNER".to_string(),
+            OperationType::ChangePrivacyProtection => "CHANGE_PRIVACY_PROTECTION".to_string(),
+            OperationType::DeleteDomain => "DELETE_DOMAIN".to_string(),
+            OperationType::DisableAutorenew => "DISABLE_AUTORENEW".to_string(),
+            OperationType::DomainLock => "DOMAIN_LOCK".to_string(),
+            OperationType::EnableAutorenew => "ENABLE_AUTORENEW".to_string(),
+            OperationType::ExpireDomain => "EXPIRE_DOMAIN".to_string(),
+            OperationType::InternalTransferInDomain => "INTERNAL_TRANSFER_IN_DOMAIN".to_string(),
+            OperationType::InternalTransferOutDomain => "INTERNAL_TRANSFER_OUT_DOMAIN".to_string(),
+            OperationType::PushDomain => "PUSH_DOMAIN".to_string(),
+            OperationType::RegisterDomain => "REGISTER_DOMAIN".to_string(),
+            OperationType::RemoveDnssec => "REMOVE_DNSSEC".to_string(),
+            OperationType::RenewDomain => "RENEW_DOMAIN".to_string(),
+            OperationType::TransferInDomain => "TRANSFER_IN_DOMAIN".to_string(),
+            OperationType::TransferOutDomain => "TRANSFER_OUT_DOMAIN".to_string(),
+            OperationType::UpdateDomainContact => "UPDATE_DOMAIN_CONTACT".to_string(),
+            OperationType::UpdateNameserver => "UPDATE_NAMESERVER".to_string(),
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationType {
+    fn into(self) -> &'a str {
+        match self {
+            OperationType::AddDnssec => &"ADD_DNSSEC",
+            OperationType::ChangeDomainOwner => &"CHANGE_DOMAIN_OWNER",
+            OperationType::ChangePrivacyProtection => &"CHANGE_PRIVACY_PROTECTION",
+            OperationType::DeleteDomain => &"DELETE_DOMAIN",
+            OperationType::DisableAutorenew => &"DISABLE_AUTORENEW",
+            OperationType::DomainLock => &"DOMAIN_LOCK",
+            OperationType::EnableAutorenew => &"ENABLE_AUTORENEW",
+            OperationType::ExpireDomain => &"EXPIRE_DOMAIN",
+            OperationType::InternalTransferInDomain => &"INTERNAL_TRANSFER_IN_DOMAIN",
+            OperationType::InternalTransferOutDomain => &"INTERNAL_TRANSFER_OUT_DOMAIN",
+            OperationType::PushDomain => &"PUSH_DOMAIN",
+            OperationType::RegisterDomain => &"REGISTER_DOMAIN",
+            OperationType::RemoveDnssec => &"REMOVE_DNSSEC",
+            OperationType::RenewDomain => &"RENEW_DOMAIN",
+            OperationType::TransferInDomain => &"TRANSFER_IN_DOMAIN",
+            OperationType::TransferOutDomain => &"TRANSFER_OUT_DOMAIN",
+            OperationType::UpdateDomainContact => &"UPDATE_DOMAIN_CONTACT",
+            OperationType::UpdateNameserver => &"UPDATE_NAMESERVER",
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADD_DNSSEC" => OperationType::AddDnssec,
+            "CHANGE_DOMAIN_OWNER" => OperationType::ChangeDomainOwner,
+            "CHANGE_PRIVACY_PROTECTION" => OperationType::ChangePrivacyProtection,
+            "DELETE_DOMAIN" => OperationType::DeleteDomain,
+            "DISABLE_AUTORENEW" => OperationType::DisableAutorenew,
+            "DOMAIN_LOCK" => OperationType::DomainLock,
+            "ENABLE_AUTORENEW" => OperationType::EnableAutorenew,
+            "EXPIRE_DOMAIN" => OperationType::ExpireDomain,
+            "INTERNAL_TRANSFER_IN_DOMAIN" => OperationType::InternalTransferInDomain,
+            "INTERNAL_TRANSFER_OUT_DOMAIN" => OperationType::InternalTransferOutDomain,
+            "PUSH_DOMAIN" => OperationType::PushDomain,
+            "REGISTER_DOMAIN" => OperationType::RegisterDomain,
+            "REMOVE_DNSSEC" => OperationType::RemoveDnssec,
+            "RENEW_DOMAIN" => OperationType::RenewDomain,
+            "TRANSFER_IN_DOMAIN" => OperationType::TransferInDomain,
+            "TRANSFER_OUT_DOMAIN" => OperationType::TransferOutDomain,
+            "UPDATE_DOMAIN_CONTACT" => OperationType::UpdateDomainContact,
+            "UPDATE_NAMESERVER" => OperationType::UpdateNameserver,
+            _ => OperationType::UnknownVariant(UnknownOperationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADD_DNSSEC" => OperationType::AddDnssec,
+            "CHANGE_DOMAIN_OWNER" => OperationType::ChangeDomainOwner,
+            "CHANGE_PRIVACY_PROTECTION" => OperationType::ChangePrivacyProtection,
+            "DELETE_DOMAIN" => OperationType::DeleteDomain,
+            "DISABLE_AUTORENEW" => OperationType::DisableAutorenew,
+            "DOMAIN_LOCK" => OperationType::DomainLock,
+            "ENABLE_AUTORENEW" => OperationType::EnableAutorenew,
+            "EXPIRE_DOMAIN" => OperationType::ExpireDomain,
+            "INTERNAL_TRANSFER_IN_DOMAIN" => OperationType::InternalTransferInDomain,
+            "INTERNAL_TRANSFER_OUT_DOMAIN" => OperationType::InternalTransferOutDomain,
+            "PUSH_DOMAIN" => OperationType::PushDomain,
+            "REGISTER_DOMAIN" => OperationType::RegisterDomain,
+            "REMOVE_DNSSEC" => OperationType::RemoveDnssec,
+            "RENEW_DOMAIN" => OperationType::RenewDomain,
+            "TRANSFER_IN_DOMAIN" => OperationType::TransferInDomain,
+            "TRANSFER_OUT_DOMAIN" => OperationType::TransferOutDomain,
+            "UPDATE_DOMAIN_CONTACT" => OperationType::UpdateDomainContact,
+            "UPDATE_NAMESERVER" => OperationType::UpdateNameserver,
+            _ => OperationType::UnknownVariant(UnknownOperationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReachabilityStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReachabilityStatus {
+    Done,
+    Expired,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReachabilityStatus),
+}
+
+impl Default for ReachabilityStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReachabilityStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReachabilityStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReachabilityStatus {
+    fn into(self) -> String {
+        match self {
+            ReachabilityStatus::Done => "DONE".to_string(),
+            ReachabilityStatus::Expired => "EXPIRED".to_string(),
+            ReachabilityStatus::Pending => "PENDING".to_string(),
+            ReachabilityStatus::UnknownVariant(UnknownReachabilityStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReachabilityStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReachabilityStatus::Done => &"DONE",
+            ReachabilityStatus::Expired => &"EXPIRED",
+            ReachabilityStatus::Pending => &"PENDING",
+            ReachabilityStatus::UnknownVariant(UnknownReachabilityStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReachabilityStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DONE" => ReachabilityStatus::Done,
+            "EXPIRED" => ReachabilityStatus::Expired,
+            "PENDING" => ReachabilityStatus::Pending,
+            _ => ReachabilityStatus::UnknownVariant(UnknownReachabilityStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReachabilityStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DONE" => ReachabilityStatus::Done,
+            "EXPIRED" => ReachabilityStatus::Expired,
+            "PENDING" => ReachabilityStatus::Pending,
+            _ => ReachabilityStatus::UnknownVariant(UnknownReachabilityStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReachabilityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReachabilityStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReachabilityStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The RegisterDomain request includes the following elements.</p>
@@ -870,6 +2999,114 @@ pub struct TransferDomainToAnotherAwsAccountResponse {
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
+}
+
+/// <p><p>Whether the domain name can be transferred to Route 53.</p> <note> <p>You can transfer only domains that have a value of <code>TRANSFERABLE</code> for <code>Transferable</code>.</p> </note> <p>Valid values:</p> <dl> <dt>TRANSFERABLE</dt> <dd> <p>The domain name can be transferred to Route 53.</p> </dd> <dt>UNTRANSFERRABLE</dt> <dd> <p>The domain name can&#39;t be transferred to Route 53.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>Reserved for future use.</p> </dd> </dl></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransferable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Transferable {
+    DontKnow,
+    Transferable,
+    Untransferable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransferable),
+}
+
+impl Default for Transferable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Transferable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Transferable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Transferable {
+    fn into(self) -> String {
+        match self {
+            Transferable::DontKnow => "DONT_KNOW".to_string(),
+            Transferable::Transferable => "TRANSFERABLE".to_string(),
+            Transferable::Untransferable => "UNTRANSFERABLE".to_string(),
+            Transferable::UnknownVariant(UnknownTransferable { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Transferable {
+    fn into(self) -> &'a str {
+        match self {
+            Transferable::DontKnow => &"DONT_KNOW",
+            Transferable::Transferable => &"TRANSFERABLE",
+            Transferable::Untransferable => &"UNTRANSFERABLE",
+            Transferable::UnknownVariant(UnknownTransferable { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Transferable {
+    fn from(name: &str) -> Self {
+        match name {
+            "DONT_KNOW" => Transferable::DontKnow,
+            "TRANSFERABLE" => Transferable::Transferable,
+            "UNTRANSFERABLE" => Transferable::Untransferable,
+            _ => Transferable::UnknownVariant(UnknownTransferable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Transferable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DONT_KNOW" => Transferable::DontKnow,
+            "TRANSFERABLE" => Transferable::Transferable,
+            "UNTRANSFERABLE" => Transferable::Untransferable,
+            _ => Transferable::UnknownVariant(UnknownTransferable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Transferable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Transferable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Transferable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The UpdateDomainContactPrivacy request includes the following elements.</p>

@@ -74,7 +74,7 @@ pub struct Accelerator {
     /// <p>The value for the address type must be IPv4. </p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The static IP addresses that Global Accelerator associates with the accelerator.</p>
     #[serde(rename = "IpSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,7 +90,7 @@ pub struct Accelerator {
     /// <p>Describes the deployment status of the accelerator.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AcceleratorStatus>,
 }
 
 /// <p>Attributes of an accelerator.</p>
@@ -109,6 +109,111 @@ pub struct AcceleratorAttributes {
     #[serde(rename = "FlowLogsS3Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_logs_s3_prefix: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAcceleratorStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AcceleratorStatus {
+    Deployed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAcceleratorStatus),
+}
+
+impl Default for AcceleratorStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AcceleratorStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AcceleratorStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AcceleratorStatus {
+    fn into(self) -> String {
+        match self {
+            AcceleratorStatus::Deployed => "DEPLOYED".to_string(),
+            AcceleratorStatus::InProgress => "IN_PROGRESS".to_string(),
+            AcceleratorStatus::UnknownVariant(UnknownAcceleratorStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AcceleratorStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AcceleratorStatus::Deployed => &"DEPLOYED",
+            AcceleratorStatus::InProgress => &"IN_PROGRESS",
+            AcceleratorStatus::UnknownVariant(UnknownAcceleratorStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AcceleratorStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPLOYED" => AcceleratorStatus::Deployed,
+            "IN_PROGRESS" => AcceleratorStatus::InProgress,
+            _ => AcceleratorStatus::UnknownVariant(UnknownAcceleratorStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AcceleratorStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPLOYED" => AcceleratorStatus::Deployed,
+            "IN_PROGRESS" => AcceleratorStatus::InProgress,
+            _ => AcceleratorStatus::UnknownVariant(UnknownAcceleratorStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AcceleratorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AcceleratorStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AcceleratorStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -190,7 +295,7 @@ pub struct ByoipCidr {
     /// <p>The state of the address pool.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ByoipCidrState>,
 }
 
 /// <p>A complex type that contains a <code>Message</code> and a <code>Timestamp</code> value for changes that you make in the status an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
@@ -207,6 +312,152 @@ pub struct ByoipCidrEvent {
     pub timestamp: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownByoipCidrState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ByoipCidrState {
+    Advertising,
+    Deprovisioned,
+    FailedAdvertising,
+    FailedDeprovision,
+    FailedProvision,
+    FailedWithdraw,
+    PendingAdvertising,
+    PendingDeprovisioning,
+    PendingProvisioning,
+    PendingWithdrawing,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownByoipCidrState),
+}
+
+impl Default for ByoipCidrState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ByoipCidrState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ByoipCidrState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ByoipCidrState {
+    fn into(self) -> String {
+        match self {
+            ByoipCidrState::Advertising => "ADVERTISING".to_string(),
+            ByoipCidrState::Deprovisioned => "DEPROVISIONED".to_string(),
+            ByoipCidrState::FailedAdvertising => "FAILED_ADVERTISING".to_string(),
+            ByoipCidrState::FailedDeprovision => "FAILED_DEPROVISION".to_string(),
+            ByoipCidrState::FailedProvision => "FAILED_PROVISION".to_string(),
+            ByoipCidrState::FailedWithdraw => "FAILED_WITHDRAW".to_string(),
+            ByoipCidrState::PendingAdvertising => "PENDING_ADVERTISING".to_string(),
+            ByoipCidrState::PendingDeprovisioning => "PENDING_DEPROVISIONING".to_string(),
+            ByoipCidrState::PendingProvisioning => "PENDING_PROVISIONING".to_string(),
+            ByoipCidrState::PendingWithdrawing => "PENDING_WITHDRAWING".to_string(),
+            ByoipCidrState::Ready => "READY".to_string(),
+            ByoipCidrState::UnknownVariant(UnknownByoipCidrState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ByoipCidrState {
+    fn into(self) -> &'a str {
+        match self {
+            ByoipCidrState::Advertising => &"ADVERTISING",
+            ByoipCidrState::Deprovisioned => &"DEPROVISIONED",
+            ByoipCidrState::FailedAdvertising => &"FAILED_ADVERTISING",
+            ByoipCidrState::FailedDeprovision => &"FAILED_DEPROVISION",
+            ByoipCidrState::FailedProvision => &"FAILED_PROVISION",
+            ByoipCidrState::FailedWithdraw => &"FAILED_WITHDRAW",
+            ByoipCidrState::PendingAdvertising => &"PENDING_ADVERTISING",
+            ByoipCidrState::PendingDeprovisioning => &"PENDING_DEPROVISIONING",
+            ByoipCidrState::PendingProvisioning => &"PENDING_PROVISIONING",
+            ByoipCidrState::PendingWithdrawing => &"PENDING_WITHDRAWING",
+            ByoipCidrState::Ready => &"READY",
+            ByoipCidrState::UnknownVariant(UnknownByoipCidrState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ByoipCidrState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADVERTISING" => ByoipCidrState::Advertising,
+            "DEPROVISIONED" => ByoipCidrState::Deprovisioned,
+            "FAILED_ADVERTISING" => ByoipCidrState::FailedAdvertising,
+            "FAILED_DEPROVISION" => ByoipCidrState::FailedDeprovision,
+            "FAILED_PROVISION" => ByoipCidrState::FailedProvision,
+            "FAILED_WITHDRAW" => ByoipCidrState::FailedWithdraw,
+            "PENDING_ADVERTISING" => ByoipCidrState::PendingAdvertising,
+            "PENDING_DEPROVISIONING" => ByoipCidrState::PendingDeprovisioning,
+            "PENDING_PROVISIONING" => ByoipCidrState::PendingProvisioning,
+            "PENDING_WITHDRAWING" => ByoipCidrState::PendingWithdrawing,
+            "READY" => ByoipCidrState::Ready,
+            _ => ByoipCidrState::UnknownVariant(UnknownByoipCidrState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ByoipCidrState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADVERTISING" => ByoipCidrState::Advertising,
+            "DEPROVISIONED" => ByoipCidrState::Deprovisioned,
+            "FAILED_ADVERTISING" => ByoipCidrState::FailedAdvertising,
+            "FAILED_DEPROVISION" => ByoipCidrState::FailedDeprovision,
+            "FAILED_PROVISION" => ByoipCidrState::FailedProvision,
+            "FAILED_WITHDRAW" => ByoipCidrState::FailedWithdraw,
+            "PENDING_ADVERTISING" => ByoipCidrState::PendingAdvertising,
+            "PENDING_DEPROVISIONING" => ByoipCidrState::PendingDeprovisioning,
+            "PENDING_PROVISIONING" => ByoipCidrState::PendingProvisioning,
+            "PENDING_WITHDRAWING" => ByoipCidrState::PendingWithdrawing,
+            "READY" => ByoipCidrState::Ready,
+            _ => ByoipCidrState::UnknownVariant(UnknownByoipCidrState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ByoipCidrState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ByoipCidrState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ByoipCidrState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides authorization for Amazon to bring a specific IP address range to a specific AWS account using bring your own IP addresses (BYOIP). </p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -217,6 +468,106 @@ pub struct CidrAuthorizationContext {
     /// <p>The signed authorization message for the prefix and account.</p>
     #[serde(rename = "Signature")]
     pub signature: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClientAffinity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClientAffinity {
+    None,
+    SourceIp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClientAffinity),
+}
+
+impl Default for ClientAffinity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClientAffinity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClientAffinity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClientAffinity {
+    fn into(self) -> String {
+        match self {
+            ClientAffinity::None => "NONE".to_string(),
+            ClientAffinity::SourceIp => "SOURCE_IP".to_string(),
+            ClientAffinity::UnknownVariant(UnknownClientAffinity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClientAffinity {
+    fn into(self) -> &'a str {
+        match self {
+            ClientAffinity::None => &"NONE",
+            ClientAffinity::SourceIp => &"SOURCE_IP",
+            ClientAffinity::UnknownVariant(UnknownClientAffinity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClientAffinity {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ClientAffinity::None,
+            "SOURCE_IP" => ClientAffinity::SourceIp,
+            _ => ClientAffinity::UnknownVariant(UnknownClientAffinity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClientAffinity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ClientAffinity::None,
+            "SOURCE_IP" => ClientAffinity::SourceIp,
+            _ => ClientAffinity::UnknownVariant(UnknownClientAffinity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClientAffinity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClientAffinity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClientAffinity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -232,7 +583,7 @@ pub struct CreateAcceleratorRequest {
     /// <p>The value for the address type must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>Optionally, if you've added your own IP address pool to Global Accelerator (BYOIP), you can choose IP addresses from your own pool to use for the accelerator's static IP addresses when you create an accelerator. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>Only one IP address from each of your IP address ranges can be used for each accelerator. If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p> Note that you can't update IP addresses for an existing accelerator. To change them, you must create a new accelerator with the new addresses.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "IpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -268,7 +619,7 @@ pub struct CreateCustomRoutingAcceleratorRequest {
     /// <p>The value for the address type must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The name of a custom routing accelerator. The name can have a maximum of 64 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -361,7 +712,7 @@ pub struct CreateEndpointGroupRequest {
     /// <p>The protocol that AWS Global Accelerator uses to check the health of endpoints that are part of this endpoint group. The default value is TCP.</p>
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<HealthCheckProtocol>,
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of the request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
@@ -400,7 +751,7 @@ pub struct CreateListenerRequest {
     /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_affinity: Option<String>,
+    pub client_affinity: Option<ClientAffinity>,
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency—that is, the uniqueness—of the request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
@@ -409,7 +760,7 @@ pub struct CreateListenerRequest {
     pub port_ranges: Vec<PortRange>,
     /// <p>The protocol for connections from clients to your accelerator.</p>
     #[serde(rename = "Protocol")]
-    pub protocol: String,
+    pub protocol: Protocol,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -444,7 +795,7 @@ pub struct CustomRoutingAccelerator {
     /// <p>The value for the address type must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The static IP addresses that Global Accelerator associates with the accelerator.</p>
     #[serde(rename = "IpSets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -460,7 +811,7 @@ pub struct CustomRoutingAccelerator {
     /// <p>Describes the deployment status of the accelerator.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CustomRoutingAcceleratorStatus>,
 }
 
 /// <p>Attributes of a custom routing accelerator.</p>
@@ -481,6 +832,115 @@ pub struct CustomRoutingAcceleratorAttributes {
     pub flow_logs_s3_prefix: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomRoutingAcceleratorStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomRoutingAcceleratorStatus {
+    Deployed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomRoutingAcceleratorStatus),
+}
+
+impl Default for CustomRoutingAcceleratorStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomRoutingAcceleratorStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomRoutingAcceleratorStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomRoutingAcceleratorStatus {
+    fn into(self) -> String {
+        match self {
+            CustomRoutingAcceleratorStatus::Deployed => "DEPLOYED".to_string(),
+            CustomRoutingAcceleratorStatus::InProgress => "IN_PROGRESS".to_string(),
+            CustomRoutingAcceleratorStatus::UnknownVariant(
+                UnknownCustomRoutingAcceleratorStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomRoutingAcceleratorStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CustomRoutingAcceleratorStatus::Deployed => &"DEPLOYED",
+            CustomRoutingAcceleratorStatus::InProgress => &"IN_PROGRESS",
+            CustomRoutingAcceleratorStatus::UnknownVariant(
+                UnknownCustomRoutingAcceleratorStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomRoutingAcceleratorStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPLOYED" => CustomRoutingAcceleratorStatus::Deployed,
+            "IN_PROGRESS" => CustomRoutingAcceleratorStatus::InProgress,
+            _ => CustomRoutingAcceleratorStatus::UnknownVariant(
+                UnknownCustomRoutingAcceleratorStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CustomRoutingAcceleratorStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPLOYED" => CustomRoutingAcceleratorStatus::Deployed,
+            "IN_PROGRESS" => CustomRoutingAcceleratorStatus::InProgress,
+            _ => CustomRoutingAcceleratorStatus::UnknownVariant(
+                UnknownCustomRoutingAcceleratorStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomRoutingAcceleratorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CustomRoutingAcceleratorStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomRoutingAcceleratorStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>For a custom routing accelerator, sets the port range and protocol for all endpoints (virtual private cloud subnets) in an endpoint group to accept client traffic on.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -490,7 +950,7 @@ pub struct CustomRoutingDestinationConfiguration {
     pub from_port: i64,
     /// <p>The protocol for the endpoint group that is associated with a custom routing accelerator. The protocol can be either TCP or UDP.</p>
     #[serde(rename = "Protocols")]
-    pub protocols: Vec<String>,
+    pub protocols: Vec<CustomRoutingProtocol>,
     /// <p>The last port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
     #[serde(rename = "ToPort")]
     pub to_port: i64,
@@ -507,11 +967,120 @@ pub struct CustomRoutingDestinationDescription {
     /// <p>The protocol for the endpoint group that is associated with a custom routing accelerator. The protocol can be either TCP or UDP.</p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocols: Option<Vec<String>>,
+    pub protocols: Option<Vec<Protocol>>,
     /// <p>The last port, inclusive, in the range of ports for the endpoint group that is associated with a custom routing accelerator.</p>
     #[serde(rename = "ToPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomRoutingDestinationTrafficState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomRoutingDestinationTrafficState {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomRoutingDestinationTrafficState),
+}
+
+impl Default for CustomRoutingDestinationTrafficState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomRoutingDestinationTrafficState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomRoutingDestinationTrafficState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomRoutingDestinationTrafficState {
+    fn into(self) -> String {
+        match self {
+            CustomRoutingDestinationTrafficState::Allow => "ALLOW".to_string(),
+            CustomRoutingDestinationTrafficState::Deny => "DENY".to_string(),
+            CustomRoutingDestinationTrafficState::UnknownVariant(
+                UnknownCustomRoutingDestinationTrafficState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomRoutingDestinationTrafficState {
+    fn into(self) -> &'a str {
+        match self {
+            CustomRoutingDestinationTrafficState::Allow => &"ALLOW",
+            CustomRoutingDestinationTrafficState::Deny => &"DENY",
+            CustomRoutingDestinationTrafficState::UnknownVariant(
+                UnknownCustomRoutingDestinationTrafficState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomRoutingDestinationTrafficState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => CustomRoutingDestinationTrafficState::Allow,
+            "DENY" => CustomRoutingDestinationTrafficState::Deny,
+            _ => CustomRoutingDestinationTrafficState::UnknownVariant(
+                UnknownCustomRoutingDestinationTrafficState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CustomRoutingDestinationTrafficState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => CustomRoutingDestinationTrafficState::Allow,
+            "DENY" => CustomRoutingDestinationTrafficState::Deny,
+            _ => CustomRoutingDestinationTrafficState::UnknownVariant(
+                UnknownCustomRoutingDestinationTrafficState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomRoutingDestinationTrafficState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CustomRoutingDestinationTrafficState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomRoutingDestinationTrafficState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The list of endpoint objects. For custom routing, this is a list of virtual private cloud (VPC) subnet IDs.</p>
@@ -568,6 +1137,110 @@ pub struct CustomRoutingListener {
     #[serde(rename = "PortRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_ranges: Option<Vec<PortRange>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomRoutingProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomRoutingProtocol {
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomRoutingProtocol),
+}
+
+impl Default for CustomRoutingProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomRoutingProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomRoutingProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomRoutingProtocol {
+    fn into(self) -> String {
+        match self {
+            CustomRoutingProtocol::Tcp => "TCP".to_string(),
+            CustomRoutingProtocol::Udp => "UDP".to_string(),
+            CustomRoutingProtocol::UnknownVariant(UnknownCustomRoutingProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomRoutingProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            CustomRoutingProtocol::Tcp => &"TCP",
+            CustomRoutingProtocol::Udp => &"UDP",
+            CustomRoutingProtocol::UnknownVariant(UnknownCustomRoutingProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomRoutingProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "TCP" => CustomRoutingProtocol::Tcp,
+            "UDP" => CustomRoutingProtocol::Udp,
+            _ => CustomRoutingProtocol::UnknownVariant(UnknownCustomRoutingProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CustomRoutingProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TCP" => CustomRoutingProtocol::Tcp,
+            "UDP" => CustomRoutingProtocol::Udp,
+            _ => CustomRoutingProtocol::UnknownVariant(UnknownCustomRoutingProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomRoutingProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomRoutingProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomRoutingProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -813,7 +1486,7 @@ pub struct DestinationPortMapping {
     /// <p>Indicates whether or not a port mapping destination can receive traffic. The value is either ALLOW, if traffic is allowed to the destination, or DENY, if traffic is not allowed to the destination.</p>
     #[serde(rename = "DestinationTrafficState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_traffic_state: Option<String>,
+    pub destination_traffic_state: Option<CustomRoutingDestinationTrafficState>,
     /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
     #[serde(rename = "EndpointGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -829,7 +1502,7 @@ pub struct DestinationPortMapping {
     /// <p>The IP address type, which must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
 }
 
 /// <p>A complex type for endpoints. A resource must be valid and active when you add it as an endpoint.</p>
@@ -869,7 +1542,7 @@ pub struct EndpointDescription {
     /// <p>The health status of the endpoint.</p>
     #[serde(rename = "HealthState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_state: Option<String>,
+    pub health_state: Option<HealthState>,
     /// <p>The weight associated with the endpoint. When you add weights to endpoints, you configure AWS Global Accelerator to route traffic based on proportions that you specify. For example, you might specify endpoint weights of 4, 5, 5, and 6 (sum=20). The result is that 4/20 of your traffic, on average, is routed to the first endpoint, 5/20 is routed both to the second and third endpoints, and 6/20 is routed to the last endpoint. For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoints-endpoint-weights.html">Endpoint Weights</a> in the <i>AWS Global Accelerator Developer Guide</i>. </p>
     #[serde(rename = "Weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -907,7 +1580,7 @@ pub struct EndpointGroup {
     /// <p>The protocol that Global Accelerator uses to perform health checks on endpoints that are part of this endpoint group. The default value is TCP.</p>
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<HealthCheckProtocol>,
     /// <p>Allows you to override the destination ports used to route traffic to an endpoint. Using a port override lets you to map a list of external destination ports (that your users send traffic to) to a list of internal destination ports that you want an application endpoint to receive traffic on. </p>
     #[serde(rename = "PortOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -920,6 +1593,316 @@ pub struct EndpointGroup {
     #[serde(rename = "TrafficDialPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_dial_percentage: Option<f32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthCheckProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthCheckProtocol {
+    Http,
+    Https,
+    Tcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthCheckProtocol),
+}
+
+impl Default for HealthCheckProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthCheckProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthCheckProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthCheckProtocol {
+    fn into(self) -> String {
+        match self {
+            HealthCheckProtocol::Http => "HTTP".to_string(),
+            HealthCheckProtocol::Https => "HTTPS".to_string(),
+            HealthCheckProtocol::Tcp => "TCP".to_string(),
+            HealthCheckProtocol::UnknownVariant(UnknownHealthCheckProtocol { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthCheckProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            HealthCheckProtocol::Http => &"HTTP",
+            HealthCheckProtocol::Https => &"HTTPS",
+            HealthCheckProtocol::Tcp => &"TCP",
+            HealthCheckProtocol::UnknownVariant(UnknownHealthCheckProtocol { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HealthCheckProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP" => HealthCheckProtocol::Http,
+            "HTTPS" => HealthCheckProtocol::Https,
+            "TCP" => HealthCheckProtocol::Tcp,
+            _ => HealthCheckProtocol::UnknownVariant(UnknownHealthCheckProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthCheckProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP" => HealthCheckProtocol::Http,
+            "HTTPS" => HealthCheckProtocol::Https,
+            "TCP" => HealthCheckProtocol::Tcp,
+            _ => HealthCheckProtocol::UnknownVariant(UnknownHealthCheckProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthCheckProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HealthCheckProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HealthCheckProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthState {
+    Healthy,
+    Initial,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthState),
+}
+
+impl Default for HealthState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthState {
+    fn into(self) -> String {
+        match self {
+            HealthState::Healthy => "HEALTHY".to_string(),
+            HealthState::Initial => "INITIAL".to_string(),
+            HealthState::Unhealthy => "UNHEALTHY".to_string(),
+            HealthState::UnknownVariant(UnknownHealthState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthState {
+    fn into(self) -> &'a str {
+        match self {
+            HealthState::Healthy => &"HEALTHY",
+            HealthState::Initial => &"INITIAL",
+            HealthState::Unhealthy => &"UNHEALTHY",
+            HealthState::UnknownVariant(UnknownHealthState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HealthState {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => HealthState::Healthy,
+            "INITIAL" => HealthState::Initial,
+            "UNHEALTHY" => HealthState::Unhealthy,
+            _ => HealthState::UnknownVariant(UnknownHealthState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => HealthState::Healthy,
+            "INITIAL" => HealthState::Initial,
+            "UNHEALTHY" => HealthState::Unhealthy,
+            _ => HealthState::UnknownVariant(UnknownHealthState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HealthState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HealthState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpAddressType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpAddressType {
+    Ipv4,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpAddressType),
+}
+
+impl Default for IpAddressType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpAddressType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpAddressType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpAddressType {
+    fn into(self) -> String {
+        match self {
+            IpAddressType::Ipv4 => "IPV4".to_string(),
+            IpAddressType::UnknownVariant(UnknownIpAddressType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpAddressType {
+    fn into(self) -> &'a str {
+        match self {
+            IpAddressType::Ipv4 => &"IPV4",
+            IpAddressType::UnknownVariant(UnknownIpAddressType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpAddressType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IPV4" => IpAddressType::Ipv4,
+            _ => IpAddressType::UnknownVariant(UnknownIpAddressType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpAddressType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IPV4" => IpAddressType::Ipv4,
+            _ => IpAddressType::UnknownVariant(UnknownIpAddressType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpAddressType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IpAddressType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpAddressType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex type for the set of IP addresses for an accelerator.</p>
@@ -1219,7 +2202,7 @@ pub struct Listener {
     /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_affinity: Option<String>,
+    pub client_affinity: Option<ClientAffinity>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     #[serde(rename = "ListenerArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1231,7 +2214,7 @@ pub struct Listener {
     /// <p>The protocol for the connections from clients to the accelerator.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
 }
 
 /// <p>Returns the ports and associated IP addresses and ports of Amazon EC2 instances in your virtual private cloud (VPC) subnets. Custom routing is a port mapping protocol in AWS Global Accelerator that statically associates port ranges with VPC subnets, which allows Global Accelerator to route to specific instances and ports within one or more subnets. </p>
@@ -1249,7 +2232,7 @@ pub struct PortMapping {
     /// <p>Indicates whether or not a port mapping destination can receive traffic. The value is either ALLOW, if traffic is allowed to the destination, or DENY, if traffic is not allowed to the destination.</p>
     #[serde(rename = "DestinationTrafficState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_traffic_state: Option<String>,
+    pub destination_traffic_state: Option<CustomRoutingDestinationTrafficState>,
     /// <p>The Amazon Resource Name (ARN) of the endpoint group.</p>
     #[serde(rename = "EndpointGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1261,7 +2244,7 @@ pub struct PortMapping {
     /// <p>The protocols supported by the endpoint group.</p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocols: Option<Vec<String>>,
+    pub protocols: Option<Vec<CustomRoutingProtocol>>,
 }
 
 /// <p>Override specific listener ports used to route traffic to endpoints that are part of an endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
@@ -1288,6 +2271,106 @@ pub struct PortRange {
     #[serde(rename = "ToPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Protocol {
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtocol),
+}
+
+impl Default for Protocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Protocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Protocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Protocol {
+    fn into(self) -> String {
+        match self {
+            Protocol::Tcp => "TCP".to_string(),
+            Protocol::Udp => "UDP".to_string(),
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Protocol {
+    fn into(self) -> &'a str {
+        match self {
+            Protocol::Tcp => &"TCP",
+            Protocol::Udp => &"UDP",
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Protocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "TCP" => Protocol::Tcp,
+            "UDP" => Protocol::Udp,
+            _ => Protocol::UnknownVariant(UnknownProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Protocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TCP" => Protocol::Tcp,
+            "UDP" => Protocol::Udp,
+            _ => Protocol::UnknownVariant(UnknownProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Protocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Protocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Protocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1418,7 +2501,7 @@ pub struct UpdateAcceleratorRequest {
     /// <p>The IP address type, which must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The name of the accelerator. The name can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1476,7 +2559,7 @@ pub struct UpdateCustomRoutingAcceleratorRequest {
     /// <p>The value for the address type must be IPv4.</p>
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The name of the accelerator. The name can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens (-), and must not begin or end with a hyphen.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1537,7 +2620,7 @@ pub struct UpdateEndpointGroupRequest {
     /// <p>The protocol that AWS Global Accelerator uses to check the health of endpoints that are part of this endpoint group. The default value is TCP.</p>
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<HealthCheckProtocol>,
     /// <p>Override specific listener ports used to route traffic to endpoints that are part of this endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "PortOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1567,7 +2650,7 @@ pub struct UpdateListenerRequest {
     /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_affinity: Option<String>,
+    pub client_affinity: Option<ClientAffinity>,
     /// <p>The Amazon Resource Name (ARN) of the listener to update.</p>
     #[serde(rename = "ListenerArn")]
     pub listener_arn: String,
@@ -1578,7 +2661,7 @@ pub struct UpdateListenerRequest {
     /// <p>The updated protocol for the connections from clients to the accelerator.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

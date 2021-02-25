@@ -146,7 +146,7 @@ pub struct ClusterListEntry {
     /// <p>The current state of this cluster. For information about the state of a specific node, see <a>JobListEntry$JobState</a>.</p>
     #[serde(rename = "ClusterState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cluster_state: Option<String>,
+    pub cluster_state: Option<ClusterState>,
     /// <p>The creation date for this cluster.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -172,7 +172,7 @@ pub struct ClusterMetadata {
     /// <p>The current status of the cluster.</p>
     #[serde(rename = "ClusterState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cluster_state: Option<String>,
+    pub cluster_state: Option<ClusterState>,
     /// <p>The creation date for this cluster.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,7 +188,7 @@ pub struct ClusterMetadata {
     /// <p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p>
     #[serde(rename = "JobType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     /// <p>The <code>KmsKeyARN</code> Amazon Resource Name (ARN) associated with this cluster. This ARN was created using the <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html">CreateKey</a> API action in AWS Key Management Service (AWS KMS).</p>
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -208,15 +208,131 @@ pub struct ClusterMetadata {
     /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
     /// <p><p>The type of AWS Snow device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: Option<SnowballType>,
     /// <p>The tax documents required in your AWS Region.</p>
     #[serde(rename = "TaxDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tax_documents: Option<TaxDocuments>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterState {
+    AwaitingQuorum,
+    Cancelled,
+    Complete,
+    InUse,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterState),
+}
+
+impl Default for ClusterState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        match self {
+            ClusterState::AwaitingQuorum => "AwaitingQuorum".to_string(),
+            ClusterState::Cancelled => "Cancelled".to_string(),
+            ClusterState::Complete => "Complete".to_string(),
+            ClusterState::InUse => "InUse".to_string(),
+            ClusterState::Pending => "Pending".to_string(),
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterState {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterState::AwaitingQuorum => &"AwaitingQuorum",
+            ClusterState::Cancelled => &"Cancelled",
+            ClusterState::Complete => &"Complete",
+            ClusterState::InUse => &"InUse",
+            ClusterState::Pending => &"Pending",
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AwaitingQuorum" => ClusterState::AwaitingQuorum,
+            "Cancelled" => ClusterState::Cancelled,
+            "Complete" => ClusterState::Complete,
+            "InUse" => ClusterState::InUse,
+            "Pending" => ClusterState::Pending,
+            _ => ClusterState::UnknownVariant(UnknownClusterState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AwaitingQuorum" => ClusterState::AwaitingQuorum,
+            "Cancelled" => ClusterState::Cancelled,
+            "Complete" => ClusterState::Complete,
+            "InUse" => ClusterState::InUse,
+            "Pending" => ClusterState::Pending,
+            _ => ClusterState::UnknownVariant(UnknownClusterState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ClusterState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snow device AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>
@@ -266,7 +382,7 @@ pub struct CreateClusterRequest {
     pub forwarding_address_id: Option<String>,
     /// <p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p>
     #[serde(rename = "JobType")]
-    pub job_type: String,
+    pub job_type: JobType,
     /// <p>The <code>KmsKeyARN</code> value that you want to associate with this cluster. <code>KmsKeyARN</code> values are created by using the <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html">CreateKey</a> API action in AWS Key Management Service (AWS KMS). </p>
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -283,11 +399,11 @@ pub struct CreateClusterRequest {
     pub role_arn: String,
     /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
-    pub shipping_option: String,
+    pub shipping_option: ShippingOption,
     /// <p><p>The type of AWS Snow Family device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: Option<SnowballType>,
     /// <p>The tax documents required in your AWS Region.</p>
     #[serde(rename = "TaxDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -329,7 +445,7 @@ pub struct CreateJobRequest {
     /// <p>Defines the type of job that you're creating. </p>
     #[serde(rename = "JobType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     /// <p>The <code>KmsKeyARN</code> that you want to associate with this job. <code>KmsKeyARN</code>s are created using the <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html">CreateKey</a> AWS Key Management Service (KMS) API action.</p>
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,15 +465,15 @@ pub struct CreateJobRequest {
     /// <p><p>The shipping speed for this job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device, rather it represents how quickly the Snow device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
     /// <p>If your job is being created in one of the US regions, you have the option of specifying what size Snow device you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_capacity_preference: Option<String>,
+    pub snowball_capacity_preference: Option<SnowballCapacity>,
     /// <p>The type of AWS Snow Family device to use for this job. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snow device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: Option<SnowballType>,
     /// <p>The tax documents required in your AWS Region.</p>
     #[serde(rename = "TaxDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -382,7 +498,7 @@ pub struct CreateReturnShippingLabelRequest {
     /// <p>The shipping speed for a particular job. This speed doesn't dictate how soon the device is returned to AWS. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -391,7 +507,7 @@ pub struct CreateReturnShippingLabelResult {
     /// <p>The status information of the task on a Snow device that is being returned to AWS.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ShippingLabelStatus>,
 }
 
 /// <p>Defines the real-time status of a Snow device's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
@@ -516,7 +632,7 @@ pub struct DescribeReturnShippingLabelResult {
     /// <p>The status information of the task on a Snow device that is being returned to AWS.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ShippingLabelStatus>,
 }
 
 /// <p>The container for <code>SnowconeDeviceConfiguration</code>. </p>
@@ -649,15 +765,15 @@ pub struct JobListEntry {
     /// <p>The current state of this job.</p>
     #[serde(rename = "JobState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_state: Option<String>,
+    pub job_state: Option<JobState>,
     /// <p>The type of job.</p>
     #[serde(rename = "JobType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     /// <p>The type of device used with this job.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: Option<SnowballType>,
 }
 
 /// <p>Contains job logs. Whenever a Snow device is used to import data into or export data out of Amazon S3, you'll have the option of downloading a PDF job report. Job logs are returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type. The job logs can be accessed for up to 60 minutes after this request has been made. To access any of the job logs after 60 minutes have passed, you'll have to make another call to the <code>DescribeJob</code> action.</p> <p>For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snow device for your job part is being delivered to you.</p> <p>The job report provides you insight into the state of your Amazon S3 data transfer. The report includes details about your job or job part for your records.</p> <p>For deeper visibility into the status of your transferred objects, you can look at the two associated logs: a success log and a failure log. The logs are saved in comma-separated value (CSV) format, and the name of each log includes the ID of the job or job part that the log describes.</p>
@@ -720,11 +836,11 @@ pub struct JobMetadata {
     /// <p>The current status of the jobs.</p>
     #[serde(rename = "JobState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_state: Option<String>,
+    pub job_state: Option<JobState>,
     /// <p>The type of job.</p>
     #[serde(rename = "JobType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_type: Option<String>,
+    pub job_type: Option<JobType>,
     /// <p>The Amazon Resource Name (ARN) for the AWS Key Management Service (AWS KMS) key associated with this job. This ARN was created using the <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html">CreateKey</a> API action in AWS KMS.</p>
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -748,11 +864,11 @@ pub struct JobMetadata {
     /// <p>The Snow device capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_capacity_preference: Option<String>,
+    pub snowball_capacity_preference: Option<SnowballCapacity>,
     /// <p>The type of device used with this job.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: Option<SnowballType>,
     /// <p>The metadata associated with the tax documents required in your AWS Region.</p>
     #[serde(rename = "TaxDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -774,6 +890,266 @@ pub struct JobResource {
     #[serde(rename = "S3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_resources: Option<Vec<S3Resource>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobState {
+    Cancelled,
+    Complete,
+    InProgress,
+    InTransitToAWS,
+    InTransitToCustomer,
+    Listing,
+    New,
+    Pending,
+    PreparingAppliance,
+    PreparingShipment,
+    WithAWS,
+    WithAWSSortingFacility,
+    WithCustomer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobState),
+}
+
+impl Default for JobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobState {
+    fn into(self) -> String {
+        match self {
+            JobState::Cancelled => "Cancelled".to_string(),
+            JobState::Complete => "Complete".to_string(),
+            JobState::InProgress => "InProgress".to_string(),
+            JobState::InTransitToAWS => "InTransitToAWS".to_string(),
+            JobState::InTransitToCustomer => "InTransitToCustomer".to_string(),
+            JobState::Listing => "Listing".to_string(),
+            JobState::New => "New".to_string(),
+            JobState::Pending => "Pending".to_string(),
+            JobState::PreparingAppliance => "PreparingAppliance".to_string(),
+            JobState::PreparingShipment => "PreparingShipment".to_string(),
+            JobState::WithAWS => "WithAWS".to_string(),
+            JobState::WithAWSSortingFacility => "WithAWSSortingFacility".to_string(),
+            JobState::WithCustomer => "WithCustomer".to_string(),
+            JobState::UnknownVariant(UnknownJobState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobState {
+    fn into(self) -> &'a str {
+        match self {
+            JobState::Cancelled => &"Cancelled",
+            JobState::Complete => &"Complete",
+            JobState::InProgress => &"InProgress",
+            JobState::InTransitToAWS => &"InTransitToAWS",
+            JobState::InTransitToCustomer => &"InTransitToCustomer",
+            JobState::Listing => &"Listing",
+            JobState::New => &"New",
+            JobState::Pending => &"Pending",
+            JobState::PreparingAppliance => &"PreparingAppliance",
+            JobState::PreparingShipment => &"PreparingShipment",
+            JobState::WithAWS => &"WithAWS",
+            JobState::WithAWSSortingFacility => &"WithAWSSortingFacility",
+            JobState::WithCustomer => &"WithCustomer",
+            JobState::UnknownVariant(UnknownJobState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => JobState::Cancelled,
+            "Complete" => JobState::Complete,
+            "InProgress" => JobState::InProgress,
+            "InTransitToAWS" => JobState::InTransitToAWS,
+            "InTransitToCustomer" => JobState::InTransitToCustomer,
+            "Listing" => JobState::Listing,
+            "New" => JobState::New,
+            "Pending" => JobState::Pending,
+            "PreparingAppliance" => JobState::PreparingAppliance,
+            "PreparingShipment" => JobState::PreparingShipment,
+            "WithAWS" => JobState::WithAWS,
+            "WithAWSSortingFacility" => JobState::WithAWSSortingFacility,
+            "WithCustomer" => JobState::WithCustomer,
+            _ => JobState::UnknownVariant(UnknownJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => JobState::Cancelled,
+            "Complete" => JobState::Complete,
+            "InProgress" => JobState::InProgress,
+            "InTransitToAWS" => JobState::InTransitToAWS,
+            "InTransitToCustomer" => JobState::InTransitToCustomer,
+            "Listing" => JobState::Listing,
+            "New" => JobState::New,
+            "Pending" => JobState::Pending,
+            "PreparingAppliance" => JobState::PreparingAppliance,
+            "PreparingShipment" => JobState::PreparingShipment,
+            "WithAWS" => JobState::WithAWS,
+            "WithAWSSortingFacility" => JobState::WithAWSSortingFacility,
+            "WithCustomer" => JobState::WithCustomer,
+            _ => JobState::UnknownVariant(UnknownJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobType {
+    Export,
+    Import,
+    LocalUse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobType),
+}
+
+impl Default for JobType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobType {
+    fn into(self) -> String {
+        match self {
+            JobType::Export => "EXPORT".to_string(),
+            JobType::Import => "IMPORT".to_string(),
+            JobType::LocalUse => "LOCAL_USE".to_string(),
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobType {
+    fn into(self) -> &'a str {
+        match self {
+            JobType::Export => &"EXPORT",
+            JobType::Import => &"IMPORT",
+            JobType::LocalUse => &"LOCAL_USE",
+            JobType::UnknownVariant(UnknownJobType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPORT" => JobType::Export,
+            "IMPORT" => JobType::Import,
+            "LOCAL_USE" => JobType::LocalUse,
+            _ => JobType::UnknownVariant(UnknownJobType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPORT" => JobType::Export,
+            "IMPORT" => JobType::Import,
+            "LOCAL_USE" => JobType::LocalUse,
+            _ => JobType::UnknownVariant(UnknownJobType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains a key range. For export jobs, a <code>S3Resource</code> object can have an optional <code>KeyRange</code> value. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>
@@ -915,7 +1291,7 @@ pub struct Notification {
     /// <p>The list of job states that will trigger a notification for this job.</p>
     #[serde(rename = "JobStatesToNotify")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_states_to_notify: Option<Vec<String>>,
+    pub job_states_to_notify: Option<Vec<JobState>>,
     /// <p>Any change in job state will trigger a notification for this job.</p>
     #[serde(rename = "NotifyAll")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -953,6 +1329,107 @@ pub struct Shipment {
     pub tracking_number: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShipmentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShipmentState {
+    Received,
+    Returned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShipmentState),
+}
+
+impl Default for ShipmentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShipmentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShipmentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShipmentState {
+    fn into(self) -> String {
+        match self {
+            ShipmentState::Received => "RECEIVED".to_string(),
+            ShipmentState::Returned => "RETURNED".to_string(),
+            ShipmentState::UnknownVariant(UnknownShipmentState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShipmentState {
+    fn into(self) -> &'a str {
+        match self {
+            ShipmentState::Received => &"RECEIVED",
+            ShipmentState::Returned => &"RETURNED",
+            ShipmentState::UnknownVariant(UnknownShipmentState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShipmentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "RECEIVED" => ShipmentState::Received,
+            "RETURNED" => ShipmentState::Returned,
+            _ => ShipmentState::UnknownVariant(UnknownShipmentState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShipmentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RECEIVED" => ShipmentState::Received,
+            "RETURNED" => ShipmentState::Returned,
+            _ => ShipmentState::UnknownVariant(UnknownShipmentState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShipmentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShipmentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ShipmentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A job's shipping information, including inbound and outbound tracking numbers and shipping speed options.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -968,7 +1445,481 @@ pub struct ShippingDetails {
     /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShippingLabelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShippingLabelStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShippingLabelStatus),
+}
+
+impl Default for ShippingLabelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShippingLabelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShippingLabelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShippingLabelStatus {
+    fn into(self) -> String {
+        match self {
+            ShippingLabelStatus::Failed => "Failed".to_string(),
+            ShippingLabelStatus::InProgress => "InProgress".to_string(),
+            ShippingLabelStatus::Succeeded => "Succeeded".to_string(),
+            ShippingLabelStatus::TimedOut => "TimedOut".to_string(),
+            ShippingLabelStatus::UnknownVariant(UnknownShippingLabelStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShippingLabelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ShippingLabelStatus::Failed => &"Failed",
+            ShippingLabelStatus::InProgress => &"InProgress",
+            ShippingLabelStatus::Succeeded => &"Succeeded",
+            ShippingLabelStatus::TimedOut => &"TimedOut",
+            ShippingLabelStatus::UnknownVariant(UnknownShippingLabelStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ShippingLabelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => ShippingLabelStatus::Failed,
+            "InProgress" => ShippingLabelStatus::InProgress,
+            "Succeeded" => ShippingLabelStatus::Succeeded,
+            "TimedOut" => ShippingLabelStatus::TimedOut,
+            _ => ShippingLabelStatus::UnknownVariant(UnknownShippingLabelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShippingLabelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => ShippingLabelStatus::Failed,
+            "InProgress" => ShippingLabelStatus::InProgress,
+            "Succeeded" => ShippingLabelStatus::Succeeded,
+            "TimedOut" => ShippingLabelStatus::TimedOut,
+            _ => ShippingLabelStatus::UnknownVariant(UnknownShippingLabelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShippingLabelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ShippingLabelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShippingLabelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShippingOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShippingOption {
+    Express,
+    NextDay,
+    SecondDay,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShippingOption),
+}
+
+impl Default for ShippingOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShippingOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShippingOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShippingOption {
+    fn into(self) -> String {
+        match self {
+            ShippingOption::Express => "EXPRESS".to_string(),
+            ShippingOption::NextDay => "NEXT_DAY".to_string(),
+            ShippingOption::SecondDay => "SECOND_DAY".to_string(),
+            ShippingOption::Standard => "STANDARD".to_string(),
+            ShippingOption::UnknownVariant(UnknownShippingOption { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShippingOption {
+    fn into(self) -> &'a str {
+        match self {
+            ShippingOption::Express => &"EXPRESS",
+            ShippingOption::NextDay => &"NEXT_DAY",
+            ShippingOption::SecondDay => &"SECOND_DAY",
+            ShippingOption::Standard => &"STANDARD",
+            ShippingOption::UnknownVariant(UnknownShippingOption { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShippingOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPRESS" => ShippingOption::Express,
+            "NEXT_DAY" => ShippingOption::NextDay,
+            "SECOND_DAY" => ShippingOption::SecondDay,
+            "STANDARD" => ShippingOption::Standard,
+            _ => ShippingOption::UnknownVariant(UnknownShippingOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShippingOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPRESS" => ShippingOption::Express,
+            "NEXT_DAY" => ShippingOption::NextDay,
+            "SECOND_DAY" => ShippingOption::SecondDay,
+            "STANDARD" => ShippingOption::Standard,
+            _ => ShippingOption::UnknownVariant(UnknownShippingOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShippingOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShippingOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShippingOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnowballCapacity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnowballCapacity {
+    NoPreference,
+    T100,
+    T42,
+    T50,
+    T8,
+    T80,
+    T98,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnowballCapacity),
+}
+
+impl Default for SnowballCapacity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnowballCapacity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnowballCapacity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnowballCapacity {
+    fn into(self) -> String {
+        match self {
+            SnowballCapacity::NoPreference => "NoPreference".to_string(),
+            SnowballCapacity::T100 => "T100".to_string(),
+            SnowballCapacity::T42 => "T42".to_string(),
+            SnowballCapacity::T50 => "T50".to_string(),
+            SnowballCapacity::T8 => "T8".to_string(),
+            SnowballCapacity::T80 => "T80".to_string(),
+            SnowballCapacity::T98 => "T98".to_string(),
+            SnowballCapacity::UnknownVariant(UnknownSnowballCapacity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnowballCapacity {
+    fn into(self) -> &'a str {
+        match self {
+            SnowballCapacity::NoPreference => &"NoPreference",
+            SnowballCapacity::T100 => &"T100",
+            SnowballCapacity::T42 => &"T42",
+            SnowballCapacity::T50 => &"T50",
+            SnowballCapacity::T8 => &"T8",
+            SnowballCapacity::T80 => &"T80",
+            SnowballCapacity::T98 => &"T98",
+            SnowballCapacity::UnknownVariant(UnknownSnowballCapacity { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SnowballCapacity {
+    fn from(name: &str) -> Self {
+        match name {
+            "NoPreference" => SnowballCapacity::NoPreference,
+            "T100" => SnowballCapacity::T100,
+            "T42" => SnowballCapacity::T42,
+            "T50" => SnowballCapacity::T50,
+            "T8" => SnowballCapacity::T8,
+            "T80" => SnowballCapacity::T80,
+            "T98" => SnowballCapacity::T98,
+            _ => SnowballCapacity::UnknownVariant(UnknownSnowballCapacity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnowballCapacity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NoPreference" => SnowballCapacity::NoPreference,
+            "T100" => SnowballCapacity::T100,
+            "T42" => SnowballCapacity::T42,
+            "T50" => SnowballCapacity::T50,
+            "T8" => SnowballCapacity::T8,
+            "T80" => SnowballCapacity::T80,
+            "T98" => SnowballCapacity::T98,
+            _ => SnowballCapacity::UnknownVariant(UnknownSnowballCapacity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnowballCapacity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SnowballCapacity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SnowballCapacity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnowballType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnowballType {
+    Edge,
+    EdgeC,
+    EdgeCg,
+    EdgeS,
+    Snc1Hdd,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnowballType),
+}
+
+impl Default for SnowballType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnowballType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnowballType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnowballType {
+    fn into(self) -> String {
+        match self {
+            SnowballType::Edge => "EDGE".to_string(),
+            SnowballType::EdgeC => "EDGE_C".to_string(),
+            SnowballType::EdgeCg => "EDGE_CG".to_string(),
+            SnowballType::EdgeS => "EDGE_S".to_string(),
+            SnowballType::Snc1Hdd => "SNC1_HDD".to_string(),
+            SnowballType::Standard => "STANDARD".to_string(),
+            SnowballType::UnknownVariant(UnknownSnowballType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnowballType {
+    fn into(self) -> &'a str {
+        match self {
+            SnowballType::Edge => &"EDGE",
+            SnowballType::EdgeC => &"EDGE_C",
+            SnowballType::EdgeCg => &"EDGE_CG",
+            SnowballType::EdgeS => &"EDGE_S",
+            SnowballType::Snc1Hdd => &"SNC1_HDD",
+            SnowballType::Standard => &"STANDARD",
+            SnowballType::UnknownVariant(UnknownSnowballType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SnowballType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EDGE" => SnowballType::Edge,
+            "EDGE_C" => SnowballType::EdgeC,
+            "EDGE_CG" => SnowballType::EdgeCg,
+            "EDGE_S" => SnowballType::EdgeS,
+            "SNC1_HDD" => SnowballType::Snc1Hdd,
+            "STANDARD" => SnowballType::Standard,
+            _ => SnowballType::UnknownVariant(UnknownSnowballType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnowballType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EDGE" => SnowballType::Edge,
+            "EDGE_C" => SnowballType::EdgeC,
+            "EDGE_CG" => SnowballType::EdgeCg,
+            "EDGE_S" => SnowballType::EdgeS,
+            "SNC1_HDD" => SnowballType::Snc1Hdd,
+            "STANDARD" => SnowballType::Standard,
+            _ => SnowballType::UnknownVariant(UnknownSnowballType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnowballType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SnowballType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SnowballType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the device configuration for an AWS Snowcone job. </p>
@@ -1021,7 +1972,7 @@ pub struct UpdateClusterRequest {
     /// <p>The updated shipping option value of this cluster's <a>ShippingDetails</a> object.</p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1061,11 +2012,11 @@ pub struct UpdateJobRequest {
     /// <p>The updated shipping option value of this job's <a>ShippingDetails</a> object.</p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_option: Option<String>,
+    pub shipping_option: Option<ShippingOption>,
     /// <p>The updated <code>SnowballCapacityPreference</code> of this job's <a>JobMetadata</a> object. The 50 TB Snowballs are only available in the US regions.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_capacity_preference: Option<String>,
+    pub snowball_capacity_preference: Option<SnowballCapacity>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1080,7 +2031,7 @@ pub struct UpdateJobShipmentStateRequest {
     pub job_id: String,
     /// <p>The state of a device when it is being shipped. </p> <p>Set to <code>RECEIVED</code> when the device arrives at your location.</p> <p>Set to <code>RETURNED</code> when you have returned the device to AWS.</p>
     #[serde(rename = "ShipmentState")]
-    pub shipment_state: String,
+    pub shipment_state: ShipmentState,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

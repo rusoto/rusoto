@@ -71,7 +71,7 @@ pub struct ApplicationComponent {
     #[serde(rename = "DetectedWorkload")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detected_workload:
-        Option<::std::collections::HashMap<String, ::std::collections::HashMap<String, String>>>,
+        Option<::std::collections::HashMap<Tier, ::std::collections::HashMap<String, String>>>,
     /// <p>Indicates whether the application component is monitored. </p>
     #[serde(rename = "Monitor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -79,7 +79,7 @@ pub struct ApplicationComponent {
     /// <p> The operating system of the component. </p>
     #[serde(rename = "OsType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub os_type: Option<String>,
+    pub os_type: Option<OsType>,
     /// <p>The resource type. Supported resource types include EC2 instances, Auto Scaling group, Classic ELB, Application ELB, and SQS Queue.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -87,7 +87,7 @@ pub struct ApplicationComponent {
     /// <p>The stack tier of the application component.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<Tier>,
 }
 
 /// <p>Describes the status of the application.</p>
@@ -120,6 +120,121 @@ pub struct ApplicationInfo {
     pub resource_group_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudWatchEventSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudWatchEventSource {
+    CodeDeploy,
+    Ec2,
+    Health,
+    Rds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudWatchEventSource),
+}
+
+impl Default for CloudWatchEventSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudWatchEventSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudWatchEventSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudWatchEventSource {
+    fn into(self) -> String {
+        match self {
+            CloudWatchEventSource::CodeDeploy => "CODE_DEPLOY".to_string(),
+            CloudWatchEventSource::Ec2 => "EC2".to_string(),
+            CloudWatchEventSource::Health => "HEALTH".to_string(),
+            CloudWatchEventSource::Rds => "RDS".to_string(),
+            CloudWatchEventSource::UnknownVariant(UnknownCloudWatchEventSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudWatchEventSource {
+    fn into(self) -> &'a str {
+        match self {
+            CloudWatchEventSource::CodeDeploy => &"CODE_DEPLOY",
+            CloudWatchEventSource::Ec2 => &"EC2",
+            CloudWatchEventSource::Health => &"HEALTH",
+            CloudWatchEventSource::Rds => &"RDS",
+            CloudWatchEventSource::UnknownVariant(UnknownCloudWatchEventSource {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CloudWatchEventSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODE_DEPLOY" => CloudWatchEventSource::CodeDeploy,
+            "EC2" => CloudWatchEventSource::Ec2,
+            "HEALTH" => CloudWatchEventSource::Health,
+            "RDS" => CloudWatchEventSource::Rds,
+            _ => CloudWatchEventSource::UnknownVariant(UnknownCloudWatchEventSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloudWatchEventSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODE_DEPLOY" => CloudWatchEventSource::CodeDeploy,
+            "EC2" => CloudWatchEventSource::Ec2,
+            "HEALTH" => CloudWatchEventSource::Health,
+            "RDS" => CloudWatchEventSource::Rds,
+            _ => CloudWatchEventSource::UnknownVariant(UnknownCloudWatchEventSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudWatchEventSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CloudWatchEventSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudWatchEventSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> The event information. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -135,11 +250,11 @@ pub struct ConfigurationEvent {
     /// <p> The resource type that Application Insights attempted to configure, for example, CLOUDWATCH_ALARM. </p>
     #[serde(rename = "EventResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_resource_type: Option<String>,
+    pub event_resource_type: Option<ConfigurationEventResourceType>,
     /// <p> The status of the configuration update event. Possible values include INFO, WARN, and ERROR. </p>
     #[serde(rename = "EventStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_status: Option<String>,
+    pub event_status: Option<ConfigurationEventStatus>,
     /// <p> The timestamp of the event. </p>
     #[serde(rename = "EventTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -148,6 +263,234 @@ pub struct ConfigurationEvent {
     #[serde(rename = "MonitoredResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monitored_resource_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationEventResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationEventResourceType {
+    Cloudformation,
+    CloudwatchAlarm,
+    CloudwatchLog,
+    SsmAssociation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationEventResourceType),
+}
+
+impl Default for ConfigurationEventResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationEventResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationEventResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationEventResourceType {
+    fn into(self) -> String {
+        match self {
+            ConfigurationEventResourceType::Cloudformation => "CLOUDFORMATION".to_string(),
+            ConfigurationEventResourceType::CloudwatchAlarm => "CLOUDWATCH_ALARM".to_string(),
+            ConfigurationEventResourceType::CloudwatchLog => "CLOUDWATCH_LOG".to_string(),
+            ConfigurationEventResourceType::SsmAssociation => "SSM_ASSOCIATION".to_string(),
+            ConfigurationEventResourceType::UnknownVariant(
+                UnknownConfigurationEventResourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationEventResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationEventResourceType::Cloudformation => &"CLOUDFORMATION",
+            ConfigurationEventResourceType::CloudwatchAlarm => &"CLOUDWATCH_ALARM",
+            ConfigurationEventResourceType::CloudwatchLog => &"CLOUDWATCH_LOG",
+            ConfigurationEventResourceType::SsmAssociation => &"SSM_ASSOCIATION",
+            ConfigurationEventResourceType::UnknownVariant(
+                UnknownConfigurationEventResourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationEventResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUDFORMATION" => ConfigurationEventResourceType::Cloudformation,
+            "CLOUDWATCH_ALARM" => ConfigurationEventResourceType::CloudwatchAlarm,
+            "CLOUDWATCH_LOG" => ConfigurationEventResourceType::CloudwatchLog,
+            "SSM_ASSOCIATION" => ConfigurationEventResourceType::SsmAssociation,
+            _ => ConfigurationEventResourceType::UnknownVariant(
+                UnknownConfigurationEventResourceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConfigurationEventResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUDFORMATION" => ConfigurationEventResourceType::Cloudformation,
+            "CLOUDWATCH_ALARM" => ConfigurationEventResourceType::CloudwatchAlarm,
+            "CLOUDWATCH_LOG" => ConfigurationEventResourceType::CloudwatchLog,
+            "SSM_ASSOCIATION" => ConfigurationEventResourceType::SsmAssociation,
+            _ => ConfigurationEventResourceType::UnknownVariant(
+                UnknownConfigurationEventResourceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationEventResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConfigurationEventResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationEventResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationEventStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationEventStatus {
+    Error,
+    Info,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationEventStatus),
+}
+
+impl Default for ConfigurationEventStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationEventStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationEventStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationEventStatus {
+    fn into(self) -> String {
+        match self {
+            ConfigurationEventStatus::Error => "ERROR".to_string(),
+            ConfigurationEventStatus::Info => "INFO".to_string(),
+            ConfigurationEventStatus::Warn => "WARN".to_string(),
+            ConfigurationEventStatus::UnknownVariant(UnknownConfigurationEventStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationEventStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationEventStatus::Error => &"ERROR",
+            ConfigurationEventStatus::Info => &"INFO",
+            ConfigurationEventStatus::Warn => &"WARN",
+            ConfigurationEventStatus::UnknownVariant(UnknownConfigurationEventStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationEventStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => ConfigurationEventStatus::Error,
+            "INFO" => ConfigurationEventStatus::Info,
+            "WARN" => ConfigurationEventStatus::Warn,
+            _ => ConfigurationEventStatus::UnknownVariant(UnknownConfigurationEventStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationEventStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => ConfigurationEventStatus::Error,
+            "INFO" => ConfigurationEventStatus::Info,
+            "WARN" => ConfigurationEventStatus::Warn,
+            _ => ConfigurationEventStatus::UnknownVariant(UnknownConfigurationEventStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationEventStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigurationEventStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationEventStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -307,7 +650,7 @@ pub struct DescribeComponentConfigurationRecommendationRequest {
     pub resource_group_name: String,
     /// <p>The tier of the application component. Supported tiers include <code>DOT_NET_CORE</code>, <code>DOT_NET_WORKER</code>, <code>DOT_NET_WEB</code>, <code>SQL_SERVER</code>, and <code>DEFAULT</code>.</p>
     #[serde(rename = "Tier")]
-    pub tier: String,
+    pub tier: Tier,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -344,7 +687,7 @@ pub struct DescribeComponentConfigurationResponse {
     /// <p>The tier of the application component. Supported tiers include <code>DOT_NET_CORE</code>, <code>DOT_NET_WORKER</code>, <code>DOT_NET_WEB</code>, <code>SQL_SERVER</code>, and <code>DEFAULT</code> </p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<Tier>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -448,6 +791,208 @@ pub struct DescribeProblemResponse {
     pub problem: Option<Problem>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeedbackKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeedbackKey {
+    InsightsFeedback,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeedbackKey),
+}
+
+impl Default for FeedbackKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeedbackKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeedbackKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeedbackKey {
+    fn into(self) -> String {
+        match self {
+            FeedbackKey::InsightsFeedback => "INSIGHTS_FEEDBACK".to_string(),
+            FeedbackKey::UnknownVariant(UnknownFeedbackKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeedbackKey {
+    fn into(self) -> &'a str {
+        match self {
+            FeedbackKey::InsightsFeedback => &"INSIGHTS_FEEDBACK",
+            FeedbackKey::UnknownVariant(UnknownFeedbackKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeedbackKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSIGHTS_FEEDBACK" => FeedbackKey::InsightsFeedback,
+            _ => FeedbackKey::UnknownVariant(UnknownFeedbackKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeedbackKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSIGHTS_FEEDBACK" => FeedbackKey::InsightsFeedback,
+            _ => FeedbackKey::UnknownVariant(UnknownFeedbackKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeedbackKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FeedbackKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeedbackKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeedbackValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeedbackValue {
+    NotSpecified,
+    NotUseful,
+    Useful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeedbackValue),
+}
+
+impl Default for FeedbackValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeedbackValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeedbackValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeedbackValue {
+    fn into(self) -> String {
+        match self {
+            FeedbackValue::NotSpecified => "NOT_SPECIFIED".to_string(),
+            FeedbackValue::NotUseful => "NOT_USEFUL".to_string(),
+            FeedbackValue::Useful => "USEFUL".to_string(),
+            FeedbackValue::UnknownVariant(UnknownFeedbackValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeedbackValue {
+    fn into(self) -> &'a str {
+        match self {
+            FeedbackValue::NotSpecified => &"NOT_SPECIFIED",
+            FeedbackValue::NotUseful => &"NOT_USEFUL",
+            FeedbackValue::Useful => &"USEFUL",
+            FeedbackValue::UnknownVariant(UnknownFeedbackValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeedbackValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_SPECIFIED" => FeedbackValue::NotSpecified,
+            "NOT_USEFUL" => FeedbackValue::NotUseful,
+            "USEFUL" => FeedbackValue::Useful,
+            _ => FeedbackValue::UnknownVariant(UnknownFeedbackValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeedbackValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_SPECIFIED" => FeedbackValue::NotSpecified,
+            "NOT_USEFUL" => FeedbackValue::NotUseful,
+            "USEFUL" => FeedbackValue::Useful,
+            _ => FeedbackValue::UnknownVariant(UnknownFeedbackValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeedbackValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FeedbackValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeedbackValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
@@ -513,7 +1058,7 @@ pub struct ListConfigurationHistoryRequest {
     /// <p>The status of the configuration update event. Possible values include INFO, WARN, and ERROR.</p>
     #[serde(rename = "EventStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_status: Option<String>,
+    pub event_status: Option<ConfigurationEventStatus>,
     /// <p> The maximum number of results returned by <code>ListConfigurationHistory</code> in paginated output. When this parameter is used, <code>ListConfigurationHistory</code> returns only <code>MaxResults</code> in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListConfigurationHistory</code> request with the returned <code>NextToken</code> value. If this parameter is not used, then <code>ListConfigurationHistory</code> returns all results. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -670,6 +1215,112 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogFilter {
+    Error,
+    Info,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogFilter),
+}
+
+impl Default for LogFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogFilter {
+    fn into(self) -> String {
+        match self {
+            LogFilter::Error => "ERROR".to_string(),
+            LogFilter::Info => "INFO".to_string(),
+            LogFilter::Warn => "WARN".to_string(),
+            LogFilter::UnknownVariant(UnknownLogFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogFilter {
+    fn into(self) -> &'a str {
+        match self {
+            LogFilter::Error => &"ERROR",
+            LogFilter::Info => &"INFO",
+            LogFilter::Warn => &"WARN",
+            LogFilter::UnknownVariant(UnknownLogFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => LogFilter::Error,
+            "INFO" => LogFilter::Info,
+            "WARN" => LogFilter::Warn,
+            _ => LogFilter::UnknownVariant(UnknownLogFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => LogFilter::Error,
+            "INFO" => LogFilter::Info,
+            "WARN" => LogFilter::Warn,
+            _ => LogFilter::UnknownVariant(UnknownLogFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LogFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that defines the log patterns that belongs to a <code>LogPatternSet</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -707,7 +1358,7 @@ pub struct Observation {
     /// <p> The source of the CloudWatch Event. </p>
     #[serde(rename = "CloudWatchEventSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cloud_watch_event_source: Option<String>,
+    pub cloud_watch_event_source: Option<CloudWatchEventSource>,
     /// <p> The CodeDeploy application to which the deployment belongs. </p>
     #[serde(rename = "CodeDeployApplication")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -783,7 +1434,7 @@ pub struct Observation {
     /// <p>The log filter of the observation.</p>
     #[serde(rename = "LogFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_filter: Option<String>,
+    pub log_filter: Option<LogFilter>,
     /// <p>The log group name.</p>
     #[serde(rename = "LogGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -878,6 +1529,107 @@ pub struct Observation {
     pub x_ray_throttle_percent: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OsType {
+    Linux,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOsType),
+}
+
+impl Default for OsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OsType {
+    fn into(self) -> String {
+        match self {
+            OsType::Linux => "LINUX".to_string(),
+            OsType::Windows => "WINDOWS".to_string(),
+            OsType::UnknownVariant(UnknownOsType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OsType {
+    fn into(self) -> &'a str {
+        match self {
+            OsType::Linux => &"LINUX",
+            OsType::Windows => &"WINDOWS",
+            OsType::UnknownVariant(UnknownOsType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINUX" => OsType::Linux,
+            "WINDOWS" => OsType::Windows,
+            _ => OsType::UnknownVariant(UnknownOsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINUX" => OsType::Linux,
+            "WINDOWS" => OsType::Windows,
+            _ => OsType::UnknownVariant(UnknownOsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a problem that is detected by correlating observations.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -893,7 +1645,7 @@ pub struct Problem {
     /// <p>Feedback provided by the user about the problem.</p>
     #[serde(rename = "Feedback")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feedback: Option<::std::collections::HashMap<String, String>>,
+    pub feedback: Option<::std::collections::HashMap<FeedbackKey, FeedbackValue>>,
     /// <p>The ID of the problem.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -909,7 +1661,7 @@ pub struct Problem {
     /// <p>A measure of the level of impact of the problem.</p>
     #[serde(rename = "SeverityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity_level: Option<String>,
+    pub severity_level: Option<SeverityLevel>,
     /// <p>The time when the problem started, in epoch seconds.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -917,7 +1669,7 @@ pub struct Problem {
     /// <p>The status of the problem.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The name of the problem.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -932,6 +1684,218 @@ pub struct RelatedObservations {
     #[serde(rename = "ObservationList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub observation_list: Option<Vec<Observation>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSeverityLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SeverityLevel {
+    High,
+    Low,
+    Medium,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSeverityLevel),
+}
+
+impl Default for SeverityLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SeverityLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SeverityLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SeverityLevel {
+    fn into(self) -> String {
+        match self {
+            SeverityLevel::High => "High".to_string(),
+            SeverityLevel::Low => "Low".to_string(),
+            SeverityLevel::Medium => "Medium".to_string(),
+            SeverityLevel::UnknownVariant(UnknownSeverityLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SeverityLevel {
+    fn into(self) -> &'a str {
+        match self {
+            SeverityLevel::High => &"High",
+            SeverityLevel::Low => &"Low",
+            SeverityLevel::Medium => &"Medium",
+            SeverityLevel::UnknownVariant(UnknownSeverityLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SeverityLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "High" => SeverityLevel::High,
+            "Low" => SeverityLevel::Low,
+            "Medium" => SeverityLevel::Medium,
+            _ => SeverityLevel::UnknownVariant(UnknownSeverityLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SeverityLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "High" => SeverityLevel::High,
+            "Low" => SeverityLevel::Low,
+            "Medium" => SeverityLevel::Medium,
+            _ => SeverityLevel::UnknownVariant(UnknownSeverityLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SeverityLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SeverityLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SeverityLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Ignore,
+    Pending,
+    Resolved,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Ignore => "IGNORE".to_string(),
+            Status::Pending => "PENDING".to_string(),
+            Status::Resolved => "RESOLVED".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Ignore => &"IGNORE",
+            Status::Pending => &"PENDING",
+            Status::Resolved => &"RESOLVED",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => Status::Ignore,
+            "PENDING" => Status::Pending,
+            "RESOLVED" => Status::Resolved,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => Status::Ignore,
+            "PENDING" => Status::Pending,
+            "RESOLVED" => Status::Resolved,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>An object that defines the tags associated with an application. A <i>tag</i> is a label that you optionally define and associate with an application. Tags can help you categorize and manage resources in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a required <i>tag key</i> and an associated <i>tag value</i>, both of which you define. A tag key is a general label that acts as a category for a more specific tag value. A tag value acts as a descriptor within a tag key. A tag key can contain as many as 128 characters. A tag value can contain as many as 256 characters. The characters can be Unicode letters, digits, white space, or one of the following symbols: _ . : / = + -. The following additional restrictions apply to tags:</p> <ul> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>For each associated resource, each tag key must be unique and it can have only one value.</p> </li> <li> <p>The <code>aws:</code> prefix is reserved for use by AWS; you can’t use it in any tag keys or values that you define. In addition, you can&#39;t edit or remove tag keys or values that use this prefix. </p> </li> </ul></p>
@@ -959,6 +1923,158 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Tier {
+    Custom,
+    Default,
+    DotNetCore,
+    DotNetWeb,
+    DotNetWebTier,
+    DotNetWorker,
+    JavaJmx,
+    Mysql,
+    Oracle,
+    Postgresql,
+    SqlServer,
+    SqlServerAlwaysonAvailabilityGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTier),
+}
+
+impl Default for Tier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Tier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Tier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Tier {
+    fn into(self) -> String {
+        match self {
+            Tier::Custom => "CUSTOM".to_string(),
+            Tier::Default => "DEFAULT".to_string(),
+            Tier::DotNetCore => "DOT_NET_CORE".to_string(),
+            Tier::DotNetWeb => "DOT_NET_WEB".to_string(),
+            Tier::DotNetWebTier => "DOT_NET_WEB_TIER".to_string(),
+            Tier::DotNetWorker => "DOT_NET_WORKER".to_string(),
+            Tier::JavaJmx => "JAVA_JMX".to_string(),
+            Tier::Mysql => "MYSQL".to_string(),
+            Tier::Oracle => "ORACLE".to_string(),
+            Tier::Postgresql => "POSTGRESQL".to_string(),
+            Tier::SqlServer => "SQL_SERVER".to_string(),
+            Tier::SqlServerAlwaysonAvailabilityGroup => {
+                "SQL_SERVER_ALWAYSON_AVAILABILITY_GROUP".to_string()
+            }
+            Tier::UnknownVariant(UnknownTier { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Tier {
+    fn into(self) -> &'a str {
+        match self {
+            Tier::Custom => &"CUSTOM",
+            Tier::Default => &"DEFAULT",
+            Tier::DotNetCore => &"DOT_NET_CORE",
+            Tier::DotNetWeb => &"DOT_NET_WEB",
+            Tier::DotNetWebTier => &"DOT_NET_WEB_TIER",
+            Tier::DotNetWorker => &"DOT_NET_WORKER",
+            Tier::JavaJmx => &"JAVA_JMX",
+            Tier::Mysql => &"MYSQL",
+            Tier::Oracle => &"ORACLE",
+            Tier::Postgresql => &"POSTGRESQL",
+            Tier::SqlServer => &"SQL_SERVER",
+            Tier::SqlServerAlwaysonAvailabilityGroup => &"SQL_SERVER_ALWAYSON_AVAILABILITY_GROUP",
+            Tier::UnknownVariant(UnknownTier { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Tier {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOM" => Tier::Custom,
+            "DEFAULT" => Tier::Default,
+            "DOT_NET_CORE" => Tier::DotNetCore,
+            "DOT_NET_WEB" => Tier::DotNetWeb,
+            "DOT_NET_WEB_TIER" => Tier::DotNetWebTier,
+            "DOT_NET_WORKER" => Tier::DotNetWorker,
+            "JAVA_JMX" => Tier::JavaJmx,
+            "MYSQL" => Tier::Mysql,
+            "ORACLE" => Tier::Oracle,
+            "POSTGRESQL" => Tier::Postgresql,
+            "SQL_SERVER" => Tier::SqlServer,
+            "SQL_SERVER_ALWAYSON_AVAILABILITY_GROUP" => Tier::SqlServerAlwaysonAvailabilityGroup,
+            _ => Tier::UnknownVariant(UnknownTier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Tier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOM" => Tier::Custom,
+            "DEFAULT" => Tier::Default,
+            "DOT_NET_CORE" => Tier::DotNetCore,
+            "DOT_NET_WEB" => Tier::DotNetWeb,
+            "DOT_NET_WEB_TIER" => Tier::DotNetWebTier,
+            "DOT_NET_WORKER" => Tier::DotNetWorker,
+            "JAVA_JMX" => Tier::JavaJmx,
+            "MYSQL" => Tier::Mysql,
+            "ORACLE" => Tier::Oracle,
+            "POSTGRESQL" => Tier::Postgresql,
+            "SQL_SERVER" => Tier::SqlServer,
+            "SQL_SERVER_ALWAYSON_AVAILABILITY_GROUP" => Tier::SqlServerAlwaysonAvailabilityGroup,
+            _ => Tier::UnknownVariant(UnknownTier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Tier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Tier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Tier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1028,7 +2144,7 @@ pub struct UpdateComponentConfigurationRequest {
     /// <p>The tier of the application component. Supported tiers include <code>DOT_NET_WORKER</code>, <code>DOT_NET_WEB</code>, <code>DOT_NET_CORE</code>, <code>SQL_SERVER</code>, and <code>DEFAULT</code>.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tier: Option<String>,
+    pub tier: Option<Tier>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

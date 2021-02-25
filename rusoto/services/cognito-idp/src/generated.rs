@@ -64,7 +64,7 @@ pub struct AccountRecoverySettingType {
 pub struct AccountTakeoverActionType {
     /// <p><p>The event action.</p> <ul> <li> <p> <code>BLOCK</code> Choosing this action will block the request.</p> </li> <li> <p> <code>MFA<em>IF</em>CONFIGURED</code> Throw MFA challenge if user has configured it, else allow the request.</p> </li> <li> <p> <code>MFA<em>REQUIRED</code> Throw MFA challenge if user has configured it, else block the request.</p> </li> <li> <p> <code>NO</em>ACTION</code> Allow the user sign-in.</p> </li> </ul></p>
     #[serde(rename = "EventAction")]
-    pub event_action: String,
+    pub event_action: AccountTakeoverEventActionType,
     /// <p>Flag specifying whether to send a notification.</p>
     #[serde(rename = "Notify")]
     pub notify: bool,
@@ -85,6 +85,124 @@ pub struct AccountTakeoverActionsType {
     #[serde(rename = "MediumAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub medium_action: Option<AccountTakeoverActionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountTakeoverEventActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountTakeoverEventActionType {
+    Block,
+    MfaIfConfigured,
+    MfaRequired,
+    NoAction,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountTakeoverEventActionType),
+}
+
+impl Default for AccountTakeoverEventActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountTakeoverEventActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountTakeoverEventActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountTakeoverEventActionType {
+    fn into(self) -> String {
+        match self {
+            AccountTakeoverEventActionType::Block => "BLOCK".to_string(),
+            AccountTakeoverEventActionType::MfaIfConfigured => "MFA_IF_CONFIGURED".to_string(),
+            AccountTakeoverEventActionType::MfaRequired => "MFA_REQUIRED".to_string(),
+            AccountTakeoverEventActionType::NoAction => "NO_ACTION".to_string(),
+            AccountTakeoverEventActionType::UnknownVariant(
+                UnknownAccountTakeoverEventActionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountTakeoverEventActionType {
+    fn into(self) -> &'a str {
+        match self {
+            AccountTakeoverEventActionType::Block => &"BLOCK",
+            AccountTakeoverEventActionType::MfaIfConfigured => &"MFA_IF_CONFIGURED",
+            AccountTakeoverEventActionType::MfaRequired => &"MFA_REQUIRED",
+            AccountTakeoverEventActionType::NoAction => &"NO_ACTION",
+            AccountTakeoverEventActionType::UnknownVariant(
+                UnknownAccountTakeoverEventActionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AccountTakeoverEventActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLOCK" => AccountTakeoverEventActionType::Block,
+            "MFA_IF_CONFIGURED" => AccountTakeoverEventActionType::MfaIfConfigured,
+            "MFA_REQUIRED" => AccountTakeoverEventActionType::MfaRequired,
+            "NO_ACTION" => AccountTakeoverEventActionType::NoAction,
+            _ => AccountTakeoverEventActionType::UnknownVariant(
+                UnknownAccountTakeoverEventActionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AccountTakeoverEventActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLOCK" => AccountTakeoverEventActionType::Block,
+            "MFA_IF_CONFIGURED" => AccountTakeoverEventActionType::MfaIfConfigured,
+            "MFA_REQUIRED" => AccountTakeoverEventActionType::MfaRequired,
+            "NO_ACTION" => AccountTakeoverEventActionType::NoAction,
+            _ => AccountTakeoverEventActionType::UnknownVariant(
+                UnknownAccountTakeoverEventActionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountTakeoverEventActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AccountTakeoverEventActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountTakeoverEventActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration for mitigation actions and notification for different levels of risk detected for a potential account takeover.</p>
@@ -179,7 +297,7 @@ pub struct AdminCreateUserRequest {
     /// <p>Specify <code>"EMAIL"</code> if email will be used to send the welcome message. Specify <code>"SMS"</code> if the phone number will be used. The default value is <code>"SMS"</code>. More than one value can be specified.</p>
     #[serde(rename = "DesiredDeliveryMediums")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub desired_delivery_mediums: Option<Vec<String>>,
+    pub desired_delivery_mediums: Option<Vec<DeliveryMediumType>>,
     /// <p>This parameter is only used if the <code>phone_number_verified</code> or <code>email_verified</code> attribute is set to <code>True</code>. Otherwise, it is ignored.</p> <p>If this parameter is set to <code>True</code> and the phone number or email address specified in the UserAttributes parameter already exists as an alias with a different user, the API call will migrate the alias from the previous user to the newly created user. The previous user will no longer be able to log in using that alias.</p> <p>If this parameter is set to <code>False</code>, the API throws an <code>AliasExistsException</code> error if the alias already exists. The default value is <code>False</code>.</p>
     #[serde(rename = "ForceAliasCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -187,7 +305,7 @@ pub struct AdminCreateUserRequest {
     /// <p>Set to <code>"RESEND"</code> to resend the invitation message to a user that already exists and reset the expiration limit on the user's account. Set to <code>"SUPPRESS"</code> to suppress sending the message. Only one value can be specified.</p>
     #[serde(rename = "MessageAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_action: Option<String>,
+    pub message_action: Option<MessageActionType>,
     /// <p>The user's temporary password. This password must conform to the password policy that you specified when you created the user pool.</p> <p>The temporary password is valid only once. To complete the Admin Create User flow, the user must enter the temporary password in the sign-in page along with a new password to be used in all future sign-ins.</p> <p>This parameter is not required. If you do not specify a value, Amazon Cognito generates one for you.</p> <p>The temporary password can only be used until the user account expiration limit that you specified when you created the user pool. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>"RESEND"</code> for the <code>MessageAction</code> parameter.</p>
     #[serde(rename = "TemporaryPassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -385,7 +503,7 @@ pub struct AdminGetUserResponse {
     /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET<em>REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE</em>CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_status: Option<String>,
+    pub user_status: Option<UserStatusType>,
     /// <p>The user name of the user about whom you are receiving information.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -401,7 +519,7 @@ pub struct AdminInitiateAuthRequest {
     pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER</em>PASSWORD<em>AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> <li> <p> <code>USER<em>PASSWORD</em>AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
-    pub auth_flow: String,
+    pub auth_flow: AuthFlowType,
     /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code>.</p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE<em>KEY</code>. To start the authentication flow with password verification, include <code>ChallengeName: SRP</em>A</code> and <code>SRP<em>A: (The SRP</em>A Value)</code>.</p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -433,7 +551,7 @@ pub struct AdminInitiateAuthResponse {
     /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <ul> <li> <p> <code>MFA<em>SETUP</code>: If MFA is required, users who do not have at least one of the MFA methods set up are presented with an <code>MFA</em>SETUP</code> challenge. The user must set up at least one MFA type to continue to authenticate.</p> </li> <li> <p> <code>SELECT<em>MFA</em>TYPE</code>: Selects the MFA type. Valid MFA options are <code>SMS<em>MFA</code> for text SMS MFA, and <code>SOFTWARE</em>TOKEN<em>MFA</code> for TOTP software token MFA.</p> </li> <li> <p> <code>SMS</em>MFA</code>: Next challenge is to supply an <code>SMS<em>MFA</em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM<em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE</em>SRP<em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code>: Similar to <code>PASSWORD</em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>ADMIN<em>NO</em>SRP<em>AUTH</code>: This is returned if you need to authenticate with <code>USERNAME</code> and <code>PASSWORD</code> directly. An app client must be enabled to use this flow.</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW</em>PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_name: Option<String>,
+    pub challenge_name: Option<ChallengeNameType>,
     /// <p>The challenge parameters. These are returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>AdminRespondToAuthChallenge</code>).</p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p> <p>The value of the <code>USER_ID_FOR_SRP</code> attribute will be the user's actual username, not an alias (such as email address or phone number), even if you specified an alias in your call to <code>AdminInitiateAuth</code>. This is because, in the <code>AdminRespondToAuthChallenge</code> API <code>ChallengeResponses</code>, the <code>USERNAME</code> attribute cannot be an alias.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -605,7 +723,7 @@ pub struct AdminRespondToAuthChallengeRequest {
     pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
-    pub challenge_name: String,
+    pub challenge_name: ChallengeNameType,
     /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: <code>PASSWORD</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul> <p>The value of the <code>USERNAME</code> attribute must be the user's actual username, not an alias (such as email address or phone number). To make this easier, the <code>AdminInitiateAuth</code> response includes the actual username value in the <code>USERNAMEUSER_ID_FOR_SRP</code> attribute, even if you specified an alias in your call to <code>AdminInitiateAuth</code>.</p>
     #[serde(rename = "ChallengeResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -641,7 +759,7 @@ pub struct AdminRespondToAuthChallengeResponse {
     /// <p>The name of the challenge. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_name: Option<String>,
+    pub challenge_name: Option<ChallengeNameType>,
     /// <p>The challenge parameters. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -725,7 +843,7 @@ pub struct AdminUpdateAuthEventFeedbackRequest {
     pub event_id: String,
     /// <p>The authentication event feedback value.</p>
     #[serde(rename = "FeedbackValue")]
-    pub feedback_value: String,
+    pub feedback_value: FeedbackValueType,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -748,7 +866,7 @@ pub struct AdminUpdateDeviceStatusRequest {
     /// <p>The status indicating whether a device has been remembered or not.</p>
     #[serde(rename = "DeviceRememberedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_remembered_status: Option<String>,
+    pub device_remembered_status: Option<DeviceRememberedStatusType>,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -802,6 +920,224 @@ pub struct AdminUserGlobalSignOutRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminUserGlobalSignOutResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdvancedSecurityModeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdvancedSecurityModeType {
+    Audit,
+    Enforced,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdvancedSecurityModeType),
+}
+
+impl Default for AdvancedSecurityModeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdvancedSecurityModeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdvancedSecurityModeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdvancedSecurityModeType {
+    fn into(self) -> String {
+        match self {
+            AdvancedSecurityModeType::Audit => "AUDIT".to_string(),
+            AdvancedSecurityModeType::Enforced => "ENFORCED".to_string(),
+            AdvancedSecurityModeType::Off => "OFF".to_string(),
+            AdvancedSecurityModeType::UnknownVariant(UnknownAdvancedSecurityModeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdvancedSecurityModeType {
+    fn into(self) -> &'a str {
+        match self {
+            AdvancedSecurityModeType::Audit => &"AUDIT",
+            AdvancedSecurityModeType::Enforced => &"ENFORCED",
+            AdvancedSecurityModeType::Off => &"OFF",
+            AdvancedSecurityModeType::UnknownVariant(UnknownAdvancedSecurityModeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdvancedSecurityModeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUDIT" => AdvancedSecurityModeType::Audit,
+            "ENFORCED" => AdvancedSecurityModeType::Enforced,
+            "OFF" => AdvancedSecurityModeType::Off,
+            _ => AdvancedSecurityModeType::UnknownVariant(UnknownAdvancedSecurityModeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdvancedSecurityModeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUDIT" => AdvancedSecurityModeType::Audit,
+            "ENFORCED" => AdvancedSecurityModeType::Enforced,
+            "OFF" => AdvancedSecurityModeType::Off,
+            _ => AdvancedSecurityModeType::UnknownVariant(UnknownAdvancedSecurityModeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdvancedSecurityModeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdvancedSecurityModeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdvancedSecurityModeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAliasAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AliasAttributeType {
+    Email,
+    PhoneNumber,
+    PreferredUsername,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAliasAttributeType),
+}
+
+impl Default for AliasAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AliasAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AliasAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AliasAttributeType {
+    fn into(self) -> String {
+        match self {
+            AliasAttributeType::Email => "email".to_string(),
+            AliasAttributeType::PhoneNumber => "phone_number".to_string(),
+            AliasAttributeType::PreferredUsername => "preferred_username".to_string(),
+            AliasAttributeType::UnknownVariant(UnknownAliasAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AliasAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            AliasAttributeType::Email => &"email",
+            AliasAttributeType::PhoneNumber => &"phone_number",
+            AliasAttributeType::PreferredUsername => &"preferred_username",
+            AliasAttributeType::UnknownVariant(UnknownAliasAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AliasAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "email" => AliasAttributeType::Email,
+            "phone_number" => AliasAttributeType::PhoneNumber,
+            "preferred_username" => AliasAttributeType::PreferredUsername,
+            _ => AliasAttributeType::UnknownVariant(UnknownAliasAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AliasAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "email" => AliasAttributeType::Email,
+            "phone_number" => AliasAttributeType::PhoneNumber,
+            "preferred_username" => AliasAttributeType::PreferredUsername,
+            _ => AliasAttributeType::UnknownVariant(UnknownAliasAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AliasAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AliasAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AliasAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p><p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p> <note> <p>In regions where Pinpoint is not available, Cognito User Pools only supports sending events to Amazon Pinpoint projects in us-east-1. In regions where Pinpoint is available, Cognito User Pools will support sending events to Amazon Pinpoint projects within that same region. </p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -864,6 +1200,120 @@ pub struct AssociateSoftwareTokenResponse {
     pub session: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttributeDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttributeDataType {
+    Boolean,
+    DateTime,
+    Number,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttributeDataType),
+}
+
+impl Default for AttributeDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttributeDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttributeDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttributeDataType {
+    fn into(self) -> String {
+        match self {
+            AttributeDataType::Boolean => "Boolean".to_string(),
+            AttributeDataType::DateTime => "DateTime".to_string(),
+            AttributeDataType::Number => "Number".to_string(),
+            AttributeDataType::String => "String".to_string(),
+            AttributeDataType::UnknownVariant(UnknownAttributeDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttributeDataType {
+    fn into(self) -> &'a str {
+        match self {
+            AttributeDataType::Boolean => &"Boolean",
+            AttributeDataType::DateTime => &"DateTime",
+            AttributeDataType::Number => &"Number",
+            AttributeDataType::String => &"String",
+            AttributeDataType::UnknownVariant(UnknownAttributeDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AttributeDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Boolean" => AttributeDataType::Boolean,
+            "DateTime" => AttributeDataType::DateTime,
+            "Number" => AttributeDataType::Number,
+            "String" => AttributeDataType::String,
+            _ => AttributeDataType::UnknownVariant(UnknownAttributeDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttributeDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Boolean" => AttributeDataType::Boolean,
+            "DateTime" => AttributeDataType::DateTime,
+            "Number" => AttributeDataType::Number,
+            "String" => AttributeDataType::String,
+            _ => AttributeDataType::UnknownVariant(UnknownAttributeDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttributeDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AttributeDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AttributeDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies whether the attribute is standard or custom.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeType {
@@ -903,7 +1353,7 @@ pub struct AuthEventType {
     /// <p>The event response.</p>
     #[serde(rename = "EventResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_response: Option<String>,
+    pub event_response: Option<EventResponseType>,
     /// <p>The event risk.</p>
     #[serde(rename = "EventRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -911,7 +1361,133 @@ pub struct AuthEventType {
     /// <p>The event type.</p>
     #[serde(rename = "EventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type: Option<String>,
+    pub event_type: Option<EventType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthFlowType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthFlowType {
+    AdminNoSrpAuth,
+    AdminUserPasswordAuth,
+    CustomAuth,
+    RefreshToken,
+    RefreshTokenAuth,
+    UserPasswordAuth,
+    UserSrpAuth,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthFlowType),
+}
+
+impl Default for AuthFlowType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthFlowType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthFlowType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthFlowType {
+    fn into(self) -> String {
+        match self {
+            AuthFlowType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH".to_string(),
+            AuthFlowType::AdminUserPasswordAuth => "ADMIN_USER_PASSWORD_AUTH".to_string(),
+            AuthFlowType::CustomAuth => "CUSTOM_AUTH".to_string(),
+            AuthFlowType::RefreshToken => "REFRESH_TOKEN".to_string(),
+            AuthFlowType::RefreshTokenAuth => "REFRESH_TOKEN_AUTH".to_string(),
+            AuthFlowType::UserPasswordAuth => "USER_PASSWORD_AUTH".to_string(),
+            AuthFlowType::UserSrpAuth => "USER_SRP_AUTH".to_string(),
+            AuthFlowType::UnknownVariant(UnknownAuthFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthFlowType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthFlowType::AdminNoSrpAuth => &"ADMIN_NO_SRP_AUTH",
+            AuthFlowType::AdminUserPasswordAuth => &"ADMIN_USER_PASSWORD_AUTH",
+            AuthFlowType::CustomAuth => &"CUSTOM_AUTH",
+            AuthFlowType::RefreshToken => &"REFRESH_TOKEN",
+            AuthFlowType::RefreshTokenAuth => &"REFRESH_TOKEN_AUTH",
+            AuthFlowType::UserPasswordAuth => &"USER_PASSWORD_AUTH",
+            AuthFlowType::UserSrpAuth => &"USER_SRP_AUTH",
+            AuthFlowType::UnknownVariant(UnknownAuthFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthFlowType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN_NO_SRP_AUTH" => AuthFlowType::AdminNoSrpAuth,
+            "ADMIN_USER_PASSWORD_AUTH" => AuthFlowType::AdminUserPasswordAuth,
+            "CUSTOM_AUTH" => AuthFlowType::CustomAuth,
+            "REFRESH_TOKEN" => AuthFlowType::RefreshToken,
+            "REFRESH_TOKEN_AUTH" => AuthFlowType::RefreshTokenAuth,
+            "USER_PASSWORD_AUTH" => AuthFlowType::UserPasswordAuth,
+            "USER_SRP_AUTH" => AuthFlowType::UserSrpAuth,
+            _ => AuthFlowType::UnknownVariant(UnknownAuthFlowType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthFlowType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN_NO_SRP_AUTH" => AuthFlowType::AdminNoSrpAuth,
+            "ADMIN_USER_PASSWORD_AUTH" => AuthFlowType::AdminUserPasswordAuth,
+            "CUSTOM_AUTH" => AuthFlowType::CustomAuth,
+            "REFRESH_TOKEN" => AuthFlowType::RefreshToken,
+            "REFRESH_TOKEN_AUTH" => AuthFlowType::RefreshTokenAuth,
+            "USER_PASSWORD_AUTH" => AuthFlowType::UserPasswordAuth,
+            "USER_SRP_AUTH" => AuthFlowType::UserSrpAuth,
+            _ => AuthFlowType::UnknownVariant(UnknownAuthFlowType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthFlowType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthFlowType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthFlowType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The authentication result.</p>
@@ -944,6 +1520,356 @@ pub struct AuthenticationResultType {
     pub token_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChallengeName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChallengeName {
+    Mfa,
+    Password,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChallengeName),
+}
+
+impl Default for ChallengeName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChallengeName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChallengeName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChallengeName {
+    fn into(self) -> String {
+        match self {
+            ChallengeName::Mfa => "Mfa".to_string(),
+            ChallengeName::Password => "Password".to_string(),
+            ChallengeName::UnknownVariant(UnknownChallengeName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChallengeName {
+    fn into(self) -> &'a str {
+        match self {
+            ChallengeName::Mfa => &"Mfa",
+            ChallengeName::Password => &"Password",
+            ChallengeName::UnknownVariant(UnknownChallengeName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChallengeName {
+    fn from(name: &str) -> Self {
+        match name {
+            "Mfa" => ChallengeName::Mfa,
+            "Password" => ChallengeName::Password,
+            _ => ChallengeName::UnknownVariant(UnknownChallengeName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChallengeName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Mfa" => ChallengeName::Mfa,
+            "Password" => ChallengeName::Password,
+            _ => ChallengeName::UnknownVariant(UnknownChallengeName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChallengeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChallengeName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChallengeName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChallengeNameType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChallengeNameType {
+    AdminNoSrpAuth,
+    CustomChallenge,
+    DevicePasswordVerifier,
+    DeviceSrpAuth,
+    MfaSetup,
+    NewPasswordRequired,
+    PasswordVerifier,
+    SelectMfaType,
+    SmsMfa,
+    SoftwareTokenMfa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChallengeNameType),
+}
+
+impl Default for ChallengeNameType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChallengeNameType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChallengeNameType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChallengeNameType {
+    fn into(self) -> String {
+        match self {
+            ChallengeNameType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH".to_string(),
+            ChallengeNameType::CustomChallenge => "CUSTOM_CHALLENGE".to_string(),
+            ChallengeNameType::DevicePasswordVerifier => "DEVICE_PASSWORD_VERIFIER".to_string(),
+            ChallengeNameType::DeviceSrpAuth => "DEVICE_SRP_AUTH".to_string(),
+            ChallengeNameType::MfaSetup => "MFA_SETUP".to_string(),
+            ChallengeNameType::NewPasswordRequired => "NEW_PASSWORD_REQUIRED".to_string(),
+            ChallengeNameType::PasswordVerifier => "PASSWORD_VERIFIER".to_string(),
+            ChallengeNameType::SelectMfaType => "SELECT_MFA_TYPE".to_string(),
+            ChallengeNameType::SmsMfa => "SMS_MFA".to_string(),
+            ChallengeNameType::SoftwareTokenMfa => "SOFTWARE_TOKEN_MFA".to_string(),
+            ChallengeNameType::UnknownVariant(UnknownChallengeNameType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChallengeNameType {
+    fn into(self) -> &'a str {
+        match self {
+            ChallengeNameType::AdminNoSrpAuth => &"ADMIN_NO_SRP_AUTH",
+            ChallengeNameType::CustomChallenge => &"CUSTOM_CHALLENGE",
+            ChallengeNameType::DevicePasswordVerifier => &"DEVICE_PASSWORD_VERIFIER",
+            ChallengeNameType::DeviceSrpAuth => &"DEVICE_SRP_AUTH",
+            ChallengeNameType::MfaSetup => &"MFA_SETUP",
+            ChallengeNameType::NewPasswordRequired => &"NEW_PASSWORD_REQUIRED",
+            ChallengeNameType::PasswordVerifier => &"PASSWORD_VERIFIER",
+            ChallengeNameType::SelectMfaType => &"SELECT_MFA_TYPE",
+            ChallengeNameType::SmsMfa => &"SMS_MFA",
+            ChallengeNameType::SoftwareTokenMfa => &"SOFTWARE_TOKEN_MFA",
+            ChallengeNameType::UnknownVariant(UnknownChallengeNameType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChallengeNameType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN_NO_SRP_AUTH" => ChallengeNameType::AdminNoSrpAuth,
+            "CUSTOM_CHALLENGE" => ChallengeNameType::CustomChallenge,
+            "DEVICE_PASSWORD_VERIFIER" => ChallengeNameType::DevicePasswordVerifier,
+            "DEVICE_SRP_AUTH" => ChallengeNameType::DeviceSrpAuth,
+            "MFA_SETUP" => ChallengeNameType::MfaSetup,
+            "NEW_PASSWORD_REQUIRED" => ChallengeNameType::NewPasswordRequired,
+            "PASSWORD_VERIFIER" => ChallengeNameType::PasswordVerifier,
+            "SELECT_MFA_TYPE" => ChallengeNameType::SelectMfaType,
+            "SMS_MFA" => ChallengeNameType::SmsMfa,
+            "SOFTWARE_TOKEN_MFA" => ChallengeNameType::SoftwareTokenMfa,
+            _ => ChallengeNameType::UnknownVariant(UnknownChallengeNameType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChallengeNameType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN_NO_SRP_AUTH" => ChallengeNameType::AdminNoSrpAuth,
+            "CUSTOM_CHALLENGE" => ChallengeNameType::CustomChallenge,
+            "DEVICE_PASSWORD_VERIFIER" => ChallengeNameType::DevicePasswordVerifier,
+            "DEVICE_SRP_AUTH" => ChallengeNameType::DeviceSrpAuth,
+            "MFA_SETUP" => ChallengeNameType::MfaSetup,
+            "NEW_PASSWORD_REQUIRED" => ChallengeNameType::NewPasswordRequired,
+            "PASSWORD_VERIFIER" => ChallengeNameType::PasswordVerifier,
+            "SELECT_MFA_TYPE" => ChallengeNameType::SelectMfaType,
+            "SMS_MFA" => ChallengeNameType::SmsMfa,
+            "SOFTWARE_TOKEN_MFA" => ChallengeNameType::SoftwareTokenMfa,
+            _ => ChallengeNameType::UnknownVariant(UnknownChallengeNameType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChallengeNameType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChallengeNameType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChallengeNameType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChallengeResponse {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChallengeResponse {
+    Failure,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChallengeResponse),
+}
+
+impl Default for ChallengeResponse {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChallengeResponse {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChallengeResponse {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChallengeResponse {
+    fn into(self) -> String {
+        match self {
+            ChallengeResponse::Failure => "Failure".to_string(),
+            ChallengeResponse::Success => "Success".to_string(),
+            ChallengeResponse::UnknownVariant(UnknownChallengeResponse { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChallengeResponse {
+    fn into(self) -> &'a str {
+        match self {
+            ChallengeResponse::Failure => &"Failure",
+            ChallengeResponse::Success => &"Success",
+            ChallengeResponse::UnknownVariant(UnknownChallengeResponse { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChallengeResponse {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failure" => ChallengeResponse::Failure,
+            "Success" => ChallengeResponse::Success,
+            _ => ChallengeResponse::UnknownVariant(UnknownChallengeResponse {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChallengeResponse {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failure" => ChallengeResponse::Failure,
+            "Success" => ChallengeResponse::Success,
+            _ => ChallengeResponse::UnknownVariant(UnknownChallengeResponse { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChallengeResponse {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChallengeResponse {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChallengeResponse {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The challenge response type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -951,11 +1877,11 @@ pub struct ChallengeResponseType {
     /// <p>The challenge name</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_name: Option<String>,
+    pub challenge_name: Option<ChallengeName>,
     /// <p>The challenge response.</p>
     #[serde(rename = "ChallengeResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_response: Option<String>,
+    pub challenge_response: Option<ChallengeResponse>,
 }
 
 /// <p>Represents the request to change a user password.</p>
@@ -989,7 +1915,7 @@ pub struct CodeDeliveryDetailsType {
     /// <p>The delivery medium (email message or phone number).</p>
     #[serde(rename = "DeliveryMedium")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delivery_medium: Option<String>,
+    pub delivery_medium: Option<DeliveryMediumType>,
     /// <p>The destination for the code delivery details.</p>
     #[serde(rename = "Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1001,7 +1927,115 @@ pub struct CodeDeliveryDetailsType {
 pub struct CompromisedCredentialsActionsType {
     /// <p>The event action.</p>
     #[serde(rename = "EventAction")]
-    pub event_action: String,
+    pub event_action: CompromisedCredentialsEventActionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompromisedCredentialsEventActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompromisedCredentialsEventActionType {
+    Block,
+    NoAction,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompromisedCredentialsEventActionType),
+}
+
+impl Default for CompromisedCredentialsEventActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompromisedCredentialsEventActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompromisedCredentialsEventActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompromisedCredentialsEventActionType {
+    fn into(self) -> String {
+        match self {
+            CompromisedCredentialsEventActionType::Block => "BLOCK".to_string(),
+            CompromisedCredentialsEventActionType::NoAction => "NO_ACTION".to_string(),
+            CompromisedCredentialsEventActionType::UnknownVariant(
+                UnknownCompromisedCredentialsEventActionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompromisedCredentialsEventActionType {
+    fn into(self) -> &'a str {
+        match self {
+            CompromisedCredentialsEventActionType::Block => &"BLOCK",
+            CompromisedCredentialsEventActionType::NoAction => &"NO_ACTION",
+            CompromisedCredentialsEventActionType::UnknownVariant(
+                UnknownCompromisedCredentialsEventActionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CompromisedCredentialsEventActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLOCK" => CompromisedCredentialsEventActionType::Block,
+            "NO_ACTION" => CompromisedCredentialsEventActionType::NoAction,
+            _ => CompromisedCredentialsEventActionType::UnknownVariant(
+                UnknownCompromisedCredentialsEventActionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CompromisedCredentialsEventActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLOCK" => CompromisedCredentialsEventActionType::Block,
+            "NO_ACTION" => CompromisedCredentialsEventActionType::NoAction,
+            _ => CompromisedCredentialsEventActionType::UnknownVariant(
+                UnknownCompromisedCredentialsEventActionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompromisedCredentialsEventActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CompromisedCredentialsEventActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompromisedCredentialsEventActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The compromised credentials risk configuration type.</p>
@@ -1013,7 +2047,7 @@ pub struct CompromisedCredentialsRiskConfigurationType {
     /// <p>Perform the action for these events. The default is to perform all events if no event filter is specified.</p>
     #[serde(rename = "EventFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_filter: Option<Vec<String>>,
+    pub event_filter: Option<Vec<EventFilterType>>,
 }
 
 /// <p>Confirms the device request.</p>
@@ -1198,7 +2232,7 @@ pub struct CreateIdentityProviderRequest {
     pub provider_name: String,
     /// <p>The identity provider type.</p>
     #[serde(rename = "ProviderType")]
-    pub provider_type: String,
+    pub provider_type: IdentityProviderTypeType,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -1274,7 +2308,7 @@ pub struct CreateUserPoolClientRequest {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_o_auth_flows: Option<Vec<String>>,
+    pub allowed_o_auth_flows: Option<Vec<OAuthFlowType>>,
     /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1301,7 +2335,7 @@ pub struct CreateUserPoolClientRequest {
     /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub explicit_auth_flows: Option<Vec<String>>,
+    pub explicit_auth_flows: Option<Vec<ExplicitAuthFlowsType>>,
     /// <p>Boolean to specify whether you want to generate a secret for the user pool client being created.</p>
     #[serde(rename = "GenerateSecret")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1317,7 +2351,7 @@ pub struct CreateUserPoolClientRequest {
     /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub prevent_user_existence_errors: Option<String>,
+    pub prevent_user_existence_errors: Option<PreventUserExistenceErrorTypes>,
     /// <p>The read attributes.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1392,11 +2426,11 @@ pub struct CreateUserPoolRequest {
     /// <p>Attributes supported as an alias for this user pool. Possible values: <b>phone_number</b>, <b>email</b>, or <b>preferred_username</b>.</p>
     #[serde(rename = "AliasAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub alias_attributes: Option<Vec<String>>,
+    pub alias_attributes: Option<Vec<AliasAttributeType>>,
     /// <p>The attributes to be auto-verified. Possible values: <b>email</b>, <b>phone_number</b>.</p>
     #[serde(rename = "AutoVerifiedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_verified_attributes: Option<Vec<String>>,
+    pub auto_verified_attributes: Option<Vec<VerifiedAttributeType>>,
     /// <p>The device configuration.</p>
     #[serde(rename = "DeviceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1420,7 +2454,7 @@ pub struct CreateUserPoolRequest {
     /// <p>Specifies MFA configuration details.</p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>The policies associated with the new user pool.</p>
     #[serde(rename = "Policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1455,7 +2489,7 @@ pub struct CreateUserPoolRequest {
     /// <p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub username_attributes: Option<Vec<String>>,
+    pub username_attributes: Option<Vec<UsernameAttributeType>>,
     /// <p>You can choose to set case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UsernameConfigurationType.html">UsernameConfigurationType</a>.</p>
     #[serde(rename = "UsernameConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1492,7 +2526,110 @@ pub struct CustomEmailLambdaVersionConfigType {
     pub lambda_arn: String,
     /// <p>The Lambda version represents the signature of the "request" attribute in the "event" information Amazon Cognito passes to your custom email Lambda function. The only supported value is <code>V1_0</code>.</p>
     #[serde(rename = "LambdaVersion")]
-    pub lambda_version: String,
+    pub lambda_version: CustomEmailSenderLambdaVersionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomEmailSenderLambdaVersionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomEmailSenderLambdaVersionType {
+    V10,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomEmailSenderLambdaVersionType),
+}
+
+impl Default for CustomEmailSenderLambdaVersionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomEmailSenderLambdaVersionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomEmailSenderLambdaVersionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomEmailSenderLambdaVersionType {
+    fn into(self) -> String {
+        match self {
+            CustomEmailSenderLambdaVersionType::V10 => "V1_0".to_string(),
+            CustomEmailSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomEmailSenderLambdaVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomEmailSenderLambdaVersionType {
+    fn into(self) -> &'a str {
+        match self {
+            CustomEmailSenderLambdaVersionType::V10 => &"V1_0",
+            CustomEmailSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomEmailSenderLambdaVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomEmailSenderLambdaVersionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "V1_0" => CustomEmailSenderLambdaVersionType::V10,
+            _ => CustomEmailSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomEmailSenderLambdaVersionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CustomEmailSenderLambdaVersionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V1_0" => CustomEmailSenderLambdaVersionType::V10,
+            _ => CustomEmailSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomEmailSenderLambdaVersionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomEmailSenderLambdaVersionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomEmailSenderLambdaVersionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomEmailSenderLambdaVersionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A custom SMS sender Lambda configuration type.</p>
@@ -1503,7 +2640,214 @@ pub struct CustomSMSLambdaVersionConfigType {
     pub lambda_arn: String,
     /// <p>The Lambda version represents the signature of the "request" attribute in the "event" information Amazon Cognito passes to your custom SMS Lambda function. The only supported value is <code>V1_0</code>.</p>
     #[serde(rename = "LambdaVersion")]
-    pub lambda_version: String,
+    pub lambda_version: CustomSMSSenderLambdaVersionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomSMSSenderLambdaVersionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomSMSSenderLambdaVersionType {
+    V10,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomSMSSenderLambdaVersionType),
+}
+
+impl Default for CustomSMSSenderLambdaVersionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomSMSSenderLambdaVersionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomSMSSenderLambdaVersionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomSMSSenderLambdaVersionType {
+    fn into(self) -> String {
+        match self {
+            CustomSMSSenderLambdaVersionType::V10 => "V1_0".to_string(),
+            CustomSMSSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomSMSSenderLambdaVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomSMSSenderLambdaVersionType {
+    fn into(self) -> &'a str {
+        match self {
+            CustomSMSSenderLambdaVersionType::V10 => &"V1_0",
+            CustomSMSSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomSMSSenderLambdaVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomSMSSenderLambdaVersionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "V1_0" => CustomSMSSenderLambdaVersionType::V10,
+            _ => CustomSMSSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomSMSSenderLambdaVersionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CustomSMSSenderLambdaVersionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V1_0" => CustomSMSSenderLambdaVersionType::V10,
+            _ => CustomSMSSenderLambdaVersionType::UnknownVariant(
+                UnknownCustomSMSSenderLambdaVersionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomSMSSenderLambdaVersionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomSMSSenderLambdaVersionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomSMSSenderLambdaVersionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDefaultEmailOptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DefaultEmailOptionType {
+    ConfirmWithCode,
+    ConfirmWithLink,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDefaultEmailOptionType),
+}
+
+impl Default for DefaultEmailOptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DefaultEmailOptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DefaultEmailOptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DefaultEmailOptionType {
+    fn into(self) -> String {
+        match self {
+            DefaultEmailOptionType::ConfirmWithCode => "CONFIRM_WITH_CODE".to_string(),
+            DefaultEmailOptionType::ConfirmWithLink => "CONFIRM_WITH_LINK".to_string(),
+            DefaultEmailOptionType::UnknownVariant(UnknownDefaultEmailOptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DefaultEmailOptionType {
+    fn into(self) -> &'a str {
+        match self {
+            DefaultEmailOptionType::ConfirmWithCode => &"CONFIRM_WITH_CODE",
+            DefaultEmailOptionType::ConfirmWithLink => &"CONFIRM_WITH_LINK",
+            DefaultEmailOptionType::UnknownVariant(UnknownDefaultEmailOptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DefaultEmailOptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIRM_WITH_CODE" => DefaultEmailOptionType::ConfirmWithCode,
+            "CONFIRM_WITH_LINK" => DefaultEmailOptionType::ConfirmWithLink,
+            _ => DefaultEmailOptionType::UnknownVariant(UnknownDefaultEmailOptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DefaultEmailOptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIRM_WITH_CODE" => DefaultEmailOptionType::ConfirmWithCode,
+            "CONFIRM_WITH_LINK" => DefaultEmailOptionType::ConfirmWithLink,
+            _ => DefaultEmailOptionType::UnknownVariant(UnknownDefaultEmailOptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DefaultEmailOptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DefaultEmailOptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DefaultEmailOptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1599,6 +2943,110 @@ pub struct DeleteUserRequest {
     /// <p>The access token from a request to delete a user.</p>
     #[serde(rename = "AccessToken")]
     pub access_token: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryMediumType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryMediumType {
+    Email,
+    Sms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryMediumType),
+}
+
+impl Default for DeliveryMediumType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryMediumType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryMediumType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryMediumType {
+    fn into(self) -> String {
+        match self {
+            DeliveryMediumType::Email => "EMAIL".to_string(),
+            DeliveryMediumType::Sms => "SMS".to_string(),
+            DeliveryMediumType::UnknownVariant(UnknownDeliveryMediumType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryMediumType {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryMediumType::Email => &"EMAIL",
+            DeliveryMediumType::Sms => &"SMS",
+            DeliveryMediumType::UnknownVariant(UnknownDeliveryMediumType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeliveryMediumType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMAIL" => DeliveryMediumType::Email,
+            "SMS" => DeliveryMediumType::Sms,
+            _ => DeliveryMediumType::UnknownVariant(UnknownDeliveryMediumType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliveryMediumType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMAIL" => DeliveryMediumType::Email,
+            "SMS" => DeliveryMediumType::Sms,
+            _ => DeliveryMediumType::UnknownVariant(UnknownDeliveryMediumType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryMediumType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeliveryMediumType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryMediumType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1752,6 +3200,113 @@ pub struct DeviceConfigurationType {
     pub device_only_remembered_on_user_prompt: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceRememberedStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceRememberedStatusType {
+    NotRemembered,
+    Remembered,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceRememberedStatusType),
+}
+
+impl Default for DeviceRememberedStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceRememberedStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceRememberedStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceRememberedStatusType {
+    fn into(self) -> String {
+        match self {
+            DeviceRememberedStatusType::NotRemembered => "not_remembered".to_string(),
+            DeviceRememberedStatusType::Remembered => "remembered".to_string(),
+            DeviceRememberedStatusType::UnknownVariant(UnknownDeviceRememberedStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceRememberedStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceRememberedStatusType::NotRemembered => &"not_remembered",
+            DeviceRememberedStatusType::Remembered => &"remembered",
+            DeviceRememberedStatusType::UnknownVariant(UnknownDeviceRememberedStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceRememberedStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "not_remembered" => DeviceRememberedStatusType::NotRemembered,
+            "remembered" => DeviceRememberedStatusType::Remembered,
+            _ => DeviceRememberedStatusType::UnknownVariant(UnknownDeviceRememberedStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceRememberedStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "not_remembered" => DeviceRememberedStatusType::NotRemembered,
+            "remembered" => DeviceRememberedStatusType::Remembered,
+            _ => DeviceRememberedStatusType::UnknownVariant(UnknownDeviceRememberedStatusType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceRememberedStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeviceRememberedStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DeviceRememberedStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The device verifier against which it will be authenticated.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1819,7 +3374,7 @@ pub struct DomainDescriptionType {
     /// <p>The domain status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DomainStatusType>,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1828,6 +3383,126 @@ pub struct DomainDescriptionType {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainStatusType {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainStatusType),
+}
+
+impl Default for DomainStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainStatusType {
+    fn into(self) -> String {
+        match self {
+            DomainStatusType::Active => "ACTIVE".to_string(),
+            DomainStatusType::Creating => "CREATING".to_string(),
+            DomainStatusType::Deleting => "DELETING".to_string(),
+            DomainStatusType::Failed => "FAILED".to_string(),
+            DomainStatusType::Updating => "UPDATING".to_string(),
+            DomainStatusType::UnknownVariant(UnknownDomainStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            DomainStatusType::Active => &"ACTIVE",
+            DomainStatusType::Creating => &"CREATING",
+            DomainStatusType::Deleting => &"DELETING",
+            DomainStatusType::Failed => &"FAILED",
+            DomainStatusType::Updating => &"UPDATING",
+            DomainStatusType::UnknownVariant(UnknownDomainStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DomainStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DomainStatusType::Active,
+            "CREATING" => DomainStatusType::Creating,
+            "DELETING" => DomainStatusType::Deleting,
+            "FAILED" => DomainStatusType::Failed,
+            "UPDATING" => DomainStatusType::Updating,
+            _ => DomainStatusType::UnknownVariant(UnknownDomainStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DomainStatusType::Active,
+            "CREATING" => DomainStatusType::Creating,
+            "DELETING" => DomainStatusType::Deleting,
+            "FAILED" => DomainStatusType::Failed,
+            "UPDATING" => DomainStatusType::Updating,
+            _ => DomainStatusType::UnknownVariant(UnknownDomainStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The email configuration type. </p> <note> <p>Amazon Cognito has specific regions for use with Amazon SES. For more information on the supported regions, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-email.html">Email Settings for Amazon Cognito User Pools</a>.</p> </note></p>
@@ -1840,7 +3515,7 @@ pub struct EmailConfigurationType {
     /// <p><p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO<em>DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p> If EmailSendingAccount is COGNITO</em>DEFAULT, the following parameters aren&#39;t allowed:</p> <ul> <li> <p>EmailVerificationMessage</p> </li> <li> <p>EmailVerificationSubject</p> </li> <li> <p>InviteMessageTemplate.EmailMessage</p> </li> <li> <p>InviteMessageTemplate.EmailSubject</p> </li> <li> <p>VerificationMessageTemplate.EmailMessage</p> </li> <li> <p>VerificationMessageTemplate.EmailMessageByLink</p> </li> <li> <p>VerificationMessageTemplate.EmailSubject,</p> </li> <li> <p>VerificationMessageTemplate.EmailSubjectByLink</p> </li> </ul> <note> <p>DEVELOPER EmailSendingAccount is required.</p> </note> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl></p>
     #[serde(rename = "EmailSendingAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub email_sending_account: Option<String>,
+    pub email_sending_account: Option<EmailSendingAccountType>,
     /// <p>Identifies either the sender’s email address or the sender’s name with their email address. For example, <code>testuser@example.com</code> or <code>Test User &lt;testuser@example.com&gt;</code>. This address will appear before the body of the email.</p>
     #[serde(rename = "From")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1853,6 +3528,110 @@ pub struct EmailConfigurationType {
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmailSendingAccountType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmailSendingAccountType {
+    CognitoDefault,
+    Developer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmailSendingAccountType),
+}
+
+impl Default for EmailSendingAccountType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmailSendingAccountType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmailSendingAccountType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmailSendingAccountType {
+    fn into(self) -> String {
+        match self {
+            EmailSendingAccountType::CognitoDefault => "COGNITO_DEFAULT".to_string(),
+            EmailSendingAccountType::Developer => "DEVELOPER".to_string(),
+            EmailSendingAccountType::UnknownVariant(UnknownEmailSendingAccountType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmailSendingAccountType {
+    fn into(self) -> &'a str {
+        match self {
+            EmailSendingAccountType::CognitoDefault => &"COGNITO_DEFAULT",
+            EmailSendingAccountType::Developer => &"DEVELOPER",
+            EmailSendingAccountType::UnknownVariant(UnknownEmailSendingAccountType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmailSendingAccountType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COGNITO_DEFAULT" => EmailSendingAccountType::CognitoDefault,
+            "DEVELOPER" => EmailSendingAccountType::Developer,
+            _ => EmailSendingAccountType::UnknownVariant(UnknownEmailSendingAccountType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmailSendingAccountType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COGNITO_DEFAULT" => EmailSendingAccountType::CognitoDefault,
+            "DEVELOPER" => EmailSendingAccountType::Developer,
+            _ => EmailSendingAccountType::UnknownVariant(UnknownEmailSendingAccountType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmailSendingAccountType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EmailSendingAccountType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EmailSendingAccountType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the user context data captured at the time of an event request.</p>
@@ -1891,10 +3670,220 @@ pub struct EventFeedbackType {
     pub feedback_date: Option<f64>,
     /// <p>The event feedback value.</p>
     #[serde(rename = "FeedbackValue")]
-    pub feedback_value: String,
+    pub feedback_value: FeedbackValueType,
     /// <p>The provider.</p>
     #[serde(rename = "Provider")]
     pub provider: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventFilterType {
+    PasswordChange,
+    SignIn,
+    SignUp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventFilterType),
+}
+
+impl Default for EventFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventFilterType {
+    fn into(self) -> String {
+        match self {
+            EventFilterType::PasswordChange => "PASSWORD_CHANGE".to_string(),
+            EventFilterType::SignIn => "SIGN_IN".to_string(),
+            EventFilterType::SignUp => "SIGN_UP".to_string(),
+            EventFilterType::UnknownVariant(UnknownEventFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            EventFilterType::PasswordChange => &"PASSWORD_CHANGE",
+            EventFilterType::SignIn => &"SIGN_IN",
+            EventFilterType::SignUp => &"SIGN_UP",
+            EventFilterType::UnknownVariant(UnknownEventFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PASSWORD_CHANGE" => EventFilterType::PasswordChange,
+            "SIGN_IN" => EventFilterType::SignIn,
+            "SIGN_UP" => EventFilterType::SignUp,
+            _ => EventFilterType::UnknownVariant(UnknownEventFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PASSWORD_CHANGE" => EventFilterType::PasswordChange,
+            "SIGN_IN" => EventFilterType::SignIn,
+            "SIGN_UP" => EventFilterType::SignUp,
+            _ => EventFilterType::UnknownVariant(UnknownEventFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventResponseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventResponseType {
+    Failure,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventResponseType),
+}
+
+impl Default for EventResponseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventResponseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventResponseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventResponseType {
+    fn into(self) -> String {
+        match self {
+            EventResponseType::Failure => "Failure".to_string(),
+            EventResponseType::Success => "Success".to_string(),
+            EventResponseType::UnknownVariant(UnknownEventResponseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventResponseType {
+    fn into(self) -> &'a str {
+        match self {
+            EventResponseType::Failure => &"Failure",
+            EventResponseType::Success => &"Success",
+            EventResponseType::UnknownVariant(UnknownEventResponseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventResponseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failure" => EventResponseType::Failure,
+            "Success" => EventResponseType::Success,
+            _ => EventResponseType::UnknownVariant(UnknownEventResponseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventResponseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failure" => EventResponseType::Failure,
+            "Success" => EventResponseType::Success,
+            _ => EventResponseType::UnknownVariant(UnknownEventResponseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventResponseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventResponseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventResponseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The event risk type.</p>
@@ -1908,11 +3897,357 @@ pub struct EventRiskType {
     /// <p>The risk decision.</p>
     #[serde(rename = "RiskDecision")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub risk_decision: Option<String>,
+    pub risk_decision: Option<RiskDecisionType>,
     /// <p>The risk level.</p>
     #[serde(rename = "RiskLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub risk_level: Option<String>,
+    pub risk_level: Option<RiskLevelType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    ForgotPassword,
+    SignIn,
+    SignUp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::ForgotPassword => "ForgotPassword".to_string(),
+            EventType::SignIn => "SignIn".to_string(),
+            EventType::SignUp => "SignUp".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::ForgotPassword => &"ForgotPassword",
+            EventType::SignIn => &"SignIn",
+            EventType::SignUp => &"SignUp",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ForgotPassword" => EventType::ForgotPassword,
+            "SignIn" => EventType::SignIn,
+            "SignUp" => EventType::SignUp,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ForgotPassword" => EventType::ForgotPassword,
+            "SignIn" => EventType::SignIn,
+            "SignUp" => EventType::SignUp,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExplicitAuthFlowsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExplicitAuthFlowsType {
+    AdminNoSrpAuth,
+    AllowAdminUserPasswordAuth,
+    AllowCustomAuth,
+    AllowRefreshTokenAuth,
+    AllowUserPasswordAuth,
+    AllowUserSrpAuth,
+    CustomAuthFlowOnly,
+    UserPasswordAuth,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExplicitAuthFlowsType),
+}
+
+impl Default for ExplicitAuthFlowsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExplicitAuthFlowsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExplicitAuthFlowsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExplicitAuthFlowsType {
+    fn into(self) -> String {
+        match self {
+            ExplicitAuthFlowsType::AdminNoSrpAuth => "ADMIN_NO_SRP_AUTH".to_string(),
+            ExplicitAuthFlowsType::AllowAdminUserPasswordAuth => {
+                "ALLOW_ADMIN_USER_PASSWORD_AUTH".to_string()
+            }
+            ExplicitAuthFlowsType::AllowCustomAuth => "ALLOW_CUSTOM_AUTH".to_string(),
+            ExplicitAuthFlowsType::AllowRefreshTokenAuth => "ALLOW_REFRESH_TOKEN_AUTH".to_string(),
+            ExplicitAuthFlowsType::AllowUserPasswordAuth => "ALLOW_USER_PASSWORD_AUTH".to_string(),
+            ExplicitAuthFlowsType::AllowUserSrpAuth => "ALLOW_USER_SRP_AUTH".to_string(),
+            ExplicitAuthFlowsType::CustomAuthFlowOnly => "CUSTOM_AUTH_FLOW_ONLY".to_string(),
+            ExplicitAuthFlowsType::UserPasswordAuth => "USER_PASSWORD_AUTH".to_string(),
+            ExplicitAuthFlowsType::UnknownVariant(UnknownExplicitAuthFlowsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExplicitAuthFlowsType {
+    fn into(self) -> &'a str {
+        match self {
+            ExplicitAuthFlowsType::AdminNoSrpAuth => &"ADMIN_NO_SRP_AUTH",
+            ExplicitAuthFlowsType::AllowAdminUserPasswordAuth => &"ALLOW_ADMIN_USER_PASSWORD_AUTH",
+            ExplicitAuthFlowsType::AllowCustomAuth => &"ALLOW_CUSTOM_AUTH",
+            ExplicitAuthFlowsType::AllowRefreshTokenAuth => &"ALLOW_REFRESH_TOKEN_AUTH",
+            ExplicitAuthFlowsType::AllowUserPasswordAuth => &"ALLOW_USER_PASSWORD_AUTH",
+            ExplicitAuthFlowsType::AllowUserSrpAuth => &"ALLOW_USER_SRP_AUTH",
+            ExplicitAuthFlowsType::CustomAuthFlowOnly => &"CUSTOM_AUTH_FLOW_ONLY",
+            ExplicitAuthFlowsType::UserPasswordAuth => &"USER_PASSWORD_AUTH",
+            ExplicitAuthFlowsType::UnknownVariant(UnknownExplicitAuthFlowsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExplicitAuthFlowsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN_NO_SRP_AUTH" => ExplicitAuthFlowsType::AdminNoSrpAuth,
+            "ALLOW_ADMIN_USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::AllowAdminUserPasswordAuth,
+            "ALLOW_CUSTOM_AUTH" => ExplicitAuthFlowsType::AllowCustomAuth,
+            "ALLOW_REFRESH_TOKEN_AUTH" => ExplicitAuthFlowsType::AllowRefreshTokenAuth,
+            "ALLOW_USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::AllowUserPasswordAuth,
+            "ALLOW_USER_SRP_AUTH" => ExplicitAuthFlowsType::AllowUserSrpAuth,
+            "CUSTOM_AUTH_FLOW_ONLY" => ExplicitAuthFlowsType::CustomAuthFlowOnly,
+            "USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::UserPasswordAuth,
+            _ => ExplicitAuthFlowsType::UnknownVariant(UnknownExplicitAuthFlowsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExplicitAuthFlowsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN_NO_SRP_AUTH" => ExplicitAuthFlowsType::AdminNoSrpAuth,
+            "ALLOW_ADMIN_USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::AllowAdminUserPasswordAuth,
+            "ALLOW_CUSTOM_AUTH" => ExplicitAuthFlowsType::AllowCustomAuth,
+            "ALLOW_REFRESH_TOKEN_AUTH" => ExplicitAuthFlowsType::AllowRefreshTokenAuth,
+            "ALLOW_USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::AllowUserPasswordAuth,
+            "ALLOW_USER_SRP_AUTH" => ExplicitAuthFlowsType::AllowUserSrpAuth,
+            "CUSTOM_AUTH_FLOW_ONLY" => ExplicitAuthFlowsType::CustomAuthFlowOnly,
+            "USER_PASSWORD_AUTH" => ExplicitAuthFlowsType::UserPasswordAuth,
+            _ => ExplicitAuthFlowsType::UnknownVariant(UnknownExplicitAuthFlowsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExplicitAuthFlowsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExplicitAuthFlowsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExplicitAuthFlowsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeedbackValueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeedbackValueType {
+    Invalid,
+    Valid,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeedbackValueType),
+}
+
+impl Default for FeedbackValueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeedbackValueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeedbackValueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeedbackValueType {
+    fn into(self) -> String {
+        match self {
+            FeedbackValueType::Invalid => "Invalid".to_string(),
+            FeedbackValueType::Valid => "Valid".to_string(),
+            FeedbackValueType::UnknownVariant(UnknownFeedbackValueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeedbackValueType {
+    fn into(self) -> &'a str {
+        match self {
+            FeedbackValueType::Invalid => &"Invalid",
+            FeedbackValueType::Valid => &"Valid",
+            FeedbackValueType::UnknownVariant(UnknownFeedbackValueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FeedbackValueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Invalid" => FeedbackValueType::Invalid,
+            "Valid" => FeedbackValueType::Valid,
+            _ => FeedbackValueType::UnknownVariant(UnknownFeedbackValueType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeedbackValueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Invalid" => FeedbackValueType::Invalid,
+            "Valid" => FeedbackValueType::Valid,
+            _ => FeedbackValueType::UnknownVariant(UnknownFeedbackValueType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeedbackValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeedbackValueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeedbackValueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the request to forget the device.</p>
@@ -2129,7 +4464,7 @@ pub struct GetUserPoolMfaConfigResponse {
     /// <p><p>The multi-factor (MFA) configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>The SMS text message multi-factor (MFA) configuration.</p>
     #[serde(rename = "SmsMfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2266,11 +4601,135 @@ pub struct IdentityProviderType {
     /// <p>The identity provider type.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<IdentityProviderTypeType>,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityProviderTypeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityProviderTypeType {
+    Facebook,
+    Google,
+    LoginWithAmazon,
+    Oidc,
+    Saml,
+    SignInWithApple,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityProviderTypeType),
+}
+
+impl Default for IdentityProviderTypeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityProviderTypeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityProviderTypeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityProviderTypeType {
+    fn into(self) -> String {
+        match self {
+            IdentityProviderTypeType::Facebook => "Facebook".to_string(),
+            IdentityProviderTypeType::Google => "Google".to_string(),
+            IdentityProviderTypeType::LoginWithAmazon => "LoginWithAmazon".to_string(),
+            IdentityProviderTypeType::Oidc => "OIDC".to_string(),
+            IdentityProviderTypeType::Saml => "SAML".to_string(),
+            IdentityProviderTypeType::SignInWithApple => "SignInWithApple".to_string(),
+            IdentityProviderTypeType::UnknownVariant(UnknownIdentityProviderTypeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityProviderTypeType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityProviderTypeType::Facebook => &"Facebook",
+            IdentityProviderTypeType::Google => &"Google",
+            IdentityProviderTypeType::LoginWithAmazon => &"LoginWithAmazon",
+            IdentityProviderTypeType::Oidc => &"OIDC",
+            IdentityProviderTypeType::Saml => &"SAML",
+            IdentityProviderTypeType::SignInWithApple => &"SignInWithApple",
+            IdentityProviderTypeType::UnknownVariant(UnknownIdentityProviderTypeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityProviderTypeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Facebook" => IdentityProviderTypeType::Facebook,
+            "Google" => IdentityProviderTypeType::Google,
+            "LoginWithAmazon" => IdentityProviderTypeType::LoginWithAmazon,
+            "OIDC" => IdentityProviderTypeType::Oidc,
+            "SAML" => IdentityProviderTypeType::Saml,
+            "SignInWithApple" => IdentityProviderTypeType::SignInWithApple,
+            _ => IdentityProviderTypeType::UnknownVariant(UnknownIdentityProviderTypeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityProviderTypeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Facebook" => IdentityProviderTypeType::Facebook,
+            "Google" => IdentityProviderTypeType::Google,
+            "LoginWithAmazon" => IdentityProviderTypeType::LoginWithAmazon,
+            "OIDC" => IdentityProviderTypeType::Oidc,
+            "SAML" => IdentityProviderTypeType::Saml,
+            "SignInWithApple" => IdentityProviderTypeType::SignInWithApple,
+            _ => IdentityProviderTypeType::UnknownVariant(UnknownIdentityProviderTypeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityProviderTypeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IdentityProviderTypeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityProviderTypeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Initiates the authentication request.</p>
@@ -2283,7 +4742,7 @@ pub struct InitiateAuthRequest {
     pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> <li> <p> <code>ADMIN_USER_PASSWORD_AUTH</code>: Admin-based user password authentication. This replaces the <code>ADMIN_NO_SRP_AUTH</code> authentication flow. In this flow, Cognito receives the password in the request instead of using the SRP process to verify passwords.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
-    pub auth_flow: String,
+    pub auth_flow: AuthFlowType,
     /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code>.</p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code>. To start the authentication flow with password verification, include <code>ChallengeName: SRP<em>A</code> and <code>SRP</em>A: (The SRP_A Value)</code>.</p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2312,7 +4771,7 @@ pub struct InitiateAuthResponse {
     /// <p><p>The name of the challenge which you are responding to with this call. This is returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge.</p> <p>Valid values include the following. Note that all of these challenges require <code>USERNAME</code> and <code>SECRET<em>HASH</code> (if applicable) in the parameters.</p> <ul> <li> <p> <code>SMS</em>MFA</code>: Next challenge is to supply an <code>SMS<em>MFA</em>CODE</code>, delivered via SMS.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: Next challenge is to supply <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, and <code>TIMESTAMP</code> after the client-side SRP calculations.</p> </li> <li> <p> <code>CUSTOM<em>CHALLENGE</code>: This is returned if your custom authentication flow determines that the user should pass another challenge before tokens are issued.</p> </li> <li> <p> <code>DEVICE</em>SRP<em>AUTH</code>: If device tracking was enabled on your user pool and the previous challenges were passed, this challenge is returned so that Amazon Cognito can start tracking this device.</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code>: Similar to <code>PASSWORD</em>VERIFIER</code>, but for devices only.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: For users which are required to change their passwords after successful first login. This challenge should be passed with <code>NEW_PASSWORD</code> and any other required attributes.</p> </li> </ul></p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_name: Option<String>,
+    pub challenge_name: Option<ChallengeNameType>,
     /// <p>The challenge parameters. These are returned to you in the <code>InitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>RespondToAuthChallenge</code>). </p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2682,7 +5141,112 @@ pub struct MFAOptionType {
     /// <p>The delivery medium to send the MFA code. You can use this parameter to set only the <code>SMS</code> delivery medium value.</p>
     #[serde(rename = "DeliveryMedium")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delivery_medium: Option<String>,
+    pub delivery_medium: Option<DeliveryMediumType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageActionType {
+    Resend,
+    Suppress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageActionType),
+}
+
+impl Default for MessageActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageActionType {
+    fn into(self) -> String {
+        match self {
+            MessageActionType::Resend => "RESEND".to_string(),
+            MessageActionType::Suppress => "SUPPRESS".to_string(),
+            MessageActionType::UnknownVariant(UnknownMessageActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageActionType {
+    fn into(self) -> &'a str {
+        match self {
+            MessageActionType::Resend => &"RESEND",
+            MessageActionType::Suppress => &"SUPPRESS",
+            MessageActionType::UnknownVariant(UnknownMessageActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MessageActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESEND" => MessageActionType::Resend,
+            "SUPPRESS" => MessageActionType::Suppress,
+            _ => MessageActionType::UnknownVariant(UnknownMessageActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESEND" => MessageActionType::Resend,
+            "SUPPRESS" => MessageActionType::Suppress,
+            _ => MessageActionType::UnknownVariant(UnknownMessageActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MessageActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MessageActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The message template structure.</p>
@@ -2773,6 +5337,111 @@ pub struct NumberAttributeConstraintsType {
     pub min_value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOAuthFlowType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OAuthFlowType {
+    ClientCredentials,
+    Code,
+    Implicit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOAuthFlowType),
+}
+
+impl Default for OAuthFlowType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OAuthFlowType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OAuthFlowType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OAuthFlowType {
+    fn into(self) -> String {
+        match self {
+            OAuthFlowType::ClientCredentials => "client_credentials".to_string(),
+            OAuthFlowType::Code => "code".to_string(),
+            OAuthFlowType::Implicit => "implicit".to_string(),
+            OAuthFlowType::UnknownVariant(UnknownOAuthFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OAuthFlowType {
+    fn into(self) -> &'a str {
+        match self {
+            OAuthFlowType::ClientCredentials => &"client_credentials",
+            OAuthFlowType::Code => &"code",
+            OAuthFlowType::Implicit => &"implicit",
+            OAuthFlowType::UnknownVariant(UnknownOAuthFlowType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OAuthFlowType {
+    fn from(name: &str) -> Self {
+        match name {
+            "client_credentials" => OAuthFlowType::ClientCredentials,
+            "code" => OAuthFlowType::Code,
+            "implicit" => OAuthFlowType::Implicit,
+            _ => OAuthFlowType::UnknownVariant(UnknownOAuthFlowType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OAuthFlowType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "client_credentials" => OAuthFlowType::ClientCredentials,
+            "code" => OAuthFlowType::Code,
+            "implicit" => OAuthFlowType::Implicit,
+            _ => OAuthFlowType::UnknownVariant(UnknownOAuthFlowType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OAuthFlowType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OAuthFlowType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OAuthFlowType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The password policy type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PasswordPolicyType {
@@ -2802,6 +5471,114 @@ pub struct PasswordPolicyType {
     pub temporary_password_validity_days: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPreventUserExistenceErrorTypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PreventUserExistenceErrorTypes {
+    Enabled,
+    Legacy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPreventUserExistenceErrorTypes),
+}
+
+impl Default for PreventUserExistenceErrorTypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PreventUserExistenceErrorTypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PreventUserExistenceErrorTypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PreventUserExistenceErrorTypes {
+    fn into(self) -> String {
+        match self {
+            PreventUserExistenceErrorTypes::Enabled => "ENABLED".to_string(),
+            PreventUserExistenceErrorTypes::Legacy => "LEGACY".to_string(),
+            PreventUserExistenceErrorTypes::UnknownVariant(
+                UnknownPreventUserExistenceErrorTypes { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PreventUserExistenceErrorTypes {
+    fn into(self) -> &'a str {
+        match self {
+            PreventUserExistenceErrorTypes::Enabled => &"ENABLED",
+            PreventUserExistenceErrorTypes::Legacy => &"LEGACY",
+            PreventUserExistenceErrorTypes::UnknownVariant(
+                UnknownPreventUserExistenceErrorTypes { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for PreventUserExistenceErrorTypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENABLED" => PreventUserExistenceErrorTypes::Enabled,
+            "LEGACY" => PreventUserExistenceErrorTypes::Legacy,
+            _ => PreventUserExistenceErrorTypes::UnknownVariant(
+                UnknownPreventUserExistenceErrorTypes {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for PreventUserExistenceErrorTypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENABLED" => PreventUserExistenceErrorTypes::Enabled,
+            "LEGACY" => PreventUserExistenceErrorTypes::Legacy,
+            _ => PreventUserExistenceErrorTypes::UnknownVariant(
+                UnknownPreventUserExistenceErrorTypes { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PreventUserExistenceErrorTypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PreventUserExistenceErrorTypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PreventUserExistenceErrorTypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A container for identity provider details.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2821,7 +5598,7 @@ pub struct ProviderDescription {
     /// <p>The identity provider type.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub provider_type: Option<String>,
+    pub provider_type: Option<IdentityProviderTypeType>,
 }
 
 /// <p>A container for information about an identity provider for a user pool.</p>
@@ -2842,12 +5619,121 @@ pub struct ProviderUserIdentifierType {
     pub provider_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecoveryOptionNameType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecoveryOptionNameType {
+    AdminOnly,
+    VerifiedEmail,
+    VerifiedPhoneNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecoveryOptionNameType),
+}
+
+impl Default for RecoveryOptionNameType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecoveryOptionNameType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecoveryOptionNameType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecoveryOptionNameType {
+    fn into(self) -> String {
+        match self {
+            RecoveryOptionNameType::AdminOnly => "admin_only".to_string(),
+            RecoveryOptionNameType::VerifiedEmail => "verified_email".to_string(),
+            RecoveryOptionNameType::VerifiedPhoneNumber => "verified_phone_number".to_string(),
+            RecoveryOptionNameType::UnknownVariant(UnknownRecoveryOptionNameType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecoveryOptionNameType {
+    fn into(self) -> &'a str {
+        match self {
+            RecoveryOptionNameType::AdminOnly => &"admin_only",
+            RecoveryOptionNameType::VerifiedEmail => &"verified_email",
+            RecoveryOptionNameType::VerifiedPhoneNumber => &"verified_phone_number",
+            RecoveryOptionNameType::UnknownVariant(UnknownRecoveryOptionNameType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecoveryOptionNameType {
+    fn from(name: &str) -> Self {
+        match name {
+            "admin_only" => RecoveryOptionNameType::AdminOnly,
+            "verified_email" => RecoveryOptionNameType::VerifiedEmail,
+            "verified_phone_number" => RecoveryOptionNameType::VerifiedPhoneNumber,
+            _ => RecoveryOptionNameType::UnknownVariant(UnknownRecoveryOptionNameType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecoveryOptionNameType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "admin_only" => RecoveryOptionNameType::AdminOnly,
+            "verified_email" => RecoveryOptionNameType::VerifiedEmail,
+            "verified_phone_number" => RecoveryOptionNameType::VerifiedPhoneNumber,
+            _ => RecoveryOptionNameType::UnknownVariant(UnknownRecoveryOptionNameType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecoveryOptionNameType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecoveryOptionNameType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecoveryOptionNameType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A map containing a priority as a key, and recovery method name as a value.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecoveryOptionType {
     /// <p>Specifies the recovery method for a user.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: RecoveryOptionNameType,
     /// <p>A positive integer specifying priority of a method with 1 being the highest priority.</p>
     #[serde(rename = "Priority")]
     pub priority: i64,
@@ -2934,7 +5820,7 @@ pub struct RespondToAuthChallengeRequest {
     pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "ChallengeName")]
-    pub challenge_name: String,
+    pub challenge_name: ChallengeNameType,
     /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <note> <p> <code>SECRET<em>HASH</code> (if app client is configured with client secret) applies to all inputs below (including <code>SOFTWARE</em>TOKEN<em>MFA</code>).</p> </note> <ul> <li> <p> <code>SMS</em>MFA</code>: <code>SMS<em>MFA</em>CODE</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>.</p> </li> <li> <p> <code>NEW<em>PASSWORD</em>REQUIRED</code>: <code>NEW<em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>. </p> </li> <li> <p> <code>SOFTWARE</em>TOKEN<em>MFA</code>: <code>USERNAME</code> and <code>SOFTWARE</em>TOKEN<em>MFA</em>CODE</code> are required attributes.</p> </li> <li> <p> <code>DEVICE<em>SRP</em>AUTH</code> requires <code>USERNAME</code>, <code>DEVICE<em>KEY</code>, <code>SRP</em>A</code> (and <code>SECRET<em>HASH</code>).</p> </li> <li> <p> <code>DEVICE</em>PASSWORD<em>VERIFIER</code> requires everything that <code>PASSWORD</em>VERIFIER</code> requires plus <code>DEVICE_KEY</code>.</p> </li> </ul></p>
     #[serde(rename = "ChallengeResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2967,7 +5853,7 @@ pub struct RespondToAuthChallengeResponse {
     /// <p>The challenge name. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub challenge_name: Option<String>,
+    pub challenge_name: Option<ChallengeNameType>,
     /// <p>The challenge parameters. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html">InitiateAuth</a>.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3009,6 +5895,116 @@ pub struct RiskConfigurationType {
     pub user_pool_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRiskDecisionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RiskDecisionType {
+    AccountTakeover,
+    Block,
+    NoRisk,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRiskDecisionType),
+}
+
+impl Default for RiskDecisionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RiskDecisionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RiskDecisionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RiskDecisionType {
+    fn into(self) -> String {
+        match self {
+            RiskDecisionType::AccountTakeover => "AccountTakeover".to_string(),
+            RiskDecisionType::Block => "Block".to_string(),
+            RiskDecisionType::NoRisk => "NoRisk".to_string(),
+            RiskDecisionType::UnknownVariant(UnknownRiskDecisionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RiskDecisionType {
+    fn into(self) -> &'a str {
+        match self {
+            RiskDecisionType::AccountTakeover => &"AccountTakeover",
+            RiskDecisionType::Block => &"Block",
+            RiskDecisionType::NoRisk => &"NoRisk",
+            RiskDecisionType::UnknownVariant(UnknownRiskDecisionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RiskDecisionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccountTakeover" => RiskDecisionType::AccountTakeover,
+            "Block" => RiskDecisionType::Block,
+            "NoRisk" => RiskDecisionType::NoRisk,
+            _ => RiskDecisionType::UnknownVariant(UnknownRiskDecisionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RiskDecisionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccountTakeover" => RiskDecisionType::AccountTakeover,
+            "Block" => RiskDecisionType::Block,
+            "NoRisk" => RiskDecisionType::NoRisk,
+            _ => RiskDecisionType::UnknownVariant(UnknownRiskDecisionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RiskDecisionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RiskDecisionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RiskDecisionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The type of the configuration to override the risk decision.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RiskExceptionConfigurationType {
@@ -3020,6 +6016,112 @@ pub struct RiskExceptionConfigurationType {
     #[serde(rename = "SkippedIPRangeList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skipped_ip_range_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRiskLevelType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RiskLevelType {
+    High,
+    Low,
+    Medium,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRiskLevelType),
+}
+
+impl Default for RiskLevelType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RiskLevelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RiskLevelType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RiskLevelType {
+    fn into(self) -> String {
+        match self {
+            RiskLevelType::High => "High".to_string(),
+            RiskLevelType::Low => "Low".to_string(),
+            RiskLevelType::Medium => "Medium".to_string(),
+            RiskLevelType::UnknownVariant(UnknownRiskLevelType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RiskLevelType {
+    fn into(self) -> &'a str {
+        match self {
+            RiskLevelType::High => &"High",
+            RiskLevelType::Low => &"Low",
+            RiskLevelType::Medium => &"Medium",
+            RiskLevelType::UnknownVariant(UnknownRiskLevelType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RiskLevelType {
+    fn from(name: &str) -> Self {
+        match name {
+            "High" => RiskLevelType::High,
+            "Low" => RiskLevelType::Low,
+            "Medium" => RiskLevelType::Medium,
+            _ => RiskLevelType::UnknownVariant(UnknownRiskLevelType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RiskLevelType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "High" => RiskLevelType::High,
+            "Low" => RiskLevelType::Low,
+            "Medium" => RiskLevelType::Medium,
+            _ => RiskLevelType::UnknownVariant(UnknownRiskLevelType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RiskLevelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RiskLevelType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RiskLevelType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The type used for enabling SMS MFA at the user level. Phone numbers don't need to be verified to be used for SMS MFA. If an MFA type is enabled for a user, the user will be prompted for MFA during all sign in attempts, unless device tracking is turned on and the device has been trusted. If you would like MFA to be applied selectively based on the assessed risk level of sign in attempts, disable MFA for users and turn on Adaptive Authentication for the user pool.</p>
@@ -3042,7 +6144,7 @@ pub struct SchemaAttributeType {
     /// <p>The attribute data type.</p>
     #[serde(rename = "AttributeDataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attribute_data_type: Option<String>,
+    pub attribute_data_type: Option<AttributeDataType>,
     /// <p><note> <p>We recommend that you use <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UserPoolClientType.html#CognitoUserPools-Type-UserPoolClientType-WriteAttributes">WriteAttributes</a> in the user pool client to control how attributes can be mutated for new use cases instead of using <code>DeveloperOnlyAttribute</code>.</p> </note> <p>Specifies whether the attribute type is developer only. This attribute can only be modified by an administrator. Users will not be able to modify this attribute using their access token. For example, <code>DeveloperOnlyAttribute</code> can be modified using AdminUpdateUserAttributes but cannot be updated using UpdateUserAttributes.</p></p>
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3161,7 +6263,7 @@ pub struct SetUserPoolMfaConfigRequest {
     /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>The SMS text message MFA configuration.</p>
     #[serde(rename = "SmsMfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3181,7 +6283,7 @@ pub struct SetUserPoolMfaConfigResponse {
     /// <p><p>The MFA configuration. Valid values include:</p> <ul> <li> <p> <code>OFF</code> MFA will not be used for any users.</p> </li> <li> <p> <code>ON</code> MFA is required for all users to sign in.</p> </li> <li> <p> <code>OPTIONAL</code> MFA will be required only for individual users who have an MFA factor enabled.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>The SMS text message MFA configuration.</p>
     #[serde(rename = "SmsMfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3334,6 +6436,107 @@ pub struct StartUserImportJobResponse {
     pub user_import_job: Option<UserImportJobType>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusType {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusType),
+}
+
+impl Default for StatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        match self {
+            StatusType::Disabled => "Disabled".to_string(),
+            StatusType::Enabled => "Enabled".to_string(),
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusType {
+    fn into(self) -> &'a str {
+        match self {
+            StatusType::Disabled => &"Disabled",
+            StatusType::Enabled => &"Enabled",
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => StatusType::Disabled,
+            "Enabled" => StatusType::Enabled,
+            _ => StatusType::UnknownVariant(UnknownStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => StatusType::Disabled,
+            "Enabled" => StatusType::Enabled,
+            _ => StatusType::UnknownVariant(UnknownStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the request to stop the user import job.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3384,21 +6587,131 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTimeUnitsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TimeUnitsType {
+    Days,
+    Hours,
+    Minutes,
+    Seconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTimeUnitsType),
+}
+
+impl Default for TimeUnitsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TimeUnitsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TimeUnitsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TimeUnitsType {
+    fn into(self) -> String {
+        match self {
+            TimeUnitsType::Days => "days".to_string(),
+            TimeUnitsType::Hours => "hours".to_string(),
+            TimeUnitsType::Minutes => "minutes".to_string(),
+            TimeUnitsType::Seconds => "seconds".to_string(),
+            TimeUnitsType::UnknownVariant(UnknownTimeUnitsType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TimeUnitsType {
+    fn into(self) -> &'a str {
+        match self {
+            TimeUnitsType::Days => &"days",
+            TimeUnitsType::Hours => &"hours",
+            TimeUnitsType::Minutes => &"minutes",
+            TimeUnitsType::Seconds => &"seconds",
+            TimeUnitsType::UnknownVariant(UnknownTimeUnitsType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TimeUnitsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "days" => TimeUnitsType::Days,
+            "hours" => TimeUnitsType::Hours,
+            "minutes" => TimeUnitsType::Minutes,
+            "seconds" => TimeUnitsType::Seconds,
+            _ => TimeUnitsType::UnknownVariant(UnknownTimeUnitsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TimeUnitsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "days" => TimeUnitsType::Days,
+            "hours" => TimeUnitsType::Hours,
+            "minutes" => TimeUnitsType::Minutes,
+            "seconds" => TimeUnitsType::Seconds,
+            _ => TimeUnitsType::UnknownVariant(UnknownTimeUnitsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeUnitsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TimeUnitsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TimeUnitsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The data type for TokenValidityUnits that specifics the time measurements for token validity.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TokenValidityUnitsType {
     /// <p> A time unit in “seconds”, “minutes”, “hours” or “days” for the value in AccessTokenValidity, defaults to hours.</p>
     #[serde(rename = "AccessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub access_token: Option<String>,
+    pub access_token: Option<TimeUnitsType>,
     /// <p>A time unit in “seconds”, “minutes”, “hours” or “days” for the value in IdTokenValidity, defaults to hours.</p>
     #[serde(rename = "IdToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub id_token: Option<String>,
+    pub id_token: Option<TimeUnitsType>,
     /// <p>A time unit in “seconds”, “minutes”, “hours” or “days” for the value in RefreshTokenValidity, defaults to days.</p>
     #[serde(rename = "RefreshToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub refresh_token: Option<String>,
+    pub refresh_token: Option<TimeUnitsType>,
 }
 
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
@@ -3461,7 +6774,7 @@ pub struct UpdateAuthEventFeedbackRequest {
     pub feedback_token: String,
     /// <p>The authentication event feedback value.</p>
     #[serde(rename = "FeedbackValue")]
-    pub feedback_value: String,
+    pub feedback_value: FeedbackValueType,
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -3487,7 +6800,7 @@ pub struct UpdateDeviceStatusRequest {
     /// <p>The status of whether a device is remembered.</p>
     #[serde(rename = "DeviceRememberedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub device_remembered_status: Option<String>,
+    pub device_remembered_status: Option<DeviceRememberedStatusType>,
 }
 
 /// <p>The response to the request to update the device status.</p>
@@ -3621,7 +6934,7 @@ pub struct UpdateUserPoolClientRequest {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_o_auth_flows: Option<Vec<String>>,
+    pub allowed_o_auth_flows: Option<Vec<OAuthFlowType>>,
     /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3652,7 +6965,7 @@ pub struct UpdateUserPoolClientRequest {
     /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub explicit_auth_flows: Option<Vec<String>>,
+    pub explicit_auth_flows: Option<Vec<ExplicitAuthFlowsType>>,
     /// <p>The time limit, after which the ID token is no longer valid and cannot be used.</p>
     #[serde(rename = "IdTokenValidity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3664,7 +6977,7 @@ pub struct UpdateUserPoolClientRequest {
     /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub prevent_user_existence_errors: Option<String>,
+    pub prevent_user_existence_errors: Option<PreventUserExistenceErrorTypes>,
     /// <p>The read-only attributes of the user pool.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3740,7 +7053,7 @@ pub struct UpdateUserPoolRequest {
     /// <p>The attributes that are automatically verified when the Amazon Cognito service makes a request to update user pools.</p>
     #[serde(rename = "AutoVerifiedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_verified_attributes: Option<Vec<String>>,
+    pub auto_verified_attributes: Option<Vec<VerifiedAttributeType>>,
     /// <p>Device configuration.</p>
     #[serde(rename = "DeviceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3764,7 +7077,7 @@ pub struct UpdateUserPoolRequest {
     /// <p><p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>A container with the policies you wish to update in a user pool.</p>
     #[serde(rename = "Policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3811,6 +7124,141 @@ pub struct UserContextDataType {
     #[serde(rename = "EncodedData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encoded_data: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserImportJobStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserImportJobStatusType {
+    Created,
+    Expired,
+    Failed,
+    InProgress,
+    Pending,
+    Stopped,
+    Stopping,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserImportJobStatusType),
+}
+
+impl Default for UserImportJobStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserImportJobStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserImportJobStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserImportJobStatusType {
+    fn into(self) -> String {
+        match self {
+            UserImportJobStatusType::Created => "Created".to_string(),
+            UserImportJobStatusType::Expired => "Expired".to_string(),
+            UserImportJobStatusType::Failed => "Failed".to_string(),
+            UserImportJobStatusType::InProgress => "InProgress".to_string(),
+            UserImportJobStatusType::Pending => "Pending".to_string(),
+            UserImportJobStatusType::Stopped => "Stopped".to_string(),
+            UserImportJobStatusType::Stopping => "Stopping".to_string(),
+            UserImportJobStatusType::Succeeded => "Succeeded".to_string(),
+            UserImportJobStatusType::UnknownVariant(UnknownUserImportJobStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserImportJobStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            UserImportJobStatusType::Created => &"Created",
+            UserImportJobStatusType::Expired => &"Expired",
+            UserImportJobStatusType::Failed => &"Failed",
+            UserImportJobStatusType::InProgress => &"InProgress",
+            UserImportJobStatusType::Pending => &"Pending",
+            UserImportJobStatusType::Stopped => &"Stopped",
+            UserImportJobStatusType::Stopping => &"Stopping",
+            UserImportJobStatusType::Succeeded => &"Succeeded",
+            UserImportJobStatusType::UnknownVariant(UnknownUserImportJobStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserImportJobStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Created" => UserImportJobStatusType::Created,
+            "Expired" => UserImportJobStatusType::Expired,
+            "Failed" => UserImportJobStatusType::Failed,
+            "InProgress" => UserImportJobStatusType::InProgress,
+            "Pending" => UserImportJobStatusType::Pending,
+            "Stopped" => UserImportJobStatusType::Stopped,
+            "Stopping" => UserImportJobStatusType::Stopping,
+            "Succeeded" => UserImportJobStatusType::Succeeded,
+            _ => UserImportJobStatusType::UnknownVariant(UnknownUserImportJobStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserImportJobStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Created" => UserImportJobStatusType::Created,
+            "Expired" => UserImportJobStatusType::Expired,
+            "Failed" => UserImportJobStatusType::Failed,
+            "InProgress" => UserImportJobStatusType::InProgress,
+            "Pending" => UserImportJobStatusType::Pending,
+            "Stopped" => UserImportJobStatusType::Stopped,
+            "Stopping" => UserImportJobStatusType::Stopping,
+            "Succeeded" => UserImportJobStatusType::Succeeded,
+            _ => UserImportJobStatusType::UnknownVariant(UnknownUserImportJobStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserImportJobStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UserImportJobStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserImportJobStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The user import job type.</p>
@@ -3864,7 +7312,7 @@ pub struct UserImportJobType {
     /// <p><p>The status of the user import job. One of the following:</p> <ul> <li> <p> <code>Created</code> - The job was created but not started.</p> </li> <li> <p> <code>Pending</code> - A transition state. You have started the job, but it has not begun importing users yet.</p> </li> <li> <p> <code>InProgress</code> - The job has started, and users are being imported.</p> </li> <li> <p> <code>Stopping</code> - You have stopped the job, but the job has not stopped importing users yet.</p> </li> <li> <p> <code>Stopped</code> - You have stopped the job, and the job has stopped importing users.</p> </li> <li> <p> <code>Succeeded</code> - The job has completed successfully.</p> </li> <li> <p> <code>Failed</code> - The job has stopped due to an error.</p> </li> <li> <p> <code>Expired</code> - You created a job, but did not start the job within 24-48 hours. All data associated with the job was deleted, and the job cannot be started.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UserImportJobStatusType>,
     /// <p>The user pool ID for the user pool that the users are being imported into.</p>
     #[serde(rename = "UserPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3876,7 +7324,7 @@ pub struct UserImportJobType {
 pub struct UserPoolAddOnsType {
     /// <p>The advanced security mode.</p>
     #[serde(rename = "AdvancedSecurityMode")]
-    pub advanced_security_mode: String,
+    pub advanced_security_mode: AdvancedSecurityModeType,
 }
 
 /// <p>The description of the user pool client.</p>
@@ -3908,7 +7356,7 @@ pub struct UserPoolClientType {
     /// <p>The allowed OAuth flows.</p> <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>implicit</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p> <p>Set to <code>client_credentials</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) from the token endpoint using a combination of client and client_secret.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_o_auth_flows: Option<Vec<String>>,
+    pub allowed_o_auth_flows: Option<Vec<OAuthFlowType>>,
     /// <p>Set to true if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>
     #[serde(rename = "AllowedOAuthFlowsUserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3948,7 +7396,7 @@ pub struct UserPoolClientType {
     /// <p><p>The authentication flows that are supported by the user pool clients. Flow names without the <code>ALLOW<em></code> prefix are deprecated in favor of new names with the <code>ALLOW</em></code> prefix. Note that values with <code>ALLOW<em></code> prefix cannot be used along with values without <code>ALLOW</em></code> prefix.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ALLOW<em>ADMIN</em>USER<em>PASSWORD</em>AUTH</code>: Enable admin based user password authentication flow <code>ADMIN<em>USER</em>PASSWORD<em>AUTH</code>. This setting replaces the <code>ADMIN</em>NO<em>SRP</em>AUTH</code> setting. With this authentication flow, Cognito receives the password in the request instead of using the SRP (Secure Remote Password protocol) protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW<em>CUSTOM</em>AUTH</code>: Enable Lambda trigger based authentication.</p> </li> <li> <p> <code>ALLOW<em>USER</em>PASSWORD<em>AUTH</code>: Enable user password-based authentication. In this flow, Cognito receives the password in the request instead of using the SRP protocol to verify passwords.</p> </li> <li> <p> <code>ALLOW</em>USER<em>SRP</em>AUTH</code>: Enable SRP based authentication.</p> </li> <li> <p> <code>ALLOW<em>REFRESH</em>TOKEN_AUTH</code>: Enable authflow to refresh tokens.</p> </li> </ul></p>
     #[serde(rename = "ExplicitAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub explicit_auth_flows: Option<Vec<String>>,
+    pub explicit_auth_flows: Option<Vec<ExplicitAuthFlowsType>>,
     /// <p>The time limit, specified by tokenValidityUnits, defaulting to hours, after which the refresh token is no longer valid and cannot be used.</p>
     #[serde(rename = "IdTokenValidity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3964,7 +7412,7 @@ pub struct UserPoolClientType {
     /// <p><p>Use this setting to choose which errors and responses are returned by Cognito APIs during authentication, account confirmation, and password recovery when the user does not exist in the user pool. When set to <code>ENABLED</code> and the user does not exist, authentication returns an error indicating either the username or password was incorrect, and account confirmation and password recovery return a response indicating a code was sent to a simulated destination. When set to <code>LEGACY</code>, those APIs will return a <code>UserNotFoundException</code> exception if the user does not exist in the user pool.</p> <p>Valid values include:</p> <ul> <li> <p> <code>ENABLED</code> - This prevents user existence-related errors.</p> </li> <li> <p> <code>LEGACY</code> - This represents the old behavior of Cognito where user existence related errors are not prevented.</p> </li> </ul> <note> <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will default to <code>ENABLED</code> for newly created user pool clients if no value is provided.</p> </note></p>
     #[serde(rename = "PreventUserExistenceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub prevent_user_existence_errors: Option<String>,
+    pub prevent_user_existence_errors: Option<PreventUserExistenceErrorTypes>,
     /// <p>The Read-only attributes.</p>
     #[serde(rename = "ReadAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4018,7 +7466,112 @@ pub struct UserPoolDescriptionType {
     /// <p>The user pool status in a user pool description.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StatusType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserPoolMfaType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserPoolMfaType {
+    Off,
+    On,
+    Optional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserPoolMfaType),
+}
+
+impl Default for UserPoolMfaType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserPoolMfaType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserPoolMfaType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserPoolMfaType {
+    fn into(self) -> String {
+        match self {
+            UserPoolMfaType::Off => "OFF".to_string(),
+            UserPoolMfaType::On => "ON".to_string(),
+            UserPoolMfaType::Optional => "OPTIONAL".to_string(),
+            UserPoolMfaType::UnknownVariant(UnknownUserPoolMfaType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserPoolMfaType {
+    fn into(self) -> &'a str {
+        match self {
+            UserPoolMfaType::Off => &"OFF",
+            UserPoolMfaType::On => &"ON",
+            UserPoolMfaType::Optional => &"OPTIONAL",
+            UserPoolMfaType::UnknownVariant(UnknownUserPoolMfaType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserPoolMfaType {
+    fn from(name: &str) -> Self {
+        match name {
+            "OFF" => UserPoolMfaType::Off,
+            "ON" => UserPoolMfaType::On,
+            "OPTIONAL" => UserPoolMfaType::Optional,
+            _ => UserPoolMfaType::UnknownVariant(UnknownUserPoolMfaType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserPoolMfaType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OFF" => UserPoolMfaType::Off,
+            "ON" => UserPoolMfaType::On,
+            "OPTIONAL" => UserPoolMfaType::Optional,
+            _ => UserPoolMfaType::UnknownVariant(UnknownUserPoolMfaType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserPoolMfaType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserPoolMfaType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserPoolMfaType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The policy associated with a user pool.</p>
@@ -4045,7 +7598,7 @@ pub struct UserPoolType {
     /// <p>Specifies the attributes that are aliased in a user pool.</p>
     #[serde(rename = "AliasAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub alias_attributes: Option<Vec<String>>,
+    pub alias_attributes: Option<Vec<AliasAttributeType>>,
     /// <p>The Amazon Resource Name (ARN) for the user pool.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4053,7 +7606,7 @@ pub struct UserPoolType {
     /// <p>Specifies the attributes that are auto-verified in a user pool.</p>
     #[serde(rename = "AutoVerifiedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_verified_attributes: Option<Vec<String>>,
+    pub auto_verified_attributes: Option<Vec<VerifiedAttributeType>>,
     /// <p>The date the user pool was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4105,7 +7658,7 @@ pub struct UserPoolType {
     /// <p><p>Can be one of the following values:</p> <ul> <li> <p> <code>OFF</code> - MFA tokens are not required and cannot be specified during user registration.</p> </li> <li> <p> <code>ON</code> - MFA tokens are required for all user registrations. You can only specify required when you are initially creating a user pool.</p> </li> <li> <p> <code>OPTIONAL</code> - Users have the option when registering to create an MFA token.</p> </li> </ul></p>
     #[serde(rename = "MfaConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mfa_configuration: Option<String>,
+    pub mfa_configuration: Option<UserPoolMfaType>,
     /// <p>The name of the user pool.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4137,7 +7690,7 @@ pub struct UserPoolType {
     /// <p>The status of a user pool.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StatusType>,
     /// <p>The user pool add-ons.</p>
     #[serde(rename = "UserPoolAddOns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4149,7 +7702,7 @@ pub struct UserPoolType {
     /// <p>Specifies whether email addresses or phone numbers can be specified as usernames when a user signs up.</p>
     #[serde(rename = "UsernameAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub username_attributes: Option<Vec<String>>,
+    pub username_attributes: Option<Vec<UsernameAttributeType>>,
     /// <p>You can choose to enable case sensitivity on the username input for the selected sign-in option. For example, when this is set to <code>False</code>, users will be able to sign in using either "username" or "Username". This configuration is immutable once it has been set. For more information, see <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UsernameConfigurationType.html">UsernameConfigurationType</a>.</p>
     #[serde(rename = "UsernameConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4158,6 +7711,132 @@ pub struct UserPoolType {
     #[serde(rename = "VerificationMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification_message_template: Option<VerificationMessageTemplateType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserStatusType {
+    Archived,
+    Compromised,
+    Confirmed,
+    ForceChangePassword,
+    ResetRequired,
+    Unconfirmed,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserStatusType),
+}
+
+impl Default for UserStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserStatusType {
+    fn into(self) -> String {
+        match self {
+            UserStatusType::Archived => "ARCHIVED".to_string(),
+            UserStatusType::Compromised => "COMPROMISED".to_string(),
+            UserStatusType::Confirmed => "CONFIRMED".to_string(),
+            UserStatusType::ForceChangePassword => "FORCE_CHANGE_PASSWORD".to_string(),
+            UserStatusType::ResetRequired => "RESET_REQUIRED".to_string(),
+            UserStatusType::Unconfirmed => "UNCONFIRMED".to_string(),
+            UserStatusType::Unknown => "UNKNOWN".to_string(),
+            UserStatusType::UnknownVariant(UnknownUserStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            UserStatusType::Archived => &"ARCHIVED",
+            UserStatusType::Compromised => &"COMPROMISED",
+            UserStatusType::Confirmed => &"CONFIRMED",
+            UserStatusType::ForceChangePassword => &"FORCE_CHANGE_PASSWORD",
+            UserStatusType::ResetRequired => &"RESET_REQUIRED",
+            UserStatusType::Unconfirmed => &"UNCONFIRMED",
+            UserStatusType::Unknown => &"UNKNOWN",
+            UserStatusType::UnknownVariant(UnknownUserStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVED" => UserStatusType::Archived,
+            "COMPROMISED" => UserStatusType::Compromised,
+            "CONFIRMED" => UserStatusType::Confirmed,
+            "FORCE_CHANGE_PASSWORD" => UserStatusType::ForceChangePassword,
+            "RESET_REQUIRED" => UserStatusType::ResetRequired,
+            "UNCONFIRMED" => UserStatusType::Unconfirmed,
+            "UNKNOWN" => UserStatusType::Unknown,
+            _ => UserStatusType::UnknownVariant(UnknownUserStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVED" => UserStatusType::Archived,
+            "COMPROMISED" => UserStatusType::Compromised,
+            "CONFIRMED" => UserStatusType::Confirmed,
+            "FORCE_CHANGE_PASSWORD" => UserStatusType::ForceChangePassword,
+            "RESET_REQUIRED" => UserStatusType::ResetRequired,
+            "UNCONFIRMED" => UserStatusType::Unconfirmed,
+            "UNKNOWN" => UserStatusType::Unknown,
+            _ => UserStatusType::UnknownVariant(UnknownUserStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UserStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The user type.</p>
@@ -4187,11 +7866,115 @@ pub struct UserType {
     /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET<em>REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE</em>CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_status: Option<String>,
+    pub user_status: Option<UserStatusType>,
     /// <p>The user name of the user you wish to describe.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsernameAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsernameAttributeType {
+    Email,
+    PhoneNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsernameAttributeType),
+}
+
+impl Default for UsernameAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsernameAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsernameAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsernameAttributeType {
+    fn into(self) -> String {
+        match self {
+            UsernameAttributeType::Email => "email".to_string(),
+            UsernameAttributeType::PhoneNumber => "phone_number".to_string(),
+            UsernameAttributeType::UnknownVariant(UnknownUsernameAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsernameAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            UsernameAttributeType::Email => &"email",
+            UsernameAttributeType::PhoneNumber => &"phone_number",
+            UsernameAttributeType::UnknownVariant(UnknownUsernameAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UsernameAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "email" => UsernameAttributeType::Email,
+            "phone_number" => UsernameAttributeType::PhoneNumber,
+            _ => UsernameAttributeType::UnknownVariant(UnknownUsernameAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsernameAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "email" => UsernameAttributeType::Email,
+            "phone_number" => UsernameAttributeType::PhoneNumber,
+            _ => UsernameAttributeType::UnknownVariant(UnknownUsernameAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsernameAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UsernameAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UsernameAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The username configuration type. </p>
@@ -4208,7 +7991,7 @@ pub struct VerificationMessageTemplateType {
     /// <p>The default email option.</p>
     #[serde(rename = "DefaultEmailOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub default_email_option: Option<String>,
+    pub default_email_option: Option<DefaultEmailOptionType>,
     /// <p>The email message template. EmailMessage is allowed only if <a href="https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount"> EmailSendingAccount</a> is DEVELOPER. </p>
     #[serde(rename = "EmailMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4229,6 +8012,110 @@ pub struct VerificationMessageTemplateType {
     #[serde(rename = "SmsMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVerifiedAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VerifiedAttributeType {
+    Email,
+    PhoneNumber,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVerifiedAttributeType),
+}
+
+impl Default for VerifiedAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VerifiedAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VerifiedAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VerifiedAttributeType {
+    fn into(self) -> String {
+        match self {
+            VerifiedAttributeType::Email => "email".to_string(),
+            VerifiedAttributeType::PhoneNumber => "phone_number".to_string(),
+            VerifiedAttributeType::UnknownVariant(UnknownVerifiedAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VerifiedAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            VerifiedAttributeType::Email => &"email",
+            VerifiedAttributeType::PhoneNumber => &"phone_number",
+            VerifiedAttributeType::UnknownVariant(UnknownVerifiedAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VerifiedAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "email" => VerifiedAttributeType::Email,
+            "phone_number" => VerifiedAttributeType::PhoneNumber,
+            _ => VerifiedAttributeType::UnknownVariant(UnknownVerifiedAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VerifiedAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "email" => VerifiedAttributeType::Email,
+            "phone_number" => VerifiedAttributeType::PhoneNumber,
+            _ => VerifiedAttributeType::UnknownVariant(UnknownVerifiedAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VerifiedAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VerifiedAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VerifiedAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4261,7 +8148,116 @@ pub struct VerifySoftwareTokenResponse {
     /// <p>The status of the verify software token.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<VerifySoftwareTokenResponseType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVerifySoftwareTokenResponseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VerifySoftwareTokenResponseType {
+    Error,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVerifySoftwareTokenResponseType),
+}
+
+impl Default for VerifySoftwareTokenResponseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VerifySoftwareTokenResponseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VerifySoftwareTokenResponseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VerifySoftwareTokenResponseType {
+    fn into(self) -> String {
+        match self {
+            VerifySoftwareTokenResponseType::Error => "ERROR".to_string(),
+            VerifySoftwareTokenResponseType::Success => "SUCCESS".to_string(),
+            VerifySoftwareTokenResponseType::UnknownVariant(
+                UnknownVerifySoftwareTokenResponseType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VerifySoftwareTokenResponseType {
+    fn into(self) -> &'a str {
+        match self {
+            VerifySoftwareTokenResponseType::Error => &"ERROR",
+            VerifySoftwareTokenResponseType::Success => &"SUCCESS",
+            VerifySoftwareTokenResponseType::UnknownVariant(
+                UnknownVerifySoftwareTokenResponseType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for VerifySoftwareTokenResponseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => VerifySoftwareTokenResponseType::Error,
+            "SUCCESS" => VerifySoftwareTokenResponseType::Success,
+            _ => VerifySoftwareTokenResponseType::UnknownVariant(
+                UnknownVerifySoftwareTokenResponseType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for VerifySoftwareTokenResponseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => VerifySoftwareTokenResponseType::Error,
+            "SUCCESS" => VerifySoftwareTokenResponseType::Success,
+            _ => VerifySoftwareTokenResponseType::UnknownVariant(
+                UnknownVerifySoftwareTokenResponseType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VerifySoftwareTokenResponseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VerifySoftwareTokenResponseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VerifySoftwareTokenResponseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the request to verify user attributes.</p>

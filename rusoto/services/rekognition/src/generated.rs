@@ -72,6 +72,107 @@ pub struct Asset {
     pub ground_truth_manifest: Option<GroundTruthManifest>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Attribute {
+    All,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttribute),
+}
+
+impl Default for Attribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Attribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Attribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Attribute {
+    fn into(self) -> String {
+        match self {
+            Attribute::All => "ALL".to_string(),
+            Attribute::Default => "DEFAULT".to_string(),
+            Attribute::UnknownVariant(UnknownAttribute { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Attribute {
+    fn into(self) -> &'a str {
+        match self {
+            Attribute::All => &"ALL",
+            Attribute::Default => &"DEFAULT",
+            Attribute::UnknownVariant(UnknownAttribute { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Attribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => Attribute::All,
+            "DEFAULT" => Attribute::Default,
+            _ => Attribute::UnknownVariant(UnknownAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Attribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => Attribute::All,
+            "DEFAULT" => Attribute::Default,
+            _ => Attribute::UnknownVariant(UnknownAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Attribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Attribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Attribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Metadata information about an audio stream. An array of <code>AudioMetadata</code> objects for the audio streams found in a stored video is returned by <a>GetSegmentDetection</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -106,6 +207,117 @@ pub struct Beard {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBodyPart {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BodyPart {
+    Face,
+    Head,
+    LeftHand,
+    RightHand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBodyPart),
+}
+
+impl Default for BodyPart {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BodyPart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BodyPart {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BodyPart {
+    fn into(self) -> String {
+        match self {
+            BodyPart::Face => "FACE".to_string(),
+            BodyPart::Head => "HEAD".to_string(),
+            BodyPart::LeftHand => "LEFT_HAND".to_string(),
+            BodyPart::RightHand => "RIGHT_HAND".to_string(),
+            BodyPart::UnknownVariant(UnknownBodyPart { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BodyPart {
+    fn into(self) -> &'a str {
+        match self {
+            BodyPart::Face => &"FACE",
+            BodyPart::Head => &"HEAD",
+            BodyPart::LeftHand => &"LEFT_HAND",
+            BodyPart::RightHand => &"RIGHT_HAND",
+            BodyPart::UnknownVariant(UnknownBodyPart { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BodyPart {
+    fn from(name: &str) -> Self {
+        match name {
+            "FACE" => BodyPart::Face,
+            "HEAD" => BodyPart::Head,
+            "LEFT_HAND" => BodyPart::LeftHand,
+            "RIGHT_HAND" => BodyPart::RightHand,
+            _ => BodyPart::UnknownVariant(UnknownBodyPart {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BodyPart {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FACE" => BodyPart::Face,
+            "HEAD" => BodyPart::Head,
+            "LEFT_HAND" => BodyPart::LeftHand,
+            "RIGHT_HAND" => BodyPart::RightHand,
+            _ => BodyPart::UnknownVariant(UnknownBodyPart { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BodyPart {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BodyPart {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BodyPart {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Identifies the bounding box around the label, face, text or personal protective equipment. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
@@ -199,6 +411,113 @@ pub struct CelebrityRecognition {
     pub timestamp: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCelebrityRecognitionSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CelebrityRecognitionSortBy {
+    Id,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCelebrityRecognitionSortBy),
+}
+
+impl Default for CelebrityRecognitionSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CelebrityRecognitionSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CelebrityRecognitionSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CelebrityRecognitionSortBy {
+    fn into(self) -> String {
+        match self {
+            CelebrityRecognitionSortBy::Id => "ID".to_string(),
+            CelebrityRecognitionSortBy::Timestamp => "TIMESTAMP".to_string(),
+            CelebrityRecognitionSortBy::UnknownVariant(UnknownCelebrityRecognitionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CelebrityRecognitionSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            CelebrityRecognitionSortBy::Id => &"ID",
+            CelebrityRecognitionSortBy::Timestamp => &"TIMESTAMP",
+            CelebrityRecognitionSortBy::UnknownVariant(UnknownCelebrityRecognitionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CelebrityRecognitionSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ID" => CelebrityRecognitionSortBy::Id,
+            "TIMESTAMP" => CelebrityRecognitionSortBy::Timestamp,
+            _ => CelebrityRecognitionSortBy::UnknownVariant(UnknownCelebrityRecognitionSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CelebrityRecognitionSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ID" => CelebrityRecognitionSortBy::Id,
+            "TIMESTAMP" => CelebrityRecognitionSortBy::Timestamp,
+            _ => CelebrityRecognitionSortBy::UnknownVariant(UnknownCelebrityRecognitionSortBy {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CelebrityRecognitionSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CelebrityRecognitionSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CelebrityRecognitionSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides information about a face in a target image that matches the source image face analyzed by <code>CompareFaces</code>. The <code>Face</code> property contains the bounding box of the face in the target image. The <code>Similarity</code> property is the confidence that the source image face matches the face in the bounding box.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -219,7 +538,7 @@ pub struct CompareFacesRequest {
     /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't compared. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
     #[serde(rename = "QualityFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality_filter: Option<String>,
+    pub quality_filter: Option<QualityFilter>,
     /// <p>The minimum level of confidence in the face matches that a match must meet to be included in the <code>FaceMatches</code> array.</p>
     #[serde(rename = "SimilarityThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -246,11 +565,11 @@ pub struct CompareFacesResponse {
     /// <p>The value of <code>SourceImageOrientationCorrection</code> is always null.</p> <p>If the input image is in .jpeg format, it might contain exchangeable image file format (Exif) metadata that includes the image's orientation. Amazon Rekognition uses this orientation information to perform image correction. The bounding box coordinates are translated to represent object locations after the orientation information in the Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> <p>Amazon Rekognition doesn’t perform image correction for images in .png format and .jpeg images without orientation information in the image Exif metadata. The bounding box coordinates aren't translated and represent the object locations before the image is rotated. </p>
     #[serde(rename = "SourceImageOrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_image_orientation_correction: Option<String>,
+    pub source_image_orientation_correction: Option<OrientationCorrection>,
     /// <p>The value of <code>TargetImageOrientationCorrection</code> is always null.</p> <p>If the input image is in .jpeg format, it might contain exchangeable image file format (Exif) metadata that includes the image's orientation. Amazon Rekognition uses this orientation information to perform image correction. The bounding box coordinates are translated to represent object locations after the orientation information in the Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> <p>Amazon Rekognition doesn’t perform image correction for images in .png format and .jpeg images without orientation information in the image Exif metadata. The bounding box coordinates aren't translated and represent the object locations before the image is rotated. </p>
     #[serde(rename = "TargetImageOrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_image_orientation_correction: Option<String>,
+    pub target_image_orientation_correction: Option<OrientationCorrection>,
     /// <p>An array of faces in the target image that did not match the source image face.</p>
     #[serde(rename = "UnmatchedFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -297,6 +616,119 @@ pub struct ComparedSourceImageFace {
     pub confidence: Option<f32>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentClassifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentClassifier {
+    FreeOfAdultContent,
+    FreeOfPersonallyIdentifiableInformation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentClassifier),
+}
+
+impl Default for ContentClassifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentClassifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentClassifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentClassifier {
+    fn into(self) -> String {
+        match self {
+            ContentClassifier::FreeOfAdultContent => "FreeOfAdultContent".to_string(),
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                "FreeOfPersonallyIdentifiableInformation".to_string()
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentClassifier {
+    fn into(self) -> &'a str {
+        match self {
+            ContentClassifier::FreeOfAdultContent => &"FreeOfAdultContent",
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                &"FreeOfPersonallyIdentifiableInformation"
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContentClassifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentClassifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentClassifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentClassifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentClassifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about an unsafe content label detection in a stored video.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -309,6 +741,111 @@ pub struct ContentModerationDetection {
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentModerationSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentModerationSortBy {
+    Name,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentModerationSortBy),
+}
+
+impl Default for ContentModerationSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentModerationSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentModerationSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentModerationSortBy {
+    fn into(self) -> String {
+        match self {
+            ContentModerationSortBy::Name => "NAME".to_string(),
+            ContentModerationSortBy::Timestamp => "TIMESTAMP".to_string(),
+            ContentModerationSortBy::UnknownVariant(UnknownContentModerationSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentModerationSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ContentModerationSortBy::Name => &"NAME",
+            ContentModerationSortBy::Timestamp => &"TIMESTAMP",
+            ContentModerationSortBy::UnknownVariant(UnknownContentModerationSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentModerationSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "NAME" => ContentModerationSortBy::Name,
+            "TIMESTAMP" => ContentModerationSortBy::Timestamp,
+            _ => ContentModerationSortBy::UnknownVariant(UnknownContentModerationSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentModerationSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NAME" => ContentModerationSortBy::Name,
+            "TIMESTAMP" => ContentModerationSortBy::Timestamp,
+            _ => ContentModerationSortBy::UnknownVariant(UnknownContentModerationSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentModerationSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentModerationSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentModerationSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an item of Personal Protective Equipment covering a corresponding body part. For more information, see <a>DetectProtectiveEquipment</a>.</p>
@@ -494,7 +1031,7 @@ pub struct DeleteProjectResponse {
     /// <p>The current status of the delete project operation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -511,7 +1048,7 @@ pub struct DeleteProjectVersionResponse {
     /// <p>The status of the deletion operation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectVersionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -656,7 +1193,7 @@ pub struct DescribeStreamProcessorResponse {
     /// <p>Current status of the stream processor.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StreamProcessorStatus>,
     /// <p>Detailed status message about the stream processor.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -700,7 +1237,7 @@ pub struct DetectFacesRequest {
     /// <p>An array of facial attributes you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>["DEFAULT"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code>, and <code>Landmarks</code>. If you provide <code>["ALL"]</code>, all facial attributes are returned, but the operation takes longer to complete.</p> <p>If you provide both, <code>["ALL", "DEFAULT"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<Vec<String>>,
+    pub attributes: Option<Vec<Attribute>>,
     /// <p>The input image as base64-encoded bytes or an S3 object. If you use the AWS CLI to call Amazon Rekognition operations, passing base64-encoded image bytes is not supported. </p> <p>If you are using an AWS SDK to call Amazon Rekognition, you might not need to base64-encode image bytes passed using the <code>Bytes</code> field. For more information, see Images in the Amazon Rekognition developer guide.</p>
     #[serde(rename = "Image")]
     pub image: Image,
@@ -716,7 +1253,7 @@ pub struct DetectFacesResponse {
     /// <p>The value of <code>OrientationCorrection</code> is always null.</p> <p>If the input image is in .jpeg format, it might contain exchangeable image file format (Exif) metadata that includes the image's orientation. Amazon Rekognition uses this orientation information to perform image correction. The bounding box coordinates are translated to represent object locations after the orientation information in the Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> <p>Amazon Rekognition doesn’t perform image correction for images in .png format and .jpeg images without orientation information in the image Exif metadata. The bounding box coordinates aren't translated and represent the object locations before the image is rotated. </p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub orientation_correction: Option<String>,
+    pub orientation_correction: Option<OrientationCorrection>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -749,7 +1286,7 @@ pub struct DetectLabelsResponse {
     /// <p>The value of <code>OrientationCorrection</code> is always null.</p> <p>If the input image is in .jpeg format, it might contain exchangeable image file format (Exif) metadata that includes the image's orientation. Amazon Rekognition uses this orientation information to perform image correction. The bounding box coordinates are translated to represent object locations after the orientation information in the Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata.</p> <p>Amazon Rekognition doesn’t perform image correction for images in .png format and .jpeg images without orientation information in the image Exif metadata. The bounding box coordinates aren't translated and represent the object locations before the image is rotated. </p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub orientation_correction: Option<String>,
+    pub orientation_correction: Option<OrientationCorrection>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -881,7 +1418,143 @@ pub struct Emotion {
     /// <p>Type of emotion detected.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EmotionName>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEmotionName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EmotionName {
+    Angry,
+    Calm,
+    Confused,
+    Disgusted,
+    Fear,
+    Happy,
+    Sad,
+    Surprised,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEmotionName),
+}
+
+impl Default for EmotionName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EmotionName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EmotionName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EmotionName {
+    fn into(self) -> String {
+        match self {
+            EmotionName::Angry => "ANGRY".to_string(),
+            EmotionName::Calm => "CALM".to_string(),
+            EmotionName::Confused => "CONFUSED".to_string(),
+            EmotionName::Disgusted => "DISGUSTED".to_string(),
+            EmotionName::Fear => "FEAR".to_string(),
+            EmotionName::Happy => "HAPPY".to_string(),
+            EmotionName::Sad => "SAD".to_string(),
+            EmotionName::Surprised => "SURPRISED".to_string(),
+            EmotionName::Unknown => "UNKNOWN".to_string(),
+            EmotionName::UnknownVariant(UnknownEmotionName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EmotionName {
+    fn into(self) -> &'a str {
+        match self {
+            EmotionName::Angry => &"ANGRY",
+            EmotionName::Calm => &"CALM",
+            EmotionName::Confused => &"CONFUSED",
+            EmotionName::Disgusted => &"DISGUSTED",
+            EmotionName::Fear => &"FEAR",
+            EmotionName::Happy => &"HAPPY",
+            EmotionName::Sad => &"SAD",
+            EmotionName::Surprised => &"SURPRISED",
+            EmotionName::Unknown => &"UNKNOWN",
+            EmotionName::UnknownVariant(UnknownEmotionName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EmotionName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANGRY" => EmotionName::Angry,
+            "CALM" => EmotionName::Calm,
+            "CONFUSED" => EmotionName::Confused,
+            "DISGUSTED" => EmotionName::Disgusted,
+            "FEAR" => EmotionName::Fear,
+            "HAPPY" => EmotionName::Happy,
+            "SAD" => EmotionName::Sad,
+            "SURPRISED" => EmotionName::Surprised,
+            "UNKNOWN" => EmotionName::Unknown,
+            _ => EmotionName::UnknownVariant(UnknownEmotionName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EmotionName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANGRY" => EmotionName::Angry,
+            "CALM" => EmotionName::Calm,
+            "CONFUSED" => EmotionName::Confused,
+            "DISGUSTED" => EmotionName::Disgusted,
+            "FEAR" => EmotionName::Fear,
+            "HAPPY" => EmotionName::Happy,
+            "SAD" => EmotionName::Sad,
+            "SURPRISED" => EmotionName::Surprised,
+            "UNKNOWN" => EmotionName::Unknown,
+            _ => EmotionName::UnknownVariant(UnknownEmotionName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EmotionName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EmotionName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EmotionName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an item of Personal Protective Equipment (PPE) detected by <a>DetectProtectiveEquipment</a>. For more information, see <a>DetectProtectiveEquipment</a>.</p>
@@ -903,7 +1576,7 @@ pub struct EquipmentDetection {
     /// <p>The type of detected PPE.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ProtectiveEquipmentType>,
 }
 
 /// <p>The evaluation results for the training of a model.</p>
@@ -972,6 +1645,107 @@ pub struct Face {
     #[serde(rename = "ImageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFaceAttributes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FaceAttributes {
+    All,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFaceAttributes),
+}
+
+impl Default for FaceAttributes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FaceAttributes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FaceAttributes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FaceAttributes {
+    fn into(self) -> String {
+        match self {
+            FaceAttributes::All => "ALL".to_string(),
+            FaceAttributes::Default => "DEFAULT".to_string(),
+            FaceAttributes::UnknownVariant(UnknownFaceAttributes { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FaceAttributes {
+    fn into(self) -> &'a str {
+        match self {
+            FaceAttributes::All => &"ALL",
+            FaceAttributes::Default => &"DEFAULT",
+            FaceAttributes::UnknownVariant(UnknownFaceAttributes { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FaceAttributes {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => FaceAttributes::All,
+            "DEFAULT" => FaceAttributes::Default,
+            _ => FaceAttributes::UnknownVariant(UnknownFaceAttributes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FaceAttributes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => FaceAttributes::All,
+            "DEFAULT" => FaceAttributes::Default,
+            _ => FaceAttributes::UnknownVariant(UnknownFaceAttributes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FaceAttributes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FaceAttributes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FaceAttributes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Structure containing attributes of the face that the algorithm detected.</p> <p>A <code>FaceDetail</code> object contains either the default facial attributes or all facial attributes. The default attributes are <code>BoundingBox</code>, <code>Confidence</code>, <code>Landmarks</code>, <code>Pose</code>, and <code>Quality</code>.</p> <p> <a>GetFaceDetection</a> is the only Amazon Rekognition Video stored video operation that can return a <code>FaceDetail</code> object with all attributes. To specify which attributes to return, use the <code>FaceAttributes</code> input parameter for <a>StartFaceDetection</a>. The following Amazon Rekognition Video operations return only the default attributes. The corresponding Start operations don't have a <code>FaceAttributes</code> input parameter.</p> <ul> <li> <p>GetCelebrityRecognition</p> </li> <li> <p>GetPersonTracking</p> </li> <li> <p>GetFaceSearch</p> </li> </ul> <p>The Amazon Rekognition Image <a>DetectFaces</a> and <a>IndexFaces</a> operations can return all facial attributes. To specify which attributes to return, use the <code>Attributes</code> input parameter for <code>DetectFaces</code>. For <code>IndexFaces</code>, use the <code>DetectAttributes</code> input parameter.</p>
@@ -1095,6 +1869,111 @@ pub struct FaceSearchSettings {
     pub face_match_threshold: Option<f32>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFaceSearchSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FaceSearchSortBy {
+    Index,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFaceSearchSortBy),
+}
+
+impl Default for FaceSearchSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FaceSearchSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FaceSearchSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FaceSearchSortBy {
+    fn into(self) -> String {
+        match self {
+            FaceSearchSortBy::Index => "INDEX".to_string(),
+            FaceSearchSortBy::Timestamp => "TIMESTAMP".to_string(),
+            FaceSearchSortBy::UnknownVariant(UnknownFaceSearchSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FaceSearchSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            FaceSearchSortBy::Index => &"INDEX",
+            FaceSearchSortBy::Timestamp => &"TIMESTAMP",
+            FaceSearchSortBy::UnknownVariant(UnknownFaceSearchSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FaceSearchSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "INDEX" => FaceSearchSortBy::Index,
+            "TIMESTAMP" => FaceSearchSortBy::Timestamp,
+            _ => FaceSearchSortBy::UnknownVariant(UnknownFaceSearchSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FaceSearchSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INDEX" => FaceSearchSortBy::Index,
+            "TIMESTAMP" => FaceSearchSortBy::Timestamp,
+            _ => FaceSearchSortBy::UnknownVariant(UnknownFaceSearchSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FaceSearchSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FaceSearchSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FaceSearchSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The predicted gender of a detected face. </p> <p>Amazon Rekognition makes gender binary (male/female) predictions based on the physical appearance of a face in a particular image. This kind of prediction is not designed to categorize a person’s gender identity, and you shouldn't use Amazon Rekognition to make such a determination. For example, a male actor wearing a long-haired wig and earrings for a role might be predicted as female.</p> <p>Using Amazon Rekognition to make gender binary predictions is best suited for use cases where aggregate gender distribution statistics need to be analyzed without identifying specific users. For example, the percentage of female users compared to male users on a social media platform. </p> <p>We don't recommend using gender binary predictions to make decisions that impact&#x2028; an individual's rights, privacy, or access to services.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1106,7 +1985,108 @@ pub struct Gender {
     /// <p>The predicted gender of the face.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: Option<GenderType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGenderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GenderType {
+    Female,
+    Male,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGenderType),
+}
+
+impl Default for GenderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GenderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GenderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GenderType {
+    fn into(self) -> String {
+        match self {
+            GenderType::Female => "Female".to_string(),
+            GenderType::Male => "Male".to_string(),
+            GenderType::UnknownVariant(UnknownGenderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GenderType {
+    fn into(self) -> &'a str {
+        match self {
+            GenderType::Female => &"Female",
+            GenderType::Male => &"Male",
+            GenderType::UnknownVariant(UnknownGenderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GenderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Female" => GenderType::Female,
+            "Male" => GenderType::Male,
+            _ => GenderType::UnknownVariant(UnknownGenderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GenderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Female" => GenderType::Female,
+            "Male" => GenderType::Male,
+            _ => GenderType::UnknownVariant(UnknownGenderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GenderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GenderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GenderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about where an object (<a>DetectCustomLabels</a>) or text (<a>DetectText</a>) is located on an image.</p>
@@ -1161,7 +2141,7 @@ pub struct GetCelebrityRecognitionRequest {
     /// <p>Sort to use for celebrities returned in <code>Celebrities</code> field. Specify <code>ID</code> to sort by the celebrity identifier, specify <code>TIMESTAMP</code> to sort by the time the celebrity was recognized.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<CelebrityRecognitionSortBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1174,7 +2154,7 @@ pub struct GetCelebrityRecognitionResponse {
     /// <p>The current status of the celebrity recognition job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of celebrities.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1206,7 +2186,7 @@ pub struct GetContentModerationRequest {
     /// <p>Sort to use for elements in the <code>ModerationLabelDetections</code> array. Use <code>TIMESTAMP</code> to sort array elements by the time labels are detected. Use <code>NAME</code> to alphabetically group elements for a label together. Within each label group, the array element are sorted by detection confidence. The default sort is by <code>TIMESTAMP</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ContentModerationSortBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1215,7 +2195,7 @@ pub struct GetContentModerationResponse {
     /// <p>The current status of the unsafe content analysis job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>The detected unsafe content labels and the time(s) they were detected.</p>
     #[serde(rename = "ModerationLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1264,7 +2244,7 @@ pub struct GetFaceDetectionResponse {
     /// <p>The current status of the face detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the response is truncated, Amazon Rekognition returns this token that you can use in the subsequent request to retrieve the next set of faces. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1296,7 +2276,7 @@ pub struct GetFaceSearchRequest {
     /// <p>Sort to use for grouping faces in the response. Use <code>TIMESTAMP</code> to group faces by the time that they are recognized. Use <code>INDEX</code> to sort by recognized faces. </p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<FaceSearchSortBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1305,7 +2285,7 @@ pub struct GetFaceSearchResponse {
     /// <p>The current status of the face search job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of search results. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1341,7 +2321,7 @@ pub struct GetLabelDetectionRequest {
     /// <p>Sort to use for elements in the <code>Labels</code> array. Use <code>TIMESTAMP</code> to sort array elements by the time labels are detected. Use <code>NAME</code> to alphabetically group elements for a label together. Within each label group, the array element are sorted by detection confidence. The default sort is by <code>TIMESTAMP</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<LabelDetectionSortBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1350,7 +2330,7 @@ pub struct GetLabelDetectionResponse {
     /// <p>The current status of the label detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>Version number of the label detection model that was used to detect labels.</p>
     #[serde(rename = "LabelModelVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1390,7 +2370,7 @@ pub struct GetPersonTrackingRequest {
     /// <p>Sort to use for elements in the <code>Persons</code> array. Use <code>TIMESTAMP</code> to sort array elements by the time persons are detected. Use <code>INDEX</code> to sort by the tracked persons. If you sort by <code>INDEX</code>, the array elements for each person are sorted by detection confidence. The default sort is by <code>TIMESTAMP</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<PersonTrackingSortBy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1399,7 +2379,7 @@ pub struct GetPersonTrackingResponse {
     /// <p>The current status of the person tracking job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of persons. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1444,7 +2424,7 @@ pub struct GetSegmentDetectionResponse {
     /// <p>Current status of the segment detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the previous response was incomplete (because there are more labels to retrieve), Amazon Rekognition Video returns a pagination token in the response. You can use this pagination token to retrieve the next set of text.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1489,7 +2469,7 @@ pub struct GetTextDetectionResponse {
     /// <p>Current status of the text detection job.</p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_status: Option<String>,
+    pub job_status: Option<VideoJobStatus>,
     /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of text.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1560,7 +2540,7 @@ pub struct HumanLoopDataAttributes {
     /// <p>Sets whether the input image is free of personally identifiable information.</p>
     #[serde(rename = "ContentClassifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_classifiers: Option<Vec<String>>,
+    pub content_classifiers: Option<Vec<ContentClassifier>>,
 }
 
 /// <p>Provides the input image either as bytes or an S3 object.</p> <p>You pass image bytes to an Amazon Rekognition API operation by using the <code>Bytes</code> property. For example, you would use the <code>Bytes</code> property to pass an image loaded from a local file system. Image bytes passed by using the <code>Bytes</code> property must be base64-encoded. Your code may not need to encode image bytes if you are using an AWS SDK to call Amazon Rekognition API operations. </p> <p>For more information, see Analyzing an Image Loaded from a Local File System in the Amazon Rekognition Developer Guide.</p> <p> You pass images stored in an S3 bucket to an Amazon Rekognition API operation by using the <code>S3Object</code> property. Images stored in an S3 bucket do not need to be base64-encoded.</p> <p>The region for the S3 bucket containing the S3 object must match the region you use for Amazon Rekognition operations.</p> <p>If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes using the Bytes property is not supported. You must first upload the image to an Amazon S3 bucket and then call the operation using the S3Object property.</p> <p>For Amazon Rekognition to process an S3 object, the user must have permission to access the S3 object. For more information, see Resource Based Policies in the Amazon Rekognition Developer Guide. </p>
@@ -1605,7 +2585,7 @@ pub struct IndexFacesRequest {
     /// <p>An array of facial attributes that you want to be returned. This can be the default list of attributes or all attributes. If you don't specify a value for <code>Attributes</code> or if you specify <code>["DEFAULT"]</code>, the API returns the following subset of facial attributes: <code>BoundingBox</code>, <code>Confidence</code>, <code>Pose</code>, <code>Quality</code>, and <code>Landmarks</code>. If you provide <code>["ALL"]</code>, all facial attributes are returned, but the operation takes longer to complete.</p> <p>If you provide both, <code>["ALL", "DEFAULT"]</code>, the service uses a logical AND operator to determine which attributes to return (in this case, all attributes). </p>
     #[serde(rename = "DetectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub detection_attributes: Option<Vec<String>>,
+    pub detection_attributes: Option<Vec<Attribute>>,
     /// <p>The ID you want to assign to all the faces detected in the image.</p>
     #[serde(rename = "ExternalImageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1620,7 +2600,7 @@ pub struct IndexFacesRequest {
     /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't indexed. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The default value is <code>AUTO</code>. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
     #[serde(rename = "QualityFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality_filter: Option<String>,
+    pub quality_filter: Option<QualityFilter>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1637,7 +2617,7 @@ pub struct IndexFacesResponse {
     /// <p>If your collection is associated with a face detection model that's later than version 3.0, the value of <code>OrientationCorrection</code> is always null and no orientation information is returned.</p> <p>If your collection is associated with a face detection model that's version 3.0 or earlier, the following applies:</p> <ul> <li> <p>If the input image is in .jpeg format, it might contain exchangeable image file format (Exif) metadata that includes the image's orientation. Amazon Rekognition uses this orientation information to perform image correction - the bounding box coordinates are translated to represent object locations after the orientation information in the Exif metadata is used to correct the image orientation. Images in .png format don't contain Exif metadata. The value of <code>OrientationCorrection</code> is null.</p> </li> <li> <p>If the image doesn't contain orientation information in its Exif metadata, Amazon Rekognition returns an estimated orientation (ROTATE_0, ROTATE_90, ROTATE_180, ROTATE_270). Amazon Rekognition doesn’t perform image correction for images. The bounding box coordinates aren't translated and represent the object locations before the image is rotated.</p> </li> </ul> <p>Bounding box information is returned in the <code>FaceRecords</code> array. You can get the version of the face detection model by calling <a>DescribeCollection</a>. </p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub orientation_correction: Option<String>,
+    pub orientation_correction: Option<OrientationCorrection>,
     /// <p>An array of faces that were detected in the image but weren't indexed. They weren't indexed because the quality filter identified them as low quality, or the <code>MaxFaces</code> request parameter filtered them out. To use the quality filter, you specify the <code>QualityFilter</code> request parameter.</p>
     #[serde(rename = "UnindexedFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1712,6 +2692,111 @@ pub struct LabelDetection {
     pub timestamp: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLabelDetectionSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LabelDetectionSortBy {
+    Name,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLabelDetectionSortBy),
+}
+
+impl Default for LabelDetectionSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LabelDetectionSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LabelDetectionSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LabelDetectionSortBy {
+    fn into(self) -> String {
+        match self {
+            LabelDetectionSortBy::Name => "NAME".to_string(),
+            LabelDetectionSortBy::Timestamp => "TIMESTAMP".to_string(),
+            LabelDetectionSortBy::UnknownVariant(UnknownLabelDetectionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LabelDetectionSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            LabelDetectionSortBy::Name => &"NAME",
+            LabelDetectionSortBy::Timestamp => &"TIMESTAMP",
+            LabelDetectionSortBy::UnknownVariant(UnknownLabelDetectionSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LabelDetectionSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "NAME" => LabelDetectionSortBy::Name,
+            "TIMESTAMP" => LabelDetectionSortBy::Timestamp,
+            _ => LabelDetectionSortBy::UnknownVariant(UnknownLabelDetectionSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LabelDetectionSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NAME" => LabelDetectionSortBy::Name,
+            "TIMESTAMP" => LabelDetectionSortBy::Timestamp,
+            _ => LabelDetectionSortBy::UnknownVariant(UnknownLabelDetectionSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LabelDetectionSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LabelDetectionSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LabelDetectionSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Indicates the location of the landmark on the face.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1719,7 +2804,7 @@ pub struct Landmark {
     /// <p>Type of landmark.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<LandmarkType>,
     /// <p>The x-coordinate of the landmark expressed as a ratio of the width of the image. The x-coordinate is measured from the left-side of the image. For example, if the image is 700 pixels wide and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>
     #[serde(rename = "X")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1728,6 +2813,247 @@ pub struct Landmark {
     #[serde(rename = "Y")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub y: Option<f32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLandmarkType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LandmarkType {
+    ChinBottom,
+    EyeLeft,
+    EyeRight,
+    LeftEyeBrowLeft,
+    LeftEyeBrowRight,
+    LeftEyeBrowUp,
+    LeftEyeDown,
+    LeftEyeLeft,
+    LeftEyeRight,
+    LeftEyeUp,
+    LeftPupil,
+    MidJawlineLeft,
+    MidJawlineRight,
+    MouthDown,
+    MouthLeft,
+    MouthRight,
+    MouthUp,
+    Nose,
+    NoseLeft,
+    NoseRight,
+    RightEyeBrowLeft,
+    RightEyeBrowRight,
+    RightEyeBrowUp,
+    RightEyeDown,
+    RightEyeLeft,
+    RightEyeRight,
+    RightEyeUp,
+    RightPupil,
+    UpperJawlineLeft,
+    UpperJawlineRight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLandmarkType),
+}
+
+impl Default for LandmarkType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LandmarkType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LandmarkType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LandmarkType {
+    fn into(self) -> String {
+        match self {
+            LandmarkType::ChinBottom => "chinBottom".to_string(),
+            LandmarkType::EyeLeft => "eyeLeft".to_string(),
+            LandmarkType::EyeRight => "eyeRight".to_string(),
+            LandmarkType::LeftEyeBrowLeft => "leftEyeBrowLeft".to_string(),
+            LandmarkType::LeftEyeBrowRight => "leftEyeBrowRight".to_string(),
+            LandmarkType::LeftEyeBrowUp => "leftEyeBrowUp".to_string(),
+            LandmarkType::LeftEyeDown => "leftEyeDown".to_string(),
+            LandmarkType::LeftEyeLeft => "leftEyeLeft".to_string(),
+            LandmarkType::LeftEyeRight => "leftEyeRight".to_string(),
+            LandmarkType::LeftEyeUp => "leftEyeUp".to_string(),
+            LandmarkType::LeftPupil => "leftPupil".to_string(),
+            LandmarkType::MidJawlineLeft => "midJawlineLeft".to_string(),
+            LandmarkType::MidJawlineRight => "midJawlineRight".to_string(),
+            LandmarkType::MouthDown => "mouthDown".to_string(),
+            LandmarkType::MouthLeft => "mouthLeft".to_string(),
+            LandmarkType::MouthRight => "mouthRight".to_string(),
+            LandmarkType::MouthUp => "mouthUp".to_string(),
+            LandmarkType::Nose => "nose".to_string(),
+            LandmarkType::NoseLeft => "noseLeft".to_string(),
+            LandmarkType::NoseRight => "noseRight".to_string(),
+            LandmarkType::RightEyeBrowLeft => "rightEyeBrowLeft".to_string(),
+            LandmarkType::RightEyeBrowRight => "rightEyeBrowRight".to_string(),
+            LandmarkType::RightEyeBrowUp => "rightEyeBrowUp".to_string(),
+            LandmarkType::RightEyeDown => "rightEyeDown".to_string(),
+            LandmarkType::RightEyeLeft => "rightEyeLeft".to_string(),
+            LandmarkType::RightEyeRight => "rightEyeRight".to_string(),
+            LandmarkType::RightEyeUp => "rightEyeUp".to_string(),
+            LandmarkType::RightPupil => "rightPupil".to_string(),
+            LandmarkType::UpperJawlineLeft => "upperJawlineLeft".to_string(),
+            LandmarkType::UpperJawlineRight => "upperJawlineRight".to_string(),
+            LandmarkType::UnknownVariant(UnknownLandmarkType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LandmarkType {
+    fn into(self) -> &'a str {
+        match self {
+            LandmarkType::ChinBottom => &"chinBottom",
+            LandmarkType::EyeLeft => &"eyeLeft",
+            LandmarkType::EyeRight => &"eyeRight",
+            LandmarkType::LeftEyeBrowLeft => &"leftEyeBrowLeft",
+            LandmarkType::LeftEyeBrowRight => &"leftEyeBrowRight",
+            LandmarkType::LeftEyeBrowUp => &"leftEyeBrowUp",
+            LandmarkType::LeftEyeDown => &"leftEyeDown",
+            LandmarkType::LeftEyeLeft => &"leftEyeLeft",
+            LandmarkType::LeftEyeRight => &"leftEyeRight",
+            LandmarkType::LeftEyeUp => &"leftEyeUp",
+            LandmarkType::LeftPupil => &"leftPupil",
+            LandmarkType::MidJawlineLeft => &"midJawlineLeft",
+            LandmarkType::MidJawlineRight => &"midJawlineRight",
+            LandmarkType::MouthDown => &"mouthDown",
+            LandmarkType::MouthLeft => &"mouthLeft",
+            LandmarkType::MouthRight => &"mouthRight",
+            LandmarkType::MouthUp => &"mouthUp",
+            LandmarkType::Nose => &"nose",
+            LandmarkType::NoseLeft => &"noseLeft",
+            LandmarkType::NoseRight => &"noseRight",
+            LandmarkType::RightEyeBrowLeft => &"rightEyeBrowLeft",
+            LandmarkType::RightEyeBrowRight => &"rightEyeBrowRight",
+            LandmarkType::RightEyeBrowUp => &"rightEyeBrowUp",
+            LandmarkType::RightEyeDown => &"rightEyeDown",
+            LandmarkType::RightEyeLeft => &"rightEyeLeft",
+            LandmarkType::RightEyeRight => &"rightEyeRight",
+            LandmarkType::RightEyeUp => &"rightEyeUp",
+            LandmarkType::RightPupil => &"rightPupil",
+            LandmarkType::UpperJawlineLeft => &"upperJawlineLeft",
+            LandmarkType::UpperJawlineRight => &"upperJawlineRight",
+            LandmarkType::UnknownVariant(UnknownLandmarkType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LandmarkType {
+    fn from(name: &str) -> Self {
+        match name {
+            "chinBottom" => LandmarkType::ChinBottom,
+            "eyeLeft" => LandmarkType::EyeLeft,
+            "eyeRight" => LandmarkType::EyeRight,
+            "leftEyeBrowLeft" => LandmarkType::LeftEyeBrowLeft,
+            "leftEyeBrowRight" => LandmarkType::LeftEyeBrowRight,
+            "leftEyeBrowUp" => LandmarkType::LeftEyeBrowUp,
+            "leftEyeDown" => LandmarkType::LeftEyeDown,
+            "leftEyeLeft" => LandmarkType::LeftEyeLeft,
+            "leftEyeRight" => LandmarkType::LeftEyeRight,
+            "leftEyeUp" => LandmarkType::LeftEyeUp,
+            "leftPupil" => LandmarkType::LeftPupil,
+            "midJawlineLeft" => LandmarkType::MidJawlineLeft,
+            "midJawlineRight" => LandmarkType::MidJawlineRight,
+            "mouthDown" => LandmarkType::MouthDown,
+            "mouthLeft" => LandmarkType::MouthLeft,
+            "mouthRight" => LandmarkType::MouthRight,
+            "mouthUp" => LandmarkType::MouthUp,
+            "nose" => LandmarkType::Nose,
+            "noseLeft" => LandmarkType::NoseLeft,
+            "noseRight" => LandmarkType::NoseRight,
+            "rightEyeBrowLeft" => LandmarkType::RightEyeBrowLeft,
+            "rightEyeBrowRight" => LandmarkType::RightEyeBrowRight,
+            "rightEyeBrowUp" => LandmarkType::RightEyeBrowUp,
+            "rightEyeDown" => LandmarkType::RightEyeDown,
+            "rightEyeLeft" => LandmarkType::RightEyeLeft,
+            "rightEyeRight" => LandmarkType::RightEyeRight,
+            "rightEyeUp" => LandmarkType::RightEyeUp,
+            "rightPupil" => LandmarkType::RightPupil,
+            "upperJawlineLeft" => LandmarkType::UpperJawlineLeft,
+            "upperJawlineRight" => LandmarkType::UpperJawlineRight,
+            _ => LandmarkType::UnknownVariant(UnknownLandmarkType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LandmarkType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "chinBottom" => LandmarkType::ChinBottom,
+            "eyeLeft" => LandmarkType::EyeLeft,
+            "eyeRight" => LandmarkType::EyeRight,
+            "leftEyeBrowLeft" => LandmarkType::LeftEyeBrowLeft,
+            "leftEyeBrowRight" => LandmarkType::LeftEyeBrowRight,
+            "leftEyeBrowUp" => LandmarkType::LeftEyeBrowUp,
+            "leftEyeDown" => LandmarkType::LeftEyeDown,
+            "leftEyeLeft" => LandmarkType::LeftEyeLeft,
+            "leftEyeRight" => LandmarkType::LeftEyeRight,
+            "leftEyeUp" => LandmarkType::LeftEyeUp,
+            "leftPupil" => LandmarkType::LeftPupil,
+            "midJawlineLeft" => LandmarkType::MidJawlineLeft,
+            "midJawlineRight" => LandmarkType::MidJawlineRight,
+            "mouthDown" => LandmarkType::MouthDown,
+            "mouthLeft" => LandmarkType::MouthLeft,
+            "mouthRight" => LandmarkType::MouthRight,
+            "mouthUp" => LandmarkType::MouthUp,
+            "nose" => LandmarkType::Nose,
+            "noseLeft" => LandmarkType::NoseLeft,
+            "noseRight" => LandmarkType::NoseRight,
+            "rightEyeBrowLeft" => LandmarkType::RightEyeBrowLeft,
+            "rightEyeBrowRight" => LandmarkType::RightEyeBrowRight,
+            "rightEyeBrowUp" => LandmarkType::RightEyeBrowUp,
+            "rightEyeDown" => LandmarkType::RightEyeDown,
+            "rightEyeLeft" => LandmarkType::RightEyeLeft,
+            "rightEyeRight" => LandmarkType::RightEyeRight,
+            "rightEyeUp" => LandmarkType::RightEyeUp,
+            "rightPupil" => LandmarkType::RightPupil,
+            "upperJawlineLeft" => LandmarkType::UpperJawlineLeft,
+            "upperJawlineRight" => LandmarkType::UpperJawlineRight,
+            _ => LandmarkType::UnknownVariant(UnknownLandmarkType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LandmarkType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LandmarkType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LandmarkType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1877,6 +3203,121 @@ pub struct NotificationChannel {
     pub sns_topic_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrientationCorrection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrientationCorrection {
+    Rotate0,
+    Rotate180,
+    Rotate270,
+    Rotate90,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrientationCorrection),
+}
+
+impl Default for OrientationCorrection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrientationCorrection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrientationCorrection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrientationCorrection {
+    fn into(self) -> String {
+        match self {
+            OrientationCorrection::Rotate0 => "ROTATE_0".to_string(),
+            OrientationCorrection::Rotate180 => "ROTATE_180".to_string(),
+            OrientationCorrection::Rotate270 => "ROTATE_270".to_string(),
+            OrientationCorrection::Rotate90 => "ROTATE_90".to_string(),
+            OrientationCorrection::UnknownVariant(UnknownOrientationCorrection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrientationCorrection {
+    fn into(self) -> &'a str {
+        match self {
+            OrientationCorrection::Rotate0 => &"ROTATE_0",
+            OrientationCorrection::Rotate180 => &"ROTATE_180",
+            OrientationCorrection::Rotate270 => &"ROTATE_270",
+            OrientationCorrection::Rotate90 => &"ROTATE_90",
+            OrientationCorrection::UnknownVariant(UnknownOrientationCorrection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrientationCorrection {
+    fn from(name: &str) -> Self {
+        match name {
+            "ROTATE_0" => OrientationCorrection::Rotate0,
+            "ROTATE_180" => OrientationCorrection::Rotate180,
+            "ROTATE_270" => OrientationCorrection::Rotate270,
+            "ROTATE_90" => OrientationCorrection::Rotate90,
+            _ => OrientationCorrection::UnknownVariant(UnknownOrientationCorrection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrientationCorrection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ROTATE_0" => OrientationCorrection::Rotate0,
+            "ROTATE_180" => OrientationCorrection::Rotate180,
+            "ROTATE_270" => OrientationCorrection::Rotate270,
+            "ROTATE_90" => OrientationCorrection::Rotate90,
+            _ => OrientationCorrection::UnknownVariant(UnknownOrientationCorrection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrientationCorrection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OrientationCorrection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrientationCorrection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The S3 bucket and folder location where training output is placed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputConfig {
@@ -1950,6 +3391,111 @@ pub struct PersonMatch {
     pub timestamp: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPersonTrackingSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PersonTrackingSortBy {
+    Index,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPersonTrackingSortBy),
+}
+
+impl Default for PersonTrackingSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PersonTrackingSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PersonTrackingSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PersonTrackingSortBy {
+    fn into(self) -> String {
+        match self {
+            PersonTrackingSortBy::Index => "INDEX".to_string(),
+            PersonTrackingSortBy::Timestamp => "TIMESTAMP".to_string(),
+            PersonTrackingSortBy::UnknownVariant(UnknownPersonTrackingSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PersonTrackingSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            PersonTrackingSortBy::Index => &"INDEX",
+            PersonTrackingSortBy::Timestamp => &"TIMESTAMP",
+            PersonTrackingSortBy::UnknownVariant(UnknownPersonTrackingSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PersonTrackingSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "INDEX" => PersonTrackingSortBy::Index,
+            "TIMESTAMP" => PersonTrackingSortBy::Timestamp,
+            _ => PersonTrackingSortBy::UnknownVariant(UnknownPersonTrackingSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PersonTrackingSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INDEX" => PersonTrackingSortBy::Index,
+            "TIMESTAMP" => PersonTrackingSortBy::Timestamp,
+            _ => PersonTrackingSortBy::UnknownVariant(UnknownPersonTrackingSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PersonTrackingSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PersonTrackingSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PersonTrackingSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The X and Y coordinates of a point on an image. The X and Y values returned are ratios of the overall image size. For example, if the input image is 700x200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the image.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectText</a> and by <a>DetectCustomLabels</a>. <code>Polygon</code> represents a fine-grained polygon around a detected item. For more information, see Geometry in the Amazon Rekognition Developer Guide. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1997,7 +3543,113 @@ pub struct ProjectDescription {
     /// <p>The current status of the project.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectStatus {
+    Created,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectStatus),
+}
+
+impl Default for ProjectStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectStatus {
+    fn into(self) -> String {
+        match self {
+            ProjectStatus::Created => "CREATED".to_string(),
+            ProjectStatus::Creating => "CREATING".to_string(),
+            ProjectStatus::Deleting => "DELETING".to_string(),
+            ProjectStatus::UnknownVariant(UnknownProjectStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectStatus::Created => &"CREATED",
+            ProjectStatus::Creating => &"CREATING",
+            ProjectStatus::Deleting => &"DELETING",
+            ProjectStatus::UnknownVariant(UnknownProjectStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ProjectStatus::Created,
+            "CREATING" => ProjectStatus::Creating,
+            "DELETING" => ProjectStatus::Deleting,
+            _ => ProjectStatus::UnknownVariant(UnknownProjectStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ProjectStatus::Created,
+            "CREATING" => ProjectStatus::Creating,
+            "DELETING" => ProjectStatus::Deleting,
+            _ => ProjectStatus::UnknownVariant(UnknownProjectStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProjectStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProjectStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The description of a version of a model.</p>
@@ -2035,7 +3687,7 @@ pub struct ProjectVersionDescription {
     /// <p>The current status of the model version.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectVersionStatus>,
     /// <p>A descriptive message for an error or warning that occurred.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2054,6 +3706,146 @@ pub struct ProjectVersionDescription {
     pub training_end_timestamp: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectVersionStatus {
+    Deleting,
+    Failed,
+    Running,
+    Starting,
+    Stopped,
+    Stopping,
+    TrainingCompleted,
+    TrainingFailed,
+    TrainingInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectVersionStatus),
+}
+
+impl Default for ProjectVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectVersionStatus {
+    fn into(self) -> String {
+        match self {
+            ProjectVersionStatus::Deleting => "DELETING".to_string(),
+            ProjectVersionStatus::Failed => "FAILED".to_string(),
+            ProjectVersionStatus::Running => "RUNNING".to_string(),
+            ProjectVersionStatus::Starting => "STARTING".to_string(),
+            ProjectVersionStatus::Stopped => "STOPPED".to_string(),
+            ProjectVersionStatus::Stopping => "STOPPING".to_string(),
+            ProjectVersionStatus::TrainingCompleted => "TRAINING_COMPLETED".to_string(),
+            ProjectVersionStatus::TrainingFailed => "TRAINING_FAILED".to_string(),
+            ProjectVersionStatus::TrainingInProgress => "TRAINING_IN_PROGRESS".to_string(),
+            ProjectVersionStatus::UnknownVariant(UnknownProjectVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectVersionStatus::Deleting => &"DELETING",
+            ProjectVersionStatus::Failed => &"FAILED",
+            ProjectVersionStatus::Running => &"RUNNING",
+            ProjectVersionStatus::Starting => &"STARTING",
+            ProjectVersionStatus::Stopped => &"STOPPED",
+            ProjectVersionStatus::Stopping => &"STOPPING",
+            ProjectVersionStatus::TrainingCompleted => &"TRAINING_COMPLETED",
+            ProjectVersionStatus::TrainingFailed => &"TRAINING_FAILED",
+            ProjectVersionStatus::TrainingInProgress => &"TRAINING_IN_PROGRESS",
+            ProjectVersionStatus::UnknownVariant(UnknownProjectVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => ProjectVersionStatus::Deleting,
+            "FAILED" => ProjectVersionStatus::Failed,
+            "RUNNING" => ProjectVersionStatus::Running,
+            "STARTING" => ProjectVersionStatus::Starting,
+            "STOPPED" => ProjectVersionStatus::Stopped,
+            "STOPPING" => ProjectVersionStatus::Stopping,
+            "TRAINING_COMPLETED" => ProjectVersionStatus::TrainingCompleted,
+            "TRAINING_FAILED" => ProjectVersionStatus::TrainingFailed,
+            "TRAINING_IN_PROGRESS" => ProjectVersionStatus::TrainingInProgress,
+            _ => ProjectVersionStatus::UnknownVariant(UnknownProjectVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => ProjectVersionStatus::Deleting,
+            "FAILED" => ProjectVersionStatus::Failed,
+            "RUNNING" => ProjectVersionStatus::Running,
+            "STARTING" => ProjectVersionStatus::Starting,
+            "STOPPED" => ProjectVersionStatus::Stopped,
+            "STOPPING" => ProjectVersionStatus::Stopping,
+            "TRAINING_COMPLETED" => ProjectVersionStatus::TrainingCompleted,
+            "TRAINING_FAILED" => ProjectVersionStatus::TrainingFailed,
+            "TRAINING_IN_PROGRESS" => ProjectVersionStatus::TrainingInProgress,
+            _ => ProjectVersionStatus::UnknownVariant(UnknownProjectVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProjectVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProjectVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a body part detected by <a>DetectProtectiveEquipment</a> that contains PPE. An array of <code>ProtectiveEquipmentBodyPart</code> objects is returned for each person detected by <code>DetectProtectiveEquipment</code>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2069,7 +3861,7 @@ pub struct ProtectiveEquipmentBodyPart {
     /// <p>The detected body part.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<BodyPart>,
 }
 
 /// <p>A person detected by a call to <a>DetectProtectiveEquipment</a>. The API returns all persons detected in the input image in an array of <code>ProtectiveEquipmentPerson</code> objects.</p>
@@ -2103,7 +3895,7 @@ pub struct ProtectiveEquipmentSummarizationAttributes {
     pub min_confidence: f32,
     /// <p>An array of personal protective equipment types for which you want summary information. If a person is detected wearing a required requipment type, the person's ID is added to the <code>PersonsWithRequiredEquipment</code> array field returned in <a>ProtectiveEquipmentSummary</a> by <code>DetectProtectiveEquipment</code>. </p>
     #[serde(rename = "RequiredEquipmentTypes")]
-    pub required_equipment_types: Vec<String>,
+    pub required_equipment_types: Vec<ProtectiveEquipmentType>,
 }
 
 /// <p>Summary information for required items of personal protective equipment (PPE) detected on persons by a call to <a>DetectProtectiveEquipment</a>. You specify the required type of PPE in the <code>SummarizationAttributes</code> (<a>ProtectiveEquipmentSummarizationAttributes</a>) input parameter. The summary includes which persons were detected wearing the required personal protective equipment (<code>PersonsWithRequiredEquipment</code>), which persons were detected as not wearing the required PPE (<code>PersonsWithoutRequiredEquipment</code>), and the persons in which a determination could not be made (<code>PersonsIndeterminate</code>).</p> <p>To get a total for each category, use the size of the field array. For example, to find out how many people were detected as wearing the specified PPE, use the size of the <code>PersonsWithRequiredEquipment</code> array. If you want to find out more about a person, such as the location (<a>BoundingBox</a>) of the person on the image, use the person ID in each array element. Each person ID matches the ID field of a <a>ProtectiveEquipmentPerson</a> object returned in the <code>Persons</code> array by <code>DetectProtectiveEquipment</code>.</p>
@@ -2124,6 +3916,357 @@ pub struct ProtectiveEquipmentSummary {
     pub persons_without_required_equipment: Option<Vec<i64>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtectiveEquipmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtectiveEquipmentType {
+    FaceCover,
+    HandCover,
+    HeadCover,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtectiveEquipmentType),
+}
+
+impl Default for ProtectiveEquipmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtectiveEquipmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtectiveEquipmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtectiveEquipmentType {
+    fn into(self) -> String {
+        match self {
+            ProtectiveEquipmentType::FaceCover => "FACE_COVER".to_string(),
+            ProtectiveEquipmentType::HandCover => "HAND_COVER".to_string(),
+            ProtectiveEquipmentType::HeadCover => "HEAD_COVER".to_string(),
+            ProtectiveEquipmentType::UnknownVariant(UnknownProtectiveEquipmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtectiveEquipmentType {
+    fn into(self) -> &'a str {
+        match self {
+            ProtectiveEquipmentType::FaceCover => &"FACE_COVER",
+            ProtectiveEquipmentType::HandCover => &"HAND_COVER",
+            ProtectiveEquipmentType::HeadCover => &"HEAD_COVER",
+            ProtectiveEquipmentType::UnknownVariant(UnknownProtectiveEquipmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtectiveEquipmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FACE_COVER" => ProtectiveEquipmentType::FaceCover,
+            "HAND_COVER" => ProtectiveEquipmentType::HandCover,
+            "HEAD_COVER" => ProtectiveEquipmentType::HeadCover,
+            _ => ProtectiveEquipmentType::UnknownVariant(UnknownProtectiveEquipmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtectiveEquipmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FACE_COVER" => ProtectiveEquipmentType::FaceCover,
+            "HAND_COVER" => ProtectiveEquipmentType::HandCover,
+            "HEAD_COVER" => ProtectiveEquipmentType::HeadCover,
+            _ => ProtectiveEquipmentType::UnknownVariant(UnknownProtectiveEquipmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectiveEquipmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtectiveEquipmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtectiveEquipmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQualityFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QualityFilter {
+    Auto,
+    High,
+    Low,
+    Medium,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQualityFilter),
+}
+
+impl Default for QualityFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QualityFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QualityFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QualityFilter {
+    fn into(self) -> String {
+        match self {
+            QualityFilter::Auto => "AUTO".to_string(),
+            QualityFilter::High => "HIGH".to_string(),
+            QualityFilter::Low => "LOW".to_string(),
+            QualityFilter::Medium => "MEDIUM".to_string(),
+            QualityFilter::None => "NONE".to_string(),
+            QualityFilter::UnknownVariant(UnknownQualityFilter { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QualityFilter {
+    fn into(self) -> &'a str {
+        match self {
+            QualityFilter::Auto => &"AUTO",
+            QualityFilter::High => &"HIGH",
+            QualityFilter::Low => &"LOW",
+            QualityFilter::Medium => &"MEDIUM",
+            QualityFilter::None => &"NONE",
+            QualityFilter::UnknownVariant(UnknownQualityFilter { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QualityFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO" => QualityFilter::Auto,
+            "HIGH" => QualityFilter::High,
+            "LOW" => QualityFilter::Low,
+            "MEDIUM" => QualityFilter::Medium,
+            "NONE" => QualityFilter::None,
+            _ => QualityFilter::UnknownVariant(UnknownQualityFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QualityFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO" => QualityFilter::Auto,
+            "HIGH" => QualityFilter::High,
+            "LOW" => QualityFilter::Low,
+            "MEDIUM" => QualityFilter::Medium,
+            "NONE" => QualityFilter::None,
+            _ => QualityFilter::UnknownVariant(UnknownQualityFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QualityFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QualityFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for QualityFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Reason {
+    ExceedsMaxFaces,
+    ExtremePose,
+    LowBrightness,
+    LowConfidence,
+    LowFaceQuality,
+    LowSharpness,
+    SmallBoundingBox,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReason),
+}
+
+impl Default for Reason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Reason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Reason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Reason {
+    fn into(self) -> String {
+        match self {
+            Reason::ExceedsMaxFaces => "EXCEEDS_MAX_FACES".to_string(),
+            Reason::ExtremePose => "EXTREME_POSE".to_string(),
+            Reason::LowBrightness => "LOW_BRIGHTNESS".to_string(),
+            Reason::LowConfidence => "LOW_CONFIDENCE".to_string(),
+            Reason::LowFaceQuality => "LOW_FACE_QUALITY".to_string(),
+            Reason::LowSharpness => "LOW_SHARPNESS".to_string(),
+            Reason::SmallBoundingBox => "SMALL_BOUNDING_BOX".to_string(),
+            Reason::UnknownVariant(UnknownReason { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Reason {
+    fn into(self) -> &'a str {
+        match self {
+            Reason::ExceedsMaxFaces => &"EXCEEDS_MAX_FACES",
+            Reason::ExtremePose => &"EXTREME_POSE",
+            Reason::LowBrightness => &"LOW_BRIGHTNESS",
+            Reason::LowConfidence => &"LOW_CONFIDENCE",
+            Reason::LowFaceQuality => &"LOW_FACE_QUALITY",
+            Reason::LowSharpness => &"LOW_SHARPNESS",
+            Reason::SmallBoundingBox => &"SMALL_BOUNDING_BOX",
+            Reason::UnknownVariant(UnknownReason { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Reason {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCEEDS_MAX_FACES" => Reason::ExceedsMaxFaces,
+            "EXTREME_POSE" => Reason::ExtremePose,
+            "LOW_BRIGHTNESS" => Reason::LowBrightness,
+            "LOW_CONFIDENCE" => Reason::LowConfidence,
+            "LOW_FACE_QUALITY" => Reason::LowFaceQuality,
+            "LOW_SHARPNESS" => Reason::LowSharpness,
+            "SMALL_BOUNDING_BOX" => Reason::SmallBoundingBox,
+            _ => Reason::UnknownVariant(UnknownReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Reason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCEEDS_MAX_FACES" => Reason::ExceedsMaxFaces,
+            "EXTREME_POSE" => Reason::ExtremePose,
+            "LOW_BRIGHTNESS" => Reason::LowBrightness,
+            "LOW_CONFIDENCE" => Reason::LowConfidence,
+            "LOW_FACE_QUALITY" => Reason::LowFaceQuality,
+            "LOW_SHARPNESS" => Reason::LowSharpness,
+            "SMALL_BOUNDING_BOX" => Reason::SmallBoundingBox,
+            _ => Reason::UnknownVariant(UnknownReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Reason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Reason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Reason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RecognizeCelebritiesRequest {
@@ -2142,7 +4285,7 @@ pub struct RecognizeCelebritiesResponse {
     /// <p><p>The orientation of the input image (counterclockwise direction). If your application displays the image, you can use this value to correct the orientation. The bounding box coordinates returned in <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> represent face locations before the image orientation is corrected. </p> <note> <p>If the input image is in .jpeg format, it might contain exchangeable image (Exif) metadata that includes the image&#39;s orientation. If so, and the Exif metadata for the input image populates the orientation field, the value of <code>OrientationCorrection</code> is null. The <code>CelebrityFaces</code> and <code>UnrecognizedFaces</code> bounding box coordinates represent face locations after Exif metadata is used to correct the image orientation. Images in .png format don&#39;t contain Exif metadata. </p> </note></p>
     #[serde(rename = "OrientationCorrection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub orientation_correction: Option<String>,
+    pub orientation_correction: Option<OrientationCorrection>,
     /// <p>Details about each unrecognized face in the image.</p>
     #[serde(rename = "UnrecognizedFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2196,7 +4339,7 @@ pub struct SearchFacesByImageRequest {
     /// <p>A filter that specifies a quality bar for how much filtering is done to identify faces. Filtered faces aren't searched for in the collection. If you specify <code>AUTO</code>, Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the chosen quality bar. The quality bar is based on a variety of common use cases. Low-quality detections can occur for a number of reasons. Some examples are an object that's misidentified as a face, a face that's too blurry, or a face with a pose that's too extreme to use. If you specify <code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>. </p> <p>To use quality filtering, the collection you are using must be associated with version 3 of the face model or higher.</p>
     #[serde(rename = "QualityFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality_filter: Option<String>,
+    pub quality_filter: Option<QualityFilter>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2295,7 +4438,107 @@ pub struct SegmentDetection {
     /// <p>The type of the segment. Valid values are <code>TECHNICAL_CUE</code> and <code>SHOT</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SegmentType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSegmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SegmentType {
+    Shot,
+    TechnicalCue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSegmentType),
+}
+
+impl Default for SegmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SegmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SegmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SegmentType {
+    fn into(self) -> String {
+        match self {
+            SegmentType::Shot => "SHOT".to_string(),
+            SegmentType::TechnicalCue => "TECHNICAL_CUE".to_string(),
+            SegmentType::UnknownVariant(UnknownSegmentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SegmentType {
+    fn into(self) -> &'a str {
+        match self {
+            SegmentType::Shot => &"SHOT",
+            SegmentType::TechnicalCue => &"TECHNICAL_CUE",
+            SegmentType::UnknownVariant(UnknownSegmentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SegmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHOT" => SegmentType::Shot,
+            "TECHNICAL_CUE" => SegmentType::TechnicalCue,
+            _ => SegmentType::UnknownVariant(UnknownSegmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SegmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHOT" => SegmentType::Shot,
+            "TECHNICAL_CUE" => SegmentType::TechnicalCue,
+            _ => SegmentType::UnknownVariant(UnknownSegmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SegmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SegmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SegmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the type of a segment requested in a call to <a>StartSegmentDetection</a>. An array of <code>SegmentTypeInfo</code> objects is returned by the response from <a>GetSegmentDetection</a>.</p>
@@ -2309,7 +4552,7 @@ pub struct SegmentTypeInfo {
     /// <p>The type of a segment (technical cue or shot detection).</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SegmentType>,
 }
 
 /// <p>Information about a shot detection segment detected in a video. For more information, see <a>SegmentDetection</a>.</p>
@@ -2412,7 +4655,7 @@ pub struct StartFaceDetectionRequest {
     /// <p>The face attributes you want returned.</p> <p> <code>DEFAULT</code> - The following subset of facial attributes are returned: BoundingBox, Confidence, Pose, Quality and Landmarks. </p> <p> <code>ALL</code> - All facial attributes are returned.</p>
     #[serde(rename = "FaceAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub face_attributes: Option<String>,
+    pub face_attributes: Option<FaceAttributes>,
     /// <p>An identifier you specify that's returned in the completion notification that's published to your Amazon Simple Notification Service topic. For example, you can use <code>JobTag</code> to group related jobs and identify them in the completion notification.</p>
     #[serde(rename = "JobTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2550,7 +4793,7 @@ pub struct StartProjectVersionResponse {
     /// <p>The current running status of the model. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectVersionStatus>,
 }
 
 /// <p>Filters applied to the technical cue or shot detection segments. For more information, see <a>StartSegmentDetection</a>. </p>
@@ -2588,7 +4831,7 @@ pub struct StartSegmentDetectionRequest {
     pub notification_channel: Option<NotificationChannel>,
     /// <p>An array of segment types to detect in the video. Valid values are TECHNICAL_CUE and SHOT.</p>
     #[serde(rename = "SegmentTypes")]
-    pub segment_types: Vec<String>,
+    pub segment_types: Vec<SegmentType>,
     #[serde(rename = "Video")]
     pub video: Video,
 }
@@ -2693,7 +4936,7 @@ pub struct StopProjectVersionResponse {
     /// <p>The current status of the stop operation. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ProjectVersionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2719,7 +4962,7 @@ pub struct StreamProcessor {
     /// <p>Current status of the Amazon Rekognition stream processor.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StreamProcessorStatus>,
 }
 
 /// <p>Information about the source streaming video. </p>
@@ -2747,6 +4990,126 @@ pub struct StreamProcessorSettings {
     #[serde(rename = "FaceSearch")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub face_search: Option<FaceSearchSettings>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamProcessorStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamProcessorStatus {
+    Failed,
+    Running,
+    Starting,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamProcessorStatus),
+}
+
+impl Default for StreamProcessorStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamProcessorStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamProcessorStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamProcessorStatus {
+    fn into(self) -> String {
+        match self {
+            StreamProcessorStatus::Failed => "FAILED".to_string(),
+            StreamProcessorStatus::Running => "RUNNING".to_string(),
+            StreamProcessorStatus::Starting => "STARTING".to_string(),
+            StreamProcessorStatus::Stopped => "STOPPED".to_string(),
+            StreamProcessorStatus::Stopping => "STOPPING".to_string(),
+            StreamProcessorStatus::UnknownVariant(UnknownStreamProcessorStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamProcessorStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StreamProcessorStatus::Failed => &"FAILED",
+            StreamProcessorStatus::Running => &"RUNNING",
+            StreamProcessorStatus::Starting => &"STARTING",
+            StreamProcessorStatus::Stopped => &"STOPPED",
+            StreamProcessorStatus::Stopping => &"STOPPING",
+            StreamProcessorStatus::UnknownVariant(UnknownStreamProcessorStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamProcessorStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => StreamProcessorStatus::Failed,
+            "RUNNING" => StreamProcessorStatus::Running,
+            "STARTING" => StreamProcessorStatus::Starting,
+            "STOPPED" => StreamProcessorStatus::Stopped,
+            "STOPPING" => StreamProcessorStatus::Stopping,
+            _ => StreamProcessorStatus::UnknownVariant(UnknownStreamProcessorStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamProcessorStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => StreamProcessorStatus::Failed,
+            "RUNNING" => StreamProcessorStatus::Running,
+            "STARTING" => StreamProcessorStatus::Starting,
+            "STOPPED" => StreamProcessorStatus::Stopped,
+            "STOPPING" => StreamProcessorStatus::Stopping,
+            _ => StreamProcessorStatus::UnknownVariant(UnknownStreamProcessorStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamProcessorStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StreamProcessorStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamProcessorStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The S3 bucket that contains the training summary. The training summary includes aggregated evaluation metrics for the entire testing dataset and metrics for each individual label. </p> <p>You get the training summary S3 bucket location by calling <a>DescribeProjectVersions</a>. </p>
@@ -2783,7 +5146,117 @@ pub struct TechnicalCueSegment {
     /// <p>The type of the technical cue.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TechnicalCueType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTechnicalCueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TechnicalCueType {
+    BlackFrames,
+    ColorBars,
+    EndCredits,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTechnicalCueType),
+}
+
+impl Default for TechnicalCueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TechnicalCueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TechnicalCueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TechnicalCueType {
+    fn into(self) -> String {
+        match self {
+            TechnicalCueType::BlackFrames => "BlackFrames".to_string(),
+            TechnicalCueType::ColorBars => "ColorBars".to_string(),
+            TechnicalCueType::EndCredits => "EndCredits".to_string(),
+            TechnicalCueType::UnknownVariant(UnknownTechnicalCueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TechnicalCueType {
+    fn into(self) -> &'a str {
+        match self {
+            TechnicalCueType::BlackFrames => &"BlackFrames",
+            TechnicalCueType::ColorBars => &"ColorBars",
+            TechnicalCueType::EndCredits => &"EndCredits",
+            TechnicalCueType::UnknownVariant(UnknownTechnicalCueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TechnicalCueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BlackFrames" => TechnicalCueType::BlackFrames,
+            "ColorBars" => TechnicalCueType::ColorBars,
+            "EndCredits" => TechnicalCueType::EndCredits,
+            _ => TechnicalCueType::UnknownVariant(UnknownTechnicalCueType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TechnicalCueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BlackFrames" => TechnicalCueType::BlackFrames,
+            "ColorBars" => TechnicalCueType::ColorBars,
+            "EndCredits" => TechnicalCueType::EndCredits,
+            _ => TechnicalCueType::UnknownVariant(UnknownTechnicalCueType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TechnicalCueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TechnicalCueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TechnicalCueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The dataset used for testing. Optionally, if <code>AutoCreate</code> is set, Amazon Rekognition Custom Labels creates a testing dataset using an 80/20 split of the training dataset.</p>
@@ -2844,7 +5317,7 @@ pub struct TextDetection {
     /// <p>The type of text that was detected.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TextTypes>,
 }
 
 /// <p>Information about text detected in a video. Incudes the detected text, the time in milliseconds from the start of the video that the text was detected, and where it was detected on the screen.</p>
@@ -2859,6 +5332,107 @@ pub struct TextDetectionResult {
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTextTypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TextTypes {
+    Line,
+    Word,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTextTypes),
+}
+
+impl Default for TextTypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TextTypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TextTypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TextTypes {
+    fn into(self) -> String {
+        match self {
+            TextTypes::Line => "LINE".to_string(),
+            TextTypes::Word => "WORD".to_string(),
+            TextTypes::UnknownVariant(UnknownTextTypes { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TextTypes {
+    fn into(self) -> &'a str {
+        match self {
+            TextTypes::Line => &"LINE",
+            TextTypes::Word => &"WORD",
+            TextTypes::UnknownVariant(UnknownTextTypes { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TextTypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINE" => TextTypes::Line,
+            "WORD" => TextTypes::Word,
+            _ => TextTypes::UnknownVariant(UnknownTextTypes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TextTypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINE" => TextTypes::Line,
+            "WORD" => TextTypes::Word,
+            _ => TextTypes::UnknownVariant(UnknownTextTypes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextTypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TextTypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TextTypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The dataset used for training.</p>
@@ -2899,7 +5473,7 @@ pub struct UnindexedFace {
     /// <p><p>An array of reasons that specify why a face wasn&#39;t indexed. </p> <ul> <li> <p>EXTREME<em>POSE - The face is at a pose that can&#39;t be detected. For example, the head is turned too far away from the camera.</p> </li> <li> <p>EXCEEDS</em>MAX<em>FACES - The number of faces detected is already higher than that specified by the <code>MaxFaces</code> input parameter for <code>IndexFaces</code>.</p> </li> <li> <p>LOW</em>BRIGHTNESS - The image is too dark.</p> </li> <li> <p>LOW<em>SHARPNESS - The image is too blurry.</p> </li> <li> <p>LOW</em>CONFIDENCE - The face was detected with a low confidence.</p> </li> <li> <p>SMALL<em>BOUNDING</em>BOX - The bounding box around the face is too small.</p> </li> </ul></p>
     #[serde(rename = "Reasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reasons: Option<Vec<String>>,
+    pub reasons: Option<Vec<Reason>>,
 }
 
 /// <p>Contains the Amazon S3 bucket location of the validation data for a model training job. </p> <p>The validation data includes error information for individual JSON lines in the dataset. For more information, see Debugging a Failed Model Training in the Amazon Rekognition Custom Labels Developer Guide. </p> <p>You get the <code>ValidationData</code> object for the training dataset (<a>TrainingDataResult</a>) and the test dataset (<a>TestingDataResult</a>) by calling <a>DescribeProjectVersions</a>. </p> <p>The assets array contains a single <a>Asset</a> object. The <a>GroundTruthManifest</a> field of the Asset object contains the S3 bucket location of the validation data. </p>
@@ -2920,6 +5494,112 @@ pub struct Video {
     #[serde(rename = "S3Object")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_object: Option<S3Object>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVideoJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VideoJobStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVideoJobStatus),
+}
+
+impl Default for VideoJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VideoJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VideoJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VideoJobStatus {
+    fn into(self) -> String {
+        match self {
+            VideoJobStatus::Failed => "FAILED".to_string(),
+            VideoJobStatus::InProgress => "IN_PROGRESS".to_string(),
+            VideoJobStatus::Succeeded => "SUCCEEDED".to_string(),
+            VideoJobStatus::UnknownVariant(UnknownVideoJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VideoJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            VideoJobStatus::Failed => &"FAILED",
+            VideoJobStatus::InProgress => &"IN_PROGRESS",
+            VideoJobStatus::Succeeded => &"SUCCEEDED",
+            VideoJobStatus::UnknownVariant(UnknownVideoJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VideoJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => VideoJobStatus::Failed,
+            "IN_PROGRESS" => VideoJobStatus::InProgress,
+            "SUCCEEDED" => VideoJobStatus::Succeeded,
+            _ => VideoJobStatus::UnknownVariant(UnknownVideoJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VideoJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => VideoJobStatus::Failed,
+            "IN_PROGRESS" => VideoJobStatus::InProgress,
+            "SUCCEEDED" => VideoJobStatus::Succeeded,
+            _ => VideoJobStatus::UnknownVariant(UnknownVideoJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VideoJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VideoJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VideoJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a video that Amazon Rekognition analyzed. <code>Videometadata</code> is returned in every page of paginated responses from a Amazon Rekognition video operation.</p>

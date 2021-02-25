@@ -50,6 +50,171 @@ impl InspectorClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessDeniedErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessDeniedErrorCode {
+    AccessDeniedToAssessmentRun,
+    AccessDeniedToAssessmentTarget,
+    AccessDeniedToAssessmentTemplate,
+    AccessDeniedToFinding,
+    AccessDeniedToIamRole,
+    AccessDeniedToResourceGroup,
+    AccessDeniedToRulesPackage,
+    AccessDeniedToSnsTopic,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessDeniedErrorCode),
+}
+
+impl Default for AccessDeniedErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessDeniedErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessDeniedErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessDeniedErrorCode {
+    fn into(self) -> String {
+        match self {
+            AccessDeniedErrorCode::AccessDeniedToAssessmentRun => {
+                "ACCESS_DENIED_TO_ASSESSMENT_RUN".to_string()
+            }
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTarget => {
+                "ACCESS_DENIED_TO_ASSESSMENT_TARGET".to_string()
+            }
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate => {
+                "ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE".to_string()
+            }
+            AccessDeniedErrorCode::AccessDeniedToFinding => "ACCESS_DENIED_TO_FINDING".to_string(),
+            AccessDeniedErrorCode::AccessDeniedToIamRole => "ACCESS_DENIED_TO_IAM_ROLE".to_string(),
+            AccessDeniedErrorCode::AccessDeniedToResourceGroup => {
+                "ACCESS_DENIED_TO_RESOURCE_GROUP".to_string()
+            }
+            AccessDeniedErrorCode::AccessDeniedToRulesPackage => {
+                "ACCESS_DENIED_TO_RULES_PACKAGE".to_string()
+            }
+            AccessDeniedErrorCode::AccessDeniedToSnsTopic => {
+                "ACCESS_DENIED_TO_SNS_TOPIC".to_string()
+            }
+            AccessDeniedErrorCode::UnknownVariant(UnknownAccessDeniedErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessDeniedErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            AccessDeniedErrorCode::AccessDeniedToAssessmentRun => {
+                &"ACCESS_DENIED_TO_ASSESSMENT_RUN"
+            }
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTarget => {
+                &"ACCESS_DENIED_TO_ASSESSMENT_TARGET"
+            }
+            AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate => {
+                &"ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE"
+            }
+            AccessDeniedErrorCode::AccessDeniedToFinding => &"ACCESS_DENIED_TO_FINDING",
+            AccessDeniedErrorCode::AccessDeniedToIamRole => &"ACCESS_DENIED_TO_IAM_ROLE",
+            AccessDeniedErrorCode::AccessDeniedToResourceGroup => {
+                &"ACCESS_DENIED_TO_RESOURCE_GROUP"
+            }
+            AccessDeniedErrorCode::AccessDeniedToRulesPackage => &"ACCESS_DENIED_TO_RULES_PACKAGE",
+            AccessDeniedErrorCode::AccessDeniedToSnsTopic => &"ACCESS_DENIED_TO_SNS_TOPIC",
+            AccessDeniedErrorCode::UnknownVariant(UnknownAccessDeniedErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessDeniedErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED_TO_ASSESSMENT_RUN" => AccessDeniedErrorCode::AccessDeniedToAssessmentRun,
+            "ACCESS_DENIED_TO_ASSESSMENT_TARGET" => {
+                AccessDeniedErrorCode::AccessDeniedToAssessmentTarget
+            }
+            "ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE" => {
+                AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate
+            }
+            "ACCESS_DENIED_TO_FINDING" => AccessDeniedErrorCode::AccessDeniedToFinding,
+            "ACCESS_DENIED_TO_IAM_ROLE" => AccessDeniedErrorCode::AccessDeniedToIamRole,
+            "ACCESS_DENIED_TO_RESOURCE_GROUP" => AccessDeniedErrorCode::AccessDeniedToResourceGroup,
+            "ACCESS_DENIED_TO_RULES_PACKAGE" => AccessDeniedErrorCode::AccessDeniedToRulesPackage,
+            "ACCESS_DENIED_TO_SNS_TOPIC" => AccessDeniedErrorCode::AccessDeniedToSnsTopic,
+            _ => AccessDeniedErrorCode::UnknownVariant(UnknownAccessDeniedErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccessDeniedErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED_TO_ASSESSMENT_RUN" => AccessDeniedErrorCode::AccessDeniedToAssessmentRun,
+            "ACCESS_DENIED_TO_ASSESSMENT_TARGET" => {
+                AccessDeniedErrorCode::AccessDeniedToAssessmentTarget
+            }
+            "ACCESS_DENIED_TO_ASSESSMENT_TEMPLATE" => {
+                AccessDeniedErrorCode::AccessDeniedToAssessmentTemplate
+            }
+            "ACCESS_DENIED_TO_FINDING" => AccessDeniedErrorCode::AccessDeniedToFinding,
+            "ACCESS_DENIED_TO_IAM_ROLE" => AccessDeniedErrorCode::AccessDeniedToIamRole,
+            "ACCESS_DENIED_TO_RESOURCE_GROUP" => AccessDeniedErrorCode::AccessDeniedToResourceGroup,
+            "ACCESS_DENIED_TO_RULES_PACKAGE" => AccessDeniedErrorCode::AccessDeniedToRulesPackage,
+            "ACCESS_DENIED_TO_SNS_TOPIC" => AccessDeniedErrorCode::AccessDeniedToSnsTopic,
+            _ => AccessDeniedErrorCode::UnknownVariant(UnknownAccessDeniedErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDeniedErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccessDeniedErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccessDeniedErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttributesToFindingsRequest {
@@ -84,10 +249,235 @@ pub struct AgentAlreadyRunningAssessment {
 pub struct AgentFilter {
     /// <p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>
     #[serde(rename = "agentHealthCodes")]
-    pub agent_health_codes: Vec<String>,
+    pub agent_health_codes: Vec<AgentHealthCode>,
     /// <p>The current health state of the agent. Values can be set to <b>HEALTHY</b> or <b>UNHEALTHY</b>.</p>
     #[serde(rename = "agentHealths")]
-    pub agent_healths: Vec<String>,
+    pub agent_healths: Vec<AgentHealth>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAgentHealth {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AgentHealth {
+    Healthy,
+    Unhealthy,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAgentHealth),
+}
+
+impl Default for AgentHealth {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AgentHealth {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AgentHealth {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AgentHealth {
+    fn into(self) -> String {
+        match self {
+            AgentHealth::Healthy => "HEALTHY".to_string(),
+            AgentHealth::Unhealthy => "UNHEALTHY".to_string(),
+            AgentHealth::Unknown => "UNKNOWN".to_string(),
+            AgentHealth::UnknownVariant(UnknownAgentHealth { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AgentHealth {
+    fn into(self) -> &'a str {
+        match self {
+            AgentHealth::Healthy => &"HEALTHY",
+            AgentHealth::Unhealthy => &"UNHEALTHY",
+            AgentHealth::Unknown => &"UNKNOWN",
+            AgentHealth::UnknownVariant(UnknownAgentHealth { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AgentHealth {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => AgentHealth::Healthy,
+            "UNHEALTHY" => AgentHealth::Unhealthy,
+            "UNKNOWN" => AgentHealth::Unknown,
+            _ => AgentHealth::UnknownVariant(UnknownAgentHealth {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AgentHealth {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => AgentHealth::Healthy,
+            "UNHEALTHY" => AgentHealth::Unhealthy,
+            "UNKNOWN" => AgentHealth::Unknown,
+            _ => AgentHealth::UnknownVariant(UnknownAgentHealth { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentHealth {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AgentHealth {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AgentHealth {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAgentHealthCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AgentHealthCode {
+    Idle,
+    Running,
+    Shutdown,
+    Throttled,
+    Unhealthy,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAgentHealthCode),
+}
+
+impl Default for AgentHealthCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AgentHealthCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AgentHealthCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AgentHealthCode {
+    fn into(self) -> String {
+        match self {
+            AgentHealthCode::Idle => "IDLE".to_string(),
+            AgentHealthCode::Running => "RUNNING".to_string(),
+            AgentHealthCode::Shutdown => "SHUTDOWN".to_string(),
+            AgentHealthCode::Throttled => "THROTTLED".to_string(),
+            AgentHealthCode::Unhealthy => "UNHEALTHY".to_string(),
+            AgentHealthCode::Unknown => "UNKNOWN".to_string(),
+            AgentHealthCode::UnknownVariant(UnknownAgentHealthCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AgentHealthCode {
+    fn into(self) -> &'a str {
+        match self {
+            AgentHealthCode::Idle => &"IDLE",
+            AgentHealthCode::Running => &"RUNNING",
+            AgentHealthCode::Shutdown => &"SHUTDOWN",
+            AgentHealthCode::Throttled => &"THROTTLED",
+            AgentHealthCode::Unhealthy => &"UNHEALTHY",
+            AgentHealthCode::Unknown => &"UNKNOWN",
+            AgentHealthCode::UnknownVariant(UnknownAgentHealthCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AgentHealthCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "IDLE" => AgentHealthCode::Idle,
+            "RUNNING" => AgentHealthCode::Running,
+            "SHUTDOWN" => AgentHealthCode::Shutdown,
+            "THROTTLED" => AgentHealthCode::Throttled,
+            "UNHEALTHY" => AgentHealthCode::Unhealthy,
+            "UNKNOWN" => AgentHealthCode::Unknown,
+            _ => AgentHealthCode::UnknownVariant(UnknownAgentHealthCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AgentHealthCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IDLE" => AgentHealthCode::Idle,
+            "RUNNING" => AgentHealthCode::Running,
+            "SHUTDOWN" => AgentHealthCode::Shutdown,
+            "THROTTLED" => AgentHealthCode::Throttled,
+            "UNHEALTHY" => AgentHealthCode::Unhealthy,
+            "UNKNOWN" => AgentHealthCode::Unknown,
+            _ => AgentHealthCode::UnknownVariant(UnknownAgentHealthCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentHealthCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AgentHealthCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AgentHealthCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Used as a response element in the <a>PreviewAgents</a> action.</p>
@@ -97,7 +487,7 @@ pub struct AgentPreview {
     /// <p>The health status of the Amazon Inspector Agent.</p>
     #[serde(rename = "agentHealth")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub agent_health: Option<String>,
+    pub agent_health: Option<AgentHealth>,
     /// <p>The ID of the EC2 instance where the agent is installed.</p>
     #[serde(rename = "agentId")]
     pub agent_id: String,
@@ -152,7 +542,7 @@ pub struct AssessmentRun {
     pub duration_in_seconds: i64,
     /// <p>Provides a total count of generated findings per severity.</p>
     #[serde(rename = "findingCounts")]
-    pub finding_counts: ::std::collections::HashMap<String, i64>,
+    pub finding_counts: ::std::collections::HashMap<Severity, i64>,
     /// <p>The auto-generated name for the assessment run.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -168,7 +558,7 @@ pub struct AssessmentRun {
     pub started_at: Option<f64>,
     /// <p>The state of the assessment run.</p>
     #[serde(rename = "state")]
-    pub state: String,
+    pub state: AssessmentRunState,
     /// <p>The last time when the assessment run's state changed.</p>
     #[serde(rename = "stateChangedAt")]
     pub state_changed_at: f64,
@@ -186,10 +576,10 @@ pub struct AssessmentRun {
 pub struct AssessmentRunAgent {
     /// <p>The current health state of the agent.</p>
     #[serde(rename = "agentHealth")]
-    pub agent_health: String,
+    pub agent_health: AgentHealth,
     /// <p>The detailed health state of the agent.</p>
     #[serde(rename = "agentHealthCode")]
-    pub agent_health_code: String,
+    pub agent_health_code: AgentHealthCode,
     /// <p>The description for the agent health code.</p>
     #[serde(rename = "agentHealthDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,7 +630,7 @@ pub struct AssessmentRunFilter {
     /// <p>For a record to match a filter, one of the values specified for this data type property must be the exact match of the value of the <b>assessmentRunState</b> property of the <a>AssessmentRun</a> data type.</p>
     #[serde(rename = "states")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub states: Option<Vec<String>>,
+    pub states: Option<Vec<AssessmentRunState>>,
 }
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
@@ -255,7 +645,7 @@ pub struct AssessmentRunNotification {
     pub error: bool,
     /// <p>The event for which a notification is sent.</p>
     #[serde(rename = "event")]
-    pub event: String,
+    pub event: InspectorEvent,
     /// <p>The message included in the notification.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -263,11 +653,305 @@ pub struct AssessmentRunNotification {
     /// <p>The status code of the SNS notification.</p>
     #[serde(rename = "snsPublishStatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sns_publish_status_code: Option<String>,
+    pub sns_publish_status_code: Option<AssessmentRunNotificationSnsStatusCode>,
     /// <p>The SNS topic to which the SNS notification is sent.</p>
     #[serde(rename = "snsTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssessmentRunNotificationSnsStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssessmentRunNotificationSnsStatusCode {
+    AccessDenied,
+    InternalError,
+    Success,
+    TopicDoesNotExist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssessmentRunNotificationSnsStatusCode),
+}
+
+impl Default for AssessmentRunNotificationSnsStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssessmentRunNotificationSnsStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssessmentRunNotificationSnsStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssessmentRunNotificationSnsStatusCode {
+    fn into(self) -> String {
+        match self {
+            AssessmentRunNotificationSnsStatusCode::AccessDenied => "ACCESS_DENIED".to_string(),
+            AssessmentRunNotificationSnsStatusCode::InternalError => "INTERNAL_ERROR".to_string(),
+            AssessmentRunNotificationSnsStatusCode::Success => "SUCCESS".to_string(),
+            AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist => {
+                "TOPIC_DOES_NOT_EXIST".to_string()
+            }
+            AssessmentRunNotificationSnsStatusCode::UnknownVariant(
+                UnknownAssessmentRunNotificationSnsStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssessmentRunNotificationSnsStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            AssessmentRunNotificationSnsStatusCode::AccessDenied => &"ACCESS_DENIED",
+            AssessmentRunNotificationSnsStatusCode::InternalError => &"INTERNAL_ERROR",
+            AssessmentRunNotificationSnsStatusCode::Success => &"SUCCESS",
+            AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist => &"TOPIC_DOES_NOT_EXIST",
+            AssessmentRunNotificationSnsStatusCode::UnknownVariant(
+                UnknownAssessmentRunNotificationSnsStatusCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AssessmentRunNotificationSnsStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => AssessmentRunNotificationSnsStatusCode::AccessDenied,
+            "INTERNAL_ERROR" => AssessmentRunNotificationSnsStatusCode::InternalError,
+            "SUCCESS" => AssessmentRunNotificationSnsStatusCode::Success,
+            "TOPIC_DOES_NOT_EXIST" => AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist,
+            _ => AssessmentRunNotificationSnsStatusCode::UnknownVariant(
+                UnknownAssessmentRunNotificationSnsStatusCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AssessmentRunNotificationSnsStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => AssessmentRunNotificationSnsStatusCode::AccessDenied,
+            "INTERNAL_ERROR" => AssessmentRunNotificationSnsStatusCode::InternalError,
+            "SUCCESS" => AssessmentRunNotificationSnsStatusCode::Success,
+            "TOPIC_DOES_NOT_EXIST" => AssessmentRunNotificationSnsStatusCode::TopicDoesNotExist,
+            _ => AssessmentRunNotificationSnsStatusCode::UnknownVariant(
+                UnknownAssessmentRunNotificationSnsStatusCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssessmentRunNotificationSnsStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AssessmentRunNotificationSnsStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssessmentRunNotificationSnsStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssessmentRunState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssessmentRunState {
+    Canceled,
+    CollectingData,
+    Completed,
+    CompletedWithErrors,
+    Created,
+    DataCollected,
+    Error,
+    EvaluatingRules,
+    Failed,
+    StartDataCollectionInProgress,
+    StartDataCollectionPending,
+    StartEvaluatingRulesPending,
+    StopDataCollectionPending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssessmentRunState),
+}
+
+impl Default for AssessmentRunState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssessmentRunState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssessmentRunState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssessmentRunState {
+    fn into(self) -> String {
+        match self {
+            AssessmentRunState::Canceled => "CANCELED".to_string(),
+            AssessmentRunState::CollectingData => "COLLECTING_DATA".to_string(),
+            AssessmentRunState::Completed => "COMPLETED".to_string(),
+            AssessmentRunState::CompletedWithErrors => "COMPLETED_WITH_ERRORS".to_string(),
+            AssessmentRunState::Created => "CREATED".to_string(),
+            AssessmentRunState::DataCollected => "DATA_COLLECTED".to_string(),
+            AssessmentRunState::Error => "ERROR".to_string(),
+            AssessmentRunState::EvaluatingRules => "EVALUATING_RULES".to_string(),
+            AssessmentRunState::Failed => "FAILED".to_string(),
+            AssessmentRunState::StartDataCollectionInProgress => {
+                "START_DATA_COLLECTION_IN_PROGRESS".to_string()
+            }
+            AssessmentRunState::StartDataCollectionPending => {
+                "START_DATA_COLLECTION_PENDING".to_string()
+            }
+            AssessmentRunState::StartEvaluatingRulesPending => {
+                "START_EVALUATING_RULES_PENDING".to_string()
+            }
+            AssessmentRunState::StopDataCollectionPending => {
+                "STOP_DATA_COLLECTION_PENDING".to_string()
+            }
+            AssessmentRunState::UnknownVariant(UnknownAssessmentRunState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssessmentRunState {
+    fn into(self) -> &'a str {
+        match self {
+            AssessmentRunState::Canceled => &"CANCELED",
+            AssessmentRunState::CollectingData => &"COLLECTING_DATA",
+            AssessmentRunState::Completed => &"COMPLETED",
+            AssessmentRunState::CompletedWithErrors => &"COMPLETED_WITH_ERRORS",
+            AssessmentRunState::Created => &"CREATED",
+            AssessmentRunState::DataCollected => &"DATA_COLLECTED",
+            AssessmentRunState::Error => &"ERROR",
+            AssessmentRunState::EvaluatingRules => &"EVALUATING_RULES",
+            AssessmentRunState::Failed => &"FAILED",
+            AssessmentRunState::StartDataCollectionInProgress => {
+                &"START_DATA_COLLECTION_IN_PROGRESS"
+            }
+            AssessmentRunState::StartDataCollectionPending => &"START_DATA_COLLECTION_PENDING",
+            AssessmentRunState::StartEvaluatingRulesPending => &"START_EVALUATING_RULES_PENDING",
+            AssessmentRunState::StopDataCollectionPending => &"STOP_DATA_COLLECTION_PENDING",
+            AssessmentRunState::UnknownVariant(UnknownAssessmentRunState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AssessmentRunState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELED" => AssessmentRunState::Canceled,
+            "COLLECTING_DATA" => AssessmentRunState::CollectingData,
+            "COMPLETED" => AssessmentRunState::Completed,
+            "COMPLETED_WITH_ERRORS" => AssessmentRunState::CompletedWithErrors,
+            "CREATED" => AssessmentRunState::Created,
+            "DATA_COLLECTED" => AssessmentRunState::DataCollected,
+            "ERROR" => AssessmentRunState::Error,
+            "EVALUATING_RULES" => AssessmentRunState::EvaluatingRules,
+            "FAILED" => AssessmentRunState::Failed,
+            "START_DATA_COLLECTION_IN_PROGRESS" => {
+                AssessmentRunState::StartDataCollectionInProgress
+            }
+            "START_DATA_COLLECTION_PENDING" => AssessmentRunState::StartDataCollectionPending,
+            "START_EVALUATING_RULES_PENDING" => AssessmentRunState::StartEvaluatingRulesPending,
+            "STOP_DATA_COLLECTION_PENDING" => AssessmentRunState::StopDataCollectionPending,
+            _ => AssessmentRunState::UnknownVariant(UnknownAssessmentRunState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssessmentRunState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELED" => AssessmentRunState::Canceled,
+            "COLLECTING_DATA" => AssessmentRunState::CollectingData,
+            "COMPLETED" => AssessmentRunState::Completed,
+            "COMPLETED_WITH_ERRORS" => AssessmentRunState::CompletedWithErrors,
+            "CREATED" => AssessmentRunState::Created,
+            "DATA_COLLECTED" => AssessmentRunState::DataCollected,
+            "ERROR" => AssessmentRunState::Error,
+            "EVALUATING_RULES" => AssessmentRunState::EvaluatingRules,
+            "FAILED" => AssessmentRunState::Failed,
+            "START_DATA_COLLECTION_IN_PROGRESS" => {
+                AssessmentRunState::StartDataCollectionInProgress
+            }
+            "START_DATA_COLLECTION_PENDING" => AssessmentRunState::StartDataCollectionPending,
+            "START_EVALUATING_RULES_PENDING" => AssessmentRunState::StartEvaluatingRulesPending,
+            "STOP_DATA_COLLECTION_PENDING" => AssessmentRunState::StopDataCollectionPending,
+            _ => AssessmentRunState::UnknownVariant(UnknownAssessmentRunState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssessmentRunState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssessmentRunState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssessmentRunState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
@@ -276,7 +960,7 @@ pub struct AssessmentRunNotification {
 pub struct AssessmentRunStateChange {
     /// <p>The assessment run state.</p>
     #[serde(rename = "state")]
-    pub state: String,
+    pub state: AssessmentRunState,
     /// <p>The last time the assessment run state changed.</p>
     #[serde(rename = "stateChangedAt")]
     pub state_changed_at: f64,
@@ -401,6 +1085,102 @@ pub struct AssetAttributes {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssetType {
+    Ec2Instance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssetType),
+}
+
+impl Default for AssetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssetType {
+    fn into(self) -> String {
+        match self {
+            AssetType::Ec2Instance => "ec2-instance".to_string(),
+            AssetType::UnknownVariant(UnknownAssetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssetType {
+    fn into(self) -> &'a str {
+        match self {
+            AssetType::Ec2Instance => &"ec2-instance",
+            AssetType::UnknownVariant(UnknownAssetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ec2-instance" => AssetType::Ec2Instance,
+            _ => AssetType::UnknownVariant(UnknownAssetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ec2-instance" => AssetType::Ec2Instance,
+            _ => AssetType::UnknownVariant(UnknownAssetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AssetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>
@@ -599,7 +1379,7 @@ pub struct DescribeExclusionsRequest {
     /// <p>The locale into which you want to translate the exclusion's title, description, and recommendation.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -622,7 +1402,7 @@ pub struct DescribeFindingsRequest {
     /// <p>The locale into which you want to translate a finding description, recommendation, and the short description that identifies the finding.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -661,7 +1441,7 @@ pub struct DescribeRulesPackagesRequest {
     /// <p>The locale that you want to translate a rules package description into.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The ARN that specifies the rules package that you want to describe.</p>
     #[serde(rename = "rulesPackageArns")]
     pub rules_package_arns: Vec<String>,
@@ -698,7 +1478,7 @@ pub struct DurationRange {
 pub struct EventSubscription {
     /// <p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>
     #[serde(rename = "event")]
-    pub event: String,
+    pub event: InspectorEvent,
     /// <p>The time at which <a>SubscribeToEvent</a> is called.</p>
     #[serde(rename = "subscribedAt")]
     pub subscribed_at: f64,
@@ -757,10 +1537,135 @@ pub struct ExclusionPreview {
 pub struct FailedItemDetails {
     /// <p>The status code of a failed item.</p>
     #[serde(rename = "failureCode")]
-    pub failure_code: String,
+    pub failure_code: FailedItemErrorCode,
     /// <p>Indicates whether you can immediately retry a request for this item for a specified resource.</p>
     #[serde(rename = "retryable")]
     pub retryable: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailedItemErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailedItemErrorCode {
+    AccessDenied,
+    DuplicateArn,
+    InternalError,
+    InvalidArn,
+    ItemDoesNotExist,
+    LimitExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailedItemErrorCode),
+}
+
+impl Default for FailedItemErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailedItemErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailedItemErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailedItemErrorCode {
+    fn into(self) -> String {
+        match self {
+            FailedItemErrorCode::AccessDenied => "ACCESS_DENIED".to_string(),
+            FailedItemErrorCode::DuplicateArn => "DUPLICATE_ARN".to_string(),
+            FailedItemErrorCode::InternalError => "INTERNAL_ERROR".to_string(),
+            FailedItemErrorCode::InvalidArn => "INVALID_ARN".to_string(),
+            FailedItemErrorCode::ItemDoesNotExist => "ITEM_DOES_NOT_EXIST".to_string(),
+            FailedItemErrorCode::LimitExceeded => "LIMIT_EXCEEDED".to_string(),
+            FailedItemErrorCode::UnknownVariant(UnknownFailedItemErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailedItemErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            FailedItemErrorCode::AccessDenied => &"ACCESS_DENIED",
+            FailedItemErrorCode::DuplicateArn => &"DUPLICATE_ARN",
+            FailedItemErrorCode::InternalError => &"INTERNAL_ERROR",
+            FailedItemErrorCode::InvalidArn => &"INVALID_ARN",
+            FailedItemErrorCode::ItemDoesNotExist => &"ITEM_DOES_NOT_EXIST",
+            FailedItemErrorCode::LimitExceeded => &"LIMIT_EXCEEDED",
+            FailedItemErrorCode::UnknownVariant(UnknownFailedItemErrorCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FailedItemErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => FailedItemErrorCode::AccessDenied,
+            "DUPLICATE_ARN" => FailedItemErrorCode::DuplicateArn,
+            "INTERNAL_ERROR" => FailedItemErrorCode::InternalError,
+            "INVALID_ARN" => FailedItemErrorCode::InvalidArn,
+            "ITEM_DOES_NOT_EXIST" => FailedItemErrorCode::ItemDoesNotExist,
+            "LIMIT_EXCEEDED" => FailedItemErrorCode::LimitExceeded,
+            _ => FailedItemErrorCode::UnknownVariant(UnknownFailedItemErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailedItemErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => FailedItemErrorCode::AccessDenied,
+            "DUPLICATE_ARN" => FailedItemErrorCode::DuplicateArn,
+            "INTERNAL_ERROR" => FailedItemErrorCode::InternalError,
+            "INVALID_ARN" => FailedItemErrorCode::InvalidArn,
+            "ITEM_DOES_NOT_EXIST" => FailedItemErrorCode::ItemDoesNotExist,
+            "LIMIT_EXCEEDED" => FailedItemErrorCode::LimitExceeded,
+            _ => FailedItemErrorCode::UnknownVariant(UnknownFailedItemErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailedItemErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FailedItemErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FailedItemErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>
@@ -777,7 +1682,7 @@ pub struct Finding {
     /// <p>The type of the host from which the finding is generated.</p>
     #[serde(rename = "assetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub asset_type: Option<String>,
+    pub asset_type: Option<AssetType>,
     /// <p>The system-defined attributes for the finding.</p>
     #[serde(rename = "attributes")]
     pub attributes: Vec<Attribute>,
@@ -823,7 +1728,7 @@ pub struct Finding {
     /// <p>The finding severity. Values can be set to High, Medium, Low, and Informational.</p>
     #[serde(rename = "severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity: Option<String>,
+    pub severity: Option<Severity>,
     /// <p>The name of the finding.</p>
     #[serde(rename = "title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -867,7 +1772,7 @@ pub struct FindingFilter {
     /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>severity</b> property of the <a>Finding</a> data type.</p>
     #[serde(rename = "severities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub severities: Option<Vec<String>>,
+    pub severities: Option<Vec<Severity>>,
     /// <p>For a record to match a filter, the value that is specified for this data type property must be contained in the list of values of the <b>userAttributes</b> property of the <a>Finding</a> data type.</p>
     #[serde(rename = "userAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -882,10 +1787,10 @@ pub struct GetAssessmentReportRequest {
     pub assessment_run_arn: String,
     /// <p>Specifies the file format (html or pdf) of the assessment report that you want to generate.</p>
     #[serde(rename = "reportFileFormat")]
-    pub report_file_format: String,
+    pub report_file_format: ReportFileFormat,
     /// <p>Specifies the type of the assessment report that you want to generate. There are two types of assessment reports: a finding report and a full report. For more information, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_reports.html">Assessment Reports</a>. </p>
     #[serde(rename = "reportType")]
-    pub report_type: String,
+    pub report_type: ReportType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -893,7 +1798,7 @@ pub struct GetAssessmentReportRequest {
 pub struct GetAssessmentReportResponse {
     /// <p>Specifies the status of the request to generate an assessment report. </p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ReportStatus,
     /// <p>Specifies the URL where you can find the generated assessment report. This parameter is only returned if the report is successfully generated.</p>
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -909,7 +1814,7 @@ pub struct GetExclusionsPreviewRequest {
     /// <p>The locale into which you want to translate the exclusion's title, description, and recommendation.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 100. The maximum value is 500.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -936,7 +1841,7 @@ pub struct GetExclusionsPreviewResponse {
     pub next_token: Option<String>,
     /// <p>Specifies the status of the request to generate an exclusions preview.</p>
     #[serde(rename = "previewStatus")]
-    pub preview_status: String,
+    pub preview_status: PreviewStatus,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -955,6 +1860,121 @@ pub struct GetTelemetryMetadataResponse {
     pub telemetry_metadata: Vec<TelemetryMetadata>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInspectorEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InspectorEvent {
+    AssessmentRunCompleted,
+    AssessmentRunStarted,
+    AssessmentRunStateChanged,
+    FindingReported,
+    Other,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInspectorEvent),
+}
+
+impl Default for InspectorEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InspectorEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InspectorEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InspectorEvent {
+    fn into(self) -> String {
+        match self {
+            InspectorEvent::AssessmentRunCompleted => "ASSESSMENT_RUN_COMPLETED".to_string(),
+            InspectorEvent::AssessmentRunStarted => "ASSESSMENT_RUN_STARTED".to_string(),
+            InspectorEvent::AssessmentRunStateChanged => "ASSESSMENT_RUN_STATE_CHANGED".to_string(),
+            InspectorEvent::FindingReported => "FINDING_REPORTED".to_string(),
+            InspectorEvent::Other => "OTHER".to_string(),
+            InspectorEvent::UnknownVariant(UnknownInspectorEvent { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InspectorEvent {
+    fn into(self) -> &'a str {
+        match self {
+            InspectorEvent::AssessmentRunCompleted => &"ASSESSMENT_RUN_COMPLETED",
+            InspectorEvent::AssessmentRunStarted => &"ASSESSMENT_RUN_STARTED",
+            InspectorEvent::AssessmentRunStateChanged => &"ASSESSMENT_RUN_STATE_CHANGED",
+            InspectorEvent::FindingReported => &"FINDING_REPORTED",
+            InspectorEvent::Other => &"OTHER",
+            InspectorEvent::UnknownVariant(UnknownInspectorEvent { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InspectorEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSESSMENT_RUN_COMPLETED" => InspectorEvent::AssessmentRunCompleted,
+            "ASSESSMENT_RUN_STARTED" => InspectorEvent::AssessmentRunStarted,
+            "ASSESSMENT_RUN_STATE_CHANGED" => InspectorEvent::AssessmentRunStateChanged,
+            "FINDING_REPORTED" => InspectorEvent::FindingReported,
+            "OTHER" => InspectorEvent::Other,
+            _ => InspectorEvent::UnknownVariant(UnknownInspectorEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InspectorEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSESSMENT_RUN_COMPLETED" => InspectorEvent::AssessmentRunCompleted,
+            "ASSESSMENT_RUN_STARTED" => InspectorEvent::AssessmentRunStarted,
+            "ASSESSMENT_RUN_STATE_CHANGED" => InspectorEvent::AssessmentRunStateChanged,
+            "FINDING_REPORTED" => InspectorEvent::FindingReported,
+            "OTHER" => InspectorEvent::Other,
+            _ => InspectorEvent::UnknownVariant(UnknownInspectorEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InspectorEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InspectorEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InspectorEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>This data type is used in the <a>Finding</a> data type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -970,6 +1990,853 @@ pub struct InspectorServiceAttributes {
     /// <p>The schema version of this data type.</p>
     #[serde(rename = "schemaVersion")]
     pub schema_version: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvalidCrossAccountRoleErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvalidCrossAccountRoleErrorCode {
+    RoleDoesNotExistOrInvalidTrustRelationship,
+    RoleDoesNotHaveCorrectPolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvalidCrossAccountRoleErrorCode),
+}
+
+impl Default for InvalidCrossAccountRoleErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvalidCrossAccountRoleErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvalidCrossAccountRoleErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvalidCrossAccountRoleErrorCode {
+    fn into(self) -> String {
+        match self {
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship => {
+                "ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP".to_string()
+            }
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy => {
+                "ROLE_DOES_NOT_HAVE_CORRECT_POLICY".to_string()
+            }
+            InvalidCrossAccountRoleErrorCode::UnknownVariant(
+                UnknownInvalidCrossAccountRoleErrorCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvalidCrossAccountRoleErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship => {
+                &"ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP"
+            }
+            InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy => {
+                &"ROLE_DOES_NOT_HAVE_CORRECT_POLICY"
+            }
+            InvalidCrossAccountRoleErrorCode::UnknownVariant(
+                UnknownInvalidCrossAccountRoleErrorCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InvalidCrossAccountRoleErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP" => {
+                InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship
+            }
+            "ROLE_DOES_NOT_HAVE_CORRECT_POLICY" => {
+                InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy
+            }
+            _ => InvalidCrossAccountRoleErrorCode::UnknownVariant(
+                UnknownInvalidCrossAccountRoleErrorCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InvalidCrossAccountRoleErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ROLE_DOES_NOT_EXIST_OR_INVALID_TRUST_RELATIONSHIP" => {
+                InvalidCrossAccountRoleErrorCode::RoleDoesNotExistOrInvalidTrustRelationship
+            }
+            "ROLE_DOES_NOT_HAVE_CORRECT_POLICY" => {
+                InvalidCrossAccountRoleErrorCode::RoleDoesNotHaveCorrectPolicy
+            }
+            _ => InvalidCrossAccountRoleErrorCode::UnknownVariant(
+                UnknownInvalidCrossAccountRoleErrorCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidCrossAccountRoleErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InvalidCrossAccountRoleErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InvalidCrossAccountRoleErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInvalidInputErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InvalidInputErrorCode {
+    AssessmentTargetNameAlreadyTaken,
+    AssessmentTemplateNameAlreadyTaken,
+    InvalidAgentId,
+    InvalidAssessmentRunArn,
+    InvalidAssessmentRunCompletionTimeRange,
+    InvalidAssessmentRunDurationRange,
+    InvalidAssessmentRunStartTimeRange,
+    InvalidAssessmentRunState,
+    InvalidAssessmentRunStateChangeTimeRange,
+    InvalidAssessmentTargetArn,
+    InvalidAssessmentTargetName,
+    InvalidAssessmentTargetNamePattern,
+    InvalidAssessmentTemplateArn,
+    InvalidAssessmentTemplateDuration,
+    InvalidAssessmentTemplateDurationRange,
+    InvalidAssessmentTemplateName,
+    InvalidAssessmentTemplateNamePattern,
+    InvalidAttribute,
+    InvalidAutoScalingGroup,
+    InvalidEvent,
+    InvalidFindingArn,
+    InvalidIamRoleArn,
+    InvalidLocale,
+    InvalidMaxResults,
+    InvalidNumberOfAgentIds,
+    InvalidNumberOfAssessmentRunArns,
+    InvalidNumberOfAssessmentRunStates,
+    InvalidNumberOfAssessmentTargetArns,
+    InvalidNumberOfAssessmentTemplateArns,
+    InvalidNumberOfAttributes,
+    InvalidNumberOfAutoScalingGroups,
+    InvalidNumberOfFindingArns,
+    InvalidNumberOfResourceGroupArns,
+    InvalidNumberOfResourceGroupTags,
+    InvalidNumberOfRulesPackageArns,
+    InvalidNumberOfRuleNames,
+    InvalidNumberOfSeverities,
+    InvalidNumberOfTags,
+    InvalidNumberOfUserAttributes,
+    InvalidPaginationToken,
+    InvalidResourceArn,
+    InvalidResourceGroupArn,
+    InvalidResourceGroupTagKey,
+    InvalidResourceGroupTagValue,
+    InvalidRulesPackageArn,
+    InvalidRuleName,
+    InvalidSeverity,
+    InvalidSnsTopicArn,
+    InvalidTag,
+    InvalidTagKey,
+    InvalidTagValue,
+    InvalidUserAttribute,
+    InvalidUserAttributeKey,
+    InvalidUserAttributeValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInvalidInputErrorCode),
+}
+
+impl Default for InvalidInputErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InvalidInputErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InvalidInputErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InvalidInputErrorCode {
+    fn into(self) -> String {
+        match self {
+            InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken => {
+                "ASSESSMENT_TARGET_NAME_ALREADY_TAKEN".to_string()
+            }
+            InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken => {
+                "ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAgentId => "INVALID_AGENT_ID".to_string(),
+            InvalidInputErrorCode::InvalidAssessmentRunArn => {
+                "INVALID_ASSESSMENT_RUN_ARN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange => {
+                "INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunDurationRange => {
+                "INVALID_ASSESSMENT_RUN_DURATION_RANGE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange => {
+                "INVALID_ASSESSMENT_RUN_START_TIME_RANGE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunState => {
+                "INVALID_ASSESSMENT_RUN_STATE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange => {
+                "INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTargetArn => {
+                "INVALID_ASSESSMENT_TARGET_ARN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTargetName => {
+                "INVALID_ASSESSMENT_TARGET_NAME".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTargetNamePattern => {
+                "INVALID_ASSESSMENT_TARGET_NAME_PATTERN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateArn => {
+                "INVALID_ASSESSMENT_TEMPLATE_ARN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDuration => {
+                "INVALID_ASSESSMENT_TEMPLATE_DURATION".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange => {
+                "INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateName => {
+                "INVALID_ASSESSMENT_TEMPLATE_NAME".to_string()
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern => {
+                "INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN".to_string()
+            }
+            InvalidInputErrorCode::InvalidAttribute => "INVALID_ATTRIBUTE".to_string(),
+            InvalidInputErrorCode::InvalidAutoScalingGroup => {
+                "INVALID_AUTO_SCALING_GROUP".to_string()
+            }
+            InvalidInputErrorCode::InvalidEvent => "INVALID_EVENT".to_string(),
+            InvalidInputErrorCode::InvalidFindingArn => "INVALID_FINDING_ARN".to_string(),
+            InvalidInputErrorCode::InvalidIamRoleArn => "INVALID_IAM_ROLE_ARN".to_string(),
+            InvalidInputErrorCode::InvalidLocale => "INVALID_LOCALE".to_string(),
+            InvalidInputErrorCode::InvalidMaxResults => "INVALID_MAX_RESULTS".to_string(),
+            InvalidInputErrorCode::InvalidNumberOfAgentIds => {
+                "INVALID_NUMBER_OF_AGENT_IDS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates => {
+                "INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns => {
+                "INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAttributes => {
+                "INVALID_NUMBER_OF_ATTRIBUTES".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups => {
+                "INVALID_NUMBER_OF_AUTO_SCALING_GROUPS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfFindingArns => {
+                "INVALID_NUMBER_OF_FINDING_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupArns => {
+                "INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupTags => {
+                "INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfRulesPackageArns => {
+                "INVALID_NUMBER_OF_RULES_PACKAGE_ARNS".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfRuleNames => {
+                "INVALID_NUMBER_OF_RULE_NAMES".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfSeverities => {
+                "INVALID_NUMBER_OF_SEVERITIES".to_string()
+            }
+            InvalidInputErrorCode::InvalidNumberOfTags => "INVALID_NUMBER_OF_TAGS".to_string(),
+            InvalidInputErrorCode::InvalidNumberOfUserAttributes => {
+                "INVALID_NUMBER_OF_USER_ATTRIBUTES".to_string()
+            }
+            InvalidInputErrorCode::InvalidPaginationToken => "INVALID_PAGINATION_TOKEN".to_string(),
+            InvalidInputErrorCode::InvalidResourceArn => "INVALID_RESOURCE_ARN".to_string(),
+            InvalidInputErrorCode::InvalidResourceGroupArn => {
+                "INVALID_RESOURCE_GROUP_ARN".to_string()
+            }
+            InvalidInputErrorCode::InvalidResourceGroupTagKey => {
+                "INVALID_RESOURCE_GROUP_TAG_KEY".to_string()
+            }
+            InvalidInputErrorCode::InvalidResourceGroupTagValue => {
+                "INVALID_RESOURCE_GROUP_TAG_VALUE".to_string()
+            }
+            InvalidInputErrorCode::InvalidRulesPackageArn => {
+                "INVALID_RULES_PACKAGE_ARN".to_string()
+            }
+            InvalidInputErrorCode::InvalidRuleName => "INVALID_RULE_NAME".to_string(),
+            InvalidInputErrorCode::InvalidSeverity => "INVALID_SEVERITY".to_string(),
+            InvalidInputErrorCode::InvalidSnsTopicArn => "INVALID_SNS_TOPIC_ARN".to_string(),
+            InvalidInputErrorCode::InvalidTag => "INVALID_TAG".to_string(),
+            InvalidInputErrorCode::InvalidTagKey => "INVALID_TAG_KEY".to_string(),
+            InvalidInputErrorCode::InvalidTagValue => "INVALID_TAG_VALUE".to_string(),
+            InvalidInputErrorCode::InvalidUserAttribute => "INVALID_USER_ATTRIBUTE".to_string(),
+            InvalidInputErrorCode::InvalidUserAttributeKey => {
+                "INVALID_USER_ATTRIBUTE_KEY".to_string()
+            }
+            InvalidInputErrorCode::InvalidUserAttributeValue => {
+                "INVALID_USER_ATTRIBUTE_VALUE".to_string()
+            }
+            InvalidInputErrorCode::UnknownVariant(UnknownInvalidInputErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InvalidInputErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken => {
+                &"ASSESSMENT_TARGET_NAME_ALREADY_TAKEN"
+            }
+            InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken => {
+                &"ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN"
+            }
+            InvalidInputErrorCode::InvalidAgentId => &"INVALID_AGENT_ID",
+            InvalidInputErrorCode::InvalidAssessmentRunArn => &"INVALID_ASSESSMENT_RUN_ARN",
+            InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange => {
+                &"INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunDurationRange => {
+                &"INVALID_ASSESSMENT_RUN_DURATION_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange => {
+                &"INVALID_ASSESSMENT_RUN_START_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentRunState => &"INVALID_ASSESSMENT_RUN_STATE",
+            InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange => {
+                &"INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTargetArn => &"INVALID_ASSESSMENT_TARGET_ARN",
+            InvalidInputErrorCode::InvalidAssessmentTargetName => &"INVALID_ASSESSMENT_TARGET_NAME",
+            InvalidInputErrorCode::InvalidAssessmentTargetNamePattern => {
+                &"INVALID_ASSESSMENT_TARGET_NAME_PATTERN"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateArn => {
+                &"INVALID_ASSESSMENT_TEMPLATE_ARN"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDuration => {
+                &"INVALID_ASSESSMENT_TEMPLATE_DURATION"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange => {
+                &"INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateName => {
+                &"INVALID_ASSESSMENT_TEMPLATE_NAME"
+            }
+            InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern => {
+                &"INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN"
+            }
+            InvalidInputErrorCode::InvalidAttribute => &"INVALID_ATTRIBUTE",
+            InvalidInputErrorCode::InvalidAutoScalingGroup => &"INVALID_AUTO_SCALING_GROUP",
+            InvalidInputErrorCode::InvalidEvent => &"INVALID_EVENT",
+            InvalidInputErrorCode::InvalidFindingArn => &"INVALID_FINDING_ARN",
+            InvalidInputErrorCode::InvalidIamRoleArn => &"INVALID_IAM_ROLE_ARN",
+            InvalidInputErrorCode::InvalidLocale => &"INVALID_LOCALE",
+            InvalidInputErrorCode::InvalidMaxResults => &"INVALID_MAX_RESULTS",
+            InvalidInputErrorCode::InvalidNumberOfAgentIds => &"INVALID_NUMBER_OF_AGENT_IDS",
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns => {
+                &"INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates => {
+                &"INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns => {
+                &"INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns => {
+                &"INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfAttributes => &"INVALID_NUMBER_OF_ATTRIBUTES",
+            InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups => {
+                &"INVALID_NUMBER_OF_AUTO_SCALING_GROUPS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfFindingArns => &"INVALID_NUMBER_OF_FINDING_ARNS",
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupArns => {
+                &"INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfResourceGroupTags => {
+                &"INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfRulesPackageArns => {
+                &"INVALID_NUMBER_OF_RULES_PACKAGE_ARNS"
+            }
+            InvalidInputErrorCode::InvalidNumberOfRuleNames => &"INVALID_NUMBER_OF_RULE_NAMES",
+            InvalidInputErrorCode::InvalidNumberOfSeverities => &"INVALID_NUMBER_OF_SEVERITIES",
+            InvalidInputErrorCode::InvalidNumberOfTags => &"INVALID_NUMBER_OF_TAGS",
+            InvalidInputErrorCode::InvalidNumberOfUserAttributes => {
+                &"INVALID_NUMBER_OF_USER_ATTRIBUTES"
+            }
+            InvalidInputErrorCode::InvalidPaginationToken => &"INVALID_PAGINATION_TOKEN",
+            InvalidInputErrorCode::InvalidResourceArn => &"INVALID_RESOURCE_ARN",
+            InvalidInputErrorCode::InvalidResourceGroupArn => &"INVALID_RESOURCE_GROUP_ARN",
+            InvalidInputErrorCode::InvalidResourceGroupTagKey => &"INVALID_RESOURCE_GROUP_TAG_KEY",
+            InvalidInputErrorCode::InvalidResourceGroupTagValue => {
+                &"INVALID_RESOURCE_GROUP_TAG_VALUE"
+            }
+            InvalidInputErrorCode::InvalidRulesPackageArn => &"INVALID_RULES_PACKAGE_ARN",
+            InvalidInputErrorCode::InvalidRuleName => &"INVALID_RULE_NAME",
+            InvalidInputErrorCode::InvalidSeverity => &"INVALID_SEVERITY",
+            InvalidInputErrorCode::InvalidSnsTopicArn => &"INVALID_SNS_TOPIC_ARN",
+            InvalidInputErrorCode::InvalidTag => &"INVALID_TAG",
+            InvalidInputErrorCode::InvalidTagKey => &"INVALID_TAG_KEY",
+            InvalidInputErrorCode::InvalidTagValue => &"INVALID_TAG_VALUE",
+            InvalidInputErrorCode::InvalidUserAttribute => &"INVALID_USER_ATTRIBUTE",
+            InvalidInputErrorCode::InvalidUserAttributeKey => &"INVALID_USER_ATTRIBUTE_KEY",
+            InvalidInputErrorCode::InvalidUserAttributeValue => &"INVALID_USER_ATTRIBUTE_VALUE",
+            InvalidInputErrorCode::UnknownVariant(UnknownInvalidInputErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InvalidInputErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSESSMENT_TARGET_NAME_ALREADY_TAKEN" => {
+                InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken
+            }
+            "ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN" => {
+                InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken
+            }
+            "INVALID_AGENT_ID" => InvalidInputErrorCode::InvalidAgentId,
+            "INVALID_ASSESSMENT_RUN_ARN" => InvalidInputErrorCode::InvalidAssessmentRunArn,
+            "INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange
+            }
+            "INVALID_ASSESSMENT_RUN_DURATION_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunDurationRange
+            }
+            "INVALID_ASSESSMENT_RUN_START_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange
+            }
+            "INVALID_ASSESSMENT_RUN_STATE" => InvalidInputErrorCode::InvalidAssessmentRunState,
+            "INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange
+            }
+            "INVALID_ASSESSMENT_TARGET_ARN" => InvalidInputErrorCode::InvalidAssessmentTargetArn,
+            "INVALID_ASSESSMENT_TARGET_NAME" => InvalidInputErrorCode::InvalidAssessmentTargetName,
+            "INVALID_ASSESSMENT_TARGET_NAME_PATTERN" => {
+                InvalidInputErrorCode::InvalidAssessmentTargetNamePattern
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_ARN" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateArn
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateDuration
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateName
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern
+            }
+            "INVALID_ATTRIBUTE" => InvalidInputErrorCode::InvalidAttribute,
+            "INVALID_AUTO_SCALING_GROUP" => InvalidInputErrorCode::InvalidAutoScalingGroup,
+            "INVALID_EVENT" => InvalidInputErrorCode::InvalidEvent,
+            "INVALID_FINDING_ARN" => InvalidInputErrorCode::InvalidFindingArn,
+            "INVALID_IAM_ROLE_ARN" => InvalidInputErrorCode::InvalidIamRoleArn,
+            "INVALID_LOCALE" => InvalidInputErrorCode::InvalidLocale,
+            "INVALID_MAX_RESULTS" => InvalidInputErrorCode::InvalidMaxResults,
+            "INVALID_NUMBER_OF_AGENT_IDS" => InvalidInputErrorCode::InvalidNumberOfAgentIds,
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns
+            }
+            "INVALID_NUMBER_OF_ATTRIBUTES" => InvalidInputErrorCode::InvalidNumberOfAttributes,
+            "INVALID_NUMBER_OF_AUTO_SCALING_GROUPS" => {
+                InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups
+            }
+            "INVALID_NUMBER_OF_FINDING_ARNS" => InvalidInputErrorCode::InvalidNumberOfFindingArns,
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfResourceGroupArns
+            }
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS" => {
+                InvalidInputErrorCode::InvalidNumberOfResourceGroupTags
+            }
+            "INVALID_NUMBER_OF_RULES_PACKAGE_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfRulesPackageArns
+            }
+            "INVALID_NUMBER_OF_RULE_NAMES" => InvalidInputErrorCode::InvalidNumberOfRuleNames,
+            "INVALID_NUMBER_OF_SEVERITIES" => InvalidInputErrorCode::InvalidNumberOfSeverities,
+            "INVALID_NUMBER_OF_TAGS" => InvalidInputErrorCode::InvalidNumberOfTags,
+            "INVALID_NUMBER_OF_USER_ATTRIBUTES" => {
+                InvalidInputErrorCode::InvalidNumberOfUserAttributes
+            }
+            "INVALID_PAGINATION_TOKEN" => InvalidInputErrorCode::InvalidPaginationToken,
+            "INVALID_RESOURCE_ARN" => InvalidInputErrorCode::InvalidResourceArn,
+            "INVALID_RESOURCE_GROUP_ARN" => InvalidInputErrorCode::InvalidResourceGroupArn,
+            "INVALID_RESOURCE_GROUP_TAG_KEY" => InvalidInputErrorCode::InvalidResourceGroupTagKey,
+            "INVALID_RESOURCE_GROUP_TAG_VALUE" => {
+                InvalidInputErrorCode::InvalidResourceGroupTagValue
+            }
+            "INVALID_RULES_PACKAGE_ARN" => InvalidInputErrorCode::InvalidRulesPackageArn,
+            "INVALID_RULE_NAME" => InvalidInputErrorCode::InvalidRuleName,
+            "INVALID_SEVERITY" => InvalidInputErrorCode::InvalidSeverity,
+            "INVALID_SNS_TOPIC_ARN" => InvalidInputErrorCode::InvalidSnsTopicArn,
+            "INVALID_TAG" => InvalidInputErrorCode::InvalidTag,
+            "INVALID_TAG_KEY" => InvalidInputErrorCode::InvalidTagKey,
+            "INVALID_TAG_VALUE" => InvalidInputErrorCode::InvalidTagValue,
+            "INVALID_USER_ATTRIBUTE" => InvalidInputErrorCode::InvalidUserAttribute,
+            "INVALID_USER_ATTRIBUTE_KEY" => InvalidInputErrorCode::InvalidUserAttributeKey,
+            "INVALID_USER_ATTRIBUTE_VALUE" => InvalidInputErrorCode::InvalidUserAttributeValue,
+            _ => InvalidInputErrorCode::UnknownVariant(UnknownInvalidInputErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InvalidInputErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSESSMENT_TARGET_NAME_ALREADY_TAKEN" => {
+                InvalidInputErrorCode::AssessmentTargetNameAlreadyTaken
+            }
+            "ASSESSMENT_TEMPLATE_NAME_ALREADY_TAKEN" => {
+                InvalidInputErrorCode::AssessmentTemplateNameAlreadyTaken
+            }
+            "INVALID_AGENT_ID" => InvalidInputErrorCode::InvalidAgentId,
+            "INVALID_ASSESSMENT_RUN_ARN" => InvalidInputErrorCode::InvalidAssessmentRunArn,
+            "INVALID_ASSESSMENT_RUN_COMPLETION_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunCompletionTimeRange
+            }
+            "INVALID_ASSESSMENT_RUN_DURATION_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunDurationRange
+            }
+            "INVALID_ASSESSMENT_RUN_START_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunStartTimeRange
+            }
+            "INVALID_ASSESSMENT_RUN_STATE" => InvalidInputErrorCode::InvalidAssessmentRunState,
+            "INVALID_ASSESSMENT_RUN_STATE_CHANGE_TIME_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentRunStateChangeTimeRange
+            }
+            "INVALID_ASSESSMENT_TARGET_ARN" => InvalidInputErrorCode::InvalidAssessmentTargetArn,
+            "INVALID_ASSESSMENT_TARGET_NAME" => InvalidInputErrorCode::InvalidAssessmentTargetName,
+            "INVALID_ASSESSMENT_TARGET_NAME_PATTERN" => {
+                InvalidInputErrorCode::InvalidAssessmentTargetNamePattern
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_ARN" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateArn
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateDuration
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_DURATION_RANGE" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateDurationRange
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateName
+            }
+            "INVALID_ASSESSMENT_TEMPLATE_NAME_PATTERN" => {
+                InvalidInputErrorCode::InvalidAssessmentTemplateNamePattern
+            }
+            "INVALID_ATTRIBUTE" => InvalidInputErrorCode::InvalidAttribute,
+            "INVALID_AUTO_SCALING_GROUP" => InvalidInputErrorCode::InvalidAutoScalingGroup,
+            "INVALID_EVENT" => InvalidInputErrorCode::InvalidEvent,
+            "INVALID_FINDING_ARN" => InvalidInputErrorCode::InvalidFindingArn,
+            "INVALID_IAM_ROLE_ARN" => InvalidInputErrorCode::InvalidIamRoleArn,
+            "INVALID_LOCALE" => InvalidInputErrorCode::InvalidLocale,
+            "INVALID_MAX_RESULTS" => InvalidInputErrorCode::InvalidMaxResults,
+            "INVALID_NUMBER_OF_AGENT_IDS" => InvalidInputErrorCode::InvalidNumberOfAgentIds,
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentRunArns
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_RUN_STATES" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentRunStates
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TARGET_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentTargetArns
+            }
+            "INVALID_NUMBER_OF_ASSESSMENT_TEMPLATE_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfAssessmentTemplateArns
+            }
+            "INVALID_NUMBER_OF_ATTRIBUTES" => InvalidInputErrorCode::InvalidNumberOfAttributes,
+            "INVALID_NUMBER_OF_AUTO_SCALING_GROUPS" => {
+                InvalidInputErrorCode::InvalidNumberOfAutoScalingGroups
+            }
+            "INVALID_NUMBER_OF_FINDING_ARNS" => InvalidInputErrorCode::InvalidNumberOfFindingArns,
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfResourceGroupArns
+            }
+            "INVALID_NUMBER_OF_RESOURCE_GROUP_TAGS" => {
+                InvalidInputErrorCode::InvalidNumberOfResourceGroupTags
+            }
+            "INVALID_NUMBER_OF_RULES_PACKAGE_ARNS" => {
+                InvalidInputErrorCode::InvalidNumberOfRulesPackageArns
+            }
+            "INVALID_NUMBER_OF_RULE_NAMES" => InvalidInputErrorCode::InvalidNumberOfRuleNames,
+            "INVALID_NUMBER_OF_SEVERITIES" => InvalidInputErrorCode::InvalidNumberOfSeverities,
+            "INVALID_NUMBER_OF_TAGS" => InvalidInputErrorCode::InvalidNumberOfTags,
+            "INVALID_NUMBER_OF_USER_ATTRIBUTES" => {
+                InvalidInputErrorCode::InvalidNumberOfUserAttributes
+            }
+            "INVALID_PAGINATION_TOKEN" => InvalidInputErrorCode::InvalidPaginationToken,
+            "INVALID_RESOURCE_ARN" => InvalidInputErrorCode::InvalidResourceArn,
+            "INVALID_RESOURCE_GROUP_ARN" => InvalidInputErrorCode::InvalidResourceGroupArn,
+            "INVALID_RESOURCE_GROUP_TAG_KEY" => InvalidInputErrorCode::InvalidResourceGroupTagKey,
+            "INVALID_RESOURCE_GROUP_TAG_VALUE" => {
+                InvalidInputErrorCode::InvalidResourceGroupTagValue
+            }
+            "INVALID_RULES_PACKAGE_ARN" => InvalidInputErrorCode::InvalidRulesPackageArn,
+            "INVALID_RULE_NAME" => InvalidInputErrorCode::InvalidRuleName,
+            "INVALID_SEVERITY" => InvalidInputErrorCode::InvalidSeverity,
+            "INVALID_SNS_TOPIC_ARN" => InvalidInputErrorCode::InvalidSnsTopicArn,
+            "INVALID_TAG" => InvalidInputErrorCode::InvalidTag,
+            "INVALID_TAG_KEY" => InvalidInputErrorCode::InvalidTagKey,
+            "INVALID_TAG_VALUE" => InvalidInputErrorCode::InvalidTagValue,
+            "INVALID_USER_ATTRIBUTE" => InvalidInputErrorCode::InvalidUserAttribute,
+            "INVALID_USER_ATTRIBUTE_KEY" => InvalidInputErrorCode::InvalidUserAttributeKey,
+            "INVALID_USER_ATTRIBUTE_VALUE" => InvalidInputErrorCode::InvalidUserAttributeValue,
+            _ => InvalidInputErrorCode::UnknownVariant(UnknownInvalidInputErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InvalidInputErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InvalidInputErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InvalidInputErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLimitExceededErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LimitExceededErrorCode {
+    AssessmentRunLimitExceeded,
+    AssessmentTargetLimitExceeded,
+    AssessmentTemplateLimitExceeded,
+    EventSubscriptionLimitExceeded,
+    ResourceGroupLimitExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLimitExceededErrorCode),
+}
+
+impl Default for LimitExceededErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LimitExceededErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LimitExceededErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LimitExceededErrorCode {
+    fn into(self) -> String {
+        match self {
+            LimitExceededErrorCode::AssessmentRunLimitExceeded => {
+                "ASSESSMENT_RUN_LIMIT_EXCEEDED".to_string()
+            }
+            LimitExceededErrorCode::AssessmentTargetLimitExceeded => {
+                "ASSESSMENT_TARGET_LIMIT_EXCEEDED".to_string()
+            }
+            LimitExceededErrorCode::AssessmentTemplateLimitExceeded => {
+                "ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED".to_string()
+            }
+            LimitExceededErrorCode::EventSubscriptionLimitExceeded => {
+                "EVENT_SUBSCRIPTION_LIMIT_EXCEEDED".to_string()
+            }
+            LimitExceededErrorCode::ResourceGroupLimitExceeded => {
+                "RESOURCE_GROUP_LIMIT_EXCEEDED".to_string()
+            }
+            LimitExceededErrorCode::UnknownVariant(UnknownLimitExceededErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LimitExceededErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            LimitExceededErrorCode::AssessmentRunLimitExceeded => &"ASSESSMENT_RUN_LIMIT_EXCEEDED",
+            LimitExceededErrorCode::AssessmentTargetLimitExceeded => {
+                &"ASSESSMENT_TARGET_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::AssessmentTemplateLimitExceeded => {
+                &"ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::EventSubscriptionLimitExceeded => {
+                &"EVENT_SUBSCRIPTION_LIMIT_EXCEEDED"
+            }
+            LimitExceededErrorCode::ResourceGroupLimitExceeded => &"RESOURCE_GROUP_LIMIT_EXCEEDED",
+            LimitExceededErrorCode::UnknownVariant(UnknownLimitExceededErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LimitExceededErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSESSMENT_RUN_LIMIT_EXCEEDED" => LimitExceededErrorCode::AssessmentRunLimitExceeded,
+            "ASSESSMENT_TARGET_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::AssessmentTargetLimitExceeded
+            }
+            "ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::AssessmentTemplateLimitExceeded
+            }
+            "EVENT_SUBSCRIPTION_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::EventSubscriptionLimitExceeded
+            }
+            "RESOURCE_GROUP_LIMIT_EXCEEDED" => LimitExceededErrorCode::ResourceGroupLimitExceeded,
+            _ => LimitExceededErrorCode::UnknownVariant(UnknownLimitExceededErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LimitExceededErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSESSMENT_RUN_LIMIT_EXCEEDED" => LimitExceededErrorCode::AssessmentRunLimitExceeded,
+            "ASSESSMENT_TARGET_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::AssessmentTargetLimitExceeded
+            }
+            "ASSESSMENT_TEMPLATE_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::AssessmentTemplateLimitExceeded
+            }
+            "EVENT_SUBSCRIPTION_LIMIT_EXCEEDED" => {
+                LimitExceededErrorCode::EventSubscriptionLimitExceeded
+            }
+            "RESOURCE_GROUP_LIMIT_EXCEEDED" => LimitExceededErrorCode::ResourceGroupLimitExceeded,
+            _ => LimitExceededErrorCode::UnknownVariant(UnknownLimitExceededErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LimitExceededErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LimitExceededErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LimitExceededErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1230,6 +3097,102 @@ pub struct ListTagsForResourceResponse {
     pub tags: Vec<Tag>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLocale {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Locale {
+    EnUs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLocale),
+}
+
+impl Default for Locale {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Locale {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Locale {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Locale {
+    fn into(self) -> String {
+        match self {
+            Locale::EnUs => "EN_US".to_string(),
+            Locale::UnknownVariant(UnknownLocale { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Locale {
+    fn into(self) -> &'a str {
+        match self {
+            Locale::EnUs => &"EN_US",
+            Locale::UnknownVariant(UnknownLocale { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Locale {
+    fn from(name: &str) -> Self {
+        match name {
+            "EN_US" => Locale::EnUs,
+            _ => Locale::UnknownVariant(UnknownLocale {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Locale {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EN_US" => Locale::EnUs,
+            _ => Locale::UnknownVariant(UnknownLocale { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Locale {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Locale {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Locale {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the network interfaces interacting with an EC2 instance. This data type is used as one of the elements of the <a>AssetAttributes</a> data type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1276,6 +3239,164 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNoSuchEntityErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NoSuchEntityErrorCode {
+    AssessmentRunDoesNotExist,
+    AssessmentTargetDoesNotExist,
+    AssessmentTemplateDoesNotExist,
+    FindingDoesNotExist,
+    IamRoleDoesNotExist,
+    ResourceGroupDoesNotExist,
+    RulesPackageDoesNotExist,
+    SnsTopicDoesNotExist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNoSuchEntityErrorCode),
+}
+
+impl Default for NoSuchEntityErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NoSuchEntityErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NoSuchEntityErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NoSuchEntityErrorCode {
+    fn into(self) -> String {
+        match self {
+            NoSuchEntityErrorCode::AssessmentRunDoesNotExist => {
+                "ASSESSMENT_RUN_DOES_NOT_EXIST".to_string()
+            }
+            NoSuchEntityErrorCode::AssessmentTargetDoesNotExist => {
+                "ASSESSMENT_TARGET_DOES_NOT_EXIST".to_string()
+            }
+            NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist => {
+                "ASSESSMENT_TEMPLATE_DOES_NOT_EXIST".to_string()
+            }
+            NoSuchEntityErrorCode::FindingDoesNotExist => "FINDING_DOES_NOT_EXIST".to_string(),
+            NoSuchEntityErrorCode::IamRoleDoesNotExist => "IAM_ROLE_DOES_NOT_EXIST".to_string(),
+            NoSuchEntityErrorCode::ResourceGroupDoesNotExist => {
+                "RESOURCE_GROUP_DOES_NOT_EXIST".to_string()
+            }
+            NoSuchEntityErrorCode::RulesPackageDoesNotExist => {
+                "RULES_PACKAGE_DOES_NOT_EXIST".to_string()
+            }
+            NoSuchEntityErrorCode::SnsTopicDoesNotExist => "SNS_TOPIC_DOES_NOT_EXIST".to_string(),
+            NoSuchEntityErrorCode::UnknownVariant(UnknownNoSuchEntityErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NoSuchEntityErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            NoSuchEntityErrorCode::AssessmentRunDoesNotExist => &"ASSESSMENT_RUN_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::AssessmentTargetDoesNotExist => {
+                &"ASSESSMENT_TARGET_DOES_NOT_EXIST"
+            }
+            NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist => {
+                &"ASSESSMENT_TEMPLATE_DOES_NOT_EXIST"
+            }
+            NoSuchEntityErrorCode::FindingDoesNotExist => &"FINDING_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::IamRoleDoesNotExist => &"IAM_ROLE_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::ResourceGroupDoesNotExist => &"RESOURCE_GROUP_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::RulesPackageDoesNotExist => &"RULES_PACKAGE_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::SnsTopicDoesNotExist => &"SNS_TOPIC_DOES_NOT_EXIST",
+            NoSuchEntityErrorCode::UnknownVariant(UnknownNoSuchEntityErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NoSuchEntityErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSESSMENT_RUN_DOES_NOT_EXIST" => NoSuchEntityErrorCode::AssessmentRunDoesNotExist,
+            "ASSESSMENT_TARGET_DOES_NOT_EXIST" => {
+                NoSuchEntityErrorCode::AssessmentTargetDoesNotExist
+            }
+            "ASSESSMENT_TEMPLATE_DOES_NOT_EXIST" => {
+                NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist
+            }
+            "FINDING_DOES_NOT_EXIST" => NoSuchEntityErrorCode::FindingDoesNotExist,
+            "IAM_ROLE_DOES_NOT_EXIST" => NoSuchEntityErrorCode::IamRoleDoesNotExist,
+            "RESOURCE_GROUP_DOES_NOT_EXIST" => NoSuchEntityErrorCode::ResourceGroupDoesNotExist,
+            "RULES_PACKAGE_DOES_NOT_EXIST" => NoSuchEntityErrorCode::RulesPackageDoesNotExist,
+            "SNS_TOPIC_DOES_NOT_EXIST" => NoSuchEntityErrorCode::SnsTopicDoesNotExist,
+            _ => NoSuchEntityErrorCode::UnknownVariant(UnknownNoSuchEntityErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NoSuchEntityErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSESSMENT_RUN_DOES_NOT_EXIST" => NoSuchEntityErrorCode::AssessmentRunDoesNotExist,
+            "ASSESSMENT_TARGET_DOES_NOT_EXIST" => {
+                NoSuchEntityErrorCode::AssessmentTargetDoesNotExist
+            }
+            "ASSESSMENT_TEMPLATE_DOES_NOT_EXIST" => {
+                NoSuchEntityErrorCode::AssessmentTemplateDoesNotExist
+            }
+            "FINDING_DOES_NOT_EXIST" => NoSuchEntityErrorCode::FindingDoesNotExist,
+            "IAM_ROLE_DOES_NOT_EXIST" => NoSuchEntityErrorCode::IamRoleDoesNotExist,
+            "RESOURCE_GROUP_DOES_NOT_EXIST" => NoSuchEntityErrorCode::ResourceGroupDoesNotExist,
+            "RULES_PACKAGE_DOES_NOT_EXIST" => NoSuchEntityErrorCode::RulesPackageDoesNotExist,
+            "SNS_TOPIC_DOES_NOT_EXIST" => NoSuchEntityErrorCode::SnsTopicDoesNotExist,
+            _ => NoSuchEntityErrorCode::UnknownVariant(UnknownNoSuchEntityErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NoSuchEntityErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for NoSuchEntityErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NoSuchEntityErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PreviewAgentsRequest {
@@ -1302,6 +3423,107 @@ pub struct PreviewAgentsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPreviewStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PreviewStatus {
+    Completed,
+    WorkInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPreviewStatus),
+}
+
+impl Default for PreviewStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PreviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PreviewStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PreviewStatus {
+    fn into(self) -> String {
+        match self {
+            PreviewStatus::Completed => "COMPLETED".to_string(),
+            PreviewStatus::WorkInProgress => "WORK_IN_PROGRESS".to_string(),
+            PreviewStatus::UnknownVariant(UnknownPreviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PreviewStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PreviewStatus::Completed => &"COMPLETED",
+            PreviewStatus::WorkInProgress => &"WORK_IN_PROGRESS",
+            PreviewStatus::UnknownVariant(UnknownPreviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PreviewStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => PreviewStatus::Completed,
+            "WORK_IN_PROGRESS" => PreviewStatus::WorkInProgress,
+            _ => PreviewStatus::UnknownVariant(UnknownPreviewStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PreviewStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => PreviewStatus::Completed,
+            "WORK_IN_PROGRESS" => PreviewStatus::WorkInProgress,
+            _ => PreviewStatus::UnknownVariant(UnknownPreviewStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PreviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PreviewStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PreviewStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>
@@ -1343,6 +3565,318 @@ pub struct RemoveAttributesFromFindingsResponse {
     /// <p>Attributes details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportFileFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportFileFormat {
+    Html,
+    Pdf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportFileFormat),
+}
+
+impl Default for ReportFileFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportFileFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportFileFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportFileFormat {
+    fn into(self) -> String {
+        match self {
+            ReportFileFormat::Html => "HTML".to_string(),
+            ReportFileFormat::Pdf => "PDF".to_string(),
+            ReportFileFormat::UnknownVariant(UnknownReportFileFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportFileFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ReportFileFormat::Html => &"HTML",
+            ReportFileFormat::Pdf => &"PDF",
+            ReportFileFormat::UnknownVariant(UnknownReportFileFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReportFileFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTML" => ReportFileFormat::Html,
+            "PDF" => ReportFileFormat::Pdf,
+            _ => ReportFileFormat::UnknownVariant(UnknownReportFileFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportFileFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTML" => ReportFileFormat::Html,
+            "PDF" => ReportFileFormat::Pdf,
+            _ => ReportFileFormat::UnknownVariant(UnknownReportFileFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportFileFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportFileFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportStatus {
+    Completed,
+    Failed,
+    WorkInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportStatus),
+}
+
+impl Default for ReportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportStatus {
+    fn into(self) -> String {
+        match self {
+            ReportStatus::Completed => "COMPLETED".to_string(),
+            ReportStatus::Failed => "FAILED".to_string(),
+            ReportStatus::WorkInProgress => "WORK_IN_PROGRESS".to_string(),
+            ReportStatus::UnknownVariant(UnknownReportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReportStatus::Completed => &"COMPLETED",
+            ReportStatus::Failed => &"FAILED",
+            ReportStatus::WorkInProgress => &"WORK_IN_PROGRESS",
+            ReportStatus::UnknownVariant(UnknownReportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => ReportStatus::Completed,
+            "FAILED" => ReportStatus::Failed,
+            "WORK_IN_PROGRESS" => ReportStatus::WorkInProgress,
+            _ => ReportStatus::UnknownVariant(UnknownReportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => ReportStatus::Completed,
+            "FAILED" => ReportStatus::Failed,
+            "WORK_IN_PROGRESS" => ReportStatus::WorkInProgress,
+            _ => ReportStatus::UnknownVariant(UnknownReportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportType {
+    Finding,
+    Full,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportType),
+}
+
+impl Default for ReportType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportType {
+    fn into(self) -> String {
+        match self {
+            ReportType::Finding => "FINDING".to_string(),
+            ReportType::Full => "FULL".to_string(),
+            ReportType::UnknownVariant(UnknownReportType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportType::Finding => &"FINDING",
+            ReportType::Full => &"FULL",
+            ReportType::UnknownVariant(UnknownReportType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FINDING" => ReportType::Finding,
+            "FULL" => ReportType::Full,
+            _ => ReportType::UnknownVariant(UnknownReportType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FINDING" => ReportType::Finding,
+            "FULL" => ReportType::Full,
+            _ => ReportType::UnknownVariant(UnknownReportType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>
@@ -1401,11 +3935,112 @@ pub struct Scope {
     /// <p>The type of the scope.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: Option<ScopeType>,
     /// <p>The resource identifier for the specified scope type.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScopeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScopeType {
+    InstanceId,
+    RulesPackageArn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScopeType),
+}
+
+impl Default for ScopeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScopeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScopeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScopeType {
+    fn into(self) -> String {
+        match self {
+            ScopeType::InstanceId => "INSTANCE_ID".to_string(),
+            ScopeType::RulesPackageArn => "RULES_PACKAGE_ARN".to_string(),
+            ScopeType::UnknownVariant(UnknownScopeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScopeType {
+    fn into(self) -> &'a str {
+        match self {
+            ScopeType::InstanceId => &"INSTANCE_ID",
+            ScopeType::RulesPackageArn => &"RULES_PACKAGE_ARN",
+            ScopeType::UnknownVariant(UnknownScopeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScopeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSTANCE_ID" => ScopeType::InstanceId,
+            "RULES_PACKAGE_ARN" => ScopeType::RulesPackageArn,
+            _ => ScopeType::UnknownVariant(UnknownScopeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScopeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSTANCE_ID" => ScopeType::InstanceId,
+            "RULES_PACKAGE_ARN" => ScopeType::RulesPackageArn,
+            _ => ScopeType::UnknownVariant(UnknownScopeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScopeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScopeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScopeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a security group associated with a network interface. This data type is used as one of the elements of the <a>NetworkInterface</a> data type.</p>
@@ -1434,6 +4069,121 @@ pub struct SetTagsForResourceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Severity {
+    High,
+    Informational,
+    Low,
+    Medium,
+    Undefined,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSeverity),
+}
+
+impl Default for Severity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Severity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Severity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Severity {
+    fn into(self) -> String {
+        match self {
+            Severity::High => "High".to_string(),
+            Severity::Informational => "Informational".to_string(),
+            Severity::Low => "Low".to_string(),
+            Severity::Medium => "Medium".to_string(),
+            Severity::Undefined => "Undefined".to_string(),
+            Severity::UnknownVariant(UnknownSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Severity {
+    fn into(self) -> &'a str {
+        match self {
+            Severity::High => &"High",
+            Severity::Informational => &"Informational",
+            Severity::Low => &"Low",
+            Severity::Medium => &"Medium",
+            Severity::Undefined => &"Undefined",
+            Severity::UnknownVariant(UnknownSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Severity {
+    fn from(name: &str) -> Self {
+        match name {
+            "High" => Severity::High,
+            "Informational" => Severity::Informational,
+            "Low" => Severity::Low,
+            "Medium" => Severity::Medium,
+            "Undefined" => Severity::Undefined,
+            _ => Severity::UnknownVariant(UnknownSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Severity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "High" => Severity::High,
+            "Informational" => Severity::Informational,
+            "Low" => Severity::Low,
+            "Medium" => Severity::Medium,
+            "Undefined" => Severity::Undefined,
+            _ => Severity::UnknownVariant(UnknownSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Severity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Severity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Severity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssessmentRunRequest {
@@ -1454,6 +4204,107 @@ pub struct StartAssessmentRunResponse {
     pub assessment_run_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStopAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StopAction {
+    SkipEvaluation,
+    StartEvaluation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStopAction),
+}
+
+impl Default for StopAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StopAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StopAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StopAction {
+    fn into(self) -> String {
+        match self {
+            StopAction::SkipEvaluation => "SKIP_EVALUATION".to_string(),
+            StopAction::StartEvaluation => "START_EVALUATION".to_string(),
+            StopAction::UnknownVariant(UnknownStopAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StopAction {
+    fn into(self) -> &'a str {
+        match self {
+            StopAction::SkipEvaluation => &"SKIP_EVALUATION",
+            StopAction::StartEvaluation => &"START_EVALUATION",
+            StopAction::UnknownVariant(UnknownStopAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StopAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "SKIP_EVALUATION" => StopAction::SkipEvaluation,
+            "START_EVALUATION" => StopAction::StartEvaluation,
+            _ => StopAction::UnknownVariant(UnknownStopAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StopAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SKIP_EVALUATION" => StopAction::SkipEvaluation,
+            "START_EVALUATION" => StopAction::StartEvaluation,
+            _ => StopAction::UnknownVariant(UnknownStopAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StopAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StopAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StopAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAssessmentRunRequest {
@@ -1463,7 +4314,7 @@ pub struct StopAssessmentRunRequest {
     /// <p>An input option that can be set to either START_EVALUATION or SKIP_EVALUATION. START_EVALUATION (the default value), stops the AWS agent from collecting data and begins the results evaluation and the findings generation process. SKIP_EVALUATION cancels the assessment run immediately, after which no findings are generated.</p>
     #[serde(rename = "stopAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stop_action: Option<String>,
+    pub stop_action: Option<StopAction>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1471,7 +4322,7 @@ pub struct StopAssessmentRunRequest {
 pub struct SubscribeToEventRequest {
     /// <p>The event for which you want to receive SNS notifications.</p>
     #[serde(rename = "event")]
-    pub event: String,
+    pub event: InspectorEvent,
     /// <p>The ARN of the assessment template that is used during the event for which you want to receive SNS notifications.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -1542,7 +4393,7 @@ pub struct TimestampRange {
 pub struct UnsubscribeFromEventRequest {
     /// <p>The event for which you want to stop receiving SNS notifications.</p>
     #[serde(rename = "event")]
-    pub event: String,
+    pub event: InspectorEvent,
     /// <p>The ARN of the assessment template that is used during the event for which you want to stop receiving SNS notifications.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,

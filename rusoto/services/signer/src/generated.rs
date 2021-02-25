@@ -67,6 +67,102 @@ pub struct CancelSigningProfileRequest {
     pub profile_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCategory {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Category {
+    AwsioT,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCategory),
+}
+
+impl Default for Category {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Category {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Category {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Category {
+    fn into(self) -> String {
+        match self {
+            Category::AwsioT => "AWSIoT".to_string(),
+            Category::UnknownVariant(UnknownCategory { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Category {
+    fn into(self) -> &'a str {
+        match self {
+            Category::AwsioT => &"AWSIoT",
+            Category::UnknownVariant(UnknownCategory { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Category {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSIoT" => Category::AwsioT,
+            _ => Category::UnknownVariant(UnknownCategory {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Category {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSIoT" => Category::AwsioT,
+            _ => Category::UnknownVariant(UnknownCategory { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Category {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Category {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Category {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSigningJobRequest {
@@ -149,7 +245,7 @@ pub struct DescribeSigningJobResponse {
     /// <p>Status of the signing job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SigningStatus>,
     /// <p>String value that contains the status reason.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,16 +262,120 @@ pub struct Destination {
     pub s_3: Option<S3Destination>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionAlgorithm {
+    Ecdsa,
+    Rsa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionAlgorithm),
+}
+
+impl Default for EncryptionAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionAlgorithm {
+    fn into(self) -> String {
+        match self {
+            EncryptionAlgorithm::Ecdsa => "ECDSA".to_string(),
+            EncryptionAlgorithm::Rsa => "RSA".to_string(),
+            EncryptionAlgorithm::UnknownVariant(UnknownEncryptionAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionAlgorithm::Ecdsa => &"ECDSA",
+            EncryptionAlgorithm::Rsa => &"RSA",
+            EncryptionAlgorithm::UnknownVariant(UnknownEncryptionAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "ECDSA" => EncryptionAlgorithm::Ecdsa,
+            "RSA" => EncryptionAlgorithm::Rsa,
+            _ => EncryptionAlgorithm::UnknownVariant(UnknownEncryptionAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ECDSA" => EncryptionAlgorithm::Ecdsa,
+            "RSA" => EncryptionAlgorithm::Rsa,
+            _ => EncryptionAlgorithm::UnknownVariant(UnknownEncryptionAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The encryption algorithm options that are available to a code signing job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptionAlgorithmOptions {
     /// <p>The set of accepted encryption algorithms that are allowed in a code signing job.</p>
     #[serde(rename = "allowedValues")]
-    pub allowed_values: Vec<String>,
+    pub allowed_values: Vec<EncryptionAlgorithm>,
     /// <p>The default encryption algorithm that is used by a code signing job.</p>
     #[serde(rename = "defaultValue")]
-    pub default_value: String,
+    pub default_value: EncryptionAlgorithm,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -192,7 +392,7 @@ pub struct GetSigningPlatformResponse {
     /// <p>The category type of the target signing platform.</p>
     #[serde(rename = "category")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<String>,
+    pub category: Option<Category>,
     /// <p>The display name of the target signing platform.</p>
     #[serde(rename = "displayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -287,7 +487,7 @@ pub struct GetSigningProfileResponse {
     /// <p>The status of the target signing profile.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SigningProfileStatus>,
     /// <p>Reason for the status of the target signing profile.</p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -298,16 +498,221 @@ pub struct GetSigningProfileResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHashAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HashAlgorithm {
+    Sha1,
+    Sha256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHashAlgorithm),
+}
+
+impl Default for HashAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HashAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HashAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HashAlgorithm {
+    fn into(self) -> String {
+        match self {
+            HashAlgorithm::Sha1 => "SHA1".to_string(),
+            HashAlgorithm::Sha256 => "SHA256".to_string(),
+            HashAlgorithm::UnknownVariant(UnknownHashAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HashAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            HashAlgorithm::Sha1 => &"SHA1",
+            HashAlgorithm::Sha256 => &"SHA256",
+            HashAlgorithm::UnknownVariant(UnknownHashAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HashAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHA1" => HashAlgorithm::Sha1,
+            "SHA256" => HashAlgorithm::Sha256,
+            _ => HashAlgorithm::UnknownVariant(UnknownHashAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HashAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHA1" => HashAlgorithm::Sha1,
+            "SHA256" => HashAlgorithm::Sha256,
+            _ => HashAlgorithm::UnknownVariant(UnknownHashAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HashAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HashAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HashAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The hash algorithms that are available to a code signing job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HashAlgorithmOptions {
     /// <p>The set of accepted hash algorithms allowed in a code signing job.</p>
     #[serde(rename = "allowedValues")]
-    pub allowed_values: Vec<String>,
+    pub allowed_values: Vec<HashAlgorithm>,
     /// <p>The default hash algorithm that is used in a code signing job.</p>
     #[serde(rename = "defaultValue")]
-    pub default_value: String,
+    pub default_value: HashAlgorithm,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageFormat {
+    Json,
+    Jsondetached,
+    Jsonembedded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageFormat),
+}
+
+impl Default for ImageFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageFormat {
+    fn into(self) -> String {
+        match self {
+            ImageFormat::Json => "JSON".to_string(),
+            ImageFormat::Jsondetached => "JSONDetached".to_string(),
+            ImageFormat::Jsonembedded => "JSONEmbedded".to_string(),
+            ImageFormat::UnknownVariant(UnknownImageFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ImageFormat::Json => &"JSON",
+            ImageFormat::Jsondetached => &"JSONDetached",
+            ImageFormat::Jsonembedded => &"JSONEmbedded",
+            ImageFormat::UnknownVariant(UnknownImageFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => ImageFormat::Json,
+            "JSONDetached" => ImageFormat::Jsondetached,
+            "JSONEmbedded" => ImageFormat::Jsonembedded,
+            _ => ImageFormat::UnknownVariant(UnknownImageFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => ImageFormat::Json,
+            "JSONDetached" => ImageFormat::Jsondetached,
+            "JSONEmbedded" => ImageFormat::Jsonembedded,
+            _ => ImageFormat::UnknownVariant(UnknownImageFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -381,7 +786,7 @@ pub struct ListSigningJobsRequest {
     /// <p>A status value with which to filter your results.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SigningStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -457,7 +862,7 @@ pub struct ListSigningProfilesRequest {
     /// <p>Filters results to return only signing jobs with statuses in the specified list.</p>
     #[serde(rename = "statuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statuses: Option<Vec<String>>,
+    pub statuses: Option<Vec<SigningProfileStatus>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -663,7 +1068,7 @@ pub struct SignatureValidityPeriod {
     /// <p>The time unit for signature validity.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ValidityType>,
     /// <p>The numerical value of the time unit for signature validity.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -698,11 +1103,11 @@ pub struct SigningConfigurationOverrides {
     /// <p>A specified override of the default encryption algorithm that is used in a code signing job.</p>
     #[serde(rename = "encryptionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_algorithm: Option<String>,
+    pub encryption_algorithm: Option<EncryptionAlgorithm>,
     /// <p>A specified override of the default hash algorithm that is used in a code signing job.</p>
     #[serde(rename = "hashAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hash_algorithm: Option<String>,
+    pub hash_algorithm: Option<HashAlgorithm>,
 }
 
 /// <p>The image format of a code signing platform or profile.</p>
@@ -711,10 +1116,10 @@ pub struct SigningConfigurationOverrides {
 pub struct SigningImageFormat {
     /// <p>The default format of a code signing image.</p>
     #[serde(rename = "defaultFormat")]
-    pub default_format: String,
+    pub default_format: ImageFormat,
     /// <p>The supported formats of a code signing image.</p>
     #[serde(rename = "supportedFormats")]
-    pub supported_formats: Vec<String>,
+    pub supported_formats: Vec<ImageFormat>,
 }
 
 /// <p>Contains information about a signing job.</p>
@@ -776,7 +1181,7 @@ pub struct SigningJob {
     /// <p>The status of the signing job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SigningStatus>,
 }
 
 /// <p>Revocation information for a signing job.</p>
@@ -812,7 +1217,7 @@ pub struct SigningPlatform {
     /// <p>The category of a code signing platform.</p>
     #[serde(rename = "category")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<String>,
+    pub category: Option<Category>,
     /// <p>The display name of a code signing platform.</p>
     #[serde(rename = "displayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -856,7 +1261,7 @@ pub struct SigningPlatformOverrides {
     /// <p>A signed image is a JSON object. When overriding the default signing platform configuration, a customer can select either of two signing formats, <code>JSONEmbedded</code> or <code>JSONDetached</code>. (A third format value, <code>JSON</code>, is reserved for future use.) With <code>JSONEmbedded</code>, the signing image has the payload embedded in it. With <code>JSONDetached</code>, the payload is not be embedded in the signing image.</p>
     #[serde(rename = "signingImageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub signing_image_format: Option<String>,
+    pub signing_image_format: Option<ImageFormat>,
 }
 
 /// <p>Contains information about the ACM certificates and code signing configuration parameters that can be used by a given code signing user.</p>
@@ -902,7 +1307,7 @@ pub struct SigningProfile {
     /// <p>The status of a code signing profile.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SigningProfileStatus>,
     /// <p>A list of tags associated with the signing profile.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -925,6 +1330,220 @@ pub struct SigningProfileRevocationRecord {
     #[serde(rename = "revokedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revoked_by: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSigningProfileStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SigningProfileStatus {
+    Active,
+    Canceled,
+    Revoked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSigningProfileStatus),
+}
+
+impl Default for SigningProfileStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SigningProfileStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SigningProfileStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SigningProfileStatus {
+    fn into(self) -> String {
+        match self {
+            SigningProfileStatus::Active => "Active".to_string(),
+            SigningProfileStatus::Canceled => "Canceled".to_string(),
+            SigningProfileStatus::Revoked => "Revoked".to_string(),
+            SigningProfileStatus::UnknownVariant(UnknownSigningProfileStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SigningProfileStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SigningProfileStatus::Active => &"Active",
+            SigningProfileStatus::Canceled => &"Canceled",
+            SigningProfileStatus::Revoked => &"Revoked",
+            SigningProfileStatus::UnknownVariant(UnknownSigningProfileStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SigningProfileStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => SigningProfileStatus::Active,
+            "Canceled" => SigningProfileStatus::Canceled,
+            "Revoked" => SigningProfileStatus::Revoked,
+            _ => SigningProfileStatus::UnknownVariant(UnknownSigningProfileStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SigningProfileStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => SigningProfileStatus::Active,
+            "Canceled" => SigningProfileStatus::Canceled,
+            "Revoked" => SigningProfileStatus::Revoked,
+            _ => SigningProfileStatus::UnknownVariant(UnknownSigningProfileStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SigningProfileStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SigningProfileStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SigningProfileStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSigningStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SigningStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSigningStatus),
+}
+
+impl Default for SigningStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SigningStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SigningStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SigningStatus {
+    fn into(self) -> String {
+        match self {
+            SigningStatus::Failed => "Failed".to_string(),
+            SigningStatus::InProgress => "InProgress".to_string(),
+            SigningStatus::Succeeded => "Succeeded".to_string(),
+            SigningStatus::UnknownVariant(UnknownSigningStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SigningStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SigningStatus::Failed => &"Failed",
+            SigningStatus::InProgress => &"InProgress",
+            SigningStatus::Succeeded => &"Succeeded",
+            SigningStatus::UnknownVariant(UnknownSigningStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SigningStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => SigningStatus::Failed,
+            "InProgress" => SigningStatus::InProgress,
+            "Succeeded" => SigningStatus::Succeeded,
+            _ => SigningStatus::UnknownVariant(UnknownSigningStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SigningStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => SigningStatus::Failed,
+            "InProgress" => SigningStatus::InProgress,
+            "Succeeded" => SigningStatus::Succeeded,
+            _ => SigningStatus::UnknownVariant(UnknownSigningStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SigningStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SigningStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SigningStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An <code>S3Source</code> object that contains information about the S3 bucket where you saved your unsigned code.</p>
@@ -999,6 +1618,111 @@ pub struct UntagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidityType {
+    Days,
+    Months,
+    Years,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidityType),
+}
+
+impl Default for ValidityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidityType {
+    fn into(self) -> String {
+        match self {
+            ValidityType::Days => "DAYS".to_string(),
+            ValidityType::Months => "MONTHS".to_string(),
+            ValidityType::Years => "YEARS".to_string(),
+            ValidityType::UnknownVariant(UnknownValidityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidityType {
+    fn into(self) -> &'a str {
+        match self {
+            ValidityType::Days => &"DAYS",
+            ValidityType::Months => &"MONTHS",
+            ValidityType::Years => &"YEARS",
+            ValidityType::UnknownVariant(UnknownValidityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAYS" => ValidityType::Days,
+            "MONTHS" => ValidityType::Months,
+            "YEARS" => ValidityType::Years,
+            _ => ValidityType::UnknownVariant(UnknownValidityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAYS" => ValidityType::Days,
+            "MONTHS" => ValidityType::Months,
+            "YEARS" => ValidityType::Years,
+            _ => ValidityType::UnknownVariant(UnknownValidityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ValidityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ValidityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// Errors returned by AddProfilePermission
 #[derive(Debug, PartialEq)]

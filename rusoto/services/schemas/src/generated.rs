@@ -26,6 +26,116 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCodeGenerationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CodeGenerationStatus {
+    CreateComplete,
+    CreateFailed,
+    CreateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCodeGenerationStatus),
+}
+
+impl Default for CodeGenerationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CodeGenerationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CodeGenerationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CodeGenerationStatus {
+    fn into(self) -> String {
+        match self {
+            CodeGenerationStatus::CreateComplete => "CREATE_COMPLETE".to_string(),
+            CodeGenerationStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            CodeGenerationStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            CodeGenerationStatus::UnknownVariant(UnknownCodeGenerationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CodeGenerationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CodeGenerationStatus::CreateComplete => &"CREATE_COMPLETE",
+            CodeGenerationStatus::CreateFailed => &"CREATE_FAILED",
+            CodeGenerationStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            CodeGenerationStatus::UnknownVariant(UnknownCodeGenerationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CodeGenerationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_COMPLETE" => CodeGenerationStatus::CreateComplete,
+            "CREATE_FAILED" => CodeGenerationStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => CodeGenerationStatus::CreateInProgress,
+            _ => CodeGenerationStatus::UnknownVariant(UnknownCodeGenerationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CodeGenerationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_COMPLETE" => CodeGenerationStatus::CreateComplete,
+            "CREATE_FAILED" => CodeGenerationStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => CodeGenerationStatus::CreateInProgress,
+            _ => CodeGenerationStatus::UnknownVariant(UnknownCodeGenerationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CodeGenerationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CodeGenerationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CodeGenerationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDiscovererRequest {
@@ -64,7 +174,7 @@ pub struct CreateDiscovererResponse {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
     /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -130,7 +240,7 @@ pub struct CreateSchemaRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of schema.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -255,7 +365,7 @@ pub struct DescribeCodeBindingResponse {
     /// <p>The current status of code binding generation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CodeGenerationStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -288,7 +398,7 @@ pub struct DescribeDiscovererResponse {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
     /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -380,6 +490,107 @@ pub struct DescribeSchemaResponse {
     pub version_created_date: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDiscovererState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DiscovererState {
+    Started,
+    Stopped,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDiscovererState),
+}
+
+impl Default for DiscovererState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DiscovererState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DiscovererState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DiscovererState {
+    fn into(self) -> String {
+        match self {
+            DiscovererState::Started => "STARTED".to_string(),
+            DiscovererState::Stopped => "STOPPED".to_string(),
+            DiscovererState::UnknownVariant(UnknownDiscovererState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DiscovererState {
+    fn into(self) -> &'a str {
+        match self {
+            DiscovererState::Started => &"STARTED",
+            DiscovererState::Stopped => &"STOPPED",
+            DiscovererState::UnknownVariant(UnknownDiscovererState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DiscovererState {
+    fn from(name: &str) -> Self {
+        match name {
+            "STARTED" => DiscovererState::Started,
+            "STOPPED" => DiscovererState::Stopped,
+            _ => DiscovererState::UnknownVariant(UnknownDiscovererState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DiscovererState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STARTED" => DiscovererState::Started,
+            "STOPPED" => DiscovererState::Stopped,
+            _ => DiscovererState::UnknownVariant(UnknownDiscovererState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DiscovererState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DiscovererState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DiscovererState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DiscovererSummary {
@@ -398,7 +609,7 @@ pub struct DiscovererSummary {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
     /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -473,7 +684,7 @@ pub struct GetDiscoveredSchemaRequest {
     pub events: Vec<String>,
     /// <p>The type of event.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -688,7 +899,7 @@ pub struct PutCodeBindingResponse {
     /// <p>The current status of code binding generation.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CodeGenerationStatus>,
 }
 
 /// <p>The name of the policy.</p>
@@ -782,7 +993,7 @@ pub struct SchemaVersionSummary {
     /// <p>The type of schema.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -820,7 +1031,7 @@ pub struct SearchSchemaVersionSummary {
     /// <p>The type of schema.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -872,7 +1083,7 @@ pub struct StartDiscovererResponse {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -893,7 +1104,7 @@ pub struct StopDiscovererResponse {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
 }
 
 /// <p></p>
@@ -906,6 +1117,106 @@ pub struct TagResourceRequest {
     /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    JsonschemaDraft4,
+    OpenApi3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::JsonschemaDraft4 => "JSONSchemaDraft4".to_string(),
+            Type::OpenApi3 => "OpenApi3".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::JsonschemaDraft4 => &"JSONSchemaDraft4",
+            Type::OpenApi3 => &"OpenApi3",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSONSchemaDraft4" => Type::JsonschemaDraft4,
+            "OpenApi3" => Type::OpenApi3,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSONSchemaDraft4" => Type::JsonschemaDraft4,
+            "OpenApi3" => Type::OpenApi3,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -953,7 +1264,7 @@ pub struct UpdateDiscovererResponse {
     /// <p>The state of the discoverer.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiscovererState>,
     /// <p>Tags associated with the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1018,7 +1329,7 @@ pub struct UpdateSchemaRequest {
     /// <p>The schema type for the events schema.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

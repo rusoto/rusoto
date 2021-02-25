@@ -80,11 +80,11 @@ impl AcceptReservedNodeExchangeInputMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ReservedNodeId"),
-            &obj.reserved_node_id,
+            &obj.reserved_node_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "TargetReservedNodeOfferingId"),
-            &obj.target_reserved_node_offering_id,
+            &obj.target_reserved_node_offering_id.to_string(),
         );
     }
 }
@@ -243,6 +243,114 @@ impl AccountsWithRestoreAccessListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionType {
+    RecommendNodeConfig,
+    ResizeCluster,
+    RestoreCluster,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionType),
+}
+
+impl Default for ActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionType {
+    fn into(self) -> String {
+        match self {
+            ActionType::RecommendNodeConfig => "recommend-node-config".to_string(),
+            ActionType::ResizeCluster => "resize-cluster".to_string(),
+            ActionType::RestoreCluster => "restore-cluster".to_string(),
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionType {
+    fn into(self) -> &'a str {
+        match self {
+            ActionType::RecommendNodeConfig => &"recommend-node-config",
+            ActionType::ResizeCluster => &"resize-cluster",
+            ActionType::RestoreCluster => &"restore-cluster",
+            ActionType::UnknownVariant(UnknownActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "recommend-node-config" => ActionType::RecommendNodeConfig,
+            "resize-cluster" => ActionType::ResizeCluster,
+            "restore-cluster" => ActionType::RestoreCluster,
+            _ => ActionType::UnknownVariant(UnknownActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "recommend-node-config" => ActionType::RecommendNodeConfig,
+            "resize-cluster" => ActionType::ResizeCluster,
+            "restore-cluster" => ActionType::RestoreCluster,
+            _ => ActionType::UnknownVariant(UnknownActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AssociatedClusterListDeserializer;
 impl AssociatedClusterListDeserializer {
@@ -292,7 +400,7 @@ impl AttributeNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -374,22 +482,22 @@ impl AuthorizeClusterSecurityGroupIngressMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cidrip {
-            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value);
+            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value.to_string());
         }
         params.put(
             &format!("{}{}", prefix, "ClusterSecurityGroupName"),
-            &obj.cluster_security_group_name,
+            &obj.cluster_security_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.ec2_security_group_name {
             params.put(
                 &format!("{}{}", prefix, "EC2SecurityGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.ec2_security_group_owner_id {
             params.put(
                 &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -451,17 +559,17 @@ impl AuthorizeSnapshotAccessMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AccountWithRestoreAccess"),
-            &obj.account_with_restore_access,
+            &obj.account_with_restore_access.to_string(),
         );
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
     }
 }
@@ -770,7 +878,7 @@ impl CancelResizeMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -868,7 +976,7 @@ pub struct Cluster {
     /// <p>A unique identifier for the cluster snapshot schedule.</p>
     pub snapshot_schedule_identifier: Option<String>,
     /// <p>The current state of the cluster snapshot schedule.</p>
-    pub snapshot_schedule_state: Option<String>,
+    pub snapshot_schedule_state: Option<ScheduleState>,
     /// <p>The list of tags for the cluster.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The identifier of the VPC the cluster is in, if the cluster is in a VPC.</p>
@@ -1153,7 +1261,7 @@ pub struct ClusterAssociatedToSchedule {
     /// <p><p/></p>
     pub cluster_identifier: Option<String>,
     /// <p><p/></p>
-    pub schedule_association_state: Option<String>,
+    pub schedule_association_state: Option<ScheduleState>,
 }
 
 #[allow(dead_code)]
@@ -1936,7 +2044,7 @@ impl ClusterSecurityGroupNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2301,16 +2409,16 @@ impl CopyClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.source_snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SourceSnapshotClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "SourceSnapshotIdentifier"),
-            &obj.source_snapshot_identifier,
+            &obj.source_snapshot_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "TargetSnapshotIdentifier"),
-            &obj.target_snapshot_identifier,
+            &obj.target_snapshot_identifier.to_string(),
         );
     }
 }
@@ -2422,7 +2530,10 @@ impl CreateClusterMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.additional_info {
-            params.put(&format!("{}{}", prefix, "AdditionalInfo"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AdditionalInfo"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
@@ -2437,7 +2548,10 @@ impl CreateClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.availability_zone_relocation {
             params.put(
@@ -2447,12 +2561,12 @@ impl CreateClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
@@ -2465,20 +2579,29 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cluster_type {
-            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.db_name {
-            params.put(&format!("{}{}", prefix, "DBName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DBName"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ElasticIp"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.encrypted {
             params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
@@ -2489,13 +2612,13 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.iam_roles {
@@ -2506,12 +2629,15 @@ impl CreateClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.maintenance_track_name {
             params.put(
                 &format!("{}{}", prefix, "MaintenanceTrackName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
@@ -2522,13 +2648,16 @@ impl CreateClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "MasterUserPassword"),
-            &obj.master_user_password,
+            &obj.master_user_password.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "MasterUsername"),
-            &obj.master_username,
+            &obj.master_username.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "NodeType"), &obj.node_type);
+        params.put(
+            &format!("{}{}", prefix, "NodeType"),
+            &obj.node_type.to_string(),
+        );
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
         }
@@ -2538,7 +2667,7 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
@@ -2547,7 +2676,7 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_schedule_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotScheduleIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.tags {
@@ -2586,14 +2715,17 @@ impl CreateClusterParameterGroupMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ParameterGroupFamily"),
-            &obj.parameter_group_family,
+            &obj.parameter_group_family.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
+            &obj.parameter_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2682,9 +2814,12 @@ impl CreateClusterSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterSecurityGroupName"),
-            &obj.cluster_security_group_name,
+            &obj.cluster_security_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
@@ -2749,7 +2884,7 @@ impl CreateClusterSnapshotMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
@@ -2759,7 +2894,7 @@ impl CreateClusterSnapshotMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2821,9 +2956,12 @@ impl CreateClusterSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-            &obj.cluster_subnet_group_name,
+            &obj.cluster_subnet_group_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
         SubnetIdentifierListSerializer::serialize(
             params,
             &format!("{}{}", prefix, "SubnetIdentifier"),
@@ -2910,9 +3048,15 @@ impl CreateEventSubscriptionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Severity"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "SnsTopicArn"), &obj.sns_topic_arn);
+        params.put(
+            &format!("{}{}", prefix, "SnsTopicArn"),
+            &obj.sns_topic_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
                 params,
@@ -2921,11 +3065,14 @@ impl CreateEventSubscriptionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceType"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SubscriptionName"),
-            &obj.subscription_name,
+            &obj.subscription_name.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -2986,7 +3133,7 @@ impl CreateHsmClientCertificateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-            &obj.hsm_client_certificate_identifier,
+            &obj.hsm_client_certificate_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -3056,26 +3203,29 @@ impl CreateHsmConfigurationMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        params.put(
+            &format!("{}{}", prefix, "Description"),
+            &obj.description.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-            &obj.hsm_configuration_identifier,
+            &obj.hsm_configuration_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "HsmIpAddress"),
-            &obj.hsm_ip_address,
+            &obj.hsm_ip_address.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "HsmPartitionName"),
-            &obj.hsm_partition_name,
+            &obj.hsm_partition_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "HsmPartitionPassword"),
-            &obj.hsm_partition_password,
+            &obj.hsm_partition_password.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "HsmServerPublicCertificate"),
-            &obj.hsm_server_public_certificate,
+            &obj.hsm_server_public_certificate.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -3151,17 +3301,23 @@ impl CreateScheduledActionMessageSerializer {
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "IamRole"), &obj.iam_role);
-        params.put(&format!("{}{}", prefix, "Schedule"), &obj.schedule);
+        params.put(
+            &format!("{}{}", prefix, "IamRole"),
+            &obj.iam_role.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Schedule"),
+            &obj.schedule.to_string(),
+        );
         if let Some(ref field_value) = obj.scheduled_action_description {
             params.put(
                 &format!("{}{}", prefix, "ScheduledActionDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -3196,11 +3352,14 @@ impl CreateSnapshotCopyGrantMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotCopyGrantName"),
-            &obj.snapshot_copy_grant_name,
+            &obj.snapshot_copy_grant_name.to_string(),
         );
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -3282,11 +3441,14 @@ impl CreateSnapshotScheduleMessageSerializer {
         if let Some(ref field_value) = obj.schedule_description {
             params.put(
                 &format!("{}{}", prefix, "ScheduleDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.schedule_identifier {
-            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ScheduleIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -3313,7 +3475,10 @@ impl CreateTagsMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(
+            &format!("{}{}", prefix, "ResourceName"),
+            &obj.resource_name.to_string(),
+        );
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
@@ -3324,15 +3489,15 @@ pub struct CreateUsageLimitMessage {
     /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB). The value must be a positive number. </p>
     pub amount: i64,
     /// <p>The action that Amazon Redshift takes when the limit is reached. The default is log. For more information about this parameter, see <a>UsageLimit</a>.</p>
-    pub breach_action: Option<String>,
+    pub breach_action: Option<UsageLimitBreachAction>,
     /// <p>The identifier of the cluster that you want to limit usage.</p>
     pub cluster_identifier: String,
     /// <p>The Amazon Redshift feature that you want to limit.</p>
-    pub feature_type: String,
+    pub feature_type: UsageLimitFeatureType,
     /// <p>The type of limit. Depending on the feature type, this can be based on a time duration or data size. If <code>FeatureType</code> is <code>spectrum</code>, then <code>LimitType</code> must be <code>data-scanned</code>. If <code>FeatureType</code> is <code>concurrency-scaling</code>, then <code>LimitType</code> must be <code>time</code>. </p>
-    pub limit_type: String,
+    pub limit_type: UsageLimitLimitType,
     /// <p>The time period that the amount applies to. A <code>weekly</code> period begins on Sunday. The default is <code>monthly</code>. </p>
-    pub period: Option<String>,
+    pub period: Option<UsageLimitPeriod>,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
 }
@@ -3348,16 +3513,25 @@ impl CreateUsageLimitMessageSerializer {
 
         params.put(&format!("{}{}", prefix, "Amount"), &obj.amount);
         if let Some(ref field_value) = obj.breach_action {
-            params.put(&format!("{}{}", prefix, "BreachAction"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "BreachAction"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "FeatureType"), &obj.feature_type);
-        params.put(&format!("{}{}", prefix, "LimitType"), &obj.limit_type);
+        params.put(
+            &format!("{}{}", prefix, "FeatureType"),
+            &obj.feature_type.to_string(),
+        );
+        params.put(
+            &format!("{}{}", prefix, "LimitType"),
+            &obj.limit_type.to_string(),
+        );
         if let Some(ref field_value) = obj.period {
-            params.put(&format!("{}{}", prefix, "Period"), &field_value);
+            params.put(&format!("{}{}", prefix, "Period"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
@@ -3479,7 +3653,7 @@ impl DbGroupListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3626,12 +3800,12 @@ impl DeleteClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.final_cluster_snapshot_identifier {
             params.put(
                 &format!("{}{}", prefix, "FinalClusterSnapshotIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.final_cluster_snapshot_retention_period {
@@ -3668,7 +3842,7 @@ impl DeleteClusterParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
+            &obj.parameter_group_name.to_string(),
         );
     }
 }
@@ -3717,7 +3891,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterSecurityGroupName"),
-            &obj.cluster_security_group_name,
+            &obj.cluster_security_group_name.to_string(),
         );
     }
 }
@@ -3744,12 +3918,12 @@ impl DeleteClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
     }
 }
@@ -3813,7 +3987,7 @@ impl DeleteClusterSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-            &obj.cluster_subnet_group_name,
+            &obj.cluster_subnet_group_name.to_string(),
         );
     }
 }
@@ -3837,7 +4011,7 @@ impl DeleteEventSubscriptionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SubscriptionName"),
-            &obj.subscription_name,
+            &obj.subscription_name.to_string(),
         );
     }
 }
@@ -3861,7 +4035,7 @@ impl DeleteHsmClientCertificateMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-            &obj.hsm_client_certificate_identifier,
+            &obj.hsm_client_certificate_identifier.to_string(),
         );
     }
 }
@@ -3885,7 +4059,7 @@ impl DeleteHsmConfigurationMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-            &obj.hsm_configuration_identifier,
+            &obj.hsm_configuration_identifier.to_string(),
         );
     }
 }
@@ -3908,7 +4082,7 @@ impl DeleteScheduledActionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
     }
 }
@@ -3932,7 +4106,7 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "SnapshotCopyGrantName"),
-            &obj.snapshot_copy_grant_name,
+            &obj.snapshot_copy_grant_name.to_string(),
         );
     }
 }
@@ -3955,7 +4129,7 @@ impl DeleteSnapshotScheduleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ScheduleIdentifier"),
-            &obj.schedule_identifier,
+            &obj.schedule_identifier.to_string(),
         );
     }
 }
@@ -3979,7 +4153,10 @@ impl DeleteTagsMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
+        params.put(
+            &format!("{}{}", prefix, "ResourceName"),
+            &obj.resource_name.to_string(),
+        );
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }
@@ -4002,7 +4179,7 @@ impl DeleteUsageLimitMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "UsageLimitId"),
-            &obj.usage_limit_id,
+            &obj.usage_limit_id.to_string(),
         );
     }
 }
@@ -4054,10 +4231,13 @@ impl DescribeClusterDbRevisionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4091,13 +4271,16 @@ impl DescribeClusterParameterGroupsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.parameter_group_name {
-            params.put(&format!("{}{}", prefix, "ParameterGroupName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterGroupName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4140,17 +4323,17 @@ impl DescribeClusterParametersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
+            &obj.parameter_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"), &field_value.to_string());
         }
     }
 }
@@ -4183,11 +4366,11 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cluster_security_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterSecurityGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4252,25 +4435,37 @@ impl DescribeClusterSnapshotsMessageSerializer {
             params.put(&format!("{}{}", prefix, "ClusterExists"), &field_value);
         }
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.end_time {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.owner_account {
-            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OwnerAccount"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_identifier {
-            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_type {
-            params.put(&format!("{}{}", prefix, "SnapshotType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.sorting_entities {
             SnapshotSortingEntityListSerializer::serialize(
@@ -4327,11 +4522,11 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4376,11 +4571,11 @@ impl DescribeClusterTracksMessageSerializer {
         if let Some(ref field_value) = obj.maintenance_track_name {
             params.put(
                 &format!("{}{}", prefix, "MaintenanceTrackName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4414,14 +4609,17 @@ impl DescribeClusterVersionsMessageSerializer {
         if let Some(ref field_value) = obj.cluster_parameter_group_family {
             params.put(
                 &format!("{}{}", prefix, "ClusterParameterGroupFamily"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4455,10 +4653,13 @@ impl DescribeClustersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4502,14 +4703,14 @@ impl DescribeDefaultClusterParametersMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ParameterGroupFamily"),
-            &obj.parameter_group_family,
+            &obj.parameter_group_family.to_string(),
         );
     }
 }
@@ -4565,7 +4766,10 @@ impl DescribeEventCategoriesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceType"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4596,13 +4800,16 @@ impl DescribeEventSubscriptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.subscription_name {
-            params.put(&format!("{}{}", prefix, "SubscriptionName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SubscriptionName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -4636,7 +4843,7 @@ pub struct DescribeEventsMessage {
     /// <p><p>The identifier of the event source for which events will be returned. If this parameter is not specified, then all sources are included in the response.</p> <p>Constraints:</p> <p>If <i>SourceIdentifier</i> is supplied, <i>SourceType</i> must also be provided.</p> <ul> <li> <p>Specify a cluster identifier when <i>SourceType</i> is <code>cluster</code>.</p> </li> <li> <p>Specify a cluster security group name when <i>SourceType</i> is <code>cluster-security-group</code>.</p> </li> <li> <p>Specify a cluster parameter group name when <i>SourceType</i> is <code>cluster-parameter-group</code>.</p> </li> <li> <p>Specify a cluster snapshot identifier when <i>SourceType</i> is <code>cluster-snapshot</code>.</p> </li> </ul></p>
     pub source_identifier: Option<String>,
     /// <p><p>The event source to retrieve events for. If no value is specified, all events are returned.</p> <p>Constraints:</p> <p>If <i>SourceType</i> is supplied, <i>SourceIdentifier</i> must also be provided.</p> <ul> <li> <p>Specify <code>cluster</code> when <i>SourceIdentifier</i> is a cluster identifier.</p> </li> <li> <p>Specify <code>cluster-security-group</code> when <i>SourceIdentifier</i> is a cluster security group name.</p> </li> <li> <p>Specify <code>cluster-parameter-group</code> when <i>SourceIdentifier</i> is a cluster parameter group name.</p> </li> <li> <p>Specify <code>cluster-snapshot</code> when <i>SourceIdentifier</i> is a cluster snapshot identifier.</p> </li> </ul></p>
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
     /// <p>The beginning of the time interval to retrieve events for, specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2009-07-08T18:00Z</code> </p>
     pub start_time: Option<String>,
 }
@@ -4657,16 +4864,22 @@ impl DescribeEventsMessageSerializer {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.source_identifier {
-            params.put(&format!("{}{}", prefix, "SourceIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -4702,11 +4915,11 @@ impl DescribeHsmClientCertificatesMessageSerializer {
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4756,11 +4969,11 @@ impl DescribeHsmConfigurationsMessageSerializer {
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4801,7 +5014,7 @@ impl DescribeLoggingStatusMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -4810,7 +5023,7 @@ impl DescribeLoggingStatusMessageSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodeConfigurationOptionsMessage {
     /// <p>The action type to evaluate for possible node configurations. Specify "restore-cluster" to get configuration combinations based on an existing snapshot. Specify "recommend-node-config" to get configuration recommendations based on an existing cluster or snapshot. Specify "resize-cluster" to get configuration combinations for elastic resize based on an existing cluster. </p>
-    pub action_type: String,
+    pub action_type: ActionType,
     /// <p>The identifier of the cluster to evaluate for possible node configurations.</p>
     pub cluster_identifier: Option<String>,
     /// <p>A set of name, operator, and value items to filter the results.</p>
@@ -4834,9 +5047,15 @@ impl DescribeNodeConfigurationOptionsMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ActionType"), &obj.action_type);
+        params.put(
+            &format!("{}{}", prefix, "ActionType"),
+            &obj.action_type.to_string(),
+        );
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.filters {
             NodeConfigurationOptionsFilterListSerializer::serialize(
@@ -4846,16 +5065,22 @@ impl DescribeNodeConfigurationOptionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.owner_account {
-            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OwnerAccount"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.snapshot_identifier {
-            params.put(&format!("{}{}", prefix, "SnapshotIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnapshotIdentifier"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4884,16 +5109,22 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeType"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4920,7 +5151,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -4928,7 +5159,7 @@ impl DescribeReservedNodeOfferingsMessageSerializer {
         if let Some(ref field_value) = obj.reserved_node_offering_id {
             params.put(
                 &format!("{}{}", prefix, "ReservedNodeOfferingId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -4956,13 +5187,16 @@ impl DescribeReservedNodesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.reserved_node_id {
-            params.put(&format!("{}{}", prefix, "ReservedNodeId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ReservedNodeId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -4986,7 +5220,7 @@ impl DescribeResizeMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -5009,7 +5243,7 @@ pub struct DescribeScheduledActionsMessage {
     /// <p>The start time in UTC of the scheduled actions to retrieve. Only active scheduled actions that have invocations after this time are retrieved.</p>
     pub start_time: Option<String>,
     /// <p>The type of the scheduled actions to retrieve. </p>
-    pub target_action_type: Option<String>,
+    pub target_action_type: Option<ScheduledActionTypeValues>,
 }
 
 /// Serialize `DescribeScheduledActionsMessage` contents to a `SignedRequest`.
@@ -5035,7 +5269,7 @@ impl DescribeScheduledActionsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -5043,14 +5277,17 @@ impl DescribeScheduledActionsMessageSerializer {
         if let Some(ref field_value) = obj.scheduled_action_name {
             params.put(
                 &format!("{}{}", prefix, "ScheduledActionName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
         }
         if let Some(ref field_value) = obj.target_action_type {
-            params.put(&format!("{}{}", prefix, "TargetActionType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetActionType"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5081,7 +5318,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -5089,7 +5326,7 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(
                 &format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.tag_keys {
@@ -5136,16 +5373,22 @@ impl DescribeSnapshotSchedulesMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.schedule_identifier {
-            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ScheduleIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -5228,10 +5471,13 @@ impl DescribeTableRestoreStatusMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -5239,7 +5485,7 @@ impl DescribeTableRestoreStatusMessageSerializer {
         if let Some(ref field_value) = obj.table_restore_request_id {
             params.put(
                 &format!("{}{}", prefix, "TableRestoreRequestId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -5273,16 +5519,22 @@ impl DescribeTagsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         if let Some(ref field_value) = obj.resource_name {
-            params.put(&format!("{}{}", prefix, "ResourceName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.resource_type {
-            params.put(&format!("{}{}", prefix, "ResourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ResourceType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
@@ -5307,7 +5559,7 @@ pub struct DescribeUsageLimitsMessage {
     /// <p>The identifier of the cluster for which you want to describe usage limits.</p>
     pub cluster_identifier: Option<String>,
     /// <p>The feature type for which you want to describe usage limits.</p>
-    pub feature_type: Option<String>,
+    pub feature_type: Option<UsageLimitFeatureType>,
     /// <p>An optional parameter that specifies the starting point to return a set of response records. When the results of a <a>DescribeUsageLimits</a> request exceed the value specified in <code>MaxRecords</code>, AWS returns a value in the <code>Marker</code> field of the response. You can retrieve the next set of response records by providing the returned marker value in the <code>Marker</code> parameter and retrying the request. </p>
     pub marker: Option<String>,
     /// <p>The maximum number of response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned marker value. </p> <p>Default: <code>100</code> </p> <p>Constraints: minimum 20, maximum 100.</p>
@@ -5330,13 +5582,19 @@ impl DescribeUsageLimitsMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cluster_identifier {
-            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterIdentifier"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.feature_type {
-            params.put(&format!("{}{}", prefix, "FeatureType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "FeatureType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
@@ -5356,7 +5614,10 @@ impl DescribeUsageLimitsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.usage_limit_id {
-            params.put(&format!("{}{}", prefix, "UsageLimitId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "UsageLimitId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5380,7 +5641,7 @@ impl DisableLoggingMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -5404,7 +5665,7 @@ impl DisableSnapshotCopyMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -5599,13 +5860,19 @@ impl EnableLoggingMessageSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "BucketName"), &obj.bucket_name);
+        params.put(
+            &format!("{}{}", prefix, "BucketName"),
+            &obj.bucket_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.s3_key_prefix {
-            params.put(&format!("{}{}", prefix, "S3KeyPrefix"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "S3KeyPrefix"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5637,11 +5904,11 @@ impl EnableSnapshotCopyMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "DestinationRegion"),
-            &obj.destination_region,
+            &obj.destination_region.to_string(),
         );
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
             params.put(
@@ -5655,7 +5922,7 @@ impl EnableSnapshotCopyMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_copy_grant_name {
             params.put(
                 &format!("{}{}", prefix, "SnapshotCopyGrantName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -5746,7 +6013,7 @@ pub struct Event {
     /// <p>The identifier for the source of the event.</p>
     pub source_identifier: Option<String>,
     /// <p>The source type for this event.</p>
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
 }
 
 #[allow(dead_code)]
@@ -5812,7 +6079,7 @@ impl EventCategoriesListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6207,7 +6474,7 @@ impl GetClusterCredentialsMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.db_groups {
             DbGroupListSerializer::serialize(
@@ -6217,9 +6484,9 @@ impl GetClusterCredentialsMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.db_name {
-            params.put(&format!("{}{}", prefix, "DbName"), &field_value);
+            params.put(&format!("{}{}", prefix, "DbName"), &field_value.to_string());
         }
-        params.put(&format!("{}{}", prefix, "DbUser"), &obj.db_user);
+        params.put(&format!("{}{}", prefix, "DbUser"), &obj.db_user.to_string());
         if let Some(ref field_value) = obj.duration_seconds {
             params.put(&format!("{}{}", prefix, "DurationSeconds"), &field_value);
         }
@@ -6252,14 +6519,14 @@ impl GetReservedNodeExchangeOfferingsInputMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ReservedNodeId"),
-            &obj.reserved_node_id,
+            &obj.reserved_node_id.to_string(),
         );
     }
 }
@@ -6634,7 +6901,7 @@ impl IamRoleArnListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6832,12 +7099,115 @@ impl MaintenanceTrackDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mode {
+    HighPerformance,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMode),
+}
+
+impl Default for Mode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mode {
+    fn into(self) -> String {
+        match self {
+            Mode::HighPerformance => "high-performance".to_string(),
+            Mode::Standard => "standard".to_string(),
+            Mode::UnknownVariant(UnknownMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mode {
+    fn into(self) -> &'a str {
+        match self {
+            Mode::HighPerformance => &"high-performance",
+            Mode::Standard => &"standard",
+            Mode::UnknownVariant(UnknownMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mode {
+    fn from(name: &str) -> Self {
+        match name {
+            "high-performance" => Mode::HighPerformance,
+            "standard" => Mode::Standard,
+            _ => Mode::UnknownVariant(UnknownMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "high-performance" => Mode::HighPerformance,
+            "standard" => Mode::Standard,
+            _ => Mode::UnknownVariant(UnknownMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Mode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Mode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ModeDeserializer;
 impl ModeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Mode, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -6860,11 +7230,11 @@ impl ModifyClusterDbRevisionMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "RevisionTarget"),
-            &obj.revision_target,
+            &obj.revision_target.to_string(),
         );
     }
 }
@@ -6928,7 +7298,7 @@ impl ModifyClusterIamRolesMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.remove_iam_roles {
             IamRoleArnListSerializer::serialize(
@@ -6997,7 +7367,7 @@ impl ModifyClusterMaintenanceMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.defer_maintenance {
             params.put(&format!("{}{}", prefix, "DeferMaintenance"), &field_value);
@@ -7017,7 +7387,7 @@ impl ModifyClusterMaintenanceMessageSerializer {
         if let Some(ref field_value) = obj.defer_maintenance_identifier {
             params.put(
                 &format!("{}{}", prefix, "DeferMaintenanceIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.defer_maintenance_start_time {
@@ -7136,7 +7506,10 @@ impl ModifyClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.availability_zone_relocation {
             params.put(
@@ -7146,12 +7519,12 @@ impl ModifyClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
@@ -7162,13 +7535,22 @@ impl ModifyClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.cluster_type {
-            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.cluster_version {
-            params.put(&format!("{}{}", prefix, "ClusterVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ElasticIp"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.encrypted {
             params.put(&format!("{}{}", prefix, "Encrypted"), &field_value);
@@ -7179,22 +7561,25 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.maintenance_track_name {
             params.put(
                 &format!("{}{}", prefix, "MaintenanceTrackName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
@@ -7204,16 +7589,22 @@ impl ModifyClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.master_user_password {
-            params.put(&format!("{}{}", prefix, "MasterUserPassword"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MasterUserPassword"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.new_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "NewClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
@@ -7224,7 +7615,7 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
@@ -7261,7 +7652,7 @@ impl ModifyClusterParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
+            &obj.parameter_group_name.to_string(),
         );
         ParametersListSerializer::serialize(
             params,
@@ -7327,7 +7718,7 @@ impl ModifyClusterSnapshotMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
     }
 }
@@ -7383,7 +7774,7 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.disassociate_schedule {
             params.put(
@@ -7392,7 +7783,10 @@ impl ModifyClusterSnapshotScheduleMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.schedule_identifier {
-            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ScheduleIdentifier"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -7420,10 +7814,13 @@ impl ModifyClusterSubnetGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-            &obj.cluster_subnet_group_name,
+            &obj.cluster_subnet_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         SubnetIdentifierListSerializer::serialize(
             params,
@@ -7506,10 +7903,16 @@ impl ModifyEventSubscriptionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.severity {
-            params.put(&format!("{}{}", prefix, "Severity"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Severity"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.sns_topic_arn {
-            params.put(&format!("{}{}", prefix, "SnsTopicArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SnsTopicArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
@@ -7519,11 +7922,14 @@ impl ModifyEventSubscriptionMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.source_type {
-            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceType"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SubscriptionName"),
-            &obj.subscription_name,
+            &obj.subscription_name.to_string(),
         );
     }
 }
@@ -7597,20 +8003,26 @@ impl ModifyScheduledActionMessageSerializer {
             params.put(&format!("{}{}", prefix, "EndTime"), &field_value);
         }
         if let Some(ref field_value) = obj.iam_role {
-            params.put(&format!("{}{}", prefix, "IamRole"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IamRole"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.schedule {
-            params.put(&format!("{}{}", prefix, "Schedule"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Schedule"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.scheduled_action_description {
             params.put(
                 &format!("{}{}", prefix, "ScheduledActionDescription"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "ScheduledActionName"),
-            &obj.scheduled_action_name,
+            &obj.scheduled_action_name.to_string(),
         );
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -7648,7 +8060,7 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.manual {
             params.put(&format!("{}{}", prefix, "Manual"), &field_value);
@@ -7714,7 +8126,7 @@ impl ModifySnapshotScheduleMessageSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "ScheduleIdentifier"),
-            &obj.schedule_identifier,
+            &obj.schedule_identifier.to_string(),
         );
     }
 }
@@ -7725,7 +8137,7 @@ pub struct ModifyUsageLimitMessage {
     /// <p>The new limit amount. For more information about this parameter, see <a>UsageLimit</a>. </p>
     pub amount: Option<i64>,
     /// <p>The new action that Amazon Redshift takes when the limit is reached. For more information about this parameter, see <a>UsageLimit</a>. </p>
-    pub breach_action: Option<String>,
+    pub breach_action: Option<UsageLimitBreachAction>,
     /// <p>The identifier of the usage limit to modify.</p>
     pub usage_limit_id: String,
 }
@@ -7743,11 +8155,14 @@ impl ModifyUsageLimitMessageSerializer {
             params.put(&format!("{}{}", prefix, "Amount"), &field_value);
         }
         if let Some(ref field_value) = obj.breach_action {
-            params.put(&format!("{}{}", prefix, "BreachAction"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "BreachAction"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "UsageLimitId"),
-            &obj.usage_limit_id,
+            &obj.usage_limit_id.to_string(),
         );
     }
 }
@@ -7759,7 +8174,7 @@ pub struct NodeConfigurationOption {
     /// <p>The estimated disk utilizaton percentage.</p>
     pub estimated_disk_utilization_percent: Option<f64>,
     /// <p>The category of the node configuration recommendation.</p>
-    pub mode: Option<String>,
+    pub mode: Option<Mode>,
     /// <p>The node type, such as, "ds2.8xlarge".</p>
     pub node_type: Option<String>,
     /// <p>The number of nodes.</p>
@@ -7829,9 +8244,9 @@ impl NodeConfigurationOptionListDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeConfigurationOptionsFilter {
     /// <p>The name of the element to filter.</p>
-    pub name: Option<String>,
+    pub name: Option<NodeConfigurationOptionsFilterName>,
     /// <p>The filter operator. If filter Name is NodeType only the 'in' operator is supported. Provide one value to evaluate for 'eq', 'lt', 'le', 'gt', and 'ge'. Provide two values to evaluate for 'between'. Provide a list of values for 'in'.</p>
-    pub operator: Option<String>,
+    pub operator: Option<OperatorType>,
     /// <p>List of values. Compare Name using Operator to Values. If filter Name is NumberOfNodes, then values can range from 0 to 200. If filter Name is EstimatedDiskUtilizationPercent, then values can range from 0 to 100. For example, filter NumberOfNodes (name) GT (operator) 3 (values).</p>
     pub values: Option<Vec<String>>,
 }
@@ -7846,10 +8261,13 @@ impl NodeConfigurationOptionsFilterSerializer {
         }
 
         if let Some(ref field_value) = obj.name {
-            params.put(&format!("{}{}", prefix, "Name"), &field_value);
+            params.put(&format!("{}{}", prefix, "Name"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.operator {
-            params.put(&format!("{}{}", prefix, "Operator"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Operator"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.values {
             ValueStringListSerializer::serialize(
@@ -7869,6 +8287,134 @@ impl NodeConfigurationOptionsFilterListSerializer {
             let key = format!("{}.member.{}", name, index + 1);
             NodeConfigurationOptionsFilterSerializer::serialize(params, &key, obj);
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeConfigurationOptionsFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeConfigurationOptionsFilterName {
+    EstimatedDiskUtilizationPercent,
+    Mode,
+    NodeType,
+    NumberOfNodes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeConfigurationOptionsFilterName),
+}
+
+impl Default for NodeConfigurationOptionsFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeConfigurationOptionsFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeConfigurationOptionsFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeConfigurationOptionsFilterName {
+    fn into(self) -> String {
+        match self {
+            NodeConfigurationOptionsFilterName::EstimatedDiskUtilizationPercent => {
+                "EstimatedDiskUtilizationPercent".to_string()
+            }
+            NodeConfigurationOptionsFilterName::Mode => "Mode".to_string(),
+            NodeConfigurationOptionsFilterName::NodeType => "NodeType".to_string(),
+            NodeConfigurationOptionsFilterName::NumberOfNodes => "NumberOfNodes".to_string(),
+            NodeConfigurationOptionsFilterName::UnknownVariant(
+                UnknownNodeConfigurationOptionsFilterName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeConfigurationOptionsFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            NodeConfigurationOptionsFilterName::EstimatedDiskUtilizationPercent => {
+                &"EstimatedDiskUtilizationPercent"
+            }
+            NodeConfigurationOptionsFilterName::Mode => &"Mode",
+            NodeConfigurationOptionsFilterName::NodeType => &"NodeType",
+            NodeConfigurationOptionsFilterName::NumberOfNodes => &"NumberOfNodes",
+            NodeConfigurationOptionsFilterName::UnknownVariant(
+                UnknownNodeConfigurationOptionsFilterName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for NodeConfigurationOptionsFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "EstimatedDiskUtilizationPercent" => {
+                NodeConfigurationOptionsFilterName::EstimatedDiskUtilizationPercent
+            }
+            "Mode" => NodeConfigurationOptionsFilterName::Mode,
+            "NodeType" => NodeConfigurationOptionsFilterName::NodeType,
+            "NumberOfNodes" => NodeConfigurationOptionsFilterName::NumberOfNodes,
+            _ => NodeConfigurationOptionsFilterName::UnknownVariant(
+                UnknownNodeConfigurationOptionsFilterName {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for NodeConfigurationOptionsFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EstimatedDiskUtilizationPercent" => {
+                NodeConfigurationOptionsFilterName::EstimatedDiskUtilizationPercent
+            }
+            "Mode" => NodeConfigurationOptionsFilterName::Mode,
+            "NodeType" => NodeConfigurationOptionsFilterName::NodeType,
+            "NumberOfNodes" => NodeConfigurationOptionsFilterName::NumberOfNodes,
+            _ => NodeConfigurationOptionsFilterName::UnknownVariant(
+                UnknownNodeConfigurationOptionsFilterName { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeConfigurationOptionsFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for NodeConfigurationOptionsFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NodeConfigurationOptionsFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -7912,6 +8458,134 @@ impl NodeConfigurationOptionsMessageDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperatorType {
+    Between,
+    Eq,
+    Ge,
+    Gt,
+    In,
+    Le,
+    Lt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperatorType),
+}
+
+impl Default for OperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperatorType {
+    fn into(self) -> String {
+        match self {
+            OperatorType::Between => "between".to_string(),
+            OperatorType::Eq => "eq".to_string(),
+            OperatorType::Ge => "ge".to_string(),
+            OperatorType::Gt => "gt".to_string(),
+            OperatorType::In => "in".to_string(),
+            OperatorType::Le => "le".to_string(),
+            OperatorType::Lt => "lt".to_string(),
+            OperatorType::UnknownVariant(UnknownOperatorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            OperatorType::Between => &"between",
+            OperatorType::Eq => &"eq",
+            OperatorType::Ge => &"ge",
+            OperatorType::Gt => &"gt",
+            OperatorType::In => &"in",
+            OperatorType::Le => &"le",
+            OperatorType::Lt => &"lt",
+            OperatorType::UnknownVariant(UnknownOperatorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "between" => OperatorType::Between,
+            "eq" => OperatorType::Eq,
+            "ge" => OperatorType::Ge,
+            "gt" => OperatorType::Gt,
+            "in" => OperatorType::In,
+            "le" => OperatorType::Le,
+            "lt" => OperatorType::Lt,
+            _ => OperatorType::UnknownVariant(UnknownOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "between" => OperatorType::Between,
+            "eq" => OperatorType::Eq,
+            "ge" => OperatorType::Ge,
+            "gt" => OperatorType::Gt,
+            "in" => OperatorType::In,
+            "le" => OperatorType::Le,
+            "lt" => OperatorType::Lt,
+            _ => OperatorType::UnknownVariant(UnknownOperatorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes an orderable cluster option.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -8027,7 +8701,7 @@ pub struct Parameter {
     /// <p>The valid range of values for the parameter.</p>
     pub allowed_values: Option<String>,
     /// <p>Specifies how to apply the WLM configuration parameter. Some properties can be applied dynamically, while other properties require that any associated clusters be rebooted for the configuration changes to be applied. For more information about parameters and parameter groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
-    pub apply_type: Option<String>,
+    pub apply_type: Option<ParameterApplyType>,
     /// <p>The data type of the parameter.</p>
     pub data_type: Option<String>,
     /// <p>A description of the parameter.</p>
@@ -8108,16 +8782,28 @@ impl ParameterSerializer {
         }
 
         if let Some(ref field_value) = obj.allowed_values {
-            params.put(&format!("{}{}", prefix, "AllowedValues"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AllowedValues"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.apply_type {
-            params.put(&format!("{}{}", prefix, "ApplyType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ApplyType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.data_type {
-            params.put(&format!("{}{}", prefix, "DataType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DataType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.description {
-            params.put(&format!("{}{}", prefix, "Description"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.is_modifiable {
             params.put(&format!("{}{}", prefix, "IsModifiable"), &field_value);
@@ -8125,18 +8811,130 @@ impl ParameterSerializer {
         if let Some(ref field_value) = obj.minimum_engine_version {
             params.put(
                 &format!("{}{}", prefix, "MinimumEngineVersion"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.parameter_name {
-            params.put(&format!("{}{}", prefix, "ParameterName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.parameter_value {
-            params.put(&format!("{}{}", prefix, "ParameterValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ParameterValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.source {
-            params.put(&format!("{}{}", prefix, "Source"), &field_value);
+            params.put(&format!("{}{}", prefix, "Source"), &field_value.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterApplyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterApplyType {
+    Dynamic,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterApplyType),
+}
+
+impl Default for ParameterApplyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterApplyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterApplyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterApplyType {
+    fn into(self) -> String {
+        match self {
+            ParameterApplyType::Dynamic => "dynamic".to_string(),
+            ParameterApplyType::Static => "static".to_string(),
+            ParameterApplyType::UnknownVariant(UnknownParameterApplyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterApplyType {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterApplyType::Dynamic => &"dynamic",
+            ParameterApplyType::Static => &"static",
+            ParameterApplyType::UnknownVariant(UnknownParameterApplyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParameterApplyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "dynamic" => ParameterApplyType::Dynamic,
+            "static" => ParameterApplyType::Static,
+            _ => ParameterApplyType::UnknownVariant(UnknownParameterApplyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterApplyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "dynamic" => ParameterApplyType::Dynamic,
+            "static" => ParameterApplyType::Static,
+            _ => ParameterApplyType::UnknownVariant(UnknownParameterApplyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterApplyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ParameterApplyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ParameterApplyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -8144,8 +8942,11 @@ impl ParameterSerializer {
 struct ParameterApplyTypeDeserializer;
 impl ParameterApplyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ParameterApplyType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8240,7 +9041,7 @@ impl PauseClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -8411,7 +9212,7 @@ impl PurchaseReservedNodeOfferingMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ReservedNodeOfferingId"),
-            &obj.reserved_node_offering_id,
+            &obj.reserved_node_offering_id.to_string(),
         );
     }
 }
@@ -8467,7 +9268,7 @@ impl RebootClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -8579,7 +9380,7 @@ pub struct ReservedNode {
     /// <p>The identifier for the reserved node offering.</p>
     pub reserved_node_offering_id: Option<String>,
     /// <p><p/></p>
-    pub reserved_node_offering_type: Option<String>,
+    pub reserved_node_offering_type: Option<ReservedNodeOfferingType>,
     /// <p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>
     pub start_time: Option<String>,
     /// <p><p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> <li> <p>retired-The reserved node is no longer available. </p> </li> <li> <p>exchanging-The owner is exchanging the reserved node for another reserved node.</p> </li> </ul></p>
@@ -8695,7 +9496,7 @@ pub struct ReservedNodeOffering {
     /// <p>The offering identifier.</p>
     pub reserved_node_offering_id: Option<String>,
     /// <p><p/></p>
-    pub reserved_node_offering_type: Option<String>,
+    pub reserved_node_offering_type: Option<ReservedNodeOfferingType>,
     /// <p>The rate you are charged for each hour the cluster that is using the offering is running.</p>
     pub usage_price: Option<f64>,
 }
@@ -8775,12 +9576,122 @@ impl ReservedNodeOfferingListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReservedNodeOfferingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReservedNodeOfferingType {
+    Regular,
+    Upgradable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReservedNodeOfferingType),
+}
+
+impl Default for ReservedNodeOfferingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReservedNodeOfferingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReservedNodeOfferingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReservedNodeOfferingType {
+    fn into(self) -> String {
+        match self {
+            ReservedNodeOfferingType::Regular => "Regular".to_string(),
+            ReservedNodeOfferingType::Upgradable => "Upgradable".to_string(),
+            ReservedNodeOfferingType::UnknownVariant(UnknownReservedNodeOfferingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReservedNodeOfferingType {
+    fn into(self) -> &'a str {
+        match self {
+            ReservedNodeOfferingType::Regular => &"Regular",
+            ReservedNodeOfferingType::Upgradable => &"Upgradable",
+            ReservedNodeOfferingType::UnknownVariant(UnknownReservedNodeOfferingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReservedNodeOfferingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Regular" => ReservedNodeOfferingType::Regular,
+            "Upgradable" => ReservedNodeOfferingType::Upgradable,
+            _ => ReservedNodeOfferingType::UnknownVariant(UnknownReservedNodeOfferingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReservedNodeOfferingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Regular" => ReservedNodeOfferingType::Regular,
+            "Upgradable" => ReservedNodeOfferingType::Upgradable,
+            _ => ReservedNodeOfferingType::UnknownVariant(UnknownReservedNodeOfferingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReservedNodeOfferingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReservedNodeOfferingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReservedNodeOfferingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReservedNodeOfferingTypeDeserializer;
 impl ReservedNodeOfferingTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReservedNodeOfferingType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p><p/></p>
@@ -8881,7 +9792,7 @@ impl ResetClusterParameterGroupMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ParameterGroupName"),
-            &obj.parameter_group_name,
+            &obj.parameter_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
@@ -8963,13 +9874,19 @@ impl ResizeClusterMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.cluster_type {
-            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClusterType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
@@ -9270,7 +10187,10 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.additional_info {
-            params.put(&format!("{}{}", prefix, "AdditionalInfo"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AdditionalInfo"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
@@ -9285,7 +10205,10 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.availability_zone_relocation {
             params.put(
@@ -9295,12 +10218,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.cluster_parameter_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterParameterGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.cluster_security_groups {
@@ -9313,11 +10236,14 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.cluster_subnet_group_name {
             params.put(
                 &format!("{}{}", prefix, "ClusterSubnetGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.elastic_ip {
-            params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ElasticIp"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
             params.put(&format!("{}{}", prefix, "EnhancedVpcRouting"), &field_value);
@@ -9325,13 +10251,13 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.hsm_client_certificate_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmClientCertificateIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.hsm_configuration_identifier {
             params.put(
                 &format!("{}{}", prefix, "HsmConfigurationIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.iam_roles {
@@ -9342,12 +10268,15 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.kms_key_id {
-            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.maintenance_track_name {
             params.put(
                 &format!("{}{}", prefix, "MaintenanceTrackName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.manual_snapshot_retention_period {
@@ -9357,13 +10286,19 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.node_type {
-            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "NodeType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.number_of_nodes {
             params.put(&format!("{}{}", prefix, "NumberOfNodes"), &field_value);
         }
         if let Some(ref field_value) = obj.owner_account {
-            params.put(&format!("{}{}", prefix, "OwnerAccount"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "OwnerAccount"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
@@ -9371,7 +10306,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.preferred_maintenance_window {
             params.put(
                 &format!("{}{}", prefix, "PreferredMaintenanceWindow"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.publicly_accessible {
@@ -9380,17 +10315,17 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
         if let Some(ref field_value) = obj.snapshot_schedule_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotScheduleIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
@@ -9530,32 +10465,41 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "NewTableName"),
-            &obj.new_table_name,
+            &obj.new_table_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "SourceDatabaseName"),
-            &obj.source_database_name,
+            &obj.source_database_name.to_string(),
         );
         if let Some(ref field_value) = obj.source_schema_name {
-            params.put(&format!("{}{}", prefix, "SourceSchemaName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceSchemaName"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "SourceTableName"),
-            &obj.source_table_name,
+            &obj.source_table_name.to_string(),
         );
         if let Some(ref field_value) = obj.target_database_name {
-            params.put(&format!("{}{}", prefix, "TargetDatabaseName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetDatabaseName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.target_schema_name {
-            params.put(&format!("{}{}", prefix, "TargetSchemaName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetSchemaName"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -9634,7 +10578,7 @@ impl ResumeClusterMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -9750,22 +10694,22 @@ impl RevokeClusterSecurityGroupIngressMessageSerializer {
         }
 
         if let Some(ref field_value) = obj.cidrip {
-            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value);
+            params.put(&format!("{}{}", prefix, "CIDRIP"), &field_value.to_string());
         }
         params.put(
             &format!("{}{}", prefix, "ClusterSecurityGroupName"),
-            &obj.cluster_security_group_name,
+            &obj.cluster_security_group_name.to_string(),
         );
         if let Some(ref field_value) = obj.ec2_security_group_name {
             params.put(
                 &format!("{}{}", prefix, "EC2SecurityGroupName"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.ec2_security_group_owner_id {
             params.put(
                 &format!("{}{}", prefix, "EC2SecurityGroupOwnerId"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
     }
@@ -9827,17 +10771,17 @@ impl RevokeSnapshotAccessMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AccountWithRestoreAccess"),
-            &obj.account_with_restore_access,
+            &obj.account_with_restore_access.to_string(),
         );
         if let Some(ref field_value) = obj.snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SnapshotClusterIdentifier"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
-            &obj.snapshot_identifier,
+            &obj.snapshot_identifier.to_string(),
         );
     }
 }
@@ -9890,7 +10834,7 @@ impl RotateEncryptionKeyMessageSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ClusterIdentifier"),
-            &obj.cluster_identifier,
+            &obj.cluster_identifier.to_string(),
         );
     }
 }
@@ -9952,8 +10896,115 @@ impl ScheduleDefinitionListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduleState {
+    Active,
+    Failed,
+    Modifying,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduleState),
+}
+
+impl Default for ScheduleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduleState {
+    fn into(self) -> String {
+        match self {
+            ScheduleState::Active => "ACTIVE".to_string(),
+            ScheduleState::Failed => "FAILED".to_string(),
+            ScheduleState::Modifying => "MODIFYING".to_string(),
+            ScheduleState::UnknownVariant(UnknownScheduleState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduleState {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduleState::Active => &"ACTIVE",
+            ScheduleState::Failed => &"FAILED",
+            ScheduleState::Modifying => &"MODIFYING",
+            ScheduleState::UnknownVariant(UnknownScheduleState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ScheduleState::Active,
+            "FAILED" => ScheduleState::Failed,
+            "MODIFYING" => ScheduleState::Modifying,
+            _ => ScheduleState::UnknownVariant(UnknownScheduleState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScheduleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ScheduleState::Active,
+            "FAILED" => ScheduleState::Failed,
+            "MODIFYING" => ScheduleState::Modifying,
+            _ => ScheduleState::UnknownVariant(UnknownScheduleState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScheduleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScheduleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -9961,8 +11012,11 @@ impl ScheduleDefinitionListSerializer {
 struct ScheduleStateDeserializer;
 impl ScheduleStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduleState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes a scheduled action. You can use a scheduled action to trigger some Amazon Redshift API operations on a schedule. For information about which API operations can be scheduled, see <a>ScheduledActionType</a>. </p>
@@ -9984,7 +11038,7 @@ pub struct ScheduledAction {
     /// <p>The start time in UTC when the schedule is active. Before this time, the scheduled action does not trigger. </p>
     pub start_time: Option<String>,
     /// <p>The state of the scheduled action. For example, <code>DISABLED</code>. </p>
-    pub state: Option<String>,
+    pub state: Option<ScheduledActionState>,
     /// <p>A JSON format string of the Amazon Redshift API operation with input parameters. </p> <p>"<code>{\"ResizeCluster\":{\"NodeType\":\"ds2.8xlarge\",\"ClusterIdentifier\":\"my-test-cluster\",\"NumberOfNodes\":3}}</code>". </p>
     pub target_action: Option<ScheduledActionType>,
 }
@@ -10050,7 +11104,7 @@ impl ScheduledActionDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledActionFilter {
     /// <p>The type of element to filter. </p>
-    pub name: String,
+    pub name: ScheduledActionFilterName,
     /// <p>List of values. Compare if the value (of type defined by <code>Name</code>) equals an item in the list of scheduled actions. </p>
     pub values: Vec<String>,
 }
@@ -10064,7 +11118,7 @@ impl ScheduledActionFilterSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         ValueStringListSerializer::serialize(params, &format!("{}{}", prefix, "item"), &obj.values);
     }
 }
@@ -10077,6 +11131,114 @@ impl ScheduledActionFilterListSerializer {
             let key = format!("{}.member.{}", name, index + 1);
             ScheduledActionFilterSerializer::serialize(params, &key, obj);
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduledActionFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduledActionFilterName {
+    ClusterIdentifier,
+    IamRole,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduledActionFilterName),
+}
+
+impl Default for ScheduledActionFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduledActionFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduledActionFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduledActionFilterName {
+    fn into(self) -> String {
+        match self {
+            ScheduledActionFilterName::ClusterIdentifier => "cluster-identifier".to_string(),
+            ScheduledActionFilterName::IamRole => "iam-role".to_string(),
+            ScheduledActionFilterName::UnknownVariant(UnknownScheduledActionFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduledActionFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduledActionFilterName::ClusterIdentifier => &"cluster-identifier",
+            ScheduledActionFilterName::IamRole => &"iam-role",
+            ScheduledActionFilterName::UnknownVariant(UnknownScheduledActionFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduledActionFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "cluster-identifier" => ScheduledActionFilterName::ClusterIdentifier,
+            "iam-role" => ScheduledActionFilterName::IamRole,
+            _ => ScheduledActionFilterName::UnknownVariant(UnknownScheduledActionFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScheduledActionFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cluster-identifier" => ScheduledActionFilterName::ClusterIdentifier,
+            "iam-role" => ScheduledActionFilterName::IamRole,
+            _ => {
+                ScheduledActionFilterName::UnknownVariant(UnknownScheduledActionFilterName { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduledActionFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScheduledActionFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScheduledActionFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -10101,12 +11263,122 @@ impl ScheduledActionListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduledActionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduledActionState {
+    Active,
+    Disabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduledActionState),
+}
+
+impl Default for ScheduledActionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduledActionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduledActionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduledActionState {
+    fn into(self) -> String {
+        match self {
+            ScheduledActionState::Active => "ACTIVE".to_string(),
+            ScheduledActionState::Disabled => "DISABLED".to_string(),
+            ScheduledActionState::UnknownVariant(UnknownScheduledActionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduledActionState {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduledActionState::Active => &"ACTIVE",
+            ScheduledActionState::Disabled => &"DISABLED",
+            ScheduledActionState::UnknownVariant(UnknownScheduledActionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduledActionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ScheduledActionState::Active,
+            "DISABLED" => ScheduledActionState::Disabled,
+            _ => ScheduledActionState::UnknownVariant(UnknownScheduledActionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScheduledActionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ScheduledActionState::Active,
+            "DISABLED" => ScheduledActionState::Disabled,
+            _ => ScheduledActionState::UnknownVariant(UnknownScheduledActionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduledActionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScheduledActionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScheduledActionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ScheduledActionStateDeserializer;
 impl ScheduledActionStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ScheduledActionState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -10208,6 +11480,119 @@ impl ScheduledActionTypeSerializer {
                 field_value,
             );
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduledActionTypeValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduledActionTypeValues {
+    PauseCluster,
+    ResizeCluster,
+    ResumeCluster,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduledActionTypeValues),
+}
+
+impl Default for ScheduledActionTypeValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduledActionTypeValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduledActionTypeValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduledActionTypeValues {
+    fn into(self) -> String {
+        match self {
+            ScheduledActionTypeValues::PauseCluster => "PauseCluster".to_string(),
+            ScheduledActionTypeValues::ResizeCluster => "ResizeCluster".to_string(),
+            ScheduledActionTypeValues::ResumeCluster => "ResumeCluster".to_string(),
+            ScheduledActionTypeValues::UnknownVariant(UnknownScheduledActionTypeValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduledActionTypeValues {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduledActionTypeValues::PauseCluster => &"PauseCluster",
+            ScheduledActionTypeValues::ResizeCluster => &"ResizeCluster",
+            ScheduledActionTypeValues::ResumeCluster => &"ResumeCluster",
+            ScheduledActionTypeValues::UnknownVariant(UnknownScheduledActionTypeValues {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduledActionTypeValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "PauseCluster" => ScheduledActionTypeValues::PauseCluster,
+            "ResizeCluster" => ScheduledActionTypeValues::ResizeCluster,
+            "ResumeCluster" => ScheduledActionTypeValues::ResumeCluster,
+            _ => ScheduledActionTypeValues::UnknownVariant(UnknownScheduledActionTypeValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScheduledActionTypeValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PauseCluster" => ScheduledActionTypeValues::PauseCluster,
+            "ResizeCluster" => ScheduledActionTypeValues::ResizeCluster,
+            "ResumeCluster" => ScheduledActionTypeValues::ResumeCluster,
+            _ => {
+                ScheduledActionTypeValues::UnknownVariant(UnknownScheduledActionTypeValues { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduledActionTypeValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ScheduledActionTypeValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScheduledActionTypeValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -10535,6 +11920,120 @@ impl SnapshotDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSnapshotAttributeToSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SnapshotAttributeToSortBy {
+    CreateTime,
+    SourceType,
+    TotalSize,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSnapshotAttributeToSortBy),
+}
+
+impl Default for SnapshotAttributeToSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SnapshotAttributeToSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SnapshotAttributeToSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SnapshotAttributeToSortBy {
+    fn into(self) -> String {
+        match self {
+            SnapshotAttributeToSortBy::CreateTime => "CREATE_TIME".to_string(),
+            SnapshotAttributeToSortBy::SourceType => "SOURCE_TYPE".to_string(),
+            SnapshotAttributeToSortBy::TotalSize => "TOTAL_SIZE".to_string(),
+            SnapshotAttributeToSortBy::UnknownVariant(UnknownSnapshotAttributeToSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SnapshotAttributeToSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            SnapshotAttributeToSortBy::CreateTime => &"CREATE_TIME",
+            SnapshotAttributeToSortBy::SourceType => &"SOURCE_TYPE",
+            SnapshotAttributeToSortBy::TotalSize => &"TOTAL_SIZE",
+            SnapshotAttributeToSortBy::UnknownVariant(UnknownSnapshotAttributeToSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SnapshotAttributeToSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_TIME" => SnapshotAttributeToSortBy::CreateTime,
+            "SOURCE_TYPE" => SnapshotAttributeToSortBy::SourceType,
+            "TOTAL_SIZE" => SnapshotAttributeToSortBy::TotalSize,
+            _ => SnapshotAttributeToSortBy::UnknownVariant(UnknownSnapshotAttributeToSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SnapshotAttributeToSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_TIME" => SnapshotAttributeToSortBy::CreateTime,
+            "SOURCE_TYPE" => SnapshotAttributeToSortBy::SourceType,
+            "TOTAL_SIZE" => SnapshotAttributeToSortBy::TotalSize,
+            _ => {
+                SnapshotAttributeToSortBy::UnknownVariant(UnknownSnapshotAttributeToSortBy { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SnapshotAttributeToSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SnapshotAttributeToSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SnapshotAttributeToSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The snapshot copy grant that grants Amazon Redshift permission to encrypt copied snapshots with the specified customer master key (CMK) from AWS KMS in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -10713,7 +12212,7 @@ impl SnapshotIdentifierListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -10879,9 +12378,9 @@ impl SnapshotScheduleListDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SnapshotSortingEntity {
     /// <p>The category for sorting the snapshots.</p>
-    pub attribute: String,
+    pub attribute: SnapshotAttributeToSortBy,
     /// <p>The order for listing the attributes.</p>
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortByOrder>,
 }
 
 /// Serialize `SnapshotSortingEntity` contents to a `SignedRequest`.
@@ -10893,9 +12392,15 @@ impl SnapshotSortingEntitySerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
+        params.put(
+            &format!("{}{}", prefix, "Attribute"),
+            &obj.attribute.to_string(),
+        );
         if let Some(ref field_value) = obj.sort_order {
-            params.put(&format!("{}{}", prefix, "SortOrder"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SortOrder"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -10908,6 +12413,108 @@ impl SnapshotSortingEntityListSerializer {
             let key = format!("{}.member.{}", name, index + 1);
             SnapshotSortingEntitySerializer::serialize(params, &key, obj);
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortByOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortByOrder {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortByOrder),
+}
+
+impl Default for SortByOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortByOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortByOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortByOrder {
+    fn into(self) -> String {
+        match self {
+            SortByOrder::Asc => "ASC".to_string(),
+            SortByOrder::Desc => "DESC".to_string(),
+            SortByOrder::UnknownVariant(UnknownSortByOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortByOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortByOrder::Asc => &"ASC",
+            SortByOrder::Desc => &"DESC",
+            SortByOrder::UnknownVariant(UnknownSortByOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortByOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => SortByOrder::Asc,
+            "DESC" => SortByOrder::Desc,
+            _ => SortByOrder::UnknownVariant(UnknownSortByOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortByOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => SortByOrder::Asc,
+            "DESC" => SortByOrder::Desc,
+            _ => SortByOrder::UnknownVariant(UnknownSortByOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortByOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SortByOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortByOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -10936,8 +12543,125 @@ impl SourceIdsListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Cluster,
+    ClusterParameterGroup,
+    ClusterSecurityGroup,
+    ClusterSnapshot,
+    ScheduledAction,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Cluster => "cluster".to_string(),
+            SourceType::ClusterParameterGroup => "cluster-parameter-group".to_string(),
+            SourceType::ClusterSecurityGroup => "cluster-security-group".to_string(),
+            SourceType::ClusterSnapshot => "cluster-snapshot".to_string(),
+            SourceType::ScheduledAction => "scheduled-action".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Cluster => &"cluster",
+            SourceType::ClusterParameterGroup => &"cluster-parameter-group",
+            SourceType::ClusterSecurityGroup => &"cluster-security-group",
+            SourceType::ClusterSnapshot => &"cluster-snapshot",
+            SourceType::ScheduledAction => &"scheduled-action",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "cluster" => SourceType::Cluster,
+            "cluster-parameter-group" => SourceType::ClusterParameterGroup,
+            "cluster-security-group" => SourceType::ClusterSecurityGroup,
+            "cluster-snapshot" => SourceType::ClusterSnapshot,
+            "scheduled-action" => SourceType::ScheduledAction,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cluster" => SourceType::Cluster,
+            "cluster-parameter-group" => SourceType::ClusterParameterGroup,
+            "cluster-security-group" => SourceType::ClusterSecurityGroup,
+            "cluster-snapshot" => SourceType::ClusterSnapshot,
+            "scheduled-action" => SourceType::ScheduledAction,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -10945,8 +12669,11 @@ impl SourceIdsListSerializer {
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The connection endpoint for connecting an Amazon Redshift cluster through the proxy.</p>
@@ -11052,7 +12779,7 @@ impl SubnetIdentifierListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -11203,7 +12930,7 @@ pub struct TableRestoreStatus {
     /// <p>The name of the source table being restored.</p>
     pub source_table_name: Option<String>,
     /// <p>A value that describes the current state of the table restore request.</p> <p>Valid Values: <code>SUCCEEDED</code>, <code>FAILED</code>, <code>CANCELED</code>, <code>PENDING</code>, <code>IN_PROGRESS</code> </p>
-    pub status: Option<String>,
+    pub status: Option<TableRestoreStatusType>,
     /// <p>The unique identifier for the table restore request.</p>
     pub table_restore_request_id: Option<String>,
     /// <p>The name of the database to restore the table to.</p>
@@ -11359,12 +13086,137 @@ impl TableRestoreStatusMessageDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTableRestoreStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TableRestoreStatusType {
+    Canceled,
+    Failed,
+    InProgress,
+    Pending,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTableRestoreStatusType),
+}
+
+impl Default for TableRestoreStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TableRestoreStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TableRestoreStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TableRestoreStatusType {
+    fn into(self) -> String {
+        match self {
+            TableRestoreStatusType::Canceled => "CANCELED".to_string(),
+            TableRestoreStatusType::Failed => "FAILED".to_string(),
+            TableRestoreStatusType::InProgress => "IN_PROGRESS".to_string(),
+            TableRestoreStatusType::Pending => "PENDING".to_string(),
+            TableRestoreStatusType::Succeeded => "SUCCEEDED".to_string(),
+            TableRestoreStatusType::UnknownVariant(UnknownTableRestoreStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TableRestoreStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            TableRestoreStatusType::Canceled => &"CANCELED",
+            TableRestoreStatusType::Failed => &"FAILED",
+            TableRestoreStatusType::InProgress => &"IN_PROGRESS",
+            TableRestoreStatusType::Pending => &"PENDING",
+            TableRestoreStatusType::Succeeded => &"SUCCEEDED",
+            TableRestoreStatusType::UnknownVariant(UnknownTableRestoreStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TableRestoreStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELED" => TableRestoreStatusType::Canceled,
+            "FAILED" => TableRestoreStatusType::Failed,
+            "IN_PROGRESS" => TableRestoreStatusType::InProgress,
+            "PENDING" => TableRestoreStatusType::Pending,
+            "SUCCEEDED" => TableRestoreStatusType::Succeeded,
+            _ => TableRestoreStatusType::UnknownVariant(UnknownTableRestoreStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TableRestoreStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELED" => TableRestoreStatusType::Canceled,
+            "FAILED" => TableRestoreStatusType::Failed,
+            "IN_PROGRESS" => TableRestoreStatusType::InProgress,
+            "PENDING" => TableRestoreStatusType::Pending,
+            "SUCCEEDED" => TableRestoreStatusType::Succeeded,
+            _ => TableRestoreStatusType::UnknownVariant(UnknownTableRestoreStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TableRestoreStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TableRestoreStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TableRestoreStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TableRestoreStatusTypeDeserializer;
 impl TableRestoreStatusTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TableRestoreStatusType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>A tag consisting of a name/value pair for a resource.</p>
@@ -11408,10 +13260,10 @@ impl TagSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -11422,7 +13274,7 @@ impl TagKeyListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -11463,7 +13315,7 @@ impl TagValueListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -11673,15 +13525,15 @@ pub struct UsageLimit {
     /// <p>The limit amount. If time-based, this amount is in minutes. If data-based, this amount is in terabytes (TB).</p>
     pub amount: Option<i64>,
     /// <p><p>The action that Amazon Redshift takes when the limit is reached. Possible values are: </p> <ul> <li> <p> <b>log</b> - To log an event in a system table. The default is log.</p> </li> <li> <p> <b>emit-metric</b> - To emit CloudWatch metrics.</p> </li> <li> <p> <b>disable</b> - To disable the feature until the next usage period begins.</p> </li> </ul></p>
-    pub breach_action: Option<String>,
+    pub breach_action: Option<UsageLimitBreachAction>,
     /// <p>The identifier of the cluster with a usage limit.</p>
     pub cluster_identifier: Option<String>,
     /// <p>The Amazon Redshift feature to which the limit applies.</p>
-    pub feature_type: Option<String>,
+    pub feature_type: Option<UsageLimitFeatureType>,
     /// <p>The type of limit. Depending on the feature type, this can be based on a time duration or data size.</p>
-    pub limit_type: Option<String>,
+    pub limit_type: Option<UsageLimitLimitType>,
     /// <p>The time period that the amount applies to. A <code>weekly</code> period begins on Sunday. The default is <code>monthly</code>. </p>
-    pub period: Option<String>,
+    pub period: Option<UsageLimitPeriod>,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The identifier of the usage limit.</p>
@@ -11741,28 +13593,363 @@ impl UsageLimitDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageLimitBreachAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageLimitBreachAction {
+    Disable,
+    EmitMetric,
+    Log,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageLimitBreachAction),
+}
+
+impl Default for UsageLimitBreachAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageLimitBreachAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageLimitBreachAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageLimitBreachAction {
+    fn into(self) -> String {
+        match self {
+            UsageLimitBreachAction::Disable => "disable".to_string(),
+            UsageLimitBreachAction::EmitMetric => "emit-metric".to_string(),
+            UsageLimitBreachAction::Log => "log".to_string(),
+            UsageLimitBreachAction::UnknownVariant(UnknownUsageLimitBreachAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageLimitBreachAction {
+    fn into(self) -> &'a str {
+        match self {
+            UsageLimitBreachAction::Disable => &"disable",
+            UsageLimitBreachAction::EmitMetric => &"emit-metric",
+            UsageLimitBreachAction::Log => &"log",
+            UsageLimitBreachAction::UnknownVariant(UnknownUsageLimitBreachAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UsageLimitBreachAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "disable" => UsageLimitBreachAction::Disable,
+            "emit-metric" => UsageLimitBreachAction::EmitMetric,
+            "log" => UsageLimitBreachAction::Log,
+            _ => UsageLimitBreachAction::UnknownVariant(UnknownUsageLimitBreachAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageLimitBreachAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "disable" => UsageLimitBreachAction::Disable,
+            "emit-metric" => UsageLimitBreachAction::EmitMetric,
+            "log" => UsageLimitBreachAction::Log,
+            _ => UsageLimitBreachAction::UnknownVariant(UnknownUsageLimitBreachAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageLimitBreachAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for UsageLimitBreachAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UsageLimitBreachAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct UsageLimitBreachActionDeserializer;
 impl UsageLimitBreachActionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimitBreachAction, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageLimitFeatureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageLimitFeatureType {
+    ConcurrencyScaling,
+    Spectrum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageLimitFeatureType),
+}
+
+impl Default for UsageLimitFeatureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageLimitFeatureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageLimitFeatureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageLimitFeatureType {
+    fn into(self) -> String {
+        match self {
+            UsageLimitFeatureType::ConcurrencyScaling => "concurrency-scaling".to_string(),
+            UsageLimitFeatureType::Spectrum => "spectrum".to_string(),
+            UsageLimitFeatureType::UnknownVariant(UnknownUsageLimitFeatureType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageLimitFeatureType {
+    fn into(self) -> &'a str {
+        match self {
+            UsageLimitFeatureType::ConcurrencyScaling => &"concurrency-scaling",
+            UsageLimitFeatureType::Spectrum => &"spectrum",
+            UsageLimitFeatureType::UnknownVariant(UnknownUsageLimitFeatureType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UsageLimitFeatureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "concurrency-scaling" => UsageLimitFeatureType::ConcurrencyScaling,
+            "spectrum" => UsageLimitFeatureType::Spectrum,
+            _ => UsageLimitFeatureType::UnknownVariant(UnknownUsageLimitFeatureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageLimitFeatureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "concurrency-scaling" => UsageLimitFeatureType::ConcurrencyScaling,
+            "spectrum" => UsageLimitFeatureType::Spectrum,
+            _ => UsageLimitFeatureType::UnknownVariant(UnknownUsageLimitFeatureType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageLimitFeatureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for UsageLimitFeatureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UsageLimitFeatureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct UsageLimitFeatureTypeDeserializer;
 impl UsageLimitFeatureTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimitFeatureType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageLimitLimitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageLimitLimitType {
+    DataScanned,
+    Time,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageLimitLimitType),
+}
+
+impl Default for UsageLimitLimitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageLimitLimitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageLimitLimitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageLimitLimitType {
+    fn into(self) -> String {
+        match self {
+            UsageLimitLimitType::DataScanned => "data-scanned".to_string(),
+            UsageLimitLimitType::Time => "time".to_string(),
+            UsageLimitLimitType::UnknownVariant(UnknownUsageLimitLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageLimitLimitType {
+    fn into(self) -> &'a str {
+        match self {
+            UsageLimitLimitType::DataScanned => &"data-scanned",
+            UsageLimitLimitType::Time => &"time",
+            UsageLimitLimitType::UnknownVariant(UnknownUsageLimitLimitType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UsageLimitLimitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "data-scanned" => UsageLimitLimitType::DataScanned,
+            "time" => UsageLimitLimitType::Time,
+            _ => UsageLimitLimitType::UnknownVariant(UnknownUsageLimitLimitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageLimitLimitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "data-scanned" => UsageLimitLimitType::DataScanned,
+            "time" => UsageLimitLimitType::Time,
+            _ => UsageLimitLimitType::UnknownVariant(UnknownUsageLimitLimitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageLimitLimitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for UsageLimitLimitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UsageLimitLimitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct UsageLimitLimitTypeDeserializer;
 impl UsageLimitLimitTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimitLimitType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -11798,12 +13985,127 @@ impl UsageLimitListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageLimitPeriod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageLimitPeriod {
+    Daily,
+    Monthly,
+    Weekly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageLimitPeriod),
+}
+
+impl Default for UsageLimitPeriod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageLimitPeriod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageLimitPeriod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageLimitPeriod {
+    fn into(self) -> String {
+        match self {
+            UsageLimitPeriod::Daily => "daily".to_string(),
+            UsageLimitPeriod::Monthly => "monthly".to_string(),
+            UsageLimitPeriod::Weekly => "weekly".to_string(),
+            UsageLimitPeriod::UnknownVariant(UnknownUsageLimitPeriod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageLimitPeriod {
+    fn into(self) -> &'a str {
+        match self {
+            UsageLimitPeriod::Daily => &"daily",
+            UsageLimitPeriod::Monthly => &"monthly",
+            UsageLimitPeriod::Weekly => &"weekly",
+            UsageLimitPeriod::UnknownVariant(UnknownUsageLimitPeriod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UsageLimitPeriod {
+    fn from(name: &str) -> Self {
+        match name {
+            "daily" => UsageLimitPeriod::Daily,
+            "monthly" => UsageLimitPeriod::Monthly,
+            "weekly" => UsageLimitPeriod::Weekly,
+            _ => UsageLimitPeriod::UnknownVariant(UnknownUsageLimitPeriod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageLimitPeriod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "daily" => UsageLimitPeriod::Daily,
+            "monthly" => UsageLimitPeriod::Monthly,
+            "weekly" => UsageLimitPeriod::Weekly,
+            _ => UsageLimitPeriod::UnknownVariant(UnknownUsageLimitPeriod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageLimitPeriod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for UsageLimitPeriod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UsageLimitPeriod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct UsageLimitPeriodDeserializer;
 impl UsageLimitPeriodDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UsageLimitPeriod, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -11831,7 +14133,7 @@ impl ValueStringListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -11842,7 +14144,7 @@ impl VpcSecurityGroupIdListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }

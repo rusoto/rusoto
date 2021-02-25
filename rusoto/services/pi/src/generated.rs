@@ -99,7 +99,7 @@ pub struct DescribeDimensionKeysRequest {
     pub period_in_seconds: Option<i64>,
     /// <p>The AWS service for which Performance Insights will return metrics. The only valid value for <i>ServiceType</i> is <code>RDS</code>.</p>
     #[serde(rename = "ServiceType")]
-    pub service_type: String,
+    pub service_type: ServiceType,
     /// <p>The date and time specifying the beginning of the requested time series data. You must specify a <code>StartTime</code> within the past 7 days. The value specified is <i>inclusive</i>, which means that data points equal to or greater than <code>StartTime</code> are returned.</p> <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p>
     #[serde(rename = "StartTime")]
     pub start_time: f64,
@@ -191,7 +191,7 @@ pub struct GetResourceMetricsRequest {
     pub period_in_seconds: Option<i64>,
     /// <p>The AWS service for which Performance Insights returns metrics. The only valid value for <i>ServiceType</i> is <code>RDS</code>.</p>
     #[serde(rename = "ServiceType")]
-    pub service_type: String,
+    pub service_type: ServiceType,
     /// <p>The date and time specifying the beginning of the requested time series data. You can't specify a <code>StartTime</code> that's earlier than 7 days ago. The value specified is <i>inclusive</i> - data points equal to or greater than <code>StartTime</code> will be returned.</p> <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p>
     #[serde(rename = "StartTime")]
     pub start_time: f64,
@@ -273,6 +273,102 @@ pub struct ResponseResourceMetricKey {
     /// <p>The name of a Performance Insights metric to be measured.</p> <p>Valid values for <code>Metric</code> are:</p> <ul> <li> <p> <code>db.load.avg</code> - a scaled representation of the number of active sessions for the database engine.</p> </li> <li> <p> <code>db.sampledload.avg</code> - the raw number of active sessions for the database engine.</p> </li> </ul> <p>If the number of active sessions is less than an internal Performance Insights threshold, <code>db.load.avg</code> and <code>db.sampledload.avg</code> are the same value. If the number of active sessions is greater than the internal threshold, Performance Insights samples the active sessions, with <code>db.load.avg</code> showing the scaled values, <code>db.sampledload.avg</code> showing the raw values, and <code>db.sampledload.avg</code> less than <code>db.load.avg</code>. For most use cases, you can query <code>db.load.avg</code> only. </p>
     #[serde(rename = "Metric")]
     pub metric: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceType {
+    Rds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceType),
+}
+
+impl Default for ServiceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceType {
+    fn into(self) -> String {
+        match self {
+            ServiceType::Rds => "RDS".to_string(),
+            ServiceType::UnknownVariant(UnknownServiceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceType {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceType::Rds => &"RDS",
+            ServiceType::UnknownVariant(UnknownServiceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RDS" => ServiceType::Rds,
+            _ => ServiceType::UnknownVariant(UnknownServiceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RDS" => ServiceType::Rds,
+            _ => ServiceType::UnknownVariant(UnknownServiceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServiceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by DescribeDimensionKeys

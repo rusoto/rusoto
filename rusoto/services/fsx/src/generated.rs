@@ -64,13 +64,133 @@ pub struct ActiveDirectoryBackupAttributes {
     pub domain_name: Option<String>,
 }
 
+/// <p>The type of error relating to Microsoft Active Directory. NOT_FOUND means that no directory was found by specifying the given directory. INCOMPATIBLE_MODE means that the directory specified is not a Microsoft AD directory. WRONG_VPC means that the specified directory isn't accessible from the specified VPC. WRONG_STAGE means that the specified directory isn't currently in the ACTIVE state.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActiveDirectoryErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActiveDirectoryErrorType {
+    DomainNotFound,
+    IncompatibleDomainMode,
+    InvalidDomainStage,
+    WrongVpc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActiveDirectoryErrorType),
+}
+
+impl Default for ActiveDirectoryErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActiveDirectoryErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActiveDirectoryErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActiveDirectoryErrorType {
+    fn into(self) -> String {
+        match self {
+            ActiveDirectoryErrorType::DomainNotFound => "DOMAIN_NOT_FOUND".to_string(),
+            ActiveDirectoryErrorType::IncompatibleDomainMode => {
+                "INCOMPATIBLE_DOMAIN_MODE".to_string()
+            }
+            ActiveDirectoryErrorType::InvalidDomainStage => "INVALID_DOMAIN_STAGE".to_string(),
+            ActiveDirectoryErrorType::WrongVpc => "WRONG_VPC".to_string(),
+            ActiveDirectoryErrorType::UnknownVariant(UnknownActiveDirectoryErrorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActiveDirectoryErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            ActiveDirectoryErrorType::DomainNotFound => &"DOMAIN_NOT_FOUND",
+            ActiveDirectoryErrorType::IncompatibleDomainMode => &"INCOMPATIBLE_DOMAIN_MODE",
+            ActiveDirectoryErrorType::InvalidDomainStage => &"INVALID_DOMAIN_STAGE",
+            ActiveDirectoryErrorType::WrongVpc => &"WRONG_VPC",
+            ActiveDirectoryErrorType::UnknownVariant(UnknownActiveDirectoryErrorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActiveDirectoryErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOMAIN_NOT_FOUND" => ActiveDirectoryErrorType::DomainNotFound,
+            "INCOMPATIBLE_DOMAIN_MODE" => ActiveDirectoryErrorType::IncompatibleDomainMode,
+            "INVALID_DOMAIN_STAGE" => ActiveDirectoryErrorType::InvalidDomainStage,
+            "WRONG_VPC" => ActiveDirectoryErrorType::WrongVpc,
+            _ => ActiveDirectoryErrorType::UnknownVariant(UnknownActiveDirectoryErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActiveDirectoryErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOMAIN_NOT_FOUND" => ActiveDirectoryErrorType::DomainNotFound,
+            "INCOMPATIBLE_DOMAIN_MODE" => ActiveDirectoryErrorType::IncompatibleDomainMode,
+            "INVALID_DOMAIN_STAGE" => ActiveDirectoryErrorType::InvalidDomainStage,
+            "WRONG_VPC" => ActiveDirectoryErrorType::WrongVpc,
+            _ => ActiveDirectoryErrorType::UnknownVariant(UnknownActiveDirectoryErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActiveDirectoryErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActiveDirectoryErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActiveDirectoryErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a specific Amazon FSx administrative action for the current Windows or Lustre file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdministrativeAction {
     #[serde(rename = "AdministrativeActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub administrative_action_type: Option<String>,
+    pub administrative_action_type: Option<AdministrativeActionType>,
     #[serde(rename = "FailureDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_details: Option<AdministrativeActionFailureDetails>,
@@ -85,7 +205,7 @@ pub struct AdministrativeAction {
     /// <p><p>Describes the status of the administrative action, as follows:</p> <ul> <li> <p> <code>FAILED</code> - Amazon FSx failed to process the administrative action successfully.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - Amazon FSx is processing the administrative action.</p> </li> <li> <p> <code>PENDING</code> - Amazon FSx is waiting to process the administrative action.</p> </li> <li> <p> <code>COMPLETED</code> - Amazon FSx has finished processing the administrative task.</p> </li> <li> <p> <code>UPDATED</em>OPTIMIZING</code> - For a storage capacity increase update, Amazon FSx has updated the file system with the new storage capacity, and is now performing the storage optimization process. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing storage capacity</a> in the <i>Amazon FSx for Windows File Server User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html">Managing storage and throughput capacity</a> in the <i>Amazon FSx for Lustre User Guide</i>.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>Describes the target value for the administration action, provided in the <code>UpdateFileSystem</code> operation. Returned for <code>FILE_SYSTEM_UPDATE</code> administrative actions. </p>
     #[serde(rename = "TargetFileSystemValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -102,6 +222,135 @@ pub struct AdministrativeActionFailureDetails {
     pub message: Option<String>,
 }
 
+/// <p><p>Describes the type of administrative action, as follows:</p> <ul> <li> <p> <code>FILE<em>SYSTEM</em>UPDATE</code> - A file system update administrative action initiated by the user from the Amazon FSx console, API (UpdateFileSystem), or CLI (update-file-system).</p> </li> <li> <p> <code>STORAGE<em>OPTIMIZATION</code> - Once the <code>FILE</em>SYSTEM<em>UPDATE</code> task to increase a file system&#39;s storage capacity completes successfully, a <code>STORAGE</em>OPTIMIZATION</code> task starts. </p> <ul> <li> <p>For Windows, storage optimization is the process of migrating the file system data to the new, larger disks.</p> </li> <li> <p>For Lustre, storage optimization consists of rebalancing the data across the existing and newly added file servers.</p> </li> </ul> <p>You can track the storage optimization progress using the <code>ProgressPercent</code> property. When <code>STORAGE<em>OPTIMIZATION</code> completes successfully, the parent <code>FILE</em>SYSTEM<em>UPDATE</code> action status changes to <code>COMPLETED</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html">Managing storage capacity</a> in the <i>Amazon FSx for Windows File Server User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html">Managing storage and throughput capacity</a> in the <i>Amazon FSx for Lustre User Guide</i>. </p> </li> <li> <p> <code>FILE</em>SYSTEM<em>ALIAS</em>ASSOCIATION</code> - A file system update to associate a new DNS alias with the file system. For more information, see .</p> </li> <li> <p> <code>FILE<em>SYSTEM</em>ALIAS_DISASSOCIATION</code> - A file system update to disassociate a DNS alias from the file system. For more information, see .</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdministrativeActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdministrativeActionType {
+    FileSystemAliasAssociation,
+    FileSystemAliasDisassociation,
+    FileSystemUpdate,
+    StorageOptimization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdministrativeActionType),
+}
+
+impl Default for AdministrativeActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdministrativeActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdministrativeActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdministrativeActionType {
+    fn into(self) -> String {
+        match self {
+            AdministrativeActionType::FileSystemAliasAssociation => {
+                "FILE_SYSTEM_ALIAS_ASSOCIATION".to_string()
+            }
+            AdministrativeActionType::FileSystemAliasDisassociation => {
+                "FILE_SYSTEM_ALIAS_DISASSOCIATION".to_string()
+            }
+            AdministrativeActionType::FileSystemUpdate => "FILE_SYSTEM_UPDATE".to_string(),
+            AdministrativeActionType::StorageOptimization => "STORAGE_OPTIMIZATION".to_string(),
+            AdministrativeActionType::UnknownVariant(UnknownAdministrativeActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdministrativeActionType {
+    fn into(self) -> &'a str {
+        match self {
+            AdministrativeActionType::FileSystemAliasAssociation => {
+                &"FILE_SYSTEM_ALIAS_ASSOCIATION"
+            }
+            AdministrativeActionType::FileSystemAliasDisassociation => {
+                &"FILE_SYSTEM_ALIAS_DISASSOCIATION"
+            }
+            AdministrativeActionType::FileSystemUpdate => &"FILE_SYSTEM_UPDATE",
+            AdministrativeActionType::StorageOptimization => &"STORAGE_OPTIMIZATION",
+            AdministrativeActionType::UnknownVariant(UnknownAdministrativeActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdministrativeActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILE_SYSTEM_ALIAS_ASSOCIATION" => AdministrativeActionType::FileSystemAliasAssociation,
+            "FILE_SYSTEM_ALIAS_DISASSOCIATION" => {
+                AdministrativeActionType::FileSystemAliasDisassociation
+            }
+            "FILE_SYSTEM_UPDATE" => AdministrativeActionType::FileSystemUpdate,
+            "STORAGE_OPTIMIZATION" => AdministrativeActionType::StorageOptimization,
+            _ => AdministrativeActionType::UnknownVariant(UnknownAdministrativeActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdministrativeActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILE_SYSTEM_ALIAS_ASSOCIATION" => AdministrativeActionType::FileSystemAliasAssociation,
+            "FILE_SYSTEM_ALIAS_DISASSOCIATION" => {
+                AdministrativeActionType::FileSystemAliasDisassociation
+            }
+            "FILE_SYSTEM_UPDATE" => AdministrativeActionType::FileSystemUpdate,
+            "STORAGE_OPTIMIZATION" => AdministrativeActionType::StorageOptimization,
+            _ => AdministrativeActionType::UnknownVariant(UnknownAdministrativeActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdministrativeActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AdministrativeActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdministrativeActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A DNS alias that is associated with the file system. You can use a DNS alias to access a file system using user-defined DNS names, in addition to the default DNS name that Amazon FSx assigns to the file system. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">DNS aliases</a> in the <i>FSx for Windows File Server User Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -109,11 +358,127 @@ pub struct Alias {
     /// <p><p>Describes the state of the DNS alias.</p> <ul> <li> <p>AVAILABLE - The DNS alias is associated with an Amazon FSx file system.</p> </li> <li> <p>CREATING - Amazon FSx is creating the DNS alias and associating it with the file system.</p> </li> <li> <p>CREATE<em>FAILED - Amazon FSx was unable to associate the DNS alias with the file system.</p> </li> <li> <p>DELETING - Amazon FSx is disassociating the DNS alias from the file system and deleting it.</p> </li> <li> <p>DELETE</em>FAILED - Amazon FSx was unable to disassocate the DNS alias from the file system.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<AliasLifecycle>,
     /// <p>The name of the DNS alias. The alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAliasLifecycle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AliasLifecycle {
+    Available,
+    CreateFailed,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAliasLifecycle),
+}
+
+impl Default for AliasLifecycle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AliasLifecycle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AliasLifecycle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AliasLifecycle {
+    fn into(self) -> String {
+        match self {
+            AliasLifecycle::Available => "AVAILABLE".to_string(),
+            AliasLifecycle::CreateFailed => "CREATE_FAILED".to_string(),
+            AliasLifecycle::Creating => "CREATING".to_string(),
+            AliasLifecycle::DeleteFailed => "DELETE_FAILED".to_string(),
+            AliasLifecycle::Deleting => "DELETING".to_string(),
+            AliasLifecycle::UnknownVariant(UnknownAliasLifecycle { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AliasLifecycle {
+    fn into(self) -> &'a str {
+        match self {
+            AliasLifecycle::Available => &"AVAILABLE",
+            AliasLifecycle::CreateFailed => &"CREATE_FAILED",
+            AliasLifecycle::Creating => &"CREATING",
+            AliasLifecycle::DeleteFailed => &"DELETE_FAILED",
+            AliasLifecycle::Deleting => &"DELETING",
+            AliasLifecycle::UnknownVariant(UnknownAliasLifecycle { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AliasLifecycle {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => AliasLifecycle::Available,
+            "CREATE_FAILED" => AliasLifecycle::CreateFailed,
+            "CREATING" => AliasLifecycle::Creating,
+            "DELETE_FAILED" => AliasLifecycle::DeleteFailed,
+            "DELETING" => AliasLifecycle::Deleting,
+            _ => AliasLifecycle::UnknownVariant(UnknownAliasLifecycle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AliasLifecycle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => AliasLifecycle::Available,
+            "CREATE_FAILED" => AliasLifecycle::CreateFailed,
+            "CREATING" => AliasLifecycle::Creating,
+            "DELETE_FAILED" => AliasLifecycle::DeleteFailed,
+            "DELETING" => AliasLifecycle::Deleting,
+            _ => AliasLifecycle::UnknownVariant(UnknownAliasLifecycle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AliasLifecycle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AliasLifecycle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AliasLifecycle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The request object specifying one or more DNS alias names to associate with an Amazon FSx for Windows File Server file system.</p>
@@ -139,6 +504,115 @@ pub struct AssociateFileSystemAliasesResponse {
     #[serde(rename = "Aliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<Alias>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoImportPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoImportPolicyType {
+    New,
+    NewChanged,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoImportPolicyType),
+}
+
+impl Default for AutoImportPolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoImportPolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoImportPolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoImportPolicyType {
+    fn into(self) -> String {
+        match self {
+            AutoImportPolicyType::New => "NEW".to_string(),
+            AutoImportPolicyType::NewChanged => "NEW_CHANGED".to_string(),
+            AutoImportPolicyType::None => "NONE".to_string(),
+            AutoImportPolicyType::UnknownVariant(UnknownAutoImportPolicyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoImportPolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            AutoImportPolicyType::New => &"NEW",
+            AutoImportPolicyType::NewChanged => &"NEW_CHANGED",
+            AutoImportPolicyType::None => &"NONE",
+            AutoImportPolicyType::UnknownVariant(UnknownAutoImportPolicyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoImportPolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NEW" => AutoImportPolicyType::New,
+            "NEW_CHANGED" => AutoImportPolicyType::NewChanged,
+            "NONE" => AutoImportPolicyType::None,
+            _ => AutoImportPolicyType::UnknownVariant(UnknownAutoImportPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoImportPolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NEW" => AutoImportPolicyType::New,
+            "NEW_CHANGED" => AutoImportPolicyType::NewChanged,
+            "NONE" => AutoImportPolicyType::None,
+            _ => AutoImportPolicyType::UnknownVariant(UnknownAutoImportPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoImportPolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoImportPolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoImportPolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>A backup of an Amazon FSx file system. For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with backups for Windows file systems</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with backups for Lustre file systems</a> </p> </li> </ul></p>
@@ -168,7 +642,7 @@ pub struct Backup {
     pub kms_key_id: Option<String>,
     /// <p><p>The lifecycle status of the backup.</p> <ul> <li> <p> <code>AVAILABLE</code> - The backup is fully available.</p> </li> <li> <p> <code>PENDING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx has not started creating the backup.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the backup.</p> </li> <li> <p> <code>TRANSFERRING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx is transferring the backup to S3.</p> </li> <li> <p> <code>DELETED</code> - Amazon FSx deleted the backup and it is no longer available.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx could not complete the backup.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
-    pub lifecycle: String,
+    pub lifecycle: BackupLifecycle,
     #[serde(rename = "ProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
@@ -182,7 +656,7 @@ pub struct Backup {
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of the file system backup.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: BackupType,
 }
 
 /// <p>If backup creation fails, this structure contains the details of that failure.</p>
@@ -193,6 +667,237 @@ pub struct BackupFailureDetails {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+/// <p><p>The lifecycle status of the backup.</p> <ul> <li> <p> <code>AVAILABLE</code> - The backup is fully available.</p> </li> <li> <p> <code>PENDING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx has not started creating the backup.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the new user-intiated backup</p> </li> <li> <p> <code>TRANSFERRING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx is backing up the file system.</p> </li> <li> <p> <code>DELETED</code> - Amazon FSx deleted the backup and it is no longer available.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx could not complete the backup.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupLifecycle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupLifecycle {
+    Available,
+    Creating,
+    Deleted,
+    Failed,
+    Pending,
+    Transferring,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupLifecycle),
+}
+
+impl Default for BackupLifecycle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupLifecycle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupLifecycle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupLifecycle {
+    fn into(self) -> String {
+        match self {
+            BackupLifecycle::Available => "AVAILABLE".to_string(),
+            BackupLifecycle::Creating => "CREATING".to_string(),
+            BackupLifecycle::Deleted => "DELETED".to_string(),
+            BackupLifecycle::Failed => "FAILED".to_string(),
+            BackupLifecycle::Pending => "PENDING".to_string(),
+            BackupLifecycle::Transferring => "TRANSFERRING".to_string(),
+            BackupLifecycle::UnknownVariant(UnknownBackupLifecycle { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupLifecycle {
+    fn into(self) -> &'a str {
+        match self {
+            BackupLifecycle::Available => &"AVAILABLE",
+            BackupLifecycle::Creating => &"CREATING",
+            BackupLifecycle::Deleted => &"DELETED",
+            BackupLifecycle::Failed => &"FAILED",
+            BackupLifecycle::Pending => &"PENDING",
+            BackupLifecycle::Transferring => &"TRANSFERRING",
+            BackupLifecycle::UnknownVariant(UnknownBackupLifecycle { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupLifecycle {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => BackupLifecycle::Available,
+            "CREATING" => BackupLifecycle::Creating,
+            "DELETED" => BackupLifecycle::Deleted,
+            "FAILED" => BackupLifecycle::Failed,
+            "PENDING" => BackupLifecycle::Pending,
+            "TRANSFERRING" => BackupLifecycle::Transferring,
+            _ => BackupLifecycle::UnknownVariant(UnknownBackupLifecycle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupLifecycle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => BackupLifecycle::Available,
+            "CREATING" => BackupLifecycle::Creating,
+            "DELETED" => BackupLifecycle::Deleted,
+            "FAILED" => BackupLifecycle::Failed,
+            "PENDING" => BackupLifecycle::Pending,
+            "TRANSFERRING" => BackupLifecycle::Transferring,
+            _ => BackupLifecycle::UnknownVariant(UnknownBackupLifecycle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupLifecycle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupLifecycle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupLifecycle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The type of the backup.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupType {
+    Automatic,
+    AwsBackup,
+    UserInitiated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupType),
+}
+
+impl Default for BackupType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupType {
+    fn into(self) -> String {
+        match self {
+            BackupType::Automatic => "AUTOMATIC".to_string(),
+            BackupType::AwsBackup => "AWS_BACKUP".to_string(),
+            BackupType::UserInitiated => "USER_INITIATED".to_string(),
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupType {
+    fn into(self) -> &'a str {
+        match self {
+            BackupType::Automatic => &"AUTOMATIC",
+            BackupType::AwsBackup => &"AWS_BACKUP",
+            BackupType::UserInitiated => &"USER_INITIATED",
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMATIC" => BackupType::Automatic,
+            "AWS_BACKUP" => BackupType::AwsBackup,
+            "USER_INITIATED" => BackupType::UserInitiated,
+            _ => BackupType::UnknownVariant(UnknownBackupType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMATIC" => BackupType::Automatic,
+            "AWS_BACKUP" => BackupType::AwsBackup,
+            "USER_INITIATED" => BackupType::UserInitiated,
+            _ => BackupType::UnknownVariant(UnknownBackupType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Cancels a data repository task.</p>
@@ -210,7 +915,7 @@ pub struct CancelDataRepositoryTaskResponse {
     /// <p><p>The lifecycle status of the data repository task, as follows:</p> <ul> <li> <p> <code>PENDING</code> - Amazon FSx has not started the task.</p> </li> <li> <p> <code>EXECUTING</code> - Amazon FSx is processing the task.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx was not able to complete the task. For example, there may be files the task failed to process. The <a>DataRepositoryTaskFailureDetails</a> property provides more information about task failures.</p> </li> <li> <p> <code>SUCCEEDED</code> - FSx completed the task successfully.</p> </li> <li> <p> <code>CANCELED</code> - Amazon FSx canceled the task and it did not complete.</p> </li> <li> <p> <code>CANCELING</code> - FSx is in process of canceling the task.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<DataRepositoryTaskLifecycle>,
     /// <p>The ID of the task being canceled.</p>
     #[serde(rename = "TaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -226,7 +931,7 @@ pub struct CompletionReport {
     /// <p>Required if <code>Enabled</code> is set to <code>true</code>. Specifies the format of the <code>CompletionReport</code>. <code>REPORT_CSV_20191124</code> is the only format currently supported. When <code>Format</code> is set to <code>REPORT_CSV_20191124</code>, the <code>CompletionReport</code> is provided in CSV format, and is delivered to <code>{path}/task-{id}/failures.csv</code>. </p>
     #[serde(rename = "Format")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: Option<ReportFormat>,
     /// <p>Required if <code>Enabled</code> is set to <code>true</code>. Specifies the location of the report on the file system's linked S3 data repository. An absolute path that defines where the completion report will be stored in the destination location. The <code>Path</code> you provide must be located within the file system’s ExportPath. An example <code>Path</code> value is "s3://myBucket/myExportPath/optionalPrefix". The report provides the following information for each file in the report: FilePath, FileStatus, and ErrorCode. To learn more about a file system's <code>ExportPath</code>, see . </p>
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -234,7 +939,7 @@ pub struct CompletionReport {
     /// <p>Required if <code>Enabled</code> is set to <code>true</code>. Specifies the scope of the <code>CompletionReport</code>; <code>FAILED_FILES_ONLY</code> is the only scope currently supported. When <code>Scope</code> is set to <code>FAILED_FILES_ONLY</code>, the <code>CompletionReport</code> only contains information about files that the data repository task failed to process.</p>
     #[serde(rename = "Scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scope: Option<String>,
+    pub scope: Option<ReportScope>,
 }
 
 /// <p>The request object for the <code>CreateBackup</code> operation.</p>
@@ -284,7 +989,7 @@ pub struct CreateDataRepositoryTaskRequest {
     pub tags: Option<Vec<Tag>>,
     /// <p>Specifies the type of data repository task to create.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataRepositoryTaskType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -316,7 +1021,7 @@ pub struct CreateFileSystemFromBackupRequest {
     /// <p><p>Sets the storage type for the Windows file system you&#39;re creating from a backup. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. Supported on all Windows deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. Supported on <code>SINGLE<em>AZ</em>2</code> and <code>MULTI<em>AZ</em>1</code> Windows file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. </p> <note> <p>HDD and SSD storage types have different minimum storage capacity requirements. A restored file system&#39;s storage capacity is tied to the file system that was backed up. You can create a file system that uses HDD storage from a backup of a file system that used SSD storage only if the original SSD file system had a storage capacity of at least 2000 GiB. </p> </note></p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<StorageType>,
     /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
@@ -347,7 +1052,7 @@ pub struct CreateFileSystemLustreConfiguration {
     /// <p> (Optional) When you create your file system, your existing S3 objects appear as file and directory listings. Use this property to choose how Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update file and directory listings for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
     #[serde(rename = "AutoImportPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_import_policy: Option<String>,
+    pub auto_import_policy: Option<AutoImportPolicyType>,
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
@@ -361,11 +1066,11 @@ pub struct CreateFileSystemLustreConfiguration {
     /// <p> Choose <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <p>Choose <code>PERSISTENT_1</code> deployment type for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>.</p> <p>Encryption of data in-transit is automatically enabled when you access a <code>SCRATCH_2</code> or <code>PERSISTENT_1</code> file system from Amazon EC2 instances that <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data- protection.html">support this feature</a>. (Default = <code>SCRATCH_1</code>) </p> <p>Encryption of data in-transit for <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types is supported when accessed from supported instance types in supported AWS Regions. To learn more, <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html">Encrypting Data in Transit</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<LustreDeploymentType>,
     /// <p>The type of drive cache used by PERSISTENT_1 file systems that are provisioned with HDD storage devices. This parameter is required when storage type is HDD. Set to <code>READ</code>, improve the performance for frequently accessed files and allows 20% of the total storage capacity of the file system to be cached. </p> <p>This parameter is required when <code>StorageType</code> is set to HDD.</p>
     #[serde(rename = "DriveCacheType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub drive_cache_type: Option<String>,
+    pub drive_cache_type: Option<DriveCacheType>,
     /// <p>(Optional) The path in Amazon S3 where the root of your Amazon FSx file system is exported. The path must use the same Amazon S3 bucket as specified in ImportPath. You can provide an optional prefix to which new and changed data is to be exported from your Amazon FSx for Lustre file system. If an <code>ExportPath</code> value is not provided, Amazon FSx sets a default export path, <code>s3://import-bucket/FSxLustre[creation-timestamp]</code>. The timestamp is in UTC format, for example <code>s3://import-bucket/FSxLustre20181105T222312Z</code>.</p> <p>The Amazon S3 export bucket must be the same as the import bucket specified by <code>ImportPath</code>. If you only specify a bucket name, such as <code>s3://import-bucket</code>, you get a 1:1 mapping of file system objects to S3 bucket objects. This mapping means that the input data in S3 is overwritten on export. If you provide a custom prefix in the export path, such as <code>s3://import-bucket/[custom-optional-prefix]</code>, Amazon FSx exports the contents of your file system to that export prefix in the Amazon S3 bucket.</p>
     #[serde(rename = "ExportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -398,7 +1103,7 @@ pub struct CreateFileSystemRequest {
     pub client_request_token: Option<String>,
     /// <p>The type of Amazon FSx file system to create, either <code>WINDOWS</code> or <code>LUSTRE</code>.</p>
     #[serde(rename = "FileSystemType")]
-    pub file_system_type: String,
+    pub file_system_type: FileSystemType,
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -415,7 +1120,7 @@ pub struct CreateFileSystemRequest {
     /// <p>Sets the storage type for the file system you're creating. Valid values are <code>SSD</code> and <code>HDD</code>.</p> <ul> <li> <p>Set to <code>SSD</code> to use solid state drive storage. SSD is supported on all Windows and Lustre deployment types.</p> </li> <li> <p>Set to <code>HDD</code> to use hard disk drive storage. HDD is supported on <code>SINGLE_AZ_2</code> and <code>MULTI_AZ_1</code> Windows file system deployment types, and on <code>PERSISTENT</code> Lustre file system deployment types. </p> </li> </ul> <p> Default value is <code>SSD</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/optimize-fsx-costs.html#storage-type-options"> Storage Type Options</a> in the <i>Amazon FSx for Windows User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html#storage-options">Multiple Storage Options</a> in the <i>Amazon FSx for Lustre User Guide</i>. </p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<StorageType>,
     /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
@@ -466,7 +1171,7 @@ pub struct CreateFileSystemWindowsConfiguration {
     /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI_AZ_1</code> - Deploys a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability. You can only deploy a Multi-AZ file system in AWS Regions that have a minimum of three Availability Zones. Also supports HDD storage type</p> </li> <li> <p> <code>SINGLE_AZ_1</code> - (Default) Choose to deploy a file system that is configured for single AZ redundancy.</p> </li> <li> <p> <code>SINGLE_AZ_2</code> - The latest generation Single AZ file system. Specifies a file system that is configured for single AZ redundancy and supports HDD storage type.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> Availability and Durability: Single-AZ and Multi-AZ File Systems</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<WindowsDeploymentType>,
     /// <p>Required when <code>DeploymentType</code> is set to <code>MULTI_AZ_1</code>. This specifies the subnet in which you want the preferred file server to be located. For in-AWS applications, we recommend that you launch your clients in the same Availability Zone (AZ) as your preferred file server to reduce cross-AZ data transfer costs and minimize latency. </p>
     #[serde(rename = "PreferredSubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -491,7 +1196,7 @@ pub struct DataRepositoryConfiguration {
     /// <p>Describes the file system's linked S3 data repository's <code>AutoImportPolicy</code>. The AutoImportPolicy configures how Amazon FSx keeps your file and directory listings up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update file and directory listings for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
     #[serde(rename = "AutoImportPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_import_policy: Option<String>,
+    pub auto_import_policy: Option<AutoImportPolicyType>,
     /// <p>The export path to the Amazon S3 bucket (and prefix) that you are using to store new and changed Lustre file system files in S3.</p>
     #[serde(rename = "ExportPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -510,7 +1215,7 @@ pub struct DataRepositoryConfiguration {
     /// <p><p>Describes the state of the file system&#39;s S3 durable data repository, if it is configured with an S3 repository. The lifecycle can have the following values:</p> <ul> <li> <p> <code>CREATING</code> - The data repository configuration between the FSx file system and the linked S3 data repository is being created. The data repository is unavailable.</p> </li> <li> <p> <code>AVAILABLE</code> - The data repository is available for use.</p> </li> <li> <p> <code>MISCONFIGURED</code> - Amazon FSx cannot automatically import updates from the S3 bucket until the data repository configuration is corrected. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/troubleshooting.html#troubleshooting-misconfigured-data-repository">Troubleshooting a Misconfigured linked S3 bucket</a>. </p> </li> <li> <p> <code>UPDATING</code> - The data repository is undergoing a customer initiated update and availability may be impacted.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<DataRepositoryLifecycle>,
 }
 
 /// <p>Provides detailed information about the data respository if its <code>Lifecycle</code> is set to <code>MISCONFIGURED</code>.</p>
@@ -520,6 +1225,126 @@ pub struct DataRepositoryFailureDetails {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataRepositoryLifecycle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataRepositoryLifecycle {
+    Available,
+    Creating,
+    Deleting,
+    Misconfigured,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataRepositoryLifecycle),
+}
+
+impl Default for DataRepositoryLifecycle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataRepositoryLifecycle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataRepositoryLifecycle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataRepositoryLifecycle {
+    fn into(self) -> String {
+        match self {
+            DataRepositoryLifecycle::Available => "AVAILABLE".to_string(),
+            DataRepositoryLifecycle::Creating => "CREATING".to_string(),
+            DataRepositoryLifecycle::Deleting => "DELETING".to_string(),
+            DataRepositoryLifecycle::Misconfigured => "MISCONFIGURED".to_string(),
+            DataRepositoryLifecycle::Updating => "UPDATING".to_string(),
+            DataRepositoryLifecycle::UnknownVariant(UnknownDataRepositoryLifecycle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataRepositoryLifecycle {
+    fn into(self) -> &'a str {
+        match self {
+            DataRepositoryLifecycle::Available => &"AVAILABLE",
+            DataRepositoryLifecycle::Creating => &"CREATING",
+            DataRepositoryLifecycle::Deleting => &"DELETING",
+            DataRepositoryLifecycle::Misconfigured => &"MISCONFIGURED",
+            DataRepositoryLifecycle::Updating => &"UPDATING",
+            DataRepositoryLifecycle::UnknownVariant(UnknownDataRepositoryLifecycle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataRepositoryLifecycle {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DataRepositoryLifecycle::Available,
+            "CREATING" => DataRepositoryLifecycle::Creating,
+            "DELETING" => DataRepositoryLifecycle::Deleting,
+            "MISCONFIGURED" => DataRepositoryLifecycle::Misconfigured,
+            "UPDATING" => DataRepositoryLifecycle::Updating,
+            _ => DataRepositoryLifecycle::UnknownVariant(UnknownDataRepositoryLifecycle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataRepositoryLifecycle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DataRepositoryLifecycle::Available,
+            "CREATING" => DataRepositoryLifecycle::Creating,
+            "DELETING" => DataRepositoryLifecycle::Deleting,
+            "MISCONFIGURED" => DataRepositoryLifecycle::Misconfigured,
+            "UPDATING" => DataRepositoryLifecycle::Updating,
+            _ => DataRepositoryLifecycle::UnknownVariant(UnknownDataRepositoryLifecycle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataRepositoryLifecycle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataRepositoryLifecycle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataRepositoryLifecycle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A description of the data repository task. You use data repository tasks to perform bulk transfer operations between your Amazon FSx file system and its linked data repository.</p>
@@ -540,7 +1365,7 @@ pub struct DataRepositoryTask {
     pub file_system_id: String,
     /// <p><p>The lifecycle status of the data repository task, as follows:</p> <ul> <li> <p> <code>PENDING</code> - Amazon FSx has not started the task.</p> </li> <li> <p> <code>EXECUTING</code> - Amazon FSx is processing the task.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx was not able to complete the task. For example, there may be files the task failed to process. The <a>DataRepositoryTaskFailureDetails</a> property provides more information about task failures.</p> </li> <li> <p> <code>SUCCEEDED</code> - FSx completed the task successfully.</p> </li> <li> <p> <code>CANCELED</code> - Amazon FSx canceled the task and it did not complete.</p> </li> <li> <p> <code>CANCELING</code> - FSx is in process of canceling the task.</p> </li> </ul> <note> <p>You cannot delete an FSx for Lustre file system if there are data repository tasks for the file system in the <code>PENDING</code> or <code>EXECUTING</code> states. Please retry when the data repository task is finished (with a status of <code>CANCELED</code>, <code>SUCCEEDED</code>, or <code>FAILED</code>). You can use the DescribeDataRepositoryTask action to monitor the task status. Contact the FSx team if you need to delete your file system immediately.</p> </note></p>
     #[serde(rename = "Lifecycle")]
-    pub lifecycle: String,
+    pub lifecycle: DataRepositoryTaskLifecycle,
     /// <p>An array of paths on the Amazon FSx for Lustre file system that specify the data for the data repository task to process. For example, in an EXPORT_TO_REPOSITORY task, the paths specify which data to export to the linked data repository.</p> <p>(Default) If <code>Paths</code> is not specified, Amazon FSx uses the file system root directory.</p>
     #[serde(rename = "Paths")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -567,7 +1392,7 @@ pub struct DataRepositoryTask {
     pub task_id: String,
     /// <p>The type of data repository task; EXPORT_TO_REPOSITORY is the only type currently supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataRepositoryTaskType,
 }
 
 /// <p>Provides information about why a data repository task failed. Only populated when the task <code>Lifecycle</code> is set to <code>FAILED</code>.</p>
@@ -586,11 +1411,249 @@ pub struct DataRepositoryTaskFilter {
     /// <p><p>Name of the task property to use in filtering the tasks returned in the response.</p> <ul> <li> <p>Use <code>file-system-id</code> to retrieve data repository tasks for specific file systems.</p> </li> <li> <p>Use <code>task-lifecycle</code> to retrieve data repository tasks with one or more specific lifecycle states, as follows: CANCELED, EXECUTING, FAILED, PENDING, and SUCCEEDED.</p> </li> </ul></p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<DataRepositoryTaskFilterName>,
     /// <p>Use Values to include the specific file system IDs and task lifecycle states for the filters you are using.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataRepositoryTaskFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataRepositoryTaskFilterName {
+    FileSystemId,
+    TaskLifecycle,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataRepositoryTaskFilterName),
+}
+
+impl Default for DataRepositoryTaskFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataRepositoryTaskFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataRepositoryTaskFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataRepositoryTaskFilterName {
+    fn into(self) -> String {
+        match self {
+            DataRepositoryTaskFilterName::FileSystemId => "file-system-id".to_string(),
+            DataRepositoryTaskFilterName::TaskLifecycle => "task-lifecycle".to_string(),
+            DataRepositoryTaskFilterName::UnknownVariant(UnknownDataRepositoryTaskFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataRepositoryTaskFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            DataRepositoryTaskFilterName::FileSystemId => &"file-system-id",
+            DataRepositoryTaskFilterName::TaskLifecycle => &"task-lifecycle",
+            DataRepositoryTaskFilterName::UnknownVariant(UnknownDataRepositoryTaskFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataRepositoryTaskFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "file-system-id" => DataRepositoryTaskFilterName::FileSystemId,
+            "task-lifecycle" => DataRepositoryTaskFilterName::TaskLifecycle,
+            _ => {
+                DataRepositoryTaskFilterName::UnknownVariant(UnknownDataRepositoryTaskFilterName {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for DataRepositoryTaskFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "file-system-id" => DataRepositoryTaskFilterName::FileSystemId,
+            "task-lifecycle" => DataRepositoryTaskFilterName::TaskLifecycle,
+            _ => {
+                DataRepositoryTaskFilterName::UnknownVariant(UnknownDataRepositoryTaskFilterName {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataRepositoryTaskFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataRepositoryTaskFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DataRepositoryTaskFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataRepositoryTaskLifecycle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataRepositoryTaskLifecycle {
+    Canceled,
+    Canceling,
+    Executing,
+    Failed,
+    Pending,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataRepositoryTaskLifecycle),
+}
+
+impl Default for DataRepositoryTaskLifecycle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataRepositoryTaskLifecycle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataRepositoryTaskLifecycle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataRepositoryTaskLifecycle {
+    fn into(self) -> String {
+        match self {
+            DataRepositoryTaskLifecycle::Canceled => "CANCELED".to_string(),
+            DataRepositoryTaskLifecycle::Canceling => "CANCELING".to_string(),
+            DataRepositoryTaskLifecycle::Executing => "EXECUTING".to_string(),
+            DataRepositoryTaskLifecycle::Failed => "FAILED".to_string(),
+            DataRepositoryTaskLifecycle::Pending => "PENDING".to_string(),
+            DataRepositoryTaskLifecycle::Succeeded => "SUCCEEDED".to_string(),
+            DataRepositoryTaskLifecycle::UnknownVariant(UnknownDataRepositoryTaskLifecycle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataRepositoryTaskLifecycle {
+    fn into(self) -> &'a str {
+        match self {
+            DataRepositoryTaskLifecycle::Canceled => &"CANCELED",
+            DataRepositoryTaskLifecycle::Canceling => &"CANCELING",
+            DataRepositoryTaskLifecycle::Executing => &"EXECUTING",
+            DataRepositoryTaskLifecycle::Failed => &"FAILED",
+            DataRepositoryTaskLifecycle::Pending => &"PENDING",
+            DataRepositoryTaskLifecycle::Succeeded => &"SUCCEEDED",
+            DataRepositoryTaskLifecycle::UnknownVariant(UnknownDataRepositoryTaskLifecycle {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataRepositoryTaskLifecycle {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELED" => DataRepositoryTaskLifecycle::Canceled,
+            "CANCELING" => DataRepositoryTaskLifecycle::Canceling,
+            "EXECUTING" => DataRepositoryTaskLifecycle::Executing,
+            "FAILED" => DataRepositoryTaskLifecycle::Failed,
+            "PENDING" => DataRepositoryTaskLifecycle::Pending,
+            "SUCCEEDED" => DataRepositoryTaskLifecycle::Succeeded,
+            _ => DataRepositoryTaskLifecycle::UnknownVariant(UnknownDataRepositoryTaskLifecycle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataRepositoryTaskLifecycle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELED" => DataRepositoryTaskLifecycle::Canceled,
+            "CANCELING" => DataRepositoryTaskLifecycle::Canceling,
+            "EXECUTING" => DataRepositoryTaskLifecycle::Executing,
+            "FAILED" => DataRepositoryTaskLifecycle::Failed,
+            "PENDING" => DataRepositoryTaskLifecycle::Pending,
+            "SUCCEEDED" => DataRepositoryTaskLifecycle::Succeeded,
+            _ => DataRepositoryTaskLifecycle::UnknownVariant(UnknownDataRepositoryTaskLifecycle {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataRepositoryTaskLifecycle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataRepositoryTaskLifecycle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataRepositoryTaskLifecycle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides the task status showing a running total of the total number of files to be processed, the number successfully processed, and the number of files the task failed to process.</p>
@@ -613,6 +1676,105 @@ pub struct DataRepositoryTaskStatus {
     #[serde(rename = "TotalCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataRepositoryTaskType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataRepositoryTaskType {
+    ExportToRepository,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataRepositoryTaskType),
+}
+
+impl Default for DataRepositoryTaskType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataRepositoryTaskType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataRepositoryTaskType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataRepositoryTaskType {
+    fn into(self) -> String {
+        match self {
+            DataRepositoryTaskType::ExportToRepository => "EXPORT_TO_REPOSITORY".to_string(),
+            DataRepositoryTaskType::UnknownVariant(UnknownDataRepositoryTaskType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataRepositoryTaskType {
+    fn into(self) -> &'a str {
+        match self {
+            DataRepositoryTaskType::ExportToRepository => &"EXPORT_TO_REPOSITORY",
+            DataRepositoryTaskType::UnknownVariant(UnknownDataRepositoryTaskType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataRepositoryTaskType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPORT_TO_REPOSITORY" => DataRepositoryTaskType::ExportToRepository,
+            _ => DataRepositoryTaskType::UnknownVariant(UnknownDataRepositoryTaskType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataRepositoryTaskType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPORT_TO_REPOSITORY" => DataRepositoryTaskType::ExportToRepository,
+            _ => DataRepositoryTaskType::UnknownVariant(UnknownDataRepositoryTaskType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataRepositoryTaskType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataRepositoryTaskType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataRepositoryTaskType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The request object for <code>DeleteBackup</code> operation.</p>
@@ -639,7 +1801,7 @@ pub struct DeleteBackupResponse {
     /// <p>The lifecycle of the backup. Should be <code>DELETED</code>.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<BackupLifecycle>,
 }
 
 /// <p>The configuration object for the Amazon FSx for Lustre file system being deleted in the <code>DeleteFileSystem</code> operation.</p>
@@ -700,7 +1862,7 @@ pub struct DeleteFileSystemResponse {
     /// <p>The file system lifecycle for the deletion request. Should be <code>DELETING</code>.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<FileSystemLifecycle>,
     #[serde(rename = "LustreResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_response: Option<DeleteFileSystemLustreResponse>,
@@ -895,6 +2057,106 @@ pub struct DisassociateFileSystemAliasesResponse {
     pub aliases: Option<Vec<Alias>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDriveCacheType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DriveCacheType {
+    None,
+    Read,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDriveCacheType),
+}
+
+impl Default for DriveCacheType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DriveCacheType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DriveCacheType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DriveCacheType {
+    fn into(self) -> String {
+        match self {
+            DriveCacheType::None => "NONE".to_string(),
+            DriveCacheType::Read => "READ".to_string(),
+            DriveCacheType::UnknownVariant(UnknownDriveCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DriveCacheType {
+    fn into(self) -> &'a str {
+        match self {
+            DriveCacheType::None => &"NONE",
+            DriveCacheType::Read => &"READ",
+            DriveCacheType::UnknownVariant(UnknownDriveCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DriveCacheType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => DriveCacheType::None,
+            "READ" => DriveCacheType::Read,
+            _ => DriveCacheType::UnknownVariant(UnknownDriveCacheType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DriveCacheType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => DriveCacheType::None,
+            "READ" => DriveCacheType::Read,
+            _ => DriveCacheType::UnknownVariant(UnknownDriveCacheType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DriveCacheType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DriveCacheType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DriveCacheType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A description of a specific Amazon FSx file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -921,7 +2183,7 @@ pub struct FileSystem {
     /// <p>The type of Amazon FSx file system, either <code>LUSTRE</code> or <code>WINDOWS</code>.</p>
     #[serde(rename = "FileSystemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_system_type: Option<String>,
+    pub file_system_type: Option<FileSystemType>,
     /// <p>The ID of the AWS Key Management Service (AWS KMS) key used to encrypt the file system's data for Amazon FSx for Windows File Server file systems and persistent Amazon FSx for Lustre file systems at rest. In either case, if not specified, the Amazon FSx managed key is used. The scratch Amazon FSx for Lustre file systems are always encrypted at rest using Amazon FSx managed keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html">Encrypt</a> in the <i>AWS Key Management Service API Reference</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -929,7 +2191,7 @@ pub struct FileSystem {
     /// <p><p>The lifecycle status of the file system, following are the possible values and what they mean:</p> <ul> <li> <p> <code>AVAILABLE</code> - The file system is in a healthy state, and is reachable and available for use.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the new file system.</p> </li> <li> <p> <code>DELETING</code> - Amazon FSx is deleting an existing file system.</p> </li> <li> <p> <code>FAILED</code> - An existing file system has experienced an unrecoverable failure. When creating a new file system, Amazon FSx was unable to create the file system.</p> </li> <li> <p> <code>MISCONFIGURED</code> indicates that the file system is in a failed but recoverable state.</p> </li> <li> <p> <code>UPDATING</code> indicates that the file system is undergoing a customer initiated update.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lifecycle: Option<String>,
+    pub lifecycle: Option<FileSystemLifecycle>,
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<LustreFileSystemConfiguration>,
@@ -952,7 +2214,7 @@ pub struct FileSystem {
     /// <p>The storage type of the file system. Valid values are <code>SSD</code> and <code>HDD</code>. If set to <code>SSD</code>, the file system uses solid state drive storage. If set to <code>HDD</code>, the file system uses hard disk drive storage. </p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<StorageType>,
     /// <p>Specifies the IDs of the subnets that the file system is accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment type, there are two subnet IDs, one for the preferred file server and one for the standby file server. The preferred file server subnet identified in the <code>PreferredSubnetID</code> property. All other file systems have only one subnet ID.</p> <p>For Lustre file systems, and Single-AZ Windows file systems, this is the ID of the subnet that contains the endpoint for the file system. For <code>MULTI_AZ_1</code> Windows file systems, the endpoint for the file system is available in the <code>PreferredSubnetID</code>.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -981,6 +2243,346 @@ pub struct FileSystemFailureDetails {
     pub message: Option<String>,
 }
 
+/// <p>The lifecycle status of the file system.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemLifecycle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemLifecycle {
+    Available,
+    Creating,
+    Deleting,
+    Failed,
+    Misconfigured,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemLifecycle),
+}
+
+impl Default for FileSystemLifecycle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemLifecycle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemLifecycle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemLifecycle {
+    fn into(self) -> String {
+        match self {
+            FileSystemLifecycle::Available => "AVAILABLE".to_string(),
+            FileSystemLifecycle::Creating => "CREATING".to_string(),
+            FileSystemLifecycle::Deleting => "DELETING".to_string(),
+            FileSystemLifecycle::Failed => "FAILED".to_string(),
+            FileSystemLifecycle::Misconfigured => "MISCONFIGURED".to_string(),
+            FileSystemLifecycle::Updating => "UPDATING".to_string(),
+            FileSystemLifecycle::UnknownVariant(UnknownFileSystemLifecycle { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemLifecycle {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemLifecycle::Available => &"AVAILABLE",
+            FileSystemLifecycle::Creating => &"CREATING",
+            FileSystemLifecycle::Deleting => &"DELETING",
+            FileSystemLifecycle::Failed => &"FAILED",
+            FileSystemLifecycle::Misconfigured => &"MISCONFIGURED",
+            FileSystemLifecycle::Updating => &"UPDATING",
+            FileSystemLifecycle::UnknownVariant(UnknownFileSystemLifecycle { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FileSystemLifecycle {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => FileSystemLifecycle::Available,
+            "CREATING" => FileSystemLifecycle::Creating,
+            "DELETING" => FileSystemLifecycle::Deleting,
+            "FAILED" => FileSystemLifecycle::Failed,
+            "MISCONFIGURED" => FileSystemLifecycle::Misconfigured,
+            "UPDATING" => FileSystemLifecycle::Updating,
+            _ => FileSystemLifecycle::UnknownVariant(UnknownFileSystemLifecycle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileSystemLifecycle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => FileSystemLifecycle::Available,
+            "CREATING" => FileSystemLifecycle::Creating,
+            "DELETING" => FileSystemLifecycle::Deleting,
+            "FAILED" => FileSystemLifecycle::Failed,
+            "MISCONFIGURED" => FileSystemLifecycle::Misconfigured,
+            "UPDATING" => FileSystemLifecycle::Updating,
+            _ => FileSystemLifecycle::UnknownVariant(UnknownFileSystemLifecycle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemLifecycle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FileSystemLifecycle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemLifecycle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>An enumeration specifying the currently ongoing maintenance operation.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemMaintenanceOperation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemMaintenanceOperation {
+    BackingUp,
+    Patching,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemMaintenanceOperation),
+}
+
+impl Default for FileSystemMaintenanceOperation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemMaintenanceOperation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemMaintenanceOperation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemMaintenanceOperation {
+    fn into(self) -> String {
+        match self {
+            FileSystemMaintenanceOperation::BackingUp => "BACKING_UP".to_string(),
+            FileSystemMaintenanceOperation::Patching => "PATCHING".to_string(),
+            FileSystemMaintenanceOperation::UnknownVariant(
+                UnknownFileSystemMaintenanceOperation { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemMaintenanceOperation {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemMaintenanceOperation::BackingUp => &"BACKING_UP",
+            FileSystemMaintenanceOperation::Patching => &"PATCHING",
+            FileSystemMaintenanceOperation::UnknownVariant(
+                UnknownFileSystemMaintenanceOperation { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for FileSystemMaintenanceOperation {
+    fn from(name: &str) -> Self {
+        match name {
+            "BACKING_UP" => FileSystemMaintenanceOperation::BackingUp,
+            "PATCHING" => FileSystemMaintenanceOperation::Patching,
+            _ => FileSystemMaintenanceOperation::UnknownVariant(
+                UnknownFileSystemMaintenanceOperation {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for FileSystemMaintenanceOperation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BACKING_UP" => FileSystemMaintenanceOperation::BackingUp,
+            "PATCHING" => FileSystemMaintenanceOperation::Patching,
+            _ => FileSystemMaintenanceOperation::UnknownVariant(
+                UnknownFileSystemMaintenanceOperation { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemMaintenanceOperation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FileSystemMaintenanceOperation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemMaintenanceOperation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The type of file system.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemType {
+    Lustre,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemType),
+}
+
+impl Default for FileSystemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemType {
+    fn into(self) -> String {
+        match self {
+            FileSystemType::Lustre => "LUSTRE".to_string(),
+            FileSystemType::Windows => "WINDOWS".to_string(),
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemType {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemType::Lustre => &"LUSTRE",
+            FileSystemType::Windows => &"WINDOWS",
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileSystemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LUSTRE" => FileSystemType::Lustre,
+            "WINDOWS" => FileSystemType::Windows,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileSystemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LUSTRE" => FileSystemType::Lustre,
+            "WINDOWS" => FileSystemType::Windows,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileSystemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A filter used to restrict the results of describe calls. You can use multiple filters to return results that meet all applied filter requirements.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -988,11 +2590,119 @@ pub struct Filter {
     /// <p>The name for this filter.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<FilterName>,
     /// <p>The values of the filter. These are all the values for any of the applied filters.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p>The name for a filter.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterName {
+    BackupType,
+    FileSystemId,
+    FileSystemType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterName),
+}
+
+impl Default for FilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterName {
+    fn into(self) -> String {
+        match self {
+            FilterName::BackupType => "backup-type".to_string(),
+            FilterName::FileSystemId => "file-system-id".to_string(),
+            FilterName::FileSystemType => "file-system-type".to_string(),
+            FilterName::UnknownVariant(UnknownFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterName {
+    fn into(self) -> &'a str {
+        match self {
+            FilterName::BackupType => &"backup-type",
+            FilterName::FileSystemId => &"file-system-id",
+            FilterName::FileSystemType => &"file-system-type",
+            FilterName::UnknownVariant(UnknownFilterName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "backup-type" => FilterName::BackupType,
+            "file-system-id" => FilterName::FileSystemId,
+            "file-system-type" => FilterName::FileSystemType,
+            _ => FilterName::UnknownVariant(UnknownFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "backup-type" => FilterName::BackupType,
+            "file-system-id" => FilterName::FileSystemId,
+            "file-system-type" => FilterName::FileSystemType,
+            _ => FilterName::UnknownVariant(UnknownFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The request object for <code>ListTagsForResource</code> operation.</p>
@@ -1026,6 +2736,115 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLustreDeploymentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LustreDeploymentType {
+    Persistent1,
+    Scratch1,
+    Scratch2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLustreDeploymentType),
+}
+
+impl Default for LustreDeploymentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LustreDeploymentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LustreDeploymentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LustreDeploymentType {
+    fn into(self) -> String {
+        match self {
+            LustreDeploymentType::Persistent1 => "PERSISTENT_1".to_string(),
+            LustreDeploymentType::Scratch1 => "SCRATCH_1".to_string(),
+            LustreDeploymentType::Scratch2 => "SCRATCH_2".to_string(),
+            LustreDeploymentType::UnknownVariant(UnknownLustreDeploymentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LustreDeploymentType {
+    fn into(self) -> &'a str {
+        match self {
+            LustreDeploymentType::Persistent1 => &"PERSISTENT_1",
+            LustreDeploymentType::Scratch1 => &"SCRATCH_1",
+            LustreDeploymentType::Scratch2 => &"SCRATCH_2",
+            LustreDeploymentType::UnknownVariant(UnknownLustreDeploymentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LustreDeploymentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PERSISTENT_1" => LustreDeploymentType::Persistent1,
+            "SCRATCH_1" => LustreDeploymentType::Scratch1,
+            "SCRATCH_2" => LustreDeploymentType::Scratch2,
+            _ => LustreDeploymentType::UnknownVariant(UnknownLustreDeploymentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LustreDeploymentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PERSISTENT_1" => LustreDeploymentType::Persistent1,
+            "SCRATCH_1" => LustreDeploymentType::Scratch1,
+            "SCRATCH_2" => LustreDeploymentType::Scratch2,
+            _ => LustreDeploymentType::UnknownVariant(UnknownLustreDeploymentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LustreDeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LustreDeploymentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LustreDeploymentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The configuration for the Amazon FSx for Lustre file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1046,11 +2865,11 @@ pub struct LustreFileSystemConfiguration {
     /// <p>The deployment type of the FSX for Lustre file system. <i>Scratch deployment type</i> is designed for temporary storage and shorter-term processing of data.</p> <p> <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types are best suited for when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <p>The <code>PERSISTENT_1</code> deployment type is used for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>. (Default = <code>SCRATCH_1</code>)</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<LustreDeploymentType>,
     /// <p>The type of drive cache used by PERSISTENT_1 file systems that are provisioned with HDD storage devices. This parameter is required when storage type is HDD. Set to <code>READ</code>, improve the performance for frequently accessed files and allows 20% of the total storage capacity of the file system to be cached. </p> <p>This parameter is required when <code>StorageType</code> is set to HDD.</p>
     #[serde(rename = "DriveCacheType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub drive_cache_type: Option<String>,
+    pub drive_cache_type: Option<DriveCacheType>,
     /// <p>You use the <code>MountName</code> value when mounting the file system.</p> <p>For the <code>SCRATCH_1</code> deployment type, this value is always "<code>fsx</code>". For <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types, this value is a string that is unique within an AWS Region. </p>
     #[serde(rename = "MountName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1063,6 +2882,196 @@ pub struct LustreFileSystemConfiguration {
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weekly_maintenance_start_time: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportFormat {
+    ReportCsv20191124,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportFormat),
+}
+
+impl Default for ReportFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportFormat {
+    fn into(self) -> String {
+        match self {
+            ReportFormat::ReportCsv20191124 => "REPORT_CSV_20191124".to_string(),
+            ReportFormat::UnknownVariant(UnknownReportFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ReportFormat::ReportCsv20191124 => &"REPORT_CSV_20191124",
+            ReportFormat::UnknownVariant(UnknownReportFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "REPORT_CSV_20191124" => ReportFormat::ReportCsv20191124,
+            _ => ReportFormat::UnknownVariant(UnknownReportFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REPORT_CSV_20191124" => ReportFormat::ReportCsv20191124,
+            _ => ReportFormat::UnknownVariant(UnknownReportFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportScope {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportScope {
+    FailedFilesOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportScope),
+}
+
+impl Default for ReportScope {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportScope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportScope {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportScope {
+    fn into(self) -> String {
+        match self {
+            ReportScope::FailedFilesOnly => "FAILED_FILES_ONLY".to_string(),
+            ReportScope::UnknownVariant(UnknownReportScope { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportScope {
+    fn into(self) -> &'a str {
+        match self {
+            ReportScope::FailedFilesOnly => &"FAILED_FILES_ONLY",
+            ReportScope::UnknownVariant(UnknownReportScope { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportScope {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED_FILES_ONLY" => ReportScope::FailedFilesOnly,
+            _ => ReportScope::UnknownVariant(UnknownReportScope {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportScope {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED_FILES_ONLY" => ReportScope::FailedFilesOnly,
+            _ => ReportScope::UnknownVariant(UnknownReportScope { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportScope {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportScope {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The configuration of the self-managed Microsoft Active Directory (AD) directory to which the Windows File Server instance is joined.</p>
@@ -1135,6 +3144,338 @@ pub struct SelfManagedActiveDirectoryConfigurationUpdates {
     pub user_name: Option<String>,
 }
 
+/// <p>The types of limits on your service utilization. Limits include file system count, total throughput capacity, total storage, and total user-initiated backups. These limits apply for a specific account in a specific AWS Region. You can increase some of them by contacting AWS Support. </p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceLimit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceLimit {
+    FileSystemCount,
+    TotalStorage,
+    TotalThroughputCapacity,
+    TotalUserInitiatedBackups,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceLimit),
+}
+
+impl Default for ServiceLimit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceLimit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceLimit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceLimit {
+    fn into(self) -> String {
+        match self {
+            ServiceLimit::FileSystemCount => "FILE_SYSTEM_COUNT".to_string(),
+            ServiceLimit::TotalStorage => "TOTAL_STORAGE".to_string(),
+            ServiceLimit::TotalThroughputCapacity => "TOTAL_THROUGHPUT_CAPACITY".to_string(),
+            ServiceLimit::TotalUserInitiatedBackups => "TOTAL_USER_INITIATED_BACKUPS".to_string(),
+            ServiceLimit::UnknownVariant(UnknownServiceLimit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceLimit {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceLimit::FileSystemCount => &"FILE_SYSTEM_COUNT",
+            ServiceLimit::TotalStorage => &"TOTAL_STORAGE",
+            ServiceLimit::TotalThroughputCapacity => &"TOTAL_THROUGHPUT_CAPACITY",
+            ServiceLimit::TotalUserInitiatedBackups => &"TOTAL_USER_INITIATED_BACKUPS",
+            ServiceLimit::UnknownVariant(UnknownServiceLimit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceLimit {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILE_SYSTEM_COUNT" => ServiceLimit::FileSystemCount,
+            "TOTAL_STORAGE" => ServiceLimit::TotalStorage,
+            "TOTAL_THROUGHPUT_CAPACITY" => ServiceLimit::TotalThroughputCapacity,
+            "TOTAL_USER_INITIATED_BACKUPS" => ServiceLimit::TotalUserInitiatedBackups,
+            _ => ServiceLimit::UnknownVariant(UnknownServiceLimit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceLimit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILE_SYSTEM_COUNT" => ServiceLimit::FileSystemCount,
+            "TOTAL_STORAGE" => ServiceLimit::TotalStorage,
+            "TOTAL_THROUGHPUT_CAPACITY" => ServiceLimit::TotalThroughputCapacity,
+            "TOTAL_USER_INITIATED_BACKUPS" => ServiceLimit::TotalUserInitiatedBackups,
+            _ => ServiceLimit::UnknownVariant(UnknownServiceLimit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceLimit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServiceLimit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceLimit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Completed,
+    Failed,
+    InProgress,
+    Pending,
+    UpdatedOptimizing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Completed => "COMPLETED".to_string(),
+            Status::Failed => "FAILED".to_string(),
+            Status::InProgress => "IN_PROGRESS".to_string(),
+            Status::Pending => "PENDING".to_string(),
+            Status::UpdatedOptimizing => "UPDATED_OPTIMIZING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Completed => &"COMPLETED",
+            Status::Failed => &"FAILED",
+            Status::InProgress => &"IN_PROGRESS",
+            Status::Pending => &"PENDING",
+            Status::UpdatedOptimizing => &"UPDATED_OPTIMIZING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => Status::Completed,
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "PENDING" => Status::Pending,
+            "UPDATED_OPTIMIZING" => Status::UpdatedOptimizing,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => Status::Completed,
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "PENDING" => Status::Pending,
+            "UPDATED_OPTIMIZING" => Status::UpdatedOptimizing,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The storage type for your Amazon FSx file system.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageType {
+    Hdd,
+    Ssd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageType),
+}
+
+impl Default for StorageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageType {
+    fn into(self) -> String {
+        match self {
+            StorageType::Hdd => "HDD".to_string(),
+            StorageType::Ssd => "SSD".to_string(),
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageType {
+    fn into(self) -> &'a str {
+        match self {
+            StorageType::Hdd => &"HDD",
+            StorageType::Ssd => &"SSD",
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HDD" => StorageType::Hdd,
+            "SSD" => StorageType::Ssd,
+            _ => StorageType::UnknownVariant(UnknownStorageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HDD" => StorageType::Hdd,
+            "SSD" => StorageType::Ssd,
+            _ => StorageType::UnknownVariant(UnknownStorageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StorageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies a key-value pair for a resource tag.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -1187,7 +3528,7 @@ pub struct UpdateFileSystemLustreConfiguration {
     /// <p> (Optional) When you create your file system, your existing S3 objects appear as file and directory listings. Use this property to choose how Amazon FSx keeps your file and directory listing up to date as you add or modify objects in your linked S3 bucket. <code>AutoImportPolicy</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) AutoImport is off. Amazon FSx only updates file and directory listings from the linked S3 bucket when the file system is created. FSx does not update the file and directory listing for any new or changed objects after choosing this option.</p> </li> <li> <p> <code>NEW</code> - AutoImport is on. Amazon FSx automatically imports directory listings of any new objects added to the linked S3 bucket that do not currently exist in the FSx file system. </p> </li> <li> <p> <code>NEW_CHANGED</code> - AutoImport is on. Amazon FSx automatically imports file and directory listings of any new objects added to the S3 bucket and any existing objects that are changed in the S3 bucket after you choose this option. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/autoimport-data-repo.html">Automatically import updates from your S3 bucket</a>.</p>
     #[serde(rename = "AutoImportPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auto_import_policy: Option<String>,
+    pub auto_import_policy: Option<AutoImportPolicyType>,
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_backup_retention_days: Option<i64>,
@@ -1261,6 +3602,115 @@ pub struct UpdateFileSystemWindowsConfiguration {
     pub weekly_maintenance_start_time: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWindowsDeploymentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WindowsDeploymentType {
+    MultiAz1,
+    SingleAz1,
+    SingleAz2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWindowsDeploymentType),
+}
+
+impl Default for WindowsDeploymentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WindowsDeploymentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WindowsDeploymentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WindowsDeploymentType {
+    fn into(self) -> String {
+        match self {
+            WindowsDeploymentType::MultiAz1 => "MULTI_AZ_1".to_string(),
+            WindowsDeploymentType::SingleAz1 => "SINGLE_AZ_1".to_string(),
+            WindowsDeploymentType::SingleAz2 => "SINGLE_AZ_2".to_string(),
+            WindowsDeploymentType::UnknownVariant(UnknownWindowsDeploymentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WindowsDeploymentType {
+    fn into(self) -> &'a str {
+        match self {
+            WindowsDeploymentType::MultiAz1 => &"MULTI_AZ_1",
+            WindowsDeploymentType::SingleAz1 => &"SINGLE_AZ_1",
+            WindowsDeploymentType::SingleAz2 => &"SINGLE_AZ_2",
+            WindowsDeploymentType::UnknownVariant(UnknownWindowsDeploymentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WindowsDeploymentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MULTI_AZ_1" => WindowsDeploymentType::MultiAz1,
+            "SINGLE_AZ_1" => WindowsDeploymentType::SingleAz1,
+            "SINGLE_AZ_2" => WindowsDeploymentType::SingleAz2,
+            _ => WindowsDeploymentType::UnknownVariant(UnknownWindowsDeploymentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WindowsDeploymentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MULTI_AZ_1" => WindowsDeploymentType::MultiAz1,
+            "SINGLE_AZ_1" => WindowsDeploymentType::SingleAz1,
+            "SINGLE_AZ_2" => WindowsDeploymentType::SingleAz2,
+            _ => WindowsDeploymentType::UnknownVariant(UnknownWindowsDeploymentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WindowsDeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WindowsDeploymentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WindowsDeploymentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The configuration for this Microsoft Windows file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1287,11 +3737,11 @@ pub struct WindowsFileSystemConfiguration {
     /// <p>Specifies the file system deployment type, valid values are the following:</p> <ul> <li> <p> <code>MULTI_AZ_1</code> - Specifies a high availability file system that is configured for Multi-AZ redundancy to tolerate temporary Availability Zone (AZ) unavailability, and supports SSD and HDD storage.</p> </li> <li> <p> <code>SINGLE_AZ_1</code> - (Default) Specifies a file system that is configured for single AZ redundancy, only supports SSD storage.</p> </li> <li> <p> <code>SINGLE_AZ_2</code> - Latest generation Single AZ file system. Specifies a file system that is configured for single AZ redundancy and supports SSD and HDD storage.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html">Single-AZ and Multi-AZ File Systems</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<WindowsDeploymentType>,
     /// <p>The list of maintenance operations in progress for this file system.</p>
     #[serde(rename = "MaintenanceOperationsInProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maintenance_operations_in_progress: Option<Vec<String>>,
+    pub maintenance_operations_in_progress: Option<Vec<FileSystemMaintenanceOperation>>,
     /// <p>For <code>MULTI_AZ_1</code> deployment types, the IP address of the primary, or preferred, file server.</p> <p>Use this IP address when mounting the file system on Linux SMB clients or Windows SMB clients that are not joined to a Microsoft Active Directory. Applicable for all Windows file system deployment types. This IP address is temporarily unavailable when the file system is undergoing maintenance. For Linux and Windows SMB clients that are joined to an Active Directory, use the file system's DNSName instead. For more information on mapping and mounting file shares, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/accessing-file-shares.html">Accessing File Shares</a>.</p>
     #[serde(rename = "PreferredFileServerIp")]
     #[serde(skip_serializing_if = "Option::is_none")]

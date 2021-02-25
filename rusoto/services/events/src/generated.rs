@@ -89,11 +89,231 @@ pub struct Archive {
     /// <p>The current state of the archive.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ArchiveState>,
     /// <p>A description for the reason that the archive is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArchiveState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArchiveState {
+    CreateFailed,
+    Creating,
+    Disabled,
+    Enabled,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArchiveState),
+}
+
+impl Default for ArchiveState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArchiveState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArchiveState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArchiveState {
+    fn into(self) -> String {
+        match self {
+            ArchiveState::CreateFailed => "CREATE_FAILED".to_string(),
+            ArchiveState::Creating => "CREATING".to_string(),
+            ArchiveState::Disabled => "DISABLED".to_string(),
+            ArchiveState::Enabled => "ENABLED".to_string(),
+            ArchiveState::UpdateFailed => "UPDATE_FAILED".to_string(),
+            ArchiveState::Updating => "UPDATING".to_string(),
+            ArchiveState::UnknownVariant(UnknownArchiveState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArchiveState {
+    fn into(self) -> &'a str {
+        match self {
+            ArchiveState::CreateFailed => &"CREATE_FAILED",
+            ArchiveState::Creating => &"CREATING",
+            ArchiveState::Disabled => &"DISABLED",
+            ArchiveState::Enabled => &"ENABLED",
+            ArchiveState::UpdateFailed => &"UPDATE_FAILED",
+            ArchiveState::Updating => &"UPDATING",
+            ArchiveState::UnknownVariant(UnknownArchiveState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ArchiveState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => ArchiveState::CreateFailed,
+            "CREATING" => ArchiveState::Creating,
+            "DISABLED" => ArchiveState::Disabled,
+            "ENABLED" => ArchiveState::Enabled,
+            "UPDATE_FAILED" => ArchiveState::UpdateFailed,
+            "UPDATING" => ArchiveState::Updating,
+            _ => ArchiveState::UnknownVariant(UnknownArchiveState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArchiveState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => ArchiveState::CreateFailed,
+            "CREATING" => ArchiveState::Creating,
+            "DISABLED" => ArchiveState::Disabled,
+            "ENABLED" => ArchiveState::Enabled,
+            "UPDATE_FAILED" => ArchiveState::UpdateFailed,
+            "UPDATING" => ArchiveState::Updating,
+            _ => ArchiveState::UnknownVariant(UnknownArchiveState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArchiveState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArchiveState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArchiveState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignPublicIp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignPublicIp {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignPublicIp),
+}
+
+impl Default for AssignPublicIp {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignPublicIp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignPublicIp {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignPublicIp {
+    fn into(self) -> String {
+        match self {
+            AssignPublicIp::Disabled => "DISABLED".to_string(),
+            AssignPublicIp::Enabled => "ENABLED".to_string(),
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignPublicIp {
+    fn into(self) -> &'a str {
+        match self {
+            AssignPublicIp::Disabled => &"DISABLED",
+            AssignPublicIp::Enabled => &"ENABLED",
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssignPublicIp {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignPublicIp {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignPublicIp {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssignPublicIp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssignPublicIp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This structure specifies the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the <code>awsvpc</code> network mode.</p>
@@ -102,7 +322,7 @@ pub struct AwsVpcConfiguration {
     /// <p>Specifies whether the task's elastic network interface receives a public IP address. You can specify <code>ENABLED</code> only when <code>LaunchType</code> in <code>EcsParameters</code> is set to <code>FARGATE</code>.</p>
     #[serde(rename = "AssignPublicIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assign_public_ip: Option<String>,
+    pub assign_public_ip: Option<AssignPublicIp>,
     /// <p>Specifies the security groups associated with the task. These security groups must all be in the same VPC. You can specify as many as five security groups. If you do not specify a security group, the default security group for the VPC is used.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,7 +387,7 @@ pub struct CancelReplayResponse {
     /// <p>The current state of the replay.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplayState>,
     /// <p>The reason that the replay is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -226,7 +446,7 @@ pub struct CreateArchiveResponse {
     /// <p>The state of the archive that was created.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ArchiveState>,
     /// <p>The reason that the archive is in the state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -392,7 +612,7 @@ pub struct DescribeArchiveResponse {
     /// <p>The state of the archive.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ArchiveState>,
     /// <p>The reason that the archive is in the state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -459,7 +679,7 @@ pub struct DescribeEventSourceResponse {
     /// <p>The state of the event source. If it is ACTIVE, you have already created a matching event bus for this event source, and that event bus is active. If it is PENDING, either you haven't yet created a matching event bus, or that event bus is deactivated. If it is DELETED, you have created a matching event bus, but the event source has since been deleted.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EventSourceState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -537,7 +757,7 @@ pub struct DescribeReplayResponse {
     /// <p>The current state of the replay.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplayState>,
     /// <p>The reason that the replay is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -598,7 +818,7 @@ pub struct DescribeRuleResponse {
     /// <p>Specifies whether the rule is enabled or disabled.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RuleState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -623,7 +843,7 @@ pub struct EcsParameters {
     /// <p>Specifies the launch type on which your task is running. The launch type that you specify here must match one of the launch type (compatibilities) of the target task. The <code>FARGATE</code> value is supported only in the Regions where AWS Fargate with Amazon ECS is supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS-Fargate.html">AWS Fargate on Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "LaunchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>Use this structure if the ECS task uses the <code>awsvpc</code> network mode. This structure specifies the VPC subnets and security groups associated with the task, and whether a public IP address is to be used. This structure is required if <code>LaunchType</code> is <code>FARGATE</code> because the <code>awsvpc</code> mode is required for Fargate tasks.</p> <p>If you specify <code>NetworkConfiguration</code> when the target ECS task does not use the <code>awsvpc</code> network mode, the task fails.</p>
     #[serde(rename = "NetworkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -698,7 +918,117 @@ pub struct EventSource {
     /// <p>The state of the event source. If it is ACTIVE, you have already created a matching event bus for this event source, and that event bus is active. If it is PENDING, either you haven't yet created a matching event bus, or that event bus is deactivated. If it is DELETED, you have created a matching event bus, but the event source has since been deleted.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EventSourceState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventSourceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventSourceState {
+    Active,
+    Deleted,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventSourceState),
+}
+
+impl Default for EventSourceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventSourceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventSourceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventSourceState {
+    fn into(self) -> String {
+        match self {
+            EventSourceState::Active => "ACTIVE".to_string(),
+            EventSourceState::Deleted => "DELETED".to_string(),
+            EventSourceState::Pending => "PENDING".to_string(),
+            EventSourceState::UnknownVariant(UnknownEventSourceState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventSourceState {
+    fn into(self) -> &'a str {
+        match self {
+            EventSourceState::Active => &"ACTIVE",
+            EventSourceState::Deleted => &"DELETED",
+            EventSourceState::Pending => &"PENDING",
+            EventSourceState::UnknownVariant(UnknownEventSourceState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventSourceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => EventSourceState::Active,
+            "DELETED" => EventSourceState::Deleted,
+            "PENDING" => EventSourceState::Pending,
+            _ => EventSourceState::UnknownVariant(UnknownEventSourceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventSourceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => EventSourceState::Active,
+            "DELETED" => EventSourceState::Deleted,
+            "PENDING" => EventSourceState::Pending,
+            _ => EventSourceState::UnknownVariant(UnknownEventSourceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSourceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventSourceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventSourceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>These are custom parameter to be used when the target is an API Gateway REST APIs.</p>
@@ -738,6 +1068,106 @@ pub struct KinesisParameters {
     pub partition_key_path: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLaunchType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LaunchType {
+    Ec2,
+    Fargate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLaunchType),
+}
+
+impl Default for LaunchType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LaunchType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LaunchType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LaunchType {
+    fn into(self) -> String {
+        match self {
+            LaunchType::Ec2 => "EC2".to_string(),
+            LaunchType::Fargate => "FARGATE".to_string(),
+            LaunchType::UnknownVariant(UnknownLaunchType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LaunchType {
+    fn into(self) -> &'a str {
+        match self {
+            LaunchType::Ec2 => &"EC2",
+            LaunchType::Fargate => &"FARGATE",
+            LaunchType::UnknownVariant(UnknownLaunchType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LaunchType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => LaunchType::Ec2,
+            "FARGATE" => LaunchType::Fargate,
+            _ => LaunchType::UnknownVariant(UnknownLaunchType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LaunchType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => LaunchType::Ec2,
+            "FARGATE" => LaunchType::Fargate,
+            _ => LaunchType::UnknownVariant(UnknownLaunchType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LaunchType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LaunchType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LaunchType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArchivesRequest {
@@ -760,7 +1190,7 @@ pub struct ListArchivesRequest {
     /// <p>The state of the archive.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ArchiveState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -916,7 +1346,7 @@ pub struct ListReplaysRequest {
     /// <p>The state of the replay.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplayState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1091,7 +1521,7 @@ pub struct PartnerEventSourceAccount {
     /// <p>The state of the event source. If it is ACTIVE, you have already created a matching event bus for this event source, and that event bus is active. If it is PENDING, either you haven't yet created a matching event bus, or that event bus is deactivated. If it is DELETED, you have created a matching event bus, but the event source has since been deleted.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<EventSourceState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1286,7 +1716,7 @@ pub struct PutRuleRequest {
     /// <p>Indicates whether the rule is enabled or disabled.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RuleState>,
     /// <p>The list of key-value pairs to associate with the rule.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1477,7 +1907,7 @@ pub struct Replay {
     /// <p>The current state of the replay.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplayState>,
     /// <p>A description of why the replay is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1494,6 +1924,126 @@ pub struct ReplayDestination {
     #[serde(rename = "FilterArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_arns: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplayState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplayState {
+    Cancelled,
+    Cancelling,
+    Completed,
+    Failed,
+    Running,
+    Starting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplayState),
+}
+
+impl Default for ReplayState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplayState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplayState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplayState {
+    fn into(self) -> String {
+        match self {
+            ReplayState::Cancelled => "CANCELLED".to_string(),
+            ReplayState::Cancelling => "CANCELLING".to_string(),
+            ReplayState::Completed => "COMPLETED".to_string(),
+            ReplayState::Failed => "FAILED".to_string(),
+            ReplayState::Running => "RUNNING".to_string(),
+            ReplayState::Starting => "STARTING".to_string(),
+            ReplayState::UnknownVariant(UnknownReplayState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplayState {
+    fn into(self) -> &'a str {
+        match self {
+            ReplayState::Cancelled => &"CANCELLED",
+            ReplayState::Cancelling => &"CANCELLING",
+            ReplayState::Completed => &"COMPLETED",
+            ReplayState::Failed => &"FAILED",
+            ReplayState::Running => &"RUNNING",
+            ReplayState::Starting => &"STARTING",
+            ReplayState::UnknownVariant(UnknownReplayState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplayState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => ReplayState::Cancelled,
+            "CANCELLING" => ReplayState::Cancelling,
+            "COMPLETED" => ReplayState::Completed,
+            "FAILED" => ReplayState::Failed,
+            "RUNNING" => ReplayState::Running,
+            "STARTING" => ReplayState::Starting,
+            _ => ReplayState::UnknownVariant(UnknownReplayState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplayState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => ReplayState::Cancelled,
+            "CANCELLING" => ReplayState::Cancelling,
+            "COMPLETED" => ReplayState::Completed,
+            "FAILED" => ReplayState::Failed,
+            "RUNNING" => ReplayState::Running,
+            "STARTING" => ReplayState::Starting,
+            _ => ReplayState::UnknownVariant(UnknownReplayState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplayState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReplayState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplayState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A <code>RetryPolicy</code> object that includes information about the retry policy settings.</p>
@@ -1548,7 +2098,107 @@ pub struct Rule {
     /// <p>The state of the rule.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RuleState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuleState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuleState),
+}
+
+impl Default for RuleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuleState {
+    fn into(self) -> String {
+        match self {
+            RuleState::Disabled => "DISABLED".to_string(),
+            RuleState::Enabled => "ENABLED".to_string(),
+            RuleState::UnknownVariant(UnknownRuleState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuleState {
+    fn into(self) -> &'a str {
+        match self {
+            RuleState::Disabled => &"DISABLED",
+            RuleState::Enabled => &"ENABLED",
+            RuleState::UnknownVariant(UnknownRuleState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RuleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => RuleState::Disabled,
+            "ENABLED" => RuleState::Enabled,
+            _ => RuleState::UnknownVariant(UnknownRuleState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => RuleState::Disabled,
+            "ENABLED" => RuleState::Enabled,
+            _ => RuleState::UnknownVariant(UnknownRuleState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RuleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This parameter contains the criteria (either InstanceIds or a tag) used to specify which EC2 instances are to be sent the command. </p>
@@ -1617,7 +2267,7 @@ pub struct StartReplayResponse {
     /// <p>The state of the replay.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ReplayState>,
     /// <p>The reason that the replay is in the state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1782,7 +2432,7 @@ pub struct UpdateArchiveResponse {
     /// <p>The state of the archive.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ArchiveState>,
     /// <p>The reason that the archive is in the current state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -163,7 +163,7 @@ pub struct CreateDetectorModelRequest {
     /// <p>Information about the order in which events are evaluated and how actions are executed. </p>
     #[serde(rename = "evaluationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_method: Option<String>,
+    pub evaluation_method: Option<EvaluationMethod>,
     /// <p>The input attribute key used to identify a device or system to create a detector (an instance of the detector model) and then to route each input received to the appropriate detector (instance). This parameter uses a JSON-path expression in the message payload of each input to specify the attribute-value pair that is used to identify the device associated with the input.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -342,7 +342,7 @@ pub struct DetectorModelConfiguration {
     /// <p>Information about the order in which events are evaluated and how actions are executed. </p>
     #[serde(rename = "evaluationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_method: Option<String>,
+    pub evaluation_method: Option<EvaluationMethod>,
     /// <p>The value used to identify a detector instance. When a device or system sends input, a new detector instance with a unique key value is created. AWS IoT Events can continue to route input to its corresponding detector instance based on this identifying information. </p> <p>This parameter uses a JSON-path expression to select the attribute-value pair in the message payload that is used for identification. To route the message to the correct detector instance, the device must send a message payload that contains the same attribute-value.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -358,7 +358,7 @@ pub struct DetectorModelConfiguration {
     /// <p>The status of the detector model.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DetectorModelVersionStatus>,
 }
 
 /// <p>Information that defines how a detector operates.</p>
@@ -390,6 +390,138 @@ pub struct DetectorModelSummary {
     pub detector_model_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetectorModelVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetectorModelVersionStatus {
+    Activating,
+    Active,
+    Deprecated,
+    Draft,
+    Failed,
+    Inactive,
+    Paused,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetectorModelVersionStatus),
+}
+
+impl Default for DetectorModelVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetectorModelVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetectorModelVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetectorModelVersionStatus {
+    fn into(self) -> String {
+        match self {
+            DetectorModelVersionStatus::Activating => "ACTIVATING".to_string(),
+            DetectorModelVersionStatus::Active => "ACTIVE".to_string(),
+            DetectorModelVersionStatus::Deprecated => "DEPRECATED".to_string(),
+            DetectorModelVersionStatus::Draft => "DRAFT".to_string(),
+            DetectorModelVersionStatus::Failed => "FAILED".to_string(),
+            DetectorModelVersionStatus::Inactive => "INACTIVE".to_string(),
+            DetectorModelVersionStatus::Paused => "PAUSED".to_string(),
+            DetectorModelVersionStatus::UnknownVariant(UnknownDetectorModelVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetectorModelVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DetectorModelVersionStatus::Activating => &"ACTIVATING",
+            DetectorModelVersionStatus::Active => &"ACTIVE",
+            DetectorModelVersionStatus::Deprecated => &"DEPRECATED",
+            DetectorModelVersionStatus::Draft => &"DRAFT",
+            DetectorModelVersionStatus::Failed => &"FAILED",
+            DetectorModelVersionStatus::Inactive => &"INACTIVE",
+            DetectorModelVersionStatus::Paused => &"PAUSED",
+            DetectorModelVersionStatus::UnknownVariant(UnknownDetectorModelVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetectorModelVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => DetectorModelVersionStatus::Activating,
+            "ACTIVE" => DetectorModelVersionStatus::Active,
+            "DEPRECATED" => DetectorModelVersionStatus::Deprecated,
+            "DRAFT" => DetectorModelVersionStatus::Draft,
+            "FAILED" => DetectorModelVersionStatus::Failed,
+            "INACTIVE" => DetectorModelVersionStatus::Inactive,
+            "PAUSED" => DetectorModelVersionStatus::Paused,
+            _ => DetectorModelVersionStatus::UnknownVariant(UnknownDetectorModelVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetectorModelVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => DetectorModelVersionStatus::Activating,
+            "ACTIVE" => DetectorModelVersionStatus::Active,
+            "DEPRECATED" => DetectorModelVersionStatus::Deprecated,
+            "DRAFT" => DetectorModelVersionStatus::Draft,
+            "FAILED" => DetectorModelVersionStatus::Failed,
+            "INACTIVE" => DetectorModelVersionStatus::Inactive,
+            "PAUSED" => DetectorModelVersionStatus::Paused,
+            _ => DetectorModelVersionStatus::UnknownVariant(UnknownDetectorModelVersionStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetectorModelVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DetectorModelVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetectorModelVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the detector model version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -413,7 +545,7 @@ pub struct DetectorModelVersionSummary {
     /// <p>Information about the order in which events are evaluated and how actions are executed. </p>
     #[serde(rename = "evaluationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_method: Option<String>,
+    pub evaluation_method: Option<EvaluationMethod>,
     /// <p>The last time the detector model version was updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -425,7 +557,7 @@ pub struct DetectorModelVersionSummary {
     /// <p>The status of the detector model version.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DetectorModelVersionStatus>,
 }
 
 /// <p><p>Defines an action to write to the Amazon DynamoDB table that you created. The standard action payload contains all attribute-value pairs that have the information about the detector model instance and the event that triggered the action. You can also customize the <a href="https://docs.aws.amazon.com/iotevents/latest/apireference/API_Payload.html">payload</a>. One column of the DynamoDB table receives all attribute-value pairs in the payload that you specify.</p> <p>The <code>tableName</code> and <code>hashKeyField</code> values must match the table name and the partition key of the DynamoDB table. </p> <note> <p>If the DynamoDB table also has a sort key, you must specify <code>rangeKeyField</code>. The <code>rangeKeyField</code> value must match the sort key.</p> </note> <p/> <p>The <code>hashKeyValue</code> and <code>rangeKeyValue</code> use substitution templates. These templates provide data at runtime. The syntax is <code>${sql-expression}</code>.</p> <p>You can use expressions for parameters that are string data type. For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> <note> <p>If the defined payload type is a string, <code>DynamoDBAction</code> writes non-JSON data to the DynamoDB table as binary data. The DynamoDB console displays the data as Base64-encoded text. The <code>payloadField</code> is <code>&lt;payload-field&gt;_raw</code>.</p> </note></p>
@@ -478,6 +610,110 @@ pub struct DynamoDBv2Action {
     /// <p>The name of the DynamoDB table.</p>
     #[serde(rename = "tableName")]
     pub table_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEvaluationMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EvaluationMethod {
+    Batch,
+    Serial,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEvaluationMethod),
+}
+
+impl Default for EvaluationMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EvaluationMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EvaluationMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EvaluationMethod {
+    fn into(self) -> String {
+        match self {
+            EvaluationMethod::Batch => "BATCH".to_string(),
+            EvaluationMethod::Serial => "SERIAL".to_string(),
+            EvaluationMethod::UnknownVariant(UnknownEvaluationMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EvaluationMethod {
+    fn into(self) -> &'a str {
+        match self {
+            EvaluationMethod::Batch => &"BATCH",
+            EvaluationMethod::Serial => &"SERIAL",
+            EvaluationMethod::UnknownVariant(UnknownEvaluationMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EvaluationMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "BATCH" => EvaluationMethod::Batch,
+            "SERIAL" => EvaluationMethod::Serial,
+            _ => EvaluationMethod::UnknownVariant(UnknownEvaluationMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EvaluationMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BATCH" => EvaluationMethod::Batch,
+            "SERIAL" => EvaluationMethod::Serial,
+            _ => EvaluationMethod::UnknownVariant(UnknownEvaluationMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EvaluationMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EvaluationMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EvaluationMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the <code>actions</code> to be performed when the <code>condition</code> evaluates to TRUE.</p>
@@ -548,7 +784,7 @@ pub struct InputConfiguration {
     pub last_update_time: f64,
     /// <p>The status of the input.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: InputStatus,
 }
 
 /// <p>The definition of the input.</p>
@@ -557,6 +793,117 @@ pub struct InputDefinition {
     /// <p>The attributes from the JSON payload that are made available by the input. Inputs are derived from messages sent to the AWS IoT Events system using <code>BatchPutMessage</code>. Each such message contains a JSON payload, and those attributes (and their paired values) specified here are available for use in the <code>condition</code> expressions used by detectors that monitor this input. </p>
     #[serde(rename = "attributes")]
     pub attributes: Vec<Attribute>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputStatus),
+}
+
+impl Default for InputStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputStatus {
+    fn into(self) -> String {
+        match self {
+            InputStatus::Active => "ACTIVE".to_string(),
+            InputStatus::Creating => "CREATING".to_string(),
+            InputStatus::Deleting => "DELETING".to_string(),
+            InputStatus::Updating => "UPDATING".to_string(),
+            InputStatus::UnknownVariant(UnknownInputStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InputStatus::Active => &"ACTIVE",
+            InputStatus::Creating => &"CREATING",
+            InputStatus::Deleting => &"DELETING",
+            InputStatus::Updating => &"UPDATING",
+            InputStatus::UnknownVariant(UnknownInputStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => InputStatus::Active,
+            "CREATING" => InputStatus::Creating,
+            "DELETING" => InputStatus::Deleting,
+            "UPDATING" => InputStatus::Updating,
+            _ => InputStatus::UnknownVariant(UnknownInputStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => InputStatus::Active,
+            "CREATING" => InputStatus::Creating,
+            "DELETING" => InputStatus::Deleting,
+            "UPDATING" => InputStatus::Updating,
+            _ => InputStatus::UnknownVariant(UnknownInputStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InputStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the input.</p>
@@ -586,7 +933,7 @@ pub struct InputSummary {
     /// <p>The status of the input.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<InputStatus>,
 }
 
 /// <p>Sends an AWS IoT Events input, passing in information about the detector model instance and the event that triggered the action.</p>
@@ -747,6 +1094,111 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggingLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggingLevel {
+    Debug,
+    Error,
+    Info,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggingLevel),
+}
+
+impl Default for LoggingLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggingLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggingLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggingLevel {
+    fn into(self) -> String {
+        match self {
+            LoggingLevel::Debug => "DEBUG".to_string(),
+            LoggingLevel::Error => "ERROR".to_string(),
+            LoggingLevel::Info => "INFO".to_string(),
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggingLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LoggingLevel::Debug => &"DEBUG",
+            LoggingLevel::Error => &"ERROR",
+            LoggingLevel::Info => &"INFO",
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggingLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => LoggingLevel::Debug,
+            "ERROR" => LoggingLevel::Error,
+            "INFO" => LoggingLevel::Info,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggingLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => LoggingLevel::Debug,
+            "ERROR" => LoggingLevel::Error,
+            "INFO" => LoggingLevel::Info,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggingLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggingLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggingLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The values of the AWS IoT Events logging options.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingOptions {
@@ -759,7 +1211,7 @@ pub struct LoggingOptions {
     pub enabled: bool,
     /// <p>The logging level.</p>
     #[serde(rename = "level")]
-    pub level: String,
+    pub level: LoggingLevel,
     /// <p>The ARN of the role that grants permission to AWS IoT Events to perform logging.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
@@ -804,7 +1256,107 @@ pub struct Payload {
     pub content_expression: String,
     /// <p>The value of the payload type can be either <code>STRING</code> or <code>JSON</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: PayloadType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPayloadType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PayloadType {
+    Json,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPayloadType),
+}
+
+impl Default for PayloadType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PayloadType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PayloadType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PayloadType {
+    fn into(self) -> String {
+        match self {
+            PayloadType::Json => "JSON".to_string(),
+            PayloadType::String => "STRING".to_string(),
+            PayloadType::UnknownVariant(UnknownPayloadType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PayloadType {
+    fn into(self) -> &'a str {
+        match self {
+            PayloadType::Json => &"JSON",
+            PayloadType::String => &"STRING",
+            PayloadType::UnknownVariant(UnknownPayloadType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PayloadType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => PayloadType::Json,
+            "STRING" => PayloadType::String,
+            _ => PayloadType::UnknownVariant(UnknownPayloadType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PayloadType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => PayloadType::Json,
+            "STRING" => PayloadType::String,
+            _ => PayloadType::UnknownVariant(UnknownPayloadType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PayloadType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PayloadType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PayloadType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -969,7 +1521,7 @@ pub struct UpdateDetectorModelRequest {
     /// <p>Information about the order in which events are evaluated and how actions are executed. </p>
     #[serde(rename = "evaluationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_method: Option<String>,
+    pub evaluation_method: Option<EvaluationMethod>,
     /// <p>The ARN of the role that grants permission to AWS IoT Events to perform its operations.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,

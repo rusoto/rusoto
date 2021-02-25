@@ -69,6 +69,217 @@ pub struct AddTagsToResourceResponse {
     pub status: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClientVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClientVersion {
+    _5_1,
+    _5_3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClientVersion),
+}
+
+impl Default for ClientVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClientVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClientVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClientVersion {
+    fn into(self) -> String {
+        match self {
+            ClientVersion::_5_1 => "5.1".to_string(),
+            ClientVersion::_5_3 => "5.3".to_string(),
+            ClientVersion::UnknownVariant(UnknownClientVersion { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClientVersion {
+    fn into(self) -> &'a str {
+        match self {
+            ClientVersion::_5_1 => &"5.1",
+            ClientVersion::_5_3 => &"5.3",
+            ClientVersion::UnknownVariant(UnknownClientVersion { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClientVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "5.1" => ClientVersion::_5_1,
+            "5.3" => ClientVersion::_5_3,
+            _ => ClientVersion::UnknownVariant(UnknownClientVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClientVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "5.1" => ClientVersion::_5_1,
+            "5.3" => ClientVersion::_5_3,
+            _ => ClientVersion::UnknownVariant(UnknownClientVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClientVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClientVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ClientVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudHsmObjectState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudHsmObjectState {
+    Degraded,
+    Ready,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudHsmObjectState),
+}
+
+impl Default for CloudHsmObjectState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudHsmObjectState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudHsmObjectState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudHsmObjectState {
+    fn into(self) -> String {
+        match self {
+            CloudHsmObjectState::Degraded => "DEGRADED".to_string(),
+            CloudHsmObjectState::Ready => "READY".to_string(),
+            CloudHsmObjectState::Updating => "UPDATING".to_string(),
+            CloudHsmObjectState::UnknownVariant(UnknownCloudHsmObjectState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudHsmObjectState {
+    fn into(self) -> &'a str {
+        match self {
+            CloudHsmObjectState::Degraded => &"DEGRADED",
+            CloudHsmObjectState::Ready => &"READY",
+            CloudHsmObjectState::Updating => &"UPDATING",
+            CloudHsmObjectState::UnknownVariant(UnknownCloudHsmObjectState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CloudHsmObjectState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEGRADED" => CloudHsmObjectState::Degraded,
+            "READY" => CloudHsmObjectState::Ready,
+            "UPDATING" => CloudHsmObjectState::Updating,
+            _ => CloudHsmObjectState::UnknownVariant(UnknownCloudHsmObjectState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CloudHsmObjectState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEGRADED" => CloudHsmObjectState::Degraded,
+            "READY" => CloudHsmObjectState::Ready,
+            "UPDATING" => CloudHsmObjectState::Updating,
+            _ => CloudHsmObjectState::UnknownVariant(UnknownCloudHsmObjectState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudHsmObjectState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CloudHsmObjectState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudHsmObjectState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the inputs for the <a>CreateHapgRequest</a> action.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -114,7 +325,7 @@ pub struct CreateHsmRequest {
     #[serde(rename = "SubnetId")]
     pub subnet_id: String,
     #[serde(rename = "SubscriptionType")]
-    pub subscription_type: String,
+    pub subscription_type: SubscriptionType,
     /// <p>The IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>
     #[serde(rename = "SyslogIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -254,7 +465,7 @@ pub struct DescribeHapgResponse {
     /// <p>The state of the high-availability partition group.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CloudHsmObjectState>,
 }
 
 /// <p>Contains the inputs for the <a>DescribeHsm</a> operation.</p>
@@ -330,7 +541,7 @@ pub struct DescribeHsmResponse {
     /// <p>The status of the HSM.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<HsmStatus>,
     /// <p>Contains additional information about the status of the HSM.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,7 +560,7 @@ pub struct DescribeHsmResponse {
     pub subscription_start_date: Option<String>,
     #[serde(rename = "SubscriptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subscription_type: Option<String>,
+    pub subscription_type: Option<SubscriptionType>,
     /// <p>The name of the HSM vendor.</p>
     #[serde(rename = "VendorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -406,7 +617,7 @@ pub struct GetConfigRequest {
     pub client_arn: String,
     /// <p>The client version.</p>
     #[serde(rename = "ClientVersion")]
-    pub client_version: String,
+    pub client_version: ClientVersion,
     /// <p>A list of ARNs that identify the high-availability partition groups that are associated with the client.</p>
     #[serde(rename = "HapgList")]
     pub hapg_list: Vec<String>,
@@ -427,6 +638,132 @@ pub struct GetConfigResponse {
     #[serde(rename = "ConfigType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHsmStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HsmStatus {
+    Degraded,
+    Pending,
+    Running,
+    Suspended,
+    Terminated,
+    Terminating,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHsmStatus),
+}
+
+impl Default for HsmStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HsmStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HsmStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HsmStatus {
+    fn into(self) -> String {
+        match self {
+            HsmStatus::Degraded => "DEGRADED".to_string(),
+            HsmStatus::Pending => "PENDING".to_string(),
+            HsmStatus::Running => "RUNNING".to_string(),
+            HsmStatus::Suspended => "SUSPENDED".to_string(),
+            HsmStatus::Terminated => "TERMINATED".to_string(),
+            HsmStatus::Terminating => "TERMINATING".to_string(),
+            HsmStatus::Updating => "UPDATING".to_string(),
+            HsmStatus::UnknownVariant(UnknownHsmStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HsmStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HsmStatus::Degraded => &"DEGRADED",
+            HsmStatus::Pending => &"PENDING",
+            HsmStatus::Running => &"RUNNING",
+            HsmStatus::Suspended => &"SUSPENDED",
+            HsmStatus::Terminated => &"TERMINATED",
+            HsmStatus::Terminating => &"TERMINATING",
+            HsmStatus::Updating => &"UPDATING",
+            HsmStatus::UnknownVariant(UnknownHsmStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HsmStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEGRADED" => HsmStatus::Degraded,
+            "PENDING" => HsmStatus::Pending,
+            "RUNNING" => HsmStatus::Running,
+            "SUSPENDED" => HsmStatus::Suspended,
+            "TERMINATED" => HsmStatus::Terminated,
+            "TERMINATING" => HsmStatus::Terminating,
+            "UPDATING" => HsmStatus::Updating,
+            _ => HsmStatus::UnknownVariant(UnknownHsmStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HsmStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEGRADED" => HsmStatus::Degraded,
+            "PENDING" => HsmStatus::Pending,
+            "RUNNING" => HsmStatus::Running,
+            "SUSPENDED" => HsmStatus::Suspended,
+            "TERMINATED" => HsmStatus::Terminated,
+            "TERMINATING" => HsmStatus::Terminating,
+            "UPDATING" => HsmStatus::Updating,
+            _ => HsmStatus::UnknownVariant(UnknownHsmStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HsmStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HsmStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HsmStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains the inputs for the <a>ListAvailableZones</a> action.</p>
@@ -625,6 +962,107 @@ pub struct RemoveTagsFromResourceResponse {
     /// <p>The status of the operation.</p>
     #[serde(rename = "Status")]
     pub status: String,
+}
+
+/// <p><p>Specifies the type of subscription for the HSM.</p> <ul> <li> <p> <b>PRODUCTION</b> - The HSM is being used in a production environment.</p> </li> <li> <p> <b>TRIAL</b> - The HSM is being used in a product trial.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriptionType {
+    Production,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriptionType),
+}
+
+impl Default for SubscriptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriptionType {
+    fn into(self) -> String {
+        match self {
+            SubscriptionType::Production => "PRODUCTION".to_string(),
+            SubscriptionType::UnknownVariant(UnknownSubscriptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriptionType {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriptionType::Production => &"PRODUCTION",
+            SubscriptionType::UnknownVariant(UnknownSubscriptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SubscriptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRODUCTION" => SubscriptionType::Production,
+            _ => SubscriptionType::UnknownVariant(UnknownSubscriptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRODUCTION" => SubscriptionType::Production,
+            _ => SubscriptionType::UnknownVariant(UnknownSubscriptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A key-value pair that identifies or specifies metadata about an AWS CloudHSM resource.</p>

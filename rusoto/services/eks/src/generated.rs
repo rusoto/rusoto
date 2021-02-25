@@ -25,6 +25,112 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAMITypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AMITypes {
+    Al2Arm64,
+    Al2X8664,
+    Al2X8664Gpu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAMITypes),
+}
+
+impl Default for AMITypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AMITypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AMITypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AMITypes {
+    fn into(self) -> String {
+        match self {
+            AMITypes::Al2Arm64 => "AL2_ARM_64".to_string(),
+            AMITypes::Al2X8664 => "AL2_x86_64".to_string(),
+            AMITypes::Al2X8664Gpu => "AL2_x86_64_GPU".to_string(),
+            AMITypes::UnknownVariant(UnknownAMITypes { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AMITypes {
+    fn into(self) -> &'a str {
+        match self {
+            AMITypes::Al2Arm64 => &"AL2_ARM_64",
+            AMITypes::Al2X8664 => &"AL2_x86_64",
+            AMITypes::Al2X8664Gpu => &"AL2_x86_64_GPU",
+            AMITypes::UnknownVariant(UnknownAMITypes { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AMITypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "AL2_ARM_64" => AMITypes::Al2Arm64,
+            "AL2_x86_64" => AMITypes::Al2X8664,
+            "AL2_x86_64_GPU" => AMITypes::Al2X8664Gpu,
+            _ => AMITypes::UnknownVariant(UnknownAMITypes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AMITypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AL2_ARM_64" => AMITypes::Al2Arm64,
+            "AL2_x86_64" => AMITypes::Al2X8664,
+            "AL2_x86_64_GPU" => AMITypes::Al2X8664Gpu,
+            _ => AMITypes::UnknownVariant(UnknownAMITypes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AMITypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AMITypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AMITypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An Amazon EKS add-on.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -64,7 +170,7 @@ pub struct Addon {
     /// <p>The status of the add-on.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AddonStatus>,
     /// <p>The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags do not propagate to any other resources associated with the cluster. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -106,7 +212,7 @@ pub struct AddonIssue {
     /// <p>A code that describes the type of issue.</p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<AddonIssueCode>,
     /// <p>A message that provides details about the issue and what might cause it.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -115,6 +221,250 @@ pub struct AddonIssue {
     #[serde(rename = "resourceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_ids: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAddonIssueCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AddonIssueCode {
+    AccessDenied,
+    ClusterUnreachable,
+    ConfigurationConflict,
+    InsufficientNumberOfReplicas,
+    InternalFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAddonIssueCode),
+}
+
+impl Default for AddonIssueCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AddonIssueCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AddonIssueCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AddonIssueCode {
+    fn into(self) -> String {
+        match self {
+            AddonIssueCode::AccessDenied => "AccessDenied".to_string(),
+            AddonIssueCode::ClusterUnreachable => "ClusterUnreachable".to_string(),
+            AddonIssueCode::ConfigurationConflict => "ConfigurationConflict".to_string(),
+            AddonIssueCode::InsufficientNumberOfReplicas => {
+                "InsufficientNumberOfReplicas".to_string()
+            }
+            AddonIssueCode::InternalFailure => "InternalFailure".to_string(),
+            AddonIssueCode::UnknownVariant(UnknownAddonIssueCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AddonIssueCode {
+    fn into(self) -> &'a str {
+        match self {
+            AddonIssueCode::AccessDenied => &"AccessDenied",
+            AddonIssueCode::ClusterUnreachable => &"ClusterUnreachable",
+            AddonIssueCode::ConfigurationConflict => &"ConfigurationConflict",
+            AddonIssueCode::InsufficientNumberOfReplicas => &"InsufficientNumberOfReplicas",
+            AddonIssueCode::InternalFailure => &"InternalFailure",
+            AddonIssueCode::UnknownVariant(UnknownAddonIssueCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AddonIssueCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => AddonIssueCode::AccessDenied,
+            "ClusterUnreachable" => AddonIssueCode::ClusterUnreachable,
+            "ConfigurationConflict" => AddonIssueCode::ConfigurationConflict,
+            "InsufficientNumberOfReplicas" => AddonIssueCode::InsufficientNumberOfReplicas,
+            "InternalFailure" => AddonIssueCode::InternalFailure,
+            _ => AddonIssueCode::UnknownVariant(UnknownAddonIssueCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AddonIssueCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => AddonIssueCode::AccessDenied,
+            "ClusterUnreachable" => AddonIssueCode::ClusterUnreachable,
+            "ConfigurationConflict" => AddonIssueCode::ConfigurationConflict,
+            "InsufficientNumberOfReplicas" => AddonIssueCode::InsufficientNumberOfReplicas,
+            "InternalFailure" => AddonIssueCode::InternalFailure,
+            _ => AddonIssueCode::UnknownVariant(UnknownAddonIssueCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AddonIssueCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AddonIssueCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AddonIssueCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAddonStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AddonStatus {
+    Active,
+    CreateFailed,
+    Creating,
+    Degraded,
+    DeleteFailed,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAddonStatus),
+}
+
+impl Default for AddonStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AddonStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AddonStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AddonStatus {
+    fn into(self) -> String {
+        match self {
+            AddonStatus::Active => "ACTIVE".to_string(),
+            AddonStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            AddonStatus::Creating => "CREATING".to_string(),
+            AddonStatus::Degraded => "DEGRADED".to_string(),
+            AddonStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            AddonStatus::Deleting => "DELETING".to_string(),
+            AddonStatus::Updating => "UPDATING".to_string(),
+            AddonStatus::UnknownVariant(UnknownAddonStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AddonStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AddonStatus::Active => &"ACTIVE",
+            AddonStatus::CreateFailed => &"CREATE_FAILED",
+            AddonStatus::Creating => &"CREATING",
+            AddonStatus::Degraded => &"DEGRADED",
+            AddonStatus::DeleteFailed => &"DELETE_FAILED",
+            AddonStatus::Deleting => &"DELETING",
+            AddonStatus::Updating => &"UPDATING",
+            AddonStatus::UnknownVariant(UnknownAddonStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AddonStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => AddonStatus::Active,
+            "CREATE_FAILED" => AddonStatus::CreateFailed,
+            "CREATING" => AddonStatus::Creating,
+            "DEGRADED" => AddonStatus::Degraded,
+            "DELETE_FAILED" => AddonStatus::DeleteFailed,
+            "DELETING" => AddonStatus::Deleting,
+            "UPDATING" => AddonStatus::Updating,
+            _ => AddonStatus::UnknownVariant(UnknownAddonStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AddonStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => AddonStatus::Active,
+            "CREATE_FAILED" => AddonStatus::CreateFailed,
+            "CREATING" => AddonStatus::Creating,
+            "DEGRADED" => AddonStatus::Degraded,
+            "DELETE_FAILED" => AddonStatus::DeleteFailed,
+            "DELETING" => AddonStatus::Deleting,
+            "UPDATING" => AddonStatus::Updating,
+            _ => AddonStatus::UnknownVariant(UnknownAddonStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AddonStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AddonStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AddonStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an add-on version.</p>
@@ -143,6 +493,106 @@ pub struct AutoScalingGroup {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapacityTypes {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CapacityTypes {
+    OnDemand,
+    Spot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapacityTypes),
+}
+
+impl Default for CapacityTypes {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CapacityTypes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CapacityTypes {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CapacityTypes {
+    fn into(self) -> String {
+        match self {
+            CapacityTypes::OnDemand => "ON_DEMAND".to_string(),
+            CapacityTypes::Spot => "SPOT".to_string(),
+            CapacityTypes::UnknownVariant(UnknownCapacityTypes { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CapacityTypes {
+    fn into(self) -> &'a str {
+        match self {
+            CapacityTypes::OnDemand => &"ON_DEMAND",
+            CapacityTypes::Spot => &"SPOT",
+            CapacityTypes::UnknownVariant(UnknownCapacityTypes { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CapacityTypes {
+    fn from(name: &str) -> Self {
+        match name {
+            "ON_DEMAND" => CapacityTypes::OnDemand,
+            "SPOT" => CapacityTypes::Spot,
+            _ => CapacityTypes::UnknownVariant(UnknownCapacityTypes {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CapacityTypes {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ON_DEMAND" => CapacityTypes::OnDemand,
+            "SPOT" => CapacityTypes::Spot,
+            _ => CapacityTypes::UnknownVariant(UnknownCapacityTypes { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CapacityTypes {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CapacityTypes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CapacityTypes {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the <code>certificate-authority-data</code> for your cluster.</p>
@@ -214,7 +664,7 @@ pub struct Cluster {
     /// <p>The current status of the cluster.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ClusterStatus>,
     /// <p>The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags do not propagate to any other resources associated with the cluster. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -223,6 +673,122 @@ pub struct Cluster {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterStatus),
+}
+
+impl Default for ClusterStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterStatus {
+    fn into(self) -> String {
+        match self {
+            ClusterStatus::Active => "ACTIVE".to_string(),
+            ClusterStatus::Creating => "CREATING".to_string(),
+            ClusterStatus::Deleting => "DELETING".to_string(),
+            ClusterStatus::Failed => "FAILED".to_string(),
+            ClusterStatus::Updating => "UPDATING".to_string(),
+            ClusterStatus::UnknownVariant(UnknownClusterStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterStatus::Active => &"ACTIVE",
+            ClusterStatus::Creating => &"CREATING",
+            ClusterStatus::Deleting => &"DELETING",
+            ClusterStatus::Failed => &"FAILED",
+            ClusterStatus::Updating => &"UPDATING",
+            ClusterStatus::UnknownVariant(UnknownClusterStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ClusterStatus::Active,
+            "CREATING" => ClusterStatus::Creating,
+            "DELETING" => ClusterStatus::Deleting,
+            "FAILED" => ClusterStatus::Failed,
+            "UPDATING" => ClusterStatus::Updating,
+            _ => ClusterStatus::UnknownVariant(UnknownClusterStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ClusterStatus::Active,
+            "CREATING" => ClusterStatus::Creating,
+            "DELETING" => ClusterStatus::Deleting,
+            "FAILED" => ClusterStatus::Failed,
+            "UPDATING" => ClusterStatus::Updating,
+            _ => ClusterStatus::UnknownVariant(UnknownClusterStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ClusterStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Compatibility information.</p>
@@ -263,7 +829,7 @@ pub struct CreateAddonRequest {
     /// <p>How to resolve parameter value conflicts when migrating an existing add-on to an Amazon EKS add-on.</p>
     #[serde(rename = "resolveConflicts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolve_conflicts: Option<String>,
+    pub resolve_conflicts: Option<ResolveConflicts>,
     /// <p><p>The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on&#39;s service account. The role must be assigned the IAM permissions required by the add-on. If you don&#39;t specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html">Amazon EKS node IAM role</a> in the <i>Amazon EKS User Guide</i>.</p> <note> <p>To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC) provider created for your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html">Enabling IAM roles for service accounts on your cluster</a> in the <i>Amazon EKS User Guide</i>.</p> </note></p>
     #[serde(rename = "serviceAccountRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -374,11 +940,11 @@ pub struct CreateNodegroupRequest {
     /// <p>The AMI type for your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type. Arm instances should use the <code>AL2_ARM_64</code> AMI type. All types use the Amazon EKS optimized Amazon Linux 2 AMI. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>amiType</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ami_type: Option<String>,
+    pub ami_type: Option<AMITypes>,
     /// <p>The capacity type for your node group.</p>
     #[serde(rename = "capacityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub capacity_type: Option<String>,
+    pub capacity_type: Option<CapacityTypes>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -669,6 +1235,167 @@ pub struct EncryptionConfig {
     pub resources: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    AccessDenied,
+    ClusterUnreachable,
+    ConfigurationConflict,
+    EniLimitReached,
+    InsufficientFreeAddresses,
+    InsufficientNumberOfReplicas,
+    IpNotAvailable,
+    NodeCreationFailure,
+    OperationNotPermitted,
+    PodEvictionFailure,
+    SecurityGroupNotFound,
+    SubnetNotFound,
+    Unknown,
+    VpcIdNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::AccessDenied => "AccessDenied".to_string(),
+            ErrorCode::ClusterUnreachable => "ClusterUnreachable".to_string(),
+            ErrorCode::ConfigurationConflict => "ConfigurationConflict".to_string(),
+            ErrorCode::EniLimitReached => "EniLimitReached".to_string(),
+            ErrorCode::InsufficientFreeAddresses => "InsufficientFreeAddresses".to_string(),
+            ErrorCode::InsufficientNumberOfReplicas => "InsufficientNumberOfReplicas".to_string(),
+            ErrorCode::IpNotAvailable => "IpNotAvailable".to_string(),
+            ErrorCode::NodeCreationFailure => "NodeCreationFailure".to_string(),
+            ErrorCode::OperationNotPermitted => "OperationNotPermitted".to_string(),
+            ErrorCode::PodEvictionFailure => "PodEvictionFailure".to_string(),
+            ErrorCode::SecurityGroupNotFound => "SecurityGroupNotFound".to_string(),
+            ErrorCode::SubnetNotFound => "SubnetNotFound".to_string(),
+            ErrorCode::Unknown => "Unknown".to_string(),
+            ErrorCode::VpcIdNotFound => "VpcIdNotFound".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::AccessDenied => &"AccessDenied",
+            ErrorCode::ClusterUnreachable => &"ClusterUnreachable",
+            ErrorCode::ConfigurationConflict => &"ConfigurationConflict",
+            ErrorCode::EniLimitReached => &"EniLimitReached",
+            ErrorCode::InsufficientFreeAddresses => &"InsufficientFreeAddresses",
+            ErrorCode::InsufficientNumberOfReplicas => &"InsufficientNumberOfReplicas",
+            ErrorCode::IpNotAvailable => &"IpNotAvailable",
+            ErrorCode::NodeCreationFailure => &"NodeCreationFailure",
+            ErrorCode::OperationNotPermitted => &"OperationNotPermitted",
+            ErrorCode::PodEvictionFailure => &"PodEvictionFailure",
+            ErrorCode::SecurityGroupNotFound => &"SecurityGroupNotFound",
+            ErrorCode::SubnetNotFound => &"SubnetNotFound",
+            ErrorCode::Unknown => &"Unknown",
+            ErrorCode::VpcIdNotFound => &"VpcIdNotFound",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "ClusterUnreachable" => ErrorCode::ClusterUnreachable,
+            "ConfigurationConflict" => ErrorCode::ConfigurationConflict,
+            "EniLimitReached" => ErrorCode::EniLimitReached,
+            "InsufficientFreeAddresses" => ErrorCode::InsufficientFreeAddresses,
+            "InsufficientNumberOfReplicas" => ErrorCode::InsufficientNumberOfReplicas,
+            "IpNotAvailable" => ErrorCode::IpNotAvailable,
+            "NodeCreationFailure" => ErrorCode::NodeCreationFailure,
+            "OperationNotPermitted" => ErrorCode::OperationNotPermitted,
+            "PodEvictionFailure" => ErrorCode::PodEvictionFailure,
+            "SecurityGroupNotFound" => ErrorCode::SecurityGroupNotFound,
+            "SubnetNotFound" => ErrorCode::SubnetNotFound,
+            "Unknown" => ErrorCode::Unknown,
+            "VpcIdNotFound" => ErrorCode::VpcIdNotFound,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => ErrorCode::AccessDenied,
+            "ClusterUnreachable" => ErrorCode::ClusterUnreachable,
+            "ConfigurationConflict" => ErrorCode::ConfigurationConflict,
+            "EniLimitReached" => ErrorCode::EniLimitReached,
+            "InsufficientFreeAddresses" => ErrorCode::InsufficientFreeAddresses,
+            "InsufficientNumberOfReplicas" => ErrorCode::InsufficientNumberOfReplicas,
+            "IpNotAvailable" => ErrorCode::IpNotAvailable,
+            "NodeCreationFailure" => ErrorCode::NodeCreationFailure,
+            "OperationNotPermitted" => ErrorCode::OperationNotPermitted,
+            "PodEvictionFailure" => ErrorCode::PodEvictionFailure,
+            "SecurityGroupNotFound" => ErrorCode::SecurityGroupNotFound,
+            "SubnetNotFound" => ErrorCode::SubnetNotFound,
+            "Unknown" => ErrorCode::Unknown,
+            "VpcIdNotFound" => ErrorCode::VpcIdNotFound,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an error when an asynchronous operation fails.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -676,7 +1403,7 @@ pub struct ErrorDetail {
     /// <p><p>A brief description of the error. </p> <ul> <li> <p> <b>SubnetNotFound</b>: We couldn&#39;t find one of the subnets associated with the cluster.</p> </li> <li> <p> <b>SecurityGroupNotFound</b>: We couldn&#39;t find one of the security groups associated with the cluster.</p> </li> <li> <p> <b>EniLimitReached</b>: You have reached the elastic network interface limit for your account.</p> </li> <li> <p> <b>IpNotAvailable</b>: A subnet associated with the cluster doesn&#39;t have any free IP addresses.</p> </li> <li> <p> <b>AccessDenied</b>: You don&#39;t have permissions to perform the specified operation.</p> </li> <li> <p> <b>OperationNotPermitted</b>: The service role associated with the cluster doesn&#39;t have the required access permissions for Amazon EKS.</p> </li> <li> <p> <b>VpcIdNotFound</b>: We couldn&#39;t find the VPC associated with the cluster.</p> </li> </ul></p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>A more complete description of the error.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -718,7 +1445,7 @@ pub struct FargateProfile {
     /// <p>The current status of the Fargate profile.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FargateProfileStatus>,
     /// <p>The IDs of subnets to launch pods into.</p>
     #[serde(rename = "subnets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -742,6 +1469,126 @@ pub struct FargateProfileSelector {
     pub namespace: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFargateProfileStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FargateProfileStatus {
+    Active,
+    CreateFailed,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFargateProfileStatus),
+}
+
+impl Default for FargateProfileStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FargateProfileStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FargateProfileStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FargateProfileStatus {
+    fn into(self) -> String {
+        match self {
+            FargateProfileStatus::Active => "ACTIVE".to_string(),
+            FargateProfileStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            FargateProfileStatus::Creating => "CREATING".to_string(),
+            FargateProfileStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            FargateProfileStatus::Deleting => "DELETING".to_string(),
+            FargateProfileStatus::UnknownVariant(UnknownFargateProfileStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FargateProfileStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FargateProfileStatus::Active => &"ACTIVE",
+            FargateProfileStatus::CreateFailed => &"CREATE_FAILED",
+            FargateProfileStatus::Creating => &"CREATING",
+            FargateProfileStatus::DeleteFailed => &"DELETE_FAILED",
+            FargateProfileStatus::Deleting => &"DELETING",
+            FargateProfileStatus::UnknownVariant(UnknownFargateProfileStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FargateProfileStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => FargateProfileStatus::Active,
+            "CREATE_FAILED" => FargateProfileStatus::CreateFailed,
+            "CREATING" => FargateProfileStatus::Creating,
+            "DELETE_FAILED" => FargateProfileStatus::DeleteFailed,
+            "DELETING" => FargateProfileStatus::Deleting,
+            _ => FargateProfileStatus::UnknownVariant(UnknownFargateProfileStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FargateProfileStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => FargateProfileStatus::Active,
+            "CREATE_FAILED" => FargateProfileStatus::CreateFailed,
+            "CREATING" => FargateProfileStatus::Creating,
+            "DELETE_FAILED" => FargateProfileStatus::DeleteFailed,
+            "DELETING" => FargateProfileStatus::Deleting,
+            _ => FargateProfileStatus::UnknownVariant(UnknownFargateProfileStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FargateProfileStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FargateProfileStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FargateProfileStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an identity provider for authentication credentials.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -759,7 +1606,7 @@ pub struct Issue {
     /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is failing to authenticate or authorize with your Kubernetes cluster API server.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>ClusterUnreachable</b>: Amazon EKS or one or more of your managed nodes is unable to to communicate with your Kubernetes cluster API server. This can happen if there are network disruptions or if API servers are timing out processing requests. </p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SubnetInvalidConfiguration</b>: One or more Amazon EC2 subnets specified for a node group do not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable the <code>auto-assign public IP address</code> setting for the subnet. See <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip">Modifying the public IPv4 addressing attribute for your subnet</a> in the Amazon VPC User Guide.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">worker node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<NodegroupIssueCode>,
     /// <p>The error message associated with the issue.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -984,7 +1831,122 @@ pub struct LogSetup {
     /// <p>The available cluster control plane log types.</p>
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub types: Option<Vec<String>>,
+    pub types: Option<Vec<LogType>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogType {
+    Api,
+    Audit,
+    Authenticator,
+    ControllerManager,
+    Scheduler,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogType),
+}
+
+impl Default for LogType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogType {
+    fn into(self) -> String {
+        match self {
+            LogType::Api => "api".to_string(),
+            LogType::Audit => "audit".to_string(),
+            LogType::Authenticator => "authenticator".to_string(),
+            LogType::ControllerManager => "controllerManager".to_string(),
+            LogType::Scheduler => "scheduler".to_string(),
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogType {
+    fn into(self) -> &'a str {
+        match self {
+            LogType::Api => &"api",
+            LogType::Audit => &"audit",
+            LogType::Authenticator => &"authenticator",
+            LogType::ControllerManager => &"controllerManager",
+            LogType::Scheduler => &"scheduler",
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogType {
+    fn from(name: &str) -> Self {
+        match name {
+            "api" => LogType::Api,
+            "audit" => LogType::Audit,
+            "authenticator" => LogType::Authenticator,
+            "controllerManager" => LogType::ControllerManager,
+            "scheduler" => LogType::Scheduler,
+            _ => LogType::UnknownVariant(UnknownLogType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "api" => LogType::Api,
+            "audit" => LogType::Audit,
+            "authenticator" => LogType::Authenticator,
+            "controllerManager" => LogType::ControllerManager,
+            "scheduler" => LogType::Scheduler,
+            _ => LogType::UnknownVariant(UnknownLogType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the logging configuration for resources in your cluster.</p>
@@ -1003,11 +1965,11 @@ pub struct Nodegroup {
     /// <p>If the node group was deployed using a launch template with a custom AMI, then this is <code>CUSTOM</code>. For node groups that weren't deployed using a launch template, this is the AMI type that was specified in the node group configuration.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ami_type: Option<String>,
+    pub ami_type: Option<AMITypes>,
     /// <p>The capacity type of your managed node group.</p>
     #[serde(rename = "capacityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub capacity_type: Option<String>,
+    pub capacity_type: Option<CapacityTypes>,
     /// <p>The name of the cluster that the managed node group resides in.</p>
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1071,7 +2033,7 @@ pub struct Nodegroup {
     /// <p>The current status of the managed node group.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NodegroupStatus>,
     /// <p>The subnets that were specified for the Auto Scaling group that is associated with your node group.</p>
     #[serde(rename = "subnets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1094,6 +2056,225 @@ pub struct NodegroupHealth {
     #[serde(rename = "issues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issues: Option<Vec<Issue>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodegroupIssueCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodegroupIssueCode {
+    AccessDenied,
+    AsgInstanceLaunchFailures,
+    AutoScalingGroupInvalidConfiguration,
+    AutoScalingGroupNotFound,
+    ClusterUnreachable,
+    Ec2LaunchTemplateNotFound,
+    Ec2LaunchTemplateVersionMismatch,
+    Ec2SecurityGroupDeletionFailure,
+    Ec2SecurityGroupNotFound,
+    Ec2SubnetInvalidConfiguration,
+    Ec2SubnetNotFound,
+    IamInstanceProfileNotFound,
+    IamLimitExceeded,
+    IamNodeRoleNotFound,
+    InstanceLimitExceeded,
+    InsufficientFreeAddresses,
+    InternalFailure,
+    NodeCreationFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodegroupIssueCode),
+}
+
+impl Default for NodegroupIssueCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodegroupIssueCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodegroupIssueCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodegroupIssueCode {
+    fn into(self) -> String {
+        match self {
+            NodegroupIssueCode::AccessDenied => "AccessDenied".to_string(),
+            NodegroupIssueCode::AsgInstanceLaunchFailures => {
+                "AsgInstanceLaunchFailures".to_string()
+            }
+            NodegroupIssueCode::AutoScalingGroupInvalidConfiguration => {
+                "AutoScalingGroupInvalidConfiguration".to_string()
+            }
+            NodegroupIssueCode::AutoScalingGroupNotFound => "AutoScalingGroupNotFound".to_string(),
+            NodegroupIssueCode::ClusterUnreachable => "ClusterUnreachable".to_string(),
+            NodegroupIssueCode::Ec2LaunchTemplateNotFound => {
+                "Ec2LaunchTemplateNotFound".to_string()
+            }
+            NodegroupIssueCode::Ec2LaunchTemplateVersionMismatch => {
+                "Ec2LaunchTemplateVersionMismatch".to_string()
+            }
+            NodegroupIssueCode::Ec2SecurityGroupDeletionFailure => {
+                "Ec2SecurityGroupDeletionFailure".to_string()
+            }
+            NodegroupIssueCode::Ec2SecurityGroupNotFound => "Ec2SecurityGroupNotFound".to_string(),
+            NodegroupIssueCode::Ec2SubnetInvalidConfiguration => {
+                "Ec2SubnetInvalidConfiguration".to_string()
+            }
+            NodegroupIssueCode::Ec2SubnetNotFound => "Ec2SubnetNotFound".to_string(),
+            NodegroupIssueCode::IamInstanceProfileNotFound => {
+                "IamInstanceProfileNotFound".to_string()
+            }
+            NodegroupIssueCode::IamLimitExceeded => "IamLimitExceeded".to_string(),
+            NodegroupIssueCode::IamNodeRoleNotFound => "IamNodeRoleNotFound".to_string(),
+            NodegroupIssueCode::InstanceLimitExceeded => "InstanceLimitExceeded".to_string(),
+            NodegroupIssueCode::InsufficientFreeAddresses => {
+                "InsufficientFreeAddresses".to_string()
+            }
+            NodegroupIssueCode::InternalFailure => "InternalFailure".to_string(),
+            NodegroupIssueCode::NodeCreationFailure => "NodeCreationFailure".to_string(),
+            NodegroupIssueCode::UnknownVariant(UnknownNodegroupIssueCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodegroupIssueCode {
+    fn into(self) -> &'a str {
+        match self {
+            NodegroupIssueCode::AccessDenied => &"AccessDenied",
+            NodegroupIssueCode::AsgInstanceLaunchFailures => &"AsgInstanceLaunchFailures",
+            NodegroupIssueCode::AutoScalingGroupInvalidConfiguration => {
+                &"AutoScalingGroupInvalidConfiguration"
+            }
+            NodegroupIssueCode::AutoScalingGroupNotFound => &"AutoScalingGroupNotFound",
+            NodegroupIssueCode::ClusterUnreachable => &"ClusterUnreachable",
+            NodegroupIssueCode::Ec2LaunchTemplateNotFound => &"Ec2LaunchTemplateNotFound",
+            NodegroupIssueCode::Ec2LaunchTemplateVersionMismatch => {
+                &"Ec2LaunchTemplateVersionMismatch"
+            }
+            NodegroupIssueCode::Ec2SecurityGroupDeletionFailure => {
+                &"Ec2SecurityGroupDeletionFailure"
+            }
+            NodegroupIssueCode::Ec2SecurityGroupNotFound => &"Ec2SecurityGroupNotFound",
+            NodegroupIssueCode::Ec2SubnetInvalidConfiguration => &"Ec2SubnetInvalidConfiguration",
+            NodegroupIssueCode::Ec2SubnetNotFound => &"Ec2SubnetNotFound",
+            NodegroupIssueCode::IamInstanceProfileNotFound => &"IamInstanceProfileNotFound",
+            NodegroupIssueCode::IamLimitExceeded => &"IamLimitExceeded",
+            NodegroupIssueCode::IamNodeRoleNotFound => &"IamNodeRoleNotFound",
+            NodegroupIssueCode::InstanceLimitExceeded => &"InstanceLimitExceeded",
+            NodegroupIssueCode::InsufficientFreeAddresses => &"InsufficientFreeAddresses",
+            NodegroupIssueCode::InternalFailure => &"InternalFailure",
+            NodegroupIssueCode::NodeCreationFailure => &"NodeCreationFailure",
+            NodegroupIssueCode::UnknownVariant(UnknownNodegroupIssueCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NodegroupIssueCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => NodegroupIssueCode::AccessDenied,
+            "AsgInstanceLaunchFailures" => NodegroupIssueCode::AsgInstanceLaunchFailures,
+            "AutoScalingGroupInvalidConfiguration" => {
+                NodegroupIssueCode::AutoScalingGroupInvalidConfiguration
+            }
+            "AutoScalingGroupNotFound" => NodegroupIssueCode::AutoScalingGroupNotFound,
+            "ClusterUnreachable" => NodegroupIssueCode::ClusterUnreachable,
+            "Ec2LaunchTemplateNotFound" => NodegroupIssueCode::Ec2LaunchTemplateNotFound,
+            "Ec2LaunchTemplateVersionMismatch" => {
+                NodegroupIssueCode::Ec2LaunchTemplateVersionMismatch
+            }
+            "Ec2SecurityGroupDeletionFailure" => {
+                NodegroupIssueCode::Ec2SecurityGroupDeletionFailure
+            }
+            "Ec2SecurityGroupNotFound" => NodegroupIssueCode::Ec2SecurityGroupNotFound,
+            "Ec2SubnetInvalidConfiguration" => NodegroupIssueCode::Ec2SubnetInvalidConfiguration,
+            "Ec2SubnetNotFound" => NodegroupIssueCode::Ec2SubnetNotFound,
+            "IamInstanceProfileNotFound" => NodegroupIssueCode::IamInstanceProfileNotFound,
+            "IamLimitExceeded" => NodegroupIssueCode::IamLimitExceeded,
+            "IamNodeRoleNotFound" => NodegroupIssueCode::IamNodeRoleNotFound,
+            "InstanceLimitExceeded" => NodegroupIssueCode::InstanceLimitExceeded,
+            "InsufficientFreeAddresses" => NodegroupIssueCode::InsufficientFreeAddresses,
+            "InternalFailure" => NodegroupIssueCode::InternalFailure,
+            "NodeCreationFailure" => NodegroupIssueCode::NodeCreationFailure,
+            _ => NodegroupIssueCode::UnknownVariant(UnknownNodegroupIssueCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodegroupIssueCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => NodegroupIssueCode::AccessDenied,
+            "AsgInstanceLaunchFailures" => NodegroupIssueCode::AsgInstanceLaunchFailures,
+            "AutoScalingGroupInvalidConfiguration" => {
+                NodegroupIssueCode::AutoScalingGroupInvalidConfiguration
+            }
+            "AutoScalingGroupNotFound" => NodegroupIssueCode::AutoScalingGroupNotFound,
+            "ClusterUnreachable" => NodegroupIssueCode::ClusterUnreachable,
+            "Ec2LaunchTemplateNotFound" => NodegroupIssueCode::Ec2LaunchTemplateNotFound,
+            "Ec2LaunchTemplateVersionMismatch" => {
+                NodegroupIssueCode::Ec2LaunchTemplateVersionMismatch
+            }
+            "Ec2SecurityGroupDeletionFailure" => {
+                NodegroupIssueCode::Ec2SecurityGroupDeletionFailure
+            }
+            "Ec2SecurityGroupNotFound" => NodegroupIssueCode::Ec2SecurityGroupNotFound,
+            "Ec2SubnetInvalidConfiguration" => NodegroupIssueCode::Ec2SubnetInvalidConfiguration,
+            "Ec2SubnetNotFound" => NodegroupIssueCode::Ec2SubnetNotFound,
+            "IamInstanceProfileNotFound" => NodegroupIssueCode::IamInstanceProfileNotFound,
+            "IamLimitExceeded" => NodegroupIssueCode::IamLimitExceeded,
+            "IamNodeRoleNotFound" => NodegroupIssueCode::IamNodeRoleNotFound,
+            "InstanceLimitExceeded" => NodegroupIssueCode::InstanceLimitExceeded,
+            "InsufficientFreeAddresses" => NodegroupIssueCode::InsufficientFreeAddresses,
+            "InternalFailure" => NodegroupIssueCode::InternalFailure,
+            "NodeCreationFailure" => NodegroupIssueCode::NodeCreationFailure,
+            _ => NodegroupIssueCode::UnknownVariant(UnknownNodegroupIssueCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodegroupIssueCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NodegroupIssueCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NodegroupIssueCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the resources associated with the node group, such as Auto Scaling groups and security groups for remote access.</p>
@@ -1127,6 +2308,132 @@ pub struct NodegroupScalingConfig {
     pub min_size: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodegroupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodegroupStatus {
+    Active,
+    CreateFailed,
+    Creating,
+    Degraded,
+    DeleteFailed,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodegroupStatus),
+}
+
+impl Default for NodegroupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodegroupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodegroupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodegroupStatus {
+    fn into(self) -> String {
+        match self {
+            NodegroupStatus::Active => "ACTIVE".to_string(),
+            NodegroupStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            NodegroupStatus::Creating => "CREATING".to_string(),
+            NodegroupStatus::Degraded => "DEGRADED".to_string(),
+            NodegroupStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            NodegroupStatus::Deleting => "DELETING".to_string(),
+            NodegroupStatus::Updating => "UPDATING".to_string(),
+            NodegroupStatus::UnknownVariant(UnknownNodegroupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodegroupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NodegroupStatus::Active => &"ACTIVE",
+            NodegroupStatus::CreateFailed => &"CREATE_FAILED",
+            NodegroupStatus::Creating => &"CREATING",
+            NodegroupStatus::Degraded => &"DEGRADED",
+            NodegroupStatus::DeleteFailed => &"DELETE_FAILED",
+            NodegroupStatus::Deleting => &"DELETING",
+            NodegroupStatus::Updating => &"UPDATING",
+            NodegroupStatus::UnknownVariant(UnknownNodegroupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NodegroupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => NodegroupStatus::Active,
+            "CREATE_FAILED" => NodegroupStatus::CreateFailed,
+            "CREATING" => NodegroupStatus::Creating,
+            "DEGRADED" => NodegroupStatus::Degraded,
+            "DELETE_FAILED" => NodegroupStatus::DeleteFailed,
+            "DELETING" => NodegroupStatus::Deleting,
+            "UPDATING" => NodegroupStatus::Updating,
+            _ => NodegroupStatus::UnknownVariant(UnknownNodegroupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodegroupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => NodegroupStatus::Active,
+            "CREATE_FAILED" => NodegroupStatus::CreateFailed,
+            "CREATING" => NodegroupStatus::Creating,
+            "DEGRADED" => NodegroupStatus::Degraded,
+            "DELETE_FAILED" => NodegroupStatus::DeleteFailed,
+            "DELETING" => NodegroupStatus::Deleting,
+            "UPDATING" => NodegroupStatus::Updating,
+            _ => NodegroupStatus::UnknownVariant(UnknownNodegroupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodegroupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NodegroupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NodegroupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing the <a href="https://openid.net/connect/">OpenID Connect</a> identity provider information for the cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1157,6 +2464,111 @@ pub struct RemoteAccessConfig {
     #[serde(rename = "sourceSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_security_groups: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolveConflicts {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolveConflicts {
+    None,
+    Overwrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolveConflicts),
+}
+
+impl Default for ResolveConflicts {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolveConflicts {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolveConflicts {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolveConflicts {
+    fn into(self) -> String {
+        match self {
+            ResolveConflicts::None => "NONE".to_string(),
+            ResolveConflicts::Overwrite => "OVERWRITE".to_string(),
+            ResolveConflicts::UnknownVariant(UnknownResolveConflicts { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolveConflicts {
+    fn into(self) -> &'a str {
+        match self {
+            ResolveConflicts::None => &"NONE",
+            ResolveConflicts::Overwrite => &"OVERWRITE",
+            ResolveConflicts::UnknownVariant(UnknownResolveConflicts { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResolveConflicts {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ResolveConflicts::None,
+            "OVERWRITE" => ResolveConflicts::Overwrite,
+            _ => ResolveConflicts::UnknownVariant(UnknownResolveConflicts {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResolveConflicts {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ResolveConflicts::None,
+            "OVERWRITE" => ResolveConflicts::Overwrite,
+            _ => ResolveConflicts::UnknownVariant(UnknownResolveConflicts { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolveConflicts {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResolveConflicts {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResolveConflicts {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1212,11 +2624,11 @@ pub struct Update {
     /// <p>The current status of the update.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UpdateStatus>,
     /// <p>The type of the update.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<UpdateType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1239,7 +2651,7 @@ pub struct UpdateAddonRequest {
     /// <p>How to resolve parameter value conflicts when applying the new version of the add-on to the cluster.</p>
     #[serde(rename = "resolveConflicts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolve_conflicts: Option<String>,
+    pub resolve_conflicts: Option<ResolveConflicts>,
     /// <p><p>The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on&#39;s service account. The role must be assigned the IAM permissions required by the add-on. If you don&#39;t specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html">Amazon EKS node IAM role</a> in the <i>Amazon EKS User Guide</i>.</p> <note> <p>To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC) provider created for your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html">Enabling IAM roles for service accounts on your cluster</a> in the <i>Amazon EKS User Guide</i>.</p> </note></p>
     #[serde(rename = "serviceAccountRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1396,11 +2808,404 @@ pub struct UpdateParam {
     /// <p>The keys associated with an update request.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<UpdateParamType>,
     /// <p>The value of the keys submitted as part of an update request.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateParamType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateParamType {
+    AddonVersion,
+    ClusterLogging,
+    DesiredSize,
+    EndpointPrivateAccess,
+    EndpointPublicAccess,
+    LabelsToAdd,
+    LabelsToRemove,
+    MaxSize,
+    MinSize,
+    PlatformVersion,
+    PublicAccessCidrs,
+    ReleaseVersion,
+    ResolveConflicts,
+    ServiceAccountRoleArn,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateParamType),
+}
+
+impl Default for UpdateParamType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateParamType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateParamType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateParamType {
+    fn into(self) -> String {
+        match self {
+            UpdateParamType::AddonVersion => "AddonVersion".to_string(),
+            UpdateParamType::ClusterLogging => "ClusterLogging".to_string(),
+            UpdateParamType::DesiredSize => "DesiredSize".to_string(),
+            UpdateParamType::EndpointPrivateAccess => "EndpointPrivateAccess".to_string(),
+            UpdateParamType::EndpointPublicAccess => "EndpointPublicAccess".to_string(),
+            UpdateParamType::LabelsToAdd => "LabelsToAdd".to_string(),
+            UpdateParamType::LabelsToRemove => "LabelsToRemove".to_string(),
+            UpdateParamType::MaxSize => "MaxSize".to_string(),
+            UpdateParamType::MinSize => "MinSize".to_string(),
+            UpdateParamType::PlatformVersion => "PlatformVersion".to_string(),
+            UpdateParamType::PublicAccessCidrs => "PublicAccessCidrs".to_string(),
+            UpdateParamType::ReleaseVersion => "ReleaseVersion".to_string(),
+            UpdateParamType::ResolveConflicts => "ResolveConflicts".to_string(),
+            UpdateParamType::ServiceAccountRoleArn => "ServiceAccountRoleArn".to_string(),
+            UpdateParamType::Version => "Version".to_string(),
+            UpdateParamType::UnknownVariant(UnknownUpdateParamType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateParamType {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateParamType::AddonVersion => &"AddonVersion",
+            UpdateParamType::ClusterLogging => &"ClusterLogging",
+            UpdateParamType::DesiredSize => &"DesiredSize",
+            UpdateParamType::EndpointPrivateAccess => &"EndpointPrivateAccess",
+            UpdateParamType::EndpointPublicAccess => &"EndpointPublicAccess",
+            UpdateParamType::LabelsToAdd => &"LabelsToAdd",
+            UpdateParamType::LabelsToRemove => &"LabelsToRemove",
+            UpdateParamType::MaxSize => &"MaxSize",
+            UpdateParamType::MinSize => &"MinSize",
+            UpdateParamType::PlatformVersion => &"PlatformVersion",
+            UpdateParamType::PublicAccessCidrs => &"PublicAccessCidrs",
+            UpdateParamType::ReleaseVersion => &"ReleaseVersion",
+            UpdateParamType::ResolveConflicts => &"ResolveConflicts",
+            UpdateParamType::ServiceAccountRoleArn => &"ServiceAccountRoleArn",
+            UpdateParamType::Version => &"Version",
+            UpdateParamType::UnknownVariant(UnknownUpdateParamType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateParamType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AddonVersion" => UpdateParamType::AddonVersion,
+            "ClusterLogging" => UpdateParamType::ClusterLogging,
+            "DesiredSize" => UpdateParamType::DesiredSize,
+            "EndpointPrivateAccess" => UpdateParamType::EndpointPrivateAccess,
+            "EndpointPublicAccess" => UpdateParamType::EndpointPublicAccess,
+            "LabelsToAdd" => UpdateParamType::LabelsToAdd,
+            "LabelsToRemove" => UpdateParamType::LabelsToRemove,
+            "MaxSize" => UpdateParamType::MaxSize,
+            "MinSize" => UpdateParamType::MinSize,
+            "PlatformVersion" => UpdateParamType::PlatformVersion,
+            "PublicAccessCidrs" => UpdateParamType::PublicAccessCidrs,
+            "ReleaseVersion" => UpdateParamType::ReleaseVersion,
+            "ResolveConflicts" => UpdateParamType::ResolveConflicts,
+            "ServiceAccountRoleArn" => UpdateParamType::ServiceAccountRoleArn,
+            "Version" => UpdateParamType::Version,
+            _ => UpdateParamType::UnknownVariant(UnknownUpdateParamType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateParamType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AddonVersion" => UpdateParamType::AddonVersion,
+            "ClusterLogging" => UpdateParamType::ClusterLogging,
+            "DesiredSize" => UpdateParamType::DesiredSize,
+            "EndpointPrivateAccess" => UpdateParamType::EndpointPrivateAccess,
+            "EndpointPublicAccess" => UpdateParamType::EndpointPublicAccess,
+            "LabelsToAdd" => UpdateParamType::LabelsToAdd,
+            "LabelsToRemove" => UpdateParamType::LabelsToRemove,
+            "MaxSize" => UpdateParamType::MaxSize,
+            "MinSize" => UpdateParamType::MinSize,
+            "PlatformVersion" => UpdateParamType::PlatformVersion,
+            "PublicAccessCidrs" => UpdateParamType::PublicAccessCidrs,
+            "ReleaseVersion" => UpdateParamType::ReleaseVersion,
+            "ResolveConflicts" => UpdateParamType::ResolveConflicts,
+            "ServiceAccountRoleArn" => UpdateParamType::ServiceAccountRoleArn,
+            "Version" => UpdateParamType::Version,
+            _ => UpdateParamType::UnknownVariant(UnknownUpdateParamType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateParamType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UpdateParamType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UpdateParamType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateStatus {
+    Cancelled,
+    Failed,
+    InProgress,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateStatus),
+}
+
+impl Default for UpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateStatus {
+    fn into(self) -> String {
+        match self {
+            UpdateStatus::Cancelled => "Cancelled".to_string(),
+            UpdateStatus::Failed => "Failed".to_string(),
+            UpdateStatus::InProgress => "InProgress".to_string(),
+            UpdateStatus::Successful => "Successful".to_string(),
+            UpdateStatus::UnknownVariant(UnknownUpdateStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateStatus::Cancelled => &"Cancelled",
+            UpdateStatus::Failed => &"Failed",
+            UpdateStatus::InProgress => &"InProgress",
+            UpdateStatus::Successful => &"Successful",
+            UpdateStatus::UnknownVariant(UnknownUpdateStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => UpdateStatus::Cancelled,
+            "Failed" => UpdateStatus::Failed,
+            "InProgress" => UpdateStatus::InProgress,
+            "Successful" => UpdateStatus::Successful,
+            _ => UpdateStatus::UnknownVariant(UnknownUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => UpdateStatus::Cancelled,
+            "Failed" => UpdateStatus::Failed,
+            "InProgress" => UpdateStatus::InProgress,
+            "Successful" => UpdateStatus::Successful,
+            _ => UpdateStatus::UnknownVariant(UnknownUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateType {
+    AddonUpdate,
+    ConfigUpdate,
+    EndpointAccessUpdate,
+    LoggingUpdate,
+    VersionUpdate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateType),
+}
+
+impl Default for UpdateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateType {
+    fn into(self) -> String {
+        match self {
+            UpdateType::AddonUpdate => "AddonUpdate".to_string(),
+            UpdateType::ConfigUpdate => "ConfigUpdate".to_string(),
+            UpdateType::EndpointAccessUpdate => "EndpointAccessUpdate".to_string(),
+            UpdateType::LoggingUpdate => "LoggingUpdate".to_string(),
+            UpdateType::VersionUpdate => "VersionUpdate".to_string(),
+            UpdateType::UnknownVariant(UnknownUpdateType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateType {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateType::AddonUpdate => &"AddonUpdate",
+            UpdateType::ConfigUpdate => &"ConfigUpdate",
+            UpdateType::EndpointAccessUpdate => &"EndpointAccessUpdate",
+            UpdateType::LoggingUpdate => &"LoggingUpdate",
+            UpdateType::VersionUpdate => &"VersionUpdate",
+            UpdateType::UnknownVariant(UnknownUpdateType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AddonUpdate" => UpdateType::AddonUpdate,
+            "ConfigUpdate" => UpdateType::ConfigUpdate,
+            "EndpointAccessUpdate" => UpdateType::EndpointAccessUpdate,
+            "LoggingUpdate" => UpdateType::LoggingUpdate,
+            "VersionUpdate" => UpdateType::VersionUpdate,
+            _ => UpdateType::UnknownVariant(UnknownUpdateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AddonUpdate" => UpdateType::AddonUpdate,
+            "ConfigUpdate" => UpdateType::ConfigUpdate,
+            "EndpointAccessUpdate" => UpdateType::EndpointAccessUpdate,
+            "LoggingUpdate" => UpdateType::LoggingUpdate,
+            "VersionUpdate" => UpdateType::VersionUpdate,
+            _ => UpdateType::UnknownVariant(UnknownUpdateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UpdateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UpdateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the VPC configuration to use for an Amazon EKS cluster.</p>

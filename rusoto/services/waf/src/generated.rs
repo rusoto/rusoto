@@ -74,7 +74,7 @@ pub struct ActivatedRule {
     /// <p>The rule type, either <code>REGULAR</code>, as defined by <a>Rule</a>, <code>RATE_BASED</code>, as defined by <a>RateBasedRule</a>, or <code>GROUP</code>, as defined by <a>RuleGroup</a>. The default is REGULAR. Although this field is optional, be aware that if you try to add a RATE_BASED rule to a web ACL without setting the type, the <a>UpdateWebACL</a> request will fail because the request tries to add a REGULAR rule with the specified ID, which does not exist. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<WafRuleType>,
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>In a <a>GetByteMatchSet</a> request, <code>ByteMatchSet</code> is a complex type that contains the <code>ByteMatchSetId</code> and <code>Name</code> of a <code>ByteMatchSet</code>, and the values that you specified when you updated the <code>ByteMatchSet</code>. </p> <p>A complex type that contains <code>ByteMatchTuple</code> objects, which specify the parts of web requests that you want AWS WAF to inspect and the values that you want AWS WAF to search for. If a <code>ByteMatchSet</code> contains more than one <code>ByteMatchTuple</code> object, a request needs to match the settings in only one <code>ByteMatchTuple</code> to be considered a match.</p></p>
@@ -111,7 +111,7 @@ pub struct ByteMatchSetSummary {
 pub struct ByteMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a <a>ByteMatchTuple</a>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Information about the part of a web request that you want AWS WAF to inspect and the value that you want AWS WAF to search for. If you specify <code>DELETE</code> for the value of <code>Action</code>, the <code>ByteMatchTuple</code> values must exactly match the values in the <code>ByteMatchTuple</code> that you want to delete from the <code>ByteMatchSet</code>.</p>
     #[serde(rename = "ByteMatchTuple")]
     pub byte_match_tuple: ByteMatchTuple,
@@ -125,7 +125,7 @@ pub struct ByteMatchTuple {
     pub field_to_match: FieldToMatch,
     /// <p>Within the portion of a web request that you want to search (for example, in the query string, if any), specify where you want AWS WAF to search. Valid values include the following:</p> <p> <b>CONTAINS</b> </p> <p>The specified part of the web request must include the value of <code>TargetString</code>, but the location doesn't matter.</p> <p> <b>CONTAINS_WORD</b> </p> <p>The specified part of the web request must include the value of <code>TargetString</code>, and <code>TargetString</code> must contain only alphanumeric characters or underscore (A-Z, a-z, 0-9, or _). In addition, <code>TargetString</code> must be a word, which means one of the following:</p> <ul> <li> <p> <code>TargetString</code> exactly matches the value of the specified part of the web request, such as the value of a header.</p> </li> <li> <p> <code>TargetString</code> is at the beginning of the specified part of the web request and is followed by a character other than an alphanumeric character or underscore (_), for example, <code>BadBot;</code>.</p> </li> <li> <p> <code>TargetString</code> is at the end of the specified part of the web request and is preceded by a character other than an alphanumeric character or underscore (_), for example, <code>;BadBot</code>.</p> </li> <li> <p> <code>TargetString</code> is in the middle of the specified part of the web request and is preceded and followed by characters other than alphanumeric characters or underscore (_), for example, <code>-BadBot;</code>.</p> </li> </ul> <p> <b>EXACTLY</b> </p> <p>The value of the specified part of the web request must exactly match the value of <code>TargetString</code>.</p> <p> <b>STARTS_WITH</b> </p> <p>The value of <code>TargetString</code> must appear at the beginning of the specified part of the web request.</p> <p> <b>ENDS_WITH</b> </p> <p>The value of <code>TargetString</code> must appear at the end of the specified part of the web request.</p>
     #[serde(rename = "PositionalConstraint")]
-    pub positional_constraint: String,
+    pub positional_constraint: PositionalConstraint,
     /// <p>The value that you want AWS WAF to search for. AWS WAF searches for the specified string in the part of web requests that you specified in <code>FieldToMatch</code>. The maximum length of the value is 50 bytes.</p> <p>Valid values depend on the values that you specified for <code>FieldToMatch</code>:</p> <ul> <li> <p> <code>HEADER</code>: The value that you want AWS WAF to search for in the request header that you specified in <a>FieldToMatch</a>, for example, the value of the <code>User-Agent</code> or <code>Referer</code> header.</p> </li> <li> <p> <code>METHOD</code>: The HTTP method, which indicates the type of operation specified in the request. CloudFront supports the following methods: <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>POST</code>, and <code>PUT</code>.</p> </li> <li> <p> <code>QUERY_STRING</code>: The value that you want AWS WAF to search for in the query string, which is the part of a URL that appears after a <code>?</code> character.</p> </li> <li> <p> <code>URI</code>: The value that you want AWS WAF to search for in the part of a URL that identifies a resource, for example, <code>/images/daily-ad.jpg</code>.</p> </li> <li> <p> <code>BODY</code>: The part of a request that contains any additional data that you want to send to your web server as the HTTP request body, such as data from a form. The request body immediately follows the request headers. Note that only the first <code>8192</code> bytes of the request body are forwarded to AWS WAF for inspection. To allow or block requests based on the length of the body, you can create a size constraint set. For more information, see <a>CreateSizeConstraintSet</a>. </p> </li> <li> <p> <code>SINGLE_QUERY_ARG</code>: The parameter in the query string that you will inspect, such as <i>UserName</i> or <i>SalesRegion</i>. The maximum length for <code>SINGLE_QUERY_ARG</code> is 30 characters.</p> </li> <li> <p> <code>ALL_QUERY_ARGS</code>: Similar to <code>SINGLE_QUERY_ARG</code>, but instead of inspecting a single parameter, AWS WAF inspects all parameters within the query string for the value or regex pattern that you specify in <code>TargetString</code>.</p> </li> </ul> <p>If <code>TargetString</code> includes alphabetic characters A-Z and a-z, note that the value is case sensitive.</p> <p> <b>If you're using the AWS WAF API</b> </p> <p>Specify a base64-encoded version of the value. The maximum length of the value before you base64-encode it is 50 bytes.</p> <p>For example, suppose the value of <code>Type</code> is <code>HEADER</code> and the value of <code>Data</code> is <code>User-Agent</code>. If you want to search the <code>User-Agent</code> header for the value <code>BadBot</code>, you base64-encode <code>BadBot</code> using MIME base64-encoding and include the resulting value, <code>QmFkQm90</code>, in the value of <code>TargetString</code>.</p> <p> <b>If you're using the AWS CLI or one of the AWS SDKs</b> </p> <p>The value that you want AWS WAF to search for. The SDK automatically base64 encodes the value.</p>
     #[serde(rename = "TargetString")]
     #[serde(
@@ -136,7 +136,342 @@ pub struct ByteMatchTuple {
     pub target_string: bytes::Bytes,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting it for a match.</p> <p>You can only specify a single type of TextTransformation.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system command line command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
     #[serde(rename = "TextTransformation")]
-    pub text_transformation: String,
+    pub text_transformation: TextTransformation,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeAction {
+    Delete,
+    Insert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeAction),
+}
+
+impl Default for ChangeAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeAction {
+    fn into(self) -> String {
+        match self {
+            ChangeAction::Delete => "DELETE".to_string(),
+            ChangeAction::Insert => "INSERT".to_string(),
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeAction {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeAction::Delete => &"DELETE",
+            ChangeAction::Insert => &"INSERT",
+            ChangeAction::UnknownVariant(UnknownChangeAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => ChangeAction::Delete,
+            "INSERT" => ChangeAction::Insert,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => ChangeAction::Delete,
+            "INSERT" => ChangeAction::Insert,
+            _ => ChangeAction::UnknownVariant(UnknownChangeAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChangeAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChangeAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeTokenStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeTokenStatus {
+    Insync,
+    Pending,
+    Provisioned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeTokenStatus),
+}
+
+impl Default for ChangeTokenStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeTokenStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeTokenStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeTokenStatus {
+    fn into(self) -> String {
+        match self {
+            ChangeTokenStatus::Insync => "INSYNC".to_string(),
+            ChangeTokenStatus::Pending => "PENDING".to_string(),
+            ChangeTokenStatus::Provisioned => "PROVISIONED".to_string(),
+            ChangeTokenStatus::UnknownVariant(UnknownChangeTokenStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeTokenStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeTokenStatus::Insync => &"INSYNC",
+            ChangeTokenStatus::Pending => &"PENDING",
+            ChangeTokenStatus::Provisioned => &"PROVISIONED",
+            ChangeTokenStatus::UnknownVariant(UnknownChangeTokenStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChangeTokenStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSYNC" => ChangeTokenStatus::Insync,
+            "PENDING" => ChangeTokenStatus::Pending,
+            "PROVISIONED" => ChangeTokenStatus::Provisioned,
+            _ => ChangeTokenStatus::UnknownVariant(UnknownChangeTokenStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeTokenStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSYNC" => ChangeTokenStatus::Insync,
+            "PENDING" => ChangeTokenStatus::Pending,
+            "PROVISIONED" => ChangeTokenStatus::Provisioned,
+            _ => ChangeTokenStatus::UnknownVariant(UnknownChangeTokenStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeTokenStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChangeTokenStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChangeTokenStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    Eq,
+    Ge,
+    Gt,
+    Le,
+    Lt,
+    Ne,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::Eq => "EQ".to_string(),
+            ComparisonOperator::Ge => "GE".to_string(),
+            ComparisonOperator::Gt => "GT".to_string(),
+            ComparisonOperator::Le => "LE".to_string(),
+            ComparisonOperator::Lt => "LT".to_string(),
+            ComparisonOperator::Ne => "NE".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::Eq => &"EQ",
+            ComparisonOperator::Ge => &"GE",
+            ComparisonOperator::Gt => &"GT",
+            ComparisonOperator::Le => &"LE",
+            ComparisonOperator::Lt => &"LT",
+            ComparisonOperator::Ne => &"NE",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -225,7 +560,7 @@ pub struct CreateRateBasedRuleRequest {
     pub name: String,
     /// <p>The field that AWS WAF uses to determine if requests are likely arriving from a single source and thus subject to rate monitoring. The only valid value for <code>RateKey</code> is <code>IP</code>. <code>IP</code> indicates that requests that arrive from the same IP address are subject to the <code>RateLimit</code> that is specified in the <code>RateBasedRule</code>.</p>
     #[serde(rename = "RateKey")]
-    pub rate_key: String,
+    pub rate_key: RateKey,
     /// <p>The maximum number of requests, which have an identical value in the field that is specified by <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>
     #[serde(rename = "RateLimit")]
     pub rate_limit: i64,
@@ -775,7 +1110,7 @@ pub struct FieldToMatch {
     pub data: Option<String>,
     /// <p><p>The part of the web request that you want AWS WAF to search for a specified string. Parts of a request that you can search include the following:</p> <ul> <li> <p> <code>HEADER</code>: A specified request header, for example, the value of the <code>User-Agent</code> or <code>Referer</code> header. If you choose <code>HEADER</code> for the type, specify the name of the header in <code>Data</code>.</p> </li> <li> <p> <code>METHOD</code>: The HTTP method, which indicated the type of operation that the request is asking the origin to perform. Amazon CloudFront supports the following methods: <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>POST</code>, and <code>PUT</code>.</p> </li> <li> <p> <code>QUERY<em>STRING</code>: A query string, which is the part of a URL that appears after a <code>?</code> character, if any.</p> </li> <li> <p> <code>URI</code>: The part of a web request that identifies a resource, for example, <code>/images/daily-ad.jpg</code>.</p> </li> <li> <p> <code>BODY</code>: The part of a request that contains any additional data that you want to send to your web server as the HTTP request body, such as data from a form. The request body immediately follows the request headers. Note that only the first <code>8192</code> bytes of the request body are forwarded to AWS WAF for inspection. To allow or block requests based on the length of the body, you can create a size constraint set. For more information, see <a>CreateSizeConstraintSet</a>. </p> </li> <li> <p> <code>SINGLE</em>QUERY<em>ARG</code>: The parameter in the query string that you will inspect, such as <i>UserName</i> or <i>SalesRegion</i>. The maximum length for <code>SINGLE</em>QUERY<em>ARG</code> is 30 characters.</p> </li> <li> <p> <code>ALL</em>QUERY<em>ARGS</code>: Similar to <code>SINGLE</em>QUERY_ARG</code>, but rather than inspecting a single parameter, AWS WAF will inspect all parameters within the query for the value or regex pattern that you specify in <code>TargetString</code>.</p> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: MatchFieldType,
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>The country from which web requests originate that you want AWS WAF to search for.</p></p>
@@ -783,10 +1118,1448 @@ pub struct FieldToMatch {
 pub struct GeoMatchConstraint {
     /// <p>The type of geographical area you want AWS WAF to search for. Currently <code>Country</code> is the only valid value.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: GeoMatchConstraintType,
     /// <p>The country that you want AWS WAF to search for.</p>
     #[serde(rename = "Value")]
-    pub value: String,
+    pub value: GeoMatchConstraintValue,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoMatchConstraintType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoMatchConstraintType {
+    Country,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoMatchConstraintType),
+}
+
+impl Default for GeoMatchConstraintType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoMatchConstraintType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoMatchConstraintType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoMatchConstraintType {
+    fn into(self) -> String {
+        match self {
+            GeoMatchConstraintType::Country => "Country".to_string(),
+            GeoMatchConstraintType::UnknownVariant(UnknownGeoMatchConstraintType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoMatchConstraintType {
+    fn into(self) -> &'a str {
+        match self {
+            GeoMatchConstraintType::Country => &"Country",
+            GeoMatchConstraintType::UnknownVariant(UnknownGeoMatchConstraintType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GeoMatchConstraintType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Country" => GeoMatchConstraintType::Country,
+            _ => GeoMatchConstraintType::UnknownVariant(UnknownGeoMatchConstraintType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoMatchConstraintType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Country" => GeoMatchConstraintType::Country,
+            _ => GeoMatchConstraintType::UnknownVariant(UnknownGeoMatchConstraintType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoMatchConstraintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GeoMatchConstraintType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GeoMatchConstraintType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoMatchConstraintValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoMatchConstraintValue {
+    Ad,
+    Ae,
+    Af,
+    Ag,
+    Ai,
+    Al,
+    Am,
+    Ao,
+    Aq,
+    Ar,
+    As,
+    At,
+    Au,
+    Aw,
+    Ax,
+    Az,
+    Ba,
+    Bb,
+    Bd,
+    Be,
+    Bf,
+    Bg,
+    Bh,
+    Bi,
+    Bj,
+    Bl,
+    Bm,
+    Bn,
+    Bo,
+    Bq,
+    Br,
+    Bs,
+    Bt,
+    Bv,
+    Bw,
+    By,
+    Bz,
+    Ca,
+    Cc,
+    Cd,
+    Cf,
+    Cg,
+    Ch,
+    Ci,
+    Ck,
+    Cl,
+    Cm,
+    Cn,
+    Co,
+    Cr,
+    Cu,
+    Cv,
+    Cw,
+    Cx,
+    Cy,
+    Cz,
+    De,
+    Dj,
+    Dk,
+    Dm,
+    Do,
+    Dz,
+    Ec,
+    Ee,
+    Eg,
+    Eh,
+    Er,
+    Es,
+    Et,
+    Fi,
+    Fj,
+    Fk,
+    Fm,
+    Fo,
+    Fr,
+    Ga,
+    Gb,
+    Gd,
+    Ge,
+    Gf,
+    Gg,
+    Gh,
+    Gi,
+    Gl,
+    Gm,
+    Gn,
+    Gp,
+    Gq,
+    Gr,
+    Gs,
+    Gt,
+    Gu,
+    Gw,
+    Gy,
+    Hk,
+    Hm,
+    Hn,
+    Hr,
+    Ht,
+    Hu,
+    Id,
+    Ie,
+    Il,
+    Im,
+    In,
+    Io,
+    Iq,
+    Ir,
+    Is,
+    It,
+    Je,
+    Jm,
+    Jo,
+    Jp,
+    Ke,
+    Kg,
+    Kh,
+    Ki,
+    Km,
+    Kn,
+    Kp,
+    Kr,
+    Kw,
+    Ky,
+    Kz,
+    La,
+    Lb,
+    Lc,
+    Li,
+    Lk,
+    Lr,
+    Ls,
+    Lt,
+    Lu,
+    Lv,
+    Ly,
+    Ma,
+    Mc,
+    Md,
+    Me,
+    Mf,
+    Mg,
+    Mh,
+    Mk,
+    Ml,
+    Mm,
+    Mn,
+    Mo,
+    Mp,
+    Mq,
+    Mr,
+    Ms,
+    Mt,
+    Mu,
+    Mv,
+    Mw,
+    Mx,
+    My,
+    Mz,
+    Na,
+    Nc,
+    Ne,
+    Nf,
+    Ng,
+    Ni,
+    Nl,
+    No,
+    Np,
+    Nr,
+    Nu,
+    Nz,
+    Om,
+    Pa,
+    Pe,
+    Pf,
+    Pg,
+    Ph,
+    Pk,
+    Pl,
+    Pm,
+    Pn,
+    Pr,
+    Ps,
+    Pt,
+    Pw,
+    Py,
+    Qa,
+    Re,
+    Ro,
+    Rs,
+    Ru,
+    Rw,
+    Sa,
+    Sb,
+    Sc,
+    Sd,
+    Se,
+    Sg,
+    Sh,
+    Si,
+    Sj,
+    Sk,
+    Sl,
+    Sm,
+    Sn,
+    So,
+    Sr,
+    Ss,
+    St,
+    Sv,
+    Sx,
+    Sy,
+    Sz,
+    Tc,
+    Td,
+    Tf,
+    Tg,
+    Th,
+    Tj,
+    Tk,
+    Tl,
+    Tm,
+    Tn,
+    To,
+    Tr,
+    Tt,
+    Tv,
+    Tw,
+    Tz,
+    Ua,
+    Ug,
+    Um,
+    Us,
+    Uy,
+    Uz,
+    Va,
+    Vc,
+    Ve,
+    Vg,
+    Vi,
+    Vn,
+    Vu,
+    Wf,
+    Ws,
+    Ye,
+    Yt,
+    Za,
+    Zm,
+    Zw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoMatchConstraintValue),
+}
+
+impl Default for GeoMatchConstraintValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoMatchConstraintValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoMatchConstraintValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoMatchConstraintValue {
+    fn into(self) -> String {
+        match self {
+            GeoMatchConstraintValue::Ad => "AD".to_string(),
+            GeoMatchConstraintValue::Ae => "AE".to_string(),
+            GeoMatchConstraintValue::Af => "AF".to_string(),
+            GeoMatchConstraintValue::Ag => "AG".to_string(),
+            GeoMatchConstraintValue::Ai => "AI".to_string(),
+            GeoMatchConstraintValue::Al => "AL".to_string(),
+            GeoMatchConstraintValue::Am => "AM".to_string(),
+            GeoMatchConstraintValue::Ao => "AO".to_string(),
+            GeoMatchConstraintValue::Aq => "AQ".to_string(),
+            GeoMatchConstraintValue::Ar => "AR".to_string(),
+            GeoMatchConstraintValue::As => "AS".to_string(),
+            GeoMatchConstraintValue::At => "AT".to_string(),
+            GeoMatchConstraintValue::Au => "AU".to_string(),
+            GeoMatchConstraintValue::Aw => "AW".to_string(),
+            GeoMatchConstraintValue::Ax => "AX".to_string(),
+            GeoMatchConstraintValue::Az => "AZ".to_string(),
+            GeoMatchConstraintValue::Ba => "BA".to_string(),
+            GeoMatchConstraintValue::Bb => "BB".to_string(),
+            GeoMatchConstraintValue::Bd => "BD".to_string(),
+            GeoMatchConstraintValue::Be => "BE".to_string(),
+            GeoMatchConstraintValue::Bf => "BF".to_string(),
+            GeoMatchConstraintValue::Bg => "BG".to_string(),
+            GeoMatchConstraintValue::Bh => "BH".to_string(),
+            GeoMatchConstraintValue::Bi => "BI".to_string(),
+            GeoMatchConstraintValue::Bj => "BJ".to_string(),
+            GeoMatchConstraintValue::Bl => "BL".to_string(),
+            GeoMatchConstraintValue::Bm => "BM".to_string(),
+            GeoMatchConstraintValue::Bn => "BN".to_string(),
+            GeoMatchConstraintValue::Bo => "BO".to_string(),
+            GeoMatchConstraintValue::Bq => "BQ".to_string(),
+            GeoMatchConstraintValue::Br => "BR".to_string(),
+            GeoMatchConstraintValue::Bs => "BS".to_string(),
+            GeoMatchConstraintValue::Bt => "BT".to_string(),
+            GeoMatchConstraintValue::Bv => "BV".to_string(),
+            GeoMatchConstraintValue::Bw => "BW".to_string(),
+            GeoMatchConstraintValue::By => "BY".to_string(),
+            GeoMatchConstraintValue::Bz => "BZ".to_string(),
+            GeoMatchConstraintValue::Ca => "CA".to_string(),
+            GeoMatchConstraintValue::Cc => "CC".to_string(),
+            GeoMatchConstraintValue::Cd => "CD".to_string(),
+            GeoMatchConstraintValue::Cf => "CF".to_string(),
+            GeoMatchConstraintValue::Cg => "CG".to_string(),
+            GeoMatchConstraintValue::Ch => "CH".to_string(),
+            GeoMatchConstraintValue::Ci => "CI".to_string(),
+            GeoMatchConstraintValue::Ck => "CK".to_string(),
+            GeoMatchConstraintValue::Cl => "CL".to_string(),
+            GeoMatchConstraintValue::Cm => "CM".to_string(),
+            GeoMatchConstraintValue::Cn => "CN".to_string(),
+            GeoMatchConstraintValue::Co => "CO".to_string(),
+            GeoMatchConstraintValue::Cr => "CR".to_string(),
+            GeoMatchConstraintValue::Cu => "CU".to_string(),
+            GeoMatchConstraintValue::Cv => "CV".to_string(),
+            GeoMatchConstraintValue::Cw => "CW".to_string(),
+            GeoMatchConstraintValue::Cx => "CX".to_string(),
+            GeoMatchConstraintValue::Cy => "CY".to_string(),
+            GeoMatchConstraintValue::Cz => "CZ".to_string(),
+            GeoMatchConstraintValue::De => "DE".to_string(),
+            GeoMatchConstraintValue::Dj => "DJ".to_string(),
+            GeoMatchConstraintValue::Dk => "DK".to_string(),
+            GeoMatchConstraintValue::Dm => "DM".to_string(),
+            GeoMatchConstraintValue::Do => "DO".to_string(),
+            GeoMatchConstraintValue::Dz => "DZ".to_string(),
+            GeoMatchConstraintValue::Ec => "EC".to_string(),
+            GeoMatchConstraintValue::Ee => "EE".to_string(),
+            GeoMatchConstraintValue::Eg => "EG".to_string(),
+            GeoMatchConstraintValue::Eh => "EH".to_string(),
+            GeoMatchConstraintValue::Er => "ER".to_string(),
+            GeoMatchConstraintValue::Es => "ES".to_string(),
+            GeoMatchConstraintValue::Et => "ET".to_string(),
+            GeoMatchConstraintValue::Fi => "FI".to_string(),
+            GeoMatchConstraintValue::Fj => "FJ".to_string(),
+            GeoMatchConstraintValue::Fk => "FK".to_string(),
+            GeoMatchConstraintValue::Fm => "FM".to_string(),
+            GeoMatchConstraintValue::Fo => "FO".to_string(),
+            GeoMatchConstraintValue::Fr => "FR".to_string(),
+            GeoMatchConstraintValue::Ga => "GA".to_string(),
+            GeoMatchConstraintValue::Gb => "GB".to_string(),
+            GeoMatchConstraintValue::Gd => "GD".to_string(),
+            GeoMatchConstraintValue::Ge => "GE".to_string(),
+            GeoMatchConstraintValue::Gf => "GF".to_string(),
+            GeoMatchConstraintValue::Gg => "GG".to_string(),
+            GeoMatchConstraintValue::Gh => "GH".to_string(),
+            GeoMatchConstraintValue::Gi => "GI".to_string(),
+            GeoMatchConstraintValue::Gl => "GL".to_string(),
+            GeoMatchConstraintValue::Gm => "GM".to_string(),
+            GeoMatchConstraintValue::Gn => "GN".to_string(),
+            GeoMatchConstraintValue::Gp => "GP".to_string(),
+            GeoMatchConstraintValue::Gq => "GQ".to_string(),
+            GeoMatchConstraintValue::Gr => "GR".to_string(),
+            GeoMatchConstraintValue::Gs => "GS".to_string(),
+            GeoMatchConstraintValue::Gt => "GT".to_string(),
+            GeoMatchConstraintValue::Gu => "GU".to_string(),
+            GeoMatchConstraintValue::Gw => "GW".to_string(),
+            GeoMatchConstraintValue::Gy => "GY".to_string(),
+            GeoMatchConstraintValue::Hk => "HK".to_string(),
+            GeoMatchConstraintValue::Hm => "HM".to_string(),
+            GeoMatchConstraintValue::Hn => "HN".to_string(),
+            GeoMatchConstraintValue::Hr => "HR".to_string(),
+            GeoMatchConstraintValue::Ht => "HT".to_string(),
+            GeoMatchConstraintValue::Hu => "HU".to_string(),
+            GeoMatchConstraintValue::Id => "ID".to_string(),
+            GeoMatchConstraintValue::Ie => "IE".to_string(),
+            GeoMatchConstraintValue::Il => "IL".to_string(),
+            GeoMatchConstraintValue::Im => "IM".to_string(),
+            GeoMatchConstraintValue::In => "IN".to_string(),
+            GeoMatchConstraintValue::Io => "IO".to_string(),
+            GeoMatchConstraintValue::Iq => "IQ".to_string(),
+            GeoMatchConstraintValue::Ir => "IR".to_string(),
+            GeoMatchConstraintValue::Is => "IS".to_string(),
+            GeoMatchConstraintValue::It => "IT".to_string(),
+            GeoMatchConstraintValue::Je => "JE".to_string(),
+            GeoMatchConstraintValue::Jm => "JM".to_string(),
+            GeoMatchConstraintValue::Jo => "JO".to_string(),
+            GeoMatchConstraintValue::Jp => "JP".to_string(),
+            GeoMatchConstraintValue::Ke => "KE".to_string(),
+            GeoMatchConstraintValue::Kg => "KG".to_string(),
+            GeoMatchConstraintValue::Kh => "KH".to_string(),
+            GeoMatchConstraintValue::Ki => "KI".to_string(),
+            GeoMatchConstraintValue::Km => "KM".to_string(),
+            GeoMatchConstraintValue::Kn => "KN".to_string(),
+            GeoMatchConstraintValue::Kp => "KP".to_string(),
+            GeoMatchConstraintValue::Kr => "KR".to_string(),
+            GeoMatchConstraintValue::Kw => "KW".to_string(),
+            GeoMatchConstraintValue::Ky => "KY".to_string(),
+            GeoMatchConstraintValue::Kz => "KZ".to_string(),
+            GeoMatchConstraintValue::La => "LA".to_string(),
+            GeoMatchConstraintValue::Lb => "LB".to_string(),
+            GeoMatchConstraintValue::Lc => "LC".to_string(),
+            GeoMatchConstraintValue::Li => "LI".to_string(),
+            GeoMatchConstraintValue::Lk => "LK".to_string(),
+            GeoMatchConstraintValue::Lr => "LR".to_string(),
+            GeoMatchConstraintValue::Ls => "LS".to_string(),
+            GeoMatchConstraintValue::Lt => "LT".to_string(),
+            GeoMatchConstraintValue::Lu => "LU".to_string(),
+            GeoMatchConstraintValue::Lv => "LV".to_string(),
+            GeoMatchConstraintValue::Ly => "LY".to_string(),
+            GeoMatchConstraintValue::Ma => "MA".to_string(),
+            GeoMatchConstraintValue::Mc => "MC".to_string(),
+            GeoMatchConstraintValue::Md => "MD".to_string(),
+            GeoMatchConstraintValue::Me => "ME".to_string(),
+            GeoMatchConstraintValue::Mf => "MF".to_string(),
+            GeoMatchConstraintValue::Mg => "MG".to_string(),
+            GeoMatchConstraintValue::Mh => "MH".to_string(),
+            GeoMatchConstraintValue::Mk => "MK".to_string(),
+            GeoMatchConstraintValue::Ml => "ML".to_string(),
+            GeoMatchConstraintValue::Mm => "MM".to_string(),
+            GeoMatchConstraintValue::Mn => "MN".to_string(),
+            GeoMatchConstraintValue::Mo => "MO".to_string(),
+            GeoMatchConstraintValue::Mp => "MP".to_string(),
+            GeoMatchConstraintValue::Mq => "MQ".to_string(),
+            GeoMatchConstraintValue::Mr => "MR".to_string(),
+            GeoMatchConstraintValue::Ms => "MS".to_string(),
+            GeoMatchConstraintValue::Mt => "MT".to_string(),
+            GeoMatchConstraintValue::Mu => "MU".to_string(),
+            GeoMatchConstraintValue::Mv => "MV".to_string(),
+            GeoMatchConstraintValue::Mw => "MW".to_string(),
+            GeoMatchConstraintValue::Mx => "MX".to_string(),
+            GeoMatchConstraintValue::My => "MY".to_string(),
+            GeoMatchConstraintValue::Mz => "MZ".to_string(),
+            GeoMatchConstraintValue::Na => "NA".to_string(),
+            GeoMatchConstraintValue::Nc => "NC".to_string(),
+            GeoMatchConstraintValue::Ne => "NE".to_string(),
+            GeoMatchConstraintValue::Nf => "NF".to_string(),
+            GeoMatchConstraintValue::Ng => "NG".to_string(),
+            GeoMatchConstraintValue::Ni => "NI".to_string(),
+            GeoMatchConstraintValue::Nl => "NL".to_string(),
+            GeoMatchConstraintValue::No => "NO".to_string(),
+            GeoMatchConstraintValue::Np => "NP".to_string(),
+            GeoMatchConstraintValue::Nr => "NR".to_string(),
+            GeoMatchConstraintValue::Nu => "NU".to_string(),
+            GeoMatchConstraintValue::Nz => "NZ".to_string(),
+            GeoMatchConstraintValue::Om => "OM".to_string(),
+            GeoMatchConstraintValue::Pa => "PA".to_string(),
+            GeoMatchConstraintValue::Pe => "PE".to_string(),
+            GeoMatchConstraintValue::Pf => "PF".to_string(),
+            GeoMatchConstraintValue::Pg => "PG".to_string(),
+            GeoMatchConstraintValue::Ph => "PH".to_string(),
+            GeoMatchConstraintValue::Pk => "PK".to_string(),
+            GeoMatchConstraintValue::Pl => "PL".to_string(),
+            GeoMatchConstraintValue::Pm => "PM".to_string(),
+            GeoMatchConstraintValue::Pn => "PN".to_string(),
+            GeoMatchConstraintValue::Pr => "PR".to_string(),
+            GeoMatchConstraintValue::Ps => "PS".to_string(),
+            GeoMatchConstraintValue::Pt => "PT".to_string(),
+            GeoMatchConstraintValue::Pw => "PW".to_string(),
+            GeoMatchConstraintValue::Py => "PY".to_string(),
+            GeoMatchConstraintValue::Qa => "QA".to_string(),
+            GeoMatchConstraintValue::Re => "RE".to_string(),
+            GeoMatchConstraintValue::Ro => "RO".to_string(),
+            GeoMatchConstraintValue::Rs => "RS".to_string(),
+            GeoMatchConstraintValue::Ru => "RU".to_string(),
+            GeoMatchConstraintValue::Rw => "RW".to_string(),
+            GeoMatchConstraintValue::Sa => "SA".to_string(),
+            GeoMatchConstraintValue::Sb => "SB".to_string(),
+            GeoMatchConstraintValue::Sc => "SC".to_string(),
+            GeoMatchConstraintValue::Sd => "SD".to_string(),
+            GeoMatchConstraintValue::Se => "SE".to_string(),
+            GeoMatchConstraintValue::Sg => "SG".to_string(),
+            GeoMatchConstraintValue::Sh => "SH".to_string(),
+            GeoMatchConstraintValue::Si => "SI".to_string(),
+            GeoMatchConstraintValue::Sj => "SJ".to_string(),
+            GeoMatchConstraintValue::Sk => "SK".to_string(),
+            GeoMatchConstraintValue::Sl => "SL".to_string(),
+            GeoMatchConstraintValue::Sm => "SM".to_string(),
+            GeoMatchConstraintValue::Sn => "SN".to_string(),
+            GeoMatchConstraintValue::So => "SO".to_string(),
+            GeoMatchConstraintValue::Sr => "SR".to_string(),
+            GeoMatchConstraintValue::Ss => "SS".to_string(),
+            GeoMatchConstraintValue::St => "ST".to_string(),
+            GeoMatchConstraintValue::Sv => "SV".to_string(),
+            GeoMatchConstraintValue::Sx => "SX".to_string(),
+            GeoMatchConstraintValue::Sy => "SY".to_string(),
+            GeoMatchConstraintValue::Sz => "SZ".to_string(),
+            GeoMatchConstraintValue::Tc => "TC".to_string(),
+            GeoMatchConstraintValue::Td => "TD".to_string(),
+            GeoMatchConstraintValue::Tf => "TF".to_string(),
+            GeoMatchConstraintValue::Tg => "TG".to_string(),
+            GeoMatchConstraintValue::Th => "TH".to_string(),
+            GeoMatchConstraintValue::Tj => "TJ".to_string(),
+            GeoMatchConstraintValue::Tk => "TK".to_string(),
+            GeoMatchConstraintValue::Tl => "TL".to_string(),
+            GeoMatchConstraintValue::Tm => "TM".to_string(),
+            GeoMatchConstraintValue::Tn => "TN".to_string(),
+            GeoMatchConstraintValue::To => "TO".to_string(),
+            GeoMatchConstraintValue::Tr => "TR".to_string(),
+            GeoMatchConstraintValue::Tt => "TT".to_string(),
+            GeoMatchConstraintValue::Tv => "TV".to_string(),
+            GeoMatchConstraintValue::Tw => "TW".to_string(),
+            GeoMatchConstraintValue::Tz => "TZ".to_string(),
+            GeoMatchConstraintValue::Ua => "UA".to_string(),
+            GeoMatchConstraintValue::Ug => "UG".to_string(),
+            GeoMatchConstraintValue::Um => "UM".to_string(),
+            GeoMatchConstraintValue::Us => "US".to_string(),
+            GeoMatchConstraintValue::Uy => "UY".to_string(),
+            GeoMatchConstraintValue::Uz => "UZ".to_string(),
+            GeoMatchConstraintValue::Va => "VA".to_string(),
+            GeoMatchConstraintValue::Vc => "VC".to_string(),
+            GeoMatchConstraintValue::Ve => "VE".to_string(),
+            GeoMatchConstraintValue::Vg => "VG".to_string(),
+            GeoMatchConstraintValue::Vi => "VI".to_string(),
+            GeoMatchConstraintValue::Vn => "VN".to_string(),
+            GeoMatchConstraintValue::Vu => "VU".to_string(),
+            GeoMatchConstraintValue::Wf => "WF".to_string(),
+            GeoMatchConstraintValue::Ws => "WS".to_string(),
+            GeoMatchConstraintValue::Ye => "YE".to_string(),
+            GeoMatchConstraintValue::Yt => "YT".to_string(),
+            GeoMatchConstraintValue::Za => "ZA".to_string(),
+            GeoMatchConstraintValue::Zm => "ZM".to_string(),
+            GeoMatchConstraintValue::Zw => "ZW".to_string(),
+            GeoMatchConstraintValue::UnknownVariant(UnknownGeoMatchConstraintValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoMatchConstraintValue {
+    fn into(self) -> &'a str {
+        match self {
+            GeoMatchConstraintValue::Ad => &"AD",
+            GeoMatchConstraintValue::Ae => &"AE",
+            GeoMatchConstraintValue::Af => &"AF",
+            GeoMatchConstraintValue::Ag => &"AG",
+            GeoMatchConstraintValue::Ai => &"AI",
+            GeoMatchConstraintValue::Al => &"AL",
+            GeoMatchConstraintValue::Am => &"AM",
+            GeoMatchConstraintValue::Ao => &"AO",
+            GeoMatchConstraintValue::Aq => &"AQ",
+            GeoMatchConstraintValue::Ar => &"AR",
+            GeoMatchConstraintValue::As => &"AS",
+            GeoMatchConstraintValue::At => &"AT",
+            GeoMatchConstraintValue::Au => &"AU",
+            GeoMatchConstraintValue::Aw => &"AW",
+            GeoMatchConstraintValue::Ax => &"AX",
+            GeoMatchConstraintValue::Az => &"AZ",
+            GeoMatchConstraintValue::Ba => &"BA",
+            GeoMatchConstraintValue::Bb => &"BB",
+            GeoMatchConstraintValue::Bd => &"BD",
+            GeoMatchConstraintValue::Be => &"BE",
+            GeoMatchConstraintValue::Bf => &"BF",
+            GeoMatchConstraintValue::Bg => &"BG",
+            GeoMatchConstraintValue::Bh => &"BH",
+            GeoMatchConstraintValue::Bi => &"BI",
+            GeoMatchConstraintValue::Bj => &"BJ",
+            GeoMatchConstraintValue::Bl => &"BL",
+            GeoMatchConstraintValue::Bm => &"BM",
+            GeoMatchConstraintValue::Bn => &"BN",
+            GeoMatchConstraintValue::Bo => &"BO",
+            GeoMatchConstraintValue::Bq => &"BQ",
+            GeoMatchConstraintValue::Br => &"BR",
+            GeoMatchConstraintValue::Bs => &"BS",
+            GeoMatchConstraintValue::Bt => &"BT",
+            GeoMatchConstraintValue::Bv => &"BV",
+            GeoMatchConstraintValue::Bw => &"BW",
+            GeoMatchConstraintValue::By => &"BY",
+            GeoMatchConstraintValue::Bz => &"BZ",
+            GeoMatchConstraintValue::Ca => &"CA",
+            GeoMatchConstraintValue::Cc => &"CC",
+            GeoMatchConstraintValue::Cd => &"CD",
+            GeoMatchConstraintValue::Cf => &"CF",
+            GeoMatchConstraintValue::Cg => &"CG",
+            GeoMatchConstraintValue::Ch => &"CH",
+            GeoMatchConstraintValue::Ci => &"CI",
+            GeoMatchConstraintValue::Ck => &"CK",
+            GeoMatchConstraintValue::Cl => &"CL",
+            GeoMatchConstraintValue::Cm => &"CM",
+            GeoMatchConstraintValue::Cn => &"CN",
+            GeoMatchConstraintValue::Co => &"CO",
+            GeoMatchConstraintValue::Cr => &"CR",
+            GeoMatchConstraintValue::Cu => &"CU",
+            GeoMatchConstraintValue::Cv => &"CV",
+            GeoMatchConstraintValue::Cw => &"CW",
+            GeoMatchConstraintValue::Cx => &"CX",
+            GeoMatchConstraintValue::Cy => &"CY",
+            GeoMatchConstraintValue::Cz => &"CZ",
+            GeoMatchConstraintValue::De => &"DE",
+            GeoMatchConstraintValue::Dj => &"DJ",
+            GeoMatchConstraintValue::Dk => &"DK",
+            GeoMatchConstraintValue::Dm => &"DM",
+            GeoMatchConstraintValue::Do => &"DO",
+            GeoMatchConstraintValue::Dz => &"DZ",
+            GeoMatchConstraintValue::Ec => &"EC",
+            GeoMatchConstraintValue::Ee => &"EE",
+            GeoMatchConstraintValue::Eg => &"EG",
+            GeoMatchConstraintValue::Eh => &"EH",
+            GeoMatchConstraintValue::Er => &"ER",
+            GeoMatchConstraintValue::Es => &"ES",
+            GeoMatchConstraintValue::Et => &"ET",
+            GeoMatchConstraintValue::Fi => &"FI",
+            GeoMatchConstraintValue::Fj => &"FJ",
+            GeoMatchConstraintValue::Fk => &"FK",
+            GeoMatchConstraintValue::Fm => &"FM",
+            GeoMatchConstraintValue::Fo => &"FO",
+            GeoMatchConstraintValue::Fr => &"FR",
+            GeoMatchConstraintValue::Ga => &"GA",
+            GeoMatchConstraintValue::Gb => &"GB",
+            GeoMatchConstraintValue::Gd => &"GD",
+            GeoMatchConstraintValue::Ge => &"GE",
+            GeoMatchConstraintValue::Gf => &"GF",
+            GeoMatchConstraintValue::Gg => &"GG",
+            GeoMatchConstraintValue::Gh => &"GH",
+            GeoMatchConstraintValue::Gi => &"GI",
+            GeoMatchConstraintValue::Gl => &"GL",
+            GeoMatchConstraintValue::Gm => &"GM",
+            GeoMatchConstraintValue::Gn => &"GN",
+            GeoMatchConstraintValue::Gp => &"GP",
+            GeoMatchConstraintValue::Gq => &"GQ",
+            GeoMatchConstraintValue::Gr => &"GR",
+            GeoMatchConstraintValue::Gs => &"GS",
+            GeoMatchConstraintValue::Gt => &"GT",
+            GeoMatchConstraintValue::Gu => &"GU",
+            GeoMatchConstraintValue::Gw => &"GW",
+            GeoMatchConstraintValue::Gy => &"GY",
+            GeoMatchConstraintValue::Hk => &"HK",
+            GeoMatchConstraintValue::Hm => &"HM",
+            GeoMatchConstraintValue::Hn => &"HN",
+            GeoMatchConstraintValue::Hr => &"HR",
+            GeoMatchConstraintValue::Ht => &"HT",
+            GeoMatchConstraintValue::Hu => &"HU",
+            GeoMatchConstraintValue::Id => &"ID",
+            GeoMatchConstraintValue::Ie => &"IE",
+            GeoMatchConstraintValue::Il => &"IL",
+            GeoMatchConstraintValue::Im => &"IM",
+            GeoMatchConstraintValue::In => &"IN",
+            GeoMatchConstraintValue::Io => &"IO",
+            GeoMatchConstraintValue::Iq => &"IQ",
+            GeoMatchConstraintValue::Ir => &"IR",
+            GeoMatchConstraintValue::Is => &"IS",
+            GeoMatchConstraintValue::It => &"IT",
+            GeoMatchConstraintValue::Je => &"JE",
+            GeoMatchConstraintValue::Jm => &"JM",
+            GeoMatchConstraintValue::Jo => &"JO",
+            GeoMatchConstraintValue::Jp => &"JP",
+            GeoMatchConstraintValue::Ke => &"KE",
+            GeoMatchConstraintValue::Kg => &"KG",
+            GeoMatchConstraintValue::Kh => &"KH",
+            GeoMatchConstraintValue::Ki => &"KI",
+            GeoMatchConstraintValue::Km => &"KM",
+            GeoMatchConstraintValue::Kn => &"KN",
+            GeoMatchConstraintValue::Kp => &"KP",
+            GeoMatchConstraintValue::Kr => &"KR",
+            GeoMatchConstraintValue::Kw => &"KW",
+            GeoMatchConstraintValue::Ky => &"KY",
+            GeoMatchConstraintValue::Kz => &"KZ",
+            GeoMatchConstraintValue::La => &"LA",
+            GeoMatchConstraintValue::Lb => &"LB",
+            GeoMatchConstraintValue::Lc => &"LC",
+            GeoMatchConstraintValue::Li => &"LI",
+            GeoMatchConstraintValue::Lk => &"LK",
+            GeoMatchConstraintValue::Lr => &"LR",
+            GeoMatchConstraintValue::Ls => &"LS",
+            GeoMatchConstraintValue::Lt => &"LT",
+            GeoMatchConstraintValue::Lu => &"LU",
+            GeoMatchConstraintValue::Lv => &"LV",
+            GeoMatchConstraintValue::Ly => &"LY",
+            GeoMatchConstraintValue::Ma => &"MA",
+            GeoMatchConstraintValue::Mc => &"MC",
+            GeoMatchConstraintValue::Md => &"MD",
+            GeoMatchConstraintValue::Me => &"ME",
+            GeoMatchConstraintValue::Mf => &"MF",
+            GeoMatchConstraintValue::Mg => &"MG",
+            GeoMatchConstraintValue::Mh => &"MH",
+            GeoMatchConstraintValue::Mk => &"MK",
+            GeoMatchConstraintValue::Ml => &"ML",
+            GeoMatchConstraintValue::Mm => &"MM",
+            GeoMatchConstraintValue::Mn => &"MN",
+            GeoMatchConstraintValue::Mo => &"MO",
+            GeoMatchConstraintValue::Mp => &"MP",
+            GeoMatchConstraintValue::Mq => &"MQ",
+            GeoMatchConstraintValue::Mr => &"MR",
+            GeoMatchConstraintValue::Ms => &"MS",
+            GeoMatchConstraintValue::Mt => &"MT",
+            GeoMatchConstraintValue::Mu => &"MU",
+            GeoMatchConstraintValue::Mv => &"MV",
+            GeoMatchConstraintValue::Mw => &"MW",
+            GeoMatchConstraintValue::Mx => &"MX",
+            GeoMatchConstraintValue::My => &"MY",
+            GeoMatchConstraintValue::Mz => &"MZ",
+            GeoMatchConstraintValue::Na => &"NA",
+            GeoMatchConstraintValue::Nc => &"NC",
+            GeoMatchConstraintValue::Ne => &"NE",
+            GeoMatchConstraintValue::Nf => &"NF",
+            GeoMatchConstraintValue::Ng => &"NG",
+            GeoMatchConstraintValue::Ni => &"NI",
+            GeoMatchConstraintValue::Nl => &"NL",
+            GeoMatchConstraintValue::No => &"NO",
+            GeoMatchConstraintValue::Np => &"NP",
+            GeoMatchConstraintValue::Nr => &"NR",
+            GeoMatchConstraintValue::Nu => &"NU",
+            GeoMatchConstraintValue::Nz => &"NZ",
+            GeoMatchConstraintValue::Om => &"OM",
+            GeoMatchConstraintValue::Pa => &"PA",
+            GeoMatchConstraintValue::Pe => &"PE",
+            GeoMatchConstraintValue::Pf => &"PF",
+            GeoMatchConstraintValue::Pg => &"PG",
+            GeoMatchConstraintValue::Ph => &"PH",
+            GeoMatchConstraintValue::Pk => &"PK",
+            GeoMatchConstraintValue::Pl => &"PL",
+            GeoMatchConstraintValue::Pm => &"PM",
+            GeoMatchConstraintValue::Pn => &"PN",
+            GeoMatchConstraintValue::Pr => &"PR",
+            GeoMatchConstraintValue::Ps => &"PS",
+            GeoMatchConstraintValue::Pt => &"PT",
+            GeoMatchConstraintValue::Pw => &"PW",
+            GeoMatchConstraintValue::Py => &"PY",
+            GeoMatchConstraintValue::Qa => &"QA",
+            GeoMatchConstraintValue::Re => &"RE",
+            GeoMatchConstraintValue::Ro => &"RO",
+            GeoMatchConstraintValue::Rs => &"RS",
+            GeoMatchConstraintValue::Ru => &"RU",
+            GeoMatchConstraintValue::Rw => &"RW",
+            GeoMatchConstraintValue::Sa => &"SA",
+            GeoMatchConstraintValue::Sb => &"SB",
+            GeoMatchConstraintValue::Sc => &"SC",
+            GeoMatchConstraintValue::Sd => &"SD",
+            GeoMatchConstraintValue::Se => &"SE",
+            GeoMatchConstraintValue::Sg => &"SG",
+            GeoMatchConstraintValue::Sh => &"SH",
+            GeoMatchConstraintValue::Si => &"SI",
+            GeoMatchConstraintValue::Sj => &"SJ",
+            GeoMatchConstraintValue::Sk => &"SK",
+            GeoMatchConstraintValue::Sl => &"SL",
+            GeoMatchConstraintValue::Sm => &"SM",
+            GeoMatchConstraintValue::Sn => &"SN",
+            GeoMatchConstraintValue::So => &"SO",
+            GeoMatchConstraintValue::Sr => &"SR",
+            GeoMatchConstraintValue::Ss => &"SS",
+            GeoMatchConstraintValue::St => &"ST",
+            GeoMatchConstraintValue::Sv => &"SV",
+            GeoMatchConstraintValue::Sx => &"SX",
+            GeoMatchConstraintValue::Sy => &"SY",
+            GeoMatchConstraintValue::Sz => &"SZ",
+            GeoMatchConstraintValue::Tc => &"TC",
+            GeoMatchConstraintValue::Td => &"TD",
+            GeoMatchConstraintValue::Tf => &"TF",
+            GeoMatchConstraintValue::Tg => &"TG",
+            GeoMatchConstraintValue::Th => &"TH",
+            GeoMatchConstraintValue::Tj => &"TJ",
+            GeoMatchConstraintValue::Tk => &"TK",
+            GeoMatchConstraintValue::Tl => &"TL",
+            GeoMatchConstraintValue::Tm => &"TM",
+            GeoMatchConstraintValue::Tn => &"TN",
+            GeoMatchConstraintValue::To => &"TO",
+            GeoMatchConstraintValue::Tr => &"TR",
+            GeoMatchConstraintValue::Tt => &"TT",
+            GeoMatchConstraintValue::Tv => &"TV",
+            GeoMatchConstraintValue::Tw => &"TW",
+            GeoMatchConstraintValue::Tz => &"TZ",
+            GeoMatchConstraintValue::Ua => &"UA",
+            GeoMatchConstraintValue::Ug => &"UG",
+            GeoMatchConstraintValue::Um => &"UM",
+            GeoMatchConstraintValue::Us => &"US",
+            GeoMatchConstraintValue::Uy => &"UY",
+            GeoMatchConstraintValue::Uz => &"UZ",
+            GeoMatchConstraintValue::Va => &"VA",
+            GeoMatchConstraintValue::Vc => &"VC",
+            GeoMatchConstraintValue::Ve => &"VE",
+            GeoMatchConstraintValue::Vg => &"VG",
+            GeoMatchConstraintValue::Vi => &"VI",
+            GeoMatchConstraintValue::Vn => &"VN",
+            GeoMatchConstraintValue::Vu => &"VU",
+            GeoMatchConstraintValue::Wf => &"WF",
+            GeoMatchConstraintValue::Ws => &"WS",
+            GeoMatchConstraintValue::Ye => &"YE",
+            GeoMatchConstraintValue::Yt => &"YT",
+            GeoMatchConstraintValue::Za => &"ZA",
+            GeoMatchConstraintValue::Zm => &"ZM",
+            GeoMatchConstraintValue::Zw => &"ZW",
+            GeoMatchConstraintValue::UnknownVariant(UnknownGeoMatchConstraintValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GeoMatchConstraintValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "AD" => GeoMatchConstraintValue::Ad,
+            "AE" => GeoMatchConstraintValue::Ae,
+            "AF" => GeoMatchConstraintValue::Af,
+            "AG" => GeoMatchConstraintValue::Ag,
+            "AI" => GeoMatchConstraintValue::Ai,
+            "AL" => GeoMatchConstraintValue::Al,
+            "AM" => GeoMatchConstraintValue::Am,
+            "AO" => GeoMatchConstraintValue::Ao,
+            "AQ" => GeoMatchConstraintValue::Aq,
+            "AR" => GeoMatchConstraintValue::Ar,
+            "AS" => GeoMatchConstraintValue::As,
+            "AT" => GeoMatchConstraintValue::At,
+            "AU" => GeoMatchConstraintValue::Au,
+            "AW" => GeoMatchConstraintValue::Aw,
+            "AX" => GeoMatchConstraintValue::Ax,
+            "AZ" => GeoMatchConstraintValue::Az,
+            "BA" => GeoMatchConstraintValue::Ba,
+            "BB" => GeoMatchConstraintValue::Bb,
+            "BD" => GeoMatchConstraintValue::Bd,
+            "BE" => GeoMatchConstraintValue::Be,
+            "BF" => GeoMatchConstraintValue::Bf,
+            "BG" => GeoMatchConstraintValue::Bg,
+            "BH" => GeoMatchConstraintValue::Bh,
+            "BI" => GeoMatchConstraintValue::Bi,
+            "BJ" => GeoMatchConstraintValue::Bj,
+            "BL" => GeoMatchConstraintValue::Bl,
+            "BM" => GeoMatchConstraintValue::Bm,
+            "BN" => GeoMatchConstraintValue::Bn,
+            "BO" => GeoMatchConstraintValue::Bo,
+            "BQ" => GeoMatchConstraintValue::Bq,
+            "BR" => GeoMatchConstraintValue::Br,
+            "BS" => GeoMatchConstraintValue::Bs,
+            "BT" => GeoMatchConstraintValue::Bt,
+            "BV" => GeoMatchConstraintValue::Bv,
+            "BW" => GeoMatchConstraintValue::Bw,
+            "BY" => GeoMatchConstraintValue::By,
+            "BZ" => GeoMatchConstraintValue::Bz,
+            "CA" => GeoMatchConstraintValue::Ca,
+            "CC" => GeoMatchConstraintValue::Cc,
+            "CD" => GeoMatchConstraintValue::Cd,
+            "CF" => GeoMatchConstraintValue::Cf,
+            "CG" => GeoMatchConstraintValue::Cg,
+            "CH" => GeoMatchConstraintValue::Ch,
+            "CI" => GeoMatchConstraintValue::Ci,
+            "CK" => GeoMatchConstraintValue::Ck,
+            "CL" => GeoMatchConstraintValue::Cl,
+            "CM" => GeoMatchConstraintValue::Cm,
+            "CN" => GeoMatchConstraintValue::Cn,
+            "CO" => GeoMatchConstraintValue::Co,
+            "CR" => GeoMatchConstraintValue::Cr,
+            "CU" => GeoMatchConstraintValue::Cu,
+            "CV" => GeoMatchConstraintValue::Cv,
+            "CW" => GeoMatchConstraintValue::Cw,
+            "CX" => GeoMatchConstraintValue::Cx,
+            "CY" => GeoMatchConstraintValue::Cy,
+            "CZ" => GeoMatchConstraintValue::Cz,
+            "DE" => GeoMatchConstraintValue::De,
+            "DJ" => GeoMatchConstraintValue::Dj,
+            "DK" => GeoMatchConstraintValue::Dk,
+            "DM" => GeoMatchConstraintValue::Dm,
+            "DO" => GeoMatchConstraintValue::Do,
+            "DZ" => GeoMatchConstraintValue::Dz,
+            "EC" => GeoMatchConstraintValue::Ec,
+            "EE" => GeoMatchConstraintValue::Ee,
+            "EG" => GeoMatchConstraintValue::Eg,
+            "EH" => GeoMatchConstraintValue::Eh,
+            "ER" => GeoMatchConstraintValue::Er,
+            "ES" => GeoMatchConstraintValue::Es,
+            "ET" => GeoMatchConstraintValue::Et,
+            "FI" => GeoMatchConstraintValue::Fi,
+            "FJ" => GeoMatchConstraintValue::Fj,
+            "FK" => GeoMatchConstraintValue::Fk,
+            "FM" => GeoMatchConstraintValue::Fm,
+            "FO" => GeoMatchConstraintValue::Fo,
+            "FR" => GeoMatchConstraintValue::Fr,
+            "GA" => GeoMatchConstraintValue::Ga,
+            "GB" => GeoMatchConstraintValue::Gb,
+            "GD" => GeoMatchConstraintValue::Gd,
+            "GE" => GeoMatchConstraintValue::Ge,
+            "GF" => GeoMatchConstraintValue::Gf,
+            "GG" => GeoMatchConstraintValue::Gg,
+            "GH" => GeoMatchConstraintValue::Gh,
+            "GI" => GeoMatchConstraintValue::Gi,
+            "GL" => GeoMatchConstraintValue::Gl,
+            "GM" => GeoMatchConstraintValue::Gm,
+            "GN" => GeoMatchConstraintValue::Gn,
+            "GP" => GeoMatchConstraintValue::Gp,
+            "GQ" => GeoMatchConstraintValue::Gq,
+            "GR" => GeoMatchConstraintValue::Gr,
+            "GS" => GeoMatchConstraintValue::Gs,
+            "GT" => GeoMatchConstraintValue::Gt,
+            "GU" => GeoMatchConstraintValue::Gu,
+            "GW" => GeoMatchConstraintValue::Gw,
+            "GY" => GeoMatchConstraintValue::Gy,
+            "HK" => GeoMatchConstraintValue::Hk,
+            "HM" => GeoMatchConstraintValue::Hm,
+            "HN" => GeoMatchConstraintValue::Hn,
+            "HR" => GeoMatchConstraintValue::Hr,
+            "HT" => GeoMatchConstraintValue::Ht,
+            "HU" => GeoMatchConstraintValue::Hu,
+            "ID" => GeoMatchConstraintValue::Id,
+            "IE" => GeoMatchConstraintValue::Ie,
+            "IL" => GeoMatchConstraintValue::Il,
+            "IM" => GeoMatchConstraintValue::Im,
+            "IN" => GeoMatchConstraintValue::In,
+            "IO" => GeoMatchConstraintValue::Io,
+            "IQ" => GeoMatchConstraintValue::Iq,
+            "IR" => GeoMatchConstraintValue::Ir,
+            "IS" => GeoMatchConstraintValue::Is,
+            "IT" => GeoMatchConstraintValue::It,
+            "JE" => GeoMatchConstraintValue::Je,
+            "JM" => GeoMatchConstraintValue::Jm,
+            "JO" => GeoMatchConstraintValue::Jo,
+            "JP" => GeoMatchConstraintValue::Jp,
+            "KE" => GeoMatchConstraintValue::Ke,
+            "KG" => GeoMatchConstraintValue::Kg,
+            "KH" => GeoMatchConstraintValue::Kh,
+            "KI" => GeoMatchConstraintValue::Ki,
+            "KM" => GeoMatchConstraintValue::Km,
+            "KN" => GeoMatchConstraintValue::Kn,
+            "KP" => GeoMatchConstraintValue::Kp,
+            "KR" => GeoMatchConstraintValue::Kr,
+            "KW" => GeoMatchConstraintValue::Kw,
+            "KY" => GeoMatchConstraintValue::Ky,
+            "KZ" => GeoMatchConstraintValue::Kz,
+            "LA" => GeoMatchConstraintValue::La,
+            "LB" => GeoMatchConstraintValue::Lb,
+            "LC" => GeoMatchConstraintValue::Lc,
+            "LI" => GeoMatchConstraintValue::Li,
+            "LK" => GeoMatchConstraintValue::Lk,
+            "LR" => GeoMatchConstraintValue::Lr,
+            "LS" => GeoMatchConstraintValue::Ls,
+            "LT" => GeoMatchConstraintValue::Lt,
+            "LU" => GeoMatchConstraintValue::Lu,
+            "LV" => GeoMatchConstraintValue::Lv,
+            "LY" => GeoMatchConstraintValue::Ly,
+            "MA" => GeoMatchConstraintValue::Ma,
+            "MC" => GeoMatchConstraintValue::Mc,
+            "MD" => GeoMatchConstraintValue::Md,
+            "ME" => GeoMatchConstraintValue::Me,
+            "MF" => GeoMatchConstraintValue::Mf,
+            "MG" => GeoMatchConstraintValue::Mg,
+            "MH" => GeoMatchConstraintValue::Mh,
+            "MK" => GeoMatchConstraintValue::Mk,
+            "ML" => GeoMatchConstraintValue::Ml,
+            "MM" => GeoMatchConstraintValue::Mm,
+            "MN" => GeoMatchConstraintValue::Mn,
+            "MO" => GeoMatchConstraintValue::Mo,
+            "MP" => GeoMatchConstraintValue::Mp,
+            "MQ" => GeoMatchConstraintValue::Mq,
+            "MR" => GeoMatchConstraintValue::Mr,
+            "MS" => GeoMatchConstraintValue::Ms,
+            "MT" => GeoMatchConstraintValue::Mt,
+            "MU" => GeoMatchConstraintValue::Mu,
+            "MV" => GeoMatchConstraintValue::Mv,
+            "MW" => GeoMatchConstraintValue::Mw,
+            "MX" => GeoMatchConstraintValue::Mx,
+            "MY" => GeoMatchConstraintValue::My,
+            "MZ" => GeoMatchConstraintValue::Mz,
+            "NA" => GeoMatchConstraintValue::Na,
+            "NC" => GeoMatchConstraintValue::Nc,
+            "NE" => GeoMatchConstraintValue::Ne,
+            "NF" => GeoMatchConstraintValue::Nf,
+            "NG" => GeoMatchConstraintValue::Ng,
+            "NI" => GeoMatchConstraintValue::Ni,
+            "NL" => GeoMatchConstraintValue::Nl,
+            "NO" => GeoMatchConstraintValue::No,
+            "NP" => GeoMatchConstraintValue::Np,
+            "NR" => GeoMatchConstraintValue::Nr,
+            "NU" => GeoMatchConstraintValue::Nu,
+            "NZ" => GeoMatchConstraintValue::Nz,
+            "OM" => GeoMatchConstraintValue::Om,
+            "PA" => GeoMatchConstraintValue::Pa,
+            "PE" => GeoMatchConstraintValue::Pe,
+            "PF" => GeoMatchConstraintValue::Pf,
+            "PG" => GeoMatchConstraintValue::Pg,
+            "PH" => GeoMatchConstraintValue::Ph,
+            "PK" => GeoMatchConstraintValue::Pk,
+            "PL" => GeoMatchConstraintValue::Pl,
+            "PM" => GeoMatchConstraintValue::Pm,
+            "PN" => GeoMatchConstraintValue::Pn,
+            "PR" => GeoMatchConstraintValue::Pr,
+            "PS" => GeoMatchConstraintValue::Ps,
+            "PT" => GeoMatchConstraintValue::Pt,
+            "PW" => GeoMatchConstraintValue::Pw,
+            "PY" => GeoMatchConstraintValue::Py,
+            "QA" => GeoMatchConstraintValue::Qa,
+            "RE" => GeoMatchConstraintValue::Re,
+            "RO" => GeoMatchConstraintValue::Ro,
+            "RS" => GeoMatchConstraintValue::Rs,
+            "RU" => GeoMatchConstraintValue::Ru,
+            "RW" => GeoMatchConstraintValue::Rw,
+            "SA" => GeoMatchConstraintValue::Sa,
+            "SB" => GeoMatchConstraintValue::Sb,
+            "SC" => GeoMatchConstraintValue::Sc,
+            "SD" => GeoMatchConstraintValue::Sd,
+            "SE" => GeoMatchConstraintValue::Se,
+            "SG" => GeoMatchConstraintValue::Sg,
+            "SH" => GeoMatchConstraintValue::Sh,
+            "SI" => GeoMatchConstraintValue::Si,
+            "SJ" => GeoMatchConstraintValue::Sj,
+            "SK" => GeoMatchConstraintValue::Sk,
+            "SL" => GeoMatchConstraintValue::Sl,
+            "SM" => GeoMatchConstraintValue::Sm,
+            "SN" => GeoMatchConstraintValue::Sn,
+            "SO" => GeoMatchConstraintValue::So,
+            "SR" => GeoMatchConstraintValue::Sr,
+            "SS" => GeoMatchConstraintValue::Ss,
+            "ST" => GeoMatchConstraintValue::St,
+            "SV" => GeoMatchConstraintValue::Sv,
+            "SX" => GeoMatchConstraintValue::Sx,
+            "SY" => GeoMatchConstraintValue::Sy,
+            "SZ" => GeoMatchConstraintValue::Sz,
+            "TC" => GeoMatchConstraintValue::Tc,
+            "TD" => GeoMatchConstraintValue::Td,
+            "TF" => GeoMatchConstraintValue::Tf,
+            "TG" => GeoMatchConstraintValue::Tg,
+            "TH" => GeoMatchConstraintValue::Th,
+            "TJ" => GeoMatchConstraintValue::Tj,
+            "TK" => GeoMatchConstraintValue::Tk,
+            "TL" => GeoMatchConstraintValue::Tl,
+            "TM" => GeoMatchConstraintValue::Tm,
+            "TN" => GeoMatchConstraintValue::Tn,
+            "TO" => GeoMatchConstraintValue::To,
+            "TR" => GeoMatchConstraintValue::Tr,
+            "TT" => GeoMatchConstraintValue::Tt,
+            "TV" => GeoMatchConstraintValue::Tv,
+            "TW" => GeoMatchConstraintValue::Tw,
+            "TZ" => GeoMatchConstraintValue::Tz,
+            "UA" => GeoMatchConstraintValue::Ua,
+            "UG" => GeoMatchConstraintValue::Ug,
+            "UM" => GeoMatchConstraintValue::Um,
+            "US" => GeoMatchConstraintValue::Us,
+            "UY" => GeoMatchConstraintValue::Uy,
+            "UZ" => GeoMatchConstraintValue::Uz,
+            "VA" => GeoMatchConstraintValue::Va,
+            "VC" => GeoMatchConstraintValue::Vc,
+            "VE" => GeoMatchConstraintValue::Ve,
+            "VG" => GeoMatchConstraintValue::Vg,
+            "VI" => GeoMatchConstraintValue::Vi,
+            "VN" => GeoMatchConstraintValue::Vn,
+            "VU" => GeoMatchConstraintValue::Vu,
+            "WF" => GeoMatchConstraintValue::Wf,
+            "WS" => GeoMatchConstraintValue::Ws,
+            "YE" => GeoMatchConstraintValue::Ye,
+            "YT" => GeoMatchConstraintValue::Yt,
+            "ZA" => GeoMatchConstraintValue::Za,
+            "ZM" => GeoMatchConstraintValue::Zm,
+            "ZW" => GeoMatchConstraintValue::Zw,
+            _ => GeoMatchConstraintValue::UnknownVariant(UnknownGeoMatchConstraintValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoMatchConstraintValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AD" => GeoMatchConstraintValue::Ad,
+            "AE" => GeoMatchConstraintValue::Ae,
+            "AF" => GeoMatchConstraintValue::Af,
+            "AG" => GeoMatchConstraintValue::Ag,
+            "AI" => GeoMatchConstraintValue::Ai,
+            "AL" => GeoMatchConstraintValue::Al,
+            "AM" => GeoMatchConstraintValue::Am,
+            "AO" => GeoMatchConstraintValue::Ao,
+            "AQ" => GeoMatchConstraintValue::Aq,
+            "AR" => GeoMatchConstraintValue::Ar,
+            "AS" => GeoMatchConstraintValue::As,
+            "AT" => GeoMatchConstraintValue::At,
+            "AU" => GeoMatchConstraintValue::Au,
+            "AW" => GeoMatchConstraintValue::Aw,
+            "AX" => GeoMatchConstraintValue::Ax,
+            "AZ" => GeoMatchConstraintValue::Az,
+            "BA" => GeoMatchConstraintValue::Ba,
+            "BB" => GeoMatchConstraintValue::Bb,
+            "BD" => GeoMatchConstraintValue::Bd,
+            "BE" => GeoMatchConstraintValue::Be,
+            "BF" => GeoMatchConstraintValue::Bf,
+            "BG" => GeoMatchConstraintValue::Bg,
+            "BH" => GeoMatchConstraintValue::Bh,
+            "BI" => GeoMatchConstraintValue::Bi,
+            "BJ" => GeoMatchConstraintValue::Bj,
+            "BL" => GeoMatchConstraintValue::Bl,
+            "BM" => GeoMatchConstraintValue::Bm,
+            "BN" => GeoMatchConstraintValue::Bn,
+            "BO" => GeoMatchConstraintValue::Bo,
+            "BQ" => GeoMatchConstraintValue::Bq,
+            "BR" => GeoMatchConstraintValue::Br,
+            "BS" => GeoMatchConstraintValue::Bs,
+            "BT" => GeoMatchConstraintValue::Bt,
+            "BV" => GeoMatchConstraintValue::Bv,
+            "BW" => GeoMatchConstraintValue::Bw,
+            "BY" => GeoMatchConstraintValue::By,
+            "BZ" => GeoMatchConstraintValue::Bz,
+            "CA" => GeoMatchConstraintValue::Ca,
+            "CC" => GeoMatchConstraintValue::Cc,
+            "CD" => GeoMatchConstraintValue::Cd,
+            "CF" => GeoMatchConstraintValue::Cf,
+            "CG" => GeoMatchConstraintValue::Cg,
+            "CH" => GeoMatchConstraintValue::Ch,
+            "CI" => GeoMatchConstraintValue::Ci,
+            "CK" => GeoMatchConstraintValue::Ck,
+            "CL" => GeoMatchConstraintValue::Cl,
+            "CM" => GeoMatchConstraintValue::Cm,
+            "CN" => GeoMatchConstraintValue::Cn,
+            "CO" => GeoMatchConstraintValue::Co,
+            "CR" => GeoMatchConstraintValue::Cr,
+            "CU" => GeoMatchConstraintValue::Cu,
+            "CV" => GeoMatchConstraintValue::Cv,
+            "CW" => GeoMatchConstraintValue::Cw,
+            "CX" => GeoMatchConstraintValue::Cx,
+            "CY" => GeoMatchConstraintValue::Cy,
+            "CZ" => GeoMatchConstraintValue::Cz,
+            "DE" => GeoMatchConstraintValue::De,
+            "DJ" => GeoMatchConstraintValue::Dj,
+            "DK" => GeoMatchConstraintValue::Dk,
+            "DM" => GeoMatchConstraintValue::Dm,
+            "DO" => GeoMatchConstraintValue::Do,
+            "DZ" => GeoMatchConstraintValue::Dz,
+            "EC" => GeoMatchConstraintValue::Ec,
+            "EE" => GeoMatchConstraintValue::Ee,
+            "EG" => GeoMatchConstraintValue::Eg,
+            "EH" => GeoMatchConstraintValue::Eh,
+            "ER" => GeoMatchConstraintValue::Er,
+            "ES" => GeoMatchConstraintValue::Es,
+            "ET" => GeoMatchConstraintValue::Et,
+            "FI" => GeoMatchConstraintValue::Fi,
+            "FJ" => GeoMatchConstraintValue::Fj,
+            "FK" => GeoMatchConstraintValue::Fk,
+            "FM" => GeoMatchConstraintValue::Fm,
+            "FO" => GeoMatchConstraintValue::Fo,
+            "FR" => GeoMatchConstraintValue::Fr,
+            "GA" => GeoMatchConstraintValue::Ga,
+            "GB" => GeoMatchConstraintValue::Gb,
+            "GD" => GeoMatchConstraintValue::Gd,
+            "GE" => GeoMatchConstraintValue::Ge,
+            "GF" => GeoMatchConstraintValue::Gf,
+            "GG" => GeoMatchConstraintValue::Gg,
+            "GH" => GeoMatchConstraintValue::Gh,
+            "GI" => GeoMatchConstraintValue::Gi,
+            "GL" => GeoMatchConstraintValue::Gl,
+            "GM" => GeoMatchConstraintValue::Gm,
+            "GN" => GeoMatchConstraintValue::Gn,
+            "GP" => GeoMatchConstraintValue::Gp,
+            "GQ" => GeoMatchConstraintValue::Gq,
+            "GR" => GeoMatchConstraintValue::Gr,
+            "GS" => GeoMatchConstraintValue::Gs,
+            "GT" => GeoMatchConstraintValue::Gt,
+            "GU" => GeoMatchConstraintValue::Gu,
+            "GW" => GeoMatchConstraintValue::Gw,
+            "GY" => GeoMatchConstraintValue::Gy,
+            "HK" => GeoMatchConstraintValue::Hk,
+            "HM" => GeoMatchConstraintValue::Hm,
+            "HN" => GeoMatchConstraintValue::Hn,
+            "HR" => GeoMatchConstraintValue::Hr,
+            "HT" => GeoMatchConstraintValue::Ht,
+            "HU" => GeoMatchConstraintValue::Hu,
+            "ID" => GeoMatchConstraintValue::Id,
+            "IE" => GeoMatchConstraintValue::Ie,
+            "IL" => GeoMatchConstraintValue::Il,
+            "IM" => GeoMatchConstraintValue::Im,
+            "IN" => GeoMatchConstraintValue::In,
+            "IO" => GeoMatchConstraintValue::Io,
+            "IQ" => GeoMatchConstraintValue::Iq,
+            "IR" => GeoMatchConstraintValue::Ir,
+            "IS" => GeoMatchConstraintValue::Is,
+            "IT" => GeoMatchConstraintValue::It,
+            "JE" => GeoMatchConstraintValue::Je,
+            "JM" => GeoMatchConstraintValue::Jm,
+            "JO" => GeoMatchConstraintValue::Jo,
+            "JP" => GeoMatchConstraintValue::Jp,
+            "KE" => GeoMatchConstraintValue::Ke,
+            "KG" => GeoMatchConstraintValue::Kg,
+            "KH" => GeoMatchConstraintValue::Kh,
+            "KI" => GeoMatchConstraintValue::Ki,
+            "KM" => GeoMatchConstraintValue::Km,
+            "KN" => GeoMatchConstraintValue::Kn,
+            "KP" => GeoMatchConstraintValue::Kp,
+            "KR" => GeoMatchConstraintValue::Kr,
+            "KW" => GeoMatchConstraintValue::Kw,
+            "KY" => GeoMatchConstraintValue::Ky,
+            "KZ" => GeoMatchConstraintValue::Kz,
+            "LA" => GeoMatchConstraintValue::La,
+            "LB" => GeoMatchConstraintValue::Lb,
+            "LC" => GeoMatchConstraintValue::Lc,
+            "LI" => GeoMatchConstraintValue::Li,
+            "LK" => GeoMatchConstraintValue::Lk,
+            "LR" => GeoMatchConstraintValue::Lr,
+            "LS" => GeoMatchConstraintValue::Ls,
+            "LT" => GeoMatchConstraintValue::Lt,
+            "LU" => GeoMatchConstraintValue::Lu,
+            "LV" => GeoMatchConstraintValue::Lv,
+            "LY" => GeoMatchConstraintValue::Ly,
+            "MA" => GeoMatchConstraintValue::Ma,
+            "MC" => GeoMatchConstraintValue::Mc,
+            "MD" => GeoMatchConstraintValue::Md,
+            "ME" => GeoMatchConstraintValue::Me,
+            "MF" => GeoMatchConstraintValue::Mf,
+            "MG" => GeoMatchConstraintValue::Mg,
+            "MH" => GeoMatchConstraintValue::Mh,
+            "MK" => GeoMatchConstraintValue::Mk,
+            "ML" => GeoMatchConstraintValue::Ml,
+            "MM" => GeoMatchConstraintValue::Mm,
+            "MN" => GeoMatchConstraintValue::Mn,
+            "MO" => GeoMatchConstraintValue::Mo,
+            "MP" => GeoMatchConstraintValue::Mp,
+            "MQ" => GeoMatchConstraintValue::Mq,
+            "MR" => GeoMatchConstraintValue::Mr,
+            "MS" => GeoMatchConstraintValue::Ms,
+            "MT" => GeoMatchConstraintValue::Mt,
+            "MU" => GeoMatchConstraintValue::Mu,
+            "MV" => GeoMatchConstraintValue::Mv,
+            "MW" => GeoMatchConstraintValue::Mw,
+            "MX" => GeoMatchConstraintValue::Mx,
+            "MY" => GeoMatchConstraintValue::My,
+            "MZ" => GeoMatchConstraintValue::Mz,
+            "NA" => GeoMatchConstraintValue::Na,
+            "NC" => GeoMatchConstraintValue::Nc,
+            "NE" => GeoMatchConstraintValue::Ne,
+            "NF" => GeoMatchConstraintValue::Nf,
+            "NG" => GeoMatchConstraintValue::Ng,
+            "NI" => GeoMatchConstraintValue::Ni,
+            "NL" => GeoMatchConstraintValue::Nl,
+            "NO" => GeoMatchConstraintValue::No,
+            "NP" => GeoMatchConstraintValue::Np,
+            "NR" => GeoMatchConstraintValue::Nr,
+            "NU" => GeoMatchConstraintValue::Nu,
+            "NZ" => GeoMatchConstraintValue::Nz,
+            "OM" => GeoMatchConstraintValue::Om,
+            "PA" => GeoMatchConstraintValue::Pa,
+            "PE" => GeoMatchConstraintValue::Pe,
+            "PF" => GeoMatchConstraintValue::Pf,
+            "PG" => GeoMatchConstraintValue::Pg,
+            "PH" => GeoMatchConstraintValue::Ph,
+            "PK" => GeoMatchConstraintValue::Pk,
+            "PL" => GeoMatchConstraintValue::Pl,
+            "PM" => GeoMatchConstraintValue::Pm,
+            "PN" => GeoMatchConstraintValue::Pn,
+            "PR" => GeoMatchConstraintValue::Pr,
+            "PS" => GeoMatchConstraintValue::Ps,
+            "PT" => GeoMatchConstraintValue::Pt,
+            "PW" => GeoMatchConstraintValue::Pw,
+            "PY" => GeoMatchConstraintValue::Py,
+            "QA" => GeoMatchConstraintValue::Qa,
+            "RE" => GeoMatchConstraintValue::Re,
+            "RO" => GeoMatchConstraintValue::Ro,
+            "RS" => GeoMatchConstraintValue::Rs,
+            "RU" => GeoMatchConstraintValue::Ru,
+            "RW" => GeoMatchConstraintValue::Rw,
+            "SA" => GeoMatchConstraintValue::Sa,
+            "SB" => GeoMatchConstraintValue::Sb,
+            "SC" => GeoMatchConstraintValue::Sc,
+            "SD" => GeoMatchConstraintValue::Sd,
+            "SE" => GeoMatchConstraintValue::Se,
+            "SG" => GeoMatchConstraintValue::Sg,
+            "SH" => GeoMatchConstraintValue::Sh,
+            "SI" => GeoMatchConstraintValue::Si,
+            "SJ" => GeoMatchConstraintValue::Sj,
+            "SK" => GeoMatchConstraintValue::Sk,
+            "SL" => GeoMatchConstraintValue::Sl,
+            "SM" => GeoMatchConstraintValue::Sm,
+            "SN" => GeoMatchConstraintValue::Sn,
+            "SO" => GeoMatchConstraintValue::So,
+            "SR" => GeoMatchConstraintValue::Sr,
+            "SS" => GeoMatchConstraintValue::Ss,
+            "ST" => GeoMatchConstraintValue::St,
+            "SV" => GeoMatchConstraintValue::Sv,
+            "SX" => GeoMatchConstraintValue::Sx,
+            "SY" => GeoMatchConstraintValue::Sy,
+            "SZ" => GeoMatchConstraintValue::Sz,
+            "TC" => GeoMatchConstraintValue::Tc,
+            "TD" => GeoMatchConstraintValue::Td,
+            "TF" => GeoMatchConstraintValue::Tf,
+            "TG" => GeoMatchConstraintValue::Tg,
+            "TH" => GeoMatchConstraintValue::Th,
+            "TJ" => GeoMatchConstraintValue::Tj,
+            "TK" => GeoMatchConstraintValue::Tk,
+            "TL" => GeoMatchConstraintValue::Tl,
+            "TM" => GeoMatchConstraintValue::Tm,
+            "TN" => GeoMatchConstraintValue::Tn,
+            "TO" => GeoMatchConstraintValue::To,
+            "TR" => GeoMatchConstraintValue::Tr,
+            "TT" => GeoMatchConstraintValue::Tt,
+            "TV" => GeoMatchConstraintValue::Tv,
+            "TW" => GeoMatchConstraintValue::Tw,
+            "TZ" => GeoMatchConstraintValue::Tz,
+            "UA" => GeoMatchConstraintValue::Ua,
+            "UG" => GeoMatchConstraintValue::Ug,
+            "UM" => GeoMatchConstraintValue::Um,
+            "US" => GeoMatchConstraintValue::Us,
+            "UY" => GeoMatchConstraintValue::Uy,
+            "UZ" => GeoMatchConstraintValue::Uz,
+            "VA" => GeoMatchConstraintValue::Va,
+            "VC" => GeoMatchConstraintValue::Vc,
+            "VE" => GeoMatchConstraintValue::Ve,
+            "VG" => GeoMatchConstraintValue::Vg,
+            "VI" => GeoMatchConstraintValue::Vi,
+            "VN" => GeoMatchConstraintValue::Vn,
+            "VU" => GeoMatchConstraintValue::Vu,
+            "WF" => GeoMatchConstraintValue::Wf,
+            "WS" => GeoMatchConstraintValue::Ws,
+            "YE" => GeoMatchConstraintValue::Ye,
+            "YT" => GeoMatchConstraintValue::Yt,
+            "ZA" => GeoMatchConstraintValue::Za,
+            "ZM" => GeoMatchConstraintValue::Zm,
+            "ZW" => GeoMatchConstraintValue::Zw,
+            _ => GeoMatchConstraintValue::UnknownVariant(UnknownGeoMatchConstraintValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoMatchConstraintValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GeoMatchConstraintValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GeoMatchConstraintValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Contains one or more countries that AWS WAF will search for.</p></p>
@@ -823,7 +2596,7 @@ pub struct GeoMatchSetSummary {
 pub struct GeoMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a country with <a>UpdateGeoMatchSet</a>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>The country from which web requests originate that you want AWS WAF to search for.</p>
     #[serde(rename = "GeoMatchConstraint")]
     pub geo_match_constraint: GeoMatchConstraint,
@@ -873,7 +2646,7 @@ pub struct GetChangeTokenStatusResponse {
     /// <p>The status of the change token.</p>
     #[serde(rename = "ChangeTokenStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub change_token_status: Option<String>,
+    pub change_token_status: Option<ChangeTokenStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1225,10 +2998,114 @@ pub struct IPSet {
 pub struct IPSetDescriptor {
     /// <p>Specify <code>IPV4</code> or <code>IPV6</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: IPSetDescriptorType,
     /// <p><p>Specify an IPv4 address by using CIDR notation. For example:</p> <ul> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from the IP address 192.0.2.44, specify <code>192.0.2.44/32</code>.</p> </li> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from IP addresses from 192.0.2.0 to 192.0.2.255, specify <code>192.0.2.0/24</code>.</p> </li> </ul> <p>For more information about CIDR notation, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>.</p> <p>Specify an IPv6 address by using CIDR notation. For example:</p> <ul> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from the IP address 1111:0000:0000:0000:0000:0000:0000:0111, specify <code>1111:0000:0000:0000:0000:0000:0000:0111/128</code>.</p> </li> <li> <p>To configure AWS WAF to allow, block, or count requests that originated from IP addresses 1111:0000:0000:0000:0000:0000:0000:0000 to 1111:0000:0000:0000:ffff:ffff:ffff:ffff, specify <code>1111:0000:0000:0000:0000:0000:0000:0000/64</code>.</p> </li> </ul></p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIPSetDescriptorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IPSetDescriptorType {
+    Ipv4,
+    Ipv6,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIPSetDescriptorType),
+}
+
+impl Default for IPSetDescriptorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IPSetDescriptorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IPSetDescriptorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IPSetDescriptorType {
+    fn into(self) -> String {
+        match self {
+            IPSetDescriptorType::Ipv4 => "IPV4".to_string(),
+            IPSetDescriptorType::Ipv6 => "IPV6".to_string(),
+            IPSetDescriptorType::UnknownVariant(UnknownIPSetDescriptorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IPSetDescriptorType {
+    fn into(self) -> &'a str {
+        match self {
+            IPSetDescriptorType::Ipv4 => &"IPV4",
+            IPSetDescriptorType::Ipv6 => &"IPV6",
+            IPSetDescriptorType::UnknownVariant(UnknownIPSetDescriptorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for IPSetDescriptorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IPV4" => IPSetDescriptorType::Ipv4,
+            "IPV6" => IPSetDescriptorType::Ipv6,
+            _ => IPSetDescriptorType::UnknownVariant(UnknownIPSetDescriptorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IPSetDescriptorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IPV4" => IPSetDescriptorType::Ipv4,
+            "IPV6" => IPSetDescriptorType::Ipv6,
+            _ => IPSetDescriptorType::UnknownVariant(UnknownIPSetDescriptorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IPSetDescriptorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IPSetDescriptorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IPSetDescriptorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Contains the identifier and the name of the <code>IPSet</code>.</p></p>
@@ -1249,7 +3126,7 @@ pub struct IPSetSummary {
 pub struct IPSetUpdate {
     /// <p>Specifies whether to insert or delete an IP address with <a>UpdateIPSet</a>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>The IP address type (<code>IPV4</code> or <code>IPV6</code>) and the IP address range (in CIDR notation) that web requests originate from.</p>
     #[serde(rename = "IPSetDescriptor")]
     pub ip_set_descriptor: IPSetDescriptor,
@@ -1697,6 +3574,713 @@ pub struct LoggingConfiguration {
     pub resource_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMatchFieldType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MatchFieldType {
+    AllQueryArgs,
+    Body,
+    Header,
+    Method,
+    QueryString,
+    SingleQueryArg,
+    Uri,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMatchFieldType),
+}
+
+impl Default for MatchFieldType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MatchFieldType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MatchFieldType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MatchFieldType {
+    fn into(self) -> String {
+        match self {
+            MatchFieldType::AllQueryArgs => "ALL_QUERY_ARGS".to_string(),
+            MatchFieldType::Body => "BODY".to_string(),
+            MatchFieldType::Header => "HEADER".to_string(),
+            MatchFieldType::Method => "METHOD".to_string(),
+            MatchFieldType::QueryString => "QUERY_STRING".to_string(),
+            MatchFieldType::SingleQueryArg => "SINGLE_QUERY_ARG".to_string(),
+            MatchFieldType::Uri => "URI".to_string(),
+            MatchFieldType::UnknownVariant(UnknownMatchFieldType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MatchFieldType {
+    fn into(self) -> &'a str {
+        match self {
+            MatchFieldType::AllQueryArgs => &"ALL_QUERY_ARGS",
+            MatchFieldType::Body => &"BODY",
+            MatchFieldType::Header => &"HEADER",
+            MatchFieldType::Method => &"METHOD",
+            MatchFieldType::QueryString => &"QUERY_STRING",
+            MatchFieldType::SingleQueryArg => &"SINGLE_QUERY_ARG",
+            MatchFieldType::Uri => &"URI",
+            MatchFieldType::UnknownVariant(UnknownMatchFieldType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MatchFieldType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_QUERY_ARGS" => MatchFieldType::AllQueryArgs,
+            "BODY" => MatchFieldType::Body,
+            "HEADER" => MatchFieldType::Header,
+            "METHOD" => MatchFieldType::Method,
+            "QUERY_STRING" => MatchFieldType::QueryString,
+            "SINGLE_QUERY_ARG" => MatchFieldType::SingleQueryArg,
+            "URI" => MatchFieldType::Uri,
+            _ => MatchFieldType::UnknownVariant(UnknownMatchFieldType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MatchFieldType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_QUERY_ARGS" => MatchFieldType::AllQueryArgs,
+            "BODY" => MatchFieldType::Body,
+            "HEADER" => MatchFieldType::Header,
+            "METHOD" => MatchFieldType::Method,
+            "QUERY_STRING" => MatchFieldType::QueryString,
+            "SINGLE_QUERY_ARG" => MatchFieldType::SingleQueryArg,
+            "URI" => MatchFieldType::Uri,
+            _ => MatchFieldType::UnknownVariant(UnknownMatchFieldType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchFieldType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MatchFieldType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MatchFieldType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMigrationErrorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MigrationErrorType {
+    EntityNotFound,
+    EntityNotSupported,
+    S3BucketInvalidRegion,
+    S3BucketNotAccessible,
+    S3BucketNotFound,
+    S3BucketNoPermission,
+    S3InternalError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMigrationErrorType),
+}
+
+impl Default for MigrationErrorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MigrationErrorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MigrationErrorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MigrationErrorType {
+    fn into(self) -> String {
+        match self {
+            MigrationErrorType::EntityNotFound => "ENTITY_NOT_FOUND".to_string(),
+            MigrationErrorType::EntityNotSupported => "ENTITY_NOT_SUPPORTED".to_string(),
+            MigrationErrorType::S3BucketInvalidRegion => "S3_BUCKET_INVALID_REGION".to_string(),
+            MigrationErrorType::S3BucketNotAccessible => "S3_BUCKET_NOT_ACCESSIBLE".to_string(),
+            MigrationErrorType::S3BucketNotFound => "S3_BUCKET_NOT_FOUND".to_string(),
+            MigrationErrorType::S3BucketNoPermission => "S3_BUCKET_NO_PERMISSION".to_string(),
+            MigrationErrorType::S3InternalError => "S3_INTERNAL_ERROR".to_string(),
+            MigrationErrorType::UnknownVariant(UnknownMigrationErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MigrationErrorType {
+    fn into(self) -> &'a str {
+        match self {
+            MigrationErrorType::EntityNotFound => &"ENTITY_NOT_FOUND",
+            MigrationErrorType::EntityNotSupported => &"ENTITY_NOT_SUPPORTED",
+            MigrationErrorType::S3BucketInvalidRegion => &"S3_BUCKET_INVALID_REGION",
+            MigrationErrorType::S3BucketNotAccessible => &"S3_BUCKET_NOT_ACCESSIBLE",
+            MigrationErrorType::S3BucketNotFound => &"S3_BUCKET_NOT_FOUND",
+            MigrationErrorType::S3BucketNoPermission => &"S3_BUCKET_NO_PERMISSION",
+            MigrationErrorType::S3InternalError => &"S3_INTERNAL_ERROR",
+            MigrationErrorType::UnknownVariant(UnknownMigrationErrorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MigrationErrorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ENTITY_NOT_FOUND" => MigrationErrorType::EntityNotFound,
+            "ENTITY_NOT_SUPPORTED" => MigrationErrorType::EntityNotSupported,
+            "S3_BUCKET_INVALID_REGION" => MigrationErrorType::S3BucketInvalidRegion,
+            "S3_BUCKET_NOT_ACCESSIBLE" => MigrationErrorType::S3BucketNotAccessible,
+            "S3_BUCKET_NOT_FOUND" => MigrationErrorType::S3BucketNotFound,
+            "S3_BUCKET_NO_PERMISSION" => MigrationErrorType::S3BucketNoPermission,
+            "S3_INTERNAL_ERROR" => MigrationErrorType::S3InternalError,
+            _ => MigrationErrorType::UnknownVariant(UnknownMigrationErrorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MigrationErrorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ENTITY_NOT_FOUND" => MigrationErrorType::EntityNotFound,
+            "ENTITY_NOT_SUPPORTED" => MigrationErrorType::EntityNotSupported,
+            "S3_BUCKET_INVALID_REGION" => MigrationErrorType::S3BucketInvalidRegion,
+            "S3_BUCKET_NOT_ACCESSIBLE" => MigrationErrorType::S3BucketNotAccessible,
+            "S3_BUCKET_NOT_FOUND" => MigrationErrorType::S3BucketNotFound,
+            "S3_BUCKET_NO_PERMISSION" => MigrationErrorType::S3BucketNoPermission,
+            "S3_INTERNAL_ERROR" => MigrationErrorType::S3InternalError,
+            _ => MigrationErrorType::UnknownVariant(UnknownMigrationErrorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MigrationErrorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MigrationErrorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MigrationErrorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterExceptionField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterExceptionField {
+    ByteMatchFieldType,
+    ByteMatchPositionalConstraint,
+    ByteMatchTextTransformation,
+    ChangeAction,
+    GeoMatchLocationType,
+    GeoMatchLocationValue,
+    IpsetType,
+    NextMarker,
+    PredicateType,
+    RateKey,
+    ResourceArn,
+    RuleType,
+    SizeConstraintComparisonOperator,
+    SqlInjectionMatchFieldType,
+    Tags,
+    TagKeys,
+    WafAction,
+    WafOverrideAction,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterExceptionField),
+}
+
+impl Default for ParameterExceptionField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterExceptionField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterExceptionField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterExceptionField {
+    fn into(self) -> String {
+        match self {
+            ParameterExceptionField::ByteMatchFieldType => "BYTE_MATCH_FIELD_TYPE".to_string(),
+            ParameterExceptionField::ByteMatchPositionalConstraint => {
+                "BYTE_MATCH_POSITIONAL_CONSTRAINT".to_string()
+            }
+            ParameterExceptionField::ByteMatchTextTransformation => {
+                "BYTE_MATCH_TEXT_TRANSFORMATION".to_string()
+            }
+            ParameterExceptionField::ChangeAction => "CHANGE_ACTION".to_string(),
+            ParameterExceptionField::GeoMatchLocationType => "GEO_MATCH_LOCATION_TYPE".to_string(),
+            ParameterExceptionField::GeoMatchLocationValue => {
+                "GEO_MATCH_LOCATION_VALUE".to_string()
+            }
+            ParameterExceptionField::IpsetType => "IPSET_TYPE".to_string(),
+            ParameterExceptionField::NextMarker => "NEXT_MARKER".to_string(),
+            ParameterExceptionField::PredicateType => "PREDICATE_TYPE".to_string(),
+            ParameterExceptionField::RateKey => "RATE_KEY".to_string(),
+            ParameterExceptionField::ResourceArn => "RESOURCE_ARN".to_string(),
+            ParameterExceptionField::RuleType => "RULE_TYPE".to_string(),
+            ParameterExceptionField::SizeConstraintComparisonOperator => {
+                "SIZE_CONSTRAINT_COMPARISON_OPERATOR".to_string()
+            }
+            ParameterExceptionField::SqlInjectionMatchFieldType => {
+                "SQL_INJECTION_MATCH_FIELD_TYPE".to_string()
+            }
+            ParameterExceptionField::Tags => "TAGS".to_string(),
+            ParameterExceptionField::TagKeys => "TAG_KEYS".to_string(),
+            ParameterExceptionField::WafAction => "WAF_ACTION".to_string(),
+            ParameterExceptionField::WafOverrideAction => "WAF_OVERRIDE_ACTION".to_string(),
+            ParameterExceptionField::UnknownVariant(UnknownParameterExceptionField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterExceptionField {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterExceptionField::ByteMatchFieldType => &"BYTE_MATCH_FIELD_TYPE",
+            ParameterExceptionField::ByteMatchPositionalConstraint => {
+                &"BYTE_MATCH_POSITIONAL_CONSTRAINT"
+            }
+            ParameterExceptionField::ByteMatchTextTransformation => {
+                &"BYTE_MATCH_TEXT_TRANSFORMATION"
+            }
+            ParameterExceptionField::ChangeAction => &"CHANGE_ACTION",
+            ParameterExceptionField::GeoMatchLocationType => &"GEO_MATCH_LOCATION_TYPE",
+            ParameterExceptionField::GeoMatchLocationValue => &"GEO_MATCH_LOCATION_VALUE",
+            ParameterExceptionField::IpsetType => &"IPSET_TYPE",
+            ParameterExceptionField::NextMarker => &"NEXT_MARKER",
+            ParameterExceptionField::PredicateType => &"PREDICATE_TYPE",
+            ParameterExceptionField::RateKey => &"RATE_KEY",
+            ParameterExceptionField::ResourceArn => &"RESOURCE_ARN",
+            ParameterExceptionField::RuleType => &"RULE_TYPE",
+            ParameterExceptionField::SizeConstraintComparisonOperator => {
+                &"SIZE_CONSTRAINT_COMPARISON_OPERATOR"
+            }
+            ParameterExceptionField::SqlInjectionMatchFieldType => {
+                &"SQL_INJECTION_MATCH_FIELD_TYPE"
+            }
+            ParameterExceptionField::Tags => &"TAGS",
+            ParameterExceptionField::TagKeys => &"TAG_KEYS",
+            ParameterExceptionField::WafAction => &"WAF_ACTION",
+            ParameterExceptionField::WafOverrideAction => &"WAF_OVERRIDE_ACTION",
+            ParameterExceptionField::UnknownVariant(UnknownParameterExceptionField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterExceptionField {
+    fn from(name: &str) -> Self {
+        match name {
+            "BYTE_MATCH_FIELD_TYPE" => ParameterExceptionField::ByteMatchFieldType,
+            "BYTE_MATCH_POSITIONAL_CONSTRAINT" => {
+                ParameterExceptionField::ByteMatchPositionalConstraint
+            }
+            "BYTE_MATCH_TEXT_TRANSFORMATION" => {
+                ParameterExceptionField::ByteMatchTextTransformation
+            }
+            "CHANGE_ACTION" => ParameterExceptionField::ChangeAction,
+            "GEO_MATCH_LOCATION_TYPE" => ParameterExceptionField::GeoMatchLocationType,
+            "GEO_MATCH_LOCATION_VALUE" => ParameterExceptionField::GeoMatchLocationValue,
+            "IPSET_TYPE" => ParameterExceptionField::IpsetType,
+            "NEXT_MARKER" => ParameterExceptionField::NextMarker,
+            "PREDICATE_TYPE" => ParameterExceptionField::PredicateType,
+            "RATE_KEY" => ParameterExceptionField::RateKey,
+            "RESOURCE_ARN" => ParameterExceptionField::ResourceArn,
+            "RULE_TYPE" => ParameterExceptionField::RuleType,
+            "SIZE_CONSTRAINT_COMPARISON_OPERATOR" => {
+                ParameterExceptionField::SizeConstraintComparisonOperator
+            }
+            "SQL_INJECTION_MATCH_FIELD_TYPE" => ParameterExceptionField::SqlInjectionMatchFieldType,
+            "TAGS" => ParameterExceptionField::Tags,
+            "TAG_KEYS" => ParameterExceptionField::TagKeys,
+            "WAF_ACTION" => ParameterExceptionField::WafAction,
+            "WAF_OVERRIDE_ACTION" => ParameterExceptionField::WafOverrideAction,
+            _ => ParameterExceptionField::UnknownVariant(UnknownParameterExceptionField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterExceptionField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BYTE_MATCH_FIELD_TYPE" => ParameterExceptionField::ByteMatchFieldType,
+            "BYTE_MATCH_POSITIONAL_CONSTRAINT" => {
+                ParameterExceptionField::ByteMatchPositionalConstraint
+            }
+            "BYTE_MATCH_TEXT_TRANSFORMATION" => {
+                ParameterExceptionField::ByteMatchTextTransformation
+            }
+            "CHANGE_ACTION" => ParameterExceptionField::ChangeAction,
+            "GEO_MATCH_LOCATION_TYPE" => ParameterExceptionField::GeoMatchLocationType,
+            "GEO_MATCH_LOCATION_VALUE" => ParameterExceptionField::GeoMatchLocationValue,
+            "IPSET_TYPE" => ParameterExceptionField::IpsetType,
+            "NEXT_MARKER" => ParameterExceptionField::NextMarker,
+            "PREDICATE_TYPE" => ParameterExceptionField::PredicateType,
+            "RATE_KEY" => ParameterExceptionField::RateKey,
+            "RESOURCE_ARN" => ParameterExceptionField::ResourceArn,
+            "RULE_TYPE" => ParameterExceptionField::RuleType,
+            "SIZE_CONSTRAINT_COMPARISON_OPERATOR" => {
+                ParameterExceptionField::SizeConstraintComparisonOperator
+            }
+            "SQL_INJECTION_MATCH_FIELD_TYPE" => ParameterExceptionField::SqlInjectionMatchFieldType,
+            "TAGS" => ParameterExceptionField::Tags,
+            "TAG_KEYS" => ParameterExceptionField::TagKeys,
+            "WAF_ACTION" => ParameterExceptionField::WafAction,
+            "WAF_OVERRIDE_ACTION" => ParameterExceptionField::WafOverrideAction,
+            _ => ParameterExceptionField::UnknownVariant(UnknownParameterExceptionField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterExceptionField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ParameterExceptionField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ParameterExceptionField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterExceptionReason {
+    IllegalArgument,
+    IllegalCombination,
+    InvalidOption,
+    InvalidTagKey,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterExceptionReason),
+}
+
+impl Default for ParameterExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ParameterExceptionReason::IllegalArgument => "ILLEGAL_ARGUMENT".to_string(),
+            ParameterExceptionReason::IllegalCombination => "ILLEGAL_COMBINATION".to_string(),
+            ParameterExceptionReason::InvalidOption => "INVALID_OPTION".to_string(),
+            ParameterExceptionReason::InvalidTagKey => "INVALID_TAG_KEY".to_string(),
+            ParameterExceptionReason::UnknownVariant(UnknownParameterExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterExceptionReason::IllegalArgument => &"ILLEGAL_ARGUMENT",
+            ParameterExceptionReason::IllegalCombination => &"ILLEGAL_COMBINATION",
+            ParameterExceptionReason::InvalidOption => &"INVALID_OPTION",
+            ParameterExceptionReason::InvalidTagKey => &"INVALID_TAG_KEY",
+            ParameterExceptionReason::UnknownVariant(UnknownParameterExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "ILLEGAL_ARGUMENT" => ParameterExceptionReason::IllegalArgument,
+            "ILLEGAL_COMBINATION" => ParameterExceptionReason::IllegalCombination,
+            "INVALID_OPTION" => ParameterExceptionReason::InvalidOption,
+            "INVALID_TAG_KEY" => ParameterExceptionReason::InvalidTagKey,
+            _ => ParameterExceptionReason::UnknownVariant(UnknownParameterExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ILLEGAL_ARGUMENT" => ParameterExceptionReason::IllegalArgument,
+            "ILLEGAL_COMBINATION" => ParameterExceptionReason::IllegalCombination,
+            "INVALID_OPTION" => ParameterExceptionReason::InvalidOption,
+            "INVALID_TAG_KEY" => ParameterExceptionReason::InvalidTagKey,
+            _ => ParameterExceptionReason::UnknownVariant(UnknownParameterExceptionReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ParameterExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ParameterExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPositionalConstraint {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PositionalConstraint {
+    Contains,
+    ContainsWord,
+    EndsWith,
+    Exactly,
+    StartsWith,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPositionalConstraint),
+}
+
+impl Default for PositionalConstraint {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PositionalConstraint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PositionalConstraint {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PositionalConstraint {
+    fn into(self) -> String {
+        match self {
+            PositionalConstraint::Contains => "CONTAINS".to_string(),
+            PositionalConstraint::ContainsWord => "CONTAINS_WORD".to_string(),
+            PositionalConstraint::EndsWith => "ENDS_WITH".to_string(),
+            PositionalConstraint::Exactly => "EXACTLY".to_string(),
+            PositionalConstraint::StartsWith => "STARTS_WITH".to_string(),
+            PositionalConstraint::UnknownVariant(UnknownPositionalConstraint {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PositionalConstraint {
+    fn into(self) -> &'a str {
+        match self {
+            PositionalConstraint::Contains => &"CONTAINS",
+            PositionalConstraint::ContainsWord => &"CONTAINS_WORD",
+            PositionalConstraint::EndsWith => &"ENDS_WITH",
+            PositionalConstraint::Exactly => &"EXACTLY",
+            PositionalConstraint::StartsWith => &"STARTS_WITH",
+            PositionalConstraint::UnknownVariant(UnknownPositionalConstraint {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PositionalConstraint {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTAINS" => PositionalConstraint::Contains,
+            "CONTAINS_WORD" => PositionalConstraint::ContainsWord,
+            "ENDS_WITH" => PositionalConstraint::EndsWith,
+            "EXACTLY" => PositionalConstraint::Exactly,
+            "STARTS_WITH" => PositionalConstraint::StartsWith,
+            _ => PositionalConstraint::UnknownVariant(UnknownPositionalConstraint {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PositionalConstraint {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTAINS" => PositionalConstraint::Contains,
+            "CONTAINS_WORD" => PositionalConstraint::ContainsWord,
+            "ENDS_WITH" => PositionalConstraint::EndsWith,
+            "EXACTLY" => PositionalConstraint::Exactly,
+            "STARTS_WITH" => PositionalConstraint::StartsWith,
+            _ => PositionalConstraint::UnknownVariant(UnknownPositionalConstraint { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PositionalConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PositionalConstraint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PositionalConstraint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Specifies the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, <a>RegexMatchSet</a>, <a>GeoMatchSet</a>, and <a>SizeConstraintSet</a> objects that you want to add to a <code>Rule</code> and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44. </p></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Predicate {
@@ -1708,7 +4292,132 @@ pub struct Predicate {
     pub negated: bool,
     /// <p>The type of predicate in a <code>Rule</code>, such as <code>ByteMatch</code> or <code>IPSet</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: PredicateType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPredicateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PredicateType {
+    ByteMatch,
+    GeoMatch,
+    Ipmatch,
+    RegexMatch,
+    SizeConstraint,
+    SqlInjectionMatch,
+    XssMatch,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPredicateType),
+}
+
+impl Default for PredicateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PredicateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PredicateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PredicateType {
+    fn into(self) -> String {
+        match self {
+            PredicateType::ByteMatch => "ByteMatch".to_string(),
+            PredicateType::GeoMatch => "GeoMatch".to_string(),
+            PredicateType::Ipmatch => "IPMatch".to_string(),
+            PredicateType::RegexMatch => "RegexMatch".to_string(),
+            PredicateType::SizeConstraint => "SizeConstraint".to_string(),
+            PredicateType::SqlInjectionMatch => "SqlInjectionMatch".to_string(),
+            PredicateType::XssMatch => "XssMatch".to_string(),
+            PredicateType::UnknownVariant(UnknownPredicateType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PredicateType {
+    fn into(self) -> &'a str {
+        match self {
+            PredicateType::ByteMatch => &"ByteMatch",
+            PredicateType::GeoMatch => &"GeoMatch",
+            PredicateType::Ipmatch => &"IPMatch",
+            PredicateType::RegexMatch => &"RegexMatch",
+            PredicateType::SizeConstraint => &"SizeConstraint",
+            PredicateType::SqlInjectionMatch => &"SqlInjectionMatch",
+            PredicateType::XssMatch => &"XssMatch",
+            PredicateType::UnknownVariant(UnknownPredicateType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PredicateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ByteMatch" => PredicateType::ByteMatch,
+            "GeoMatch" => PredicateType::GeoMatch,
+            "IPMatch" => PredicateType::Ipmatch,
+            "RegexMatch" => PredicateType::RegexMatch,
+            "SizeConstraint" => PredicateType::SizeConstraint,
+            "SqlInjectionMatch" => PredicateType::SqlInjectionMatch,
+            "XssMatch" => PredicateType::XssMatch,
+            _ => PredicateType::UnknownVariant(UnknownPredicateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PredicateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ByteMatch" => PredicateType::ByteMatch,
+            "GeoMatch" => PredicateType::GeoMatch,
+            "IPMatch" => PredicateType::Ipmatch,
+            "RegexMatch" => PredicateType::RegexMatch,
+            "SizeConstraint" => PredicateType::SizeConstraint,
+            "SqlInjectionMatch" => PredicateType::SqlInjectionMatch,
+            "XssMatch" => PredicateType::XssMatch,
+            _ => PredicateType::UnknownVariant(UnknownPredicateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PredicateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PredicateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PredicateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1760,13 +4469,108 @@ pub struct RateBasedRule {
     pub name: Option<String>,
     /// <p>The field that AWS WAF uses to determine if requests are likely arriving from single source and thus subject to rate monitoring. The only valid value for <code>RateKey</code> is <code>IP</code>. <code>IP</code> indicates that requests arriving from the same IP address are subject to the <code>RateLimit</code> that is specified in the <code>RateBasedRule</code>.</p>
     #[serde(rename = "RateKey")]
-    pub rate_key: String,
+    pub rate_key: RateKey,
     /// <p>The maximum number of requests, which have an identical value in the field specified by the <code>RateKey</code>, allowed in a five-minute period. If the number of requests exceeds the <code>RateLimit</code> and the other predicates specified in the rule are also met, AWS WAF triggers the action that is specified for this rule.</p>
     #[serde(rename = "RateLimit")]
     pub rate_limit: i64,
     /// <p>A unique identifier for a <code>RateBasedRule</code>. You use <code>RuleId</code> to get more information about a <code>RateBasedRule</code> (see <a>GetRateBasedRule</a>), update a <code>RateBasedRule</code> (see <a>UpdateRateBasedRule</a>), insert a <code>RateBasedRule</code> into a <code>WebACL</code> or delete one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>RateBasedRule</code> from AWS WAF (see <a>DeleteRateBasedRule</a>).</p>
     #[serde(rename = "RuleId")]
     pub rule_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRateKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RateKey {
+    Ip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRateKey),
+}
+
+impl Default for RateKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RateKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RateKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RateKey {
+    fn into(self) -> String {
+        match self {
+            RateKey::Ip => "IP".to_string(),
+            RateKey::UnknownVariant(UnknownRateKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RateKey {
+    fn into(self) -> &'a str {
+        match self {
+            RateKey::Ip => &"IP",
+            RateKey::UnknownVariant(UnknownRateKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RateKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "IP" => RateKey::Ip,
+            _ => RateKey::UnknownVariant(UnknownRateKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RateKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IP" => RateKey::Ip,
+            _ => RateKey::UnknownVariant(UnknownRateKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RateKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RateKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RateKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>In a <a>GetRegexMatchSet</a> request, <code>RegexMatchSet</code> is a complex type that contains the <code>RegexMatchSetId</code> and <code>Name</code> of a <code>RegexMatchSet</code>, and the values that you specified when you updated the <code>RegexMatchSet</code>.</p> <p> The values are contained in a <code>RegexMatchTuple</code> object, which specify the parts of web requests that you want AWS WAF to inspect and the values that you want AWS WAF to search for. If a <code>RegexMatchSet</code> contains more than one <code>RegexMatchTuple</code> object, a request needs to match the settings in only one <code>ByteMatchTuple</code> to be considered a match.</p></p>
@@ -1805,7 +4609,7 @@ pub struct RegexMatchSetSummary {
 pub struct RegexMatchSetUpdate {
     /// <p>Specifies whether to insert or delete a <a>RegexMatchTuple</a>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Information about the part of a web request that you want AWS WAF to inspect and the identifier of the regular expression (regex) pattern that you want AWS WAF to search for. If you specify <code>DELETE</code> for the value of <code>Action</code>, the <code>RegexMatchTuple</code> values must exactly match the values in the <code>RegexMatchTuple</code> that you want to delete from the <code>RegexMatchSet</code>.</p>
     #[serde(rename = "RegexMatchTuple")]
     pub regex_match_tuple: RegexMatchTuple,
@@ -1822,7 +4626,7 @@ pub struct RegexMatchTuple {
     pub regex_pattern_set_id: String,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>RegexPatternSet</code> before inspecting a request for a match.</p> <p>You can only specify a single type of TextTransformation.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
     #[serde(rename = "TextTransformation")]
-    pub text_transformation: String,
+    pub text_transformation: TextTransformation,
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>The <code>RegexPatternSet</code> specifies the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p></p>
@@ -1859,7 +4663,7 @@ pub struct RegexPatternSetSummary {
 pub struct RegexPatternSetUpdate {
     /// <p>Specifies whether to insert or delete a <code>RegexPatternString</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Specifies the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>.</p>
     #[serde(rename = "RegexPatternString")]
     pub regex_pattern_string: String,
@@ -1920,7 +4724,7 @@ pub struct RuleGroupSummary {
 pub struct RuleGroupUpdate {
     /// <p>Specify <code>INSERT</code> to add an <code>ActivatedRule</code> to a <code>RuleGroup</code>. Use <code>DELETE</code> to remove an <code>ActivatedRule</code> from a <code>RuleGroup</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>The <code>ActivatedRule</code> object specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p>
     #[serde(rename = "ActivatedRule")]
     pub activated_rule: ActivatedRule,
@@ -1944,7 +4748,7 @@ pub struct RuleSummary {
 pub struct RuleUpdate {
     /// <p>Specify <code>INSERT</code> to add a <code>Predicate</code> to a <code>Rule</code>. Use <code>DELETE</code> to remove a <code>Predicate</code> from a <code>Rule</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>The ID of the <code>Predicate</code> (such as an <code>IPSet</code>) that you want to add to a <code>Rule</code>.</p>
     #[serde(rename = "Predicate")]
     pub predicate: Predicate,
@@ -1979,7 +4783,7 @@ pub struct SampledHTTPRequest {
 pub struct SizeConstraint {
     /// <p>The type of comparison you want AWS WAF to perform. AWS WAF uses this in combination with the provided <code>Size</code> and <code>FieldToMatch</code> to build an expression in the form of "<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p> <p> <b>EQ</b>: Used to test if the <code>Size</code> is equal to the size of the <code>FieldToMatch</code> </p> <p> <b>NE</b>: Used to test if the <code>Size</code> is not equal to the size of the <code>FieldToMatch</code> </p> <p> <b>LE</b>: Used to test if the <code>Size</code> is less than or equal to the size of the <code>FieldToMatch</code> </p> <p> <b>LT</b>: Used to test if the <code>Size</code> is strictly less than the size of the <code>FieldToMatch</code> </p> <p> <b>GE</b>: Used to test if the <code>Size</code> is greater than or equal to the size of the <code>FieldToMatch</code> </p> <p> <b>GT</b>: Used to test if the <code>Size</code> is strictly greater than the size of the <code>FieldToMatch</code> </p>
     #[serde(rename = "ComparisonOperator")]
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
     /// <p>Specifies where in a web request to look for the size constraint.</p>
     #[serde(rename = "FieldToMatch")]
     pub field_to_match: FieldToMatch,
@@ -1988,7 +4792,7 @@ pub struct SizeConstraint {
     pub size: i64,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting it for a match.</p> <p>You can only specify a single type of TextTransformation.</p> <p>Note that if you choose <code>BODY</code> for the value of <code>Type</code>, you must choose <code>NONE</code> for <code>TextTransformation</code> because CloudFront forwards only the first 8192 bytes for inspection. </p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system command line command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p>
     #[serde(rename = "TextTransformation")]
-    pub text_transformation: String,
+    pub text_transformation: TextTransformation,
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>A complex type that contains <code>SizeConstraint</code> objects, which specify the parts of web requests that you want AWS WAF to inspect the size of. If a <code>SizeConstraintSet</code> contains more than one <code>SizeConstraint</code> object, a request only needs to match one constraint to be considered a match.</p></p>
@@ -2025,7 +4829,7 @@ pub struct SizeConstraintSetSummary {
 pub struct SizeConstraintSetUpdate {
     /// <p>Specify <code>INSERT</code> to add a <a>SizeConstraintSetUpdate</a> to a <a>SizeConstraintSet</a>. Use <code>DELETE</code> to remove a <code>SizeConstraintSetUpdate</code> from a <code>SizeConstraintSet</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Specifies a constraint on the size of a part of the web request. AWS WAF uses the <code>Size</code>, <code>ComparisonOperator</code>, and <code>FieldToMatch</code> to build an expression in the form of "<code>Size</code> <code>ComparisonOperator</code> size in bytes of <code>FieldToMatch</code>". If that expression is true, the <code>SizeConstraint</code> is considered to match.</p>
     #[serde(rename = "SizeConstraint")]
     pub size_constraint: SizeConstraint,
@@ -2065,7 +4869,7 @@ pub struct SqlInjectionMatchSetSummary {
 pub struct SqlInjectionMatchSetUpdate {
     /// <p>Specify <code>INSERT</code> to add a <a>SqlInjectionMatchSetUpdate</a> to a <a>SqlInjectionMatchSet</a>. Use <code>DELETE</code> to remove a <code>SqlInjectionMatchSetUpdate</code> from a <code>SqlInjectionMatchSet</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Specifies the part of a web request that you want AWS WAF to inspect for snippets of malicious SQL code and, if you want AWS WAF to inspect a header, the name of the header.</p>
     #[serde(rename = "SqlInjectionMatchTuple")]
     pub sql_injection_match_tuple: SqlInjectionMatchTuple,
@@ -2079,7 +4883,7 @@ pub struct SqlInjectionMatchTuple {
     pub field_to_match: FieldToMatch,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting it for a match.</p> <p>You can only specify a single type of TextTransformation.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system command line command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
     #[serde(rename = "TextTransformation")]
-    pub text_transformation: String,
+    pub text_transformation: TextTransformation,
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>A summary of the rule groups you are subscribed to.</p></p>
@@ -2136,6 +4940,130 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTextTransformation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TextTransformation {
+    CmdLine,
+    CompressWhiteSpace,
+    HtmlEntityDecode,
+    Lowercase,
+    None,
+    UrlDecode,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTextTransformation),
+}
+
+impl Default for TextTransformation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TextTransformation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TextTransformation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TextTransformation {
+    fn into(self) -> String {
+        match self {
+            TextTransformation::CmdLine => "CMD_LINE".to_string(),
+            TextTransformation::CompressWhiteSpace => "COMPRESS_WHITE_SPACE".to_string(),
+            TextTransformation::HtmlEntityDecode => "HTML_ENTITY_DECODE".to_string(),
+            TextTransformation::Lowercase => "LOWERCASE".to_string(),
+            TextTransformation::None => "NONE".to_string(),
+            TextTransformation::UrlDecode => "URL_DECODE".to_string(),
+            TextTransformation::UnknownVariant(UnknownTextTransformation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TextTransformation {
+    fn into(self) -> &'a str {
+        match self {
+            TextTransformation::CmdLine => &"CMD_LINE",
+            TextTransformation::CompressWhiteSpace => &"COMPRESS_WHITE_SPACE",
+            TextTransformation::HtmlEntityDecode => &"HTML_ENTITY_DECODE",
+            TextTransformation::Lowercase => &"LOWERCASE",
+            TextTransformation::None => &"NONE",
+            TextTransformation::UrlDecode => &"URL_DECODE",
+            TextTransformation::UnknownVariant(UnknownTextTransformation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TextTransformation {
+    fn from(name: &str) -> Self {
+        match name {
+            "CMD_LINE" => TextTransformation::CmdLine,
+            "COMPRESS_WHITE_SPACE" => TextTransformation::CompressWhiteSpace,
+            "HTML_ENTITY_DECODE" => TextTransformation::HtmlEntityDecode,
+            "LOWERCASE" => TextTransformation::Lowercase,
+            "NONE" => TextTransformation::None,
+            "URL_DECODE" => TextTransformation::UrlDecode,
+            _ => TextTransformation::UnknownVariant(UnknownTextTransformation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TextTransformation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CMD_LINE" => TextTransformation::CmdLine,
+            "COMPRESS_WHITE_SPACE" => TextTransformation::CompressWhiteSpace,
+            "HTML_ENTITY_DECODE" => TextTransformation::HtmlEntityDecode,
+            "LOWERCASE" => TextTransformation::Lowercase,
+            "NONE" => TextTransformation::None,
+            "URL_DECODE" => TextTransformation::UrlDecode,
+            _ => TextTransformation::UnknownVariant(UnknownTextTransformation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TextTransformation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TextTransformation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TextTransformation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>In a <a>GetSampledRequests</a> request, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which you want AWS WAF to return a sample of web requests.</p> <p>You must specify the times in Coordinated Universal Time (UTC) format. UTC format includes the special designator, <code>Z</code>. For example, <code>&quot;2016-09-27T14:50Z&quot;</code>. </p> <p>In a <a>GetSampledRequests</a> response, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which AWS WAF actually returned a sample of web requests. AWS WAF gets the specified number of requests from among the first 5,000 requests that your AWS resource receives during the specified time period. If your resource receives more than 5,000 requests during that period, AWS WAF stops sampling after the 5,000th request. In that case, <code>EndTime</code> is the time that AWS WAF received the 5,000th request. </p></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -2456,7 +5384,112 @@ pub struct UpdateXssMatchSetResponse {
 pub struct WafAction {
     /// <p><p>Specifies how you want AWS WAF to respond to requests that match the settings in a <code>Rule</code>. Valid settings include the following:</p> <ul> <li> <p> <code>ALLOW</code>: AWS WAF allows requests</p> </li> <li> <p> <code>BLOCK</code>: AWS WAF blocks requests</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of the requests that match all of the conditions in the rule. AWS WAF then continues to inspect the web request based on the remaining rules in the web ACL. You can&#39;t specify <code>COUNT</code> for the default action for a <code>WebACL</code>.</p> </li> </ul></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: WafActionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWafActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WafActionType {
+    Allow,
+    Block,
+    Count,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWafActionType),
+}
+
+impl Default for WafActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WafActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WafActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WafActionType {
+    fn into(self) -> String {
+        match self {
+            WafActionType::Allow => "ALLOW".to_string(),
+            WafActionType::Block => "BLOCK".to_string(),
+            WafActionType::Count => "COUNT".to_string(),
+            WafActionType::UnknownVariant(UnknownWafActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WafActionType {
+    fn into(self) -> &'a str {
+        match self {
+            WafActionType::Allow => &"ALLOW",
+            WafActionType::Block => &"BLOCK",
+            WafActionType::Count => &"COUNT",
+            WafActionType::UnknownVariant(UnknownWafActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WafActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => WafActionType::Allow,
+            "BLOCK" => WafActionType::Block,
+            "COUNT" => WafActionType::Count,
+            _ => WafActionType::UnknownVariant(UnknownWafActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WafActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => WafActionType::Allow,
+            "BLOCK" => WafActionType::Block,
+            "COUNT" => WafActionType::Count,
+            _ => WafActionType::UnknownVariant(UnknownWafActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WafActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WafActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WafActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>The action to take if any rule within the <code>RuleGroup</code> matches a request. </p></p>
@@ -2464,7 +5497,216 @@ pub struct WafAction {
 pub struct WafOverrideAction {
     /// <p> <code>COUNT</code> overrides the action specified by the individual rule within a <code>RuleGroup</code> . If set to <code>NONE</code>, the rule's action will take place.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: WafOverrideActionType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWafOverrideActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WafOverrideActionType {
+    Count,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWafOverrideActionType),
+}
+
+impl Default for WafOverrideActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WafOverrideActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WafOverrideActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WafOverrideActionType {
+    fn into(self) -> String {
+        match self {
+            WafOverrideActionType::Count => "COUNT".to_string(),
+            WafOverrideActionType::None => "NONE".to_string(),
+            WafOverrideActionType::UnknownVariant(UnknownWafOverrideActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WafOverrideActionType {
+    fn into(self) -> &'a str {
+        match self {
+            WafOverrideActionType::Count => &"COUNT",
+            WafOverrideActionType::None => &"NONE",
+            WafOverrideActionType::UnknownVariant(UnknownWafOverrideActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WafOverrideActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COUNT" => WafOverrideActionType::Count,
+            "NONE" => WafOverrideActionType::None,
+            _ => WafOverrideActionType::UnknownVariant(UnknownWafOverrideActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WafOverrideActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COUNT" => WafOverrideActionType::Count,
+            "NONE" => WafOverrideActionType::None,
+            _ => WafOverrideActionType::UnknownVariant(UnknownWafOverrideActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WafOverrideActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WafOverrideActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WafOverrideActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWafRuleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WafRuleType {
+    Group,
+    RateBased,
+    Regular,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWafRuleType),
+}
+
+impl Default for WafRuleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WafRuleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WafRuleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WafRuleType {
+    fn into(self) -> String {
+        match self {
+            WafRuleType::Group => "GROUP".to_string(),
+            WafRuleType::RateBased => "RATE_BASED".to_string(),
+            WafRuleType::Regular => "REGULAR".to_string(),
+            WafRuleType::UnknownVariant(UnknownWafRuleType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WafRuleType {
+    fn into(self) -> &'a str {
+        match self {
+            WafRuleType::Group => &"GROUP",
+            WafRuleType::RateBased => &"RATE_BASED",
+            WafRuleType::Regular => &"REGULAR",
+            WafRuleType::UnknownVariant(UnknownWafRuleType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WafRuleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GROUP" => WafRuleType::Group,
+            "RATE_BASED" => WafRuleType::RateBased,
+            "REGULAR" => WafRuleType::Regular,
+            _ => WafRuleType::UnknownVariant(UnknownWafRuleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WafRuleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GROUP" => WafRuleType::Group,
+            "RATE_BASED" => WafRuleType::RateBased,
+            "REGULAR" => WafRuleType::Regular,
+            _ => WafRuleType::UnknownVariant(UnknownWafRuleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WafRuleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WafRuleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WafRuleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>This is <b>AWS WAF Classic</b> documentation. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html">AWS WAF Classic</a> in the developer guide.</p> <p> <b>For the latest version of AWS WAF</b>, use the AWS WAFV2 API and see the <a href="https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html">AWS WAF Developer Guide</a>. With the latest version, AWS WAF has a single set of endpoints for regional and global use. </p> </note> <p>Contains the <code>Rules</code> that identify the requests that you want to allow, block, or count. In a <code>WebACL</code>, you also specify a default action (<code>ALLOW</code> or <code>BLOCK</code>), and the action for each <code>Rule</code> that you add to a <code>WebACL</code>, for example, block requests from specified IP addresses or block requests from specified referrers. You also associate the <code>WebACL</code> with a CloudFront distribution to identify the requests that you want AWS WAF to filter. If you add more than one <code>Rule</code> to a <code>WebACL</code>, a request needs to match only one of the specifications to be allowed, blocked, or counted. For more information, see <a>UpdateWebACL</a>.</p></p>
@@ -2512,7 +5754,7 @@ pub struct WebACLSummary {
 pub struct WebACLUpdate {
     /// <p>Specifies whether to insert a <code>Rule</code> into or delete a <code>Rule</code> from a <code>WebACL</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p>
     #[serde(rename = "ActivatedRule")]
     pub activated_rule: ActivatedRule,
@@ -2552,7 +5794,7 @@ pub struct XssMatchSetSummary {
 pub struct XssMatchSetUpdate {
     /// <p>Specify <code>INSERT</code> to add an <a>XssMatchSetUpdate</a> to an <a>XssMatchSet</a>. Use <code>DELETE</code> to remove an <code>XssMatchSetUpdate</code> from an <code>XssMatchSet</code>.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: ChangeAction,
     /// <p>Specifies the part of a web request that you want AWS WAF to inspect for cross-site scripting attacks and, if you want AWS WAF to inspect a header, the name of the header.</p>
     #[serde(rename = "XssMatchTuple")]
     pub xss_match_tuple: XssMatchTuple,
@@ -2566,7 +5808,7 @@ pub struct XssMatchTuple {
     pub field_to_match: FieldToMatch,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>FieldToMatch</code> before inspecting it for a match.</p> <p>You can only specify a single type of TextTransformation.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system command line command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
     #[serde(rename = "TextTransformation")]
-    pub text_transformation: String,
+    pub text_transformation: TextTransformation,
 }
 
 /// Errors returned by CreateByteMatchSet

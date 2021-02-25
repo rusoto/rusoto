@@ -48,6 +48,107 @@ pub struct BucketInfo {
     pub buckets: Option<Vec<Bucket>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentType {
+    ApplicationJson,
+    ApplicationXml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentType),
+}
+
+impl Default for ContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        match self {
+            ContentType::ApplicationJson => "application/json".to_string(),
+            ContentType::ApplicationXml => "application/xml".to_string(),
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentType {
+    fn into(self) -> &'a str {
+        match self {
+            ContentType::ApplicationJson => &"application/json",
+            ContentType::ApplicationXml => &"application/xml",
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "application/json" => ContentType::ApplicationJson,
+            "application/xml" => ContentType::ApplicationXml,
+            _ => ContentType::UnknownVariant(UnknownContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "application/json" => ContentType::ApplicationJson,
+            "application/xml" => ContentType::ApplicationXml,
+            _ => ContentType::UnknownVariant(UnknownContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -140,6 +241,117 @@ pub struct Hits {
     pub start: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryParser {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryParser {
+    Dismax,
+    Lucene,
+    Simple,
+    Structured,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryParser),
+}
+
+impl Default for QueryParser {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryParser {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryParser {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryParser {
+    fn into(self) -> String {
+        match self {
+            QueryParser::Dismax => "dismax".to_string(),
+            QueryParser::Lucene => "lucene".to_string(),
+            QueryParser::Simple => "simple".to_string(),
+            QueryParser::Structured => "structured".to_string(),
+            QueryParser::UnknownVariant(UnknownQueryParser { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryParser {
+    fn into(self) -> &'a str {
+        match self {
+            QueryParser::Dismax => &"dismax",
+            QueryParser::Lucene => &"lucene",
+            QueryParser::Simple => &"simple",
+            QueryParser::Structured => &"structured",
+            QueryParser::UnknownVariant(UnknownQueryParser { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryParser {
+    fn from(name: &str) -> Self {
+        match name {
+            "dismax" => QueryParser::Dismax,
+            "lucene" => QueryParser::Lucene,
+            "simple" => QueryParser::Simple,
+            "structured" => QueryParser::Structured,
+            _ => QueryParser::UnknownVariant(UnknownQueryParser {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryParser {
+    fn from(name: String) -> Self {
+        match &*name {
+            "dismax" => QueryParser::Dismax,
+            "lucene" => QueryParser::Lucene,
+            "simple" => QueryParser::Simple,
+            "structured" => QueryParser::Structured,
+            _ => QueryParser::UnknownVariant(UnknownQueryParser { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryParser {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueryParser {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for QueryParser {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Container for the parameters to the <code>Search</code> request.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -178,7 +390,7 @@ pub struct SearchRequest {
     /// <p><p>Specifies which query parser to use to process the request. If <code>queryParser</code> is not specified, Amazon CloudSearch uses the <code>simple</code> query parser. </p> <p>Amazon CloudSearch supports four query parsers:</p> <ul> <li> <code>simple</code>: perform simple searches of <code>text</code> and <code>text-array</code> fields. By default, the <code>simple</code> query parser searches all <code>text</code> and <code>text-array</code> fields. You can specify which fields to search by with the <code>queryOptions</code> parameter. If you prefix a search term with a plus sign (+) documents must contain the term to be considered a match. (This is the default, unless you configure the default operator with the <code>queryOptions</code> parameter.) You can use the <code>-</code> (NOT), <code>|</code> (OR), and <code>*</code> (wildcard) operators to exclude particular terms, find results that match any of the specified terms, or search for a prefix. To search for a phrase rather than individual terms, enclose the phrase in double quotes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching-text.html">Searching for Text</a> in the <i>Amazon CloudSearch Developer Guide</i>. </li> <li> <code>structured</code>: perform advanced searches by combining multiple expressions to define the search criteria. You can also search within particular fields, search for values and ranges of values, and use advanced options such as term boosting, <code>matchall</code>, and <code>near</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching-compound-queries.html">Constructing Compound Queries</a> in the <i>Amazon CloudSearch Developer Guide</i>. </li> <li> <code>lucene</code>: search using the Apache Lucene query parser syntax. For more information, see <a href="http://lucene.apache.org/core/4_6_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description">Apache Lucene Query Parser Syntax</a>. </li> <li> <code>dismax</code>: search using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser. For more information, see <a href="http://wiki.apache.org/solr/DisMaxQParserPlugin#Query_Syntax">DisMax Query Parser Syntax</a>. </li> </ul></p>
     #[serde(rename = "queryParser")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_parser: Option<String>,
+    pub query_parser: Option<QueryParser>,
     /// <p>Specifies the field and expression values to include in the response. Multiple fields or expressions are specified as a comma-separated list. By default, a search response includes all return enabled fields (<code>_all_fields</code>). To return only the document IDs for the matching documents, specify <code>_no_fields</code>. To retrieve the relevance score calculated for each document, specify <code>_score</code>. </p>
     #[serde(rename = "return")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,7 +535,7 @@ pub struct SuggestionMatch {
 pub struct UploadDocumentsRequest {
     /// <p><p>The format of the batch you are uploading. Amazon CloudSearch supports two document batch formats:</p> <ul> <li>application/json</li> <li>application/xml</li> </ul></p>
     #[serde(rename = "contentType")]
-    pub content_type: String,
+    pub content_type: ContentType,
     /// <p>A batch of documents formatted in JSON or HTML.</p>
     #[serde(rename = "documents")]
     #[serde(

@@ -61,7 +61,7 @@ pub struct Backup {
     /// <p>The state of the backup.</p>
     #[serde(rename = "BackupState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_state: Option<String>,
+    pub backup_state: Option<BackupState>,
     /// <p>The identifier (ID) of the cluster that was backed up.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -100,17 +100,323 @@ pub struct Backup {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupPolicy {
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupPolicy),
+}
+
+impl Default for BackupPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupPolicy {
+    fn into(self) -> String {
+        match self {
+            BackupPolicy::Default => "DEFAULT".to_string(),
+            BackupPolicy::UnknownVariant(UnknownBackupPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            BackupPolicy::Default => &"DEFAULT",
+            BackupPolicy::UnknownVariant(UnknownBackupPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => BackupPolicy::Default,
+            _ => BackupPolicy::UnknownVariant(UnknownBackupPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => BackupPolicy::Default,
+            _ => BackupPolicy::UnknownVariant(UnknownBackupPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A policy that defines the number of days to retain backups.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupRetentionPolicy {
     /// <p>The type of backup retention policy. For the <code>DAYS</code> type, the value is the number of days to retain backups.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<BackupRetentionType>,
     /// <p>Use a value between 7 - 379.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupRetentionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupRetentionType {
+    Days,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupRetentionType),
+}
+
+impl Default for BackupRetentionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupRetentionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupRetentionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupRetentionType {
+    fn into(self) -> String {
+        match self {
+            BackupRetentionType::Days => "DAYS".to_string(),
+            BackupRetentionType::UnknownVariant(UnknownBackupRetentionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupRetentionType {
+    fn into(self) -> &'a str {
+        match self {
+            BackupRetentionType::Days => &"DAYS",
+            BackupRetentionType::UnknownVariant(UnknownBackupRetentionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BackupRetentionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAYS" => BackupRetentionType::Days,
+            _ => BackupRetentionType::UnknownVariant(UnknownBackupRetentionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupRetentionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAYS" => BackupRetentionType::Days,
+            _ => BackupRetentionType::UnknownVariant(UnknownBackupRetentionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupRetentionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BackupRetentionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupRetentionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupState {
+    CreateInProgress,
+    Deleted,
+    PendingDeletion,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupState),
+}
+
+impl Default for BackupState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupState {
+    fn into(self) -> String {
+        match self {
+            BackupState::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            BackupState::Deleted => "DELETED".to_string(),
+            BackupState::PendingDeletion => "PENDING_DELETION".to_string(),
+            BackupState::Ready => "READY".to_string(),
+            BackupState::UnknownVariant(UnknownBackupState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupState {
+    fn into(self) -> &'a str {
+        match self {
+            BackupState::CreateInProgress => &"CREATE_IN_PROGRESS",
+            BackupState::Deleted => &"DELETED",
+            BackupState::PendingDeletion => &"PENDING_DELETION",
+            BackupState::Ready => &"READY",
+            BackupState::UnknownVariant(UnknownBackupState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_IN_PROGRESS" => BackupState::CreateInProgress,
+            "DELETED" => BackupState::Deleted,
+            "PENDING_DELETION" => BackupState::PendingDeletion,
+            "READY" => BackupState::Ready,
+            _ => BackupState::UnknownVariant(UnknownBackupState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_IN_PROGRESS" => BackupState::CreateInProgress,
+            "DELETED" => BackupState::Deleted,
+            "PENDING_DELETION" => BackupState::PendingDeletion,
+            "READY" => BackupState::Ready,
+            _ => BackupState::UnknownVariant(UnknownBackupState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
@@ -146,7 +452,7 @@ pub struct Cluster {
     /// <p>The cluster's backup policy.</p>
     #[serde(rename = "BackupPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_policy: Option<String>,
+    pub backup_policy: Option<BackupPolicy>,
     /// <p>A policy that defines how the service retains backups.</p>
     #[serde(rename = "BackupRetentionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -186,7 +492,7 @@ pub struct Cluster {
     /// <p>The cluster's state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
     /// <p>A description of the cluster's state.</p>
     #[serde(rename = "StateMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,6 +509,142 @@ pub struct Cluster {
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterState {
+    Active,
+    CreateInProgress,
+    Degraded,
+    Deleted,
+    DeleteInProgress,
+    Initialized,
+    InitializeInProgress,
+    Uninitialized,
+    UpdateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterState),
+}
+
+impl Default for ClusterState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        match self {
+            ClusterState::Active => "ACTIVE".to_string(),
+            ClusterState::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            ClusterState::Degraded => "DEGRADED".to_string(),
+            ClusterState::Deleted => "DELETED".to_string(),
+            ClusterState::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            ClusterState::Initialized => "INITIALIZED".to_string(),
+            ClusterState::InitializeInProgress => "INITIALIZE_IN_PROGRESS".to_string(),
+            ClusterState::Uninitialized => "UNINITIALIZED".to_string(),
+            ClusterState::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterState {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterState::Active => &"ACTIVE",
+            ClusterState::CreateInProgress => &"CREATE_IN_PROGRESS",
+            ClusterState::Degraded => &"DEGRADED",
+            ClusterState::Deleted => &"DELETED",
+            ClusterState::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            ClusterState::Initialized => &"INITIALIZED",
+            ClusterState::InitializeInProgress => &"INITIALIZE_IN_PROGRESS",
+            ClusterState::Uninitialized => &"UNINITIALIZED",
+            ClusterState::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ClusterState::Active,
+            "CREATE_IN_PROGRESS" => ClusterState::CreateInProgress,
+            "DEGRADED" => ClusterState::Degraded,
+            "DELETED" => ClusterState::Deleted,
+            "DELETE_IN_PROGRESS" => ClusterState::DeleteInProgress,
+            "INITIALIZED" => ClusterState::Initialized,
+            "INITIALIZE_IN_PROGRESS" => ClusterState::InitializeInProgress,
+            "UNINITIALIZED" => ClusterState::Uninitialized,
+            "UPDATE_IN_PROGRESS" => ClusterState::UpdateInProgress,
+            _ => ClusterState::UnknownVariant(UnknownClusterState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ClusterState::Active,
+            "CREATE_IN_PROGRESS" => ClusterState::CreateInProgress,
+            "DEGRADED" => ClusterState::Degraded,
+            "DELETED" => ClusterState::Deleted,
+            "DELETE_IN_PROGRESS" => ClusterState::DeleteInProgress,
+            "INITIALIZED" => ClusterState::Initialized,
+            "INITIALIZE_IN_PROGRESS" => ClusterState::InitializeInProgress,
+            "UNINITIALIZED" => ClusterState::Uninitialized,
+            "UPDATE_IN_PROGRESS" => ClusterState::UpdateInProgress,
+            _ => ClusterState::UnknownVariant(UnknownClusterState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ClusterState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -460,7 +902,7 @@ pub struct Hsm {
     /// <p>The HSM's state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<HsmState>,
     /// <p>A description of the HSM's state.</p>
     #[serde(rename = "StateMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -469,6 +911,122 @@ pub struct Hsm {
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHsmState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HsmState {
+    Active,
+    CreateInProgress,
+    Degraded,
+    Deleted,
+    DeleteInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHsmState),
+}
+
+impl Default for HsmState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HsmState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HsmState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HsmState {
+    fn into(self) -> String {
+        match self {
+            HsmState::Active => "ACTIVE".to_string(),
+            HsmState::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            HsmState::Degraded => "DEGRADED".to_string(),
+            HsmState::Deleted => "DELETED".to_string(),
+            HsmState::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            HsmState::UnknownVariant(UnknownHsmState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HsmState {
+    fn into(self) -> &'a str {
+        match self {
+            HsmState::Active => &"ACTIVE",
+            HsmState::CreateInProgress => &"CREATE_IN_PROGRESS",
+            HsmState::Degraded => &"DEGRADED",
+            HsmState::Deleted => &"DELETED",
+            HsmState::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            HsmState::UnknownVariant(UnknownHsmState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HsmState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => HsmState::Active,
+            "CREATE_IN_PROGRESS" => HsmState::CreateInProgress,
+            "DEGRADED" => HsmState::Degraded,
+            "DELETED" => HsmState::Deleted,
+            "DELETE_IN_PROGRESS" => HsmState::DeleteInProgress,
+            _ => HsmState::UnknownVariant(UnknownHsmState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HsmState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => HsmState::Active,
+            "CREATE_IN_PROGRESS" => HsmState::CreateInProgress,
+            "DEGRADED" => HsmState::Degraded,
+            "DELETED" => HsmState::Deleted,
+            "DELETE_IN_PROGRESS" => HsmState::DeleteInProgress,
+            _ => HsmState::UnknownVariant(UnknownHsmState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HsmState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HsmState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HsmState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -491,7 +1049,7 @@ pub struct InitializeClusterResponse {
     /// <p>The cluster's state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
     /// <p>A description of the cluster's state.</p>
     #[serde(rename = "StateMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]

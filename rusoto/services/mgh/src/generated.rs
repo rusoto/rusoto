@@ -61,11 +61,120 @@ pub struct ApplicationState {
     /// <p>The current status of an application.</p>
     #[serde(rename = "ApplicationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_status: Option<String>,
+    pub application_status: Option<ApplicationStatus>,
     /// <p>The timestamp when the application status was last updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApplicationStatus {
+    Completed,
+    InProgress,
+    NotStarted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApplicationStatus),
+}
+
+impl Default for ApplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApplicationStatus {
+    fn into(self) -> String {
+        match self {
+            ApplicationStatus::Completed => "COMPLETED".to_string(),
+            ApplicationStatus::InProgress => "IN_PROGRESS".to_string(),
+            ApplicationStatus::NotStarted => "NOT_STARTED".to_string(),
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApplicationStatus::Completed => &"COMPLETED",
+            ApplicationStatus::InProgress => &"IN_PROGRESS",
+            ApplicationStatus::NotStarted => &"NOT_STARTED",
+            ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ApplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => ApplicationStatus::Completed,
+            "IN_PROGRESS" => ApplicationStatus::InProgress,
+            "NOT_STARTED" => ApplicationStatus::NotStarted,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => ApplicationStatus::Completed,
+            "IN_PROGRESS" => ApplicationStatus::InProgress,
+            "NOT_STARTED" => ApplicationStatus::NotStarted,
+            _ => ApplicationStatus::UnknownVariant(UnknownApplicationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -170,7 +279,7 @@ pub struct DescribeApplicationStateResult {
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "ApplicationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_status: Option<String>,
+    pub application_status: Option<ApplicationStatus>,
     /// <p>The timestamp when the application status was last updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -467,7 +576,7 @@ pub struct MigrationTaskSummary {
     /// <p>Status of the task.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>Detail information of what is being done within the overall status state.</p>
     #[serde(rename = "StatusDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -490,7 +599,7 @@ pub struct NotifyApplicationStateRequest {
     pub dry_run: Option<bool>,
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: ApplicationStatus,
     /// <p>The timestamp when the application state changed.</p>
     #[serde(rename = "UpdateDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,10 +675,268 @@ pub struct PutResourceAttributesResult {}
 pub struct ResourceAttribute {
     /// <p>Type of resource.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ResourceAttributeType,
     /// <p>Value of the resource type.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceAttributeType {
+    BiosId,
+    Fqdn,
+    Ipv4Address,
+    Ipv6Address,
+    MacAddress,
+    MotherboardSerialNumber,
+    VmManagedObjectReference,
+    VmManagerId,
+    VmName,
+    VmPath,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceAttributeType),
+}
+
+impl Default for ResourceAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceAttributeType {
+    fn into(self) -> String {
+        match self {
+            ResourceAttributeType::BiosId => "BIOS_ID".to_string(),
+            ResourceAttributeType::Fqdn => "FQDN".to_string(),
+            ResourceAttributeType::Ipv4Address => "IPV4_ADDRESS".to_string(),
+            ResourceAttributeType::Ipv6Address => "IPV6_ADDRESS".to_string(),
+            ResourceAttributeType::MacAddress => "MAC_ADDRESS".to_string(),
+            ResourceAttributeType::MotherboardSerialNumber => {
+                "MOTHERBOARD_SERIAL_NUMBER".to_string()
+            }
+            ResourceAttributeType::VmManagedObjectReference => {
+                "VM_MANAGED_OBJECT_REFERENCE".to_string()
+            }
+            ResourceAttributeType::VmManagerId => "VM_MANAGER_ID".to_string(),
+            ResourceAttributeType::VmName => "VM_NAME".to_string(),
+            ResourceAttributeType::VmPath => "VM_PATH".to_string(),
+            ResourceAttributeType::UnknownVariant(UnknownResourceAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceAttributeType::BiosId => &"BIOS_ID",
+            ResourceAttributeType::Fqdn => &"FQDN",
+            ResourceAttributeType::Ipv4Address => &"IPV4_ADDRESS",
+            ResourceAttributeType::Ipv6Address => &"IPV6_ADDRESS",
+            ResourceAttributeType::MacAddress => &"MAC_ADDRESS",
+            ResourceAttributeType::MotherboardSerialNumber => &"MOTHERBOARD_SERIAL_NUMBER",
+            ResourceAttributeType::VmManagedObjectReference => &"VM_MANAGED_OBJECT_REFERENCE",
+            ResourceAttributeType::VmManagerId => &"VM_MANAGER_ID",
+            ResourceAttributeType::VmName => &"VM_NAME",
+            ResourceAttributeType::VmPath => &"VM_PATH",
+            ResourceAttributeType::UnknownVariant(UnknownResourceAttributeType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BIOS_ID" => ResourceAttributeType::BiosId,
+            "FQDN" => ResourceAttributeType::Fqdn,
+            "IPV4_ADDRESS" => ResourceAttributeType::Ipv4Address,
+            "IPV6_ADDRESS" => ResourceAttributeType::Ipv6Address,
+            "MAC_ADDRESS" => ResourceAttributeType::MacAddress,
+            "MOTHERBOARD_SERIAL_NUMBER" => ResourceAttributeType::MotherboardSerialNumber,
+            "VM_MANAGED_OBJECT_REFERENCE" => ResourceAttributeType::VmManagedObjectReference,
+            "VM_MANAGER_ID" => ResourceAttributeType::VmManagerId,
+            "VM_NAME" => ResourceAttributeType::VmName,
+            "VM_PATH" => ResourceAttributeType::VmPath,
+            _ => ResourceAttributeType::UnknownVariant(UnknownResourceAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BIOS_ID" => ResourceAttributeType::BiosId,
+            "FQDN" => ResourceAttributeType::Fqdn,
+            "IPV4_ADDRESS" => ResourceAttributeType::Ipv4Address,
+            "IPV6_ADDRESS" => ResourceAttributeType::Ipv6Address,
+            "MAC_ADDRESS" => ResourceAttributeType::MacAddress,
+            "MOTHERBOARD_SERIAL_NUMBER" => ResourceAttributeType::MotherboardSerialNumber,
+            "VM_MANAGED_OBJECT_REFERENCE" => ResourceAttributeType::VmManagedObjectReference,
+            "VM_MANAGER_ID" => ResourceAttributeType::VmManagerId,
+            "VM_NAME" => ResourceAttributeType::VmName,
+            "VM_PATH" => ResourceAttributeType::VmPath,
+            _ => ResourceAttributeType::UnknownVariant(UnknownResourceAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Completed,
+    Failed,
+    InProgress,
+    NotStarted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Completed => "COMPLETED".to_string(),
+            Status::Failed => "FAILED".to_string(),
+            Status::InProgress => "IN_PROGRESS".to_string(),
+            Status::NotStarted => "NOT_STARTED".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Completed => &"COMPLETED",
+            Status::Failed => &"FAILED",
+            Status::InProgress => &"IN_PROGRESS",
+            Status::NotStarted => &"NOT_STARTED",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => Status::Completed,
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "NOT_STARTED" => Status::NotStarted,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => Status::Completed,
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "NOT_STARTED" => Status::NotStarted,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Task object encapsulating task information.</p>
@@ -581,7 +948,7 @@ pub struct Task {
     pub progress_percent: Option<i64>,
     /// <p>Status of the task - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: Status,
     /// <p>Details of task status as notified by a migration tool. A tool might use this field to provide clarifying information about the status that is unique to that tool or that explains an error state.</p>
     #[serde(rename = "StatusDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]

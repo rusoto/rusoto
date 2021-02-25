@@ -25,6 +25,108 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAngleUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AngleUnits {
+    DegreeAngle,
+    Radian,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAngleUnits),
+}
+
+impl Default for AngleUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AngleUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AngleUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AngleUnits {
+    fn into(self) -> String {
+        match self {
+            AngleUnits::DegreeAngle => "DEGREE_ANGLE".to_string(),
+            AngleUnits::Radian => "RADIAN".to_string(),
+            AngleUnits::UnknownVariant(UnknownAngleUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AngleUnits {
+    fn into(self) -> &'a str {
+        match self {
+            AngleUnits::DegreeAngle => &"DEGREE_ANGLE",
+            AngleUnits::Radian => &"RADIAN",
+            AngleUnits::UnknownVariant(UnknownAngleUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AngleUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEGREE_ANGLE" => AngleUnits::DegreeAngle,
+            "RADIAN" => AngleUnits::Radian,
+            _ => AngleUnits::UnknownVariant(UnknownAngleUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AngleUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEGREE_ANGLE" => AngleUnits::DegreeAngle,
+            "RADIAN" => AngleUnits::Radian,
+            _ => AngleUnits::UnknownVariant(UnknownAngleUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AngleUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AngleUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AngleUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details about an antenna demod decode <code>Config</code> used in a contact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -72,6 +174,111 @@ pub struct AntennaUplinkConfig {
     pub transmit_disabled: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBandwidthUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BandwidthUnits {
+    Ghz,
+    Mhz,
+    Khz,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBandwidthUnits),
+}
+
+impl Default for BandwidthUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BandwidthUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BandwidthUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BandwidthUnits {
+    fn into(self) -> String {
+        match self {
+            BandwidthUnits::Ghz => "GHz".to_string(),
+            BandwidthUnits::Mhz => "MHz".to_string(),
+            BandwidthUnits::Khz => "kHz".to_string(),
+            BandwidthUnits::UnknownVariant(UnknownBandwidthUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BandwidthUnits {
+    fn into(self) -> &'a str {
+        match self {
+            BandwidthUnits::Ghz => &"GHz",
+            BandwidthUnits::Mhz => &"MHz",
+            BandwidthUnits::Khz => &"kHz",
+            BandwidthUnits::UnknownVariant(UnknownBandwidthUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BandwidthUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "GHz" => BandwidthUnits::Ghz,
+            "MHz" => BandwidthUnits::Mhz,
+            "kHz" => BandwidthUnits::Khz,
+            _ => BandwidthUnits::UnknownVariant(UnknownBandwidthUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BandwidthUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GHz" => BandwidthUnits::Ghz,
+            "MHz" => BandwidthUnits::Mhz,
+            "kHz" => BandwidthUnits::Khz,
+            _ => BandwidthUnits::UnknownVariant(UnknownBandwidthUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BandwidthUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BandwidthUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BandwidthUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -79,6 +286,132 @@ pub struct CancelContactRequest {
     /// <p>UUID of a contact.</p>
     #[serde(rename = "contactId")]
     pub contact_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigCapabilityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigCapabilityType {
+    AntennaDownlink,
+    AntennaDownlinkDemodDecode,
+    AntennaUplink,
+    DataflowEndpoint,
+    Tracking,
+    UplinkEcho,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigCapabilityType),
+}
+
+impl Default for ConfigCapabilityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigCapabilityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigCapabilityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigCapabilityType {
+    fn into(self) -> String {
+        match self {
+            ConfigCapabilityType::AntennaDownlink => "antenna-downlink".to_string(),
+            ConfigCapabilityType::AntennaDownlinkDemodDecode => {
+                "antenna-downlink-demod-decode".to_string()
+            }
+            ConfigCapabilityType::AntennaUplink => "antenna-uplink".to_string(),
+            ConfigCapabilityType::DataflowEndpoint => "dataflow-endpoint".to_string(),
+            ConfigCapabilityType::Tracking => "tracking".to_string(),
+            ConfigCapabilityType::UplinkEcho => "uplink-echo".to_string(),
+            ConfigCapabilityType::UnknownVariant(UnknownConfigCapabilityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigCapabilityType {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigCapabilityType::AntennaDownlink => &"antenna-downlink",
+            ConfigCapabilityType::AntennaDownlinkDemodDecode => &"antenna-downlink-demod-decode",
+            ConfigCapabilityType::AntennaUplink => &"antenna-uplink",
+            ConfigCapabilityType::DataflowEndpoint => &"dataflow-endpoint",
+            ConfigCapabilityType::Tracking => &"tracking",
+            ConfigCapabilityType::UplinkEcho => &"uplink-echo",
+            ConfigCapabilityType::UnknownVariant(UnknownConfigCapabilityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigCapabilityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "antenna-downlink" => ConfigCapabilityType::AntennaDownlink,
+            "antenna-downlink-demod-decode" => ConfigCapabilityType::AntennaDownlinkDemodDecode,
+            "antenna-uplink" => ConfigCapabilityType::AntennaUplink,
+            "dataflow-endpoint" => ConfigCapabilityType::DataflowEndpoint,
+            "tracking" => ConfigCapabilityType::Tracking,
+            "uplink-echo" => ConfigCapabilityType::UplinkEcho,
+            _ => ConfigCapabilityType::UnknownVariant(UnknownConfigCapabilityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigCapabilityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "antenna-downlink" => ConfigCapabilityType::AntennaDownlink,
+            "antenna-downlink-demod-decode" => ConfigCapabilityType::AntennaDownlinkDemodDecode,
+            "antenna-uplink" => ConfigCapabilityType::AntennaUplink,
+            "dataflow-endpoint" => ConfigCapabilityType::DataflowEndpoint,
+            "tracking" => ConfigCapabilityType::Tracking,
+            "uplink-echo" => ConfigCapabilityType::UplinkEcho,
+            _ => ConfigCapabilityType::UnknownVariant(UnknownConfigCapabilityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigCapabilityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigCapabilityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigCapabilityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details for certain <code>Config</code> object types in a contact.</p>
@@ -109,7 +442,7 @@ pub struct ConfigIdResponse {
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_type: Option<String>,
+    pub config_type: Option<ConfigCapabilityType>,
 }
 
 /// <p>An item in a list of <code>Config</code> objects.</p>
@@ -127,7 +460,7 @@ pub struct ConfigListItem {
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_type: Option<String>,
+    pub config_type: Option<ConfigCapabilityType>,
     /// <p>Name of a <code>Config</code>.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -174,7 +507,7 @@ pub struct ContactData {
     /// <p>Status of a contact.</p>
     #[serde(rename = "contactStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_status: Option<String>,
+    pub contact_status: Option<ContactStatus>,
     /// <p>End time of a contact.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,6 +562,161 @@ pub struct ContactIdResponse {
     #[serde(rename = "contactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactStatus {
+    Available,
+    AwsCancelled,
+    AwsFailed,
+    Cancelled,
+    Cancelling,
+    Completed,
+    Failed,
+    FailedToSchedule,
+    Pass,
+    Postpass,
+    Prepass,
+    Scheduled,
+    Scheduling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactStatus),
+}
+
+impl Default for ContactStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactStatus {
+    fn into(self) -> String {
+        match self {
+            ContactStatus::Available => "AVAILABLE".to_string(),
+            ContactStatus::AwsCancelled => "AWS_CANCELLED".to_string(),
+            ContactStatus::AwsFailed => "AWS_FAILED".to_string(),
+            ContactStatus::Cancelled => "CANCELLED".to_string(),
+            ContactStatus::Cancelling => "CANCELLING".to_string(),
+            ContactStatus::Completed => "COMPLETED".to_string(),
+            ContactStatus::Failed => "FAILED".to_string(),
+            ContactStatus::FailedToSchedule => "FAILED_TO_SCHEDULE".to_string(),
+            ContactStatus::Pass => "PASS".to_string(),
+            ContactStatus::Postpass => "POSTPASS".to_string(),
+            ContactStatus::Prepass => "PREPASS".to_string(),
+            ContactStatus::Scheduled => "SCHEDULED".to_string(),
+            ContactStatus::Scheduling => "SCHEDULING".to_string(),
+            ContactStatus::UnknownVariant(UnknownContactStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContactStatus::Available => &"AVAILABLE",
+            ContactStatus::AwsCancelled => &"AWS_CANCELLED",
+            ContactStatus::AwsFailed => &"AWS_FAILED",
+            ContactStatus::Cancelled => &"CANCELLED",
+            ContactStatus::Cancelling => &"CANCELLING",
+            ContactStatus::Completed => &"COMPLETED",
+            ContactStatus::Failed => &"FAILED",
+            ContactStatus::FailedToSchedule => &"FAILED_TO_SCHEDULE",
+            ContactStatus::Pass => &"PASS",
+            ContactStatus::Postpass => &"POSTPASS",
+            ContactStatus::Prepass => &"PREPASS",
+            ContactStatus::Scheduled => &"SCHEDULED",
+            ContactStatus::Scheduling => &"SCHEDULING",
+            ContactStatus::UnknownVariant(UnknownContactStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ContactStatus::Available,
+            "AWS_CANCELLED" => ContactStatus::AwsCancelled,
+            "AWS_FAILED" => ContactStatus::AwsFailed,
+            "CANCELLED" => ContactStatus::Cancelled,
+            "CANCELLING" => ContactStatus::Cancelling,
+            "COMPLETED" => ContactStatus::Completed,
+            "FAILED" => ContactStatus::Failed,
+            "FAILED_TO_SCHEDULE" => ContactStatus::FailedToSchedule,
+            "PASS" => ContactStatus::Pass,
+            "POSTPASS" => ContactStatus::Postpass,
+            "PREPASS" => ContactStatus::Prepass,
+            "SCHEDULED" => ContactStatus::Scheduled,
+            "SCHEDULING" => ContactStatus::Scheduling,
+            _ => ContactStatus::UnknownVariant(UnknownContactStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ContactStatus::Available,
+            "AWS_CANCELLED" => ContactStatus::AwsCancelled,
+            "AWS_FAILED" => ContactStatus::AwsFailed,
+            "CANCELLED" => ContactStatus::Cancelled,
+            "CANCELLING" => ContactStatus::Cancelling,
+            "COMPLETED" => ContactStatus::Completed,
+            "FAILED" => ContactStatus::Failed,
+            "FAILED_TO_SCHEDULE" => ContactStatus::FailedToSchedule,
+            "PASS" => ContactStatus::Pass,
+            "POSTPASS" => ContactStatus::Postpass,
+            "PREPASS" => ContactStatus::Prepass,
+            "SCHEDULED" => ContactStatus::Scheduled,
+            "SCHEDULING" => ContactStatus::Scheduling,
+            _ => ContactStatus::UnknownVariant(UnknownContactStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -290,6 +778,111 @@ pub struct CreateMissionProfileRequest {
     pub tracking_config_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCriticality {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Criticality {
+    Preferred,
+    Removed,
+    Required,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCriticality),
+}
+
+impl Default for Criticality {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Criticality {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Criticality {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Criticality {
+    fn into(self) -> String {
+        match self {
+            Criticality::Preferred => "PREFERRED".to_string(),
+            Criticality::Removed => "REMOVED".to_string(),
+            Criticality::Required => "REQUIRED".to_string(),
+            Criticality::UnknownVariant(UnknownCriticality { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Criticality {
+    fn into(self) -> &'a str {
+        match self {
+            Criticality::Preferred => &"PREFERRED",
+            Criticality::Removed => &"REMOVED",
+            Criticality::Required => &"REQUIRED",
+            Criticality::UnknownVariant(UnknownCriticality { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Criticality {
+    fn from(name: &str) -> Self {
+        match name {
+            "PREFERRED" => Criticality::Preferred,
+            "REMOVED" => Criticality::Removed,
+            "REQUIRED" => Criticality::Required,
+            _ => Criticality::UnknownVariant(UnknownCriticality {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Criticality {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PREFERRED" => Criticality::Preferred,
+            "REMOVED" => Criticality::Removed,
+            "REQUIRED" => Criticality::Required,
+            _ => Criticality::UnknownVariant(UnknownCriticality { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Criticality {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Criticality {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Criticality {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a dataflow edge used in a contact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -324,7 +917,7 @@ pub struct DataflowEndpoint {
     /// <p>Status of a dataflow endpoint.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<EndpointStatus>,
 }
 
 /// <p>Information about the dataflow endpoint <code>Config</code>.</p>
@@ -380,7 +973,7 @@ pub struct DeleteConfigRequest {
     pub config_id: String,
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
-    pub config_type: String,
+    pub config_type: ConfigCapabilityType,
 }
 
 /// <p><p/></p>
@@ -429,7 +1022,7 @@ pub struct DescribeContactResponse {
     /// <p>Status of a contact.</p>
     #[serde(rename = "contactStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_status: Option<String>,
+    pub contact_status: Option<ContactStatus>,
     /// <p>List describing source and destination details for each dataflow edge.</p>
     #[serde(rename = "dataflowList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -495,7 +1088,7 @@ pub struct Destination {
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_type: Option<String>,
+    pub config_type: Option<ConfigCapabilityType>,
     /// <p>Region of a dataflow destination.</p>
     #[serde(rename = "dataflowDestinationRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -507,10 +1100,105 @@ pub struct Destination {
 pub struct Eirp {
     /// <p>Units of an EIRP.</p>
     #[serde(rename = "units")]
-    pub units: String,
+    pub units: EirpUnits,
     /// <p>Value of an EIRP. Valid values are between 20.0 to 50.0 dBW.</p>
     #[serde(rename = "value")]
     pub value: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEirpUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EirpUnits {
+    Dbw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEirpUnits),
+}
+
+impl Default for EirpUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EirpUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EirpUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EirpUnits {
+    fn into(self) -> String {
+        match self {
+            EirpUnits::Dbw => "dBW".to_string(),
+            EirpUnits::UnknownVariant(UnknownEirpUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EirpUnits {
+    fn into(self) -> &'a str {
+        match self {
+            EirpUnits::Dbw => &"dBW",
+            EirpUnits::UnknownVariant(UnknownEirpUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EirpUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "dBW" => EirpUnits::Dbw,
+            _ => EirpUnits::UnknownVariant(UnknownEirpUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EirpUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "dBW" => EirpUnits::Dbw,
+            _ => EirpUnits::UnknownVariant(UnknownEirpUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EirpUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EirpUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EirpUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Elevation angle of the satellite in the sky during a contact.</p>
@@ -519,7 +1207,7 @@ pub struct Eirp {
 pub struct Elevation {
     /// <p>Elevation angle units.</p>
     #[serde(rename = "unit")]
-    pub unit: String,
+    pub unit: AngleUnits,
     /// <p>Elevation angle value.</p>
     #[serde(rename = "value")]
     pub value: f64,
@@ -538,12 +1226,127 @@ pub struct EndpointDetails {
     pub security_details: Option<SecurityDetails>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointStatus {
+    Created,
+    Creating,
+    Deleted,
+    Deleting,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointStatus),
+}
+
+impl Default for EndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointStatus {
+    fn into(self) -> String {
+        match self {
+            EndpointStatus::Created => "created".to_string(),
+            EndpointStatus::Creating => "creating".to_string(),
+            EndpointStatus::Deleted => "deleted".to_string(),
+            EndpointStatus::Deleting => "deleting".to_string(),
+            EndpointStatus::Failed => "failed".to_string(),
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointStatus::Created => &"created",
+            EndpointStatus::Creating => &"creating",
+            EndpointStatus::Deleted => &"deleted",
+            EndpointStatus::Deleting => &"deleting",
+            EndpointStatus::Failed => &"failed",
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "created" => EndpointStatus::Created,
+            "creating" => EndpointStatus::Creating,
+            "deleted" => EndpointStatus::Deleted,
+            "deleting" => EndpointStatus::Deleting,
+            "failed" => EndpointStatus::Failed,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "created" => EndpointStatus::Created,
+            "creating" => EndpointStatus::Creating,
+            "deleted" => EndpointStatus::Deleted,
+            "deleting" => EndpointStatus::Deleting,
+            "failed" => EndpointStatus::Failed,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Object that describes the frequency.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Frequency {
     /// <p>Frequency units.</p>
     #[serde(rename = "units")]
-    pub units: String,
+    pub units: FrequencyUnits,
     /// <p>Frequency value. Valid values are between 2200 to 2300 MHz and 7750 to 8400 MHz for downlink and 2025 to 2120 MHz for uplink.</p>
     #[serde(rename = "value")]
     pub value: f64,
@@ -554,10 +1357,115 @@ pub struct Frequency {
 pub struct FrequencyBandwidth {
     /// <p>Frequency bandwidth units.</p>
     #[serde(rename = "units")]
-    pub units: String,
+    pub units: BandwidthUnits,
     /// <p><p>Frequency bandwidth value. AWS Ground Station currently has the following bandwidth limitations:</p> <ul> <li> <p>For <code>AntennaDownlinkDemodDecodeconfig</code>, valid values are between 125 kHz to 650 MHz.</p> </li> <li> <p>For <code>AntennaDownlinkconfig</code>, valid values are between 10 kHz to 54 MHz.</p> </li> <li> <p>For <code>AntennaUplinkConfig</code>, valid values are between 10 kHz to 54 MHz.</p> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFrequencyUnits {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FrequencyUnits {
+    Ghz,
+    Mhz,
+    Khz,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFrequencyUnits),
+}
+
+impl Default for FrequencyUnits {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FrequencyUnits {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FrequencyUnits {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FrequencyUnits {
+    fn into(self) -> String {
+        match self {
+            FrequencyUnits::Ghz => "GHz".to_string(),
+            FrequencyUnits::Mhz => "MHz".to_string(),
+            FrequencyUnits::Khz => "kHz".to_string(),
+            FrequencyUnits::UnknownVariant(UnknownFrequencyUnits { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FrequencyUnits {
+    fn into(self) -> &'a str {
+        match self {
+            FrequencyUnits::Ghz => &"GHz",
+            FrequencyUnits::Mhz => &"MHz",
+            FrequencyUnits::Khz => &"kHz",
+            FrequencyUnits::UnknownVariant(UnknownFrequencyUnits { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FrequencyUnits {
+    fn from(name: &str) -> Self {
+        match name {
+            "GHz" => FrequencyUnits::Ghz,
+            "MHz" => FrequencyUnits::Mhz,
+            "kHz" => FrequencyUnits::Khz,
+            _ => FrequencyUnits::UnknownVariant(UnknownFrequencyUnits {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FrequencyUnits {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GHz" => FrequencyUnits::Ghz,
+            "MHz" => FrequencyUnits::Mhz,
+            "kHz" => FrequencyUnits::Khz,
+            _ => FrequencyUnits::UnknownVariant(UnknownFrequencyUnits { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FrequencyUnits {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FrequencyUnits {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FrequencyUnits {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -569,7 +1477,7 @@ pub struct GetConfigRequest {
     pub config_id: String,
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
-    pub config_type: String,
+    pub config_type: ConfigCapabilityType,
 }
 
 /// <p><p/></p>
@@ -588,7 +1496,7 @@ pub struct GetConfigResponse {
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_type: Option<String>,
+    pub config_type: Option<ConfigCapabilityType>,
     /// <p>Name of a <code>Config</code>.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -831,7 +1739,7 @@ pub struct ListContactsRequest {
     pub start_time: f64,
     /// <p>Status of a contact reservation.</p>
     #[serde(rename = "statusList")]
-    pub status_list: Vec<String>,
+    pub status_list: Vec<ContactStatus>,
 }
 
 /// <p><p/></p>
@@ -1015,6 +1923,111 @@ pub struct MissionProfileListItem {
     pub region: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolarization {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Polarization {
+    LeftHand,
+    None,
+    RightHand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolarization),
+}
+
+impl Default for Polarization {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Polarization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Polarization {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Polarization {
+    fn into(self) -> String {
+        match self {
+            Polarization::LeftHand => "LEFT_HAND".to_string(),
+            Polarization::None => "NONE".to_string(),
+            Polarization::RightHand => "RIGHT_HAND".to_string(),
+            Polarization::UnknownVariant(UnknownPolarization { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Polarization {
+    fn into(self) -> &'a str {
+        match self {
+            Polarization::LeftHand => &"LEFT_HAND",
+            Polarization::None => &"NONE",
+            Polarization::RightHand => &"RIGHT_HAND",
+            Polarization::UnknownVariant(UnknownPolarization { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Polarization {
+    fn from(name: &str) -> Self {
+        match name {
+            "LEFT_HAND" => Polarization::LeftHand,
+            "NONE" => Polarization::None,
+            "RIGHT_HAND" => Polarization::RightHand,
+            _ => Polarization::UnknownVariant(UnknownPolarization {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Polarization {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LEFT_HAND" => Polarization::LeftHand,
+            "NONE" => Polarization::None,
+            "RIGHT_HAND" => Polarization::RightHand,
+            _ => Polarization::UnknownVariant(UnknownPolarization { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Polarization {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Polarization {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Polarization {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1102,7 +2115,7 @@ pub struct Source {
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_type: Option<String>,
+    pub config_type: Option<ConfigCapabilityType>,
     /// <p>Region of a dataflow source.</p>
     #[serde(rename = "dataflowSourceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1121,7 +2134,7 @@ pub struct SpectrumConfig {
     /// <p>Polarization of a spectral <code>Config</code>. Capturing both <code>"RIGHT_HAND"</code> and <code>"LEFT_HAND"</code> polarization requires two separate configs.</p>
     #[serde(rename = "polarization")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub polarization: Option<String>,
+    pub polarization: Option<Polarization>,
 }
 
 /// <p><p/></p>
@@ -1146,7 +2159,7 @@ pub struct TagResourceResponse {}
 pub struct TrackingConfig {
     /// <p>Current setting for autotrack.</p>
     #[serde(rename = "autotrack")]
-    pub autotrack: String,
+    pub autotrack: Criticality,
 }
 
 /// <p><p/></p>
@@ -1178,7 +2191,7 @@ pub struct UpdateConfigRequest {
     pub config_id: String,
     /// <p>Type of a <code>Config</code>.</p>
     #[serde(rename = "configType")]
-    pub config_type: String,
+    pub config_type: ConfigCapabilityType,
     /// <p>Name of a <code>Config</code>.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -1237,7 +2250,7 @@ pub struct UplinkSpectrumConfig {
     /// <p>Polarization of an uplink spectral <code>Config</code>. Capturing both <code>"RIGHT_HAND"</code> and <code>"LEFT_HAND"</code> polarization requires two separate configs.</p>
     #[serde(rename = "polarization")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub polarization: Option<String>,
+    pub polarization: Option<Polarization>,
 }
 
 /// Errors returned by CancelContact

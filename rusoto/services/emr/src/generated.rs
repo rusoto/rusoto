@@ -51,6 +51,117 @@ impl EmrClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionOnFailure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionOnFailure {
+    CancelAndWait,
+    Continue,
+    TerminateCluster,
+    TerminateJobFlow,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionOnFailure),
+}
+
+impl Default for ActionOnFailure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionOnFailure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionOnFailure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionOnFailure {
+    fn into(self) -> String {
+        match self {
+            ActionOnFailure::CancelAndWait => "CANCEL_AND_WAIT".to_string(),
+            ActionOnFailure::Continue => "CONTINUE".to_string(),
+            ActionOnFailure::TerminateCluster => "TERMINATE_CLUSTER".to_string(),
+            ActionOnFailure::TerminateJobFlow => "TERMINATE_JOB_FLOW".to_string(),
+            ActionOnFailure::UnknownVariant(UnknownActionOnFailure { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionOnFailure {
+    fn into(self) -> &'a str {
+        match self {
+            ActionOnFailure::CancelAndWait => &"CANCEL_AND_WAIT",
+            ActionOnFailure::Continue => &"CONTINUE",
+            ActionOnFailure::TerminateCluster => &"TERMINATE_CLUSTER",
+            ActionOnFailure::TerminateJobFlow => &"TERMINATE_JOB_FLOW",
+            ActionOnFailure::UnknownVariant(UnknownActionOnFailure { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionOnFailure {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCEL_AND_WAIT" => ActionOnFailure::CancelAndWait,
+            "CONTINUE" => ActionOnFailure::Continue,
+            "TERMINATE_CLUSTER" => ActionOnFailure::TerminateCluster,
+            "TERMINATE_JOB_FLOW" => ActionOnFailure::TerminateJobFlow,
+            _ => ActionOnFailure::UnknownVariant(UnknownActionOnFailure {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionOnFailure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCEL_AND_WAIT" => ActionOnFailure::CancelAndWait,
+            "CONTINUE" => ActionOnFailure::Continue,
+            "TERMINATE_CLUSTER" => ActionOnFailure::TerminateCluster,
+            "TERMINATE_JOB_FLOW" => ActionOnFailure::TerminateJobFlow,
+            _ => ActionOnFailure::UnknownVariant(UnknownActionOnFailure { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionOnFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionOnFailure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionOnFailure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceFleetInput {
@@ -148,6 +259,111 @@ pub struct AddTagsInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdjustmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdjustmentType {
+    ChangeInCapacity,
+    ExactCapacity,
+    PercentChangeInCapacity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdjustmentType),
+}
+
+impl Default for AdjustmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdjustmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdjustmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdjustmentType {
+    fn into(self) -> String {
+        match self {
+            AdjustmentType::ChangeInCapacity => "CHANGE_IN_CAPACITY".to_string(),
+            AdjustmentType::ExactCapacity => "EXACT_CAPACITY".to_string(),
+            AdjustmentType::PercentChangeInCapacity => "PERCENT_CHANGE_IN_CAPACITY".to_string(),
+            AdjustmentType::UnknownVariant(UnknownAdjustmentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdjustmentType {
+    fn into(self) -> &'a str {
+        match self {
+            AdjustmentType::ChangeInCapacity => &"CHANGE_IN_CAPACITY",
+            AdjustmentType::ExactCapacity => &"EXACT_CAPACITY",
+            AdjustmentType::PercentChangeInCapacity => &"PERCENT_CHANGE_IN_CAPACITY",
+            AdjustmentType::UnknownVariant(UnknownAdjustmentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdjustmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CHANGE_IN_CAPACITY" => AdjustmentType::ChangeInCapacity,
+            "EXACT_CAPACITY" => AdjustmentType::ExactCapacity,
+            "PERCENT_CHANGE_IN_CAPACITY" => AdjustmentType::PercentChangeInCapacity,
+            _ => AdjustmentType::UnknownVariant(UnknownAdjustmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdjustmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CHANGE_IN_CAPACITY" => AdjustmentType::ChangeInCapacity,
+            "EXACT_CAPACITY" => AdjustmentType::ExactCapacity,
+            "PERCENT_CHANGE_IN_CAPACITY" => AdjustmentType::PercentChangeInCapacity,
+            _ => AdjustmentType::UnknownVariant(UnknownAdjustmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdjustmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdjustmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdjustmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>With Amazon EMR release version 4.0 and later, the only accepted parameter is the application name. To pass arguments to applications, you use configuration classifications specified using configuration JSON objects. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p> <p>With earlier Amazon EMR releases, the application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Application {
@@ -167,6 +383,106 @@ pub struct Application {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthMode {
+    Iam,
+    Sso,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthMode),
+}
+
+impl Default for AuthMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthMode {
+    fn into(self) -> String {
+        match self {
+            AuthMode::Iam => "IAM".to_string(),
+            AuthMode::Sso => "SSO".to_string(),
+            AuthMode::UnknownVariant(UnknownAuthMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthMode {
+    fn into(self) -> &'a str {
+        match self {
+            AuthMode::Iam => &"IAM",
+            AuthMode::Sso => &"SSO",
+            AuthMode::UnknownVariant(UnknownAuthMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "IAM" => AuthMode::Iam,
+            "SSO" => AuthMode::Sso,
+            _ => AuthMode::UnknownVariant(UnknownAuthMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IAM" => AuthMode::Iam,
+            "SSO" => AuthMode::Sso,
+            _ => AuthMode::UnknownVariant(UnknownAuthMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. An automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>
@@ -199,6 +515,131 @@ pub struct AutoScalingPolicyDescription {
     pub status: Option<AutoScalingPolicyStatus>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoScalingPolicyState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoScalingPolicyState {
+    Attached,
+    Attaching,
+    Detached,
+    Detaching,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoScalingPolicyState),
+}
+
+impl Default for AutoScalingPolicyState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoScalingPolicyState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoScalingPolicyState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoScalingPolicyState {
+    fn into(self) -> String {
+        match self {
+            AutoScalingPolicyState::Attached => "ATTACHED".to_string(),
+            AutoScalingPolicyState::Attaching => "ATTACHING".to_string(),
+            AutoScalingPolicyState::Detached => "DETACHED".to_string(),
+            AutoScalingPolicyState::Detaching => "DETACHING".to_string(),
+            AutoScalingPolicyState::Failed => "FAILED".to_string(),
+            AutoScalingPolicyState::Pending => "PENDING".to_string(),
+            AutoScalingPolicyState::UnknownVariant(UnknownAutoScalingPolicyState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoScalingPolicyState {
+    fn into(self) -> &'a str {
+        match self {
+            AutoScalingPolicyState::Attached => &"ATTACHED",
+            AutoScalingPolicyState::Attaching => &"ATTACHING",
+            AutoScalingPolicyState::Detached => &"DETACHED",
+            AutoScalingPolicyState::Detaching => &"DETACHING",
+            AutoScalingPolicyState::Failed => &"FAILED",
+            AutoScalingPolicyState::Pending => &"PENDING",
+            AutoScalingPolicyState::UnknownVariant(UnknownAutoScalingPolicyState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoScalingPolicyState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTACHED" => AutoScalingPolicyState::Attached,
+            "ATTACHING" => AutoScalingPolicyState::Attaching,
+            "DETACHED" => AutoScalingPolicyState::Detached,
+            "DETACHING" => AutoScalingPolicyState::Detaching,
+            "FAILED" => AutoScalingPolicyState::Failed,
+            "PENDING" => AutoScalingPolicyState::Pending,
+            _ => AutoScalingPolicyState::UnknownVariant(UnknownAutoScalingPolicyState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoScalingPolicyState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTACHED" => AutoScalingPolicyState::Attached,
+            "ATTACHING" => AutoScalingPolicyState::Attaching,
+            "DETACHED" => AutoScalingPolicyState::Detached,
+            "DETACHING" => AutoScalingPolicyState::Detaching,
+            "FAILED" => AutoScalingPolicyState::Failed,
+            "PENDING" => AutoScalingPolicyState::Pending,
+            _ => AutoScalingPolicyState::UnknownVariant(UnknownAutoScalingPolicyState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingPolicyState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutoScalingPolicyState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoScalingPolicyState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The reason for an <a>AutoScalingPolicyStatus</a> change.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -206,11 +647,127 @@ pub struct AutoScalingPolicyStateChangeReason {
     /// <p>The code indicating the reason for the change in status.<code>USER_REQUEST</code> indicates that the scaling policy status was changed by a user. <code>PROVISION_FAILURE</code> indicates that the status change was because the policy failed to provision. <code>CLEANUP_FAILURE</code> indicates an error.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<AutoScalingPolicyStateChangeReasonCode>,
     /// <p>A friendly, more verbose message that accompanies an automatic scaling policy state change.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoScalingPolicyStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoScalingPolicyStateChangeReasonCode {
+    CleanupFailure,
+    ProvisionFailure,
+    UserRequest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoScalingPolicyStateChangeReasonCode),
+}
+
+impl Default for AutoScalingPolicyStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoScalingPolicyStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoScalingPolicyStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoScalingPolicyStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            AutoScalingPolicyStateChangeReasonCode::CleanupFailure => "CLEANUP_FAILURE".to_string(),
+            AutoScalingPolicyStateChangeReasonCode::ProvisionFailure => {
+                "PROVISION_FAILURE".to_string()
+            }
+            AutoScalingPolicyStateChangeReasonCode::UserRequest => "USER_REQUEST".to_string(),
+            AutoScalingPolicyStateChangeReasonCode::UnknownVariant(
+                UnknownAutoScalingPolicyStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoScalingPolicyStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            AutoScalingPolicyStateChangeReasonCode::CleanupFailure => &"CLEANUP_FAILURE",
+            AutoScalingPolicyStateChangeReasonCode::ProvisionFailure => &"PROVISION_FAILURE",
+            AutoScalingPolicyStateChangeReasonCode::UserRequest => &"USER_REQUEST",
+            AutoScalingPolicyStateChangeReasonCode::UnknownVariant(
+                UnknownAutoScalingPolicyStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoScalingPolicyStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLEANUP_FAILURE" => AutoScalingPolicyStateChangeReasonCode::CleanupFailure,
+            "PROVISION_FAILURE" => AutoScalingPolicyStateChangeReasonCode::ProvisionFailure,
+            "USER_REQUEST" => AutoScalingPolicyStateChangeReasonCode::UserRequest,
+            _ => AutoScalingPolicyStateChangeReasonCode::UnknownVariant(
+                UnknownAutoScalingPolicyStateChangeReasonCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AutoScalingPolicyStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLEANUP_FAILURE" => AutoScalingPolicyStateChangeReasonCode::CleanupFailure,
+            "PROVISION_FAILURE" => AutoScalingPolicyStateChangeReasonCode::ProvisionFailure,
+            "USER_REQUEST" => AutoScalingPolicyStateChangeReasonCode::UserRequest,
+            _ => AutoScalingPolicyStateChangeReasonCode::UnknownVariant(
+                UnknownAutoScalingPolicyStateChangeReasonCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoScalingPolicyStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutoScalingPolicyStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoScalingPolicyStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The status of an automatic scaling policy. </p>
@@ -220,7 +777,7 @@ pub struct AutoScalingPolicyStatus {
     /// <p>Indicates the status of the automatic scaling policy.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<AutoScalingPolicyState>,
     /// <p>The reason for a change in status.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -283,7 +840,7 @@ pub struct CancelStepsInfo {
     /// <p>The status of a CancelSteps Request. The value may be SUBMITTED or FAILED.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CancelStepsRequestStatus>,
     /// <p>The encrypted StepId of a step.</p>
     #[serde(rename = "StepId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -300,7 +857,7 @@ pub struct CancelStepsInput {
     /// <p>The option to choose to cancel <code>RUNNING</code> steps. By default, the value is <code>SEND_INTERRUPT</code>.</p>
     #[serde(rename = "StepCancellationOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_cancellation_option: Option<String>,
+    pub step_cancellation_option: Option<StepCancellationOption>,
     /// <p>The list of <code>StepIDs</code> to cancel. Use <a>ListSteps</a> to get steps and their states for the specified cluster.</p>
     #[serde(rename = "StepIds")]
     pub step_ids: Vec<String>,
@@ -316,12 +873,117 @@ pub struct CancelStepsOutput {
     pub cancel_steps_info_list: Option<Vec<CancelStepsInfo>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCancelStepsRequestStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CancelStepsRequestStatus {
+    Failed,
+    Submitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCancelStepsRequestStatus),
+}
+
+impl Default for CancelStepsRequestStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CancelStepsRequestStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CancelStepsRequestStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CancelStepsRequestStatus {
+    fn into(self) -> String {
+        match self {
+            CancelStepsRequestStatus::Failed => "FAILED".to_string(),
+            CancelStepsRequestStatus::Submitted => "SUBMITTED".to_string(),
+            CancelStepsRequestStatus::UnknownVariant(UnknownCancelStepsRequestStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CancelStepsRequestStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CancelStepsRequestStatus::Failed => &"FAILED",
+            CancelStepsRequestStatus::Submitted => &"SUBMITTED",
+            CancelStepsRequestStatus::UnknownVariant(UnknownCancelStepsRequestStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CancelStepsRequestStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => CancelStepsRequestStatus::Failed,
+            "SUBMITTED" => CancelStepsRequestStatus::Submitted,
+            _ => CancelStepsRequestStatus::UnknownVariant(UnknownCancelStepsRequestStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CancelStepsRequestStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => CancelStepsRequestStatus::Failed,
+            "SUBMITTED" => CancelStepsRequestStatus::Submitted,
+            _ => CancelStepsRequestStatus::UnknownVariant(UnknownCancelStepsRequestStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CancelStepsRequestStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CancelStepsRequestStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CancelStepsRequestStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The definition of a CloudWatch metric alarm, which determines when an automatic scaling activity is triggered. When the defined alarm conditions are satisfied, scaling activity begins.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchAlarmDefinition {
     /// <p>Determines how the metric specified by <code>MetricName</code> is compared to the value specified by <code>Threshold</code>.</p>
     #[serde(rename = "ComparisonOperator")]
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
     /// <p>A CloudWatch metric dimension.</p>
     #[serde(rename = "Dimensions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -343,14 +1005,14 @@ pub struct CloudWatchAlarmDefinition {
     /// <p>The statistic to apply to the metric associated with the alarm. The default is <code>AVERAGE</code>.</p>
     #[serde(rename = "Statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statistic: Option<String>,
+    pub statistic: Option<Statistic>,
     /// <p>The value against which the specified statistic is compared.</p>
     #[serde(rename = "Threshold")]
     pub threshold: f64,
     /// <p>The unit of measure associated with the CloudWatch metric being watched. The value specified for <code>Unit</code> must correspond to the units specified in the CloudWatch metric.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<Unit>,
 }
 
 /// <p>The detailed description of the cluster.</p>
@@ -396,7 +1058,7 @@ pub struct Cluster {
     /// <p><note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>The instance group configuration of the cluster. A value of <code>INSTANCE<em>GROUP</code> indicates a uniform instance group configuration. A value of <code>INSTANCE</em>FLEET</code> indicates an instance fleets configuration.</p></p>
     #[serde(rename = "InstanceCollectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_collection_type: Option<String>,
+    pub instance_collection_type: Option<InstanceCollectionType>,
     /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>Amazon EMR Management Guide</i>.</p>
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -436,7 +1098,7 @@ pub struct Cluster {
     /// <p>Applies only when <code>CustomAmiID</code> is used. Specifies the type of updates that are applied from the Amazon Linux AMI package repositories when an instance boots using the AMI.</p>
     #[serde(rename = "RepoUpgradeOnBoot")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub repo_upgrade_on_boot: Option<String>,
+    pub repo_upgrade_on_boot: Option<RepoUpgradeOnBoot>,
     /// <p>The AMI version requested for this cluster.</p>
     #[serde(rename = "RequestedAmiVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -448,7 +1110,7 @@ pub struct Cluster {
     /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> is available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scale_down_behavior: Option<String>,
+    pub scale_down_behavior: Option<ScaleDownBehavior>,
     /// <p>The name of the security configuration applied to the cluster.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -479,6 +1141,131 @@ pub struct Cluster {
     pub visible_to_all_users: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterState {
+    Bootstrapping,
+    Running,
+    Starting,
+    Terminated,
+    TerminatedWithErrors,
+    Terminating,
+    Waiting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterState),
+}
+
+impl Default for ClusterState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        match self {
+            ClusterState::Bootstrapping => "BOOTSTRAPPING".to_string(),
+            ClusterState::Running => "RUNNING".to_string(),
+            ClusterState::Starting => "STARTING".to_string(),
+            ClusterState::Terminated => "TERMINATED".to_string(),
+            ClusterState::TerminatedWithErrors => "TERMINATED_WITH_ERRORS".to_string(),
+            ClusterState::Terminating => "TERMINATING".to_string(),
+            ClusterState::Waiting => "WAITING".to_string(),
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterState {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterState::Bootstrapping => &"BOOTSTRAPPING",
+            ClusterState::Running => &"RUNNING",
+            ClusterState::Starting => &"STARTING",
+            ClusterState::Terminated => &"TERMINATED",
+            ClusterState::TerminatedWithErrors => &"TERMINATED_WITH_ERRORS",
+            ClusterState::Terminating => &"TERMINATING",
+            ClusterState::Waiting => &"WAITING",
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterState {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOTSTRAPPING" => ClusterState::Bootstrapping,
+            "RUNNING" => ClusterState::Running,
+            "STARTING" => ClusterState::Starting,
+            "TERMINATED" => ClusterState::Terminated,
+            "TERMINATED_WITH_ERRORS" => ClusterState::TerminatedWithErrors,
+            "TERMINATING" => ClusterState::Terminating,
+            "WAITING" => ClusterState::Waiting,
+            _ => ClusterState::UnknownVariant(UnknownClusterState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOTSTRAPPING" => ClusterState::Bootstrapping,
+            "RUNNING" => ClusterState::Running,
+            "STARTING" => ClusterState::Starting,
+            "TERMINATED" => ClusterState::Terminated,
+            "TERMINATED_WITH_ERRORS" => ClusterState::TerminatedWithErrors,
+            "TERMINATING" => ClusterState::Terminating,
+            "WAITING" => ClusterState::Waiting,
+            _ => ClusterState::UnknownVariant(UnknownClusterState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClusterState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The reason that the cluster changed to its current state.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -486,11 +1273,154 @@ pub struct ClusterStateChangeReason {
     /// <p>The programmatic code for the state change reason.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<ClusterStateChangeReasonCode>,
     /// <p>The descriptive message for the state change reason.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterStateChangeReasonCode {
+    AllStepsCompleted,
+    BootstrapFailure,
+    InstanceFailure,
+    InstanceFleetTimeout,
+    InternalError,
+    StepFailure,
+    UserRequest,
+    ValidationError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterStateChangeReasonCode),
+}
+
+impl Default for ClusterStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            ClusterStateChangeReasonCode::AllStepsCompleted => "ALL_STEPS_COMPLETED".to_string(),
+            ClusterStateChangeReasonCode::BootstrapFailure => "BOOTSTRAP_FAILURE".to_string(),
+            ClusterStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE".to_string(),
+            ClusterStateChangeReasonCode::InstanceFleetTimeout => {
+                "INSTANCE_FLEET_TIMEOUT".to_string()
+            }
+            ClusterStateChangeReasonCode::InternalError => "INTERNAL_ERROR".to_string(),
+            ClusterStateChangeReasonCode::StepFailure => "STEP_FAILURE".to_string(),
+            ClusterStateChangeReasonCode::UserRequest => "USER_REQUEST".to_string(),
+            ClusterStateChangeReasonCode::ValidationError => "VALIDATION_ERROR".to_string(),
+            ClusterStateChangeReasonCode::UnknownVariant(UnknownClusterStateChangeReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterStateChangeReasonCode::AllStepsCompleted => &"ALL_STEPS_COMPLETED",
+            ClusterStateChangeReasonCode::BootstrapFailure => &"BOOTSTRAP_FAILURE",
+            ClusterStateChangeReasonCode::InstanceFailure => &"INSTANCE_FAILURE",
+            ClusterStateChangeReasonCode::InstanceFleetTimeout => &"INSTANCE_FLEET_TIMEOUT",
+            ClusterStateChangeReasonCode::InternalError => &"INTERNAL_ERROR",
+            ClusterStateChangeReasonCode::StepFailure => &"STEP_FAILURE",
+            ClusterStateChangeReasonCode::UserRequest => &"USER_REQUEST",
+            ClusterStateChangeReasonCode::ValidationError => &"VALIDATION_ERROR",
+            ClusterStateChangeReasonCode::UnknownVariant(UnknownClusterStateChangeReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_STEPS_COMPLETED" => ClusterStateChangeReasonCode::AllStepsCompleted,
+            "BOOTSTRAP_FAILURE" => ClusterStateChangeReasonCode::BootstrapFailure,
+            "INSTANCE_FAILURE" => ClusterStateChangeReasonCode::InstanceFailure,
+            "INSTANCE_FLEET_TIMEOUT" => ClusterStateChangeReasonCode::InstanceFleetTimeout,
+            "INTERNAL_ERROR" => ClusterStateChangeReasonCode::InternalError,
+            "STEP_FAILURE" => ClusterStateChangeReasonCode::StepFailure,
+            "USER_REQUEST" => ClusterStateChangeReasonCode::UserRequest,
+            "VALIDATION_ERROR" => ClusterStateChangeReasonCode::ValidationError,
+            _ => {
+                ClusterStateChangeReasonCode::UnknownVariant(UnknownClusterStateChangeReasonCode {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ClusterStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_STEPS_COMPLETED" => ClusterStateChangeReasonCode::AllStepsCompleted,
+            "BOOTSTRAP_FAILURE" => ClusterStateChangeReasonCode::BootstrapFailure,
+            "INSTANCE_FAILURE" => ClusterStateChangeReasonCode::InstanceFailure,
+            "INSTANCE_FLEET_TIMEOUT" => ClusterStateChangeReasonCode::InstanceFleetTimeout,
+            "INTERNAL_ERROR" => ClusterStateChangeReasonCode::InternalError,
+            "STEP_FAILURE" => ClusterStateChangeReasonCode::StepFailure,
+            "USER_REQUEST" => ClusterStateChangeReasonCode::UserRequest,
+            "VALIDATION_ERROR" => ClusterStateChangeReasonCode::ValidationError,
+            _ => {
+                ClusterStateChangeReasonCode::UnknownVariant(UnknownClusterStateChangeReasonCode {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ClusterStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The detailed status of the cluster.</p>
@@ -500,7 +1430,7 @@ pub struct ClusterStatus {
     /// <p>The current state of the cluster.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
     /// <p>The reason for the cluster status change.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -577,6 +1507,120 @@ pub struct Command {
     pub script_path: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    GreaterThan,
+    GreaterThanOrEqual,
+    LessThan,
+    LessThanOrEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::GreaterThan => "GREATER_THAN".to_string(),
+            ComparisonOperator::GreaterThanOrEqual => "GREATER_THAN_OR_EQUAL".to_string(),
+            ComparisonOperator::LessThan => "LESS_THAN".to_string(),
+            ComparisonOperator::LessThanOrEqual => "LESS_THAN_OR_EQUAL".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::GreaterThan => &"GREATER_THAN",
+            ComparisonOperator::GreaterThanOrEqual => &"GREATER_THAN_OR_EQUAL",
+            ComparisonOperator::LessThan => &"LESS_THAN",
+            ComparisonOperator::LessThanOrEqual => &"LESS_THAN_OR_EQUAL",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "GREATER_THAN" => ComparisonOperator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL" => ComparisonOperator::GreaterThanOrEqual,
+            "LESS_THAN" => ComparisonOperator::LessThan,
+            "LESS_THAN_OR_EQUAL" => ComparisonOperator::LessThanOrEqual,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GREATER_THAN" => ComparisonOperator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL" => ComparisonOperator::GreaterThanOrEqual,
+            "LESS_THAN" => ComparisonOperator::LessThan,
+            "LESS_THAN_OR_EQUAL" => ComparisonOperator::LessThanOrEqual,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster can not be above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComputeLimits {
@@ -596,7 +1640,116 @@ pub struct ComputeLimits {
     pub minimum_capacity_units: i64,
     /// <p> The unit type used for specifying a managed scaling policy. </p>
     #[serde(rename = "UnitType")]
-    pub unit_type: String,
+    pub unit_type: ComputeLimitsUnitType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputeLimitsUnitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputeLimitsUnitType {
+    InstanceFleetUnits,
+    Instances,
+    Vcpu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputeLimitsUnitType),
+}
+
+impl Default for ComputeLimitsUnitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputeLimitsUnitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputeLimitsUnitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputeLimitsUnitType {
+    fn into(self) -> String {
+        match self {
+            ComputeLimitsUnitType::InstanceFleetUnits => "InstanceFleetUnits".to_string(),
+            ComputeLimitsUnitType::Instances => "Instances".to_string(),
+            ComputeLimitsUnitType::Vcpu => "VCPU".to_string(),
+            ComputeLimitsUnitType::UnknownVariant(UnknownComputeLimitsUnitType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputeLimitsUnitType {
+    fn into(self) -> &'a str {
+        match self {
+            ComputeLimitsUnitType::InstanceFleetUnits => &"InstanceFleetUnits",
+            ComputeLimitsUnitType::Instances => &"Instances",
+            ComputeLimitsUnitType::Vcpu => &"VCPU",
+            ComputeLimitsUnitType::UnknownVariant(UnknownComputeLimitsUnitType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputeLimitsUnitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "InstanceFleetUnits" => ComputeLimitsUnitType::InstanceFleetUnits,
+            "Instances" => ComputeLimitsUnitType::Instances,
+            "VCPU" => ComputeLimitsUnitType::Vcpu,
+            _ => ComputeLimitsUnitType::UnknownVariant(UnknownComputeLimitsUnitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputeLimitsUnitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InstanceFleetUnits" => ComputeLimitsUnitType::InstanceFleetUnits,
+            "Instances" => ComputeLimitsUnitType::Instances,
+            "VCPU" => ComputeLimitsUnitType::Vcpu,
+            _ => ComputeLimitsUnitType::UnknownVariant(UnknownComputeLimitsUnitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeLimitsUnitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComputeLimitsUnitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComputeLimitsUnitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p></p>
@@ -643,7 +1796,7 @@ pub struct CreateSecurityConfigurationOutput {
 pub struct CreateStudioInput {
     /// <p>Specifies whether the Studio authenticates users using single sign-on (SSO) or IAM. Amazon EMR Studio currently only supports SSO authentication.</p>
     #[serde(rename = "AuthMode")]
-    pub auth_mode: String,
+    pub auth_mode: AuthMode,
     /// <p>The default Amazon S3 location to back up EMR Studio Workspaces and notebook files. A Studio user can select an alternative Amazon S3 location when creating a Workspace.</p>
     #[serde(rename = "DefaultS3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -705,7 +1858,7 @@ pub struct CreateStudioSessionMappingInput {
     pub identity_name: Option<String>,
     /// <p>Specifies whether the identity to map to the Studio is a user or a group.</p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: IdentityType,
     /// <p>The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group. Session policies refine Studio user permissions without the need to use multiple IAM user roles.</p>
     #[serde(rename = "SessionPolicyArn")]
     pub session_policy_arn: String,
@@ -747,7 +1900,7 @@ pub struct DeleteStudioSessionMappingInput {
     pub identity_name: Option<String>,
     /// <p>Specifies whether the identity to delete from the Studio is a user or a group.</p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: IdentityType,
     /// <p>The ID of the Amazon EMR Studio.</p>
     #[serde(rename = "StudioId")]
     pub studio_id: String,
@@ -791,7 +1944,7 @@ pub struct DescribeJobFlowsInput {
     /// <p>Return only job flows whose state is contained in this list.</p>
     #[serde(rename = "JobFlowStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_flow_states: Option<Vec<String>>,
+    pub job_flow_states: Option<Vec<JobFlowExecutionState>>,
 }
 
 /// <p> The output for the <a>DescribeJobFlows</a> operation. </p>
@@ -1003,7 +2156,106 @@ pub struct ExecutionEngineConfig {
     /// <p>The type of execution engine. A value of <code>EMR</code> specifies an EMR cluster.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ExecutionEngineType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionEngineType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionEngineType {
+    Emr,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionEngineType),
+}
+
+impl Default for ExecutionEngineType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionEngineType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionEngineType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionEngineType {
+    fn into(self) -> String {
+        match self {
+            ExecutionEngineType::Emr => "EMR".to_string(),
+            ExecutionEngineType::UnknownVariant(UnknownExecutionEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionEngineType {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionEngineType::Emr => &"EMR",
+            ExecutionEngineType::UnknownVariant(UnknownExecutionEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ExecutionEngineType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMR" => ExecutionEngineType::Emr,
+            _ => ExecutionEngineType::UnknownVariant(UnknownExecutionEngineType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionEngineType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMR" => ExecutionEngineType::Emr,
+            _ => ExecutionEngineType::UnknownVariant(UnknownExecutionEngineType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionEngineType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExecutionEngineType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExecutionEngineType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The details of the step failure. The service attempts to detect the root cause for many common failures.</p>
@@ -1069,7 +2321,7 @@ pub struct GetStudioSessionMappingInput {
     pub identity_name: Option<String>,
     /// <p>Specifies whether the identity to fetch is a user or a group.</p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: IdentityType,
     /// <p>The ID of the Amazon EMR Studio.</p>
     #[serde(rename = "StudioId")]
     pub studio_id: String,
@@ -1126,6 +2378,106 @@ pub struct HadoopStepConfig {
     pub properties: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIdentityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IdentityType {
+    Group,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIdentityType),
+}
+
+impl Default for IdentityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IdentityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IdentityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IdentityType {
+    fn into(self) -> String {
+        match self {
+            IdentityType::Group => "GROUP".to_string(),
+            IdentityType::User => "USER".to_string(),
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IdentityType {
+    fn into(self) -> &'a str {
+        match self {
+            IdentityType::Group => &"GROUP",
+            IdentityType::User => &"USER",
+            IdentityType::UnknownVariant(UnknownIdentityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IdentityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GROUP" => IdentityType::Group,
+            "USER" => IdentityType::User,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IdentityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GROUP" => IdentityType::Group,
+            "USER" => IdentityType::User,
+            _ => IdentityType::UnknownVariant(UnknownIdentityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IdentityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IdentityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IdentityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents an EC2 instance provisioned as part of cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1157,7 +2509,7 @@ pub struct Instance {
     /// <p>The instance purchasing option. Valid values are <code>ON_DEMAND</code> or <code>SPOT</code>. </p>
     #[serde(rename = "Market")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub market: Option<String>,
+    pub market: Option<MarketType>,
     /// <p>The private DNS name of the instance.</p>
     #[serde(rename = "PrivateDnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1180,6 +2532,111 @@ pub struct Instance {
     pub status: Option<InstanceStatus>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceCollectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceCollectionType {
+    InstanceFleet,
+    InstanceGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceCollectionType),
+}
+
+impl Default for InstanceCollectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceCollectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceCollectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceCollectionType {
+    fn into(self) -> String {
+        match self {
+            InstanceCollectionType::InstanceFleet => "INSTANCE_FLEET".to_string(),
+            InstanceCollectionType::InstanceGroup => "INSTANCE_GROUP".to_string(),
+            InstanceCollectionType::UnknownVariant(UnknownInstanceCollectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceCollectionType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceCollectionType::InstanceFleet => &"INSTANCE_FLEET",
+            InstanceCollectionType::InstanceGroup => &"INSTANCE_GROUP",
+            InstanceCollectionType::UnknownVariant(UnknownInstanceCollectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceCollectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INSTANCE_FLEET" => InstanceCollectionType::InstanceFleet,
+            "INSTANCE_GROUP" => InstanceCollectionType::InstanceGroup,
+            _ => InstanceCollectionType::UnknownVariant(UnknownInstanceCollectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceCollectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INSTANCE_FLEET" => InstanceCollectionType::InstanceFleet,
+            "INSTANCE_GROUP" => InstanceCollectionType::InstanceGroup,
+            _ => InstanceCollectionType::UnknownVariant(UnknownInstanceCollectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceCollectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceCollectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceCollectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot Instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1191,7 +2648,7 @@ pub struct InstanceFleet {
     /// <p>The node type that the instance fleet hosts. Valid values are MASTER, CORE, or TASK. </p>
     #[serde(rename = "InstanceFleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_fleet_type: Option<String>,
+    pub instance_fleet_type: Option<InstanceFleetType>,
     /// <p>The specification for the instance types that comprise an instance fleet. Up to five unique instance specifications may be defined for each instance fleet. </p>
     #[serde(rename = "InstanceTypeSpecifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,7 +2689,7 @@ pub struct InstanceFleet {
 pub struct InstanceFleetConfig {
     /// <p>The node type that the instance fleet hosts. Valid values are MASTER,CORE,and TASK.</p>
     #[serde(rename = "InstanceFleetType")]
-    pub instance_fleet_type: String,
+    pub instance_fleet_type: InstanceFleetType,
     /// <p>The instance type configurations that define the EC2 instances in the instance fleet.</p>
     #[serde(rename = "InstanceTypeConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1285,6 +2742,136 @@ pub struct InstanceFleetProvisioningSpecifications {
     pub spot_specification: Option<SpotProvisioningSpecification>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceFleetState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceFleetState {
+    Bootstrapping,
+    Provisioning,
+    Resizing,
+    Running,
+    Suspended,
+    Terminated,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceFleetState),
+}
+
+impl Default for InstanceFleetState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceFleetState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceFleetState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceFleetState {
+    fn into(self) -> String {
+        match self {
+            InstanceFleetState::Bootstrapping => "BOOTSTRAPPING".to_string(),
+            InstanceFleetState::Provisioning => "PROVISIONING".to_string(),
+            InstanceFleetState::Resizing => "RESIZING".to_string(),
+            InstanceFleetState::Running => "RUNNING".to_string(),
+            InstanceFleetState::Suspended => "SUSPENDED".to_string(),
+            InstanceFleetState::Terminated => "TERMINATED".to_string(),
+            InstanceFleetState::Terminating => "TERMINATING".to_string(),
+            InstanceFleetState::UnknownVariant(UnknownInstanceFleetState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceFleetState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceFleetState::Bootstrapping => &"BOOTSTRAPPING",
+            InstanceFleetState::Provisioning => &"PROVISIONING",
+            InstanceFleetState::Resizing => &"RESIZING",
+            InstanceFleetState::Running => &"RUNNING",
+            InstanceFleetState::Suspended => &"SUSPENDED",
+            InstanceFleetState::Terminated => &"TERMINATED",
+            InstanceFleetState::Terminating => &"TERMINATING",
+            InstanceFleetState::UnknownVariant(UnknownInstanceFleetState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceFleetState {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOTSTRAPPING" => InstanceFleetState::Bootstrapping,
+            "PROVISIONING" => InstanceFleetState::Provisioning,
+            "RESIZING" => InstanceFleetState::Resizing,
+            "RUNNING" => InstanceFleetState::Running,
+            "SUSPENDED" => InstanceFleetState::Suspended,
+            "TERMINATED" => InstanceFleetState::Terminated,
+            "TERMINATING" => InstanceFleetState::Terminating,
+            _ => InstanceFleetState::UnknownVariant(UnknownInstanceFleetState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceFleetState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOTSTRAPPING" => InstanceFleetState::Bootstrapping,
+            "PROVISIONING" => InstanceFleetState::Provisioning,
+            "RESIZING" => InstanceFleetState::Resizing,
+            "RUNNING" => InstanceFleetState::Running,
+            "SUSPENDED" => InstanceFleetState::Suspended,
+            "TERMINATED" => InstanceFleetState::Terminated,
+            "TERMINATING" => InstanceFleetState::Terminating,
+            _ => InstanceFleetState::UnknownVariant(UnknownInstanceFleetState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceFleetState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceFleetState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1292,11 +2879,132 @@ pub struct InstanceFleetStateChangeReason {
     /// <p>A code corresponding to the reason the state change occurred.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<InstanceFleetStateChangeReasonCode>,
     /// <p>An explanatory message.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceFleetStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceFleetStateChangeReasonCode {
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceFleetStateChangeReasonCode),
+}
+
+impl Default for InstanceFleetStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceFleetStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceFleetStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceFleetStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            InstanceFleetStateChangeReasonCode::ClusterTerminated => {
+                "CLUSTER_TERMINATED".to_string()
+            }
+            InstanceFleetStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE".to_string(),
+            InstanceFleetStateChangeReasonCode::InternalError => "INTERNAL_ERROR".to_string(),
+            InstanceFleetStateChangeReasonCode::ValidationError => "VALIDATION_ERROR".to_string(),
+            InstanceFleetStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceFleetStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceFleetStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceFleetStateChangeReasonCode::ClusterTerminated => &"CLUSTER_TERMINATED",
+            InstanceFleetStateChangeReasonCode::InstanceFailure => &"INSTANCE_FAILURE",
+            InstanceFleetStateChangeReasonCode::InternalError => &"INTERNAL_ERROR",
+            InstanceFleetStateChangeReasonCode::ValidationError => &"VALIDATION_ERROR",
+            InstanceFleetStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceFleetStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceFleetStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLUSTER_TERMINATED" => InstanceFleetStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceFleetStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceFleetStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceFleetStateChangeReasonCode::ValidationError,
+            _ => InstanceFleetStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceFleetStateChangeReasonCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstanceFleetStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLUSTER_TERMINATED" => InstanceFleetStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceFleetStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceFleetStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceFleetStateChangeReasonCode::ValidationError,
+            _ => InstanceFleetStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceFleetStateChangeReasonCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceFleetStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceFleetStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
@@ -1306,7 +3014,7 @@ pub struct InstanceFleetStatus {
     /// <p><p>A code representing the instance fleet status.</p> <ul> <li> <p> <code>PROVISIONING</code>—The instance fleet is provisioning EC2 resources and is not yet ready to run jobs.</p> </li> <li> <p> <code>BOOTSTRAPPING</code>—EC2 instances and other resources have been provisioned and the bootstrap actions specified for the instances are underway.</p> </li> <li> <p> <code>RUNNING</code>—EC2 instances and other resources are running. They are either executing jobs or waiting to execute jobs.</p> </li> <li> <p> <code>RESIZING</code>—A resize operation is underway. EC2 instances are either being added or removed.</p> </li> <li> <p> <code>SUSPENDED</code>—A resize operation could not complete. Existing EC2 instances are running, but instances can&#39;t be added or removed.</p> </li> <li> <p> <code>TERMINATING</code>—The instance fleet is terminating EC2 instances.</p> </li> <li> <p> <code>TERMINATED</code>—The instance fleet is no longer active, and all EC2 instances have been terminated.</p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InstanceFleetState>,
     /// <p>Provides status change reason details for the instance fleet.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1333,6 +3041,115 @@ pub struct InstanceFleetTimeline {
     #[serde(rename = "ReadyDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ready_date_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceFleetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceFleetType {
+    Core,
+    Master,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceFleetType),
+}
+
+impl Default for InstanceFleetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceFleetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceFleetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceFleetType {
+    fn into(self) -> String {
+        match self {
+            InstanceFleetType::Core => "CORE".to_string(),
+            InstanceFleetType::Master => "MASTER".to_string(),
+            InstanceFleetType::Task => "TASK".to_string(),
+            InstanceFleetType::UnknownVariant(UnknownInstanceFleetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceFleetType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceFleetType::Core => &"CORE",
+            InstanceFleetType::Master => &"MASTER",
+            InstanceFleetType::Task => &"TASK",
+            InstanceFleetType::UnknownVariant(UnknownInstanceFleetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceFleetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CORE" => InstanceFleetType::Core,
+            "MASTER" => InstanceFleetType::Master,
+            "TASK" => InstanceFleetType::Task,
+            _ => InstanceFleetType::UnknownVariant(UnknownInstanceFleetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceFleetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CORE" => InstanceFleetType::Core,
+            "MASTER" => InstanceFleetType::Master,
+            "TASK" => InstanceFleetType::Task,
+            _ => InstanceFleetType::UnknownVariant(UnknownInstanceFleetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceFleetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceFleetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceFleetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This entity represents an instance group, which is a group of instances that have common purpose. For example, CORE instance group is used for HDFS.</p>
@@ -1370,7 +3187,7 @@ pub struct InstanceGroup {
     /// <p>The type of the instance group. Valid values are MASTER, CORE or TASK.</p>
     #[serde(rename = "InstanceGroupType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_group_type: Option<String>,
+    pub instance_group_type: Option<InstanceGroupType>,
     /// <p>The EC2 instance type for all instances in the instance group.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1386,7 +3203,7 @@ pub struct InstanceGroup {
     /// <p>The marketplace to provision instances for this group. Valid values are ON_DEMAND or SPOT.</p>
     #[serde(rename = "Market")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub market: Option<String>,
+    pub market: Option<MarketType>,
     /// <p>The name of the instance group.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1434,14 +3251,14 @@ pub struct InstanceGroupConfig {
     pub instance_count: i64,
     /// <p>The role of the instance group in the cluster.</p>
     #[serde(rename = "InstanceRole")]
-    pub instance_role: String,
+    pub instance_role: InstanceRoleType,
     /// <p>The EC2 instance type for all instances in the instance group.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>Market type of the EC2 instances used to create a cluster node.</p>
     #[serde(rename = "Market")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub market: Option<String>,
+    pub market: Option<MarketType>,
     /// <p>Friendly name given to the instance group.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1472,7 +3289,7 @@ pub struct InstanceGroupDetail {
     pub instance_request_count: i64,
     /// <p>Instance group role in the cluster</p>
     #[serde(rename = "InstanceRole")]
-    pub instance_role: String,
+    pub instance_role: InstanceRoleType,
     /// <p>Actual count of running instances.</p>
     #[serde(rename = "InstanceRunningCount")]
     pub instance_running_count: i64,
@@ -1485,7 +3302,7 @@ pub struct InstanceGroupDetail {
     pub last_state_change_reason: Option<String>,
     /// <p>Market type of the EC2 instances used to create a cluster node.</p>
     #[serde(rename = "Market")]
-    pub market: String,
+    pub market: MarketType,
     /// <p>Friendly name for the instance group.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1500,7 +3317,7 @@ pub struct InstanceGroupDetail {
     pub start_date_time: Option<f64>,
     /// <p>State of instance group. The following values are deprecated: STARTING, TERMINATED, and FAILED.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: InstanceGroupState,
 }
 
 /// <p>Modify the size or configurations of an instance group.</p>
@@ -1528,6 +3345,156 @@ pub struct InstanceGroupModifyConfig {
     pub shrink_policy: Option<ShrinkPolicy>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceGroupState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceGroupState {
+    Arrested,
+    Bootstrapping,
+    Ended,
+    Provisioning,
+    Reconfiguring,
+    Resizing,
+    Running,
+    ShuttingDown,
+    Suspended,
+    Terminated,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceGroupState),
+}
+
+impl Default for InstanceGroupState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceGroupState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceGroupState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceGroupState {
+    fn into(self) -> String {
+        match self {
+            InstanceGroupState::Arrested => "ARRESTED".to_string(),
+            InstanceGroupState::Bootstrapping => "BOOTSTRAPPING".to_string(),
+            InstanceGroupState::Ended => "ENDED".to_string(),
+            InstanceGroupState::Provisioning => "PROVISIONING".to_string(),
+            InstanceGroupState::Reconfiguring => "RECONFIGURING".to_string(),
+            InstanceGroupState::Resizing => "RESIZING".to_string(),
+            InstanceGroupState::Running => "RUNNING".to_string(),
+            InstanceGroupState::ShuttingDown => "SHUTTING_DOWN".to_string(),
+            InstanceGroupState::Suspended => "SUSPENDED".to_string(),
+            InstanceGroupState::Terminated => "TERMINATED".to_string(),
+            InstanceGroupState::Terminating => "TERMINATING".to_string(),
+            InstanceGroupState::UnknownVariant(UnknownInstanceGroupState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceGroupState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceGroupState::Arrested => &"ARRESTED",
+            InstanceGroupState::Bootstrapping => &"BOOTSTRAPPING",
+            InstanceGroupState::Ended => &"ENDED",
+            InstanceGroupState::Provisioning => &"PROVISIONING",
+            InstanceGroupState::Reconfiguring => &"RECONFIGURING",
+            InstanceGroupState::Resizing => &"RESIZING",
+            InstanceGroupState::Running => &"RUNNING",
+            InstanceGroupState::ShuttingDown => &"SHUTTING_DOWN",
+            InstanceGroupState::Suspended => &"SUSPENDED",
+            InstanceGroupState::Terminated => &"TERMINATED",
+            InstanceGroupState::Terminating => &"TERMINATING",
+            InstanceGroupState::UnknownVariant(UnknownInstanceGroupState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceGroupState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARRESTED" => InstanceGroupState::Arrested,
+            "BOOTSTRAPPING" => InstanceGroupState::Bootstrapping,
+            "ENDED" => InstanceGroupState::Ended,
+            "PROVISIONING" => InstanceGroupState::Provisioning,
+            "RECONFIGURING" => InstanceGroupState::Reconfiguring,
+            "RESIZING" => InstanceGroupState::Resizing,
+            "RUNNING" => InstanceGroupState::Running,
+            "SHUTTING_DOWN" => InstanceGroupState::ShuttingDown,
+            "SUSPENDED" => InstanceGroupState::Suspended,
+            "TERMINATED" => InstanceGroupState::Terminated,
+            "TERMINATING" => InstanceGroupState::Terminating,
+            _ => InstanceGroupState::UnknownVariant(UnknownInstanceGroupState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceGroupState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARRESTED" => InstanceGroupState::Arrested,
+            "BOOTSTRAPPING" => InstanceGroupState::Bootstrapping,
+            "ENDED" => InstanceGroupState::Ended,
+            "PROVISIONING" => InstanceGroupState::Provisioning,
+            "RECONFIGURING" => InstanceGroupState::Reconfiguring,
+            "RESIZING" => InstanceGroupState::Resizing,
+            "RUNNING" => InstanceGroupState::Running,
+            "SHUTTING_DOWN" => InstanceGroupState::ShuttingDown,
+            "SUSPENDED" => InstanceGroupState::Suspended,
+            "TERMINATED" => InstanceGroupState::Terminated,
+            "TERMINATING" => InstanceGroupState::Terminating,
+            _ => InstanceGroupState::UnknownVariant(UnknownInstanceGroupState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceGroupState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceGroupState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The status change reason details for the instance group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1535,11 +3502,132 @@ pub struct InstanceGroupStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<InstanceGroupStateChangeReasonCode>,
     /// <p>The status change reason description.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceGroupStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceGroupStateChangeReasonCode {
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceGroupStateChangeReasonCode),
+}
+
+impl Default for InstanceGroupStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceGroupStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceGroupStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceGroupStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            InstanceGroupStateChangeReasonCode::ClusterTerminated => {
+                "CLUSTER_TERMINATED".to_string()
+            }
+            InstanceGroupStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE".to_string(),
+            InstanceGroupStateChangeReasonCode::InternalError => "INTERNAL_ERROR".to_string(),
+            InstanceGroupStateChangeReasonCode::ValidationError => "VALIDATION_ERROR".to_string(),
+            InstanceGroupStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceGroupStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceGroupStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceGroupStateChangeReasonCode::ClusterTerminated => &"CLUSTER_TERMINATED",
+            InstanceGroupStateChangeReasonCode::InstanceFailure => &"INSTANCE_FAILURE",
+            InstanceGroupStateChangeReasonCode::InternalError => &"INTERNAL_ERROR",
+            InstanceGroupStateChangeReasonCode::ValidationError => &"VALIDATION_ERROR",
+            InstanceGroupStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceGroupStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceGroupStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLUSTER_TERMINATED" => InstanceGroupStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceGroupStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceGroupStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceGroupStateChangeReasonCode::ValidationError,
+            _ => InstanceGroupStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceGroupStateChangeReasonCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstanceGroupStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLUSTER_TERMINATED" => InstanceGroupStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceGroupStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceGroupStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceGroupStateChangeReasonCode::ValidationError,
+            _ => InstanceGroupStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceGroupStateChangeReasonCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceGroupStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceGroupStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The details of the instance group status.</p>
@@ -1549,7 +3637,7 @@ pub struct InstanceGroupStatus {
     /// <p>The current state of the instance group.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InstanceGroupState>,
     /// <p>The status change reason details for the instance group.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1578,6 +3666,115 @@ pub struct InstanceGroupTimeline {
     pub ready_date_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceGroupType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceGroupType {
+    Core,
+    Master,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceGroupType),
+}
+
+impl Default for InstanceGroupType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceGroupType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceGroupType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceGroupType {
+    fn into(self) -> String {
+        match self {
+            InstanceGroupType::Core => "CORE".to_string(),
+            InstanceGroupType::Master => "MASTER".to_string(),
+            InstanceGroupType::Task => "TASK".to_string(),
+            InstanceGroupType::UnknownVariant(UnknownInstanceGroupType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceGroupType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceGroupType::Core => &"CORE",
+            InstanceGroupType::Master => &"MASTER",
+            InstanceGroupType::Task => &"TASK",
+            InstanceGroupType::UnknownVariant(UnknownInstanceGroupType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceGroupType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CORE" => InstanceGroupType::Core,
+            "MASTER" => InstanceGroupType::Master,
+            "TASK" => InstanceGroupType::Task,
+            _ => InstanceGroupType::UnknownVariant(UnknownInstanceGroupType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceGroupType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CORE" => InstanceGroupType::Core,
+            "MASTER" => InstanceGroupType::Master,
+            "TASK" => InstanceGroupType::Task,
+            _ => InstanceGroupType::UnknownVariant(UnknownInstanceGroupType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceGroupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceGroupType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceGroupType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Custom policy for requesting termination protection or termination of specific instances when shrinking an instance group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceResizePolicy {
@@ -1595,6 +3792,230 @@ pub struct InstanceResizePolicy {
     pub instances_to_terminate: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceRoleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceRoleType {
+    Core,
+    Master,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceRoleType),
+}
+
+impl Default for InstanceRoleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceRoleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceRoleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceRoleType {
+    fn into(self) -> String {
+        match self {
+            InstanceRoleType::Core => "CORE".to_string(),
+            InstanceRoleType::Master => "MASTER".to_string(),
+            InstanceRoleType::Task => "TASK".to_string(),
+            InstanceRoleType::UnknownVariant(UnknownInstanceRoleType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceRoleType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceRoleType::Core => &"CORE",
+            InstanceRoleType::Master => &"MASTER",
+            InstanceRoleType::Task => &"TASK",
+            InstanceRoleType::UnknownVariant(UnknownInstanceRoleType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceRoleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CORE" => InstanceRoleType::Core,
+            "MASTER" => InstanceRoleType::Master,
+            "TASK" => InstanceRoleType::Task,
+            _ => InstanceRoleType::UnknownVariant(UnknownInstanceRoleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceRoleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CORE" => InstanceRoleType::Core,
+            "MASTER" => InstanceRoleType::Master,
+            "TASK" => InstanceRoleType::Task,
+            _ => InstanceRoleType::UnknownVariant(UnknownInstanceRoleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceRoleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceRoleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceRoleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceState {
+    AwaitingFulfillment,
+    Bootstrapping,
+    Provisioning,
+    Running,
+    Terminated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceState),
+}
+
+impl Default for InstanceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceState {
+    fn into(self) -> String {
+        match self {
+            InstanceState::AwaitingFulfillment => "AWAITING_FULFILLMENT".to_string(),
+            InstanceState::Bootstrapping => "BOOTSTRAPPING".to_string(),
+            InstanceState::Provisioning => "PROVISIONING".to_string(),
+            InstanceState::Running => "RUNNING".to_string(),
+            InstanceState::Terminated => "TERMINATED".to_string(),
+            InstanceState::UnknownVariant(UnknownInstanceState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceState::AwaitingFulfillment => &"AWAITING_FULFILLMENT",
+            InstanceState::Bootstrapping => &"BOOTSTRAPPING",
+            InstanceState::Provisioning => &"PROVISIONING",
+            InstanceState::Running => &"RUNNING",
+            InstanceState::Terminated => &"TERMINATED",
+            InstanceState::UnknownVariant(UnknownInstanceState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWAITING_FULFILLMENT" => InstanceState::AwaitingFulfillment,
+            "BOOTSTRAPPING" => InstanceState::Bootstrapping,
+            "PROVISIONING" => InstanceState::Provisioning,
+            "RUNNING" => InstanceState::Running,
+            "TERMINATED" => InstanceState::Terminated,
+            _ => InstanceState::UnknownVariant(UnknownInstanceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWAITING_FULFILLMENT" => InstanceState::AwaitingFulfillment,
+            "BOOTSTRAPPING" => InstanceState::Bootstrapping,
+            "PROVISIONING" => InstanceState::Provisioning,
+            "RUNNING" => InstanceState::Running,
+            "TERMINATED" => InstanceState::Terminated,
+            _ => InstanceState::UnknownVariant(UnknownInstanceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The details of the status change reason for the instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1602,11 +4023,135 @@ pub struct InstanceStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<InstanceStateChangeReasonCode>,
     /// <p>The status change reason description.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceStateChangeReasonCode {
+    BootstrapFailure,
+    ClusterTerminated,
+    InstanceFailure,
+    InternalError,
+    ValidationError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceStateChangeReasonCode),
+}
+
+impl Default for InstanceStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            InstanceStateChangeReasonCode::BootstrapFailure => "BOOTSTRAP_FAILURE".to_string(),
+            InstanceStateChangeReasonCode::ClusterTerminated => "CLUSTER_TERMINATED".to_string(),
+            InstanceStateChangeReasonCode::InstanceFailure => "INSTANCE_FAILURE".to_string(),
+            InstanceStateChangeReasonCode::InternalError => "INTERNAL_ERROR".to_string(),
+            InstanceStateChangeReasonCode::ValidationError => "VALIDATION_ERROR".to_string(),
+            InstanceStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceStateChangeReasonCode::BootstrapFailure => &"BOOTSTRAP_FAILURE",
+            InstanceStateChangeReasonCode::ClusterTerminated => &"CLUSTER_TERMINATED",
+            InstanceStateChangeReasonCode::InstanceFailure => &"INSTANCE_FAILURE",
+            InstanceStateChangeReasonCode::InternalError => &"INTERNAL_ERROR",
+            InstanceStateChangeReasonCode::ValidationError => &"VALIDATION_ERROR",
+            InstanceStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceStateChangeReasonCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOTSTRAP_FAILURE" => InstanceStateChangeReasonCode::BootstrapFailure,
+            "CLUSTER_TERMINATED" => InstanceStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceStateChangeReasonCode::ValidationError,
+            _ => InstanceStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceStateChangeReasonCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InstanceStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOTSTRAP_FAILURE" => InstanceStateChangeReasonCode::BootstrapFailure,
+            "CLUSTER_TERMINATED" => InstanceStateChangeReasonCode::ClusterTerminated,
+            "INSTANCE_FAILURE" => InstanceStateChangeReasonCode::InstanceFailure,
+            "INTERNAL_ERROR" => InstanceStateChangeReasonCode::InternalError,
+            "VALIDATION_ERROR" => InstanceStateChangeReasonCode::ValidationError,
+            _ => InstanceStateChangeReasonCode::UnknownVariant(
+                UnknownInstanceStateChangeReasonCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The instance status details.</p>
@@ -1616,7 +4161,7 @@ pub struct InstanceStatus {
     /// <p>The current state of the instance.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InstanceState>,
     /// <p>The details of the status change reason for the instance.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1751,7 +4296,7 @@ pub struct JobFlowDetail {
     /// <p>The way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scale_down_behavior: Option<String>,
+    pub scale_down_behavior: Option<ScaleDownBehavior>,
     /// <p>The IAM role that is assumed by the Amazon EMR service to access AWS resources on your behalf.</p>
     #[serde(rename = "ServiceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1768,6 +4313,142 @@ pub struct JobFlowDetail {
     #[serde(rename = "VisibleToAllUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visible_to_all_users: Option<bool>,
+}
+
+/// <p>The type of instance.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJobFlowExecutionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JobFlowExecutionState {
+    Bootstrapping,
+    Completed,
+    Failed,
+    Running,
+    ShuttingDown,
+    Starting,
+    Terminated,
+    Waiting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJobFlowExecutionState),
+}
+
+impl Default for JobFlowExecutionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JobFlowExecutionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JobFlowExecutionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JobFlowExecutionState {
+    fn into(self) -> String {
+        match self {
+            JobFlowExecutionState::Bootstrapping => "BOOTSTRAPPING".to_string(),
+            JobFlowExecutionState::Completed => "COMPLETED".to_string(),
+            JobFlowExecutionState::Failed => "FAILED".to_string(),
+            JobFlowExecutionState::Running => "RUNNING".to_string(),
+            JobFlowExecutionState::ShuttingDown => "SHUTTING_DOWN".to_string(),
+            JobFlowExecutionState::Starting => "STARTING".to_string(),
+            JobFlowExecutionState::Terminated => "TERMINATED".to_string(),
+            JobFlowExecutionState::Waiting => "WAITING".to_string(),
+            JobFlowExecutionState::UnknownVariant(UnknownJobFlowExecutionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JobFlowExecutionState {
+    fn into(self) -> &'a str {
+        match self {
+            JobFlowExecutionState::Bootstrapping => &"BOOTSTRAPPING",
+            JobFlowExecutionState::Completed => &"COMPLETED",
+            JobFlowExecutionState::Failed => &"FAILED",
+            JobFlowExecutionState::Running => &"RUNNING",
+            JobFlowExecutionState::ShuttingDown => &"SHUTTING_DOWN",
+            JobFlowExecutionState::Starting => &"STARTING",
+            JobFlowExecutionState::Terminated => &"TERMINATED",
+            JobFlowExecutionState::Waiting => &"WAITING",
+            JobFlowExecutionState::UnknownVariant(UnknownJobFlowExecutionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for JobFlowExecutionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOOTSTRAPPING" => JobFlowExecutionState::Bootstrapping,
+            "COMPLETED" => JobFlowExecutionState::Completed,
+            "FAILED" => JobFlowExecutionState::Failed,
+            "RUNNING" => JobFlowExecutionState::Running,
+            "SHUTTING_DOWN" => JobFlowExecutionState::ShuttingDown,
+            "STARTING" => JobFlowExecutionState::Starting,
+            "TERMINATED" => JobFlowExecutionState::Terminated,
+            "WAITING" => JobFlowExecutionState::Waiting,
+            _ => JobFlowExecutionState::UnknownVariant(UnknownJobFlowExecutionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JobFlowExecutionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOOTSTRAPPING" => JobFlowExecutionState::Bootstrapping,
+            "COMPLETED" => JobFlowExecutionState::Completed,
+            "FAILED" => JobFlowExecutionState::Failed,
+            "RUNNING" => JobFlowExecutionState::Running,
+            "SHUTTING_DOWN" => JobFlowExecutionState::ShuttingDown,
+            "STARTING" => JobFlowExecutionState::Starting,
+            "TERMINATED" => JobFlowExecutionState::Terminated,
+            "WAITING" => JobFlowExecutionState::Waiting,
+            _ => JobFlowExecutionState::UnknownVariant(UnknownJobFlowExecutionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JobFlowExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JobFlowExecutionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JobFlowExecutionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the status of the cluster (job flow).</p>
@@ -1795,7 +4476,7 @@ pub struct JobFlowExecutionStatusDetail {
     pub start_date_time: Option<f64>,
     /// <p>The state of the job flow.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: JobFlowExecutionState,
 }
 
 /// <p>A description of the Amazon EC2 instance on which the cluster (job flow) runs. A valid JobFlowInstancesConfig must contain either InstanceGroups or InstanceFleets. They cannot be used together. You may also have MasterInstanceType, SlaveInstanceType, and InstanceCount (all three must be present), but we don't recommend this configuration.</p>
@@ -1997,7 +4678,7 @@ pub struct ListClustersInput {
     /// <p>The cluster state filters to apply when listing clusters.</p>
     #[serde(rename = "ClusterStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cluster_states: Option<Vec<String>>,
+    pub cluster_states: Option<Vec<ClusterState>>,
     /// <p>The creation date and time beginning value filter for listing clusters.</p>
     #[serde(rename = "CreatedAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2092,7 +4773,7 @@ pub struct ListInstancesInput {
     /// <p>The node type of the instance fleet. For example MASTER, CORE, or TASK.</p>
     #[serde(rename = "InstanceFleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_fleet_type: Option<String>,
+    pub instance_fleet_type: Option<InstanceFleetType>,
     /// <p>The identifier of the instance group for which to list the instances.</p>
     #[serde(rename = "InstanceGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2100,11 +4781,11 @@ pub struct ListInstancesInput {
     /// <p>The type of instance group for which to list the instances.</p>
     #[serde(rename = "InstanceGroupTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_group_types: Option<Vec<String>>,
+    pub instance_group_types: Option<Vec<InstanceGroupType>>,
     /// <p>A list of instance states that will filter the instances returned with this request.</p>
     #[serde(rename = "InstanceStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_states: Option<Vec<String>>,
+    pub instance_states: Option<Vec<InstanceState>>,
     /// <p>The pagination token that indicates the next set of results to retrieve.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2143,7 +4824,7 @@ pub struct ListNotebookExecutionsInput {
     /// <p><p>The status filter for listing notebook executions.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotebookExecutionStatus>,
     /// <p>The end of time range filter for listing notebook executions. The default is the current timestamp.</p>
     #[serde(rename = "To")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2203,7 +4884,7 @@ pub struct ListStepsInput {
     /// <p>The filter to limit the step list based on certain states.</p>
     #[serde(rename = "StepStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_states: Option<Vec<String>>,
+    pub step_states: Option<Vec<StepState>>,
 }
 
 /// <p>This output contains the list of steps returned in reverse order. This means that the last step is the first element in the list.</p>
@@ -2226,7 +4907,7 @@ pub struct ListStudioSessionMappingsInput {
     /// <p>Specifies whether to return session mappings for users or groups. If not specified, the results include session mapping details for both users and groups.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>The pagination token that indicates the set of results to retrieve.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2279,6 +4960,106 @@ pub struct ManagedScalingPolicy {
     #[serde(rename = "ComputeLimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_limits: Option<ComputeLimits>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMarketType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MarketType {
+    OnDemand,
+    Spot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMarketType),
+}
+
+impl Default for MarketType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MarketType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MarketType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MarketType {
+    fn into(self) -> String {
+        match self {
+            MarketType::OnDemand => "ON_DEMAND".to_string(),
+            MarketType::Spot => "SPOT".to_string(),
+            MarketType::UnknownVariant(UnknownMarketType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MarketType {
+    fn into(self) -> &'a str {
+        match self {
+            MarketType::OnDemand => &"ON_DEMAND",
+            MarketType::Spot => &"SPOT",
+            MarketType::UnknownVariant(UnknownMarketType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MarketType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ON_DEMAND" => MarketType::OnDemand,
+            "SPOT" => MarketType::Spot,
+            _ => MarketType::UnknownVariant(UnknownMarketType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MarketType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ON_DEMAND" => MarketType::OnDemand,
+            "SPOT" => MarketType::Spot,
+            _ => MarketType::UnknownVariant(UnknownMarketType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MarketType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MarketType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MarketType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A CloudWatch dimension, which is specified using a <code>Key</code> (known as a <code>Name</code> in CloudWatch), <code>Value</code> pair. By default, Amazon EMR uses one dimension whose <code>Key</code> is <code>JobFlowID</code> and <code>Value</code> is a variable representing the cluster ID, which is <code>${emr.clusterId}</code>. This enables the rule to bootstrap when the cluster ID becomes available.</p>
@@ -2391,11 +5172,155 @@ pub struct NotebookExecution {
     /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotebookExecutionStatus>,
     /// <p>A list of tags associated with a notebook execution. Tags are user-defined key-value pairs that consist of a required key string with a maximum of 128 characters and an optional value string with a maximum of 256 characters.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookExecutionStatus {
+    Failed,
+    Failing,
+    Finished,
+    Finishing,
+    Running,
+    Starting,
+    StartPending,
+    Stopped,
+    Stopping,
+    StopPending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookExecutionStatus),
+}
+
+impl Default for NotebookExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            NotebookExecutionStatus::Failed => "FAILED".to_string(),
+            NotebookExecutionStatus::Failing => "FAILING".to_string(),
+            NotebookExecutionStatus::Finished => "FINISHED".to_string(),
+            NotebookExecutionStatus::Finishing => "FINISHING".to_string(),
+            NotebookExecutionStatus::Running => "RUNNING".to_string(),
+            NotebookExecutionStatus::Starting => "STARTING".to_string(),
+            NotebookExecutionStatus::StartPending => "START_PENDING".to_string(),
+            NotebookExecutionStatus::Stopped => "STOPPED".to_string(),
+            NotebookExecutionStatus::Stopping => "STOPPING".to_string(),
+            NotebookExecutionStatus::StopPending => "STOP_PENDING".to_string(),
+            NotebookExecutionStatus::UnknownVariant(UnknownNotebookExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookExecutionStatus::Failed => &"FAILED",
+            NotebookExecutionStatus::Failing => &"FAILING",
+            NotebookExecutionStatus::Finished => &"FINISHED",
+            NotebookExecutionStatus::Finishing => &"FINISHING",
+            NotebookExecutionStatus::Running => &"RUNNING",
+            NotebookExecutionStatus::Starting => &"STARTING",
+            NotebookExecutionStatus::StartPending => &"START_PENDING",
+            NotebookExecutionStatus::Stopped => &"STOPPED",
+            NotebookExecutionStatus::Stopping => &"STOPPING",
+            NotebookExecutionStatus::StopPending => &"STOP_PENDING",
+            NotebookExecutionStatus::UnknownVariant(UnknownNotebookExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => NotebookExecutionStatus::Failed,
+            "FAILING" => NotebookExecutionStatus::Failing,
+            "FINISHED" => NotebookExecutionStatus::Finished,
+            "FINISHING" => NotebookExecutionStatus::Finishing,
+            "RUNNING" => NotebookExecutionStatus::Running,
+            "STARTING" => NotebookExecutionStatus::Starting,
+            "START_PENDING" => NotebookExecutionStatus::StartPending,
+            "STOPPED" => NotebookExecutionStatus::Stopped,
+            "STOPPING" => NotebookExecutionStatus::Stopping,
+            "STOP_PENDING" => NotebookExecutionStatus::StopPending,
+            _ => NotebookExecutionStatus::UnknownVariant(UnknownNotebookExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotebookExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => NotebookExecutionStatus::Failed,
+            "FAILING" => NotebookExecutionStatus::Failing,
+            "FINISHED" => NotebookExecutionStatus::Finished,
+            "FINISHING" => NotebookExecutionStatus::Finishing,
+            "RUNNING" => NotebookExecutionStatus::Running,
+            "STARTING" => NotebookExecutionStatus::Starting,
+            "START_PENDING" => NotebookExecutionStatus::StartPending,
+            "STOPPED" => NotebookExecutionStatus::Stopped,
+            "STOPPING" => NotebookExecutionStatus::Stopping,
+            "STOP_PENDING" => NotebookExecutionStatus::StopPending,
+            _ => NotebookExecutionStatus::UnknownVariant(UnknownNotebookExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotebookExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -2425,7 +5350,110 @@ pub struct NotebookExecutionSummary {
     /// <p><p>The status of the notebook execution.</p> <ul> <li> <p> <code>START<em>PENDING</code> indicates that the cluster has received the execution request but execution has not begun.</p> </li> <li> <p> <code>STARTING</code> indicates that the execution is starting on the cluster.</p> </li> <li> <p> <code>RUNNING</code> indicates that the execution is being processed by the cluster.</p> </li> <li> <p> <code>FINISHING</code> indicates that execution processing is in the final stages.</p> </li> <li> <p> <code>FINISHED</code> indicates that the execution has completed without error.</p> </li> <li> <p> <code>FAILING</code> indicates that the execution is failing and will not finish successfully.</p> </li> <li> <p> <code>FAILED</code> indicates that the execution failed.</p> </li> <li> <p> <code>STOP</em>PENDING</code> indicates that the cluster has received a <code>StopNotebookExecution</code> request and the stop is pending.</p> </li> <li> <p> <code>STOPPING</code> indicates that the cluster is in the process of stopping the execution as a result of a <code>StopNotebookExecution</code> request.</p> </li> <li> <p> <code>STOPPED</code> indicates that the execution stopped because of a <code>StopNotebookExecution</code> request.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<NotebookExecutionStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOnDemandProvisioningAllocationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OnDemandProvisioningAllocationStrategy {
+    LowestPrice,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOnDemandProvisioningAllocationStrategy),
+}
+
+impl Default for OnDemandProvisioningAllocationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OnDemandProvisioningAllocationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OnDemandProvisioningAllocationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OnDemandProvisioningAllocationStrategy {
+    fn into(self) -> String {
+        match self {
+            OnDemandProvisioningAllocationStrategy::LowestPrice => "lowest-price".to_string(),
+            OnDemandProvisioningAllocationStrategy::UnknownVariant(
+                UnknownOnDemandProvisioningAllocationStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OnDemandProvisioningAllocationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            OnDemandProvisioningAllocationStrategy::LowestPrice => &"lowest-price",
+            OnDemandProvisioningAllocationStrategy::UnknownVariant(
+                UnknownOnDemandProvisioningAllocationStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OnDemandProvisioningAllocationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "lowest-price" => OnDemandProvisioningAllocationStrategy::LowestPrice,
+            _ => OnDemandProvisioningAllocationStrategy::UnknownVariant(
+                UnknownOnDemandProvisioningAllocationStrategy {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OnDemandProvisioningAllocationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "lowest-price" => OnDemandProvisioningAllocationStrategy::LowestPrice,
+            _ => OnDemandProvisioningAllocationStrategy::UnknownVariant(
+                UnknownOnDemandProvisioningAllocationStrategy { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OnDemandProvisioningAllocationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OnDemandProvisioningAllocationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OnDemandProvisioningAllocationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p> The launch specification for On-Demand Instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand Instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
@@ -2433,7 +5461,7 @@ pub struct NotebookExecutionSummary {
 pub struct OnDemandProvisioningSpecification {
     /// <p> Specifies the strategy to use in launching On-Demand Instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
     #[serde(rename = "AllocationStrategy")]
-    pub allocation_strategy: String,
+    pub allocation_strategy: OnDemandProvisioningAllocationStrategy,
 }
 
 /// <p>Placement group configuration for an Amazon EMR cluster. The configuration specifies the placement strategy that can be applied to instance roles during cluster creation.</p> <p>To use this configuration, consider attaching managed policy AmazonElasticMapReducePlacementGroupPolicy to the EMR role.</p>
@@ -2441,11 +5469,125 @@ pub struct OnDemandProvisioningSpecification {
 pub struct PlacementGroupConfig {
     /// <p>Role of the instance in the cluster.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported instance role is <code>MASTER</code>.</p>
     #[serde(rename = "InstanceRole")]
-    pub instance_role: String,
+    pub instance_role: InstanceRoleType,
     /// <p>EC2 Placement Group strategy associated with instance role.</p> <p>Starting with Amazon EMR version 5.23.0, the only supported placement strategy is <code>SPREAD</code> for the <code>MASTER</code> instance role.</p>
     #[serde(rename = "PlacementStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub placement_strategy: Option<String>,
+    pub placement_strategy: Option<PlacementGroupStrategy>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlacementGroupStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlacementGroupStrategy {
+    Cluster,
+    None,
+    Partition,
+    Spread,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlacementGroupStrategy),
+}
+
+impl Default for PlacementGroupStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlacementGroupStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlacementGroupStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlacementGroupStrategy {
+    fn into(self) -> String {
+        match self {
+            PlacementGroupStrategy::Cluster => "CLUSTER".to_string(),
+            PlacementGroupStrategy::None => "NONE".to_string(),
+            PlacementGroupStrategy::Partition => "PARTITION".to_string(),
+            PlacementGroupStrategy::Spread => "SPREAD".to_string(),
+            PlacementGroupStrategy::UnknownVariant(UnknownPlacementGroupStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlacementGroupStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            PlacementGroupStrategy::Cluster => &"CLUSTER",
+            PlacementGroupStrategy::None => &"NONE",
+            PlacementGroupStrategy::Partition => &"PARTITION",
+            PlacementGroupStrategy::Spread => &"SPREAD",
+            PlacementGroupStrategy::UnknownVariant(UnknownPlacementGroupStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlacementGroupStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLUSTER" => PlacementGroupStrategy::Cluster,
+            "NONE" => PlacementGroupStrategy::None,
+            "PARTITION" => PlacementGroupStrategy::Partition,
+            "SPREAD" => PlacementGroupStrategy::Spread,
+            _ => PlacementGroupStrategy::UnknownVariant(UnknownPlacementGroupStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlacementGroupStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLUSTER" => PlacementGroupStrategy::Cluster,
+            "NONE" => PlacementGroupStrategy::None,
+            "PARTITION" => PlacementGroupStrategy::Partition,
+            "SPREAD" => PlacementGroupStrategy::Spread,
+            _ => PlacementGroupStrategy::UnknownVariant(UnknownPlacementGroupStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementGroupStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlacementGroupStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlacementGroupStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon EC2 Availability Zone configuration of the cluster (job flow).</p>
@@ -2579,6 +5721,110 @@ pub struct RemoveTagsInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRepoUpgradeOnBoot {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RepoUpgradeOnBoot {
+    None,
+    Security,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRepoUpgradeOnBoot),
+}
+
+impl Default for RepoUpgradeOnBoot {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RepoUpgradeOnBoot {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RepoUpgradeOnBoot {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RepoUpgradeOnBoot {
+    fn into(self) -> String {
+        match self {
+            RepoUpgradeOnBoot::None => "NONE".to_string(),
+            RepoUpgradeOnBoot::Security => "SECURITY".to_string(),
+            RepoUpgradeOnBoot::UnknownVariant(UnknownRepoUpgradeOnBoot { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RepoUpgradeOnBoot {
+    fn into(self) -> &'a str {
+        match self {
+            RepoUpgradeOnBoot::None => &"NONE",
+            RepoUpgradeOnBoot::Security => &"SECURITY",
+            RepoUpgradeOnBoot::UnknownVariant(UnknownRepoUpgradeOnBoot { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RepoUpgradeOnBoot {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => RepoUpgradeOnBoot::None,
+            "SECURITY" => RepoUpgradeOnBoot::Security,
+            _ => RepoUpgradeOnBoot::UnknownVariant(UnknownRepoUpgradeOnBoot {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RepoUpgradeOnBoot {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => RepoUpgradeOnBoot::None,
+            "SECURITY" => RepoUpgradeOnBoot::Security,
+            _ => RepoUpgradeOnBoot::UnknownVariant(UnknownRepoUpgradeOnBoot { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RepoUpgradeOnBoot {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RepoUpgradeOnBoot {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RepoUpgradeOnBoot {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Input to the <a>RunJobFlow</a> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2656,11 +5902,11 @@ pub struct RunJobFlowInput {
     /// <p>Applies only when <code>CustomAmiID</code> is used. Specifies which updates from the Amazon Linux AMI package repositories to apply automatically when the instance boots using the AMI. If omitted, the default is <code>SECURITY</code>, which indicates that only security updates are applied. If <code>NONE</code> is specified, no updates are applied, and all updates must be applied manually.</p>
     #[serde(rename = "RepoUpgradeOnBoot")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub repo_upgrade_on_boot: Option<String>,
+    pub repo_upgrade_on_boot: Option<RepoUpgradeOnBoot>,
     /// <p>Specifies the way that individual Amazon EC2 instances terminate when an automatic scale-in activity occurs or an instance group is resized. <code>TERMINATE_AT_INSTANCE_HOUR</code> indicates that Amazon EMR terminates nodes at the instance-hour boundary, regardless of when the request to terminate the instance was submitted. This option is only available with Amazon EMR 5.1.0 and later and is the default for clusters created using that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR adds nodes to a deny list and drains tasks from nodes before terminating the Amazon EC2 instances, regardless of the instance-hour boundary. With either behavior, Amazon EMR removes the least active nodes first and blocks instance termination if it could lead to HDFS corruption. <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version 4.1.0 and later, and is the default for versions of Amazon EMR earlier than 5.1.0.</p>
     #[serde(rename = "ScaleDownBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scale_down_behavior: Option<String>,
+    pub scale_down_behavior: Option<ScaleDownBehavior>,
     /// <p>The name of a security configuration to apply to the cluster.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2705,13 +5951,119 @@ pub struct RunJobFlowOutput {
     pub job_flow_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScaleDownBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScaleDownBehavior {
+    TerminateAtInstanceHour,
+    TerminateAtTaskCompletion,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScaleDownBehavior),
+}
+
+impl Default for ScaleDownBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScaleDownBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScaleDownBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScaleDownBehavior {
+    fn into(self) -> String {
+        match self {
+            ScaleDownBehavior::TerminateAtInstanceHour => "TERMINATE_AT_INSTANCE_HOUR".to_string(),
+            ScaleDownBehavior::TerminateAtTaskCompletion => {
+                "TERMINATE_AT_TASK_COMPLETION".to_string()
+            }
+            ScaleDownBehavior::UnknownVariant(UnknownScaleDownBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScaleDownBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            ScaleDownBehavior::TerminateAtInstanceHour => &"TERMINATE_AT_INSTANCE_HOUR",
+            ScaleDownBehavior::TerminateAtTaskCompletion => &"TERMINATE_AT_TASK_COMPLETION",
+            ScaleDownBehavior::UnknownVariant(UnknownScaleDownBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScaleDownBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "TERMINATE_AT_INSTANCE_HOUR" => ScaleDownBehavior::TerminateAtInstanceHour,
+            "TERMINATE_AT_TASK_COMPLETION" => ScaleDownBehavior::TerminateAtTaskCompletion,
+            _ => ScaleDownBehavior::UnknownVariant(UnknownScaleDownBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScaleDownBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TERMINATE_AT_INSTANCE_HOUR" => ScaleDownBehavior::TerminateAtInstanceHour,
+            "TERMINATE_AT_TASK_COMPLETION" => ScaleDownBehavior::TerminateAtTaskCompletion,
+            _ => ScaleDownBehavior::UnknownVariant(UnknownScaleDownBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScaleDownBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScaleDownBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScaleDownBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The type of adjustment the automatic scaling activity makes when triggered, and the periodicity of the adjustment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScalingAction {
     /// <p>Not available for instance groups. Instance groups use the market type specified for the group.</p>
     #[serde(rename = "Market")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub market: Option<String>,
+    pub market: Option<MarketType>,
     /// <p>The type of adjustment the automatic scaling activity makes when triggered, and the periodicity of the adjustment.</p>
     #[serde(rename = "SimpleScalingPolicyConfiguration")]
     pub simple_scaling_policy_configuration: SimpleScalingPolicyConfiguration,
@@ -2799,7 +6151,7 @@ pub struct SessionMappingDetail {
     /// <p>Specifies whether the identity mapped to the Studio is a user or a group.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>The time the session mapping was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2833,7 +6185,7 @@ pub struct SessionMappingSummary {
     /// <p>Specifies whether the identity mapped to the Studio is a user or a group.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_type: Option<String>,
+    pub identity_type: Option<IdentityType>,
     /// <p>The Amazon Resource Name (ARN) of the session policy associated with the user or group.</p>
     #[serde(rename = "SessionPolicyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2887,7 +6239,7 @@ pub struct SimpleScalingPolicyConfiguration {
     /// <p>The way in which EC2 instances are added (if <code>ScalingAdjustment</code> is a positive number) or terminated (if <code>ScalingAdjustment</code> is a negative number) each time the scaling activity is triggered. <code>CHANGE_IN_CAPACITY</code> is the default. <code>CHANGE_IN_CAPACITY</code> indicates that the EC2 instance count increments or decrements by <code>ScalingAdjustment</code>, which should be expressed as an integer. <code>PERCENT_CHANGE_IN_CAPACITY</code> indicates the instance count increments or decrements by the percentage specified by <code>ScalingAdjustment</code>, which should be expressed as an integer. For example, 20 indicates an increase in 20% increments of cluster capacity. <code>EXACT_CAPACITY</code> indicates the scaling activity results in an instance group with the number of EC2 instances specified by <code>ScalingAdjustment</code>, which should be expressed as a positive integer.</p>
     #[serde(rename = "AdjustmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub adjustment_type: Option<String>,
+    pub adjustment_type: Option<AdjustmentType>,
     /// <p>The amount of time, in seconds, after a scaling activity completes before any further trigger-related scaling activities can start. The default value is 0.</p>
     #[serde(rename = "CoolDown")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2897,23 +6249,236 @@ pub struct SimpleScalingPolicyConfiguration {
     pub scaling_adjustment: i64,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSpotProvisioningAllocationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SpotProvisioningAllocationStrategy {
+    CapacityOptimized,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSpotProvisioningAllocationStrategy),
+}
+
+impl Default for SpotProvisioningAllocationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SpotProvisioningAllocationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SpotProvisioningAllocationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SpotProvisioningAllocationStrategy {
+    fn into(self) -> String {
+        match self {
+            SpotProvisioningAllocationStrategy::CapacityOptimized => {
+                "capacity-optimized".to_string()
+            }
+            SpotProvisioningAllocationStrategy::UnknownVariant(
+                UnknownSpotProvisioningAllocationStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SpotProvisioningAllocationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            SpotProvisioningAllocationStrategy::CapacityOptimized => &"capacity-optimized",
+            SpotProvisioningAllocationStrategy::UnknownVariant(
+                UnknownSpotProvisioningAllocationStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SpotProvisioningAllocationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "capacity-optimized" => SpotProvisioningAllocationStrategy::CapacityOptimized,
+            _ => SpotProvisioningAllocationStrategy::UnknownVariant(
+                UnknownSpotProvisioningAllocationStrategy {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SpotProvisioningAllocationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "capacity-optimized" => SpotProvisioningAllocationStrategy::CapacityOptimized,
+            _ => SpotProvisioningAllocationStrategy::UnknownVariant(
+                UnknownSpotProvisioningAllocationStrategy { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpotProvisioningAllocationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SpotProvisioningAllocationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SpotProvisioningAllocationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>The launch specification for Spot Instances in the instance fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. Spot Instance allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpotProvisioningSpecification {
     /// <p> Specifies the strategy to use in launching Spot Instance fleets. Currently, the only option is capacity-optimized (the default), which launches instances from Spot Instance pools with optimal capacity for the number of instances that are launching. </p>
     #[serde(rename = "AllocationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocation_strategy: Option<String>,
+    pub allocation_strategy: Option<SpotProvisioningAllocationStrategy>,
     /// <p>The defined duration for Spot Instances (also known as Spot blocks) in minutes. When specified, the Spot Instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot Instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot Instance for termination and provides a Spot Instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
     #[serde(rename = "BlockDurationMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_duration_minutes: Option<i64>,
     /// <p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired; that is, when all Spot Instances could not be provisioned within the Spot provisioning timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot Instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>
     #[serde(rename = "TimeoutAction")]
-    pub timeout_action: String,
+    pub timeout_action: SpotProvisioningTimeoutAction,
     /// <p>The spot provisioning timeout period in minutes. If Spot Instances are not provisioned within this time period, the <code>TimeOutAction</code> is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.</p>
     #[serde(rename = "TimeoutDurationMinutes")]
     pub timeout_duration_minutes: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSpotProvisioningTimeoutAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SpotProvisioningTimeoutAction {
+    SwitchToOnDemand,
+    TerminateCluster,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSpotProvisioningTimeoutAction),
+}
+
+impl Default for SpotProvisioningTimeoutAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SpotProvisioningTimeoutAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SpotProvisioningTimeoutAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SpotProvisioningTimeoutAction {
+    fn into(self) -> String {
+        match self {
+            SpotProvisioningTimeoutAction::SwitchToOnDemand => "SWITCH_TO_ON_DEMAND".to_string(),
+            SpotProvisioningTimeoutAction::TerminateCluster => "TERMINATE_CLUSTER".to_string(),
+            SpotProvisioningTimeoutAction::UnknownVariant(
+                UnknownSpotProvisioningTimeoutAction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SpotProvisioningTimeoutAction {
+    fn into(self) -> &'a str {
+        match self {
+            SpotProvisioningTimeoutAction::SwitchToOnDemand => &"SWITCH_TO_ON_DEMAND",
+            SpotProvisioningTimeoutAction::TerminateCluster => &"TERMINATE_CLUSTER",
+            SpotProvisioningTimeoutAction::UnknownVariant(
+                UnknownSpotProvisioningTimeoutAction { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SpotProvisioningTimeoutAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "SWITCH_TO_ON_DEMAND" => SpotProvisioningTimeoutAction::SwitchToOnDemand,
+            "TERMINATE_CLUSTER" => SpotProvisioningTimeoutAction::TerminateCluster,
+            _ => SpotProvisioningTimeoutAction::UnknownVariant(
+                UnknownSpotProvisioningTimeoutAction {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SpotProvisioningTimeoutAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SWITCH_TO_ON_DEMAND" => SpotProvisioningTimeoutAction::SwitchToOnDemand,
+            "TERMINATE_CLUSTER" => SpotProvisioningTimeoutAction::TerminateCluster,
+            _ => SpotProvisioningTimeoutAction::UnknownVariant(
+                UnknownSpotProvisioningTimeoutAction { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SpotProvisioningTimeoutAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SpotProvisioningTimeoutAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SpotProvisioningTimeoutAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2958,6 +6523,121 @@ pub struct StartNotebookExecutionOutput {
     pub notebook_execution_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Statistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatistic),
+}
+
+impl Default for Statistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Statistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Statistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Statistic {
+    fn into(self) -> String {
+        match self {
+            Statistic::Average => "AVERAGE".to_string(),
+            Statistic::Maximum => "MAXIMUM".to_string(),
+            Statistic::Minimum => "MINIMUM".to_string(),
+            Statistic::SampleCount => "SAMPLE_COUNT".to_string(),
+            Statistic::Sum => "SUM".to_string(),
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Statistic {
+    fn into(self) -> &'a str {
+        match self {
+            Statistic::Average => &"AVERAGE",
+            Statistic::Maximum => &"MAXIMUM",
+            Statistic::Minimum => &"MINIMUM",
+            Statistic::SampleCount => &"SAMPLE_COUNT",
+            Statistic::Sum => &"SUM",
+            Statistic::UnknownVariant(UnknownStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Statistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVERAGE" => Statistic::Average,
+            "MAXIMUM" => Statistic::Maximum,
+            "MINIMUM" => Statistic::Minimum,
+            "SAMPLE_COUNT" => Statistic::SampleCount,
+            "SUM" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Statistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVERAGE" => Statistic::Average,
+            "MAXIMUM" => Statistic::Maximum,
+            "MINIMUM" => Statistic::Minimum,
+            "SAMPLE_COUNT" => Statistic::SampleCount,
+            "SUM" => Statistic::Sum,
+            _ => Statistic::UnknownVariant(UnknownStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Statistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Statistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Statistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>This represents a step in a cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2965,7 +6645,7 @@ pub struct Step {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_on_failure: Option<String>,
+    pub action_on_failure: Option<ActionOnFailure>,
     /// <p>The Hadoop job configuration of the cluster step.</p>
     #[serde(rename = "Config")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2984,13 +6664,118 @@ pub struct Step {
     pub status: Option<StepStatus>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepCancellationOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepCancellationOption {
+    SendInterrupt,
+    TerminateProcess,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepCancellationOption),
+}
+
+impl Default for StepCancellationOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepCancellationOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepCancellationOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepCancellationOption {
+    fn into(self) -> String {
+        match self {
+            StepCancellationOption::SendInterrupt => "SEND_INTERRUPT".to_string(),
+            StepCancellationOption::TerminateProcess => "TERMINATE_PROCESS".to_string(),
+            StepCancellationOption::UnknownVariant(UnknownStepCancellationOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepCancellationOption {
+    fn into(self) -> &'a str {
+        match self {
+            StepCancellationOption::SendInterrupt => &"SEND_INTERRUPT",
+            StepCancellationOption::TerminateProcess => &"TERMINATE_PROCESS",
+            StepCancellationOption::UnknownVariant(UnknownStepCancellationOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StepCancellationOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "SEND_INTERRUPT" => StepCancellationOption::SendInterrupt,
+            "TERMINATE_PROCESS" => StepCancellationOption::TerminateProcess,
+            _ => StepCancellationOption::UnknownVariant(UnknownStepCancellationOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepCancellationOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SEND_INTERRUPT" => StepCancellationOption::SendInterrupt,
+            "TERMINATE_PROCESS" => StepCancellationOption::TerminateProcess,
+            _ => StepCancellationOption::UnknownVariant(UnknownStepCancellationOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepCancellationOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StepCancellationOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StepCancellationOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specification of a cluster (job flow) step.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StepConfig {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_on_failure: Option<String>,
+    pub action_on_failure: Option<ActionOnFailure>,
     /// <p>The JAR file used for the step.</p>
     #[serde(rename = "HadoopJarStep")]
     pub hadoop_jar_step: HadoopJarStepConfig,
@@ -3009,6 +6794,136 @@ pub struct StepDetail {
     /// <p>The step configuration.</p>
     #[serde(rename = "StepConfig")]
     pub step_config: StepConfig,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepExecutionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepExecutionState {
+    Cancelled,
+    Completed,
+    Continue,
+    Failed,
+    Interrupted,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepExecutionState),
+}
+
+impl Default for StepExecutionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepExecutionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepExecutionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepExecutionState {
+    fn into(self) -> String {
+        match self {
+            StepExecutionState::Cancelled => "CANCELLED".to_string(),
+            StepExecutionState::Completed => "COMPLETED".to_string(),
+            StepExecutionState::Continue => "CONTINUE".to_string(),
+            StepExecutionState::Failed => "FAILED".to_string(),
+            StepExecutionState::Interrupted => "INTERRUPTED".to_string(),
+            StepExecutionState::Pending => "PENDING".to_string(),
+            StepExecutionState::Running => "RUNNING".to_string(),
+            StepExecutionState::UnknownVariant(UnknownStepExecutionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepExecutionState {
+    fn into(self) -> &'a str {
+        match self {
+            StepExecutionState::Cancelled => &"CANCELLED",
+            StepExecutionState::Completed => &"COMPLETED",
+            StepExecutionState::Continue => &"CONTINUE",
+            StepExecutionState::Failed => &"FAILED",
+            StepExecutionState::Interrupted => &"INTERRUPTED",
+            StepExecutionState::Pending => &"PENDING",
+            StepExecutionState::Running => &"RUNNING",
+            StepExecutionState::UnknownVariant(UnknownStepExecutionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for StepExecutionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => StepExecutionState::Cancelled,
+            "COMPLETED" => StepExecutionState::Completed,
+            "CONTINUE" => StepExecutionState::Continue,
+            "FAILED" => StepExecutionState::Failed,
+            "INTERRUPTED" => StepExecutionState::Interrupted,
+            "PENDING" => StepExecutionState::Pending,
+            "RUNNING" => StepExecutionState::Running,
+            _ => StepExecutionState::UnknownVariant(UnknownStepExecutionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepExecutionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => StepExecutionState::Cancelled,
+            "COMPLETED" => StepExecutionState::Completed,
+            "CONTINUE" => StepExecutionState::Continue,
+            "FAILED" => StepExecutionState::Failed,
+            "INTERRUPTED" => StepExecutionState::Interrupted,
+            "PENDING" => StepExecutionState::Pending,
+            "RUNNING" => StepExecutionState::Running,
+            _ => StepExecutionState::UnknownVariant(UnknownStepExecutionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StepExecutionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StepExecutionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The execution state of a step.</p>
@@ -3032,7 +6947,132 @@ pub struct StepExecutionStatusDetail {
     pub start_date_time: Option<f64>,
     /// <p>The state of the step.</p>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: StepExecutionState,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepState {
+    Cancelled,
+    CancelPending,
+    Completed,
+    Failed,
+    Interrupted,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepState),
+}
+
+impl Default for StepState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepState {
+    fn into(self) -> String {
+        match self {
+            StepState::Cancelled => "CANCELLED".to_string(),
+            StepState::CancelPending => "CANCEL_PENDING".to_string(),
+            StepState::Completed => "COMPLETED".to_string(),
+            StepState::Failed => "FAILED".to_string(),
+            StepState::Interrupted => "INTERRUPTED".to_string(),
+            StepState::Pending => "PENDING".to_string(),
+            StepState::Running => "RUNNING".to_string(),
+            StepState::UnknownVariant(UnknownStepState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepState {
+    fn into(self) -> &'a str {
+        match self {
+            StepState::Cancelled => &"CANCELLED",
+            StepState::CancelPending => &"CANCEL_PENDING",
+            StepState::Completed => &"COMPLETED",
+            StepState::Failed => &"FAILED",
+            StepState::Interrupted => &"INTERRUPTED",
+            StepState::Pending => &"PENDING",
+            StepState::Running => &"RUNNING",
+            StepState::UnknownVariant(UnknownStepState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StepState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => StepState::Cancelled,
+            "CANCEL_PENDING" => StepState::CancelPending,
+            "COMPLETED" => StepState::Completed,
+            "FAILED" => StepState::Failed,
+            "INTERRUPTED" => StepState::Interrupted,
+            "PENDING" => StepState::Pending,
+            "RUNNING" => StepState::Running,
+            _ => StepState::UnknownVariant(UnknownStepState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => StepState::Cancelled,
+            "CANCEL_PENDING" => StepState::CancelPending,
+            "COMPLETED" => StepState::Completed,
+            "FAILED" => StepState::Failed,
+            "INTERRUPTED" => StepState::Interrupted,
+            "PENDING" => StepState::Pending,
+            "RUNNING" => StepState::Running,
+            _ => StepState::UnknownVariant(UnknownStepState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StepState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StepState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The details of the step state change reason.</p>
@@ -3042,11 +7082,113 @@ pub struct StepStateChangeReason {
     /// <p>The programmable code for the state change reason. Note: Currently, the service provides no code for the state change.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<StepStateChangeReasonCode>,
     /// <p>The descriptive message for the state change reason.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepStateChangeReasonCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepStateChangeReasonCode {
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepStateChangeReasonCode),
+}
+
+impl Default for StepStateChangeReasonCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepStateChangeReasonCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepStateChangeReasonCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepStateChangeReasonCode {
+    fn into(self) -> String {
+        match self {
+            StepStateChangeReasonCode::None => "NONE".to_string(),
+            StepStateChangeReasonCode::UnknownVariant(UnknownStepStateChangeReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepStateChangeReasonCode {
+    fn into(self) -> &'a str {
+        match self {
+            StepStateChangeReasonCode::None => &"NONE",
+            StepStateChangeReasonCode::UnknownVariant(UnknownStepStateChangeReasonCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for StepStateChangeReasonCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => StepStateChangeReasonCode::None,
+            _ => StepStateChangeReasonCode::UnknownVariant(UnknownStepStateChangeReasonCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepStateChangeReasonCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => StepStateChangeReasonCode::None,
+            _ => {
+                StepStateChangeReasonCode::UnknownVariant(UnknownStepStateChangeReasonCode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepStateChangeReasonCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StepStateChangeReasonCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StepStateChangeReasonCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The execution status details of the cluster step.</p>
@@ -3060,7 +7202,7 @@ pub struct StepStatus {
     /// <p>The execution state of the cluster step.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<StepState>,
     /// <p>The reason for the step execution status change.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3078,7 +7220,7 @@ pub struct StepSummary {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is available for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_on_failure: Option<String>,
+    pub action_on_failure: Option<ActionOnFailure>,
     /// <p>The Hadoop job configuration of the cluster step.</p>
     #[serde(rename = "Config")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3130,7 +7272,7 @@ pub struct Studio {
     /// <p>Specifies whether the Studio authenticates users using single sign-on (SSO) or IAM.</p>
     #[serde(rename = "AuthMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth_mode: Option<String>,
+    pub auth_mode: Option<AuthMode>,
     /// <p>The time the Amazon EMR Studio was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3255,6 +7397,231 @@ pub struct TerminateJobFlowsInput {
     pub job_flow_ids: Vec<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Unit {
+    Bits,
+    BitsPerSecond,
+    Bytes,
+    BytesPerSecond,
+    Count,
+    CountPerSecond,
+    GigaBits,
+    GigaBitsPerSecond,
+    GigaBytes,
+    GigaBytesPerSecond,
+    KiloBits,
+    KiloBitsPerSecond,
+    KiloBytes,
+    KiloBytesPerSecond,
+    MegaBits,
+    MegaBitsPerSecond,
+    MegaBytes,
+    MegaBytesPerSecond,
+    MicroSeconds,
+    MilliSeconds,
+    None,
+    Percent,
+    Seconds,
+    TeraBits,
+    TeraBitsPerSecond,
+    TeraBytes,
+    TeraBytesPerSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUnit),
+}
+
+impl Default for Unit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Unit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Unit {
+    fn into(self) -> String {
+        match self {
+            Unit::Bits => "BITS".to_string(),
+            Unit::BitsPerSecond => "BITS_PER_SECOND".to_string(),
+            Unit::Bytes => "BYTES".to_string(),
+            Unit::BytesPerSecond => "BYTES_PER_SECOND".to_string(),
+            Unit::Count => "COUNT".to_string(),
+            Unit::CountPerSecond => "COUNT_PER_SECOND".to_string(),
+            Unit::GigaBits => "GIGA_BITS".to_string(),
+            Unit::GigaBitsPerSecond => "GIGA_BITS_PER_SECOND".to_string(),
+            Unit::GigaBytes => "GIGA_BYTES".to_string(),
+            Unit::GigaBytesPerSecond => "GIGA_BYTES_PER_SECOND".to_string(),
+            Unit::KiloBits => "KILO_BITS".to_string(),
+            Unit::KiloBitsPerSecond => "KILO_BITS_PER_SECOND".to_string(),
+            Unit::KiloBytes => "KILO_BYTES".to_string(),
+            Unit::KiloBytesPerSecond => "KILO_BYTES_PER_SECOND".to_string(),
+            Unit::MegaBits => "MEGA_BITS".to_string(),
+            Unit::MegaBitsPerSecond => "MEGA_BITS_PER_SECOND".to_string(),
+            Unit::MegaBytes => "MEGA_BYTES".to_string(),
+            Unit::MegaBytesPerSecond => "MEGA_BYTES_PER_SECOND".to_string(),
+            Unit::MicroSeconds => "MICRO_SECONDS".to_string(),
+            Unit::MilliSeconds => "MILLI_SECONDS".to_string(),
+            Unit::None => "NONE".to_string(),
+            Unit::Percent => "PERCENT".to_string(),
+            Unit::Seconds => "SECONDS".to_string(),
+            Unit::TeraBits => "TERA_BITS".to_string(),
+            Unit::TeraBitsPerSecond => "TERA_BITS_PER_SECOND".to_string(),
+            Unit::TeraBytes => "TERA_BYTES".to_string(),
+            Unit::TeraBytesPerSecond => "TERA_BYTES_PER_SECOND".to_string(),
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Unit {
+    fn into(self) -> &'a str {
+        match self {
+            Unit::Bits => &"BITS",
+            Unit::BitsPerSecond => &"BITS_PER_SECOND",
+            Unit::Bytes => &"BYTES",
+            Unit::BytesPerSecond => &"BYTES_PER_SECOND",
+            Unit::Count => &"COUNT",
+            Unit::CountPerSecond => &"COUNT_PER_SECOND",
+            Unit::GigaBits => &"GIGA_BITS",
+            Unit::GigaBitsPerSecond => &"GIGA_BITS_PER_SECOND",
+            Unit::GigaBytes => &"GIGA_BYTES",
+            Unit::GigaBytesPerSecond => &"GIGA_BYTES_PER_SECOND",
+            Unit::KiloBits => &"KILO_BITS",
+            Unit::KiloBitsPerSecond => &"KILO_BITS_PER_SECOND",
+            Unit::KiloBytes => &"KILO_BYTES",
+            Unit::KiloBytesPerSecond => &"KILO_BYTES_PER_SECOND",
+            Unit::MegaBits => &"MEGA_BITS",
+            Unit::MegaBitsPerSecond => &"MEGA_BITS_PER_SECOND",
+            Unit::MegaBytes => &"MEGA_BYTES",
+            Unit::MegaBytesPerSecond => &"MEGA_BYTES_PER_SECOND",
+            Unit::MicroSeconds => &"MICRO_SECONDS",
+            Unit::MilliSeconds => &"MILLI_SECONDS",
+            Unit::None => &"NONE",
+            Unit::Percent => &"PERCENT",
+            Unit::Seconds => &"SECONDS",
+            Unit::TeraBits => &"TERA_BITS",
+            Unit::TeraBitsPerSecond => &"TERA_BITS_PER_SECOND",
+            Unit::TeraBytes => &"TERA_BYTES",
+            Unit::TeraBytesPerSecond => &"TERA_BYTES_PER_SECOND",
+            Unit::UnknownVariant(UnknownUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Unit {
+    fn from(name: &str) -> Self {
+        match name {
+            "BITS" => Unit::Bits,
+            "BITS_PER_SECOND" => Unit::BitsPerSecond,
+            "BYTES" => Unit::Bytes,
+            "BYTES_PER_SECOND" => Unit::BytesPerSecond,
+            "COUNT" => Unit::Count,
+            "COUNT_PER_SECOND" => Unit::CountPerSecond,
+            "GIGA_BITS" => Unit::GigaBits,
+            "GIGA_BITS_PER_SECOND" => Unit::GigaBitsPerSecond,
+            "GIGA_BYTES" => Unit::GigaBytes,
+            "GIGA_BYTES_PER_SECOND" => Unit::GigaBytesPerSecond,
+            "KILO_BITS" => Unit::KiloBits,
+            "KILO_BITS_PER_SECOND" => Unit::KiloBitsPerSecond,
+            "KILO_BYTES" => Unit::KiloBytes,
+            "KILO_BYTES_PER_SECOND" => Unit::KiloBytesPerSecond,
+            "MEGA_BITS" => Unit::MegaBits,
+            "MEGA_BITS_PER_SECOND" => Unit::MegaBitsPerSecond,
+            "MEGA_BYTES" => Unit::MegaBytes,
+            "MEGA_BYTES_PER_SECOND" => Unit::MegaBytesPerSecond,
+            "MICRO_SECONDS" => Unit::MicroSeconds,
+            "MILLI_SECONDS" => Unit::MilliSeconds,
+            "NONE" => Unit::None,
+            "PERCENT" => Unit::Percent,
+            "SECONDS" => Unit::Seconds,
+            "TERA_BITS" => Unit::TeraBits,
+            "TERA_BITS_PER_SECOND" => Unit::TeraBitsPerSecond,
+            "TERA_BYTES" => Unit::TeraBytes,
+            "TERA_BYTES_PER_SECOND" => Unit::TeraBytesPerSecond,
+            _ => Unit::UnknownVariant(UnknownUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Unit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BITS" => Unit::Bits,
+            "BITS_PER_SECOND" => Unit::BitsPerSecond,
+            "BYTES" => Unit::Bytes,
+            "BYTES_PER_SECOND" => Unit::BytesPerSecond,
+            "COUNT" => Unit::Count,
+            "COUNT_PER_SECOND" => Unit::CountPerSecond,
+            "GIGA_BITS" => Unit::GigaBits,
+            "GIGA_BITS_PER_SECOND" => Unit::GigaBitsPerSecond,
+            "GIGA_BYTES" => Unit::GigaBytes,
+            "GIGA_BYTES_PER_SECOND" => Unit::GigaBytesPerSecond,
+            "KILO_BITS" => Unit::KiloBits,
+            "KILO_BITS_PER_SECOND" => Unit::KiloBitsPerSecond,
+            "KILO_BYTES" => Unit::KiloBytes,
+            "KILO_BYTES_PER_SECOND" => Unit::KiloBytesPerSecond,
+            "MEGA_BITS" => Unit::MegaBits,
+            "MEGA_BITS_PER_SECOND" => Unit::MegaBitsPerSecond,
+            "MEGA_BYTES" => Unit::MegaBytes,
+            "MEGA_BYTES_PER_SECOND" => Unit::MegaBytesPerSecond,
+            "MICRO_SECONDS" => Unit::MicroSeconds,
+            "MILLI_SECONDS" => Unit::MilliSeconds,
+            "NONE" => Unit::None,
+            "PERCENT" => Unit::Percent,
+            "SECONDS" => Unit::Seconds,
+            "TERA_BITS" => Unit::TeraBits,
+            "TERA_BITS_PER_SECOND" => Unit::TeraBitsPerSecond,
+            "TERA_BYTES" => Unit::TeraBytes,
+            "TERA_BYTES_PER_SECOND" => Unit::TeraBytesPerSecond,
+            _ => Unit::UnknownVariant(UnknownUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Unit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Unit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Unit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStudioSessionMappingInput {
@@ -3268,7 +7635,7 @@ pub struct UpdateStudioSessionMappingInput {
     pub identity_name: Option<String>,
     /// <p>Specifies whether the identity to update is a user or a group.</p>
     #[serde(rename = "IdentityType")]
-    pub identity_type: String,
+    pub identity_type: IdentityType,
     /// <p>The Amazon Resource Name (ARN) of the session policy to associate with the specified user or group.</p>
     #[serde(rename = "SessionPolicyArn")]
     pub session_policy_arn: String,

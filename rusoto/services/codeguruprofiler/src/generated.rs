@@ -25,6 +25,103 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionGroup {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionGroup {
+    AgentPermissions,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionGroup),
+}
+
+impl Default for ActionGroup {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionGroup {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionGroup {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionGroup {
+    fn into(self) -> String {
+        match self {
+            ActionGroup::AgentPermissions => "agentPermissions".to_string(),
+            ActionGroup::UnknownVariant(UnknownActionGroup { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionGroup {
+    fn into(self) -> &'a str {
+        match self {
+            ActionGroup::AgentPermissions => &"agentPermissions",
+            ActionGroup::UnknownVariant(UnknownActionGroup { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionGroup {
+    fn from(name: &str) -> Self {
+        match name {
+            "agentPermissions" => ActionGroup::AgentPermissions,
+            _ => ActionGroup::UnknownVariant(UnknownActionGroup {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionGroup {
+    fn from(name: String) -> Self {
+        match &*name {
+            "agentPermissions" => ActionGroup::AgentPermissions,
+            _ => ActionGroup::UnknownVariant(UnknownActionGroup { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionGroup {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionGroup {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionGroup {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The structure representing the AddNotificationChannelsRequest.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -54,7 +151,7 @@ pub struct AgentConfiguration {
     /// <p><p> Parameters used by the profiler. The valid parameters are: </p> <ul> <li> <p> <code>MaxStackDepth</code> - The maximum depth of the stacks in the code that is represented in the profile. For example, if CodeGuru Profiler finds a method <code>A</code>, which calls method <code>B</code>, which calls method <code>C</code>, which calls method <code>D</code>, then the depth is 4. If the <code>maxDepth</code> is set to 2, then the profiler evaluates <code>A</code> and <code>B</code>. </p> </li> <li> <p> <code>MemoryUsageLimitPercent</code> - The percentage of memory that is used by the profiler.</p> </li> <li> <p> <code>MinimumTimeForReportingInMilliseconds</code> - The minimum time in milliseconds between sending reports. </p> </li> <li> <p> <code>ReportingIntervalInMilliseconds</code> - The reporting interval in milliseconds used to report profiles. </p> </li> <li> <p> <code>SamplingIntervalInMilliseconds</code> - The sampling interval in milliseconds that is used to profile samples. </p> </li> </ul></p>
     #[serde(rename = "agentParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub agent_parameters: Option<::std::collections::HashMap<String, String>>,
+    pub agent_parameters: Option<::std::collections::HashMap<AgentParameterField, String>>,
     /// <p> How long a profiling agent should send profiling data using <a href="https://docs.aws.amazon.com/codeguru/latest/profiler-api/API_ConfigureAgent.html"> <code>ConfigureAgent</code> </a>. For example, if this is set to 300, the profiling agent calls <a href="https://docs.aws.amazon.com/codeguru/latest/profiler-api/API_ConfigureAgent.html"> <code>ConfigureAgent</code> </a> every 5 minutes to submit the profiled data collected during that period. </p>
     #[serde(rename = "periodInSeconds")]
     pub period_in_seconds: i64,
@@ -71,6 +168,146 @@ pub struct AgentOrchestrationConfig {
     pub profiling_enabled: bool,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAgentParameterField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AgentParameterField {
+    MaxStackDepth,
+    MemoryUsageLimitPercent,
+    MinimumTimeForReportingInMilliseconds,
+    ReportingIntervalInMilliseconds,
+    SamplingIntervalInMilliseconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAgentParameterField),
+}
+
+impl Default for AgentParameterField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AgentParameterField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AgentParameterField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AgentParameterField {
+    fn into(self) -> String {
+        match self {
+            AgentParameterField::MaxStackDepth => "MaxStackDepth".to_string(),
+            AgentParameterField::MemoryUsageLimitPercent => "MemoryUsageLimitPercent".to_string(),
+            AgentParameterField::MinimumTimeForReportingInMilliseconds => {
+                "MinimumTimeForReportingInMilliseconds".to_string()
+            }
+            AgentParameterField::ReportingIntervalInMilliseconds => {
+                "ReportingIntervalInMilliseconds".to_string()
+            }
+            AgentParameterField::SamplingIntervalInMilliseconds => {
+                "SamplingIntervalInMilliseconds".to_string()
+            }
+            AgentParameterField::UnknownVariant(UnknownAgentParameterField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AgentParameterField {
+    fn into(self) -> &'a str {
+        match self {
+            AgentParameterField::MaxStackDepth => &"MaxStackDepth",
+            AgentParameterField::MemoryUsageLimitPercent => &"MemoryUsageLimitPercent",
+            AgentParameterField::MinimumTimeForReportingInMilliseconds => {
+                &"MinimumTimeForReportingInMilliseconds"
+            }
+            AgentParameterField::ReportingIntervalInMilliseconds => {
+                &"ReportingIntervalInMilliseconds"
+            }
+            AgentParameterField::SamplingIntervalInMilliseconds => {
+                &"SamplingIntervalInMilliseconds"
+            }
+            AgentParameterField::UnknownVariant(UnknownAgentParameterField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AgentParameterField {
+    fn from(name: &str) -> Self {
+        match name {
+            "MaxStackDepth" => AgentParameterField::MaxStackDepth,
+            "MemoryUsageLimitPercent" => AgentParameterField::MemoryUsageLimitPercent,
+            "MinimumTimeForReportingInMilliseconds" => {
+                AgentParameterField::MinimumTimeForReportingInMilliseconds
+            }
+            "ReportingIntervalInMilliseconds" => {
+                AgentParameterField::ReportingIntervalInMilliseconds
+            }
+            "SamplingIntervalInMilliseconds" => AgentParameterField::SamplingIntervalInMilliseconds,
+            _ => AgentParameterField::UnknownVariant(UnknownAgentParameterField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AgentParameterField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MaxStackDepth" => AgentParameterField::MaxStackDepth,
+            "MemoryUsageLimitPercent" => AgentParameterField::MemoryUsageLimitPercent,
+            "MinimumTimeForReportingInMilliseconds" => {
+                AgentParameterField::MinimumTimeForReportingInMilliseconds
+            }
+            "ReportingIntervalInMilliseconds" => {
+                AgentParameterField::ReportingIntervalInMilliseconds
+            }
+            "SamplingIntervalInMilliseconds" => AgentParameterField::SamplingIntervalInMilliseconds,
+            _ => AgentParameterField::UnknownVariant(UnknownAgentParameterField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentParameterField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AgentParameterField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AgentParameterField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Specifies the aggregation period and aggregation start time for an aggregated profile. An aggregated profile is used to collect posted agent profiles during an aggregation period. There are three possible aggregation periods (1 day, 1 hour, or 5 minutes). </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -78,11 +315,120 @@ pub struct AggregatedProfileTime {
     /// <p><p> The aggregation period. This indicates the period during which an aggregation profile collects posted agent profiles for a profiling group. Use one of three valid durations that are specified using the ISO 8601 format. </p> <ul> <li> <p> <code>P1D</code> — 1 day </p> </li> <li> <p> <code>PT1H</code> — 1 hour </p> </li> <li> <p> <code>PT5M</code> — 5 minutes </p> </li> </ul></p>
     #[serde(rename = "period")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub period: Option<String>,
+    pub period: Option<AggregationPeriod>,
     /// <p> The time that aggregation of posted agent profiles for a profiling group starts. The aggregation profile contains profiles posted by the agent starting at this time for an aggregation period specified by the <code>period</code> property of the <code>AggregatedProfileTime</code> object. </p> <p> Specify <code>start</code> using the ISO 8601 format. For example, 2020-06-01T13:15:02.001Z represents 1 millisecond past June 1, 2020 1:15:02 PM UTC. </p>
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAggregationPeriod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AggregationPeriod {
+    P1D,
+    Pt1H,
+    Pt5M,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAggregationPeriod),
+}
+
+impl Default for AggregationPeriod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AggregationPeriod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AggregationPeriod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AggregationPeriod {
+    fn into(self) -> String {
+        match self {
+            AggregationPeriod::P1D => "P1D".to_string(),
+            AggregationPeriod::Pt1H => "PT1H".to_string(),
+            AggregationPeriod::Pt5M => "PT5M".to_string(),
+            AggregationPeriod::UnknownVariant(UnknownAggregationPeriod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AggregationPeriod {
+    fn into(self) -> &'a str {
+        match self {
+            AggregationPeriod::P1D => &"P1D",
+            AggregationPeriod::Pt1H => &"PT1H",
+            AggregationPeriod::Pt5M => &"PT5M",
+            AggregationPeriod::UnknownVariant(UnknownAggregationPeriod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AggregationPeriod {
+    fn from(name: &str) -> Self {
+        match name {
+            "P1D" => AggregationPeriod::P1D,
+            "PT1H" => AggregationPeriod::Pt1H,
+            "PT5M" => AggregationPeriod::Pt5M,
+            _ => AggregationPeriod::UnknownVariant(UnknownAggregationPeriod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AggregationPeriod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "P1D" => AggregationPeriod::P1D,
+            "PT1H" => AggregationPeriod::Pt1H,
+            "PT5M" => AggregationPeriod::Pt5M,
+            _ => AggregationPeriod::UnknownVariant(UnknownAggregationPeriod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AggregationPeriod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AggregationPeriod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AggregationPeriod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Details about an anomaly in a specific metric of application profile. The anomaly is detected using analysis of the metric data over a period of time. </p>
@@ -146,7 +492,7 @@ pub struct BatchGetFrameMetricDataRequest {
     /// <p><p>The requested resolution of time steps for the returned time series of values. If the requested target resolution is not available due to data not being retained we provide a best effort result by falling back to the most granular available resolution after the target resolution. There are 3 valid values. </p> <ul> <li> <p> <code>P1D</code> — 1 day </p> </li> <li> <p> <code>PT1H</code> — 1 hour </p> </li> <li> <p> <code>PT5M</code> — 5 minutes </p> </li> </ul></p>
     #[serde(rename = "targetResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_resolution: Option<String>,
+    pub target_resolution: Option<AggregationPeriod>,
 }
 
 /// <p>The structure representing the BatchGetFrameMetricDataResponse.</p>
@@ -164,7 +510,7 @@ pub struct BatchGetFrameMetricDataResponse {
     pub frame_metric_data: Vec<FrameMetricDatum>,
     /// <p><p>Resolution or granularity of the profile data used to generate the time series. This is the value used to jump through time steps in a time series. There are 3 valid values. </p> <ul> <li> <p> <code>P1D</code> — 1 day </p> </li> <li> <p> <code>PT1H</code> — 1 hour </p> </li> <li> <p> <code>PT5M</code> — 5 minutes </p> </li> </ul></p>
     #[serde(rename = "resolution")]
-    pub resolution: String,
+    pub resolution: AggregationPeriod,
     /// <p> The start time of the time period for the returned time series values. This is specified using the ISO 8601 format. For example, 2020-06-01T13:15:02.001Z represents 1 millisecond past June 1, 2020 1:15:02 PM UTC. </p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
@@ -178,7 +524,7 @@ pub struct BatchGetFrameMetricDataResponse {
 pub struct Channel {
     /// <p>List of publishers for different type of events that may be detected in an application from the profile. Anomaly detection is the only event publisher in Profiler.</p>
     #[serde(rename = "eventPublishers")]
-    pub event_publishers: Vec<String>,
+    pub event_publishers: Vec<EventPublisher>,
     /// <p>Unique identifier for each <code>Channel</code> in the notification configuration of a Profiling Group. A random UUID for channelId is used when adding a channel to the notification configuration if not specified in the request.</p>
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -186,6 +532,106 @@ pub struct Channel {
     /// <p>Unique arn of the resource to be used for notifications. We support a valid SNS topic arn as a channel uri.</p>
     #[serde(rename = "uri")]
     pub uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputePlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputePlatform {
+    Awslambda,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputePlatform),
+}
+
+impl Default for ComputePlatform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputePlatform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputePlatform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputePlatform {
+    fn into(self) -> String {
+        match self {
+            ComputePlatform::Awslambda => "AWSLambda".to_string(),
+            ComputePlatform::Default => "Default".to_string(),
+            ComputePlatform::UnknownVariant(UnknownComputePlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputePlatform {
+    fn into(self) -> &'a str {
+        match self {
+            ComputePlatform::Awslambda => &"AWSLambda",
+            ComputePlatform::Default => &"Default",
+            ComputePlatform::UnknownVariant(UnknownComputePlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputePlatform {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSLambda" => ComputePlatform::Awslambda,
+            "Default" => ComputePlatform::Default,
+            _ => ComputePlatform::UnknownVariant(UnknownComputePlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputePlatform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSLambda" => ComputePlatform::Awslambda,
+            "Default" => ComputePlatform::Default,
+            _ => ComputePlatform::UnknownVariant(UnknownComputePlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputePlatform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComputePlatform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComputePlatform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The structure representing the configureAgentRequest.</p>
@@ -199,7 +645,7 @@ pub struct ConfigureAgentRequest {
     /// <p><p> Metadata captured about the compute platform the agent is running on. It includes information about sampling and reporting. The valid fields are:</p> <ul> <li> <p> <code>COMPUTE<em>PLATFORM</code> - The compute platform on which the agent is running </p> </li> <li> <p> <code>AGENT</em>ID</code> - The ID for an agent instance. </p> </li> <li> <p> <code>AWS<em>REQUEST</em>ID</code> - The AWS request ID of a Lambda invocation. </p> </li> <li> <p> <code>EXECUTION<em>ENVIRONMENT</code> - The execution environment a Lambda function is running on. </p> </li> <li> <p> <code>LAMBDA</em>FUNCTION<em>ARN</code> - The Amazon Resource Name (ARN) that is used to invoke a Lambda function. </p> </li> <li> <p> <code>LAMBDA</em>MEMORY<em>LIMIT</em>IN<em>MB</code> - The memory allocated to a Lambda function. </p> </li> <li> <p> <code>LAMBDA</em>REMAINING<em>TIME</em>IN<em>MILLISECONDS</code> - The time in milliseconds before execution of a Lambda function times out. </p> </li> <li> <p> <code>LAMBDA</em>TIME<em>GAP</em>BETWEEN<em>INVOKES</em>IN<em>MILLISECONDS</code> - The time in milliseconds between two invocations of a Lambda function. </p> </li> <li> <p> <code>LAMBDA</em>PREVIOUS<em>EXECUTION</em>TIME<em>IN</em>MILLISECONDS</code> - The time in milliseconds for the previous Lambda invocation. </p> </li> </ul></p>
     #[serde(rename = "metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metadata: Option<::std::collections::HashMap<String, String>>,
+    pub metadata: Option<::std::collections::HashMap<MetadataField, String>>,
     /// <p> The name of the profiling group for which the configured agent is collecting profiling data. </p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
@@ -228,7 +674,7 @@ pub struct CreateProfilingGroupRequest {
     /// <p> The compute platform of the profiling group. Use <code>AWSLambda</code> if your application runs on AWS Lambda. Use <code>Default</code> if your application runs on a compute platform that is not AWS Lambda, such an Amazon EC2 instance, an on-premises server, or a different platform. If not specified, <code>Default</code> is used. </p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The name of the profiling group to create.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
@@ -279,6 +725,201 @@ pub struct DescribeProfilingGroupResponse {
     pub profiling_group: ProfilingGroupDescription,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventPublisher {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventPublisher {
+    AnomalyDetection,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventPublisher),
+}
+
+impl Default for EventPublisher {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventPublisher {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventPublisher {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventPublisher {
+    fn into(self) -> String {
+        match self {
+            EventPublisher::AnomalyDetection => "AnomalyDetection".to_string(),
+            EventPublisher::UnknownVariant(UnknownEventPublisher { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventPublisher {
+    fn into(self) -> &'a str {
+        match self {
+            EventPublisher::AnomalyDetection => &"AnomalyDetection",
+            EventPublisher::UnknownVariant(UnknownEventPublisher { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventPublisher {
+    fn from(name: &str) -> Self {
+        match name {
+            "AnomalyDetection" => EventPublisher::AnomalyDetection,
+            _ => EventPublisher::UnknownVariant(UnknownEventPublisher {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventPublisher {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AnomalyDetection" => EventPublisher::AnomalyDetection,
+            _ => EventPublisher::UnknownVariant(UnknownEventPublisher { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventPublisher {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventPublisher {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventPublisher {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeedbackType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeedbackType {
+    Negative,
+    Positive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeedbackType),
+}
+
+impl Default for FeedbackType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeedbackType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeedbackType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeedbackType {
+    fn into(self) -> String {
+        match self {
+            FeedbackType::Negative => "Negative".to_string(),
+            FeedbackType::Positive => "Positive".to_string(),
+            FeedbackType::UnknownVariant(UnknownFeedbackType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeedbackType {
+    fn into(self) -> &'a str {
+        match self {
+            FeedbackType::Negative => &"Negative",
+            FeedbackType::Positive => &"Positive",
+            FeedbackType::UnknownVariant(UnknownFeedbackType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeedbackType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Negative" => FeedbackType::Negative,
+            "Positive" => FeedbackType::Positive,
+            _ => FeedbackType::UnknownVariant(UnknownFeedbackType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeedbackType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Negative" => FeedbackType::Negative,
+            "Positive" => FeedbackType::Positive,
+            _ => FeedbackType::UnknownVariant(UnknownFeedbackType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeedbackType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeedbackType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeedbackType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Information about potential recommendations that might be created from the analysis of profiling data. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -316,7 +957,7 @@ pub struct FrameMetric {
     pub thread_states: Vec<String>,
     /// <p> A type of aggregation that specifies how a metric for a frame is analyzed. The supported value <code>AggregatedRelativeTotalTime</code> is an aggregation of the metric value for one frame that is calculated across the occurrences of all frames in a profile. </p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: MetricType,
 }
 
 /// <p> Information about a frame metric and its values. </p>
@@ -538,10 +1179,10 @@ pub struct ListProfileTimesRequest {
     /// <p>The order (ascending or descending by start time of the profile) to use when listing profiles. Defaults to <code>TIMESTAMP_DESCENDING</code>. </p>
     #[serde(rename = "orderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order_by: Option<String>,
+    pub order_by: Option<OrderBy>,
     /// <p><p> The aggregation period. This specifies the period during which an aggregation profile collects posted agent profiles for a profiling group. There are 3 valid values. </p> <ul> <li> <p> <code>P1D</code> — 1 day </p> </li> <li> <p> <code>PT1H</code> — 1 hour </p> </li> <li> <p> <code>PT5M</code> — 5 minutes </p> </li> </ul></p>
     #[serde(rename = "period")]
-    pub period: String,
+    pub period: AggregationPeriod,
     /// <p>The name of the profiling group.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
@@ -633,6 +1274,162 @@ pub struct Match {
     pub threshold_breach_value: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetadataField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetadataField {
+    AgentId,
+    AwsRequestId,
+    ComputePlatform,
+    ExecutionEnvironment,
+    LambdaFunctionArn,
+    LambdaMemoryLimitInMB,
+    LambdaPreviousExecutionTimeInMilliseconds,
+    LambdaRemainingTimeInMilliseconds,
+    LambdaTimeGapBetweenInvokesInMilliseconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetadataField),
+}
+
+impl Default for MetadataField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetadataField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetadataField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetadataField {
+    fn into(self) -> String {
+        match self {
+            MetadataField::AgentId => "AgentId".to_string(),
+            MetadataField::AwsRequestId => "AwsRequestId".to_string(),
+            MetadataField::ComputePlatform => "ComputePlatform".to_string(),
+            MetadataField::ExecutionEnvironment => "ExecutionEnvironment".to_string(),
+            MetadataField::LambdaFunctionArn => "LambdaFunctionArn".to_string(),
+            MetadataField::LambdaMemoryLimitInMB => "LambdaMemoryLimitInMB".to_string(),
+            MetadataField::LambdaPreviousExecutionTimeInMilliseconds => {
+                "LambdaPreviousExecutionTimeInMilliseconds".to_string()
+            }
+            MetadataField::LambdaRemainingTimeInMilliseconds => {
+                "LambdaRemainingTimeInMilliseconds".to_string()
+            }
+            MetadataField::LambdaTimeGapBetweenInvokesInMilliseconds => {
+                "LambdaTimeGapBetweenInvokesInMilliseconds".to_string()
+            }
+            MetadataField::UnknownVariant(UnknownMetadataField { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetadataField {
+    fn into(self) -> &'a str {
+        match self {
+            MetadataField::AgentId => &"AgentId",
+            MetadataField::AwsRequestId => &"AwsRequestId",
+            MetadataField::ComputePlatform => &"ComputePlatform",
+            MetadataField::ExecutionEnvironment => &"ExecutionEnvironment",
+            MetadataField::LambdaFunctionArn => &"LambdaFunctionArn",
+            MetadataField::LambdaMemoryLimitInMB => &"LambdaMemoryLimitInMB",
+            MetadataField::LambdaPreviousExecutionTimeInMilliseconds => {
+                &"LambdaPreviousExecutionTimeInMilliseconds"
+            }
+            MetadataField::LambdaRemainingTimeInMilliseconds => {
+                &"LambdaRemainingTimeInMilliseconds"
+            }
+            MetadataField::LambdaTimeGapBetweenInvokesInMilliseconds => {
+                &"LambdaTimeGapBetweenInvokesInMilliseconds"
+            }
+            MetadataField::UnknownVariant(UnknownMetadataField { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetadataField {
+    fn from(name: &str) -> Self {
+        match name {
+            "AgentId" => MetadataField::AgentId,
+            "AwsRequestId" => MetadataField::AwsRequestId,
+            "ComputePlatform" => MetadataField::ComputePlatform,
+            "ExecutionEnvironment" => MetadataField::ExecutionEnvironment,
+            "LambdaFunctionArn" => MetadataField::LambdaFunctionArn,
+            "LambdaMemoryLimitInMB" => MetadataField::LambdaMemoryLimitInMB,
+            "LambdaPreviousExecutionTimeInMilliseconds" => {
+                MetadataField::LambdaPreviousExecutionTimeInMilliseconds
+            }
+            "LambdaRemainingTimeInMilliseconds" => MetadataField::LambdaRemainingTimeInMilliseconds,
+            "LambdaTimeGapBetweenInvokesInMilliseconds" => {
+                MetadataField::LambdaTimeGapBetweenInvokesInMilliseconds
+            }
+            _ => MetadataField::UnknownVariant(UnknownMetadataField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetadataField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AgentId" => MetadataField::AgentId,
+            "AwsRequestId" => MetadataField::AwsRequestId,
+            "ComputePlatform" => MetadataField::ComputePlatform,
+            "ExecutionEnvironment" => MetadataField::ExecutionEnvironment,
+            "LambdaFunctionArn" => MetadataField::LambdaFunctionArn,
+            "LambdaMemoryLimitInMB" => MetadataField::LambdaMemoryLimitInMB,
+            "LambdaPreviousExecutionTimeInMilliseconds" => {
+                MetadataField::LambdaPreviousExecutionTimeInMilliseconds
+            }
+            "LambdaRemainingTimeInMilliseconds" => MetadataField::LambdaRemainingTimeInMilliseconds,
+            "LambdaTimeGapBetweenInvokesInMilliseconds" => {
+                MetadataField::LambdaTimeGapBetweenInvokesInMilliseconds
+            }
+            _ => MetadataField::UnknownVariant(UnknownMetadataField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetadataField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetadataField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MetadataField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Details about the metric that the analysis used when it detected the anomaly. The metric what is analyzed to create recommendations. It includes the name of the frame that was analyzed and the type and thread states used to derive the metric value for that frame. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -645,7 +1442,102 @@ pub struct Metric {
     pub thread_states: Vec<String>,
     /// <p> A type that specifies how a metric for a frame is analyzed. The supported value <code>AggregatedRelativeTotalTime</code> is an aggregation of the metric value for one frame that is calculated across the occurences of all frames in a profile.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: MetricType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricType {
+    AggregatedRelativeTotalTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricType),
+}
+
+impl Default for MetricType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricType {
+    fn into(self) -> String {
+        match self {
+            MetricType::AggregatedRelativeTotalTime => "AggregatedRelativeTotalTime".to_string(),
+            MetricType::UnknownVariant(UnknownMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricType {
+    fn into(self) -> &'a str {
+        match self {
+            MetricType::AggregatedRelativeTotalTime => &"AggregatedRelativeTotalTime",
+            MetricType::UnknownVariant(UnknownMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AggregatedRelativeTotalTime" => MetricType::AggregatedRelativeTotalTime,
+            _ => MetricType::UnknownVariant(UnknownMetricType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AggregatedRelativeTotalTime" => MetricType::AggregatedRelativeTotalTime,
+            _ => MetricType::UnknownVariant(UnknownMetricType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The configuration for notifications stored for each profiling group. This includes up to to two channels and a list of event publishers associated with each channel.</p>
@@ -656,6 +1548,107 @@ pub struct NotificationConfiguration {
     #[serde(rename = "channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<Channel>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderBy {
+    TimestampAscending,
+    TimestampDescending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderBy),
+}
+
+impl Default for OrderBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderBy {
+    fn into(self) -> String {
+        match self {
+            OrderBy::TimestampAscending => "TimestampAscending".to_string(),
+            OrderBy::TimestampDescending => "TimestampDescending".to_string(),
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderBy {
+    fn into(self) -> &'a str {
+        match self {
+            OrderBy::TimestampAscending => &"TimestampAscending",
+            OrderBy::TimestampDescending => &"TimestampDescending",
+            OrderBy::UnknownVariant(UnknownOrderBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "TimestampAscending" => OrderBy::TimestampAscending,
+            "TimestampDescending" => OrderBy::TimestampDescending,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TimestampAscending" => OrderBy::TimestampAscending,
+            "TimestampDescending" => OrderBy::TimestampDescending,
+            _ => OrderBy::UnknownVariant(UnknownOrderBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> A set of rules used to make a recommendation during an analysis. </p>
@@ -746,7 +1739,7 @@ pub struct ProfilingGroupDescription {
     /// <p> The compute platform of the profiling group. If it is set to <code>AWSLambda</code>, then the profiled application runs on AWS Lambda. If it is set to <code>Default</code>, then the profiled application runs on a compute platform that is not AWS Lambda, such an Amazon EC2 instance, an on-premises server, or a different platform. The default is <code>Default</code>. </p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_platform: Option<String>,
+    pub compute_platform: Option<ComputePlatform>,
     /// <p>The time when the profiling group was created. Specify using the ISO 8601 format. For example, 2020-06-01T13:15:02.001Z represents 1 millisecond past June 1, 2020 1:15:02 PM UTC. </p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -793,7 +1786,7 @@ pub struct ProfilingStatus {
 pub struct PutPermissionRequest {
     /// <p> Specifies an action group that contains permissions to add to a profiling group resource. One action group is supported, <code>agentPermissions</code>, which grants permission to perform actions required by the profiling agent, <code>ConfigureAgent</code> and <code>PostAgentProfile</code> permissions. </p>
     #[serde(rename = "actionGroup")]
-    pub action_group: String,
+    pub action_group: ActionGroup,
     /// <p> A list ARNs for the roles and users you want to grant access to the profiling group. Wildcards are not are supported in the ARNs. </p>
     #[serde(rename = "principals")]
     pub principals: Vec<String>,
@@ -870,7 +1863,7 @@ pub struct RemoveNotificationChannelResponse {
 pub struct RemovePermissionRequest {
     /// <p> Specifies an action group that contains the permissions to remove from a profiling group's resource-based policy. One action group is supported, <code>agentPermissions</code>, which grants <code>ConfigureAgent</code> and <code>PostAgentProfile</code> permissions. </p>
     #[serde(rename = "actionGroup")]
-    pub action_group: String,
+    pub action_group: ActionGroup,
     /// <p>The name of the profiling group.</p>
     #[serde(rename = "profilingGroupName")]
     pub profiling_group_name: String,
@@ -907,7 +1900,7 @@ pub struct SubmitFeedbackRequest {
     pub profiling_group_name: String,
     /// <p> The feedback tpye. Thee are two valid values, <code>Positive</code> and <code>Negative</code>. </p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FeedbackType,
 }
 
 /// <p>The structure representing the SubmitFeedbackResponse.</p>
@@ -981,7 +1974,7 @@ pub struct UpdateProfilingGroupResponse {
 pub struct UserFeedback {
     /// <p>Optional <code>Positive</code> or <code>Negative</code> feedback submitted by the user about whether the recommendation is useful or not.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FeedbackType,
 }
 
 /// Errors returned by AddNotificationChannels

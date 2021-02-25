@@ -121,7 +121,7 @@ pub struct AggregateEvaluationResult {
     /// <p>The resource compliance status.</p> <p>For the <code>AggregationEvaluationResult</code> data type, AWS Config supports only the <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. AWS Config does not support the <code>NOT_APPLICABLE</code> and <code>INSUFFICIENT_DATA</code> value.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ComplianceType>,
     /// <p>The time when the AWS Config rule evaluated the AWS resource.</p>
     #[serde(rename = "ConfigRuleInvokedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -148,7 +148,7 @@ pub struct AggregateResourceIdentifier {
     pub resource_name: Option<String>,
     /// <p>The type of the AWS resource.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>The 12-digit account ID of the source account.</p>
     #[serde(rename = "SourceAccountId")]
     pub source_account_id: String,
@@ -176,7 +176,7 @@ pub struct AggregatedSourceStatus {
     /// <p><p>Filters the last updated status type.</p> <ul> <li> <p>Valid value FAILED indicates errors while moving data.</p> </li> <li> <p>Valid value SUCCEEDED indicates the data was successfully moved.</p> </li> <li> <p>Valid value OUTDATED indicates the data is not the most recent.</p> </li> </ul></p>
     #[serde(rename = "LastUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_update_status: Option<String>,
+    pub last_update_status: Option<AggregatedSourceStatusType>,
     /// <p>The time of the last update.</p>
     #[serde(rename = "LastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,7 +188,223 @@ pub struct AggregatedSourceStatus {
     /// <p>The source account or an organization.</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<AggregatedSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAggregatedSourceStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AggregatedSourceStatusType {
+    Failed,
+    Outdated,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAggregatedSourceStatusType),
+}
+
+impl Default for AggregatedSourceStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AggregatedSourceStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AggregatedSourceStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AggregatedSourceStatusType {
+    fn into(self) -> String {
+        match self {
+            AggregatedSourceStatusType::Failed => "FAILED".to_string(),
+            AggregatedSourceStatusType::Outdated => "OUTDATED".to_string(),
+            AggregatedSourceStatusType::Succeeded => "SUCCEEDED".to_string(),
+            AggregatedSourceStatusType::UnknownVariant(UnknownAggregatedSourceStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AggregatedSourceStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            AggregatedSourceStatusType::Failed => &"FAILED",
+            AggregatedSourceStatusType::Outdated => &"OUTDATED",
+            AggregatedSourceStatusType::Succeeded => &"SUCCEEDED",
+            AggregatedSourceStatusType::UnknownVariant(UnknownAggregatedSourceStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AggregatedSourceStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => AggregatedSourceStatusType::Failed,
+            "OUTDATED" => AggregatedSourceStatusType::Outdated,
+            "SUCCEEDED" => AggregatedSourceStatusType::Succeeded,
+            _ => AggregatedSourceStatusType::UnknownVariant(UnknownAggregatedSourceStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AggregatedSourceStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => AggregatedSourceStatusType::Failed,
+            "OUTDATED" => AggregatedSourceStatusType::Outdated,
+            "SUCCEEDED" => AggregatedSourceStatusType::Succeeded,
+            _ => AggregatedSourceStatusType::UnknownVariant(UnknownAggregatedSourceStatusType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AggregatedSourceStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AggregatedSourceStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AggregatedSourceStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAggregatedSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AggregatedSourceType {
+    Account,
+    Organization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAggregatedSourceType),
+}
+
+impl Default for AggregatedSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AggregatedSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AggregatedSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AggregatedSourceType {
+    fn into(self) -> String {
+        match self {
+            AggregatedSourceType::Account => "ACCOUNT".to_string(),
+            AggregatedSourceType::Organization => "ORGANIZATION".to_string(),
+            AggregatedSourceType::UnknownVariant(UnknownAggregatedSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AggregatedSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            AggregatedSourceType::Account => &"ACCOUNT",
+            AggregatedSourceType::Organization => &"ORGANIZATION",
+            AggregatedSourceType::UnknownVariant(UnknownAggregatedSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AggregatedSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => AggregatedSourceType::Account,
+            "ORGANIZATION" => AggregatedSourceType::Organization,
+            _ => AggregatedSourceType::UnknownVariant(UnknownAggregatedSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AggregatedSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => AggregatedSourceType::Account,
+            "ORGANIZATION" => AggregatedSourceType::Organization,
+            _ => AggregatedSourceType::UnknownVariant(UnknownAggregatedSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AggregatedSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AggregatedSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AggregatedSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
@@ -244,7 +460,7 @@ pub struct BaseConfigurationItem {
     /// <p><p>The configuration item status. The valid values are:</p> <ul> <li> <p>OK – The resource configuration has been updated</p> </li> <li> <p>ResourceDiscovered – The resource was newly discovered</p> </li> <li> <p>ResourceNotRecorded – The resource was discovered but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> <li> <p>ResourceDeleted – The resource was deleted</p> </li> <li> <p>ResourceDeletedNotRecorded – The resource was deleted but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> </ul> <note> <p>The CIs do not incur any cost.</p> </note></p>
     #[serde(rename = "configurationItemStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_item_status: Option<String>,
+    pub configuration_item_status: Option<ConfigurationItemStatus>,
     /// <p>An identifier that indicates the ordering of the configuration items of a resource.</p>
     #[serde(rename = "configurationStateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,7 +480,7 @@ pub struct BaseConfigurationItem {
     /// <p>The type of AWS resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the configuration parameter.</p>
     #[serde(rename = "supplementaryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -320,6 +536,111 @@ pub struct BatchGetResourceConfigResponse {
     pub unprocessed_resource_keys: Option<Vec<ResourceKey>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChronologicalOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChronologicalOrder {
+    Forward,
+    Reverse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChronologicalOrder),
+}
+
+impl Default for ChronologicalOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChronologicalOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChronologicalOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChronologicalOrder {
+    fn into(self) -> String {
+        match self {
+            ChronologicalOrder::Forward => "Forward".to_string(),
+            ChronologicalOrder::Reverse => "Reverse".to_string(),
+            ChronologicalOrder::UnknownVariant(UnknownChronologicalOrder { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChronologicalOrder {
+    fn into(self) -> &'a str {
+        match self {
+            ChronologicalOrder::Forward => &"Forward",
+            ChronologicalOrder::Reverse => &"Reverse",
+            ChronologicalOrder::UnknownVariant(UnknownChronologicalOrder { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChronologicalOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Forward" => ChronologicalOrder::Forward,
+            "Reverse" => ChronologicalOrder::Reverse,
+            _ => ChronologicalOrder::UnknownVariant(UnknownChronologicalOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChronologicalOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Forward" => ChronologicalOrder::Forward,
+            "Reverse" => ChronologicalOrder::Reverse,
+            _ => ChronologicalOrder::UnknownVariant(UnknownChronologicalOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChronologicalOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChronologicalOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChronologicalOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -331,7 +652,7 @@ pub struct Compliance {
     /// <p>Indicates whether an AWS resource or AWS Config rule is compliant.</p> <p>A resource is compliant if it complies with all of the AWS Config rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p> <p>A rule is compliant if all of the resources that the rule evaluates comply with it. A rule is noncompliant if any of these resources do not comply.</p> <p>AWS Config returns the <code>INSUFFICIENT_DATA</code> value when no evaluation results are available for the AWS resource or AWS Config rule.</p> <p>For the <code>Compliance</code> data type, AWS Config supports only <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code> values. AWS Config does not support the <code>NOT_APPLICABLE</code> value for the <code>Compliance</code> data type.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ComplianceType>,
 }
 
 /// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
@@ -412,6 +733,116 @@ pub struct ComplianceSummaryByResourceType {
     pub resource_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComplianceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComplianceType {
+    Compliant,
+    InsufficientData,
+    NonCompliant,
+    NotApplicable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComplianceType),
+}
+
+impl Default for ComplianceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComplianceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComplianceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComplianceType {
+    fn into(self) -> String {
+        match self {
+            ComplianceType::Compliant => "COMPLIANT".to_string(),
+            ComplianceType::InsufficientData => "INSUFFICIENT_DATA".to_string(),
+            ComplianceType::NonCompliant => "NON_COMPLIANT".to_string(),
+            ComplianceType::NotApplicable => "NOT_APPLICABLE".to_string(),
+            ComplianceType::UnknownVariant(UnknownComplianceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComplianceType {
+    fn into(self) -> &'a str {
+        match self {
+            ComplianceType::Compliant => &"COMPLIANT",
+            ComplianceType::InsufficientData => &"INSUFFICIENT_DATA",
+            ComplianceType::NonCompliant => &"NON_COMPLIANT",
+            ComplianceType::NotApplicable => &"NOT_APPLICABLE",
+            ComplianceType::UnknownVariant(UnknownComplianceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComplianceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANT" => ComplianceType::Compliant,
+            "INSUFFICIENT_DATA" => ComplianceType::InsufficientData,
+            "NON_COMPLIANT" => ComplianceType::NonCompliant,
+            "NOT_APPLICABLE" => ComplianceType::NotApplicable,
+            _ => ComplianceType::UnknownVariant(UnknownComplianceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComplianceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANT" => ComplianceType::Compliant,
+            "INSUFFICIENT_DATA" => ComplianceType::InsufficientData,
+            "NON_COMPLIANT" => ComplianceType::NonCompliant,
+            "NOT_APPLICABLE" => ComplianceType::NotApplicable,
+            _ => ComplianceType::UnknownVariant(UnknownComplianceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComplianceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComplianceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComplianceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -431,7 +862,7 @@ pub struct ConfigExportDeliveryInfo {
     /// <p>Status of the last attempted delivery.</p>
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status: Option<String>,
+    pub last_status: Option<DeliveryStatus>,
     /// <p>The time of the last successful delivery.</p>
     #[serde(rename = "lastSuccessfulTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -460,7 +891,7 @@ pub struct ConfigRule {
     /// <p>Indicates whether the AWS Config rule is active or is currently being deleted by AWS Config. It can also indicate the evaluation status for the AWS Config rule.</p> <p>AWS Config sets the state of the rule to <code>EVALUATING</code> temporarily after you use the <code>StartConfigRulesEvaluation</code> request to evaluate your resources against the AWS Config rule.</p> <p>AWS Config sets the state of the rule to <code>DELETING_RESULTS</code> temporarily after you use the <code>DeleteEvaluationResults</code> request to delete the current evaluation results for the AWS Config rule.</p> <p>AWS Config temporarily sets the state of a rule to <code>DELETING</code> after you use the <code>DeleteConfigRule</code> request to delete the rule. After AWS Config deletes the rule, the rule and all of its evaluations are erased and are no longer available.</p>
     #[serde(rename = "ConfigRuleState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub config_rule_state: Option<String>,
+    pub config_rule_state: Option<ConfigRuleState>,
     /// <p><p>Service principal name of the service that created the rule.</p> <note> <p>The field is populated only if the service linked rule is created by a service. The field is empty if you create your own rule.</p> </note></p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -476,7 +907,7 @@ pub struct ConfigRule {
     /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. You can specify a value for <code>MaximumExecutionFrequency</code> when:</p> <ul> <li> <p>You are using an AWS managed rule that is triggered at a periodic frequency.</p> </li> <li> <p>Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </li> </ul> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_execution_frequency: Option<String>,
+    pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     /// <p><p>Defines which resources can trigger an evaluation for the rule. The scope can include one or more resource types, a combination of one resource type and one resource ID, or a combination of a tag key and value. Specify a scope to constrain the resources that can trigger an evaluation for the rule. If you do not specify a scope, evaluations are triggered when any resource in the recording group changes.</p> <note> <p>The scope can be empty. </p> </note></p>
     #[serde(rename = "Scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -501,7 +932,7 @@ pub struct ConfigRuleComplianceFilters {
     /// <p>The rule compliance status.</p> <p>For the <code>ConfigRuleComplianceFilters</code> data type, AWS Config supports only <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. AWS Config does not support the <code>NOT_APPLICABLE</code> and the <code>INSUFFICIENT_DATA</code> values.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ComplianceType>,
     /// <p>The name of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -520,6 +951,115 @@ pub struct ConfigRuleComplianceSummaryFilters {
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigRuleComplianceSummaryGroupKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigRuleComplianceSummaryGroupKey {
+    AccountId,
+    AwsRegion,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigRuleComplianceSummaryGroupKey),
+}
+
+impl Default for ConfigRuleComplianceSummaryGroupKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigRuleComplianceSummaryGroupKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigRuleComplianceSummaryGroupKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigRuleComplianceSummaryGroupKey {
+    fn into(self) -> String {
+        match self {
+            ConfigRuleComplianceSummaryGroupKey::AccountId => "ACCOUNT_ID".to_string(),
+            ConfigRuleComplianceSummaryGroupKey::AwsRegion => "AWS_REGION".to_string(),
+            ConfigRuleComplianceSummaryGroupKey::UnknownVariant(
+                UnknownConfigRuleComplianceSummaryGroupKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigRuleComplianceSummaryGroupKey {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigRuleComplianceSummaryGroupKey::AccountId => &"ACCOUNT_ID",
+            ConfigRuleComplianceSummaryGroupKey::AwsRegion => &"AWS_REGION",
+            ConfigRuleComplianceSummaryGroupKey::UnknownVariant(
+                UnknownConfigRuleComplianceSummaryGroupKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigRuleComplianceSummaryGroupKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_ID" => ConfigRuleComplianceSummaryGroupKey::AccountId,
+            "AWS_REGION" => ConfigRuleComplianceSummaryGroupKey::AwsRegion,
+            _ => ConfigRuleComplianceSummaryGroupKey::UnknownVariant(
+                UnknownConfigRuleComplianceSummaryGroupKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConfigRuleComplianceSummaryGroupKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_ID" => ConfigRuleComplianceSummaryGroupKey::AccountId,
+            "AWS_REGION" => ConfigRuleComplianceSummaryGroupKey::AwsRegion,
+            _ => ConfigRuleComplianceSummaryGroupKey::UnknownVariant(
+                UnknownConfigRuleComplianceSummaryGroupKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigRuleComplianceSummaryGroupKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigRuleComplianceSummaryGroupKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConfigRuleComplianceSummaryGroupKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
@@ -576,13 +1116,123 @@ pub struct ConfigRuleEvaluationStatus {
     pub last_successful_invocation_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigRuleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigRuleState {
+    Active,
+    Deleting,
+    DeletingResults,
+    Evaluating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigRuleState),
+}
+
+impl Default for ConfigRuleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigRuleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigRuleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigRuleState {
+    fn into(self) -> String {
+        match self {
+            ConfigRuleState::Active => "ACTIVE".to_string(),
+            ConfigRuleState::Deleting => "DELETING".to_string(),
+            ConfigRuleState::DeletingResults => "DELETING_RESULTS".to_string(),
+            ConfigRuleState::Evaluating => "EVALUATING".to_string(),
+            ConfigRuleState::UnknownVariant(UnknownConfigRuleState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigRuleState {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigRuleState::Active => &"ACTIVE",
+            ConfigRuleState::Deleting => &"DELETING",
+            ConfigRuleState::DeletingResults => &"DELETING_RESULTS",
+            ConfigRuleState::Evaluating => &"EVALUATING",
+            ConfigRuleState::UnknownVariant(UnknownConfigRuleState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigRuleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ConfigRuleState::Active,
+            "DELETING" => ConfigRuleState::Deleting,
+            "DELETING_RESULTS" => ConfigRuleState::DeletingResults,
+            "EVALUATING" => ConfigRuleState::Evaluating,
+            _ => ConfigRuleState::UnknownVariant(UnknownConfigRuleState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigRuleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ConfigRuleState::Active,
+            "DELETING" => ConfigRuleState::Deleting,
+            "DELETING_RESULTS" => ConfigRuleState::DeletingResults,
+            "EVALUATING" => ConfigRuleState::Evaluating,
+            _ => ConfigRuleState::UnknownVariant(UnknownConfigRuleState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigRuleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigRuleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigRuleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for AWS Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigSnapshotDeliveryProperties {
     /// <p>The frequency with which AWS Config delivers configuration snapshots.</p>
     #[serde(rename = "deliveryFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delivery_frequency: Option<String>,
+    pub delivery_frequency: Option<MaximumExecutionFrequency>,
 }
 
 /// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
@@ -600,7 +1250,7 @@ pub struct ConfigStreamDeliveryInfo {
     /// <p>Status of the last attempted delivery.</p> <p> <b>Note</b> Providing an SNS topic on a <a href="https://docs.aws.amazon.com/config/latest/APIReference/API_DeliveryChannel.html">DeliveryChannel</a> for AWS Config is optional. If the SNS delivery is turned off, the last status will be <b>Not_Applicable</b>.</p>
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status: Option<String>,
+    pub last_status: Option<DeliveryStatus>,
     /// <p>The time from the last status change.</p>
     #[serde(rename = "lastStatusChangeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -676,7 +1326,7 @@ pub struct ConfigurationItem {
     /// <p><p>The configuration item status. The valid values are:</p> <ul> <li> <p>OK – The resource configuration has been updated</p> </li> <li> <p>ResourceDiscovered – The resource was newly discovered</p> </li> <li> <p>ResourceNotRecorded – The resource was discovered but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> <li> <p>ResourceDeleted – The resource was deleted</p> </li> <li> <p>ResourceDeletedNotRecorded – The resource was deleted but its configuration was not recorded since the recorder excludes the recording of resources of this type</p> </li> </ul> <note> <p>The CIs do not incur any cost.</p> </note></p>
     #[serde(rename = "configurationItemStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_item_status: Option<String>,
+    pub configuration_item_status: Option<ConfigurationItemStatus>,
     /// <p>An identifier that indicates the ordering of the configuration items of a resource.</p>
     #[serde(rename = "configurationStateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -704,7 +1354,7 @@ pub struct ConfigurationItem {
     /// <p>The type of AWS resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the <code>configuration</code> parameter.</p>
     #[serde(rename = "supplementaryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -717,6 +1367,128 @@ pub struct ConfigurationItem {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationItemStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationItemStatus {
+    Ok,
+    ResourceDeleted,
+    ResourceDeletedNotRecorded,
+    ResourceDiscovered,
+    ResourceNotRecorded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationItemStatus),
+}
+
+impl Default for ConfigurationItemStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationItemStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationItemStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationItemStatus {
+    fn into(self) -> String {
+        match self {
+            ConfigurationItemStatus::Ok => "OK".to_string(),
+            ConfigurationItemStatus::ResourceDeleted => "ResourceDeleted".to_string(),
+            ConfigurationItemStatus::ResourceDeletedNotRecorded => {
+                "ResourceDeletedNotRecorded".to_string()
+            }
+            ConfigurationItemStatus::ResourceDiscovered => "ResourceDiscovered".to_string(),
+            ConfigurationItemStatus::ResourceNotRecorded => "ResourceNotRecorded".to_string(),
+            ConfigurationItemStatus::UnknownVariant(UnknownConfigurationItemStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationItemStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationItemStatus::Ok => &"OK",
+            ConfigurationItemStatus::ResourceDeleted => &"ResourceDeleted",
+            ConfigurationItemStatus::ResourceDeletedNotRecorded => &"ResourceDeletedNotRecorded",
+            ConfigurationItemStatus::ResourceDiscovered => &"ResourceDiscovered",
+            ConfigurationItemStatus::ResourceNotRecorded => &"ResourceNotRecorded",
+            ConfigurationItemStatus::UnknownVariant(UnknownConfigurationItemStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationItemStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "OK" => ConfigurationItemStatus::Ok,
+            "ResourceDeleted" => ConfigurationItemStatus::ResourceDeleted,
+            "ResourceDeletedNotRecorded" => ConfigurationItemStatus::ResourceDeletedNotRecorded,
+            "ResourceDiscovered" => ConfigurationItemStatus::ResourceDiscovered,
+            "ResourceNotRecorded" => ConfigurationItemStatus::ResourceNotRecorded,
+            _ => ConfigurationItemStatus::UnknownVariant(UnknownConfigurationItemStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationItemStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OK" => ConfigurationItemStatus::Ok,
+            "ResourceDeleted" => ConfigurationItemStatus::ResourceDeleted,
+            "ResourceDeletedNotRecorded" => ConfigurationItemStatus::ResourceDeletedNotRecorded,
+            "ResourceDiscovered" => ConfigurationItemStatus::ResourceDiscovered,
+            "ResourceNotRecorded" => ConfigurationItemStatus::ResourceNotRecorded,
+            _ => ConfigurationItemStatus::UnknownVariant(UnknownConfigurationItemStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationItemStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConfigurationItemStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationItemStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the recording of configuration changes of an AWS resource.</p>
@@ -755,7 +1527,7 @@ pub struct ConfigurationRecorderStatus {
     /// <p>The last (previous) status of the recorder.</p>
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_status: Option<String>,
+    pub last_status: Option<RecorderStatus>,
     /// <p>The time when the status was last changed.</p>
     #[serde(rename = "lastStatusChangeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -781,7 +1553,7 @@ pub struct ConformancePackComplianceFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ConformancePackComplianceType>,
     /// <p>Filters the results by AWS Config rule names.</p>
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -794,10 +1566,118 @@ pub struct ConformancePackComplianceFilters {
 pub struct ConformancePackComplianceSummary {
     /// <p>The status of the conformance pack. The allowed values are COMPLIANT and NON_COMPLIANT. </p>
     #[serde(rename = "ConformancePackComplianceStatus")]
-    pub conformance_pack_compliance_status: String,
+    pub conformance_pack_compliance_status: ConformancePackComplianceType,
     /// <p>The name of the conformance pack name.</p>
     #[serde(rename = "ConformancePackName")]
     pub conformance_pack_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConformancePackComplianceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConformancePackComplianceType {
+    Compliant,
+    NonCompliant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConformancePackComplianceType),
+}
+
+impl Default for ConformancePackComplianceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConformancePackComplianceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConformancePackComplianceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConformancePackComplianceType {
+    fn into(self) -> String {
+        match self {
+            ConformancePackComplianceType::Compliant => "COMPLIANT".to_string(),
+            ConformancePackComplianceType::NonCompliant => "NON_COMPLIANT".to_string(),
+            ConformancePackComplianceType::UnknownVariant(
+                UnknownConformancePackComplianceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConformancePackComplianceType {
+    fn into(self) -> &'a str {
+        match self {
+            ConformancePackComplianceType::Compliant => &"COMPLIANT",
+            ConformancePackComplianceType::NonCompliant => &"NON_COMPLIANT",
+            ConformancePackComplianceType::UnknownVariant(
+                UnknownConformancePackComplianceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConformancePackComplianceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANT" => ConformancePackComplianceType::Compliant,
+            "NON_COMPLIANT" => ConformancePackComplianceType::NonCompliant,
+            _ => ConformancePackComplianceType::UnknownVariant(
+                UnknownConformancePackComplianceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConformancePackComplianceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANT" => ConformancePackComplianceType::Compliant,
+            "NON_COMPLIANT" => ConformancePackComplianceType::NonCompliant,
+            _ => ConformancePackComplianceType::UnknownVariant(
+                UnknownConformancePackComplianceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConformancePackComplianceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConformancePackComplianceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConformancePackComplianceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns details of a conformance pack. A conformance pack is a collection of AWS Config rules and remediation actions that can be easily deployed in an account and a region.</p>
@@ -842,7 +1722,7 @@ pub struct ConformancePackEvaluationFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ConformancePackComplianceType>,
     /// <p>Filters the results by AWS Config rule names.</p>
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -867,7 +1747,7 @@ pub struct ConformancePackEvaluationResult {
     pub annotation: Option<String>,
     /// <p>The compliance type. The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. </p>
     #[serde(rename = "ComplianceType")]
-    pub compliance_type: String,
+    pub compliance_type: ConformancePackComplianceType,
     /// <p>The time when AWS Config rule evaluated AWS resource.</p>
     #[serde(rename = "ConfigRuleInvokedTime")]
     pub config_rule_invoked_time: f64,
@@ -896,11 +1776,131 @@ pub struct ConformancePackRuleCompliance {
     /// <p>Compliance of the AWS Config rule</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ConformancePackComplianceType>,
     /// <p>Name of the config rule.</p>
     #[serde(rename = "ConfigRuleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConformancePackState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConformancePackState {
+    CreateComplete,
+    CreateFailed,
+    CreateInProgress,
+    DeleteFailed,
+    DeleteInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConformancePackState),
+}
+
+impl Default for ConformancePackState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConformancePackState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConformancePackState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConformancePackState {
+    fn into(self) -> String {
+        match self {
+            ConformancePackState::CreateComplete => "CREATE_COMPLETE".to_string(),
+            ConformancePackState::CreateFailed => "CREATE_FAILED".to_string(),
+            ConformancePackState::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            ConformancePackState::DeleteFailed => "DELETE_FAILED".to_string(),
+            ConformancePackState::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            ConformancePackState::UnknownVariant(UnknownConformancePackState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConformancePackState {
+    fn into(self) -> &'a str {
+        match self {
+            ConformancePackState::CreateComplete => &"CREATE_COMPLETE",
+            ConformancePackState::CreateFailed => &"CREATE_FAILED",
+            ConformancePackState::CreateInProgress => &"CREATE_IN_PROGRESS",
+            ConformancePackState::DeleteFailed => &"DELETE_FAILED",
+            ConformancePackState::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            ConformancePackState::UnknownVariant(UnknownConformancePackState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConformancePackState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_COMPLETE" => ConformancePackState::CreateComplete,
+            "CREATE_FAILED" => ConformancePackState::CreateFailed,
+            "CREATE_IN_PROGRESS" => ConformancePackState::CreateInProgress,
+            "DELETE_FAILED" => ConformancePackState::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ConformancePackState::DeleteInProgress,
+            _ => ConformancePackState::UnknownVariant(UnknownConformancePackState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConformancePackState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_COMPLETE" => ConformancePackState::CreateComplete,
+            "CREATE_FAILED" => ConformancePackState::CreateFailed,
+            "CREATE_IN_PROGRESS" => ConformancePackState::CreateInProgress,
+            "DELETE_FAILED" => ConformancePackState::DeleteFailed,
+            "DELETE_IN_PROGRESS" => ConformancePackState::DeleteInProgress,
+            _ => ConformancePackState::UnknownVariant(UnknownConformancePackState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConformancePackState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConformancePackState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConformancePackState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Status details of a conformance pack.</p>
@@ -918,7 +1918,7 @@ pub struct ConformancePackStatusDetail {
     pub conformance_pack_name: String,
     /// <p><p>Indicates deployment status of conformance pack.</p> <p>AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p>CREATE<em>IN</em>PROGRESS when a conformance pack creation is in progress for an account.</p> </li> <li> <p>CREATE<em>COMPLETE when a conformance pack has been successfully created in your account.</p> </li> <li> <p>CREATE</em>FAILED when a conformance pack creation failed in your account.</p> </li> <li> <p>DELETE<em>IN</em>PROGRESS when a conformance pack deletion is in progress. </p> </li> <li> <p>DELETE_FAILED when a conformance pack deletion failed in your account.</p> </li> </ul></p>
     #[serde(rename = "ConformancePackState")]
-    pub conformance_pack_state: String,
+    pub conformance_pack_state: ConformancePackState,
     /// <p>The reason of conformance pack creation failure.</p>
     #[serde(rename = "ConformancePackStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1163,6 +2163,112 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryStatus {
+    Failure,
+    NotApplicable,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryStatus),
+}
+
+impl Default for DeliveryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryStatus {
+    fn into(self) -> String {
+        match self {
+            DeliveryStatus::Failure => "Failure".to_string(),
+            DeliveryStatus::NotApplicable => "Not_Applicable".to_string(),
+            DeliveryStatus::Success => "Success".to_string(),
+            DeliveryStatus::UnknownVariant(UnknownDeliveryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryStatus::Failure => &"Failure",
+            DeliveryStatus::NotApplicable => &"Not_Applicable",
+            DeliveryStatus::Success => &"Success",
+            DeliveryStatus::UnknownVariant(UnknownDeliveryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliveryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failure" => DeliveryStatus::Failure,
+            "Not_Applicable" => DeliveryStatus::NotApplicable,
+            "Success" => DeliveryStatus::Success,
+            _ => DeliveryStatus::UnknownVariant(UnknownDeliveryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliveryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failure" => DeliveryStatus::Failure,
+            "Not_Applicable" => DeliveryStatus::NotApplicable,
+            "Success" => DeliveryStatus::Success,
+            _ => DeliveryStatus::UnknownVariant(UnknownDeliveryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliveryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregateComplianceByConfigRulesRequest {
@@ -1229,7 +2335,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_types: Option<Vec<String>>,
+    pub compliance_types: Option<Vec<ComplianceType>>,
     /// <p>Specify one or more AWS Config rule names to filter the results by rule.</p>
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1261,7 +2367,7 @@ pub struct DescribeComplianceByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_types: Option<Vec<String>>,
+    pub compliance_types: Option<Vec<ComplianceType>>,
     /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1371,7 +2477,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     /// <p><p>Filters the status type.</p> <ul> <li> <p>Valid value FAILED indicates errors while moving data.</p> </li> <li> <p>Valid value SUCCEEDED indicates the data was successfully moved.</p> </li> <li> <p>Valid value OUTDATED indicates the data is not the most recent.</p> </li> </ul></p>
     #[serde(rename = "UpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_status: Option<Vec<String>>,
+    pub update_status: Option<Vec<AggregatedSourceStatusType>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1862,7 +2968,7 @@ pub struct Evaluation {
     pub compliance_resource_type: String,
     /// <p>Indicates whether the AWS resource complies with the AWS Config rule that it was evaluated against.</p> <p>For the <code>Evaluation</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for this data type.</p> <p>Similarly, AWS Config does not accept <code>INSUFFICIENT_DATA</code> as the value for <code>ComplianceType</code> from a <code>PutEvaluations</code> request. For example, an AWS Lambda function for a custom AWS Config rule cannot pass an <code>INSUFFICIENT_DATA</code> value to AWS Config.</p>
     #[serde(rename = "ComplianceType")]
-    pub compliance_type: String,
+    pub compliance_type: ComplianceType,
     /// <p>The time of the event in AWS Config that triggered the evaluation. For event-based evaluations, the time indicates when AWS Config created the configuration item that triggered the evaluation. For periodic evaluations, the time indicates when AWS Config triggered the evaluation at the frequency that you specified (for example, every 24 hours).</p>
     #[serde(rename = "OrderingTimestamp")]
     pub ordering_timestamp: f64,
@@ -1879,7 +2985,7 @@ pub struct EvaluationResult {
     /// <p>Indicates whether the AWS resource complies with the AWS Config rule that evaluated it.</p> <p>For the <code>EvaluationResult</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for the <code>EvaluationResult</code> data type.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ComplianceType>,
     /// <p>The time when the AWS Config rule evaluated the AWS resource.</p>
     #[serde(rename = "ConfigRuleInvokedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1930,6 +3036,101 @@ pub struct EvaluationResultQualifier {
     pub resource_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventSource {
+    AwsConfig,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventSource),
+}
+
+impl Default for EventSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventSource {
+    fn into(self) -> String {
+        match self {
+            EventSource::AwsConfig => "aws.config".to_string(),
+            EventSource::UnknownVariant(UnknownEventSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventSource {
+    fn into(self) -> &'a str {
+        match self {
+            EventSource::AwsConfig => &"aws.config",
+            EventSource::UnknownVariant(UnknownEventSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "aws.config" => EventSource::AwsConfig,
+            _ => EventSource::UnknownVariant(UnknownEventSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aws.config" => EventSource::AwsConfig,
+            _ => EventSource::UnknownVariant(UnknownEventSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The controls that AWS Config uses for executing remediations.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExecutionControls {
@@ -1950,7 +3151,7 @@ pub struct ExternalEvaluation {
     #[serde(rename = "ComplianceResourceType")]
     pub compliance_resource_type: String,
     #[serde(rename = "ComplianceType")]
-    pub compliance_type: String,
+    pub compliance_type: ComplianceType,
     #[serde(rename = "OrderingTimestamp")]
     pub ordering_timestamp: f64,
 }
@@ -2019,7 +3220,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     /// <p><p>The resource compliance status.</p> <note> <p>For the <code>GetAggregateComplianceDetailsByConfigRuleRequest</code> data type, AWS Config supports only the <code>COMPLIANT</code> and <code>NON<em>COMPLIANT</code>. AWS Config does not support the <code>NOT</em>APPLICABLE</code> and <code>INSUFFICIENT_DATA</code> values.</p> </note></p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_type: Option<String>,
+    pub compliance_type: Option<ComplianceType>,
     /// <p>The name of the AWS Config rule for which you want compliance information.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
@@ -2062,7 +3263,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     /// <p>Groups the result based on ACCOUNT_ID or AWS_REGION.</p>
     #[serde(rename = "GroupByKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_by_key: Option<String>,
+    pub group_by_key: Option<ConfigRuleComplianceSummaryGroupKey>,
     /// <p>The maximum number of evaluation results returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,7 +3304,7 @@ pub struct GetAggregateDiscoveredResourceCountsRequest {
     /// <p>The key to group the resource counts.</p>
     #[serde(rename = "GroupByKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_by_key: Option<String>,
+    pub group_by_key: Option<ResourceCountGroupKey>,
     /// <p>The maximum number of <a>GroupedResourceCount</a> objects returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2161,7 +3362,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_types: Option<Vec<String>>,
+    pub compliance_types: Option<Vec<ComplianceType>>,
     /// <p>The name of the AWS Config rule for which you want compliance information.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
@@ -2196,7 +3397,7 @@ pub struct GetComplianceDetailsByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_types: Option<Vec<String>>,
+    pub compliance_types: Option<Vec<ComplianceType>>,
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2426,7 +3627,7 @@ pub struct GetResourceConfigHistoryRequest {
     /// <p>The chronological order for configuration items listed. By default, the results are listed in reverse chronological order.</p>
     #[serde(rename = "chronologicalOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub chronological_order: Option<String>,
+    pub chronological_order: Option<ChronologicalOrder>,
     /// <p>The time stamp that indicates an earlier time. If not specified, the action returns paginated results that contain configuration items that start when the first configuration item was recorded.</p>
     #[serde(rename = "earlierTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2448,7 +3649,7 @@ pub struct GetResourceConfigHistoryRequest {
     pub resource_id: String,
     /// <p>The resource type.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
 }
 
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
@@ -2514,7 +3715,7 @@ pub struct ListAggregateDiscoveredResourcesRequest {
     pub next_token: Option<String>,
     /// <p>The type of resources that you want AWS Config to list in the response.</p>
     #[serde(rename = "ResourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2556,7 +3757,7 @@ pub struct ListDiscoveredResourcesRequest {
     pub resource_name: Option<String>,
     /// <p>The type of resources that you want AWS Config to list in the response.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
 }
 
 /// <p><p/></p>
@@ -2628,6 +3829,266 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMaximumExecutionFrequency {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MaximumExecutionFrequency {
+    OneHour,
+    SixHours,
+    ThreeHours,
+    TwelveHours,
+    TwentyFourHours,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMaximumExecutionFrequency),
+}
+
+impl Default for MaximumExecutionFrequency {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MaximumExecutionFrequency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MaximumExecutionFrequency {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MaximumExecutionFrequency {
+    fn into(self) -> String {
+        match self {
+            MaximumExecutionFrequency::OneHour => "One_Hour".to_string(),
+            MaximumExecutionFrequency::SixHours => "Six_Hours".to_string(),
+            MaximumExecutionFrequency::ThreeHours => "Three_Hours".to_string(),
+            MaximumExecutionFrequency::TwelveHours => "Twelve_Hours".to_string(),
+            MaximumExecutionFrequency::TwentyFourHours => "TwentyFour_Hours".to_string(),
+            MaximumExecutionFrequency::UnknownVariant(UnknownMaximumExecutionFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MaximumExecutionFrequency {
+    fn into(self) -> &'a str {
+        match self {
+            MaximumExecutionFrequency::OneHour => &"One_Hour",
+            MaximumExecutionFrequency::SixHours => &"Six_Hours",
+            MaximumExecutionFrequency::ThreeHours => &"Three_Hours",
+            MaximumExecutionFrequency::TwelveHours => &"Twelve_Hours",
+            MaximumExecutionFrequency::TwentyFourHours => &"TwentyFour_Hours",
+            MaximumExecutionFrequency::UnknownVariant(UnknownMaximumExecutionFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MaximumExecutionFrequency {
+    fn from(name: &str) -> Self {
+        match name {
+            "One_Hour" => MaximumExecutionFrequency::OneHour,
+            "Six_Hours" => MaximumExecutionFrequency::SixHours,
+            "Three_Hours" => MaximumExecutionFrequency::ThreeHours,
+            "Twelve_Hours" => MaximumExecutionFrequency::TwelveHours,
+            "TwentyFour_Hours" => MaximumExecutionFrequency::TwentyFourHours,
+            _ => MaximumExecutionFrequency::UnknownVariant(UnknownMaximumExecutionFrequency {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MaximumExecutionFrequency {
+    fn from(name: String) -> Self {
+        match &*name {
+            "One_Hour" => MaximumExecutionFrequency::OneHour,
+            "Six_Hours" => MaximumExecutionFrequency::SixHours,
+            "Three_Hours" => MaximumExecutionFrequency::ThreeHours,
+            "Twelve_Hours" => MaximumExecutionFrequency::TwelveHours,
+            "TwentyFour_Hours" => MaximumExecutionFrequency::TwentyFourHours,
+            _ => {
+                MaximumExecutionFrequency::UnknownVariant(UnknownMaximumExecutionFrequency { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaximumExecutionFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MaximumExecutionFrequency {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MaximumExecutionFrequency {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMemberAccountRuleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MemberAccountRuleStatus {
+    CreateFailed,
+    CreateInProgress,
+    CreateSuccessful,
+    DeleteFailed,
+    DeleteInProgress,
+    DeleteSuccessful,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMemberAccountRuleStatus),
+}
+
+impl Default for MemberAccountRuleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MemberAccountRuleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MemberAccountRuleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MemberAccountRuleStatus {
+    fn into(self) -> String {
+        match self {
+            MemberAccountRuleStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            MemberAccountRuleStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            MemberAccountRuleStatus::CreateSuccessful => "CREATE_SUCCESSFUL".to_string(),
+            MemberAccountRuleStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            MemberAccountRuleStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            MemberAccountRuleStatus::DeleteSuccessful => "DELETE_SUCCESSFUL".to_string(),
+            MemberAccountRuleStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            MemberAccountRuleStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            MemberAccountRuleStatus::UpdateSuccessful => "UPDATE_SUCCESSFUL".to_string(),
+            MemberAccountRuleStatus::UnknownVariant(UnknownMemberAccountRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MemberAccountRuleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MemberAccountRuleStatus::CreateFailed => &"CREATE_FAILED",
+            MemberAccountRuleStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            MemberAccountRuleStatus::CreateSuccessful => &"CREATE_SUCCESSFUL",
+            MemberAccountRuleStatus::DeleteFailed => &"DELETE_FAILED",
+            MemberAccountRuleStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            MemberAccountRuleStatus::DeleteSuccessful => &"DELETE_SUCCESSFUL",
+            MemberAccountRuleStatus::UpdateFailed => &"UPDATE_FAILED",
+            MemberAccountRuleStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            MemberAccountRuleStatus::UpdateSuccessful => &"UPDATE_SUCCESSFUL",
+            MemberAccountRuleStatus::UnknownVariant(UnknownMemberAccountRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MemberAccountRuleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => MemberAccountRuleStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => MemberAccountRuleStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => MemberAccountRuleStatus::CreateSuccessful,
+            "DELETE_FAILED" => MemberAccountRuleStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => MemberAccountRuleStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => MemberAccountRuleStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => MemberAccountRuleStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => MemberAccountRuleStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => MemberAccountRuleStatus::UpdateSuccessful,
+            _ => MemberAccountRuleStatus::UnknownVariant(UnknownMemberAccountRuleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MemberAccountRuleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => MemberAccountRuleStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => MemberAccountRuleStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => MemberAccountRuleStatus::CreateSuccessful,
+            "DELETE_FAILED" => MemberAccountRuleStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => MemberAccountRuleStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => MemberAccountRuleStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => MemberAccountRuleStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => MemberAccountRuleStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => MemberAccountRuleStatus::UpdateSuccessful,
+            _ => MemberAccountRuleStatus::UnknownVariant(UnknownMemberAccountRuleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MemberAccountRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MemberAccountRuleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MemberAccountRuleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Organization config rule creation or deletion status in each member account. This includes the name of the rule, the status, error code and error message when the rule creation or deletion failed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2652,7 +4113,141 @@ pub struct MemberAccountStatus {
     pub last_update_time: Option<f64>,
     /// <p><p>Indicates deployment status for config rule in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the first time, config rule status is created in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the second time, config rule status is updated in the member account. Config rule status is deleted when the master account deletes <code>OrganizationConfigRule</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when config rule has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when config rule is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when config rule creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when config rule is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when config rule has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when config rule has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when config rule is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> </ul></p>
     #[serde(rename = "MemberAccountRuleStatus")]
-    pub member_account_rule_status: String,
+    pub member_account_rule_status: MemberAccountRuleStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageType {
+    ConfigurationItemChangeNotification,
+    ConfigurationSnapshotDeliveryCompleted,
+    OversizedConfigurationItemChangeNotification,
+    ScheduledNotification,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageType),
+}
+
+impl Default for MessageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageType {
+    fn into(self) -> String {
+        match self {
+            MessageType::ConfigurationItemChangeNotification => {
+                "ConfigurationItemChangeNotification".to_string()
+            }
+            MessageType::ConfigurationSnapshotDeliveryCompleted => {
+                "ConfigurationSnapshotDeliveryCompleted".to_string()
+            }
+            MessageType::OversizedConfigurationItemChangeNotification => {
+                "OversizedConfigurationItemChangeNotification".to_string()
+            }
+            MessageType::ScheduledNotification => "ScheduledNotification".to_string(),
+            MessageType::UnknownVariant(UnknownMessageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageType {
+    fn into(self) -> &'a str {
+        match self {
+            MessageType::ConfigurationItemChangeNotification => {
+                &"ConfigurationItemChangeNotification"
+            }
+            MessageType::ConfigurationSnapshotDeliveryCompleted => {
+                &"ConfigurationSnapshotDeliveryCompleted"
+            }
+            MessageType::OversizedConfigurationItemChangeNotification => {
+                &"OversizedConfigurationItemChangeNotification"
+            }
+            MessageType::ScheduledNotification => &"ScheduledNotification",
+            MessageType::UnknownVariant(UnknownMessageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MessageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ConfigurationItemChangeNotification" => {
+                MessageType::ConfigurationItemChangeNotification
+            }
+            "ConfigurationSnapshotDeliveryCompleted" => {
+                MessageType::ConfigurationSnapshotDeliveryCompleted
+            }
+            "OversizedConfigurationItemChangeNotification" => {
+                MessageType::OversizedConfigurationItemChangeNotification
+            }
+            "ScheduledNotification" => MessageType::ScheduledNotification,
+            _ => MessageType::UnknownVariant(UnknownMessageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ConfigurationItemChangeNotification" => {
+                MessageType::ConfigurationItemChangeNotification
+            }
+            "ConfigurationSnapshotDeliveryCompleted" => {
+                MessageType::ConfigurationSnapshotDeliveryCompleted
+            }
+            "OversizedConfigurationItemChangeNotification" => {
+                MessageType::OversizedConfigurationItemChangeNotification
+            }
+            "ScheduledNotification" => MessageType::ScheduledNotification,
+            _ => MessageType::UnknownVariant(UnknownMessageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MessageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MessageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This object contains regions to set up the aggregator and an IAM role to retrieve organization details.</p>
@@ -2720,7 +4315,138 @@ pub struct OrganizationConfigRuleStatus {
     pub organization_config_rule_name: String,
     /// <p><p>Indicates deployment status of an organization config rule. When master account calls PutOrganizationConfigRule action for the first time, config rule status is created in all the member accounts. When master account calls PutOrganizationConfigRule action for the second time, config rule status is updated in all the member accounts. Additionally, config rule status is updated when one or more member accounts join or leave an organization. Config rule status is deleted when the master account deletes OrganizationConfigRule in all the member accounts and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <p>AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when an organization config rule has been successfully created in all the member accounts. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when an organization config rule creation is in progress.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when an organization config rule creation failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when an organization config rule deletion failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when an organization config rule deletion is in progress.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when an organization config rule has been successfully deleted from all the member accounts.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when an organization config rule has been successfully updated in all the member accounts.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when an organization config rule update is in progress.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when an organization config rule update failed in one or more member accounts within that organization.</p> </li> </ul></p>
     #[serde(rename = "OrganizationRuleStatus")]
-    pub organization_rule_status: String,
+    pub organization_rule_status: OrganizationRuleStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrganizationConfigRuleTriggerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrganizationConfigRuleTriggerType {
+    ConfigurationItemChangeNotification,
+    OversizedConfigurationItemChangeNotification,
+    ScheduledNotification,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrganizationConfigRuleTriggerType),
+}
+
+impl Default for OrganizationConfigRuleTriggerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrganizationConfigRuleTriggerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrganizationConfigRuleTriggerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrganizationConfigRuleTriggerType {
+    fn into(self) -> String {
+        match self {
+            OrganizationConfigRuleTriggerType::ConfigurationItemChangeNotification => {
+                "ConfigurationItemChangeNotification".to_string()
+            }
+            OrganizationConfigRuleTriggerType::OversizedConfigurationItemChangeNotification => {
+                "OversizedConfigurationItemChangeNotification".to_string()
+            }
+            OrganizationConfigRuleTriggerType::ScheduledNotification => {
+                "ScheduledNotification".to_string()
+            }
+            OrganizationConfigRuleTriggerType::UnknownVariant(
+                UnknownOrganizationConfigRuleTriggerType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrganizationConfigRuleTriggerType {
+    fn into(self) -> &'a str {
+        match self {
+            OrganizationConfigRuleTriggerType::ConfigurationItemChangeNotification => {
+                &"ConfigurationItemChangeNotification"
+            }
+            OrganizationConfigRuleTriggerType::OversizedConfigurationItemChangeNotification => {
+                &"OversizedConfigurationItemChangeNotification"
+            }
+            OrganizationConfigRuleTriggerType::ScheduledNotification => &"ScheduledNotification",
+            OrganizationConfigRuleTriggerType::UnknownVariant(
+                UnknownOrganizationConfigRuleTriggerType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OrganizationConfigRuleTriggerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ConfigurationItemChangeNotification" => {
+                OrganizationConfigRuleTriggerType::ConfigurationItemChangeNotification
+            }
+            "OversizedConfigurationItemChangeNotification" => {
+                OrganizationConfigRuleTriggerType::OversizedConfigurationItemChangeNotification
+            }
+            "ScheduledNotification" => OrganizationConfigRuleTriggerType::ScheduledNotification,
+            _ => OrganizationConfigRuleTriggerType::UnknownVariant(
+                UnknownOrganizationConfigRuleTriggerType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OrganizationConfigRuleTriggerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ConfigurationItemChangeNotification" => {
+                OrganizationConfigRuleTriggerType::ConfigurationItemChangeNotification
+            }
+            "OversizedConfigurationItemChangeNotification" => {
+                OrganizationConfigRuleTriggerType::OversizedConfigurationItemChangeNotification
+            }
+            "ScheduledNotification" => OrganizationConfigRuleTriggerType::ScheduledNotification,
+            _ => OrganizationConfigRuleTriggerType::UnknownVariant(
+                UnknownOrganizationConfigRuleTriggerType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationConfigRuleTriggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrganizationConfigRuleTriggerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrganizationConfigRuleTriggerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An organization conformance pack that has information about conformance packs that AWS Config creates in member accounts. </p>
@@ -2778,7 +4504,7 @@ pub struct OrganizationConformancePackDetailedStatus {
     pub last_update_time: Option<f64>,
     /// <p><p>Indicates deployment status for conformance pack in a member account. When master account calls <code>PutOrganizationConformancePack</code> action for the first time, conformance pack status is created in the member account. When master account calls <code>PutOrganizationConformancePack</code> action for the second time, conformance pack status is updated in the member account. Conformance pack status is deleted when the master account deletes <code>OrganizationConformancePack</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when conformance pack has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when conformance pack is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when conformance pack creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when conformance pack is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when conformance pack has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when conformance pack has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when conformance pack is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> </ul></p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: OrganizationResourceDetailedStatus,
 }
 
 /// <p>Returns the status for an organization conformance pack in an organization.</p>
@@ -2802,7 +4528,7 @@ pub struct OrganizationConformancePackStatus {
     pub organization_conformance_pack_name: String,
     /// <p><p>Indicates deployment status of an organization conformance pack. When master account calls PutOrganizationConformancePack for the first time, conformance pack status is created in all the member accounts. When master account calls PutOrganizationConformancePack for the second time, conformance pack status is updated in all the member accounts. Additionally, conformance pack status is updated when one or more member accounts join or leave an organization. Conformance pack status is deleted when the master account deletes OrganizationConformancePack in all the member accounts and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <p>AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when an organization conformance pack has been successfully created in all the member accounts. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when an organization conformance pack creation is in progress.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when an organization conformance pack creation failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when an organization conformance pack deletion failed in one or more member accounts within that organization.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when an organization conformance pack deletion is in progress.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when an organization conformance pack has been successfully deleted from all the member accounts.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when an organization conformance pack has been successfully updated in all the member accounts.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when an organization conformance pack update is in progress.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when an organization conformance pack update failed in one or more member accounts within that organization.</p> </li> </ul></p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: OrganizationResourceStatus,
 }
 
 /// <p>An object that specifies organization custom rule metadata such as resource type, resource ID of AWS resource, Lamdba function ARN, and organization trigger types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
@@ -2822,10 +4548,10 @@ pub struct OrganizationCustomRuleMetadata {
     /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. Your custom rule is triggered when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_execution_frequency: Option<String>,
+    pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     /// <p><p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> </ul></p>
     #[serde(rename = "OrganizationConfigRuleTriggerTypes")]
-    pub organization_config_rule_trigger_types: Vec<String>,
+    pub organization_config_rule_trigger_types: Vec<OrganizationConfigRuleTriggerType>,
     /// <p>The ID of the AWS resource that was evaluated.</p>
     #[serde(rename = "ResourceIdScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2858,7 +4584,7 @@ pub struct OrganizationManagedRuleMetadata {
     /// <p><p>The maximum frequency with which AWS Config runs evaluations for a rule. You are using an AWS managed rule that is triggered at a periodic frequency.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_execution_frequency: Option<String>,
+    pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     /// <p>The ID of the AWS resource that was evaluated.</p>
     #[serde(rename = "ResourceIdScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2880,6 +4606,155 @@ pub struct OrganizationManagedRuleMetadata {
     pub tag_value_scope: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrganizationResourceDetailedStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrganizationResourceDetailedStatus {
+    CreateFailed,
+    CreateInProgress,
+    CreateSuccessful,
+    DeleteFailed,
+    DeleteInProgress,
+    DeleteSuccessful,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrganizationResourceDetailedStatus),
+}
+
+impl Default for OrganizationResourceDetailedStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrganizationResourceDetailedStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrganizationResourceDetailedStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrganizationResourceDetailedStatus {
+    fn into(self) -> String {
+        match self {
+            OrganizationResourceDetailedStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            OrganizationResourceDetailedStatus::CreateInProgress => {
+                "CREATE_IN_PROGRESS".to_string()
+            }
+            OrganizationResourceDetailedStatus::CreateSuccessful => "CREATE_SUCCESSFUL".to_string(),
+            OrganizationResourceDetailedStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            OrganizationResourceDetailedStatus::DeleteInProgress => {
+                "DELETE_IN_PROGRESS".to_string()
+            }
+            OrganizationResourceDetailedStatus::DeleteSuccessful => "DELETE_SUCCESSFUL".to_string(),
+            OrganizationResourceDetailedStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            OrganizationResourceDetailedStatus::UpdateInProgress => {
+                "UPDATE_IN_PROGRESS".to_string()
+            }
+            OrganizationResourceDetailedStatus::UpdateSuccessful => "UPDATE_SUCCESSFUL".to_string(),
+            OrganizationResourceDetailedStatus::UnknownVariant(
+                UnknownOrganizationResourceDetailedStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrganizationResourceDetailedStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OrganizationResourceDetailedStatus::CreateFailed => &"CREATE_FAILED",
+            OrganizationResourceDetailedStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            OrganizationResourceDetailedStatus::CreateSuccessful => &"CREATE_SUCCESSFUL",
+            OrganizationResourceDetailedStatus::DeleteFailed => &"DELETE_FAILED",
+            OrganizationResourceDetailedStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            OrganizationResourceDetailedStatus::DeleteSuccessful => &"DELETE_SUCCESSFUL",
+            OrganizationResourceDetailedStatus::UpdateFailed => &"UPDATE_FAILED",
+            OrganizationResourceDetailedStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            OrganizationResourceDetailedStatus::UpdateSuccessful => &"UPDATE_SUCCESSFUL",
+            OrganizationResourceDetailedStatus::UnknownVariant(
+                UnknownOrganizationResourceDetailedStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OrganizationResourceDetailedStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => OrganizationResourceDetailedStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationResourceDetailedStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationResourceDetailedStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationResourceDetailedStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationResourceDetailedStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationResourceDetailedStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationResourceDetailedStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationResourceDetailedStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationResourceDetailedStatus::UpdateSuccessful,
+            _ => OrganizationResourceDetailedStatus::UnknownVariant(
+                UnknownOrganizationResourceDetailedStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OrganizationResourceDetailedStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => OrganizationResourceDetailedStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationResourceDetailedStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationResourceDetailedStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationResourceDetailedStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationResourceDetailedStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationResourceDetailedStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationResourceDetailedStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationResourceDetailedStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationResourceDetailedStatus::UpdateSuccessful,
+            _ => OrganizationResourceDetailedStatus::UnknownVariant(
+                UnknownOrganizationResourceDetailedStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationResourceDetailedStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrganizationResourceDetailedStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrganizationResourceDetailedStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Status filter object to filter results based on specific member account ID or status type for an organization conformance pack.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2891,7 +4766,389 @@ pub struct OrganizationResourceDetailedStatusFilters {
     /// <p><p>Indicates deployment status for conformance pack in a member account. When master account calls <code>PutOrganizationConformancePack</code> action for the first time, conformance pack status is created in the member account. When master account calls <code>PutOrganizationConformancePack</code> action for the second time, conformance pack status is updated in the member account. Conformance pack status is deleted when the master account deletes <code>OrganizationConformancePack</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p> AWS Config sets the state of the conformance pack to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when conformance pack has been created in the member account. </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when conformance pack is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when conformance pack creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when conformance pack is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when conformance pack has been deleted in the member account. </p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when conformance pack has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when conformance pack is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when conformance pack deletion has failed in the member account.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OrganizationResourceDetailedStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrganizationResourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrganizationResourceStatus {
+    CreateFailed,
+    CreateInProgress,
+    CreateSuccessful,
+    DeleteFailed,
+    DeleteInProgress,
+    DeleteSuccessful,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrganizationResourceStatus),
+}
+
+impl Default for OrganizationResourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrganizationResourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrganizationResourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrganizationResourceStatus {
+    fn into(self) -> String {
+        match self {
+            OrganizationResourceStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            OrganizationResourceStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            OrganizationResourceStatus::CreateSuccessful => "CREATE_SUCCESSFUL".to_string(),
+            OrganizationResourceStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            OrganizationResourceStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            OrganizationResourceStatus::DeleteSuccessful => "DELETE_SUCCESSFUL".to_string(),
+            OrganizationResourceStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            OrganizationResourceStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            OrganizationResourceStatus::UpdateSuccessful => "UPDATE_SUCCESSFUL".to_string(),
+            OrganizationResourceStatus::UnknownVariant(UnknownOrganizationResourceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrganizationResourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OrganizationResourceStatus::CreateFailed => &"CREATE_FAILED",
+            OrganizationResourceStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            OrganizationResourceStatus::CreateSuccessful => &"CREATE_SUCCESSFUL",
+            OrganizationResourceStatus::DeleteFailed => &"DELETE_FAILED",
+            OrganizationResourceStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            OrganizationResourceStatus::DeleteSuccessful => &"DELETE_SUCCESSFUL",
+            OrganizationResourceStatus::UpdateFailed => &"UPDATE_FAILED",
+            OrganizationResourceStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            OrganizationResourceStatus::UpdateSuccessful => &"UPDATE_SUCCESSFUL",
+            OrganizationResourceStatus::UnknownVariant(UnknownOrganizationResourceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrganizationResourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => OrganizationResourceStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationResourceStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationResourceStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationResourceStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationResourceStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationResourceStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationResourceStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationResourceStatus::UpdateSuccessful,
+            _ => OrganizationResourceStatus::UnknownVariant(UnknownOrganizationResourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrganizationResourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => OrganizationResourceStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationResourceStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationResourceStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationResourceStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationResourceStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationResourceStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationResourceStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationResourceStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationResourceStatus::UpdateSuccessful,
+            _ => OrganizationResourceStatus::UnknownVariant(UnknownOrganizationResourceStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationResourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OrganizationResourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrganizationResourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrganizationRuleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrganizationRuleStatus {
+    CreateFailed,
+    CreateInProgress,
+    CreateSuccessful,
+    DeleteFailed,
+    DeleteInProgress,
+    DeleteSuccessful,
+    UpdateFailed,
+    UpdateInProgress,
+    UpdateSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrganizationRuleStatus),
+}
+
+impl Default for OrganizationRuleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrganizationRuleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrganizationRuleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrganizationRuleStatus {
+    fn into(self) -> String {
+        match self {
+            OrganizationRuleStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            OrganizationRuleStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            OrganizationRuleStatus::CreateSuccessful => "CREATE_SUCCESSFUL".to_string(),
+            OrganizationRuleStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            OrganizationRuleStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            OrganizationRuleStatus::DeleteSuccessful => "DELETE_SUCCESSFUL".to_string(),
+            OrganizationRuleStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            OrganizationRuleStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            OrganizationRuleStatus::UpdateSuccessful => "UPDATE_SUCCESSFUL".to_string(),
+            OrganizationRuleStatus::UnknownVariant(UnknownOrganizationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrganizationRuleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OrganizationRuleStatus::CreateFailed => &"CREATE_FAILED",
+            OrganizationRuleStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            OrganizationRuleStatus::CreateSuccessful => &"CREATE_SUCCESSFUL",
+            OrganizationRuleStatus::DeleteFailed => &"DELETE_FAILED",
+            OrganizationRuleStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            OrganizationRuleStatus::DeleteSuccessful => &"DELETE_SUCCESSFUL",
+            OrganizationRuleStatus::UpdateFailed => &"UPDATE_FAILED",
+            OrganizationRuleStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            OrganizationRuleStatus::UpdateSuccessful => &"UPDATE_SUCCESSFUL",
+            OrganizationRuleStatus::UnknownVariant(UnknownOrganizationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrganizationRuleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_FAILED" => OrganizationRuleStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationRuleStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationRuleStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationRuleStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationRuleStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationRuleStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationRuleStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationRuleStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationRuleStatus::UpdateSuccessful,
+            _ => OrganizationRuleStatus::UnknownVariant(UnknownOrganizationRuleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrganizationRuleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_FAILED" => OrganizationRuleStatus::CreateFailed,
+            "CREATE_IN_PROGRESS" => OrganizationRuleStatus::CreateInProgress,
+            "CREATE_SUCCESSFUL" => OrganizationRuleStatus::CreateSuccessful,
+            "DELETE_FAILED" => OrganizationRuleStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => OrganizationRuleStatus::DeleteInProgress,
+            "DELETE_SUCCESSFUL" => OrganizationRuleStatus::DeleteSuccessful,
+            "UPDATE_FAILED" => OrganizationRuleStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => OrganizationRuleStatus::UpdateInProgress,
+            "UPDATE_SUCCESSFUL" => OrganizationRuleStatus::UpdateSuccessful,
+            _ => OrganizationRuleStatus::UnknownVariant(UnknownOrganizationRuleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrganizationRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OrganizationRuleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrganizationRuleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOwner {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Owner {
+    Aws,
+    CustomLambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOwner),
+}
+
+impl Default for Owner {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Owner {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Owner {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Owner {
+    fn into(self) -> String {
+        match self {
+            Owner::Aws => "AWS".to_string(),
+            Owner::CustomLambda => "CUSTOM_LAMBDA".to_string(),
+            Owner::UnknownVariant(UnknownOwner { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Owner {
+    fn into(self) -> &'a str {
+        match self {
+            Owner::Aws => &"AWS",
+            Owner::CustomLambda => &"CUSTOM_LAMBDA",
+            Owner::UnknownVariant(UnknownOwner { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Owner {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => Owner::Aws,
+            "CUSTOM_LAMBDA" => Owner::CustomLambda,
+            _ => Owner::UnknownVariant(UnknownOwner {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Owner {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => Owner::Aws,
+            "CUSTOM_LAMBDA" => Owner::CustomLambda,
+            _ => Owner::UnknownVariant(UnknownOwner { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Owner {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Owner {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Owner {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
@@ -3256,6 +5513,112 @@ pub struct QueryInfo {
     pub select_fields: Option<Vec<FieldInfo>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecorderStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecorderStatus {
+    Failure,
+    Pending,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecorderStatus),
+}
+
+impl Default for RecorderStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecorderStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecorderStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecorderStatus {
+    fn into(self) -> String {
+        match self {
+            RecorderStatus::Failure => "Failure".to_string(),
+            RecorderStatus::Pending => "Pending".to_string(),
+            RecorderStatus::Success => "Success".to_string(),
+            RecorderStatus::UnknownVariant(UnknownRecorderStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecorderStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RecorderStatus::Failure => &"Failure",
+            RecorderStatus::Pending => &"Pending",
+            RecorderStatus::Success => &"Success",
+            RecorderStatus::UnknownVariant(UnknownRecorderStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecorderStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failure" => RecorderStatus::Failure,
+            "Pending" => RecorderStatus::Pending,
+            "Success" => RecorderStatus::Success,
+            _ => RecorderStatus::UnknownVariant(UnknownRecorderStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecorderStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failure" => RecorderStatus::Failure,
+            "Pending" => RecorderStatus::Pending,
+            "Success" => RecorderStatus::Success,
+            _ => RecorderStatus::UnknownVariant(UnknownRecorderStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecorderStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RecorderStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecorderStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported Resource Types</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordingGroup {
@@ -3270,7 +5633,7 @@ pub struct RecordingGroup {
     /// <p>A comma-separated list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, <code>AWS::EC2::Instance</code> or <code>AWS::CloudTrail::Trail</code>).</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>false</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of resource, it will not record resources of that type unless you manually add that type to your recording group.</p> <p>For a list of valid <code>resourceTypes</code> values, see the <b>resourceType Value</b> column in <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported AWS Resource Types</a>.</p>
     #[serde(rename = "resourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_types: Option<Vec<String>>,
+    pub resource_types: Option<Vec<ResourceType>>,
 }
 
 /// <p>The relationship of the related resource to the main resource.</p>
@@ -3292,7 +5655,7 @@ pub struct Relationship {
     /// <p>The resource type of the related resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>An object that represents the details about the remediation configuration that includes the remediation action, parameters, and data to execute the action.</p>
@@ -3338,7 +5701,7 @@ pub struct RemediationConfiguration {
     pub target_id: String,
     /// <p>The type of the target. Target executes remediation. For example, SSM document.</p>
     #[serde(rename = "TargetType")]
-    pub target_type: String,
+    pub target_type: RemediationTargetType,
     /// <p><p>Version of the target. For example, version of the SSM document.</p> <note> <p>If you make backward incompatible changes to the SSM document, you must call PutRemediationConfiguration API again to ensure the remediations can run.</p> </note></p>
     #[serde(rename = "TargetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3381,6 +5744,123 @@ pub struct RemediationExceptionResourceKey {
     pub resource_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRemediationExecutionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RemediationExecutionState {
+    Failed,
+    InProgress,
+    Queued,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRemediationExecutionState),
+}
+
+impl Default for RemediationExecutionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RemediationExecutionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RemediationExecutionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RemediationExecutionState {
+    fn into(self) -> String {
+        match self {
+            RemediationExecutionState::Failed => "FAILED".to_string(),
+            RemediationExecutionState::InProgress => "IN_PROGRESS".to_string(),
+            RemediationExecutionState::Queued => "QUEUED".to_string(),
+            RemediationExecutionState::Succeeded => "SUCCEEDED".to_string(),
+            RemediationExecutionState::UnknownVariant(UnknownRemediationExecutionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RemediationExecutionState {
+    fn into(self) -> &'a str {
+        match self {
+            RemediationExecutionState::Failed => &"FAILED",
+            RemediationExecutionState::InProgress => &"IN_PROGRESS",
+            RemediationExecutionState::Queued => &"QUEUED",
+            RemediationExecutionState::Succeeded => &"SUCCEEDED",
+            RemediationExecutionState::UnknownVariant(UnknownRemediationExecutionState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RemediationExecutionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => RemediationExecutionState::Failed,
+            "IN_PROGRESS" => RemediationExecutionState::InProgress,
+            "QUEUED" => RemediationExecutionState::Queued,
+            "SUCCEEDED" => RemediationExecutionState::Succeeded,
+            _ => RemediationExecutionState::UnknownVariant(UnknownRemediationExecutionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RemediationExecutionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => RemediationExecutionState::Failed,
+            "IN_PROGRESS" => RemediationExecutionState::InProgress,
+            "QUEUED" => RemediationExecutionState::Queued,
+            "SUCCEEDED" => RemediationExecutionState::Succeeded,
+            _ => {
+                RemediationExecutionState::UnknownVariant(UnknownRemediationExecutionState { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RemediationExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RemediationExecutionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RemediationExecutionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides details of the current status of the invoked remediation action for that resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3399,7 +5879,7 @@ pub struct RemediationExecutionStatus {
     /// <p>ENUM of the values.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RemediationExecutionState>,
     /// <p>Details of every step.</p>
     #[serde(rename = "StepDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3425,11 +5905,125 @@ pub struct RemediationExecutionStep {
     /// <p>The valid status of the step.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RemediationExecutionStepState>,
     /// <p>The time when the step stopped.</p>
     #[serde(rename = "StopTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRemediationExecutionStepState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RemediationExecutionStepState {
+    Failed,
+    Pending,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRemediationExecutionStepState),
+}
+
+impl Default for RemediationExecutionStepState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RemediationExecutionStepState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RemediationExecutionStepState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RemediationExecutionStepState {
+    fn into(self) -> String {
+        match self {
+            RemediationExecutionStepState::Failed => "FAILED".to_string(),
+            RemediationExecutionStepState::Pending => "PENDING".to_string(),
+            RemediationExecutionStepState::Succeeded => "SUCCEEDED".to_string(),
+            RemediationExecutionStepState::UnknownVariant(
+                UnknownRemediationExecutionStepState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RemediationExecutionStepState {
+    fn into(self) -> &'a str {
+        match self {
+            RemediationExecutionStepState::Failed => &"FAILED",
+            RemediationExecutionStepState::Pending => &"PENDING",
+            RemediationExecutionStepState::Succeeded => &"SUCCEEDED",
+            RemediationExecutionStepState::UnknownVariant(
+                UnknownRemediationExecutionStepState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RemediationExecutionStepState {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => RemediationExecutionStepState::Failed,
+            "PENDING" => RemediationExecutionStepState::Pending,
+            "SUCCEEDED" => RemediationExecutionStepState::Succeeded,
+            _ => RemediationExecutionStepState::UnknownVariant(
+                UnknownRemediationExecutionStepState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RemediationExecutionStepState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => RemediationExecutionStepState::Failed,
+            "PENDING" => RemediationExecutionStepState::Pending,
+            "SUCCEEDED" => RemediationExecutionStepState::Succeeded,
+            _ => RemediationExecutionStepState::UnknownVariant(
+                UnknownRemediationExecutionStepState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RemediationExecutionStepState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RemediationExecutionStepState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RemediationExecutionStepState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The value is either a dynamic (resource) value or a static value. You must select either a dynamic value or a static value.</p>
@@ -3445,6 +6039,105 @@ pub struct RemediationParameterValue {
     pub static_value: Option<StaticValue>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRemediationTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RemediationTargetType {
+    SsmDocument,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRemediationTargetType),
+}
+
+impl Default for RemediationTargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RemediationTargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RemediationTargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RemediationTargetType {
+    fn into(self) -> String {
+        match self {
+            RemediationTargetType::SsmDocument => "SSM_DOCUMENT".to_string(),
+            RemediationTargetType::UnknownVariant(UnknownRemediationTargetType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RemediationTargetType {
+    fn into(self) -> &'a str {
+        match self {
+            RemediationTargetType::SsmDocument => &"SSM_DOCUMENT",
+            RemediationTargetType::UnknownVariant(UnknownRemediationTargetType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RemediationTargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SSM_DOCUMENT" => RemediationTargetType::SsmDocument,
+            _ => RemediationTargetType::UnknownVariant(UnknownRemediationTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RemediationTargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SSM_DOCUMENT" => RemediationTargetType::SsmDocument,
+            _ => RemediationTargetType::UnknownVariant(UnknownRemediationTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RemediationTargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RemediationTargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RemediationTargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that contains the resource type and the number of resources.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3456,7 +6149,7 @@ pub struct ResourceCount {
     /// <p>The resource type (for example, <code>"AWS::EC2::Instance"</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Filters the resource count based on account ID, region, and resource type.</p>
@@ -3474,7 +6167,117 @@ pub struct ResourceCountFilters {
     /// <p>The type of the AWS resource.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceCountGroupKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceCountGroupKey {
+    AccountId,
+    AwsRegion,
+    ResourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceCountGroupKey),
+}
+
+impl Default for ResourceCountGroupKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceCountGroupKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceCountGroupKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceCountGroupKey {
+    fn into(self) -> String {
+        match self {
+            ResourceCountGroupKey::AccountId => "ACCOUNT_ID".to_string(),
+            ResourceCountGroupKey::AwsRegion => "AWS_REGION".to_string(),
+            ResourceCountGroupKey::ResourceType => "RESOURCE_TYPE".to_string(),
+            ResourceCountGroupKey::UnknownVariant(UnknownResourceCountGroupKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceCountGroupKey {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceCountGroupKey::AccountId => &"ACCOUNT_ID",
+            ResourceCountGroupKey::AwsRegion => &"AWS_REGION",
+            ResourceCountGroupKey::ResourceType => &"RESOURCE_TYPE",
+            ResourceCountGroupKey::UnknownVariant(UnknownResourceCountGroupKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceCountGroupKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_ID" => ResourceCountGroupKey::AccountId,
+            "AWS_REGION" => ResourceCountGroupKey::AwsRegion,
+            "RESOURCE_TYPE" => ResourceCountGroupKey::ResourceType,
+            _ => ResourceCountGroupKey::UnknownVariant(UnknownResourceCountGroupKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceCountGroupKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_ID" => ResourceCountGroupKey::AccountId,
+            "AWS_REGION" => ResourceCountGroupKey::AwsRegion,
+            "RESOURCE_TYPE" => ResourceCountGroupKey::ResourceType,
+            _ => ResourceCountGroupKey::UnknownVariant(UnknownResourceCountGroupKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceCountGroupKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceCountGroupKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceCountGroupKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Filters the results by resource account ID, region, resource ID, and resource name.</p>
@@ -3518,7 +6321,7 @@ pub struct ResourceIdentifier {
     /// <p>The type of resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>The details that identify a resource within AWS Config, including the resource type and resource ID.</p>
@@ -3529,7 +6332,691 @@ pub struct ResourceKey {
     pub resource_id: String,
     /// <p>The resource type.</p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    AwsAcmCertificate,
+    AwsApiGatewayRestApi,
+    AwsApiGatewayStage,
+    AwsApiGatewayV2Api,
+    AwsApiGatewayV2Stage,
+    AwsAutoScalingAutoScalingGroup,
+    AwsAutoScalingLaunchConfiguration,
+    AwsAutoScalingScalingPolicy,
+    AwsAutoScalingScheduledAction,
+    AwsCloudFormationStack,
+    AwsCloudFrontDistribution,
+    AwsCloudFrontStreamingDistribution,
+    AwsCloudTrailTrail,
+    AwsCloudWatchAlarm,
+    AwsCodeBuildProject,
+    AwsCodePipelinePipeline,
+    AwsConfigResourceCompliance,
+    AwsDynamoDBTable,
+    AwsEc2CustomerGateway,
+    AwsEc2Eip,
+    AwsEc2EgressOnlyInternetGateway,
+    AwsEc2FlowLog,
+    AwsEc2Host,
+    AwsEc2Instance,
+    AwsEc2InternetGateway,
+    AwsEc2NatGateway,
+    AwsEc2NetworkAcl,
+    AwsEc2NetworkInterface,
+    AwsEc2RegisteredHAInstance,
+    AwsEc2RouteTable,
+    AwsEc2SecurityGroup,
+    AwsEc2Subnet,
+    AwsEc2Vpc,
+    AwsEc2Vpcendpoint,
+    AwsEc2VpcendpointService,
+    AwsEc2VpcpeeringConnection,
+    AwsEc2Vpnconnection,
+    AwsEc2Vpngateway,
+    AwsEc2Volume,
+    AwsElasticBeanstalkApplication,
+    AwsElasticBeanstalkApplicationVersion,
+    AwsElasticBeanstalkEnvironment,
+    AwsElasticLoadBalancingLoadBalancer,
+    AwsElasticLoadBalancingV2LoadBalancer,
+    AwsElasticsearchDomain,
+    AwsIamGroup,
+    AwsIamPolicy,
+    AwsIamRole,
+    AwsIamUser,
+    AwsKmsKey,
+    AwsLambdaFunction,
+    AwsNetworkFirewallFirewall,
+    AwsNetworkFirewallFirewallPolicy,
+    AwsNetworkFirewallRuleGroup,
+    AwsQldbLedger,
+    AwsRdsDbcluster,
+    AwsRdsDbclusterSnapshot,
+    AwsRdsDbinstance,
+    AwsRdsDbsecurityGroup,
+    AwsRdsDbsnapshot,
+    AwsRdsDbsubnetGroup,
+    AwsRdsEventSubscription,
+    AwsRedshiftCluster,
+    AwsRedshiftClusterParameterGroup,
+    AwsRedshiftClusterSecurityGroup,
+    AwsRedshiftClusterSnapshot,
+    AwsRedshiftClusterSubnetGroup,
+    AwsRedshiftEventSubscription,
+    AwsS3AccountPublicAccessBlock,
+    AwsS3Bucket,
+    AwsSnsTopic,
+    AwsSqsQueue,
+    AwsSsmAssociationCompliance,
+    AwsSsmFileData,
+    AwsSsmManagedInstanceInventory,
+    AwsSsmPatchCompliance,
+    AwsSecretsManagerSecret,
+    AwsServiceCatalogCloudFormationProduct,
+    AwsServiceCatalogCloudFormationProvisionedProduct,
+    AwsServiceCatalogPortfolio,
+    AwsShieldProtection,
+    AwsShieldRegionalProtection,
+    AwsWafRateBasedRule,
+    AwsWafRule,
+    AwsWafRuleGroup,
+    AwsWafWebACL,
+    AwsWafregionalRateBasedRule,
+    AwsWafregionalRule,
+    AwsWafregionalRuleGroup,
+    AwsWafregionalWebACL,
+    AwsWafv2IPSet,
+    AwsWafv2ManagedRuleSet,
+    AwsWafv2RegexPatternSet,
+    AwsWafv2RuleGroup,
+    AwsWafv2WebACL,
+    AwsXrayEncryptionConfig,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::AwsAcmCertificate => "AWS::ACM::Certificate".to_string(),
+            ResourceType::AwsApiGatewayRestApi => "AWS::ApiGateway::RestApi".to_string(),
+            ResourceType::AwsApiGatewayStage => "AWS::ApiGateway::Stage".to_string(),
+            ResourceType::AwsApiGatewayV2Api => "AWS::ApiGatewayV2::Api".to_string(),
+            ResourceType::AwsApiGatewayV2Stage => "AWS::ApiGatewayV2::Stage".to_string(),
+            ResourceType::AwsAutoScalingAutoScalingGroup => {
+                "AWS::AutoScaling::AutoScalingGroup".to_string()
+            }
+            ResourceType::AwsAutoScalingLaunchConfiguration => {
+                "AWS::AutoScaling::LaunchConfiguration".to_string()
+            }
+            ResourceType::AwsAutoScalingScalingPolicy => {
+                "AWS::AutoScaling::ScalingPolicy".to_string()
+            }
+            ResourceType::AwsAutoScalingScheduledAction => {
+                "AWS::AutoScaling::ScheduledAction".to_string()
+            }
+            ResourceType::AwsCloudFormationStack => "AWS::CloudFormation::Stack".to_string(),
+            ResourceType::AwsCloudFrontDistribution => "AWS::CloudFront::Distribution".to_string(),
+            ResourceType::AwsCloudFrontStreamingDistribution => {
+                "AWS::CloudFront::StreamingDistribution".to_string()
+            }
+            ResourceType::AwsCloudTrailTrail => "AWS::CloudTrail::Trail".to_string(),
+            ResourceType::AwsCloudWatchAlarm => "AWS::CloudWatch::Alarm".to_string(),
+            ResourceType::AwsCodeBuildProject => "AWS::CodeBuild::Project".to_string(),
+            ResourceType::AwsCodePipelinePipeline => "AWS::CodePipeline::Pipeline".to_string(),
+            ResourceType::AwsConfigResourceCompliance => {
+                "AWS::Config::ResourceCompliance".to_string()
+            }
+            ResourceType::AwsDynamoDBTable => "AWS::DynamoDB::Table".to_string(),
+            ResourceType::AwsEc2CustomerGateway => "AWS::EC2::CustomerGateway".to_string(),
+            ResourceType::AwsEc2Eip => "AWS::EC2::EIP".to_string(),
+            ResourceType::AwsEc2EgressOnlyInternetGateway => {
+                "AWS::EC2::EgressOnlyInternetGateway".to_string()
+            }
+            ResourceType::AwsEc2FlowLog => "AWS::EC2::FlowLog".to_string(),
+            ResourceType::AwsEc2Host => "AWS::EC2::Host".to_string(),
+            ResourceType::AwsEc2Instance => "AWS::EC2::Instance".to_string(),
+            ResourceType::AwsEc2InternetGateway => "AWS::EC2::InternetGateway".to_string(),
+            ResourceType::AwsEc2NatGateway => "AWS::EC2::NatGateway".to_string(),
+            ResourceType::AwsEc2NetworkAcl => "AWS::EC2::NetworkAcl".to_string(),
+            ResourceType::AwsEc2NetworkInterface => "AWS::EC2::NetworkInterface".to_string(),
+            ResourceType::AwsEc2RegisteredHAInstance => {
+                "AWS::EC2::RegisteredHAInstance".to_string()
+            }
+            ResourceType::AwsEc2RouteTable => "AWS::EC2::RouteTable".to_string(),
+            ResourceType::AwsEc2SecurityGroup => "AWS::EC2::SecurityGroup".to_string(),
+            ResourceType::AwsEc2Subnet => "AWS::EC2::Subnet".to_string(),
+            ResourceType::AwsEc2Vpc => "AWS::EC2::VPC".to_string(),
+            ResourceType::AwsEc2Vpcendpoint => "AWS::EC2::VPCEndpoint".to_string(),
+            ResourceType::AwsEc2VpcendpointService => "AWS::EC2::VPCEndpointService".to_string(),
+            ResourceType::AwsEc2VpcpeeringConnection => {
+                "AWS::EC2::VPCPeeringConnection".to_string()
+            }
+            ResourceType::AwsEc2Vpnconnection => "AWS::EC2::VPNConnection".to_string(),
+            ResourceType::AwsEc2Vpngateway => "AWS::EC2::VPNGateway".to_string(),
+            ResourceType::AwsEc2Volume => "AWS::EC2::Volume".to_string(),
+            ResourceType::AwsElasticBeanstalkApplication => {
+                "AWS::ElasticBeanstalk::Application".to_string()
+            }
+            ResourceType::AwsElasticBeanstalkApplicationVersion => {
+                "AWS::ElasticBeanstalk::ApplicationVersion".to_string()
+            }
+            ResourceType::AwsElasticBeanstalkEnvironment => {
+                "AWS::ElasticBeanstalk::Environment".to_string()
+            }
+            ResourceType::AwsElasticLoadBalancingLoadBalancer => {
+                "AWS::ElasticLoadBalancing::LoadBalancer".to_string()
+            }
+            ResourceType::AwsElasticLoadBalancingV2LoadBalancer => {
+                "AWS::ElasticLoadBalancingV2::LoadBalancer".to_string()
+            }
+            ResourceType::AwsElasticsearchDomain => "AWS::Elasticsearch::Domain".to_string(),
+            ResourceType::AwsIamGroup => "AWS::IAM::Group".to_string(),
+            ResourceType::AwsIamPolicy => "AWS::IAM::Policy".to_string(),
+            ResourceType::AwsIamRole => "AWS::IAM::Role".to_string(),
+            ResourceType::AwsIamUser => "AWS::IAM::User".to_string(),
+            ResourceType::AwsKmsKey => "AWS::KMS::Key".to_string(),
+            ResourceType::AwsLambdaFunction => "AWS::Lambda::Function".to_string(),
+            ResourceType::AwsNetworkFirewallFirewall => {
+                "AWS::NetworkFirewall::Firewall".to_string()
+            }
+            ResourceType::AwsNetworkFirewallFirewallPolicy => {
+                "AWS::NetworkFirewall::FirewallPolicy".to_string()
+            }
+            ResourceType::AwsNetworkFirewallRuleGroup => {
+                "AWS::NetworkFirewall::RuleGroup".to_string()
+            }
+            ResourceType::AwsQldbLedger => "AWS::QLDB::Ledger".to_string(),
+            ResourceType::AwsRdsDbcluster => "AWS::RDS::DBCluster".to_string(),
+            ResourceType::AwsRdsDbclusterSnapshot => "AWS::RDS::DBClusterSnapshot".to_string(),
+            ResourceType::AwsRdsDbinstance => "AWS::RDS::DBInstance".to_string(),
+            ResourceType::AwsRdsDbsecurityGroup => "AWS::RDS::DBSecurityGroup".to_string(),
+            ResourceType::AwsRdsDbsnapshot => "AWS::RDS::DBSnapshot".to_string(),
+            ResourceType::AwsRdsDbsubnetGroup => "AWS::RDS::DBSubnetGroup".to_string(),
+            ResourceType::AwsRdsEventSubscription => "AWS::RDS::EventSubscription".to_string(),
+            ResourceType::AwsRedshiftCluster => "AWS::Redshift::Cluster".to_string(),
+            ResourceType::AwsRedshiftClusterParameterGroup => {
+                "AWS::Redshift::ClusterParameterGroup".to_string()
+            }
+            ResourceType::AwsRedshiftClusterSecurityGroup => {
+                "AWS::Redshift::ClusterSecurityGroup".to_string()
+            }
+            ResourceType::AwsRedshiftClusterSnapshot => {
+                "AWS::Redshift::ClusterSnapshot".to_string()
+            }
+            ResourceType::AwsRedshiftClusterSubnetGroup => {
+                "AWS::Redshift::ClusterSubnetGroup".to_string()
+            }
+            ResourceType::AwsRedshiftEventSubscription => {
+                "AWS::Redshift::EventSubscription".to_string()
+            }
+            ResourceType::AwsS3AccountPublicAccessBlock => {
+                "AWS::S3::AccountPublicAccessBlock".to_string()
+            }
+            ResourceType::AwsS3Bucket => "AWS::S3::Bucket".to_string(),
+            ResourceType::AwsSnsTopic => "AWS::SNS::Topic".to_string(),
+            ResourceType::AwsSqsQueue => "AWS::SQS::Queue".to_string(),
+            ResourceType::AwsSsmAssociationCompliance => {
+                "AWS::SSM::AssociationCompliance".to_string()
+            }
+            ResourceType::AwsSsmFileData => "AWS::SSM::FileData".to_string(),
+            ResourceType::AwsSsmManagedInstanceInventory => {
+                "AWS::SSM::ManagedInstanceInventory".to_string()
+            }
+            ResourceType::AwsSsmPatchCompliance => "AWS::SSM::PatchCompliance".to_string(),
+            ResourceType::AwsSecretsManagerSecret => "AWS::SecretsManager::Secret".to_string(),
+            ResourceType::AwsServiceCatalogCloudFormationProduct => {
+                "AWS::ServiceCatalog::CloudFormationProduct".to_string()
+            }
+            ResourceType::AwsServiceCatalogCloudFormationProvisionedProduct => {
+                "AWS::ServiceCatalog::CloudFormationProvisionedProduct".to_string()
+            }
+            ResourceType::AwsServiceCatalogPortfolio => {
+                "AWS::ServiceCatalog::Portfolio".to_string()
+            }
+            ResourceType::AwsShieldProtection => "AWS::Shield::Protection".to_string(),
+            ResourceType::AwsShieldRegionalProtection => {
+                "AWS::ShieldRegional::Protection".to_string()
+            }
+            ResourceType::AwsWafRateBasedRule => "AWS::WAF::RateBasedRule".to_string(),
+            ResourceType::AwsWafRule => "AWS::WAF::Rule".to_string(),
+            ResourceType::AwsWafRuleGroup => "AWS::WAF::RuleGroup".to_string(),
+            ResourceType::AwsWafWebACL => "AWS::WAF::WebACL".to_string(),
+            ResourceType::AwsWafregionalRateBasedRule => {
+                "AWS::WAFRegional::RateBasedRule".to_string()
+            }
+            ResourceType::AwsWafregionalRule => "AWS::WAFRegional::Rule".to_string(),
+            ResourceType::AwsWafregionalRuleGroup => "AWS::WAFRegional::RuleGroup".to_string(),
+            ResourceType::AwsWafregionalWebACL => "AWS::WAFRegional::WebACL".to_string(),
+            ResourceType::AwsWafv2IPSet => "AWS::WAFv2::IPSet".to_string(),
+            ResourceType::AwsWafv2ManagedRuleSet => "AWS::WAFv2::ManagedRuleSet".to_string(),
+            ResourceType::AwsWafv2RegexPatternSet => "AWS::WAFv2::RegexPatternSet".to_string(),
+            ResourceType::AwsWafv2RuleGroup => "AWS::WAFv2::RuleGroup".to_string(),
+            ResourceType::AwsWafv2WebACL => "AWS::WAFv2::WebACL".to_string(),
+            ResourceType::AwsXrayEncryptionConfig => "AWS::XRay::EncryptionConfig".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::AwsAcmCertificate => &"AWS::ACM::Certificate",
+            ResourceType::AwsApiGatewayRestApi => &"AWS::ApiGateway::RestApi",
+            ResourceType::AwsApiGatewayStage => &"AWS::ApiGateway::Stage",
+            ResourceType::AwsApiGatewayV2Api => &"AWS::ApiGatewayV2::Api",
+            ResourceType::AwsApiGatewayV2Stage => &"AWS::ApiGatewayV2::Stage",
+            ResourceType::AwsAutoScalingAutoScalingGroup => &"AWS::AutoScaling::AutoScalingGroup",
+            ResourceType::AwsAutoScalingLaunchConfiguration => {
+                &"AWS::AutoScaling::LaunchConfiguration"
+            }
+            ResourceType::AwsAutoScalingScalingPolicy => &"AWS::AutoScaling::ScalingPolicy",
+            ResourceType::AwsAutoScalingScheduledAction => &"AWS::AutoScaling::ScheduledAction",
+            ResourceType::AwsCloudFormationStack => &"AWS::CloudFormation::Stack",
+            ResourceType::AwsCloudFrontDistribution => &"AWS::CloudFront::Distribution",
+            ResourceType::AwsCloudFrontStreamingDistribution => {
+                &"AWS::CloudFront::StreamingDistribution"
+            }
+            ResourceType::AwsCloudTrailTrail => &"AWS::CloudTrail::Trail",
+            ResourceType::AwsCloudWatchAlarm => &"AWS::CloudWatch::Alarm",
+            ResourceType::AwsCodeBuildProject => &"AWS::CodeBuild::Project",
+            ResourceType::AwsCodePipelinePipeline => &"AWS::CodePipeline::Pipeline",
+            ResourceType::AwsConfigResourceCompliance => &"AWS::Config::ResourceCompliance",
+            ResourceType::AwsDynamoDBTable => &"AWS::DynamoDB::Table",
+            ResourceType::AwsEc2CustomerGateway => &"AWS::EC2::CustomerGateway",
+            ResourceType::AwsEc2Eip => &"AWS::EC2::EIP",
+            ResourceType::AwsEc2EgressOnlyInternetGateway => &"AWS::EC2::EgressOnlyInternetGateway",
+            ResourceType::AwsEc2FlowLog => &"AWS::EC2::FlowLog",
+            ResourceType::AwsEc2Host => &"AWS::EC2::Host",
+            ResourceType::AwsEc2Instance => &"AWS::EC2::Instance",
+            ResourceType::AwsEc2InternetGateway => &"AWS::EC2::InternetGateway",
+            ResourceType::AwsEc2NatGateway => &"AWS::EC2::NatGateway",
+            ResourceType::AwsEc2NetworkAcl => &"AWS::EC2::NetworkAcl",
+            ResourceType::AwsEc2NetworkInterface => &"AWS::EC2::NetworkInterface",
+            ResourceType::AwsEc2RegisteredHAInstance => &"AWS::EC2::RegisteredHAInstance",
+            ResourceType::AwsEc2RouteTable => &"AWS::EC2::RouteTable",
+            ResourceType::AwsEc2SecurityGroup => &"AWS::EC2::SecurityGroup",
+            ResourceType::AwsEc2Subnet => &"AWS::EC2::Subnet",
+            ResourceType::AwsEc2Vpc => &"AWS::EC2::VPC",
+            ResourceType::AwsEc2Vpcendpoint => &"AWS::EC2::VPCEndpoint",
+            ResourceType::AwsEc2VpcendpointService => &"AWS::EC2::VPCEndpointService",
+            ResourceType::AwsEc2VpcpeeringConnection => &"AWS::EC2::VPCPeeringConnection",
+            ResourceType::AwsEc2Vpnconnection => &"AWS::EC2::VPNConnection",
+            ResourceType::AwsEc2Vpngateway => &"AWS::EC2::VPNGateway",
+            ResourceType::AwsEc2Volume => &"AWS::EC2::Volume",
+            ResourceType::AwsElasticBeanstalkApplication => &"AWS::ElasticBeanstalk::Application",
+            ResourceType::AwsElasticBeanstalkApplicationVersion => {
+                &"AWS::ElasticBeanstalk::ApplicationVersion"
+            }
+            ResourceType::AwsElasticBeanstalkEnvironment => &"AWS::ElasticBeanstalk::Environment",
+            ResourceType::AwsElasticLoadBalancingLoadBalancer => {
+                &"AWS::ElasticLoadBalancing::LoadBalancer"
+            }
+            ResourceType::AwsElasticLoadBalancingV2LoadBalancer => {
+                &"AWS::ElasticLoadBalancingV2::LoadBalancer"
+            }
+            ResourceType::AwsElasticsearchDomain => &"AWS::Elasticsearch::Domain",
+            ResourceType::AwsIamGroup => &"AWS::IAM::Group",
+            ResourceType::AwsIamPolicy => &"AWS::IAM::Policy",
+            ResourceType::AwsIamRole => &"AWS::IAM::Role",
+            ResourceType::AwsIamUser => &"AWS::IAM::User",
+            ResourceType::AwsKmsKey => &"AWS::KMS::Key",
+            ResourceType::AwsLambdaFunction => &"AWS::Lambda::Function",
+            ResourceType::AwsNetworkFirewallFirewall => &"AWS::NetworkFirewall::Firewall",
+            ResourceType::AwsNetworkFirewallFirewallPolicy => {
+                &"AWS::NetworkFirewall::FirewallPolicy"
+            }
+            ResourceType::AwsNetworkFirewallRuleGroup => &"AWS::NetworkFirewall::RuleGroup",
+            ResourceType::AwsQldbLedger => &"AWS::QLDB::Ledger",
+            ResourceType::AwsRdsDbcluster => &"AWS::RDS::DBCluster",
+            ResourceType::AwsRdsDbclusterSnapshot => &"AWS::RDS::DBClusterSnapshot",
+            ResourceType::AwsRdsDbinstance => &"AWS::RDS::DBInstance",
+            ResourceType::AwsRdsDbsecurityGroup => &"AWS::RDS::DBSecurityGroup",
+            ResourceType::AwsRdsDbsnapshot => &"AWS::RDS::DBSnapshot",
+            ResourceType::AwsRdsDbsubnetGroup => &"AWS::RDS::DBSubnetGroup",
+            ResourceType::AwsRdsEventSubscription => &"AWS::RDS::EventSubscription",
+            ResourceType::AwsRedshiftCluster => &"AWS::Redshift::Cluster",
+            ResourceType::AwsRedshiftClusterParameterGroup => {
+                &"AWS::Redshift::ClusterParameterGroup"
+            }
+            ResourceType::AwsRedshiftClusterSecurityGroup => &"AWS::Redshift::ClusterSecurityGroup",
+            ResourceType::AwsRedshiftClusterSnapshot => &"AWS::Redshift::ClusterSnapshot",
+            ResourceType::AwsRedshiftClusterSubnetGroup => &"AWS::Redshift::ClusterSubnetGroup",
+            ResourceType::AwsRedshiftEventSubscription => &"AWS::Redshift::EventSubscription",
+            ResourceType::AwsS3AccountPublicAccessBlock => &"AWS::S3::AccountPublicAccessBlock",
+            ResourceType::AwsS3Bucket => &"AWS::S3::Bucket",
+            ResourceType::AwsSnsTopic => &"AWS::SNS::Topic",
+            ResourceType::AwsSqsQueue => &"AWS::SQS::Queue",
+            ResourceType::AwsSsmAssociationCompliance => &"AWS::SSM::AssociationCompliance",
+            ResourceType::AwsSsmFileData => &"AWS::SSM::FileData",
+            ResourceType::AwsSsmManagedInstanceInventory => &"AWS::SSM::ManagedInstanceInventory",
+            ResourceType::AwsSsmPatchCompliance => &"AWS::SSM::PatchCompliance",
+            ResourceType::AwsSecretsManagerSecret => &"AWS::SecretsManager::Secret",
+            ResourceType::AwsServiceCatalogCloudFormationProduct => {
+                &"AWS::ServiceCatalog::CloudFormationProduct"
+            }
+            ResourceType::AwsServiceCatalogCloudFormationProvisionedProduct => {
+                &"AWS::ServiceCatalog::CloudFormationProvisionedProduct"
+            }
+            ResourceType::AwsServiceCatalogPortfolio => &"AWS::ServiceCatalog::Portfolio",
+            ResourceType::AwsShieldProtection => &"AWS::Shield::Protection",
+            ResourceType::AwsShieldRegionalProtection => &"AWS::ShieldRegional::Protection",
+            ResourceType::AwsWafRateBasedRule => &"AWS::WAF::RateBasedRule",
+            ResourceType::AwsWafRule => &"AWS::WAF::Rule",
+            ResourceType::AwsWafRuleGroup => &"AWS::WAF::RuleGroup",
+            ResourceType::AwsWafWebACL => &"AWS::WAF::WebACL",
+            ResourceType::AwsWafregionalRateBasedRule => &"AWS::WAFRegional::RateBasedRule",
+            ResourceType::AwsWafregionalRule => &"AWS::WAFRegional::Rule",
+            ResourceType::AwsWafregionalRuleGroup => &"AWS::WAFRegional::RuleGroup",
+            ResourceType::AwsWafregionalWebACL => &"AWS::WAFRegional::WebACL",
+            ResourceType::AwsWafv2IPSet => &"AWS::WAFv2::IPSet",
+            ResourceType::AwsWafv2ManagedRuleSet => &"AWS::WAFv2::ManagedRuleSet",
+            ResourceType::AwsWafv2RegexPatternSet => &"AWS::WAFv2::RegexPatternSet",
+            ResourceType::AwsWafv2RuleGroup => &"AWS::WAFv2::RuleGroup",
+            ResourceType::AwsWafv2WebACL => &"AWS::WAFv2::WebACL",
+            ResourceType::AwsXrayEncryptionConfig => &"AWS::XRay::EncryptionConfig",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS::ACM::Certificate" => ResourceType::AwsAcmCertificate,
+            "AWS::ApiGateway::RestApi" => ResourceType::AwsApiGatewayRestApi,
+            "AWS::ApiGateway::Stage" => ResourceType::AwsApiGatewayStage,
+            "AWS::ApiGatewayV2::Api" => ResourceType::AwsApiGatewayV2Api,
+            "AWS::ApiGatewayV2::Stage" => ResourceType::AwsApiGatewayV2Stage,
+            "AWS::AutoScaling::AutoScalingGroup" => ResourceType::AwsAutoScalingAutoScalingGroup,
+            "AWS::AutoScaling::LaunchConfiguration" => {
+                ResourceType::AwsAutoScalingLaunchConfiguration
+            }
+            "AWS::AutoScaling::ScalingPolicy" => ResourceType::AwsAutoScalingScalingPolicy,
+            "AWS::AutoScaling::ScheduledAction" => ResourceType::AwsAutoScalingScheduledAction,
+            "AWS::CloudFormation::Stack" => ResourceType::AwsCloudFormationStack,
+            "AWS::CloudFront::Distribution" => ResourceType::AwsCloudFrontDistribution,
+            "AWS::CloudFront::StreamingDistribution" => {
+                ResourceType::AwsCloudFrontStreamingDistribution
+            }
+            "AWS::CloudTrail::Trail" => ResourceType::AwsCloudTrailTrail,
+            "AWS::CloudWatch::Alarm" => ResourceType::AwsCloudWatchAlarm,
+            "AWS::CodeBuild::Project" => ResourceType::AwsCodeBuildProject,
+            "AWS::CodePipeline::Pipeline" => ResourceType::AwsCodePipelinePipeline,
+            "AWS::Config::ResourceCompliance" => ResourceType::AwsConfigResourceCompliance,
+            "AWS::DynamoDB::Table" => ResourceType::AwsDynamoDBTable,
+            "AWS::EC2::CustomerGateway" => ResourceType::AwsEc2CustomerGateway,
+            "AWS::EC2::EIP" => ResourceType::AwsEc2Eip,
+            "AWS::EC2::EgressOnlyInternetGateway" => ResourceType::AwsEc2EgressOnlyInternetGateway,
+            "AWS::EC2::FlowLog" => ResourceType::AwsEc2FlowLog,
+            "AWS::EC2::Host" => ResourceType::AwsEc2Host,
+            "AWS::EC2::Instance" => ResourceType::AwsEc2Instance,
+            "AWS::EC2::InternetGateway" => ResourceType::AwsEc2InternetGateway,
+            "AWS::EC2::NatGateway" => ResourceType::AwsEc2NatGateway,
+            "AWS::EC2::NetworkAcl" => ResourceType::AwsEc2NetworkAcl,
+            "AWS::EC2::NetworkInterface" => ResourceType::AwsEc2NetworkInterface,
+            "AWS::EC2::RegisteredHAInstance" => ResourceType::AwsEc2RegisteredHAInstance,
+            "AWS::EC2::RouteTable" => ResourceType::AwsEc2RouteTable,
+            "AWS::EC2::SecurityGroup" => ResourceType::AwsEc2SecurityGroup,
+            "AWS::EC2::Subnet" => ResourceType::AwsEc2Subnet,
+            "AWS::EC2::VPC" => ResourceType::AwsEc2Vpc,
+            "AWS::EC2::VPCEndpoint" => ResourceType::AwsEc2Vpcendpoint,
+            "AWS::EC2::VPCEndpointService" => ResourceType::AwsEc2VpcendpointService,
+            "AWS::EC2::VPCPeeringConnection" => ResourceType::AwsEc2VpcpeeringConnection,
+            "AWS::EC2::VPNConnection" => ResourceType::AwsEc2Vpnconnection,
+            "AWS::EC2::VPNGateway" => ResourceType::AwsEc2Vpngateway,
+            "AWS::EC2::Volume" => ResourceType::AwsEc2Volume,
+            "AWS::ElasticBeanstalk::Application" => ResourceType::AwsElasticBeanstalkApplication,
+            "AWS::ElasticBeanstalk::ApplicationVersion" => {
+                ResourceType::AwsElasticBeanstalkApplicationVersion
+            }
+            "AWS::ElasticBeanstalk::Environment" => ResourceType::AwsElasticBeanstalkEnvironment,
+            "AWS::ElasticLoadBalancing::LoadBalancer" => {
+                ResourceType::AwsElasticLoadBalancingLoadBalancer
+            }
+            "AWS::ElasticLoadBalancingV2::LoadBalancer" => {
+                ResourceType::AwsElasticLoadBalancingV2LoadBalancer
+            }
+            "AWS::Elasticsearch::Domain" => ResourceType::AwsElasticsearchDomain,
+            "AWS::IAM::Group" => ResourceType::AwsIamGroup,
+            "AWS::IAM::Policy" => ResourceType::AwsIamPolicy,
+            "AWS::IAM::Role" => ResourceType::AwsIamRole,
+            "AWS::IAM::User" => ResourceType::AwsIamUser,
+            "AWS::KMS::Key" => ResourceType::AwsKmsKey,
+            "AWS::Lambda::Function" => ResourceType::AwsLambdaFunction,
+            "AWS::NetworkFirewall::Firewall" => ResourceType::AwsNetworkFirewallFirewall,
+            "AWS::NetworkFirewall::FirewallPolicy" => {
+                ResourceType::AwsNetworkFirewallFirewallPolicy
+            }
+            "AWS::NetworkFirewall::RuleGroup" => ResourceType::AwsNetworkFirewallRuleGroup,
+            "AWS::QLDB::Ledger" => ResourceType::AwsQldbLedger,
+            "AWS::RDS::DBCluster" => ResourceType::AwsRdsDbcluster,
+            "AWS::RDS::DBClusterSnapshot" => ResourceType::AwsRdsDbclusterSnapshot,
+            "AWS::RDS::DBInstance" => ResourceType::AwsRdsDbinstance,
+            "AWS::RDS::DBSecurityGroup" => ResourceType::AwsRdsDbsecurityGroup,
+            "AWS::RDS::DBSnapshot" => ResourceType::AwsRdsDbsnapshot,
+            "AWS::RDS::DBSubnetGroup" => ResourceType::AwsRdsDbsubnetGroup,
+            "AWS::RDS::EventSubscription" => ResourceType::AwsRdsEventSubscription,
+            "AWS::Redshift::Cluster" => ResourceType::AwsRedshiftCluster,
+            "AWS::Redshift::ClusterParameterGroup" => {
+                ResourceType::AwsRedshiftClusterParameterGroup
+            }
+            "AWS::Redshift::ClusterSecurityGroup" => ResourceType::AwsRedshiftClusterSecurityGroup,
+            "AWS::Redshift::ClusterSnapshot" => ResourceType::AwsRedshiftClusterSnapshot,
+            "AWS::Redshift::ClusterSubnetGroup" => ResourceType::AwsRedshiftClusterSubnetGroup,
+            "AWS::Redshift::EventSubscription" => ResourceType::AwsRedshiftEventSubscription,
+            "AWS::S3::AccountPublicAccessBlock" => ResourceType::AwsS3AccountPublicAccessBlock,
+            "AWS::S3::Bucket" => ResourceType::AwsS3Bucket,
+            "AWS::SNS::Topic" => ResourceType::AwsSnsTopic,
+            "AWS::SQS::Queue" => ResourceType::AwsSqsQueue,
+            "AWS::SSM::AssociationCompliance" => ResourceType::AwsSsmAssociationCompliance,
+            "AWS::SSM::FileData" => ResourceType::AwsSsmFileData,
+            "AWS::SSM::ManagedInstanceInventory" => ResourceType::AwsSsmManagedInstanceInventory,
+            "AWS::SSM::PatchCompliance" => ResourceType::AwsSsmPatchCompliance,
+            "AWS::SecretsManager::Secret" => ResourceType::AwsSecretsManagerSecret,
+            "AWS::ServiceCatalog::CloudFormationProduct" => {
+                ResourceType::AwsServiceCatalogCloudFormationProduct
+            }
+            "AWS::ServiceCatalog::CloudFormationProvisionedProduct" => {
+                ResourceType::AwsServiceCatalogCloudFormationProvisionedProduct
+            }
+            "AWS::ServiceCatalog::Portfolio" => ResourceType::AwsServiceCatalogPortfolio,
+            "AWS::Shield::Protection" => ResourceType::AwsShieldProtection,
+            "AWS::ShieldRegional::Protection" => ResourceType::AwsShieldRegionalProtection,
+            "AWS::WAF::RateBasedRule" => ResourceType::AwsWafRateBasedRule,
+            "AWS::WAF::Rule" => ResourceType::AwsWafRule,
+            "AWS::WAF::RuleGroup" => ResourceType::AwsWafRuleGroup,
+            "AWS::WAF::WebACL" => ResourceType::AwsWafWebACL,
+            "AWS::WAFRegional::RateBasedRule" => ResourceType::AwsWafregionalRateBasedRule,
+            "AWS::WAFRegional::Rule" => ResourceType::AwsWafregionalRule,
+            "AWS::WAFRegional::RuleGroup" => ResourceType::AwsWafregionalRuleGroup,
+            "AWS::WAFRegional::WebACL" => ResourceType::AwsWafregionalWebACL,
+            "AWS::WAFv2::IPSet" => ResourceType::AwsWafv2IPSet,
+            "AWS::WAFv2::ManagedRuleSet" => ResourceType::AwsWafv2ManagedRuleSet,
+            "AWS::WAFv2::RegexPatternSet" => ResourceType::AwsWafv2RegexPatternSet,
+            "AWS::WAFv2::RuleGroup" => ResourceType::AwsWafv2RuleGroup,
+            "AWS::WAFv2::WebACL" => ResourceType::AwsWafv2WebACL,
+            "AWS::XRay::EncryptionConfig" => ResourceType::AwsXrayEncryptionConfig,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS::ACM::Certificate" => ResourceType::AwsAcmCertificate,
+            "AWS::ApiGateway::RestApi" => ResourceType::AwsApiGatewayRestApi,
+            "AWS::ApiGateway::Stage" => ResourceType::AwsApiGatewayStage,
+            "AWS::ApiGatewayV2::Api" => ResourceType::AwsApiGatewayV2Api,
+            "AWS::ApiGatewayV2::Stage" => ResourceType::AwsApiGatewayV2Stage,
+            "AWS::AutoScaling::AutoScalingGroup" => ResourceType::AwsAutoScalingAutoScalingGroup,
+            "AWS::AutoScaling::LaunchConfiguration" => {
+                ResourceType::AwsAutoScalingLaunchConfiguration
+            }
+            "AWS::AutoScaling::ScalingPolicy" => ResourceType::AwsAutoScalingScalingPolicy,
+            "AWS::AutoScaling::ScheduledAction" => ResourceType::AwsAutoScalingScheduledAction,
+            "AWS::CloudFormation::Stack" => ResourceType::AwsCloudFormationStack,
+            "AWS::CloudFront::Distribution" => ResourceType::AwsCloudFrontDistribution,
+            "AWS::CloudFront::StreamingDistribution" => {
+                ResourceType::AwsCloudFrontStreamingDistribution
+            }
+            "AWS::CloudTrail::Trail" => ResourceType::AwsCloudTrailTrail,
+            "AWS::CloudWatch::Alarm" => ResourceType::AwsCloudWatchAlarm,
+            "AWS::CodeBuild::Project" => ResourceType::AwsCodeBuildProject,
+            "AWS::CodePipeline::Pipeline" => ResourceType::AwsCodePipelinePipeline,
+            "AWS::Config::ResourceCompliance" => ResourceType::AwsConfigResourceCompliance,
+            "AWS::DynamoDB::Table" => ResourceType::AwsDynamoDBTable,
+            "AWS::EC2::CustomerGateway" => ResourceType::AwsEc2CustomerGateway,
+            "AWS::EC2::EIP" => ResourceType::AwsEc2Eip,
+            "AWS::EC2::EgressOnlyInternetGateway" => ResourceType::AwsEc2EgressOnlyInternetGateway,
+            "AWS::EC2::FlowLog" => ResourceType::AwsEc2FlowLog,
+            "AWS::EC2::Host" => ResourceType::AwsEc2Host,
+            "AWS::EC2::Instance" => ResourceType::AwsEc2Instance,
+            "AWS::EC2::InternetGateway" => ResourceType::AwsEc2InternetGateway,
+            "AWS::EC2::NatGateway" => ResourceType::AwsEc2NatGateway,
+            "AWS::EC2::NetworkAcl" => ResourceType::AwsEc2NetworkAcl,
+            "AWS::EC2::NetworkInterface" => ResourceType::AwsEc2NetworkInterface,
+            "AWS::EC2::RegisteredHAInstance" => ResourceType::AwsEc2RegisteredHAInstance,
+            "AWS::EC2::RouteTable" => ResourceType::AwsEc2RouteTable,
+            "AWS::EC2::SecurityGroup" => ResourceType::AwsEc2SecurityGroup,
+            "AWS::EC2::Subnet" => ResourceType::AwsEc2Subnet,
+            "AWS::EC2::VPC" => ResourceType::AwsEc2Vpc,
+            "AWS::EC2::VPCEndpoint" => ResourceType::AwsEc2Vpcendpoint,
+            "AWS::EC2::VPCEndpointService" => ResourceType::AwsEc2VpcendpointService,
+            "AWS::EC2::VPCPeeringConnection" => ResourceType::AwsEc2VpcpeeringConnection,
+            "AWS::EC2::VPNConnection" => ResourceType::AwsEc2Vpnconnection,
+            "AWS::EC2::VPNGateway" => ResourceType::AwsEc2Vpngateway,
+            "AWS::EC2::Volume" => ResourceType::AwsEc2Volume,
+            "AWS::ElasticBeanstalk::Application" => ResourceType::AwsElasticBeanstalkApplication,
+            "AWS::ElasticBeanstalk::ApplicationVersion" => {
+                ResourceType::AwsElasticBeanstalkApplicationVersion
+            }
+            "AWS::ElasticBeanstalk::Environment" => ResourceType::AwsElasticBeanstalkEnvironment,
+            "AWS::ElasticLoadBalancing::LoadBalancer" => {
+                ResourceType::AwsElasticLoadBalancingLoadBalancer
+            }
+            "AWS::ElasticLoadBalancingV2::LoadBalancer" => {
+                ResourceType::AwsElasticLoadBalancingV2LoadBalancer
+            }
+            "AWS::Elasticsearch::Domain" => ResourceType::AwsElasticsearchDomain,
+            "AWS::IAM::Group" => ResourceType::AwsIamGroup,
+            "AWS::IAM::Policy" => ResourceType::AwsIamPolicy,
+            "AWS::IAM::Role" => ResourceType::AwsIamRole,
+            "AWS::IAM::User" => ResourceType::AwsIamUser,
+            "AWS::KMS::Key" => ResourceType::AwsKmsKey,
+            "AWS::Lambda::Function" => ResourceType::AwsLambdaFunction,
+            "AWS::NetworkFirewall::Firewall" => ResourceType::AwsNetworkFirewallFirewall,
+            "AWS::NetworkFirewall::FirewallPolicy" => {
+                ResourceType::AwsNetworkFirewallFirewallPolicy
+            }
+            "AWS::NetworkFirewall::RuleGroup" => ResourceType::AwsNetworkFirewallRuleGroup,
+            "AWS::QLDB::Ledger" => ResourceType::AwsQldbLedger,
+            "AWS::RDS::DBCluster" => ResourceType::AwsRdsDbcluster,
+            "AWS::RDS::DBClusterSnapshot" => ResourceType::AwsRdsDbclusterSnapshot,
+            "AWS::RDS::DBInstance" => ResourceType::AwsRdsDbinstance,
+            "AWS::RDS::DBSecurityGroup" => ResourceType::AwsRdsDbsecurityGroup,
+            "AWS::RDS::DBSnapshot" => ResourceType::AwsRdsDbsnapshot,
+            "AWS::RDS::DBSubnetGroup" => ResourceType::AwsRdsDbsubnetGroup,
+            "AWS::RDS::EventSubscription" => ResourceType::AwsRdsEventSubscription,
+            "AWS::Redshift::Cluster" => ResourceType::AwsRedshiftCluster,
+            "AWS::Redshift::ClusterParameterGroup" => {
+                ResourceType::AwsRedshiftClusterParameterGroup
+            }
+            "AWS::Redshift::ClusterSecurityGroup" => ResourceType::AwsRedshiftClusterSecurityGroup,
+            "AWS::Redshift::ClusterSnapshot" => ResourceType::AwsRedshiftClusterSnapshot,
+            "AWS::Redshift::ClusterSubnetGroup" => ResourceType::AwsRedshiftClusterSubnetGroup,
+            "AWS::Redshift::EventSubscription" => ResourceType::AwsRedshiftEventSubscription,
+            "AWS::S3::AccountPublicAccessBlock" => ResourceType::AwsS3AccountPublicAccessBlock,
+            "AWS::S3::Bucket" => ResourceType::AwsS3Bucket,
+            "AWS::SNS::Topic" => ResourceType::AwsSnsTopic,
+            "AWS::SQS::Queue" => ResourceType::AwsSqsQueue,
+            "AWS::SSM::AssociationCompliance" => ResourceType::AwsSsmAssociationCompliance,
+            "AWS::SSM::FileData" => ResourceType::AwsSsmFileData,
+            "AWS::SSM::ManagedInstanceInventory" => ResourceType::AwsSsmManagedInstanceInventory,
+            "AWS::SSM::PatchCompliance" => ResourceType::AwsSsmPatchCompliance,
+            "AWS::SecretsManager::Secret" => ResourceType::AwsSecretsManagerSecret,
+            "AWS::ServiceCatalog::CloudFormationProduct" => {
+                ResourceType::AwsServiceCatalogCloudFormationProduct
+            }
+            "AWS::ServiceCatalog::CloudFormationProvisionedProduct" => {
+                ResourceType::AwsServiceCatalogCloudFormationProvisionedProduct
+            }
+            "AWS::ServiceCatalog::Portfolio" => ResourceType::AwsServiceCatalogPortfolio,
+            "AWS::Shield::Protection" => ResourceType::AwsShieldProtection,
+            "AWS::ShieldRegional::Protection" => ResourceType::AwsShieldRegionalProtection,
+            "AWS::WAF::RateBasedRule" => ResourceType::AwsWafRateBasedRule,
+            "AWS::WAF::Rule" => ResourceType::AwsWafRule,
+            "AWS::WAF::RuleGroup" => ResourceType::AwsWafRuleGroup,
+            "AWS::WAF::WebACL" => ResourceType::AwsWafWebACL,
+            "AWS::WAFRegional::RateBasedRule" => ResourceType::AwsWafregionalRateBasedRule,
+            "AWS::WAFRegional::Rule" => ResourceType::AwsWafregionalRule,
+            "AWS::WAFRegional::RuleGroup" => ResourceType::AwsWafregionalRuleGroup,
+            "AWS::WAFRegional::WebACL" => ResourceType::AwsWafregionalWebACL,
+            "AWS::WAFv2::IPSet" => ResourceType::AwsWafv2IPSet,
+            "AWS::WAFv2::ManagedRuleSet" => ResourceType::AwsWafv2ManagedRuleSet,
+            "AWS::WAFv2::RegexPatternSet" => ResourceType::AwsWafv2RegexPatternSet,
+            "AWS::WAFv2::RuleGroup" => ResourceType::AwsWafv2RuleGroup,
+            "AWS::WAFv2::WebACL" => ResourceType::AwsWafv2WebACL,
+            "AWS::XRay::EncryptionConfig" => ResourceType::AwsXrayEncryptionConfig,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The dynamic value of the resource.</p>
@@ -3537,7 +7024,106 @@ pub struct ResourceKey {
 pub struct ResourceValue {
     /// <p>The value is a resource ID.</p>
     #[serde(rename = "Value")]
-    pub value: String,
+    pub value: ResourceValueType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceValueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceValueType {
+    ResourceId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceValueType),
+}
+
+impl Default for ResourceValueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceValueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceValueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceValueType {
+    fn into(self) -> String {
+        match self {
+            ResourceValueType::ResourceId => "RESOURCE_ID".to_string(),
+            ResourceValueType::UnknownVariant(UnknownResourceValueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceValueType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceValueType::ResourceId => &"RESOURCE_ID",
+            ResourceValueType::UnknownVariant(UnknownResourceValueType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceValueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RESOURCE_ID" => ResourceValueType::ResourceId,
+            _ => ResourceValueType::UnknownVariant(UnknownResourceValueType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceValueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RESOURCE_ID" => ResourceValueType::ResourceId,
+            _ => ResourceValueType::UnknownVariant(UnknownResourceValueType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceValueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceValueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
@@ -3650,7 +7236,7 @@ pub struct SelectResourceConfigResponse {
 pub struct Source {
     /// <p>Indicates whether AWS or the customer owns and manages the AWS Config rule.</p>
     #[serde(rename = "Owner")]
-    pub owner: String,
+    pub owner: Owner,
     /// <p>Provides the source and type of the event that causes AWS Config to evaluate your AWS resources.</p>
     #[serde(rename = "SourceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3666,15 +7252,15 @@ pub struct SourceDetail {
     /// <p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>
     #[serde(rename = "EventSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_source: Option<String>,
+    pub event_source: Option<EventSource>,
     /// <p><p>The frequency at which you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> <p>Based on the valid value you choose, AWS Config runs evaluations once for each valid value. For example, if you choose <code>Three<em>Hours</code>, AWS Config runs evaluations once every three hours. In this case, <code>Three</em>Hours</code> is the frequency of this rule. </p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maximum_execution_frequency: Option<String>,
+    pub maximum_execution_frequency: Option<MaximumExecutionFrequency>,
     /// <p>The type of notification that triggers AWS Config to run an evaluation for a rule. You can specify the following notification types:</p> <ul> <li> <p> <code>ConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers a configuration item as a result of a resource change.</p> </li> <li> <p> <code>OversizedConfigurationItemChangeNotification</code> - Triggers an evaluation when AWS Config delivers an oversized configuration item. AWS Config may generate this notification type when a resource changes and the notification exceeds the maximum size allowed by Amazon SNS.</p> </li> <li> <p> <code>ScheduledNotification</code> - Triggers a periodic evaluation at the frequency specified for <code>MaximumExecutionFrequency</code>.</p> </li> <li> <p> <code>ConfigurationSnapshotDeliveryCompleted</code> - Triggers a periodic evaluation when AWS Config delivers a configuration snapshot.</p> </li> </ul> <p>If you want your custom rule to be triggered by configuration changes, specify two SourceDetail objects, one for <code>ConfigurationItemChangeNotification</code> and one for <code>OversizedConfigurationItemChangeNotification</code>.</p>
     #[serde(rename = "MessageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_type: Option<String>,
+    pub message_type: Option<MessageType>,
 }
 
 /// <p>AWS Systems Manager (SSM) specific remediation controls.</p>
@@ -3757,7 +7343,7 @@ pub struct StatusDetailFilters {
     /// <p><p>Indicates deployment status for config rule in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the first time, config rule status is created in the member account. When master account calls <code>PutOrganizationConfigRule</code> action for the second time, config rule status is updated in the member account. Config rule status is deleted when the master account deletes <code>OrganizationConfigRule</code> and disables service access for <code>config-multiaccountsetup.amazonaws.com</code>. </p> <p>AWS Config sets the state of the rule to:</p> <ul> <li> <p> <code>CREATE<em>SUCCESSFUL</code> when config rule has been created in the member account.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> when config rule is being created in the member account.</p> </li> <li> <p> <code>CREATE</em>FAILED</code> when config rule creation has failed in the member account.</p> </li> <li> <p> <code>DELETE<em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> when config rule is being deleted in the member account.</p> </li> <li> <p> <code>DELETE</em>SUCCESSFUL</code> when config rule has been deleted in the member account.</p> </li> <li> <p> <code>UPDATE<em>SUCCESSFUL</code> when config rule has been updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>IN<em>PROGRESS</code> when config rule is being updated in the member account.</p> </li> <li> <p> <code>UPDATE</em>FAILED</code> when config rule deletion has failed in the member account.</p> </li> </ul></p>
     #[serde(rename = "MemberAccountRuleStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub member_account_rule_status: Option<String>,
+    pub member_account_rule_status: Option<MemberAccountRuleStatus>,
 }
 
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>

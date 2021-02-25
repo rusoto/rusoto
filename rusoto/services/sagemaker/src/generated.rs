@@ -67,6 +67,126 @@ pub struct ActionSource {
     pub source_uri: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionStatus),
+}
+
+impl Default for ActionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionStatus {
+    fn into(self) -> String {
+        match self {
+            ActionStatus::Completed => "Completed".to_string(),
+            ActionStatus::Failed => "Failed".to_string(),
+            ActionStatus::InProgress => "InProgress".to_string(),
+            ActionStatus::Stopped => "Stopped".to_string(),
+            ActionStatus::Stopping => "Stopping".to_string(),
+            ActionStatus::Unknown => "Unknown".to_string(),
+            ActionStatus::UnknownVariant(UnknownActionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ActionStatus::Completed => &"Completed",
+            ActionStatus::Failed => &"Failed",
+            ActionStatus::InProgress => &"InProgress",
+            ActionStatus::Stopped => &"Stopped",
+            ActionStatus::Stopping => &"Stopping",
+            ActionStatus::Unknown => &"Unknown",
+            ActionStatus::UnknownVariant(UnknownActionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ActionStatus::Completed,
+            "Failed" => ActionStatus::Failed,
+            "InProgress" => ActionStatus::InProgress,
+            "Stopped" => ActionStatus::Stopped,
+            "Stopping" => ActionStatus::Stopping,
+            "Unknown" => ActionStatus::Unknown,
+            _ => ActionStatus::UnknownVariant(UnknownActionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ActionStatus::Completed,
+            "Failed" => ActionStatus::Failed,
+            "InProgress" => ActionStatus::InProgress,
+            "Stopped" => ActionStatus::Stopped,
+            "Stopping" => ActionStatus::Stopping,
+            "Unknown" => ActionStatus::Unknown,
+            _ => ActionStatus::UnknownVariant(UnknownActionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ActionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Lists the properties of an <i>action</i>. An action represents an action or activity. Some examples are a workflow step and a model deployment. Generally, an action involves at least one input artifact or output artifact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -98,7 +218,7 @@ pub struct ActionSummary {
     /// <p>The status of the action.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -107,7 +227,7 @@ pub struct AddAssociationRequest {
     /// <p><p>The type of association. The following are suggested uses for each type. Amazon SageMaker places no restrictions on their use.</p> <ul> <li> <p>ContributedTo - The source contributed to the destination or had a part in enabling the destination. For example, the training data contributed to the training job.</p> </li> <li> <p>AssociatedWith - The source is connected to the destination. For example, an approval workflow is associated with a model deployment.</p> </li> <li> <p>DerivedFrom - The destination is a modification of the source. For example, a digest output of a channel input for a processing job is derived from the original inputs.</p> </li> <li> <p>Produced - The source generated the destination. For example, a training job produced a model artifact.</p> </li> </ul></p>
     #[serde(rename = "AssociationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_type: Option<String>,
+    pub association_type: Option<AssociationEdgeType>,
     /// <p>The Amazon Resource Name (ARN) of the destination.</p>
     #[serde(rename = "DestinationArn")]
     pub destination_arn: String,
@@ -170,6 +290,107 @@ pub struct Alarm {
     pub alarm_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithmSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlgorithmSortBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithmSortBy),
+}
+
+impl Default for AlgorithmSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlgorithmSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlgorithmSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlgorithmSortBy {
+    fn into(self) -> String {
+        match self {
+            AlgorithmSortBy::CreationTime => "CreationTime".to_string(),
+            AlgorithmSortBy::Name => "Name".to_string(),
+            AlgorithmSortBy::UnknownVariant(UnknownAlgorithmSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlgorithmSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            AlgorithmSortBy::CreationTime => &"CreationTime",
+            AlgorithmSortBy::Name => &"Name",
+            AlgorithmSortBy::UnknownVariant(UnknownAlgorithmSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AlgorithmSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => AlgorithmSortBy::CreationTime,
+            "Name" => AlgorithmSortBy::Name,
+            _ => AlgorithmSortBy::UnknownVariant(UnknownAlgorithmSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlgorithmSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => AlgorithmSortBy::CreationTime,
+            "Name" => AlgorithmSortBy::Name,
+            _ => AlgorithmSortBy::UnknownVariant(UnknownAlgorithmSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AlgorithmSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AlgorithmSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies the training algorithm to use in a <a>CreateTrainingJob</a> request.</p> <p>For more information about algorithms provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. For information about using your own algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms.html">Using Your Own Algorithms with Amazon SageMaker</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AlgorithmSpecification {
@@ -191,7 +412,123 @@ pub struct AlgorithmSpecification {
     pub training_image: Option<String>,
     /// <p>The input mode that the algorithm supports. For the input modes that Amazon SageMaker algorithms support, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. If an algorithm supports the <code>File</code> input mode, Amazon SageMaker downloads the training data from S3 to the provisioned ML storage Volume, and mounts the directory to docker volume for training container. If an algorithm supports the <code>Pipe</code> input mode, Amazon SageMaker streams data directly from S3 to the container. </p> <p> In File mode, make sure you provision ML storage volume with sufficient capacity to accommodate the data download from S3. In addition to the training data, the ML storage volume also stores the output model. The algorithm container use ML storage volume to also store intermediate information, if any. </p> <p> For distributed algorithms using File mode, training data is distributed uniformly, and your training duration is predictable if the input data objects size is approximately same. Amazon SageMaker does not split the files any further for model training. If the object sizes are skewed, training won't be optimal as the data distribution is also skewed where one host in a training cluster is overloaded, thus becoming bottleneck in training. </p>
     #[serde(rename = "TrainingInputMode")]
-    pub training_input_mode: String,
+    pub training_input_mode: TrainingInputMode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithmStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlgorithmStatus {
+    Completed,
+    Deleting,
+    Failed,
+    InProgress,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithmStatus),
+}
+
+impl Default for AlgorithmStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlgorithmStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlgorithmStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlgorithmStatus {
+    fn into(self) -> String {
+        match self {
+            AlgorithmStatus::Completed => "Completed".to_string(),
+            AlgorithmStatus::Deleting => "Deleting".to_string(),
+            AlgorithmStatus::Failed => "Failed".to_string(),
+            AlgorithmStatus::InProgress => "InProgress".to_string(),
+            AlgorithmStatus::Pending => "Pending".to_string(),
+            AlgorithmStatus::UnknownVariant(UnknownAlgorithmStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlgorithmStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AlgorithmStatus::Completed => &"Completed",
+            AlgorithmStatus::Deleting => &"Deleting",
+            AlgorithmStatus::Failed => &"Failed",
+            AlgorithmStatus::InProgress => &"InProgress",
+            AlgorithmStatus::Pending => &"Pending",
+            AlgorithmStatus::UnknownVariant(UnknownAlgorithmStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AlgorithmStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => AlgorithmStatus::Completed,
+            "Deleting" => AlgorithmStatus::Deleting,
+            "Failed" => AlgorithmStatus::Failed,
+            "InProgress" => AlgorithmStatus::InProgress,
+            "Pending" => AlgorithmStatus::Pending,
+            _ => AlgorithmStatus::UnknownVariant(UnknownAlgorithmStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlgorithmStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => AlgorithmStatus::Completed,
+            "Deleting" => AlgorithmStatus::Deleting,
+            "Failed" => AlgorithmStatus::Failed,
+            "InProgress" => AlgorithmStatus::InProgress,
+            "Pending" => AlgorithmStatus::Pending,
+            _ => AlgorithmStatus::UnknownVariant(UnknownAlgorithmStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AlgorithmStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AlgorithmStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the validation and image scan statuses of the algorithm.</p>
@@ -221,7 +558,7 @@ pub struct AlgorithmStatusItem {
     pub name: String,
     /// <p>The current status.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DetailedAlgorithmStatus,
 }
 
 /// <p>Provides summary information about an algorithm.</p>
@@ -240,7 +577,7 @@ pub struct AlgorithmSummary {
     pub algorithm_name: String,
     /// <p>The overall status of the algorithm.</p>
     #[serde(rename = "AlgorithmStatus")]
-    pub algorithm_status: String,
+    pub algorithm_status: AlgorithmStatus,
     /// <p>A timestamp that shows when the algorithm was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -291,7 +628,7 @@ pub struct AppDetails {
     /// <p>The type of app.</p>
     #[serde(rename = "AppType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_type: Option<String>,
+    pub app_type: Option<AppType>,
     /// <p>The creation time.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,7 +640,7 @@ pub struct AppDetails {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AppStatus>,
     /// <p>The user profile name.</p>
     #[serde(rename = "UserProfileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -336,6 +673,566 @@ pub struct AppImageConfigDetails {
     pub last_modified_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppImageConfigSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppImageConfigSortKey {
+    CreationTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppImageConfigSortKey),
+}
+
+impl Default for AppImageConfigSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppImageConfigSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppImageConfigSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppImageConfigSortKey {
+    fn into(self) -> String {
+        match self {
+            AppImageConfigSortKey::CreationTime => "CreationTime".to_string(),
+            AppImageConfigSortKey::LastModifiedTime => "LastModifiedTime".to_string(),
+            AppImageConfigSortKey::Name => "Name".to_string(),
+            AppImageConfigSortKey::UnknownVariant(UnknownAppImageConfigSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppImageConfigSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            AppImageConfigSortKey::CreationTime => &"CreationTime",
+            AppImageConfigSortKey::LastModifiedTime => &"LastModifiedTime",
+            AppImageConfigSortKey::Name => &"Name",
+            AppImageConfigSortKey::UnknownVariant(UnknownAppImageConfigSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppImageConfigSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => AppImageConfigSortKey::CreationTime,
+            "LastModifiedTime" => AppImageConfigSortKey::LastModifiedTime,
+            "Name" => AppImageConfigSortKey::Name,
+            _ => AppImageConfigSortKey::UnknownVariant(UnknownAppImageConfigSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppImageConfigSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => AppImageConfigSortKey::CreationTime,
+            "LastModifiedTime" => AppImageConfigSortKey::LastModifiedTime,
+            "Name" => AppImageConfigSortKey::Name,
+            _ => AppImageConfigSortKey::UnknownVariant(UnknownAppImageConfigSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppImageConfigSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppImageConfigSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AppImageConfigSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppInstanceType {
+    MlC512Xlarge,
+    MlC518Xlarge,
+    MlC524Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Large,
+    MlC5Xlarge,
+    MlG4Dn12Xlarge,
+    MlG4Dn16Xlarge,
+    MlG4Dn2Xlarge,
+    MlG4Dn4Xlarge,
+    MlG4Dn8Xlarge,
+    MlG4DnXlarge,
+    MlM512Xlarge,
+    MlM516Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM58Xlarge,
+    MlM5Large,
+    MlM5Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    MlT32Xlarge,
+    MlT3Large,
+    MlT3Medium,
+    MlT3Micro,
+    MlT3Small,
+    MlT3Xlarge,
+    System,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppInstanceType),
+}
+
+impl Default for AppInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppInstanceType {
+    fn into(self) -> String {
+        match self {
+            AppInstanceType::MlC512Xlarge => "ml.c5.12xlarge".to_string(),
+            AppInstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            AppInstanceType::MlC524Xlarge => "ml.c5.24xlarge".to_string(),
+            AppInstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            AppInstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            AppInstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            AppInstanceType::MlC5Large => "ml.c5.large".to_string(),
+            AppInstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            AppInstanceType::MlG4Dn12Xlarge => "ml.g4dn.12xlarge".to_string(),
+            AppInstanceType::MlG4Dn16Xlarge => "ml.g4dn.16xlarge".to_string(),
+            AppInstanceType::MlG4Dn2Xlarge => "ml.g4dn.2xlarge".to_string(),
+            AppInstanceType::MlG4Dn4Xlarge => "ml.g4dn.4xlarge".to_string(),
+            AppInstanceType::MlG4Dn8Xlarge => "ml.g4dn.8xlarge".to_string(),
+            AppInstanceType::MlG4DnXlarge => "ml.g4dn.xlarge".to_string(),
+            AppInstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            AppInstanceType::MlM516Xlarge => "ml.m5.16xlarge".to_string(),
+            AppInstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            AppInstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            AppInstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            AppInstanceType::MlM58Xlarge => "ml.m5.8xlarge".to_string(),
+            AppInstanceType::MlM5Large => "ml.m5.large".to_string(),
+            AppInstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            AppInstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            AppInstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            AppInstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            AppInstanceType::MlT32Xlarge => "ml.t3.2xlarge".to_string(),
+            AppInstanceType::MlT3Large => "ml.t3.large".to_string(),
+            AppInstanceType::MlT3Medium => "ml.t3.medium".to_string(),
+            AppInstanceType::MlT3Micro => "ml.t3.micro".to_string(),
+            AppInstanceType::MlT3Small => "ml.t3.small".to_string(),
+            AppInstanceType::MlT3Xlarge => "ml.t3.xlarge".to_string(),
+            AppInstanceType::System => "system".to_string(),
+            AppInstanceType::UnknownVariant(UnknownAppInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            AppInstanceType::MlC512Xlarge => &"ml.c5.12xlarge",
+            AppInstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            AppInstanceType::MlC524Xlarge => &"ml.c5.24xlarge",
+            AppInstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            AppInstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            AppInstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            AppInstanceType::MlC5Large => &"ml.c5.large",
+            AppInstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            AppInstanceType::MlG4Dn12Xlarge => &"ml.g4dn.12xlarge",
+            AppInstanceType::MlG4Dn16Xlarge => &"ml.g4dn.16xlarge",
+            AppInstanceType::MlG4Dn2Xlarge => &"ml.g4dn.2xlarge",
+            AppInstanceType::MlG4Dn4Xlarge => &"ml.g4dn.4xlarge",
+            AppInstanceType::MlG4Dn8Xlarge => &"ml.g4dn.8xlarge",
+            AppInstanceType::MlG4DnXlarge => &"ml.g4dn.xlarge",
+            AppInstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            AppInstanceType::MlM516Xlarge => &"ml.m5.16xlarge",
+            AppInstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            AppInstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            AppInstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            AppInstanceType::MlM58Xlarge => &"ml.m5.8xlarge",
+            AppInstanceType::MlM5Large => &"ml.m5.large",
+            AppInstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            AppInstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            AppInstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            AppInstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            AppInstanceType::MlT32Xlarge => &"ml.t3.2xlarge",
+            AppInstanceType::MlT3Large => &"ml.t3.large",
+            AppInstanceType::MlT3Medium => &"ml.t3.medium",
+            AppInstanceType::MlT3Micro => &"ml.t3.micro",
+            AppInstanceType::MlT3Small => &"ml.t3.small",
+            AppInstanceType::MlT3Xlarge => &"ml.t3.xlarge",
+            AppInstanceType::System => &"system",
+            AppInstanceType::UnknownVariant(UnknownAppInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c5.12xlarge" => AppInstanceType::MlC512Xlarge,
+            "ml.c5.18xlarge" => AppInstanceType::MlC518Xlarge,
+            "ml.c5.24xlarge" => AppInstanceType::MlC524Xlarge,
+            "ml.c5.2xlarge" => AppInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => AppInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => AppInstanceType::MlC59Xlarge,
+            "ml.c5.large" => AppInstanceType::MlC5Large,
+            "ml.c5.xlarge" => AppInstanceType::MlC5Xlarge,
+            "ml.g4dn.12xlarge" => AppInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => AppInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => AppInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => AppInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => AppInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => AppInstanceType::MlG4DnXlarge,
+            "ml.m5.12xlarge" => AppInstanceType::MlM512Xlarge,
+            "ml.m5.16xlarge" => AppInstanceType::MlM516Xlarge,
+            "ml.m5.24xlarge" => AppInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => AppInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => AppInstanceType::MlM54Xlarge,
+            "ml.m5.8xlarge" => AppInstanceType::MlM58Xlarge,
+            "ml.m5.large" => AppInstanceType::MlM5Large,
+            "ml.m5.xlarge" => AppInstanceType::MlM5Xlarge,
+            "ml.p3.16xlarge" => AppInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => AppInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => AppInstanceType::MlP38Xlarge,
+            "ml.t3.2xlarge" => AppInstanceType::MlT32Xlarge,
+            "ml.t3.large" => AppInstanceType::MlT3Large,
+            "ml.t3.medium" => AppInstanceType::MlT3Medium,
+            "ml.t3.micro" => AppInstanceType::MlT3Micro,
+            "ml.t3.small" => AppInstanceType::MlT3Small,
+            "ml.t3.xlarge" => AppInstanceType::MlT3Xlarge,
+            "system" => AppInstanceType::System,
+            _ => AppInstanceType::UnknownVariant(UnknownAppInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c5.12xlarge" => AppInstanceType::MlC512Xlarge,
+            "ml.c5.18xlarge" => AppInstanceType::MlC518Xlarge,
+            "ml.c5.24xlarge" => AppInstanceType::MlC524Xlarge,
+            "ml.c5.2xlarge" => AppInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => AppInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => AppInstanceType::MlC59Xlarge,
+            "ml.c5.large" => AppInstanceType::MlC5Large,
+            "ml.c5.xlarge" => AppInstanceType::MlC5Xlarge,
+            "ml.g4dn.12xlarge" => AppInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => AppInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => AppInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => AppInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => AppInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => AppInstanceType::MlG4DnXlarge,
+            "ml.m5.12xlarge" => AppInstanceType::MlM512Xlarge,
+            "ml.m5.16xlarge" => AppInstanceType::MlM516Xlarge,
+            "ml.m5.24xlarge" => AppInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => AppInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => AppInstanceType::MlM54Xlarge,
+            "ml.m5.8xlarge" => AppInstanceType::MlM58Xlarge,
+            "ml.m5.large" => AppInstanceType::MlM5Large,
+            "ml.m5.xlarge" => AppInstanceType::MlM5Xlarge,
+            "ml.p3.16xlarge" => AppInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => AppInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => AppInstanceType::MlP38Xlarge,
+            "ml.t3.2xlarge" => AppInstanceType::MlT32Xlarge,
+            "ml.t3.large" => AppInstanceType::MlT3Large,
+            "ml.t3.medium" => AppInstanceType::MlT3Medium,
+            "ml.t3.micro" => AppInstanceType::MlT3Micro,
+            "ml.t3.small" => AppInstanceType::MlT3Small,
+            "ml.t3.xlarge" => AppInstanceType::MlT3Xlarge,
+            "system" => AppInstanceType::System,
+            _ => AppInstanceType::UnknownVariant(UnknownAppInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppNetworkAccessType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppNetworkAccessType {
+    PublicInternetOnly,
+    VpcOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppNetworkAccessType),
+}
+
+impl Default for AppNetworkAccessType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppNetworkAccessType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppNetworkAccessType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppNetworkAccessType {
+    fn into(self) -> String {
+        match self {
+            AppNetworkAccessType::PublicInternetOnly => "PublicInternetOnly".to_string(),
+            AppNetworkAccessType::VpcOnly => "VpcOnly".to_string(),
+            AppNetworkAccessType::UnknownVariant(UnknownAppNetworkAccessType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppNetworkAccessType {
+    fn into(self) -> &'a str {
+        match self {
+            AppNetworkAccessType::PublicInternetOnly => &"PublicInternetOnly",
+            AppNetworkAccessType::VpcOnly => &"VpcOnly",
+            AppNetworkAccessType::UnknownVariant(UnknownAppNetworkAccessType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppNetworkAccessType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PublicInternetOnly" => AppNetworkAccessType::PublicInternetOnly,
+            "VpcOnly" => AppNetworkAccessType::VpcOnly,
+            _ => AppNetworkAccessType::UnknownVariant(UnknownAppNetworkAccessType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppNetworkAccessType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PublicInternetOnly" => AppNetworkAccessType::PublicInternetOnly,
+            "VpcOnly" => AppNetworkAccessType::VpcOnly,
+            _ => AppNetworkAccessType::UnknownVariant(UnknownAppNetworkAccessType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppNetworkAccessType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppNetworkAccessType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppNetworkAccessType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppSortKey {
+    CreationTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppSortKey),
+}
+
+impl Default for AppSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppSortKey {
+    fn into(self) -> String {
+        match self {
+            AppSortKey::CreationTime => "CreationTime".to_string(),
+            AppSortKey::UnknownVariant(UnknownAppSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            AppSortKey::CreationTime => &"CreationTime",
+            AppSortKey::UnknownVariant(UnknownAppSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => AppSortKey::CreationTime,
+            _ => AppSortKey::UnknownVariant(UnknownAppSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => AppSortKey::CreationTime,
+            _ => AppSortKey::UnknownVariant(UnknownAppSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AppSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration to run a processing job in a specified container image.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppSpecification {
@@ -352,6 +1249,227 @@ pub struct AppSpecification {
     pub image_uri: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppStatus {
+    Deleted,
+    Deleting,
+    Failed,
+    InService,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppStatus),
+}
+
+impl Default for AppStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppStatus {
+    fn into(self) -> String {
+        match self {
+            AppStatus::Deleted => "Deleted".to_string(),
+            AppStatus::Deleting => "Deleting".to_string(),
+            AppStatus::Failed => "Failed".to_string(),
+            AppStatus::InService => "InService".to_string(),
+            AppStatus::Pending => "Pending".to_string(),
+            AppStatus::UnknownVariant(UnknownAppStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AppStatus::Deleted => &"Deleted",
+            AppStatus::Deleting => &"Deleting",
+            AppStatus::Failed => &"Failed",
+            AppStatus::InService => &"InService",
+            AppStatus::Pending => &"Pending",
+            AppStatus::UnknownVariant(UnknownAppStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Deleted" => AppStatus::Deleted,
+            "Deleting" => AppStatus::Deleting,
+            "Failed" => AppStatus::Failed,
+            "InService" => AppStatus::InService,
+            "Pending" => AppStatus::Pending,
+            _ => AppStatus::UnknownVariant(UnknownAppStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Deleted" => AppStatus::Deleted,
+            "Deleting" => AppStatus::Deleting,
+            "Failed" => AppStatus::Failed,
+            "InService" => AppStatus::InService,
+            "Pending" => AppStatus::Pending,
+            _ => AppStatus::UnknownVariant(UnknownAppStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AppStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAppType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AppType {
+    JupyterServer,
+    KernelGateway,
+    TensorBoard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAppType),
+}
+
+impl Default for AppType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AppType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AppType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AppType {
+    fn into(self) -> String {
+        match self {
+            AppType::JupyterServer => "JupyterServer".to_string(),
+            AppType::KernelGateway => "KernelGateway".to_string(),
+            AppType::TensorBoard => "TensorBoard".to_string(),
+            AppType::UnknownVariant(UnknownAppType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AppType {
+    fn into(self) -> &'a str {
+        match self {
+            AppType::JupyterServer => &"JupyterServer",
+            AppType::KernelGateway => &"KernelGateway",
+            AppType::TensorBoard => &"TensorBoard",
+            AppType::UnknownVariant(UnknownAppType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AppType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JupyterServer" => AppType::JupyterServer,
+            "KernelGateway" => AppType::KernelGateway,
+            "TensorBoard" => AppType::TensorBoard,
+            _ => AppType::UnknownVariant(UnknownAppType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AppType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JupyterServer" => AppType::JupyterServer,
+            "KernelGateway" => AppType::KernelGateway,
+            "TensorBoard" => AppType::TensorBoard,
+            _ => AppType::UnknownVariant(UnknownAppType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AppType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AppType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AppType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A structure describing the source of an artifact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArtifactSource {
@@ -364,12 +1482,126 @@ pub struct ArtifactSource {
     pub source_uri: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactSourceIdType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactSourceIdType {
+    Custom,
+    Md5Hash,
+    S3Etag,
+    S3Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactSourceIdType),
+}
+
+impl Default for ArtifactSourceIdType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactSourceIdType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactSourceIdType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactSourceIdType {
+    fn into(self) -> String {
+        match self {
+            ArtifactSourceIdType::Custom => "Custom".to_string(),
+            ArtifactSourceIdType::Md5Hash => "MD5Hash".to_string(),
+            ArtifactSourceIdType::S3Etag => "S3ETag".to_string(),
+            ArtifactSourceIdType::S3Version => "S3Version".to_string(),
+            ArtifactSourceIdType::UnknownVariant(UnknownArtifactSourceIdType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactSourceIdType {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactSourceIdType::Custom => &"Custom",
+            ArtifactSourceIdType::Md5Hash => &"MD5Hash",
+            ArtifactSourceIdType::S3Etag => &"S3ETag",
+            ArtifactSourceIdType::S3Version => &"S3Version",
+            ArtifactSourceIdType::UnknownVariant(UnknownArtifactSourceIdType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ArtifactSourceIdType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Custom" => ArtifactSourceIdType::Custom,
+            "MD5Hash" => ArtifactSourceIdType::Md5Hash,
+            "S3ETag" => ArtifactSourceIdType::S3Etag,
+            "S3Version" => ArtifactSourceIdType::S3Version,
+            _ => ArtifactSourceIdType::UnknownVariant(UnknownArtifactSourceIdType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactSourceIdType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Custom" => ArtifactSourceIdType::Custom,
+            "MD5Hash" => ArtifactSourceIdType::Md5Hash,
+            "S3ETag" => ArtifactSourceIdType::S3Etag,
+            "S3Version" => ArtifactSourceIdType::S3Version,
+            _ => ArtifactSourceIdType::UnknownVariant(UnknownArtifactSourceIdType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactSourceIdType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArtifactSourceIdType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactSourceIdType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The ID and ID type of an artifact source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArtifactSourceType {
     /// <p>The type of ID.</p>
     #[serde(rename = "SourceIdType")]
-    pub source_id_type: String,
+    pub source_id_type: ArtifactSourceIdType,
     /// <p>The ID.</p>
     #[serde(rename = "Value")]
     pub value: String,
@@ -405,6 +1637,106 @@ pub struct ArtifactSummary {
     pub source: Option<ArtifactSource>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssemblyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssemblyType {
+    Line,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssemblyType),
+}
+
+impl Default for AssemblyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssemblyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssemblyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssemblyType {
+    fn into(self) -> String {
+        match self {
+            AssemblyType::Line => "Line".to_string(),
+            AssemblyType::None => "None".to_string(),
+            AssemblyType::UnknownVariant(UnknownAssemblyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssemblyType {
+    fn into(self) -> &'a str {
+        match self {
+            AssemblyType::Line => &"Line",
+            AssemblyType::None => &"None",
+            AssemblyType::UnknownVariant(UnknownAssemblyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssemblyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Line" => AssemblyType::Line,
+            "None" => AssemblyType::None,
+            _ => AssemblyType::UnknownVariant(UnknownAssemblyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssemblyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Line" => AssemblyType::Line,
+            "None" => AssemblyType::None,
+            _ => AssemblyType::UnknownVariant(UnknownAssemblyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssemblyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssemblyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssemblyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateTrialComponentRequest {
@@ -429,6 +1761,120 @@ pub struct AssociateTrialComponentResponse {
     pub trial_component_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssociationEdgeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssociationEdgeType {
+    AssociatedWith,
+    ContributedTo,
+    DerivedFrom,
+    Produced,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssociationEdgeType),
+}
+
+impl Default for AssociationEdgeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssociationEdgeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssociationEdgeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssociationEdgeType {
+    fn into(self) -> String {
+        match self {
+            AssociationEdgeType::AssociatedWith => "AssociatedWith".to_string(),
+            AssociationEdgeType::ContributedTo => "ContributedTo".to_string(),
+            AssociationEdgeType::DerivedFrom => "DerivedFrom".to_string(),
+            AssociationEdgeType::Produced => "Produced".to_string(),
+            AssociationEdgeType::UnknownVariant(UnknownAssociationEdgeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssociationEdgeType {
+    fn into(self) -> &'a str {
+        match self {
+            AssociationEdgeType::AssociatedWith => &"AssociatedWith",
+            AssociationEdgeType::ContributedTo => &"ContributedTo",
+            AssociationEdgeType::DerivedFrom => &"DerivedFrom",
+            AssociationEdgeType::Produced => &"Produced",
+            AssociationEdgeType::UnknownVariant(UnknownAssociationEdgeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AssociationEdgeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AssociatedWith" => AssociationEdgeType::AssociatedWith,
+            "ContributedTo" => AssociationEdgeType::ContributedTo,
+            "DerivedFrom" => AssociationEdgeType::DerivedFrom,
+            "Produced" => AssociationEdgeType::Produced,
+            _ => AssociationEdgeType::UnknownVariant(UnknownAssociationEdgeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssociationEdgeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AssociatedWith" => AssociationEdgeType::AssociatedWith,
+            "ContributedTo" => AssociationEdgeType::ContributedTo,
+            "DerivedFrom" => AssociationEdgeType::DerivedFrom,
+            "Produced" => AssociationEdgeType::Produced,
+            _ => AssociationEdgeType::UnknownVariant(UnknownAssociationEdgeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssociationEdgeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssociationEdgeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssociationEdgeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Lists a summary of the properties of an association. An association is an entity that links other lineage or experiment entities. An example would be an association between a training job and a model.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -436,7 +1882,7 @@ pub struct AssociationSummary {
     /// <p>The type of the association.</p>
     #[serde(rename = "AssociationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_type: Option<String>,
+    pub association_type: Option<AssociationEdgeType>,
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<UserContext>,
@@ -483,9 +1929,9 @@ pub struct AthenaDatasetDefinition {
     pub kms_key_id: Option<String>,
     #[serde(rename = "OutputCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_compression: Option<String>,
+    pub output_compression: Option<AthenaResultCompressionType>,
     #[serde(rename = "OutputFormat")]
-    pub output_format: String,
+    pub output_format: AthenaResultFormat,
     /// <p>The location in Amazon S3 where Athena query results are stored.</p>
     #[serde(rename = "OutputS3Uri")]
     pub output_s3_uri: String,
@@ -494,6 +1940,340 @@ pub struct AthenaDatasetDefinition {
     #[serde(rename = "WorkGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_group: Option<String>,
+}
+
+/// <p>The compression used for Athena query results.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAthenaResultCompressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AthenaResultCompressionType {
+    Gzip,
+    Snappy,
+    Zlib,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAthenaResultCompressionType),
+}
+
+impl Default for AthenaResultCompressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AthenaResultCompressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AthenaResultCompressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AthenaResultCompressionType {
+    fn into(self) -> String {
+        match self {
+            AthenaResultCompressionType::Gzip => "GZIP".to_string(),
+            AthenaResultCompressionType::Snappy => "SNAPPY".to_string(),
+            AthenaResultCompressionType::Zlib => "ZLIB".to_string(),
+            AthenaResultCompressionType::UnknownVariant(UnknownAthenaResultCompressionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AthenaResultCompressionType {
+    fn into(self) -> &'a str {
+        match self {
+            AthenaResultCompressionType::Gzip => &"GZIP",
+            AthenaResultCompressionType::Snappy => &"SNAPPY",
+            AthenaResultCompressionType::Zlib => &"ZLIB",
+            AthenaResultCompressionType::UnknownVariant(UnknownAthenaResultCompressionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AthenaResultCompressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GZIP" => AthenaResultCompressionType::Gzip,
+            "SNAPPY" => AthenaResultCompressionType::Snappy,
+            "ZLIB" => AthenaResultCompressionType::Zlib,
+            _ => AthenaResultCompressionType::UnknownVariant(UnknownAthenaResultCompressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AthenaResultCompressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GZIP" => AthenaResultCompressionType::Gzip,
+            "SNAPPY" => AthenaResultCompressionType::Snappy,
+            "ZLIB" => AthenaResultCompressionType::Zlib,
+            _ => AthenaResultCompressionType::UnknownVariant(UnknownAthenaResultCompressionType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AthenaResultCompressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AthenaResultCompressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AthenaResultCompressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The data storage format for Athena query results.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAthenaResultFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AthenaResultFormat {
+    Avro,
+    Json,
+    Orc,
+    Parquet,
+    Textfile,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAthenaResultFormat),
+}
+
+impl Default for AthenaResultFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AthenaResultFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AthenaResultFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AthenaResultFormat {
+    fn into(self) -> String {
+        match self {
+            AthenaResultFormat::Avro => "AVRO".to_string(),
+            AthenaResultFormat::Json => "JSON".to_string(),
+            AthenaResultFormat::Orc => "ORC".to_string(),
+            AthenaResultFormat::Parquet => "PARQUET".to_string(),
+            AthenaResultFormat::Textfile => "TEXTFILE".to_string(),
+            AthenaResultFormat::UnknownVariant(UnknownAthenaResultFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AthenaResultFormat {
+    fn into(self) -> &'a str {
+        match self {
+            AthenaResultFormat::Avro => &"AVRO",
+            AthenaResultFormat::Json => &"JSON",
+            AthenaResultFormat::Orc => &"ORC",
+            AthenaResultFormat::Parquet => &"PARQUET",
+            AthenaResultFormat::Textfile => &"TEXTFILE",
+            AthenaResultFormat::UnknownVariant(UnknownAthenaResultFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AthenaResultFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVRO" => AthenaResultFormat::Avro,
+            "JSON" => AthenaResultFormat::Json,
+            "ORC" => AthenaResultFormat::Orc,
+            "PARQUET" => AthenaResultFormat::Parquet,
+            "TEXTFILE" => AthenaResultFormat::Textfile,
+            _ => AthenaResultFormat::UnknownVariant(UnknownAthenaResultFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AthenaResultFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVRO" => AthenaResultFormat::Avro,
+            "JSON" => AthenaResultFormat::Json,
+            "ORC" => AthenaResultFormat::Orc,
+            "PARQUET" => AthenaResultFormat::Parquet,
+            "TEXTFILE" => AthenaResultFormat::Textfile,
+            _ => AthenaResultFormat::UnknownVariant(UnknownAthenaResultFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AthenaResultFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AthenaResultFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AthenaResultFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthMode {
+    Iam,
+    Sso,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthMode),
+}
+
+impl Default for AuthMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthMode {
+    fn into(self) -> String {
+        match self {
+            AuthMode::Iam => "IAM".to_string(),
+            AuthMode::Sso => "SSO".to_string(),
+            AuthMode::UnknownVariant(UnknownAuthMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthMode {
+    fn into(self) -> &'a str {
+        match self {
+            AuthMode::Iam => &"IAM",
+            AuthMode::Sso => &"SSO",
+            AuthMode::UnknownVariant(UnknownAuthMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "IAM" => AuthMode::Iam,
+            "SSO" => AuthMode::Sso,
+            _ => AuthMode::UnknownVariant(UnknownAuthMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IAM" => AuthMode::Iam,
+            "SSO" => AuthMode::Sso,
+            _ => AuthMode::UnknownVariant(UnknownAuthMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An Autopilot job returns recommendations, or candidates. Each candidate has futher details about the steps involed, and the status.</p>
@@ -505,7 +2285,7 @@ pub struct AutoMLCandidate {
     pub candidate_name: String,
     /// <p>The candidate's status.</p>
     #[serde(rename = "CandidateStatus")]
-    pub candidate_status: String,
+    pub candidate_status: CandidateStatus,
     /// <p>The candidate's steps.</p>
     #[serde(rename = "CandidateSteps")]
     pub candidate_steps: Vec<AutoMLCandidateStep>,
@@ -532,7 +2312,7 @@ pub struct AutoMLCandidate {
     pub last_modified_time: f64,
     /// <p>The objective status.</p>
     #[serde(rename = "ObjectiveStatus")]
-    pub objective_status: String,
+    pub objective_status: ObjectiveStatus,
 }
 
 /// <p>Information about the steps for a Candidate, and what step it is working on.</p>
@@ -547,7 +2327,7 @@ pub struct AutoMLCandidateStep {
     pub candidate_step_name: String,
     /// <p>Whether the Candidate is at the transform, training, or processing step.</p>
     #[serde(rename = "CandidateStepType")]
-    pub candidate_step_type: String,
+    pub candidate_step_type: CandidateStepType,
 }
 
 /// <p>Similar to Channel. A channel is a named input source that training algorithms can consume. Refer to Channel for detailed descriptions.</p>
@@ -556,7 +2336,7 @@ pub struct AutoMLChannel {
     /// <p>You can use Gzip or None. The default value is None.</p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_type: Option<String>,
+    pub compression_type: Option<CompressionType>,
     /// <p>The data source.</p>
     #[serde(rename = "DataSource")]
     pub data_source: AutoMLDataSource,
@@ -638,7 +2418,382 @@ pub struct AutoMLJobConfig {
 pub struct AutoMLJobObjective {
     /// <p><p>The name of the objective metric used to measure the predictive quality of a machine learning system. This metric is optimized during training to provide the best estimate for model parameter values from data.</p> <p>Here are the options:</p> <ul> <li> <p> <code>MSE</code>: The mean squared error (MSE) is the average of the squared differences between the predicted and actual values. It is used for regression. MSE values are always positive, the better a model is at predicting the actual values the smaller the MSE value. When the data contains outliers, they tend to dominate the MSE which might cause subpar prediction performance.</p> </li> <li> <p> <code>Accuracy</code>: The ratio of the number correctly classified items to the total number (correctly and incorrectly) classified. It is used for binary and multiclass classification. Measures how close the predicted class values are to the actual values. Accuracy values vary between zero and one, one being perfect accuracy and zero perfect inaccuracy.</p> </li> <li> <p> <code>F1</code>: The F1 score is the harmonic mean of the precision and recall. It is used for binary classification into classes traditionally referred to as positive and negative. Predictions are said to be true when they match their actual (correct) class; false when they do not. Precision is the ratio of the true positive predictions to all positive predictions (including the false positives) in a data set and measures the quality of the prediction when it predicts the positive class. Recall (or sensitivity) is the ratio of the true positive predictions to all actual positive instances and measures how completely a model predicts the actual class members in a data set. The standard F1 score weighs precision and recall equally. But which metric is paramount typically depends on specific aspects of a problem. F1 scores vary between zero and one, one being the best possible performance and zero the worst.</p> </li> <li> <p> <code>AUC</code>: The area under the curve (AUC) metric is used to compare and evaluate binary classification by algorithms such as logistic regression that return probabilities. A threshold is needed to map the probabilities into classifications. The relevant curve is the receiver operating characteristic curve that plots the true positive rate (TPR) of predictions (or recall) against the false positive rate (FPR) as a function of the threshold value, above which a prediction is considered positive. Increasing the threshold results in fewer false positives but more false negatives. AUC is the area under this receiver operating characteristic curve and so provides an aggregated measure of the model performance across all possible classification thresholds. The AUC score can also be interpreted as the probability that a randomly selected positive data point is more likely to be predicted positive than a randomly selected negative example. AUC scores vary between zero and one, one being perfect accuracy and one half not better than a random classifier. Values less that one half predict worse than a random predictor and such consistently bad predictors can be inverted to obtain better than random predictors.</p> </li> <li> <p> <code>F1macro</code>: The F1macro score applies F1 scoring to multiclass classification. In this context, you have multiple classes to predict. You just calculate the precision and recall for each class as you did for the positive class in binary classification. Then used these values to calculate the F1 score for each class and average them to obtain the F1macro score. F1macro scores vary between zero and one, one being the best possible performance and zero the worst.</p> </li> </ul> <p>If you do not specify a metric explicitly, the default behavior is to automatically use:</p> <ul> <li> <p> <code>MSE</code>: for regression.</p> </li> <li> <p> <code>F1</code>: for binary classification</p> </li> <li> <p> <code>Accuracy</code>: for multiclass classification.</p> </li> </ul></p>
     #[serde(rename = "MetricName")]
-    pub metric_name: String,
+    pub metric_name: AutoMLMetricEnum,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLJobObjectiveType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLJobObjectiveType {
+    Maximize,
+    Minimize,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLJobObjectiveType),
+}
+
+impl Default for AutoMLJobObjectiveType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLJobObjectiveType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLJobObjectiveType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLJobObjectiveType {
+    fn into(self) -> String {
+        match self {
+            AutoMLJobObjectiveType::Maximize => "Maximize".to_string(),
+            AutoMLJobObjectiveType::Minimize => "Minimize".to_string(),
+            AutoMLJobObjectiveType::UnknownVariant(UnknownAutoMLJobObjectiveType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLJobObjectiveType {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLJobObjectiveType::Maximize => &"Maximize",
+            AutoMLJobObjectiveType::Minimize => &"Minimize",
+            AutoMLJobObjectiveType::UnknownVariant(UnknownAutoMLJobObjectiveType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoMLJobObjectiveType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Maximize" => AutoMLJobObjectiveType::Maximize,
+            "Minimize" => AutoMLJobObjectiveType::Minimize,
+            _ => AutoMLJobObjectiveType::UnknownVariant(UnknownAutoMLJobObjectiveType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLJobObjectiveType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Maximize" => AutoMLJobObjectiveType::Maximize,
+            "Minimize" => AutoMLJobObjectiveType::Minimize,
+            _ => AutoMLJobObjectiveType::UnknownVariant(UnknownAutoMLJobObjectiveType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLJobObjectiveType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutoMLJobObjectiveType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoMLJobObjectiveType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLJobSecondaryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLJobSecondaryStatus {
+    AnalyzingData,
+    CandidateDefinitionsGenerated,
+    Failed,
+    FeatureEngineering,
+    MaxAutoMLJobRuntimeReached,
+    MaxCandidatesReached,
+    ModelTuning,
+    Starting,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLJobSecondaryStatus),
+}
+
+impl Default for AutoMLJobSecondaryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLJobSecondaryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLJobSecondaryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLJobSecondaryStatus {
+    fn into(self) -> String {
+        match self {
+            AutoMLJobSecondaryStatus::AnalyzingData => "AnalyzingData".to_string(),
+            AutoMLJobSecondaryStatus::CandidateDefinitionsGenerated => {
+                "CandidateDefinitionsGenerated".to_string()
+            }
+            AutoMLJobSecondaryStatus::Failed => "Failed".to_string(),
+            AutoMLJobSecondaryStatus::FeatureEngineering => "FeatureEngineering".to_string(),
+            AutoMLJobSecondaryStatus::MaxAutoMLJobRuntimeReached => {
+                "MaxAutoMLJobRuntimeReached".to_string()
+            }
+            AutoMLJobSecondaryStatus::MaxCandidatesReached => "MaxCandidatesReached".to_string(),
+            AutoMLJobSecondaryStatus::ModelTuning => "ModelTuning".to_string(),
+            AutoMLJobSecondaryStatus::Starting => "Starting".to_string(),
+            AutoMLJobSecondaryStatus::Stopped => "Stopped".to_string(),
+            AutoMLJobSecondaryStatus::Stopping => "Stopping".to_string(),
+            AutoMLJobSecondaryStatus::UnknownVariant(UnknownAutoMLJobSecondaryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLJobSecondaryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLJobSecondaryStatus::AnalyzingData => &"AnalyzingData",
+            AutoMLJobSecondaryStatus::CandidateDefinitionsGenerated => {
+                &"CandidateDefinitionsGenerated"
+            }
+            AutoMLJobSecondaryStatus::Failed => &"Failed",
+            AutoMLJobSecondaryStatus::FeatureEngineering => &"FeatureEngineering",
+            AutoMLJobSecondaryStatus::MaxAutoMLJobRuntimeReached => &"MaxAutoMLJobRuntimeReached",
+            AutoMLJobSecondaryStatus::MaxCandidatesReached => &"MaxCandidatesReached",
+            AutoMLJobSecondaryStatus::ModelTuning => &"ModelTuning",
+            AutoMLJobSecondaryStatus::Starting => &"Starting",
+            AutoMLJobSecondaryStatus::Stopped => &"Stopped",
+            AutoMLJobSecondaryStatus::Stopping => &"Stopping",
+            AutoMLJobSecondaryStatus::UnknownVariant(UnknownAutoMLJobSecondaryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoMLJobSecondaryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AnalyzingData" => AutoMLJobSecondaryStatus::AnalyzingData,
+            "CandidateDefinitionsGenerated" => {
+                AutoMLJobSecondaryStatus::CandidateDefinitionsGenerated
+            }
+            "Failed" => AutoMLJobSecondaryStatus::Failed,
+            "FeatureEngineering" => AutoMLJobSecondaryStatus::FeatureEngineering,
+            "MaxAutoMLJobRuntimeReached" => AutoMLJobSecondaryStatus::MaxAutoMLJobRuntimeReached,
+            "MaxCandidatesReached" => AutoMLJobSecondaryStatus::MaxCandidatesReached,
+            "ModelTuning" => AutoMLJobSecondaryStatus::ModelTuning,
+            "Starting" => AutoMLJobSecondaryStatus::Starting,
+            "Stopped" => AutoMLJobSecondaryStatus::Stopped,
+            "Stopping" => AutoMLJobSecondaryStatus::Stopping,
+            _ => AutoMLJobSecondaryStatus::UnknownVariant(UnknownAutoMLJobSecondaryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLJobSecondaryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AnalyzingData" => AutoMLJobSecondaryStatus::AnalyzingData,
+            "CandidateDefinitionsGenerated" => {
+                AutoMLJobSecondaryStatus::CandidateDefinitionsGenerated
+            }
+            "Failed" => AutoMLJobSecondaryStatus::Failed,
+            "FeatureEngineering" => AutoMLJobSecondaryStatus::FeatureEngineering,
+            "MaxAutoMLJobRuntimeReached" => AutoMLJobSecondaryStatus::MaxAutoMLJobRuntimeReached,
+            "MaxCandidatesReached" => AutoMLJobSecondaryStatus::MaxCandidatesReached,
+            "ModelTuning" => AutoMLJobSecondaryStatus::ModelTuning,
+            "Starting" => AutoMLJobSecondaryStatus::Starting,
+            "Stopped" => AutoMLJobSecondaryStatus::Stopped,
+            "Stopping" => AutoMLJobSecondaryStatus::Stopping,
+            _ => AutoMLJobSecondaryStatus::UnknownVariant(UnknownAutoMLJobSecondaryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLJobSecondaryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutoMLJobSecondaryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoMLJobSecondaryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLJobStatus),
+}
+
+impl Default for AutoMLJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLJobStatus {
+    fn into(self) -> String {
+        match self {
+            AutoMLJobStatus::Completed => "Completed".to_string(),
+            AutoMLJobStatus::Failed => "Failed".to_string(),
+            AutoMLJobStatus::InProgress => "InProgress".to_string(),
+            AutoMLJobStatus::Stopped => "Stopped".to_string(),
+            AutoMLJobStatus::Stopping => "Stopping".to_string(),
+            AutoMLJobStatus::UnknownVariant(UnknownAutoMLJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLJobStatus::Completed => &"Completed",
+            AutoMLJobStatus::Failed => &"Failed",
+            AutoMLJobStatus::InProgress => &"InProgress",
+            AutoMLJobStatus::Stopped => &"Stopped",
+            AutoMLJobStatus::Stopping => &"Stopping",
+            AutoMLJobStatus::UnknownVariant(UnknownAutoMLJobStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoMLJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => AutoMLJobStatus::Completed,
+            "Failed" => AutoMLJobStatus::Failed,
+            "InProgress" => AutoMLJobStatus::InProgress,
+            "Stopped" => AutoMLJobStatus::Stopped,
+            "Stopping" => AutoMLJobStatus::Stopping,
+            _ => AutoMLJobStatus::UnknownVariant(UnknownAutoMLJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => AutoMLJobStatus::Completed,
+            "Failed" => AutoMLJobStatus::Failed,
+            "InProgress" => AutoMLJobStatus::InProgress,
+            "Stopped" => AutoMLJobStatus::Stopped,
+            "Stopping" => AutoMLJobStatus::Stopping,
+            _ => AutoMLJobStatus::UnknownVariant(UnknownAutoMLJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoMLJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoMLJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary about a job.</p>
@@ -653,10 +2808,10 @@ pub struct AutoMLJobSummary {
     pub auto_ml_job_name: String,
     /// <p>The job's secondary status.</p>
     #[serde(rename = "AutoMLJobSecondaryStatus")]
-    pub auto_ml_job_secondary_status: String,
+    pub auto_ml_job_secondary_status: AutoMLJobSecondaryStatus,
     /// <p>The job's status.</p>
     #[serde(rename = "AutoMLJobStatus")]
-    pub auto_ml_job_status: String,
+    pub auto_ml_job_status: AutoMLJobStatus,
     /// <p>When the job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -671,6 +2826,125 @@ pub struct AutoMLJobSummary {
     /// <p>When the job was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLMetricEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLMetricEnum {
+    Auc,
+    Accuracy,
+    F1,
+    F1Macro,
+    Mse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLMetricEnum),
+}
+
+impl Default for AutoMLMetricEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLMetricEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLMetricEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLMetricEnum {
+    fn into(self) -> String {
+        match self {
+            AutoMLMetricEnum::Auc => "AUC".to_string(),
+            AutoMLMetricEnum::Accuracy => "Accuracy".to_string(),
+            AutoMLMetricEnum::F1 => "F1".to_string(),
+            AutoMLMetricEnum::F1Macro => "F1macro".to_string(),
+            AutoMLMetricEnum::Mse => "MSE".to_string(),
+            AutoMLMetricEnum::UnknownVariant(UnknownAutoMLMetricEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLMetricEnum {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLMetricEnum::Auc => &"AUC",
+            AutoMLMetricEnum::Accuracy => &"Accuracy",
+            AutoMLMetricEnum::F1 => &"F1",
+            AutoMLMetricEnum::F1Macro => &"F1macro",
+            AutoMLMetricEnum::Mse => &"MSE",
+            AutoMLMetricEnum::UnknownVariant(UnknownAutoMLMetricEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AutoMLMetricEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUC" => AutoMLMetricEnum::Auc,
+            "Accuracy" => AutoMLMetricEnum::Accuracy,
+            "F1" => AutoMLMetricEnum::F1,
+            "F1macro" => AutoMLMetricEnum::F1Macro,
+            "MSE" => AutoMLMetricEnum::Mse,
+            _ => AutoMLMetricEnum::UnknownVariant(UnknownAutoMLMetricEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLMetricEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUC" => AutoMLMetricEnum::Auc,
+            "Accuracy" => AutoMLMetricEnum::Accuracy,
+            "F1" => AutoMLMetricEnum::F1,
+            "F1macro" => AutoMLMetricEnum::F1Macro,
+            "MSE" => AutoMLMetricEnum::Mse,
+            _ => AutoMLMetricEnum::UnknownVariant(UnknownAutoMLMetricEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLMetricEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoMLMetricEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoMLMetricEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The output data configuration.</p>
@@ -690,10 +2964,114 @@ pub struct AutoMLOutputDataConfig {
 pub struct AutoMLS3DataSource {
     /// <p>The data type.</p>
     #[serde(rename = "S3DataType")]
-    pub s3_data_type: String,
+    pub s3_data_type: AutoMLS3DataType,
     /// <p>The URL to the Amazon S3 data source.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLS3DataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLS3DataType {
+    ManifestFile,
+    S3Prefix,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLS3DataType),
+}
+
+impl Default for AutoMLS3DataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLS3DataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLS3DataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLS3DataType {
+    fn into(self) -> String {
+        match self {
+            AutoMLS3DataType::ManifestFile => "ManifestFile".to_string(),
+            AutoMLS3DataType::S3Prefix => "S3Prefix".to_string(),
+            AutoMLS3DataType::UnknownVariant(UnknownAutoMLS3DataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLS3DataType {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLS3DataType::ManifestFile => &"ManifestFile",
+            AutoMLS3DataType::S3Prefix => &"S3Prefix",
+            AutoMLS3DataType::UnknownVariant(UnknownAutoMLS3DataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AutoMLS3DataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ManifestFile" => AutoMLS3DataType::ManifestFile,
+            "S3Prefix" => AutoMLS3DataType::S3Prefix,
+            _ => AutoMLS3DataType::UnknownVariant(UnknownAutoMLS3DataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLS3DataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ManifestFile" => AutoMLS3DataType::ManifestFile,
+            "S3Prefix" => AutoMLS3DataType::S3Prefix,
+            _ => AutoMLS3DataType::UnknownVariant(UnknownAutoMLS3DataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLS3DataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoMLS3DataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoMLS3DataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Security options.</p>
@@ -713,6 +3091,213 @@ pub struct AutoMLSecurityConfig {
     pub vpc_config: Option<VpcConfig>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLSortBy {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLSortBy),
+}
+
+impl Default for AutoMLSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLSortBy {
+    fn into(self) -> String {
+        match self {
+            AutoMLSortBy::CreationTime => "CreationTime".to_string(),
+            AutoMLSortBy::Name => "Name".to_string(),
+            AutoMLSortBy::Status => "Status".to_string(),
+            AutoMLSortBy::UnknownVariant(UnknownAutoMLSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLSortBy::CreationTime => &"CreationTime",
+            AutoMLSortBy::Name => &"Name",
+            AutoMLSortBy::Status => &"Status",
+            AutoMLSortBy::UnknownVariant(UnknownAutoMLSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoMLSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => AutoMLSortBy::CreationTime,
+            "Name" => AutoMLSortBy::Name,
+            "Status" => AutoMLSortBy::Status,
+            _ => AutoMLSortBy::UnknownVariant(UnknownAutoMLSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => AutoMLSortBy::CreationTime,
+            "Name" => AutoMLSortBy::Name,
+            "Status" => AutoMLSortBy::Status,
+            _ => AutoMLSortBy::UnknownVariant(UnknownAutoMLSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoMLSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AutoMLSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoMLSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoMLSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoMLSortOrder),
+}
+
+impl Default for AutoMLSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoMLSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoMLSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoMLSortOrder {
+    fn into(self) -> String {
+        match self {
+            AutoMLSortOrder::Ascending => "Ascending".to_string(),
+            AutoMLSortOrder::Descending => "Descending".to_string(),
+            AutoMLSortOrder::UnknownVariant(UnknownAutoMLSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoMLSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            AutoMLSortOrder::Ascending => &"Ascending",
+            AutoMLSortOrder::Descending => &"Descending",
+            AutoMLSortOrder::UnknownVariant(UnknownAutoMLSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AutoMLSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => AutoMLSortOrder::Ascending,
+            "Descending" => AutoMLSortOrder::Descending,
+            _ => AutoMLSortOrder::UnknownVariant(UnknownAutoMLSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoMLSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => AutoMLSortOrder::Ascending,
+            "Descending" => AutoMLSortOrder::Descending,
+            _ => AutoMLSortOrder::UnknownVariant(UnknownAutoMLSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoMLSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AutoMLSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AutoMLSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Currently, the <code>AutoRollbackConfig</code> API is not supported.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoRollbackConfig {
@@ -720,6 +3305,230 @@ pub struct AutoRollbackConfig {
     #[serde(rename = "Alarms")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alarms: Option<Vec<Alarm>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAwsManagedHumanLoopRequestSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AwsManagedHumanLoopRequestSource {
+    AwsRekognitionDetectModerationLabelsImageV3,
+    AwsTextractAnalyzeDocumentFormsV1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAwsManagedHumanLoopRequestSource),
+}
+
+impl Default for AwsManagedHumanLoopRequestSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AwsManagedHumanLoopRequestSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AwsManagedHumanLoopRequestSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AwsManagedHumanLoopRequestSource {
+    fn into(self) -> String {
+        match self {
+            AwsManagedHumanLoopRequestSource::AwsRekognitionDetectModerationLabelsImageV3 => {
+                "AWS/Rekognition/DetectModerationLabels/Image/V3".to_string()
+            }
+            AwsManagedHumanLoopRequestSource::AwsTextractAnalyzeDocumentFormsV1 => {
+                "AWS/Textract/AnalyzeDocument/Forms/V1".to_string()
+            }
+            AwsManagedHumanLoopRequestSource::UnknownVariant(
+                UnknownAwsManagedHumanLoopRequestSource { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AwsManagedHumanLoopRequestSource {
+    fn into(self) -> &'a str {
+        match self {
+            AwsManagedHumanLoopRequestSource::AwsRekognitionDetectModerationLabelsImageV3 => {
+                &"AWS/Rekognition/DetectModerationLabels/Image/V3"
+            }
+            AwsManagedHumanLoopRequestSource::AwsTextractAnalyzeDocumentFormsV1 => {
+                &"AWS/Textract/AnalyzeDocument/Forms/V1"
+            }
+            AwsManagedHumanLoopRequestSource::UnknownVariant(
+                UnknownAwsManagedHumanLoopRequestSource { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AwsManagedHumanLoopRequestSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS/Rekognition/DetectModerationLabels/Image/V3" => {
+                AwsManagedHumanLoopRequestSource::AwsRekognitionDetectModerationLabelsImageV3
+            }
+            "AWS/Textract/AnalyzeDocument/Forms/V1" => {
+                AwsManagedHumanLoopRequestSource::AwsTextractAnalyzeDocumentFormsV1
+            }
+            _ => AwsManagedHumanLoopRequestSource::UnknownVariant(
+                UnknownAwsManagedHumanLoopRequestSource {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AwsManagedHumanLoopRequestSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS/Rekognition/DetectModerationLabels/Image/V3" => {
+                AwsManagedHumanLoopRequestSource::AwsRekognitionDetectModerationLabelsImageV3
+            }
+            "AWS/Textract/AnalyzeDocument/Forms/V1" => {
+                AwsManagedHumanLoopRequestSource::AwsTextractAnalyzeDocumentFormsV1
+            }
+            _ => AwsManagedHumanLoopRequestSource::UnknownVariant(
+                UnknownAwsManagedHumanLoopRequestSource { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AwsManagedHumanLoopRequestSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AwsManagedHumanLoopRequestSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AwsManagedHumanLoopRequestSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchStrategy {
+    MultiRecord,
+    SingleRecord,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchStrategy),
+}
+
+impl Default for BatchStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchStrategy {
+    fn into(self) -> String {
+        match self {
+            BatchStrategy::MultiRecord => "MultiRecord".to_string(),
+            BatchStrategy::SingleRecord => "SingleRecord".to_string(),
+            BatchStrategy::UnknownVariant(UnknownBatchStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            BatchStrategy::MultiRecord => &"MultiRecord",
+            BatchStrategy::SingleRecord => &"SingleRecord",
+            BatchStrategy::UnknownVariant(UnknownBatchStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "MultiRecord" => BatchStrategy::MultiRecord,
+            "SingleRecord" => BatchStrategy::SingleRecord,
+            _ => BatchStrategy::UnknownVariant(UnknownBatchStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BatchStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MultiRecord" => BatchStrategy::MultiRecord,
+            "SingleRecord" => BatchStrategy::SingleRecord,
+            _ => BatchStrategy::UnknownVariant(UnknownBatchStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BatchStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BatchStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains bias metrics for a model.</p>
@@ -747,6 +3556,107 @@ pub struct BlueGreenUpdatePolicy {
     pub traffic_routing_configuration: TrafficRoutingConfig,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBooleanOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BooleanOperator {
+    And,
+    Or,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBooleanOperator),
+}
+
+impl Default for BooleanOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BooleanOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BooleanOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BooleanOperator {
+    fn into(self) -> String {
+        match self {
+            BooleanOperator::And => "And".to_string(),
+            BooleanOperator::Or => "Or".to_string(),
+            BooleanOperator::UnknownVariant(UnknownBooleanOperator { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BooleanOperator {
+    fn into(self) -> &'a str {
+        match self {
+            BooleanOperator::And => &"And",
+            BooleanOperator::Or => &"Or",
+            BooleanOperator::UnknownVariant(UnknownBooleanOperator { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BooleanOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "And" => BooleanOperator::And,
+            "Or" => BooleanOperator::Or,
+            _ => BooleanOperator::UnknownVariant(UnknownBooleanOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BooleanOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "And" => BooleanOperator::And,
+            "Or" => BooleanOperator::Or,
+            _ => BooleanOperator::UnknownVariant(UnknownBooleanOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BooleanOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BooleanOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BooleanOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details on the cache hit of a pipeline execution step.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -757,15 +3667,454 @@ pub struct CacheHitResult {
     pub source_pipeline_execution_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCandidateSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CandidateSortBy {
+    CreationTime,
+    FinalObjectiveMetricValue,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCandidateSortBy),
+}
+
+impl Default for CandidateSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CandidateSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CandidateSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CandidateSortBy {
+    fn into(self) -> String {
+        match self {
+            CandidateSortBy::CreationTime => "CreationTime".to_string(),
+            CandidateSortBy::FinalObjectiveMetricValue => "FinalObjectiveMetricValue".to_string(),
+            CandidateSortBy::Status => "Status".to_string(),
+            CandidateSortBy::UnknownVariant(UnknownCandidateSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CandidateSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            CandidateSortBy::CreationTime => &"CreationTime",
+            CandidateSortBy::FinalObjectiveMetricValue => &"FinalObjectiveMetricValue",
+            CandidateSortBy::Status => &"Status",
+            CandidateSortBy::UnknownVariant(UnknownCandidateSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CandidateSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => CandidateSortBy::CreationTime,
+            "FinalObjectiveMetricValue" => CandidateSortBy::FinalObjectiveMetricValue,
+            "Status" => CandidateSortBy::Status,
+            _ => CandidateSortBy::UnknownVariant(UnknownCandidateSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CandidateSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => CandidateSortBy::CreationTime,
+            "FinalObjectiveMetricValue" => CandidateSortBy::FinalObjectiveMetricValue,
+            "Status" => CandidateSortBy::Status,
+            _ => CandidateSortBy::UnknownVariant(UnknownCandidateSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CandidateSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CandidateSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CandidateSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCandidateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CandidateStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCandidateStatus),
+}
+
+impl Default for CandidateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CandidateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CandidateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CandidateStatus {
+    fn into(self) -> String {
+        match self {
+            CandidateStatus::Completed => "Completed".to_string(),
+            CandidateStatus::Failed => "Failed".to_string(),
+            CandidateStatus::InProgress => "InProgress".to_string(),
+            CandidateStatus::Stopped => "Stopped".to_string(),
+            CandidateStatus::Stopping => "Stopping".to_string(),
+            CandidateStatus::UnknownVariant(UnknownCandidateStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CandidateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CandidateStatus::Completed => &"Completed",
+            CandidateStatus::Failed => &"Failed",
+            CandidateStatus::InProgress => &"InProgress",
+            CandidateStatus::Stopped => &"Stopped",
+            CandidateStatus::Stopping => &"Stopping",
+            CandidateStatus::UnknownVariant(UnknownCandidateStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CandidateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => CandidateStatus::Completed,
+            "Failed" => CandidateStatus::Failed,
+            "InProgress" => CandidateStatus::InProgress,
+            "Stopped" => CandidateStatus::Stopped,
+            "Stopping" => CandidateStatus::Stopping,
+            _ => CandidateStatus::UnknownVariant(UnknownCandidateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CandidateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => CandidateStatus::Completed,
+            "Failed" => CandidateStatus::Failed,
+            "InProgress" => CandidateStatus::InProgress,
+            "Stopped" => CandidateStatus::Stopped,
+            "Stopping" => CandidateStatus::Stopping,
+            _ => CandidateStatus::UnknownVariant(UnknownCandidateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CandidateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CandidateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CandidateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCandidateStepType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CandidateStepType {
+    AwsSageMakerProcessingJob,
+    AwsSageMakerTrainingJob,
+    AwsSageMakerTransformJob,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCandidateStepType),
+}
+
+impl Default for CandidateStepType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CandidateStepType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CandidateStepType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CandidateStepType {
+    fn into(self) -> String {
+        match self {
+            CandidateStepType::AwsSageMakerProcessingJob => {
+                "AWS::SageMaker::ProcessingJob".to_string()
+            }
+            CandidateStepType::AwsSageMakerTrainingJob => "AWS::SageMaker::TrainingJob".to_string(),
+            CandidateStepType::AwsSageMakerTransformJob => {
+                "AWS::SageMaker::TransformJob".to_string()
+            }
+            CandidateStepType::UnknownVariant(UnknownCandidateStepType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CandidateStepType {
+    fn into(self) -> &'a str {
+        match self {
+            CandidateStepType::AwsSageMakerProcessingJob => &"AWS::SageMaker::ProcessingJob",
+            CandidateStepType::AwsSageMakerTrainingJob => &"AWS::SageMaker::TrainingJob",
+            CandidateStepType::AwsSageMakerTransformJob => &"AWS::SageMaker::TransformJob",
+            CandidateStepType::UnknownVariant(UnknownCandidateStepType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CandidateStepType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS::SageMaker::ProcessingJob" => CandidateStepType::AwsSageMakerProcessingJob,
+            "AWS::SageMaker::TrainingJob" => CandidateStepType::AwsSageMakerTrainingJob,
+            "AWS::SageMaker::TransformJob" => CandidateStepType::AwsSageMakerTransformJob,
+            _ => CandidateStepType::UnknownVariant(UnknownCandidateStepType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CandidateStepType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS::SageMaker::ProcessingJob" => CandidateStepType::AwsSageMakerProcessingJob,
+            "AWS::SageMaker::TrainingJob" => CandidateStepType::AwsSageMakerTrainingJob,
+            "AWS::SageMaker::TransformJob" => CandidateStepType::AwsSageMakerTransformJob,
+            _ => CandidateStepType::UnknownVariant(UnknownCandidateStepType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CandidateStepType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CandidateStepType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CandidateStepType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Currently, the <code>CapacitySize</code> API is not supported.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CapacitySize {
     /// <p>This API is not supported.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: CapacitySizeType,
     /// <p><p/></p>
     #[serde(rename = "Value")]
     pub value: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapacitySizeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CapacitySizeType {
+    CapacityPercent,
+    InstanceCount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapacitySizeType),
+}
+
+impl Default for CapacitySizeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CapacitySizeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CapacitySizeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CapacitySizeType {
+    fn into(self) -> String {
+        match self {
+            CapacitySizeType::CapacityPercent => "CAPACITY_PERCENT".to_string(),
+            CapacitySizeType::InstanceCount => "INSTANCE_COUNT".to_string(),
+            CapacitySizeType::UnknownVariant(UnknownCapacitySizeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CapacitySizeType {
+    fn into(self) -> &'a str {
+        match self {
+            CapacitySizeType::CapacityPercent => &"CAPACITY_PERCENT",
+            CapacitySizeType::InstanceCount => &"INSTANCE_COUNT",
+            CapacitySizeType::UnknownVariant(UnknownCapacitySizeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CapacitySizeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CAPACITY_PERCENT" => CapacitySizeType::CapacityPercent,
+            "INSTANCE_COUNT" => CapacitySizeType::InstanceCount,
+            _ => CapacitySizeType::UnknownVariant(UnknownCapacitySizeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CapacitySizeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CAPACITY_PERCENT" => CapacitySizeType::CapacityPercent,
+            "INSTANCE_COUNT" => CapacitySizeType::InstanceCount,
+            _ => CapacitySizeType::UnknownVariant(UnknownCapacitySizeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CapacitySizeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CapacitySizeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CapacitySizeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -781,12 +4130,213 @@ pub struct CaptureContentTypeHeader {
     pub json_content_types: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCaptureMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CaptureMode {
+    Input,
+    Output,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCaptureMode),
+}
+
+impl Default for CaptureMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CaptureMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CaptureMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CaptureMode {
+    fn into(self) -> String {
+        match self {
+            CaptureMode::Input => "Input".to_string(),
+            CaptureMode::Output => "Output".to_string(),
+            CaptureMode::UnknownVariant(UnknownCaptureMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CaptureMode {
+    fn into(self) -> &'a str {
+        match self {
+            CaptureMode::Input => &"Input",
+            CaptureMode::Output => &"Output",
+            CaptureMode::UnknownVariant(UnknownCaptureMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CaptureMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Input" => CaptureMode::Input,
+            "Output" => CaptureMode::Output,
+            _ => CaptureMode::UnknownVariant(UnknownCaptureMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CaptureMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Input" => CaptureMode::Input,
+            "Output" => CaptureMode::Output,
+            _ => CaptureMode::UnknownVariant(UnknownCaptureMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CaptureMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CaptureMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CaptureMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptureOption {
     /// <p><p/></p>
     #[serde(rename = "CaptureMode")]
-    pub capture_mode: String,
+    pub capture_mode: CaptureMode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCaptureStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CaptureStatus {
+    Started,
+    Stopped,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCaptureStatus),
+}
+
+impl Default for CaptureStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CaptureStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CaptureStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CaptureStatus {
+    fn into(self) -> String {
+        match self {
+            CaptureStatus::Started => "Started".to_string(),
+            CaptureStatus::Stopped => "Stopped".to_string(),
+            CaptureStatus::UnknownVariant(UnknownCaptureStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CaptureStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CaptureStatus::Started => &"Started",
+            CaptureStatus::Stopped => &"Stopped",
+            CaptureStatus::UnknownVariant(UnknownCaptureStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CaptureStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Started" => CaptureStatus::Started,
+            "Stopped" => CaptureStatus::Stopped,
+            _ => CaptureStatus::UnknownVariant(UnknownCaptureStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CaptureStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Started" => CaptureStatus::Started,
+            "Stopped" => CaptureStatus::Stopped,
+            _ => CaptureStatus::UnknownVariant(UnknownCaptureStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CaptureStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CaptureStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CaptureStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A list of categorical hyperparameters to tune.</p>
@@ -817,7 +4367,7 @@ pub struct Channel {
     /// <p>If training data is compressed, the compression type. The default value is <code>None</code>. <code>CompressionType</code> is used only in Pipe input mode. In File mode, leave this field unset or set it to None.</p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_type: Option<String>,
+    pub compression_type: Option<CompressionType>,
     /// <p>The MIME type of the data.</p>
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -828,11 +4378,11 @@ pub struct Channel {
     /// <p>(Optional) The input mode to use for the data channel in a training job. If you don't set a value for <code>InputMode</code>, Amazon SageMaker uses the value set for <code>TrainingInputMode</code>. Use this parameter to override the <code>TrainingInputMode</code> setting in a <a>AlgorithmSpecification</a> request when you have a channel that needs a different input mode from the training job's general setting. To download the data from Amazon Simple Storage Service (Amazon S3) to the provisioned ML storage volume, and mount the directory to a Docker volume, use <code>File</code> input mode. To stream data directly from Amazon S3 to the container, choose <code>Pipe</code> input mode.</p> <p>To use a model for incremental training, choose <code>File</code> input model.</p>
     #[serde(rename = "InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_mode: Option<String>,
+    pub input_mode: Option<TrainingInputMode>,
     /// <p><p/> <p>Specify RecordIO as the value when input data is in raw format but the training algorithm requires the RecordIO format. In this case, Amazon SageMaker wraps each individual S3 object in a RecordIO record. If the input data is already in RecordIO format, you don&#39;t need to set this attribute. For more information, see <a href="https://mxnet.apache.org/api/architecture/note_data_loading#data-format">Create a Dataset Using RecordIO</a>. </p> <p>In File mode, leave this field unset or set it to None.</p></p>
     #[serde(rename = "RecordWrapperType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub record_wrapper_type: Option<String>,
+    pub record_wrapper_type: Option<RecordWrapper>,
     /// <p>A configuration for a shuffle option for input data in a channel. If you use <code>S3Prefix</code> for <code>S3DataType</code>, this shuffles the results of the S3 key prefix matches. If you use <code>ManifestFile</code>, the order of the S3 object references in the <code>ManifestFile</code> is shuffled. If you use <code>AugmentedManifestFile</code>, the order of the JSON lines in the <code>AugmentedManifestFile</code> is shuffled. The shuffling order is determined using the <code>Seed</code> value.</p> <p>For Pipe input mode, shuffling is done at the start of every epoch. With large datasets this ensures that the order of the training data is different for each epoch, it helps reduce bias and possible overfitting. In a multi-node training job when ShuffleConfig is combined with <code>S3DataDistributionType</code> of <code>ShardedByS3Key</code>, the data is shuffled across nodes so that the content sent to a particular node on the first epoch might be sent to a different node on the second epoch.</p>
     #[serde(rename = "ShuffleConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -856,13 +4406,13 @@ pub struct ChannelSpecification {
     /// <p>The allowed compression types, if data compression is used.</p>
     #[serde(rename = "SupportedCompressionTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_compression_types: Option<Vec<String>>,
+    pub supported_compression_types: Option<Vec<CompressionType>>,
     /// <p>The supported MIME types for the data.</p>
     #[serde(rename = "SupportedContentTypes")]
     pub supported_content_types: Vec<String>,
     /// <p>The allowed input mode, either FILE or PIPE.</p> <p>In FILE mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode.</p> <p>In PIPE mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
     #[serde(rename = "SupportedInputModes")]
-    pub supported_input_modes: Vec<String>,
+    pub supported_input_modes: Vec<TrainingInputMode>,
 }
 
 /// <p>Contains information about the output location for managed spot training checkpoint data. </p>
@@ -875,6 +4425,221 @@ pub struct CheckpointConfig {
     /// <p>Identifies the S3 path where you want Amazon SageMaker to store checkpoints. For example, <code>s3://bucket-name/key-name-prefix</code>.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCodeRepositorySortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CodeRepositorySortBy {
+    CreationTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCodeRepositorySortBy),
+}
+
+impl Default for CodeRepositorySortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CodeRepositorySortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CodeRepositorySortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CodeRepositorySortBy {
+    fn into(self) -> String {
+        match self {
+            CodeRepositorySortBy::CreationTime => "CreationTime".to_string(),
+            CodeRepositorySortBy::LastModifiedTime => "LastModifiedTime".to_string(),
+            CodeRepositorySortBy::Name => "Name".to_string(),
+            CodeRepositorySortBy::UnknownVariant(UnknownCodeRepositorySortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CodeRepositorySortBy {
+    fn into(self) -> &'a str {
+        match self {
+            CodeRepositorySortBy::CreationTime => &"CreationTime",
+            CodeRepositorySortBy::LastModifiedTime => &"LastModifiedTime",
+            CodeRepositorySortBy::Name => &"Name",
+            CodeRepositorySortBy::UnknownVariant(UnknownCodeRepositorySortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CodeRepositorySortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => CodeRepositorySortBy::CreationTime,
+            "LastModifiedTime" => CodeRepositorySortBy::LastModifiedTime,
+            "Name" => CodeRepositorySortBy::Name,
+            _ => CodeRepositorySortBy::UnknownVariant(UnknownCodeRepositorySortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CodeRepositorySortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => CodeRepositorySortBy::CreationTime,
+            "LastModifiedTime" => CodeRepositorySortBy::LastModifiedTime,
+            "Name" => CodeRepositorySortBy::Name,
+            _ => CodeRepositorySortBy::UnknownVariant(UnknownCodeRepositorySortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CodeRepositorySortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CodeRepositorySortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CodeRepositorySortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCodeRepositorySortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CodeRepositorySortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCodeRepositorySortOrder),
+}
+
+impl Default for CodeRepositorySortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CodeRepositorySortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CodeRepositorySortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CodeRepositorySortOrder {
+    fn into(self) -> String {
+        match self {
+            CodeRepositorySortOrder::Ascending => "Ascending".to_string(),
+            CodeRepositorySortOrder::Descending => "Descending".to_string(),
+            CodeRepositorySortOrder::UnknownVariant(UnknownCodeRepositorySortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CodeRepositorySortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            CodeRepositorySortOrder::Ascending => &"Ascending",
+            CodeRepositorySortOrder::Descending => &"Descending",
+            CodeRepositorySortOrder::UnknownVariant(UnknownCodeRepositorySortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CodeRepositorySortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => CodeRepositorySortOrder::Ascending,
+            "Descending" => CodeRepositorySortOrder::Descending,
+            _ => CodeRepositorySortOrder::UnknownVariant(UnknownCodeRepositorySortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CodeRepositorySortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => CodeRepositorySortOrder::Ascending,
+            "Descending" => CodeRepositorySortOrder::Descending,
+            _ => CodeRepositorySortOrder::UnknownVariant(UnknownCodeRepositorySortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CodeRepositorySortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CodeRepositorySortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CodeRepositorySortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies summary information about a Git repository.</p>
@@ -937,6 +4702,130 @@ pub struct CollectionConfiguration {
     pub collection_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompilationJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompilationJobStatus {
+    Completed,
+    Failed,
+    Inprogress,
+    Starting,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompilationJobStatus),
+}
+
+impl Default for CompilationJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompilationJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompilationJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompilationJobStatus {
+    fn into(self) -> String {
+        match self {
+            CompilationJobStatus::Completed => "COMPLETED".to_string(),
+            CompilationJobStatus::Failed => "FAILED".to_string(),
+            CompilationJobStatus::Inprogress => "INPROGRESS".to_string(),
+            CompilationJobStatus::Starting => "STARTING".to_string(),
+            CompilationJobStatus::Stopped => "STOPPED".to_string(),
+            CompilationJobStatus::Stopping => "STOPPING".to_string(),
+            CompilationJobStatus::UnknownVariant(UnknownCompilationJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompilationJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CompilationJobStatus::Completed => &"COMPLETED",
+            CompilationJobStatus::Failed => &"FAILED",
+            CompilationJobStatus::Inprogress => &"INPROGRESS",
+            CompilationJobStatus::Starting => &"STARTING",
+            CompilationJobStatus::Stopped => &"STOPPED",
+            CompilationJobStatus::Stopping => &"STOPPING",
+            CompilationJobStatus::UnknownVariant(UnknownCompilationJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CompilationJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => CompilationJobStatus::Completed,
+            "FAILED" => CompilationJobStatus::Failed,
+            "INPROGRESS" => CompilationJobStatus::Inprogress,
+            "STARTING" => CompilationJobStatus::Starting,
+            "STOPPED" => CompilationJobStatus::Stopped,
+            "STOPPING" => CompilationJobStatus::Stopping,
+            _ => CompilationJobStatus::UnknownVariant(UnknownCompilationJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CompilationJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => CompilationJobStatus::Completed,
+            "FAILED" => CompilationJobStatus::Failed,
+            "INPROGRESS" => CompilationJobStatus::Inprogress,
+            "STARTING" => CompilationJobStatus::Starting,
+            "STOPPED" => CompilationJobStatus::Stopped,
+            "STOPPING" => CompilationJobStatus::Stopping,
+            _ => CompilationJobStatus::UnknownVariant(UnknownCompilationJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompilationJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CompilationJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompilationJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of a model compilation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -953,7 +4842,7 @@ pub struct CompilationJobSummary {
     pub compilation_job_name: String,
     /// <p>The status of the model compilation job.</p>
     #[serde(rename = "CompilationJobStatus")]
-    pub compilation_job_status: String,
+    pub compilation_job_status: CompilationJobStatus,
     /// <p>The time when the model compilation job started.</p>
     #[serde(rename = "CompilationStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -961,19 +4850,19 @@ pub struct CompilationJobSummary {
     /// <p>The type of device that the model will run on after the compilation job has completed.</p>
     #[serde(rename = "CompilationTargetDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compilation_target_device: Option<String>,
+    pub compilation_target_device: Option<TargetDevice>,
     /// <p>The type of accelerator that the model will run on after the compilation job has completed.</p>
     #[serde(rename = "CompilationTargetPlatformAccelerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compilation_target_platform_accelerator: Option<String>,
+    pub compilation_target_platform_accelerator: Option<TargetPlatformAccelerator>,
     /// <p>The type of architecture that the model will run on after the compilation job has completed.</p>
     #[serde(rename = "CompilationTargetPlatformArch")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compilation_target_platform_arch: Option<String>,
+    pub compilation_target_platform_arch: Option<TargetPlatformArch>,
     /// <p>The type of OS that the model will run on after the compilation job has completed.</p>
     #[serde(rename = "CompilationTargetPlatformOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compilation_target_platform_os: Option<String>,
+    pub compilation_target_platform_os: Option<TargetPlatformOs>,
     /// <p>The time when the model compilation job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -983,6 +4872,211 @@ pub struct CompilationJobSummary {
     pub last_modified_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompressionType {
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompressionType),
+}
+
+impl Default for CompressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompressionType {
+    fn into(self) -> String {
+        match self {
+            CompressionType::Gzip => "Gzip".to_string(),
+            CompressionType::None => "None".to_string(),
+            CompressionType::UnknownVariant(UnknownCompressionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompressionType {
+    fn into(self) -> &'a str {
+        match self {
+            CompressionType::Gzip => &"Gzip",
+            CompressionType::None => &"None",
+            CompressionType::UnknownVariant(UnknownCompressionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CompressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Gzip" => CompressionType::Gzip,
+            "None" => CompressionType::None,
+            _ => CompressionType::UnknownVariant(UnknownCompressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CompressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Gzip" => CompressionType::Gzip,
+            "None" => CompressionType::None,
+            _ => CompressionType::UnknownVariant(UnknownCompressionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CompressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConditionOutcome {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConditionOutcome {
+    False,
+    True,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConditionOutcome),
+}
+
+impl Default for ConditionOutcome {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConditionOutcome {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConditionOutcome {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConditionOutcome {
+    fn into(self) -> String {
+        match self {
+            ConditionOutcome::False => "False".to_string(),
+            ConditionOutcome::True => "True".to_string(),
+            ConditionOutcome::UnknownVariant(UnknownConditionOutcome { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConditionOutcome {
+    fn into(self) -> &'a str {
+        match self {
+            ConditionOutcome::False => &"False",
+            ConditionOutcome::True => &"True",
+            ConditionOutcome::UnknownVariant(UnknownConditionOutcome { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConditionOutcome {
+    fn from(name: &str) -> Self {
+        match name {
+            "False" => ConditionOutcome::False,
+            "True" => ConditionOutcome::True,
+            _ => ConditionOutcome::UnknownVariant(UnknownConditionOutcome {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConditionOutcome {
+    fn from(name: String) -> Self {
+        match &*name {
+            "False" => ConditionOutcome::False,
+            "True" => ConditionOutcome::True,
+            _ => ConditionOutcome::UnknownVariant(UnknownConditionOutcome { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConditionOutcome {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConditionOutcome {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConditionOutcome {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Metadata for a Condition step.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -990,7 +5084,7 @@ pub struct ConditionStepMetadata {
     /// <p>The outcome of the Condition step evaluation.</p>
     #[serde(rename = "Outcome")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub outcome: Option<String>,
+    pub outcome: Option<ConditionOutcome>,
 }
 
 /// <p>Describes the container, as part of model definition.</p>
@@ -1015,7 +5109,7 @@ pub struct ContainerDefinition {
     /// <p>Whether the container hosts a single model or multiple models.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<ContainerMode>,
     /// <p><p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix). The S3 path is required for Amazon SageMaker built-in algorithms, but not if you use your own algorithms. For more information on built-in algorithms, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html">Common Parameters</a>. </p> <note> <p>The model artifacts must be in an S3 bucket that is in the same region as the model or endpoint you are creating.</p> </note> <p>If you provide a value for this parameter, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provide. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> <important> <p>If you use a built-in algorithm to create a model, Amazon SageMaker requires that you provide a S3 path to the model artifacts in <code>ModelDataUrl</code>.</p> </important></p>
     #[serde(rename = "ModelDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1024,6 +5118,218 @@ pub struct ContainerDefinition {
     #[serde(rename = "ModelPackageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerMode {
+    MultiModel,
+    SingleModel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerMode),
+}
+
+impl Default for ContainerMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerMode {
+    fn into(self) -> String {
+        match self {
+            ContainerMode::MultiModel => "MultiModel".to_string(),
+            ContainerMode::SingleModel => "SingleModel".to_string(),
+            ContainerMode::UnknownVariant(UnknownContainerMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerMode {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerMode::MultiModel => &"MultiModel",
+            ContainerMode::SingleModel => &"SingleModel",
+            ContainerMode::UnknownVariant(UnknownContainerMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "MultiModel" => ContainerMode::MultiModel,
+            "SingleModel" => ContainerMode::SingleModel,
+            _ => ContainerMode::UnknownVariant(UnknownContainerMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MultiModel" => ContainerMode::MultiModel,
+            "SingleModel" => ContainerMode::SingleModel,
+            _ => ContainerMode::UnknownVariant(UnknownContainerMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentClassifier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentClassifier {
+    FreeOfAdultContent,
+    FreeOfPersonallyIdentifiableInformation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentClassifier),
+}
+
+impl Default for ContentClassifier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentClassifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentClassifier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentClassifier {
+    fn into(self) -> String {
+        match self {
+            ContentClassifier::FreeOfAdultContent => "FreeOfAdultContent".to_string(),
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                "FreeOfPersonallyIdentifiableInformation".to_string()
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentClassifier {
+    fn into(self) -> &'a str {
+        match self {
+            ContentClassifier::FreeOfAdultContent => &"FreeOfAdultContent",
+            ContentClassifier::FreeOfPersonallyIdentifiableInformation => {
+                &"FreeOfPersonallyIdentifiableInformation"
+            }
+            ContentClassifier::UnknownVariant(UnknownContentClassifier { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContentClassifier {
+    fn from(name: &str) -> Self {
+        match name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentClassifier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FreeOfAdultContent" => ContentClassifier::FreeOfAdultContent,
+            "FreeOfPersonallyIdentifiableInformation" => {
+                ContentClassifier::FreeOfPersonallyIdentifiableInformation
+            }
+            _ => ContentClassifier::UnknownVariant(UnknownContentClassifier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentClassifier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentClassifier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentClassifier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A structure describing the source of a context.</p>
@@ -1087,7 +5393,7 @@ pub struct ContinuousParameterRange {
     /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> <dt>ReverseLogarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a reverse logarithmic scale.</p> <p>Reverse logarithmic scaling works only for ranges that are entirely within the range 0&lt;=x&lt;1.0.</p> </dd> </dl></p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_type: Option<String>,
+    pub scaling_type: Option<HyperParameterScalingType>,
 }
 
 /// <p>Defines the possible values for a continuous hyperparameter.</p>
@@ -1127,7 +5433,7 @@ pub struct CreateActionRequest {
     /// <p>The status of the action.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
     /// <p>A list of tags to apply to the action.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1215,7 +5521,7 @@ pub struct CreateAppRequest {
     pub app_name: String,
     /// <p>The type of app.</p>
     #[serde(rename = "AppType")]
-    pub app_type: String,
+    pub app_type: AppType,
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
     pub domain_id: String,
@@ -1303,7 +5609,7 @@ pub struct CreateAutoMLJobRequest {
     /// <p>Defines the kind of preprocessing and algorithms intended for the candidates. Options include: BinaryClassification, MulticlassClassification, and Regression.</p>
     #[serde(rename = "ProblemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub problem_type: Option<String>,
+    pub problem_type: Option<ProblemType>,
     /// <p>The ARN of the role that is used to access the data.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
@@ -1484,10 +5790,10 @@ pub struct CreateDomainRequest {
     /// <p><p>Specifies the VPC used for non-EFS traffic. The default value is <code>PublicInternetOnly</code>.</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic is through a VPC managed by Amazon SageMaker, which allows direct internet access</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets</p> </li> </ul></p>
     #[serde(rename = "AppNetworkAccessType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_network_access_type: Option<String>,
+    pub app_network_access_type: Option<AppNetworkAccessType>,
     /// <p>The mode of authentication that members use to access the domain.</p>
     #[serde(rename = "AuthMode")]
-    pub auth_mode: String,
+    pub auth_mode: AuthMode,
     /// <p>The default user settings.</p>
     #[serde(rename = "DefaultUserSettings")]
     pub default_user_settings: UserSettings,
@@ -2049,7 +6355,7 @@ pub struct CreateModelPackageInput {
     /// <p>Whether the model is approved for deployment.</p> <p>This parameter is optional for versioned models, and does not apply to unversioned models.</p> <p>For versioned models, the value of this parameter must be set to <code>Approved</code> to deploy the model.</p>
     #[serde(rename = "ModelApprovalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_approval_status: Option<String>,
+    pub model_approval_status: Option<ModelApprovalStatus>,
     /// <p>A structure that contains model metrics reports.</p>
     #[serde(rename = "ModelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2161,7 +6467,7 @@ pub struct CreateNotebookInstanceInput {
     /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub accelerator_types: Option<Vec<String>>,
+    pub accelerator_types: Option<Vec<NotebookInstanceAcceleratorType>>,
     /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2173,10 +6479,10 @@ pub struct CreateNotebookInstanceInput {
     /// <p>Sets whether Amazon SageMaker provides internet access to the notebook instance. If you set this to <code>Disabled</code> this notebook instance will be able to access resources only in your VPC, and will not be able to connect to Amazon SageMaker training and endpoint services unless your configure a NAT Gateway in your VPC.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/appendix-additional-considerations.html#appendix-notebook-and-internet-access">Notebook Instances Are Internet-Enabled by Default</a>. You can set the value of this parameter to <code>Disabled</code> only if you set a value for the <code>SubnetId</code> parameter.</p>
     #[serde(rename = "DirectInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direct_internet_access: Option<String>,
+    pub direct_internet_access: Option<DirectInternetAccess>,
     /// <p>The type of ML compute instance to launch for the notebook instance.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: InstanceType,
     /// <p>The Amazon Resource Name (ARN) of a AWS Key Management Service key that Amazon SageMaker uses to encrypt data on the storage volume attached to your notebook instance. The KMS key you provide must be enabled. For information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/enabling-keys.html">Enabling and Disabling Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2194,7 +6500,7 @@ pub struct CreateNotebookInstanceInput {
     /// <p><p>Whether root access is enabled or disabled for users of the notebook instance. The default value is <code>Enabled</code>.</p> <note> <p>Lifecycle configurations need root access to be able to set up a notebook instance. Because of this, lifecycle configurations associated with a notebook instance always run with root access even if you disable root access for users.</p> </note></p>
     #[serde(rename = "RootAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_access: Option<String>,
+    pub root_access: Option<RootAccess>,
     /// <p>The VPC security group IDs, in the form sg-xxxxxxxx. The security groups must be for the same VPC as specified in the subnet. </p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2501,7 +6807,7 @@ pub struct CreateTransformJobRequest {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set the <code>SplitType</code> property to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p> <p>To use only one record when making an HTTP invocation request to a container, set <code>BatchStrategy</code> to <code>SingleRecord</code> and <code>SplitType</code> to <code>Line</code>.</p> <p>To fit as many records in a mini-batch as can fit within the <code>MaxPayloadInMB</code> limit, set <code>BatchStrategy</code> to <code>MultiRecord</code> and <code>SplitType</code> to <code>Line</code>.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub batch_strategy: Option<String>,
+    pub batch_strategy: Option<BatchStrategy>,
     /// <p>The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.</p>
     #[serde(rename = "DataProcessing")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2786,7 +7092,7 @@ pub struct DataCaptureConfig {
 pub struct DataCaptureConfigSummary {
     /// <p><p/></p>
     #[serde(rename = "CaptureStatus")]
-    pub capture_status: String,
+    pub capture_status: CaptureStatus,
     /// <p><p/></p>
     #[serde(rename = "CurrentSamplingPercentage")]
     pub current_sampling_percentage: i64,
@@ -2815,6 +7121,110 @@ pub struct DataCatalogConfig {
     pub table_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataDistributionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataDistributionType {
+    FullyReplicated,
+    ShardedByS3Key,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataDistributionType),
+}
+
+impl Default for DataDistributionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataDistributionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataDistributionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataDistributionType {
+    fn into(self) -> String {
+        match self {
+            DataDistributionType::FullyReplicated => "FullyReplicated".to_string(),
+            DataDistributionType::ShardedByS3Key => "ShardedByS3Key".to_string(),
+            DataDistributionType::UnknownVariant(UnknownDataDistributionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataDistributionType {
+    fn into(self) -> &'a str {
+        match self {
+            DataDistributionType::FullyReplicated => &"FullyReplicated",
+            DataDistributionType::ShardedByS3Key => &"ShardedByS3Key",
+            DataDistributionType::UnknownVariant(UnknownDataDistributionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataDistributionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FullyReplicated" => DataDistributionType::FullyReplicated,
+            "ShardedByS3Key" => DataDistributionType::ShardedByS3Key,
+            _ => DataDistributionType::UnknownVariant(UnknownDataDistributionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataDistributionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FullyReplicated" => DataDistributionType::FullyReplicated,
+            "ShardedByS3Key" => DataDistributionType::ShardedByS3Key,
+            _ => DataDistributionType::UnknownVariant(UnknownDataDistributionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataDistributionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataDistributionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataDistributionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The data structure used to specify the data to be used for inference in a batch transform job and to associate the data that is relevant to the prediction results in the output. The input filter provided allows you to exclude input data that is not needed for inference in a batch transform job. The output filter provided allows you to include input data relevant to interpreting the predictions in the output from the job. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html">Associate Prediction Results with their Corresponding Input Records</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataProcessing {
@@ -2825,7 +7235,7 @@ pub struct DataProcessing {
     /// <p>Specifies the source of the data to join with the transformed data. The valid values are <code>None</code> and <code>Input</code>. The default value is <code>None</code>, which specifies not to join the input with the transformed data. If you want the batch transform job to join the original input data with the transformed data, set <code>JoinSource</code> to <code>Input</code>. </p> <p>For JSON or JSONLines objects, such as a JSON array, Amazon SageMaker adds the transformed data to the input JSON object in an attribute called <code>SageMakerOutput</code>. The joined result for JSON must be a key-value pair object. If the input is not a key-value pair object, Amazon SageMaker creates a new JSON file. In the new JSON file, and the input data is stored under the <code>SageMakerInput</code> key and the results are stored in <code>SageMakerOutput</code>.</p> <p>For CSV files, Amazon SageMaker combines the transformed data with the input data at the end of the input data and stores it in the output file. The joined data has the joined input data followed by the transformed data and the output is a CSV file. </p>
     #[serde(rename = "JoinSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub join_source: Option<String>,
+    pub join_source: Option<JoinSource>,
     /// <p>A <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-data-processing.html#data-processing-operators">JSONPath</a> expression used to select a portion of the joined dataset to save in the output file for a batch transform job. If you want Amazon SageMaker to store the entire input dataset in the output file, leave the default value, <code>$</code>. If you specify indexes that aren't within the dimension size of the joined dataset, you get an error.</p> <p>Examples: <code>"$"</code>, <code>"$[0,5:]"</code>, <code>"$['id','SageMakerOutput']"</code> </p>
     #[serde(rename = "OutputFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2904,11 +7314,11 @@ pub struct DatasetDefinition {
     /// <p>Whether the generated dataset is <code>FullyReplicated</code> or <code>ShardedByS3Key</code> (default).</p>
     #[serde(rename = "DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_distribution_type: Option<String>,
+    pub data_distribution_type: Option<DataDistributionType>,
     /// <p>Whether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> (default) mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.</p>
     #[serde(rename = "InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_mode: Option<String>,
+    pub input_mode: Option<InputMode>,
     /// <p>The local path where you want Amazon SageMaker to download the Dataset Definition inputs to run a processing job. <code>LocalPath</code> is an absolute path to the input data. This is a required parameter when <code>AppManaged</code> is <code>False</code> (default).</p>
     #[serde(rename = "LocalPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2944,7 +7354,7 @@ pub struct DebugRuleConfiguration {
     /// <p>The instance type to deploy a Debugger custom rule for debugging a training job.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<ProcessingInstanceType>,
     /// <p>Path to local storage location for output of rules. Defaults to <code>/opt/ml/processing/output/rule/</code>.</p>
     #[serde(rename = "LocalPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2988,7 +7398,7 @@ pub struct DebugRuleEvaluationStatus {
     /// <p>Status of the rule evaluation.</p>
     #[serde(rename = "RuleEvaluationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_evaluation_status: Option<String>,
+    pub rule_evaluation_status: Option<RuleEvaluationStatus>,
     /// <p>Details from the rule evaluation.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3036,7 +7446,7 @@ pub struct DeleteAppRequest {
     pub app_name: String,
     /// <p>The type of app.</p>
     #[serde(rename = "AppType")]
-    pub app_type: String,
+    pub app_type: AppType,
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
     pub domain_id: String,
@@ -3528,7 +7938,7 @@ pub struct DescribeActionResponse {
     /// <p>The status of the action.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3554,7 +7964,7 @@ pub struct DescribeAlgorithmOutput {
     pub algorithm_name: String,
     /// <p>The current status of the algorithm.</p>
     #[serde(rename = "AlgorithmStatus")]
-    pub algorithm_status: String,
+    pub algorithm_status: AlgorithmStatus,
     /// <p>Details about the current status of the algorithm.</p>
     #[serde(rename = "AlgorithmStatusDetails")]
     pub algorithm_status_details: AlgorithmStatusDetails,
@@ -3623,7 +8033,7 @@ pub struct DescribeAppRequest {
     pub app_name: String,
     /// <p>The type of app.</p>
     #[serde(rename = "AppType")]
-    pub app_type: String,
+    pub app_type: AppType,
     /// <p>The domain ID.</p>
     #[serde(rename = "DomainId")]
     pub domain_id: String,
@@ -3646,7 +8056,7 @@ pub struct DescribeAppResponse {
     /// <p>The type of app.</p>
     #[serde(rename = "AppType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_type: Option<String>,
+    pub app_type: Option<AppType>,
     /// <p>The creation time.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3674,7 +8084,7 @@ pub struct DescribeAppResponse {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AppStatus>,
     /// <p>The user profile name.</p>
     #[serde(rename = "UserProfileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3762,10 +8172,10 @@ pub struct DescribeAutoMLJobResponse {
     pub auto_ml_job_objective: Option<AutoMLJobObjective>,
     /// <p>Returns the job's AutoMLJobSecondaryStatus.</p>
     #[serde(rename = "AutoMLJobSecondaryStatus")]
-    pub auto_ml_job_secondary_status: String,
+    pub auto_ml_job_secondary_status: AutoMLJobSecondaryStatus,
     /// <p>Returns the job's AutoMLJobStatus.</p>
     #[serde(rename = "AutoMLJobStatus")]
-    pub auto_ml_job_status: String,
+    pub auto_ml_job_status: AutoMLJobStatus,
     /// <p>Returns the job's BestCandidate.</p>
     #[serde(rename = "BestCandidate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3797,7 +8207,7 @@ pub struct DescribeAutoMLJobResponse {
     /// <p>Returns the job's problem type.</p>
     #[serde(rename = "ProblemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub problem_type: Option<String>,
+    pub problem_type: Option<ProblemType>,
     /// <p>This contains ProblemType, AutoMLJobObjective and CompletionCriteria. They're auto-inferred values, if not provided by you. If you do provide them, then they'll be the same as provided.</p>
     #[serde(rename = "ResolvedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3859,7 +8269,7 @@ pub struct DescribeCompilationJobResponse {
     pub compilation_job_name: String,
     /// <p>The status of the model compilation job.</p>
     #[serde(rename = "CompilationJobStatus")]
-    pub compilation_job_status: String,
+    pub compilation_job_status: CompilationJobStatus,
     /// <p>The time when the model compilation job started the <code>CompilationJob</code> instances. </p> <p>You are billed for the time between this timestamp and the timestamp in the <a>DescribeCompilationJobResponse$CompilationEndTime</a> field. In Amazon CloudWatch Logs, the start time might be later than this time. That's because it takes time to download the compilation job, which depends on the size of the compilation job container. </p>
     #[serde(rename = "CompilationStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4102,11 +8512,11 @@ pub struct DescribeDomainResponse {
     /// <p><p>Specifies the VPC used for non-EFS traffic. The default value is <code>PublicInternetOnly</code>.</p> <ul> <li> <p> <code>PublicInternetOnly</code> - Non-EFS traffic is through a VPC managed by Amazon SageMaker, which allows direct internet access</p> </li> <li> <p> <code>VpcOnly</code> - All Studio traffic is through the specified VPC and subnets</p> </li> </ul></p>
     #[serde(rename = "AppNetworkAccessType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub app_network_access_type: Option<String>,
+    pub app_network_access_type: Option<AppNetworkAccessType>,
     /// <p>The domain's authentication mode.</p>
     #[serde(rename = "AuthMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth_mode: Option<String>,
+    pub auth_mode: Option<AuthMode>,
     /// <p>The creation time.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4150,7 +8560,7 @@ pub struct DescribeDomainResponse {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DomainStatus>,
     /// <p>The VPC subnets that Studio uses for communication.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4192,7 +8602,7 @@ pub struct DescribeEdgePackagingJobResponse {
     pub edge_packaging_job_name: String,
     /// <p>The current status of the packaging job.</p>
     #[serde(rename = "EdgePackagingJobStatus")]
-    pub edge_packaging_job_status: String,
+    pub edge_packaging_job_status: EdgePackagingJobStatus,
     /// <p>Returns a message describing the job status and error messages.</p>
     #[serde(rename = "EdgePackagingJobStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4291,7 +8701,7 @@ pub struct DescribeEndpointOutput {
     pub endpoint_name: String,
     /// <p><p>The status of the endpoint.</p> <ul> <li> <p> <code>OutOfService</code>: Endpoint is not available to take incoming requests.</p> </li> <li> <p> <code>Creating</code>: <a>CreateEndpoint</a> is executing.</p> </li> <li> <p> <code>Updating</code>: <a>UpdateEndpoint</a> or <a>UpdateEndpointWeightsAndCapacities</a> is executing.</p> </li> <li> <p> <code>SystemUpdating</code>: Endpoint is undergoing maintenance and cannot be updated or deleted or re-scaled until it has completed. This maintenance operation does not change any customer-specified values such as VPC config, KMS encryption, model, instance type, or instance count.</p> </li> <li> <p> <code>RollingBack</code>: Endpoint fails to scale up or down or change its variant weight and is in the process of rolling back to its previous configuration. Once the rollback completes, endpoint returns to an <code>InService</code> status. This transitional status only applies to an endpoint that has autoscaling enabled and is undergoing variant weight or capacity changes as part of an <a>UpdateEndpointWeightsAndCapacities</a> call or when the <a>UpdateEndpointWeightsAndCapacities</a> operation is called explicitly.</p> </li> <li> <p> <code>InService</code>: Endpoint is available to process incoming requests.</p> </li> <li> <p> <code>Deleting</code>: <a>DeleteEndpoint</a> is executing.</p> </li> <li> <p> <code>Failed</code>: Endpoint could not be created, updated, or re-scaled. Use <a>DescribeEndpointOutput$FailureReason</a> for information about the failure. <a>DeleteEndpoint</a> is the only operation that can be performed on a failed endpoint.</p> </li> </ul></p>
     #[serde(rename = "EndpointStatus")]
-    pub endpoint_status: String,
+    pub endpoint_status: EndpointStatus,
     /// <p>If the status of the endpoint is <code>Failed</code>, the reason why it failed. </p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4399,7 +8809,7 @@ pub struct DescribeFeatureGroupResponse {
     /// <p>The status of the feature group.</p>
     #[serde(rename = "FeatureGroupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_group_status: Option<String>,
+    pub feature_group_status: Option<FeatureGroupStatus>,
     /// <p>A token to resume pagination of the list of <code>Features</code> (<code>FeatureDefinitions</code>).</p>
     #[serde(rename = "NextToken")]
     pub next_token: String,
@@ -4450,7 +8860,7 @@ pub struct DescribeFlowDefinitionResponse {
     pub flow_definition_name: String,
     /// <p>The status of the flow definition. Valid values are listed below.</p>
     #[serde(rename = "FlowDefinitionStatus")]
-    pub flow_definition_status: String,
+    pub flow_definition_status: FlowDefinitionStatus,
     /// <p>An object containing information about what triggers a human review workflow.</p>
     #[serde(rename = "HumanLoopActivationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4493,7 +8903,7 @@ pub struct DescribeHumanTaskUiResponse {
     /// <p>The status of the human task user interface (worker task template). Valid values are listed below.</p>
     #[serde(rename = "HumanTaskUiStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub human_task_ui_status: Option<String>,
+    pub human_task_ui_status: Option<HumanTaskUiStatus>,
     #[serde(rename = "UiTemplate")]
     pub ui_template: UiTemplateInfo,
 }
@@ -4535,7 +8945,7 @@ pub struct DescribeHyperParameterTuningJobResponse {
     pub hyper_parameter_tuning_job_name: String,
     /// <p>The status of the tuning job: InProgress, Completed, Failed, Stopping, or Stopped.</p>
     #[serde(rename = "HyperParameterTuningJobStatus")]
-    pub hyper_parameter_tuning_job_status: String,
+    pub hyper_parameter_tuning_job_status: HyperParameterTuningJobStatus,
     /// <p>The date and time that the status of the tuning job was modified. </p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4602,7 +9012,7 @@ pub struct DescribeImageResponse {
     /// <p>The status of the image.</p>
     #[serde(rename = "ImageStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_status: Option<String>,
+    pub image_status: Option<ImageStatus>,
     /// <p>When the image was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4655,7 +9065,7 @@ pub struct DescribeImageVersionResponse {
     /// <p>The status of the version.</p>
     #[serde(rename = "ImageVersionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_version_status: Option<String>,
+    pub image_version_status: Option<ImageVersionStatus>,
     /// <p>When the version was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4720,7 +9130,7 @@ pub struct DescribeLabelingJobResponse {
     pub labeling_job_output: Option<LabelingJobOutput>,
     /// <p>The processing status of the labeling job. </p>
     #[serde(rename = "LabelingJobStatus")]
-    pub labeling_job_status: String,
+    pub labeling_job_status: LabelingJobStatus,
     /// <p>The date and time that the labeling job was last updated.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
@@ -4901,7 +9311,7 @@ pub struct DescribeModelPackageGroupOutput {
     pub model_package_group_name: String,
     /// <p>The status of the model group.</p>
     #[serde(rename = "ModelPackageGroupStatus")]
-    pub model_package_group_status: String,
+    pub model_package_group_status: ModelPackageGroupStatus,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4946,7 +9356,7 @@ pub struct DescribeModelPackageOutput {
     /// <p>The approval status of the model package.</p>
     #[serde(rename = "ModelApprovalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_approval_status: Option<String>,
+    pub model_approval_status: Option<ModelApprovalStatus>,
     /// <p>Metrics for the model.</p>
     #[serde(rename = "ModelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4967,7 +9377,7 @@ pub struct DescribeModelPackageOutput {
     pub model_package_name: String,
     /// <p>The current status of the model package.</p>
     #[serde(rename = "ModelPackageStatus")]
-    pub model_package_status: String,
+    pub model_package_status: ModelPackageStatus,
     /// <p>Details about the current status of the model package.</p>
     #[serde(rename = "ModelPackageStatusDetails")]
     pub model_package_status_details: ModelPackageStatusDetails,
@@ -5071,11 +9481,11 @@ pub struct DescribeMonitoringScheduleResponse {
     pub monitoring_schedule_name: String,
     /// <p>The status of an monitoring job.</p>
     #[serde(rename = "MonitoringScheduleStatus")]
-    pub monitoring_schedule_status: String,
+    pub monitoring_schedule_status: ScheduleStatus,
     /// <p><p>The type of the monitoring job that this schedule runs. This is one of the following values.</p> <ul> <li> <p> <code>DATA<em>QUALITY</code> - The schedule is for a data quality monitoring job.</p> </li> <li> <p> <code>MODEL</em>QUALITY</code> - The schedule is for a model quality monitoring job.</p> </li> <li> <p> <code>MODEL<em>BIAS</code> - The schedule is for a bias monitoring job.</p> </li> <li> <p> <code>MODEL</em>EXPLAINABILITY</code> - The schedule is for an explainability monitoring job.</p> </li> </ul></p>
     #[serde(rename = "MonitoringType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type: Option<String>,
+    pub monitoring_type: Option<MonitoringType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5129,7 +9539,7 @@ pub struct DescribeNotebookInstanceOutput {
     /// <p>A list of the Elastic Inference (EI) instance types associated with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub accelerator_types: Option<Vec<String>>,
+    pub accelerator_types: Option<Vec<NotebookInstanceAcceleratorType>>,
     /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5145,7 +9555,7 @@ pub struct DescribeNotebookInstanceOutput {
     /// <p>Describes whether Amazon SageMaker provides internet access to the notebook instance. If this value is set to <i>Disabled</i>, the notebook instance does not have internet access, and cannot connect to Amazon SageMaker training and endpoint services.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/appendix-additional-considerations.html#appendix-notebook-and-internet-access">Notebook Instances Are Internet-Enabled by Default</a>.</p>
     #[serde(rename = "DirectInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direct_internet_access: Option<String>,
+    pub direct_internet_access: Option<DirectInternetAccess>,
     /// <p>If status is <code>Failed</code>, the reason it failed.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5153,7 +9563,7 @@ pub struct DescribeNotebookInstanceOutput {
     /// <p>The type of ML compute instance running on the notebook instance.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<InstanceType>,
     /// <p>The AWS KMS key ID Amazon SageMaker uses to encrypt data when storing it on the ML storage volume attached to the instance. </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5181,7 +9591,7 @@ pub struct DescribeNotebookInstanceOutput {
     /// <p>The status of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notebook_instance_status: Option<String>,
+    pub notebook_instance_status: Option<NotebookInstanceStatus>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role associated with the instance. </p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5189,7 +9599,7 @@ pub struct DescribeNotebookInstanceOutput {
     /// <p><p>Whether root access is enabled or disabled for users of the notebook instance.</p> <note> <p>Lifecycle configurations need root access to be able to set up a notebook instance. Because of this, lifecycle configurations associated with a notebook instance always run with root access even if you disable root access for users.</p> </note></p>
     #[serde(rename = "RootAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_access: Option<String>,
+    pub root_access: Option<RootAccess>,
     /// <p>The IDs of the VPC security groups.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5273,7 +9683,7 @@ pub struct DescribePipelineExecutionResponse {
     /// <p>The status of the pipeline execution.</p>
     #[serde(rename = "PipelineExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_execution_status: Option<String>,
+    pub pipeline_execution_status: Option<PipelineExecutionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5328,7 +9738,7 @@ pub struct DescribePipelineResponse {
     /// <p>The status of the pipeline execution.</p>
     #[serde(rename = "PipelineStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_status: Option<String>,
+    pub pipeline_status: Option<PipelineStatus>,
     /// <p>The Amazon Resource Name (ARN) that the pipeline uses to execute.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5400,7 +9810,7 @@ pub struct DescribeProcessingJobResponse {
     pub processing_job_name: String,
     /// <p>Provides the status of a processing job.</p>
     #[serde(rename = "ProcessingJobStatus")]
-    pub processing_job_status: String,
+    pub processing_job_status: ProcessingJobStatus,
     /// <p>Output configuration for the processing job.</p>
     #[serde(rename = "ProcessingOutputConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5458,7 +9868,7 @@ pub struct DescribeProjectOutput {
     pub project_name: String,
     /// <p>The status of the project.</p>
     #[serde(rename = "ProjectStatus")]
-    pub project_status: String,
+    pub project_status: ProjectStatus,
     /// <p>Information about a provisioned service catalog product.</p>
     #[serde(rename = "ServiceCatalogProvisionedProductDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5584,7 +9994,7 @@ pub struct DescribeTrainingJobResponse {
     /// <p>Profiling status of a training job.</p>
     #[serde(rename = "ProfilingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profiling_status: Option<String>,
+    pub profiling_status: Option<ProfilingStatus>,
     /// <p>Resources, including ML compute instances and ML storage volumes, that are configured for model training. </p>
     #[serde(rename = "ResourceConfig")]
     pub resource_config: ResourceConfig,
@@ -5594,7 +10004,7 @@ pub struct DescribeTrainingJobResponse {
     pub role_arn: Option<String>,
     /// <p><p> Provides detailed information about the state of the training job. For detailed information on the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Interrupted</code> - The job stopped because the managed spot training instances were interrupted. </p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>MaxWaitTimeExceeded</code> - The job stopped because it exceeded the maximum allowed wait time.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "SecondaryStatus")]
-    pub secondary_status: String,
+    pub secondary_status: SecondaryStatus,
     /// <p>A history of all of the secondary statuses that the training job has transitioned through.</p>
     #[serde(rename = "SecondaryStatusTransitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5617,7 +10027,7 @@ pub struct DescribeTrainingJobResponse {
     pub training_job_name: String,
     /// <p>The status of the training job.</p> <p>Amazon SageMaker provides the following training job statuses:</p> <ul> <li> <p> <code>InProgress</code> - The training is in progress.</p> </li> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> <li> <p> <code>Failed</code> - The training job has failed. To see the reason for the failure, see the <code>FailureReason</code> field in the response to a <code>DescribeTrainingJobResponse</code> call.</p> </li> <li> <p> <code>Stopping</code> - The training job is stopping.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> <p>For more detailed information, see <code>SecondaryStatus</code>. </p>
     #[serde(rename = "TrainingJobStatus")]
-    pub training_job_status: String,
+    pub training_job_status: TrainingJobStatus,
     /// <p>Indicates the time when the training job starts on training instances. You are billed for the time interval between this time and the value of <code>TrainingEndTime</code>. The start time in CloudWatch Logs might be later than this time. The difference is due to the time it takes to download the training data and to the size of the training container.</p>
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5654,7 +10064,7 @@ pub struct DescribeTransformJobResponse {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set <code>SplitType</code> to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub batch_strategy: Option<String>,
+    pub batch_strategy: Option<BatchStrategy>,
     /// <p>A timestamp that shows when the transform Job was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -5706,7 +10116,7 @@ pub struct DescribeTransformJobResponse {
     pub transform_job_name: String,
     /// <p>The status of the transform job. If the transform job failed, the reason is returned in the <code>FailureReason</code> field.</p>
     #[serde(rename = "TransformJobStatus")]
-    pub transform_job_status: String,
+    pub transform_job_status: TransformJobStatus,
     /// <p>Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p>
     #[serde(rename = "TransformOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5893,7 +10303,7 @@ pub struct DescribeUserProfileResponse {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UserProfileStatus>,
     /// <p>The user profile Amazon Resource Name (ARN).</p>
     #[serde(rename = "UserProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5955,6 +10365,238 @@ pub struct DesiredWeightAndCapacity {
     /// <p>The name of the variant to update.</p>
     #[serde(rename = "VariantName")]
     pub variant_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetailedAlgorithmStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetailedAlgorithmStatus {
+    Completed,
+    Failed,
+    InProgress,
+    NotStarted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetailedAlgorithmStatus),
+}
+
+impl Default for DetailedAlgorithmStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetailedAlgorithmStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetailedAlgorithmStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetailedAlgorithmStatus {
+    fn into(self) -> String {
+        match self {
+            DetailedAlgorithmStatus::Completed => "Completed".to_string(),
+            DetailedAlgorithmStatus::Failed => "Failed".to_string(),
+            DetailedAlgorithmStatus::InProgress => "InProgress".to_string(),
+            DetailedAlgorithmStatus::NotStarted => "NotStarted".to_string(),
+            DetailedAlgorithmStatus::UnknownVariant(UnknownDetailedAlgorithmStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetailedAlgorithmStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DetailedAlgorithmStatus::Completed => &"Completed",
+            DetailedAlgorithmStatus::Failed => &"Failed",
+            DetailedAlgorithmStatus::InProgress => &"InProgress",
+            DetailedAlgorithmStatus::NotStarted => &"NotStarted",
+            DetailedAlgorithmStatus::UnknownVariant(UnknownDetailedAlgorithmStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetailedAlgorithmStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => DetailedAlgorithmStatus::Completed,
+            "Failed" => DetailedAlgorithmStatus::Failed,
+            "InProgress" => DetailedAlgorithmStatus::InProgress,
+            "NotStarted" => DetailedAlgorithmStatus::NotStarted,
+            _ => DetailedAlgorithmStatus::UnknownVariant(UnknownDetailedAlgorithmStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetailedAlgorithmStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => DetailedAlgorithmStatus::Completed,
+            "Failed" => DetailedAlgorithmStatus::Failed,
+            "InProgress" => DetailedAlgorithmStatus::InProgress,
+            "NotStarted" => DetailedAlgorithmStatus::NotStarted,
+            _ => DetailedAlgorithmStatus::UnknownVariant(UnknownDetailedAlgorithmStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetailedAlgorithmStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DetailedAlgorithmStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetailedAlgorithmStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDetailedModelPackageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DetailedModelPackageStatus {
+    Completed,
+    Failed,
+    InProgress,
+    NotStarted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDetailedModelPackageStatus),
+}
+
+impl Default for DetailedModelPackageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DetailedModelPackageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DetailedModelPackageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DetailedModelPackageStatus {
+    fn into(self) -> String {
+        match self {
+            DetailedModelPackageStatus::Completed => "Completed".to_string(),
+            DetailedModelPackageStatus::Failed => "Failed".to_string(),
+            DetailedModelPackageStatus::InProgress => "InProgress".to_string(),
+            DetailedModelPackageStatus::NotStarted => "NotStarted".to_string(),
+            DetailedModelPackageStatus::UnknownVariant(UnknownDetailedModelPackageStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DetailedModelPackageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DetailedModelPackageStatus::Completed => &"Completed",
+            DetailedModelPackageStatus::Failed => &"Failed",
+            DetailedModelPackageStatus::InProgress => &"InProgress",
+            DetailedModelPackageStatus::NotStarted => &"NotStarted",
+            DetailedModelPackageStatus::UnknownVariant(UnknownDetailedModelPackageStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DetailedModelPackageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => DetailedModelPackageStatus::Completed,
+            "Failed" => DetailedModelPackageStatus::Failed,
+            "InProgress" => DetailedModelPackageStatus::InProgress,
+            "NotStarted" => DetailedModelPackageStatus::NotStarted,
+            _ => DetailedModelPackageStatus::UnknownVariant(UnknownDetailedModelPackageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DetailedModelPackageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => DetailedModelPackageStatus::Completed,
+            "Failed" => DetailedModelPackageStatus::Failed,
+            "InProgress" => DetailedModelPackageStatus::InProgress,
+            "NotStarted" => DetailedModelPackageStatus::NotStarted,
+            _ => DetailedModelPackageStatus::UnknownVariant(UnknownDetailedModelPackageStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DetailedModelPackageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DetailedModelPackageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DetailedModelPackageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information of a particular device.</p>
@@ -6042,6 +10684,110 @@ pub struct DeviceSummary {
     pub registration_time: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectInternetAccess {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectInternetAccess {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectInternetAccess),
+}
+
+impl Default for DirectInternetAccess {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectInternetAccess {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectInternetAccess {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectInternetAccess {
+    fn into(self) -> String {
+        match self {
+            DirectInternetAccess::Disabled => "Disabled".to_string(),
+            DirectInternetAccess::Enabled => "Enabled".to_string(),
+            DirectInternetAccess::UnknownVariant(UnknownDirectInternetAccess {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectInternetAccess {
+    fn into(self) -> &'a str {
+        match self {
+            DirectInternetAccess::Disabled => &"Disabled",
+            DirectInternetAccess::Enabled => &"Enabled",
+            DirectInternetAccess::UnknownVariant(UnknownDirectInternetAccess {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectInternetAccess {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => DirectInternetAccess::Disabled,
+            "Enabled" => DirectInternetAccess::Enabled,
+            _ => DirectInternetAccess::UnknownVariant(UnknownDirectInternetAccess {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectInternetAccess {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => DirectInternetAccess::Disabled,
+            "Enabled" => DirectInternetAccess::Enabled,
+            _ => DirectInternetAccess::UnknownVariant(UnknownDirectInternetAccess { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectInternetAccess {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DirectInternetAccess {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectInternetAccess {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableSagemakerServicecatalogPortfolioInput {}
@@ -6101,11 +10847,137 @@ pub struct DomainDetails {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DomainStatus>,
     /// <p>The domain's URL.</p>
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainStatus {
+    DeleteFailed,
+    Deleting,
+    Failed,
+    InService,
+    Pending,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainStatus),
+}
+
+impl Default for DomainStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainStatus {
+    fn into(self) -> String {
+        match self {
+            DomainStatus::DeleteFailed => "Delete_Failed".to_string(),
+            DomainStatus::Deleting => "Deleting".to_string(),
+            DomainStatus::Failed => "Failed".to_string(),
+            DomainStatus::InService => "InService".to_string(),
+            DomainStatus::Pending => "Pending".to_string(),
+            DomainStatus::UpdateFailed => "Update_Failed".to_string(),
+            DomainStatus::Updating => "Updating".to_string(),
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainStatus::DeleteFailed => &"Delete_Failed",
+            DomainStatus::Deleting => &"Deleting",
+            DomainStatus::Failed => &"Failed",
+            DomainStatus::InService => &"InService",
+            DomainStatus::Pending => &"Pending",
+            DomainStatus::UpdateFailed => &"Update_Failed",
+            DomainStatus::Updating => &"Updating",
+            DomainStatus::UnknownVariant(UnknownDomainStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DomainStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Delete_Failed" => DomainStatus::DeleteFailed,
+            "Deleting" => DomainStatus::Deleting,
+            "Failed" => DomainStatus::Failed,
+            "InService" => DomainStatus::InService,
+            "Pending" => DomainStatus::Pending,
+            "Update_Failed" => DomainStatus::UpdateFailed,
+            "Updating" => DomainStatus::Updating,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Delete_Failed" => DomainStatus::DeleteFailed,
+            "Deleting" => DomainStatus::Deleting,
+            "Failed" => DomainStatus::Failed,
+            "InService" => DomainStatus::InService,
+            "Pending" => DomainStatus::Pending,
+            "Update_Failed" => DomainStatus::UpdateFailed,
+            "Updating" => DomainStatus::Updating,
+            _ => DomainStatus::UnknownVariant(UnknownDomainStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The model on the edge device.</p>
@@ -6176,6 +11048,130 @@ pub struct EdgeOutputConfig {
     pub s3_output_location: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEdgePackagingJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EdgePackagingJobStatus {
+    Completed,
+    Failed,
+    Inprogress,
+    Starting,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEdgePackagingJobStatus),
+}
+
+impl Default for EdgePackagingJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EdgePackagingJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EdgePackagingJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EdgePackagingJobStatus {
+    fn into(self) -> String {
+        match self {
+            EdgePackagingJobStatus::Completed => "COMPLETED".to_string(),
+            EdgePackagingJobStatus::Failed => "FAILED".to_string(),
+            EdgePackagingJobStatus::Inprogress => "INPROGRESS".to_string(),
+            EdgePackagingJobStatus::Starting => "STARTING".to_string(),
+            EdgePackagingJobStatus::Stopped => "STOPPED".to_string(),
+            EdgePackagingJobStatus::Stopping => "STOPPING".to_string(),
+            EdgePackagingJobStatus::UnknownVariant(UnknownEdgePackagingJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EdgePackagingJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EdgePackagingJobStatus::Completed => &"COMPLETED",
+            EdgePackagingJobStatus::Failed => &"FAILED",
+            EdgePackagingJobStatus::Inprogress => &"INPROGRESS",
+            EdgePackagingJobStatus::Starting => &"STARTING",
+            EdgePackagingJobStatus::Stopped => &"STOPPED",
+            EdgePackagingJobStatus::Stopping => &"STOPPING",
+            EdgePackagingJobStatus::UnknownVariant(UnknownEdgePackagingJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EdgePackagingJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => EdgePackagingJobStatus::Completed,
+            "FAILED" => EdgePackagingJobStatus::Failed,
+            "INPROGRESS" => EdgePackagingJobStatus::Inprogress,
+            "STARTING" => EdgePackagingJobStatus::Starting,
+            "STOPPED" => EdgePackagingJobStatus::Stopped,
+            "STOPPING" => EdgePackagingJobStatus::Stopping,
+            _ => EdgePackagingJobStatus::UnknownVariant(UnknownEdgePackagingJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EdgePackagingJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => EdgePackagingJobStatus::Completed,
+            "FAILED" => EdgePackagingJobStatus::Failed,
+            "INPROGRESS" => EdgePackagingJobStatus::Inprogress,
+            "STARTING" => EdgePackagingJobStatus::Starting,
+            "STOPPED" => EdgePackagingJobStatus::Stopped,
+            "STOPPING" => EdgePackagingJobStatus::Stopping,
+            _ => EdgePackagingJobStatus::UnknownVariant(UnknownEdgePackagingJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EdgePackagingJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EdgePackagingJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EdgePackagingJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Summary of edge packaging job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6196,7 +11192,7 @@ pub struct EdgePackagingJobSummary {
     pub edge_packaging_job_name: String,
     /// <p>The status of the edge packaging job.</p>
     #[serde(rename = "EdgePackagingJobStatus")]
-    pub edge_packaging_job_status: String,
+    pub edge_packaging_job_status: EdgePackagingJobStatus,
     /// <p>The timestamp of when the edge packaging job was last updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6240,7 +11236,7 @@ pub struct Endpoint {
     pub endpoint_name: String,
     /// <p>The status of the endpoint.</p>
     #[serde(rename = "EndpointStatus")]
-    pub endpoint_status: String,
+    pub endpoint_status: EndpointStatus,
     /// <p>If the endpoint failed, the reason it failed.</p>
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6260,6 +11256,111 @@ pub struct Endpoint {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointConfigSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointConfigSortKey {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointConfigSortKey),
+}
+
+impl Default for EndpointConfigSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointConfigSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointConfigSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointConfigSortKey {
+    fn into(self) -> String {
+        match self {
+            EndpointConfigSortKey::CreationTime => "CreationTime".to_string(),
+            EndpointConfigSortKey::Name => "Name".to_string(),
+            EndpointConfigSortKey::UnknownVariant(UnknownEndpointConfigSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointConfigSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointConfigSortKey::CreationTime => &"CreationTime",
+            EndpointConfigSortKey::Name => &"Name",
+            EndpointConfigSortKey::UnknownVariant(UnknownEndpointConfigSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointConfigSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => EndpointConfigSortKey::CreationTime,
+            "Name" => EndpointConfigSortKey::Name,
+            _ => EndpointConfigSortKey::UnknownVariant(UnknownEndpointConfigSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointConfigSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => EndpointConfigSortKey::CreationTime,
+            "Name" => EndpointConfigSortKey::Name,
+            _ => EndpointConfigSortKey::UnknownVariant(UnknownEndpointConfigSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointConfigSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointConfigSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EndpointConfigSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides summary information for an endpoint configuration.</p>
@@ -6309,15 +11410,251 @@ pub struct EndpointInput {
     /// <p>Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to <code>FullyReplicated</code> </p>
     #[serde(rename = "S3DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_data_distribution_type: Option<String>,
+    pub s3_data_distribution_type: Option<ProcessingS3DataDistributionType>,
     /// <p>Whether the <code>Pipe</code> or <code>File</code> is used as the input mode for transfering data for the monitoring job. <code>Pipe</code> mode is recommended for large datasets. <code>File</code> mode is useful for small files that fit in memory. Defaults to <code>File</code>.</p>
     #[serde(rename = "S3InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_input_mode: Option<String>,
+    pub s3_input_mode: Option<ProcessingS3InputMode>,
     /// <p>If specified, monitoring jobs substract this time from the start time. For information about using offsets for scheduling monitoring jobs, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html">Schedule Model Quality Monitoring Jobs</a>.</p>
     #[serde(rename = "StartTimeOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time_offset: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointSortKey {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointSortKey),
+}
+
+impl Default for EndpointSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointSortKey {
+    fn into(self) -> String {
+        match self {
+            EndpointSortKey::CreationTime => "CreationTime".to_string(),
+            EndpointSortKey::Name => "Name".to_string(),
+            EndpointSortKey::Status => "Status".to_string(),
+            EndpointSortKey::UnknownVariant(UnknownEndpointSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointSortKey::CreationTime => &"CreationTime",
+            EndpointSortKey::Name => &"Name",
+            EndpointSortKey::Status => &"Status",
+            EndpointSortKey::UnknownVariant(UnknownEndpointSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => EndpointSortKey::CreationTime,
+            "Name" => EndpointSortKey::Name,
+            "Status" => EndpointSortKey::Status,
+            _ => EndpointSortKey::UnknownVariant(UnknownEndpointSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => EndpointSortKey::CreationTime,
+            "Name" => EndpointSortKey::Name,
+            "Status" => EndpointSortKey::Status,
+            _ => EndpointSortKey::UnknownVariant(UnknownEndpointSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EndpointSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointStatus {
+    Creating,
+    Deleting,
+    Failed,
+    InService,
+    OutOfService,
+    RollingBack,
+    SystemUpdating,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointStatus),
+}
+
+impl Default for EndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointStatus {
+    fn into(self) -> String {
+        match self {
+            EndpointStatus::Creating => "Creating".to_string(),
+            EndpointStatus::Deleting => "Deleting".to_string(),
+            EndpointStatus::Failed => "Failed".to_string(),
+            EndpointStatus::InService => "InService".to_string(),
+            EndpointStatus::OutOfService => "OutOfService".to_string(),
+            EndpointStatus::RollingBack => "RollingBack".to_string(),
+            EndpointStatus::SystemUpdating => "SystemUpdating".to_string(),
+            EndpointStatus::Updating => "Updating".to_string(),
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointStatus::Creating => &"Creating",
+            EndpointStatus::Deleting => &"Deleting",
+            EndpointStatus::Failed => &"Failed",
+            EndpointStatus::InService => &"InService",
+            EndpointStatus::OutOfService => &"OutOfService",
+            EndpointStatus::RollingBack => &"RollingBack",
+            EndpointStatus::SystemUpdating => &"SystemUpdating",
+            EndpointStatus::Updating => &"Updating",
+            EndpointStatus::UnknownVariant(UnknownEndpointStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Creating" => EndpointStatus::Creating,
+            "Deleting" => EndpointStatus::Deleting,
+            "Failed" => EndpointStatus::Failed,
+            "InService" => EndpointStatus::InService,
+            "OutOfService" => EndpointStatus::OutOfService,
+            "RollingBack" => EndpointStatus::RollingBack,
+            "SystemUpdating" => EndpointStatus::SystemUpdating,
+            "Updating" => EndpointStatus::Updating,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Creating" => EndpointStatus::Creating,
+            "Deleting" => EndpointStatus::Deleting,
+            "Failed" => EndpointStatus::Failed,
+            "InService" => EndpointStatus::InService,
+            "OutOfService" => EndpointStatus::OutOfService,
+            "RollingBack" => EndpointStatus::RollingBack,
+            "SystemUpdating" => EndpointStatus::SystemUpdating,
+            "Updating" => EndpointStatus::Updating,
+            _ => EndpointStatus::UnknownVariant(UnknownEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides summary information for an endpoint.</p>
@@ -6335,10 +11672,135 @@ pub struct EndpointSummary {
     pub endpoint_name: String,
     /// <p>The status of the endpoint.</p> <ul> <li> <p> <code>OutOfService</code>: Endpoint is not available to take incoming requests.</p> </li> <li> <p> <code>Creating</code>: <a>CreateEndpoint</a> is executing.</p> </li> <li> <p> <code>Updating</code>: <a>UpdateEndpoint</a> or <a>UpdateEndpointWeightsAndCapacities</a> is executing.</p> </li> <li> <p> <code>SystemUpdating</code>: Endpoint is undergoing maintenance and cannot be updated or deleted or re-scaled until it has completed. This maintenance operation does not change any customer-specified values such as VPC config, KMS encryption, model, instance type, or instance count.</p> </li> <li> <p> <code>RollingBack</code>: Endpoint fails to scale up or down or change its variant weight and is in the process of rolling back to its previous configuration. Once the rollback completes, endpoint returns to an <code>InService</code> status. This transitional status only applies to an endpoint that has autoscaling enabled and is undergoing variant weight or capacity changes as part of an <a>UpdateEndpointWeightsAndCapacities</a> call or when the <a>UpdateEndpointWeightsAndCapacities</a> operation is called explicitly.</p> </li> <li> <p> <code>InService</code>: Endpoint is available to process incoming requests.</p> </li> <li> <p> <code>Deleting</code>: <a>DeleteEndpoint</a> is executing.</p> </li> <li> <p> <code>Failed</code>: Endpoint could not be created, updated, or re-scaled. Use <a>DescribeEndpointOutput$FailureReason</a> for information about the failure. <a>DeleteEndpoint</a> is the only operation that can be performed on a failed endpoint.</p> </li> </ul> <p>To get a list of endpoints with a specified status, use the <a>ListEndpointsInput$StatusEquals</a> filter.</p>
     #[serde(rename = "EndpointStatus")]
-    pub endpoint_status: String,
+    pub endpoint_status: EndpointStatus,
     /// <p>A timestamp that shows when the endpoint was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExecutionStatus {
+    Completed,
+    CompletedWithViolations,
+    Failed,
+    InProgress,
+    Pending,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExecutionStatus),
+}
+
+impl Default for ExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            ExecutionStatus::Completed => "Completed".to_string(),
+            ExecutionStatus::CompletedWithViolations => "CompletedWithViolations".to_string(),
+            ExecutionStatus::Failed => "Failed".to_string(),
+            ExecutionStatus::InProgress => "InProgress".to_string(),
+            ExecutionStatus::Pending => "Pending".to_string(),
+            ExecutionStatus::Stopped => "Stopped".to_string(),
+            ExecutionStatus::Stopping => "Stopping".to_string(),
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExecutionStatus::Completed => &"Completed",
+            ExecutionStatus::CompletedWithViolations => &"CompletedWithViolations",
+            ExecutionStatus::Failed => &"Failed",
+            ExecutionStatus::InProgress => &"InProgress",
+            ExecutionStatus::Pending => &"Pending",
+            ExecutionStatus::Stopped => &"Stopped",
+            ExecutionStatus::Stopping => &"Stopping",
+            ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ExecutionStatus::Completed,
+            "CompletedWithViolations" => ExecutionStatus::CompletedWithViolations,
+            "Failed" => ExecutionStatus::Failed,
+            "InProgress" => ExecutionStatus::InProgress,
+            "Pending" => ExecutionStatus::Pending,
+            "Stopped" => ExecutionStatus::Stopped,
+            "Stopping" => ExecutionStatus::Stopping,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ExecutionStatus::Completed,
+            "CompletedWithViolations" => ExecutionStatus::CompletedWithViolations,
+            "Failed" => ExecutionStatus::Failed,
+            "InProgress" => ExecutionStatus::InProgress,
+            "Pending" => ExecutionStatus::Pending,
+            "Stopped" => ExecutionStatus::Stopped,
+            "Stopping" => ExecutionStatus::Stopping,
+            _ => ExecutionStatus::UnknownVariant(UnknownExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The properties of an experiment as returned by the <a>Search</a> API.</p>
@@ -6462,7 +11924,7 @@ pub struct FeatureDefinition {
     /// <p>The value type of a feature. Valid values are Integral, Fractional, or String.</p>
     #[serde(rename = "FeatureType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_type: Option<String>,
+    pub feature_type: Option<FeatureType>,
 }
 
 /// <p>Amazon SageMaker Feature Store stores features in a collection called Feature Group. A Feature Group can be visualized as a table which has rows, with a unique identifier for each row where each column in the table is a feature. In principle, a Feature Group is composed of features and values per features.</p>
@@ -6500,7 +11962,7 @@ pub struct FeatureGroup {
     /// <p>A <code>FeatureGroup</code> status.</p>
     #[serde(rename = "FeatureGroupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_group_status: Option<String>,
+    pub feature_group_status: Option<FeatureGroupStatus>,
     #[serde(rename = "OfflineStoreConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offline_store_config: Option<OfflineStoreConfig>,
@@ -6524,6 +11986,345 @@ pub struct FeatureGroup {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureGroupSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureGroupSortBy {
+    CreationTime,
+    FeatureGroupStatus,
+    Name,
+    OfflineStoreStatus,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureGroupSortBy),
+}
+
+impl Default for FeatureGroupSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureGroupSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureGroupSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureGroupSortBy {
+    fn into(self) -> String {
+        match self {
+            FeatureGroupSortBy::CreationTime => "CreationTime".to_string(),
+            FeatureGroupSortBy::FeatureGroupStatus => "FeatureGroupStatus".to_string(),
+            FeatureGroupSortBy::Name => "Name".to_string(),
+            FeatureGroupSortBy::OfflineStoreStatus => "OfflineStoreStatus".to_string(),
+            FeatureGroupSortBy::UnknownVariant(UnknownFeatureGroupSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureGroupSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureGroupSortBy::CreationTime => &"CreationTime",
+            FeatureGroupSortBy::FeatureGroupStatus => &"FeatureGroupStatus",
+            FeatureGroupSortBy::Name => &"Name",
+            FeatureGroupSortBy::OfflineStoreStatus => &"OfflineStoreStatus",
+            FeatureGroupSortBy::UnknownVariant(UnknownFeatureGroupSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FeatureGroupSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => FeatureGroupSortBy::CreationTime,
+            "FeatureGroupStatus" => FeatureGroupSortBy::FeatureGroupStatus,
+            "Name" => FeatureGroupSortBy::Name,
+            "OfflineStoreStatus" => FeatureGroupSortBy::OfflineStoreStatus,
+            _ => FeatureGroupSortBy::UnknownVariant(UnknownFeatureGroupSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeatureGroupSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => FeatureGroupSortBy::CreationTime,
+            "FeatureGroupStatus" => FeatureGroupSortBy::FeatureGroupStatus,
+            "Name" => FeatureGroupSortBy::Name,
+            "OfflineStoreStatus" => FeatureGroupSortBy::OfflineStoreStatus,
+            _ => FeatureGroupSortBy::UnknownVariant(UnknownFeatureGroupSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureGroupSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureGroupSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FeatureGroupSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureGroupSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureGroupSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureGroupSortOrder),
+}
+
+impl Default for FeatureGroupSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureGroupSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureGroupSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureGroupSortOrder {
+    fn into(self) -> String {
+        match self {
+            FeatureGroupSortOrder::Ascending => "Ascending".to_string(),
+            FeatureGroupSortOrder::Descending => "Descending".to_string(),
+            FeatureGroupSortOrder::UnknownVariant(UnknownFeatureGroupSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureGroupSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureGroupSortOrder::Ascending => &"Ascending",
+            FeatureGroupSortOrder::Descending => &"Descending",
+            FeatureGroupSortOrder::UnknownVariant(UnknownFeatureGroupSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeatureGroupSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => FeatureGroupSortOrder::Ascending,
+            "Descending" => FeatureGroupSortOrder::Descending,
+            _ => FeatureGroupSortOrder::UnknownVariant(UnknownFeatureGroupSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeatureGroupSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => FeatureGroupSortOrder::Ascending,
+            "Descending" => FeatureGroupSortOrder::Descending,
+            _ => FeatureGroupSortOrder::UnknownVariant(UnknownFeatureGroupSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureGroupSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureGroupSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FeatureGroupSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureGroupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureGroupStatus {
+    CreateFailed,
+    Created,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureGroupStatus),
+}
+
+impl Default for FeatureGroupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureGroupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureGroupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureGroupStatus {
+    fn into(self) -> String {
+        match self {
+            FeatureGroupStatus::CreateFailed => "CreateFailed".to_string(),
+            FeatureGroupStatus::Created => "Created".to_string(),
+            FeatureGroupStatus::Creating => "Creating".to_string(),
+            FeatureGroupStatus::DeleteFailed => "DeleteFailed".to_string(),
+            FeatureGroupStatus::Deleting => "Deleting".to_string(),
+            FeatureGroupStatus::UnknownVariant(UnknownFeatureGroupStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureGroupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureGroupStatus::CreateFailed => &"CreateFailed",
+            FeatureGroupStatus::Created => &"Created",
+            FeatureGroupStatus::Creating => &"Creating",
+            FeatureGroupStatus::DeleteFailed => &"DeleteFailed",
+            FeatureGroupStatus::Deleting => &"Deleting",
+            FeatureGroupStatus::UnknownVariant(UnknownFeatureGroupStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FeatureGroupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreateFailed" => FeatureGroupStatus::CreateFailed,
+            "Created" => FeatureGroupStatus::Created,
+            "Creating" => FeatureGroupStatus::Creating,
+            "DeleteFailed" => FeatureGroupStatus::DeleteFailed,
+            "Deleting" => FeatureGroupStatus::Deleting,
+            _ => FeatureGroupStatus::UnknownVariant(UnknownFeatureGroupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeatureGroupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreateFailed" => FeatureGroupStatus::CreateFailed,
+            "Created" => FeatureGroupStatus::Created,
+            "Creating" => FeatureGroupStatus::Creating,
+            "DeleteFailed" => FeatureGroupStatus::DeleteFailed,
+            "Deleting" => FeatureGroupStatus::Deleting,
+            _ => FeatureGroupStatus::UnknownVariant(UnknownFeatureGroupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureGroupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureGroupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeatureGroupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The name, Arn, <code>CreationTime</code>, <code>FeatureGroup</code> values, <code>LastUpdatedTime</code> and <code>EnableOnlineStorage</code> status of a <code>FeatureGroup</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6540,11 +12341,220 @@ pub struct FeatureGroupSummary {
     /// <p>The status of a FeatureGroup. The status can be any of the following: <code>Creating</code>, <code>Created</code>, <code>CreateFail</code>, <code>Deleting</code> or <code>DetailFail</code>. </p>
     #[serde(rename = "FeatureGroupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_group_status: Option<String>,
+    pub feature_group_status: Option<FeatureGroupStatus>,
     /// <p>Notifies you if replicating data into the <code>OfflineStore</code> has failed. Returns either: <code>Active</code> or <code>Blocked</code>.</p>
     #[serde(rename = "OfflineStoreStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offline_store_status: Option<OfflineStoreStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeatureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeatureType {
+    Fractional,
+    Integral,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeatureType),
+}
+
+impl Default for FeatureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeatureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeatureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeatureType {
+    fn into(self) -> String {
+        match self {
+            FeatureType::Fractional => "Fractional".to_string(),
+            FeatureType::Integral => "Integral".to_string(),
+            FeatureType::String => "String".to_string(),
+            FeatureType::UnknownVariant(UnknownFeatureType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeatureType {
+    fn into(self) -> &'a str {
+        match self {
+            FeatureType::Fractional => &"Fractional",
+            FeatureType::Integral => &"Integral",
+            FeatureType::String => &"String",
+            FeatureType::UnknownVariant(UnknownFeatureType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeatureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Fractional" => FeatureType::Fractional,
+            "Integral" => FeatureType::Integral,
+            "String" => FeatureType::String,
+            _ => FeatureType::UnknownVariant(UnknownFeatureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeatureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Fractional" => FeatureType::Fractional,
+            "Integral" => FeatureType::Integral,
+            "String" => FeatureType::String,
+            _ => FeatureType::UnknownVariant(UnknownFeatureType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeatureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeatureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeatureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemAccessMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemAccessMode {
+    Ro,
+    Rw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemAccessMode),
+}
+
+impl Default for FileSystemAccessMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemAccessMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemAccessMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemAccessMode {
+    fn into(self) -> String {
+        match self {
+            FileSystemAccessMode::Ro => "ro".to_string(),
+            FileSystemAccessMode::Rw => "rw".to_string(),
+            FileSystemAccessMode::UnknownVariant(UnknownFileSystemAccessMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemAccessMode {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemAccessMode::Ro => &"ro",
+            FileSystemAccessMode::Rw => &"rw",
+            FileSystemAccessMode::UnknownVariant(UnknownFileSystemAccessMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileSystemAccessMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ro" => FileSystemAccessMode::Ro,
+            "rw" => FileSystemAccessMode::Rw,
+            _ => FileSystemAccessMode::UnknownVariant(UnknownFileSystemAccessMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileSystemAccessMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ro" => FileSystemAccessMode::Ro,
+            "rw" => FileSystemAccessMode::Rw,
+            _ => FileSystemAccessMode::UnknownVariant(UnknownFileSystemAccessMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemAccessMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileSystemAccessMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemAccessMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon Elastic File System (EFS) storage configuration for a SageMaker image.</p>
@@ -6572,13 +12582,113 @@ pub struct FileSystemDataSource {
     pub directory_path: String,
     /// <p>The access mode of the mount of the directory associated with the channel. A directory can be mounted either in <code>ro</code> (read-only) or <code>rw</code> (read-write) mode.</p>
     #[serde(rename = "FileSystemAccessMode")]
-    pub file_system_access_mode: String,
+    pub file_system_access_mode: FileSystemAccessMode,
     /// <p>The file system id.</p>
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
     /// <p>The file system type. </p>
     #[serde(rename = "FileSystemType")]
-    pub file_system_type: String,
+    pub file_system_type: FileSystemType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemType {
+    Efs,
+    FsxLustre,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemType),
+}
+
+impl Default for FileSystemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemType {
+    fn into(self) -> String {
+        match self {
+            FileSystemType::Efs => "EFS".to_string(),
+            FileSystemType::FsxLustre => "FSxLustre".to_string(),
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemType {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemType::Efs => &"EFS",
+            FileSystemType::FsxLustre => &"FSxLustre",
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileSystemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EFS" => FileSystemType::Efs,
+            "FSxLustre" => FileSystemType::FsxLustre,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileSystemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EFS" => FileSystemType::Efs,
+            "FSxLustre" => FileSystemType::FsxLustre,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileSystemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>A conditional statement for a search expression that includes a resource property, a Boolean operator, and a value. Resources that match the statement are returned in the results from the <a>Search</a> API.</p> <p>If you specify a <code>Value</code>, but not an <code>Operator</code>, Amazon SageMaker uses the equals operator.</p> <p>In search, there are several property types:</p> <dl> <dt>Metrics</dt> <dd> <p>To define a metric filter, enter a value using the form <code>&quot;Metrics.&lt;name&gt;&quot;</code>, where <code>&lt;name&gt;</code> is a metric name. For example, the following filter searches for training jobs with an <code>&quot;accuracy&quot;</code> metric greater than <code>&quot;0.9&quot;</code>:</p> <p> <code>{</code> </p> <p> <code>&quot;Name&quot;: &quot;Metrics.accuracy&quot;,</code> </p> <p> <code>&quot;Operator&quot;: &quot;GreaterThan&quot;,</code> </p> <p> <code>&quot;Value&quot;: &quot;0.9&quot;</code> </p> <p> <code>}</code> </p> </dd> <dt>HyperParameters</dt> <dd> <p>To define a hyperparameter filter, enter a value with the form <code>&quot;HyperParameters.&lt;name&gt;&quot;</code>. Decimal hyperparameter values are treated as a decimal in a comparison if the specified <code>Value</code> is also a decimal value. If the specified <code>Value</code> is an integer, the decimal hyperparameter values are treated as integers. For example, the following filter is satisfied by training jobs with a <code>&quot;learning<em>rate&quot;</code> hyperparameter that is less than <code>&quot;0.5&quot;</code>:</p> <p> <code> {</code> </p> <p> <code> &quot;Name&quot;: &quot;HyperParameters.learning</em>rate&quot;,</code> </p> <p> <code> &quot;Operator&quot;: &quot;LessThan&quot;,</code> </p> <p> <code> &quot;Value&quot;: &quot;0.5&quot;</code> </p> <p> <code> }</code> </p> </dd> <dt>Tags</dt> <dd> <p>To define a tag filter, enter a value with the form <code>Tags.&lt;key&gt;</code>.</p> </dd> </dl></p>
@@ -6591,7 +12701,7 @@ pub struct Filter {
     /// <p><p>A Boolean binary operator that is used to evaluate the filter. The operator field contains one of the following values:</p> <dl> <dt>Equals</dt> <dd> <p>The value of <code>Name</code> equals <code>Value</code>.</p> </dd> <dt>NotEquals</dt> <dd> <p>The value of <code>Name</code> doesn&#39;t equal <code>Value</code>.</p> </dd> <dt>Exists</dt> <dd> <p>The <code>Name</code> property exists.</p> </dd> <dt>NotExists</dt> <dd> <p>The <code>Name</code> property does not exist.</p> </dd> <dt>GreaterThan</dt> <dd> <p>The value of <code>Name</code> is greater than <code>Value</code>. Not supported for text properties.</p> </dd> <dt>GreaterThanOrEqualTo</dt> <dd> <p>The value of <code>Name</code> is greater than or equal to <code>Value</code>. Not supported for text properties.</p> </dd> <dt>LessThan</dt> <dd> <p>The value of <code>Name</code> is less than <code>Value</code>. Not supported for text properties.</p> </dd> <dt>LessThanOrEqualTo</dt> <dd> <p>The value of <code>Name</code> is less than or equal to <code>Value</code>. Not supported for text properties.</p> </dd> <dt>In</dt> <dd> <p>The value of <code>Name</code> is one of the comma delimited strings in <code>Value</code>. Only supported for text properties.</p> </dd> <dt>Contains</dt> <dd> <p>The value of <code>Name</code> contains the string <code>Value</code>. Only supported for text properties.</p> <p>A <code>SearchExpression</code> can include the <code>Contains</code> operator multiple times when the value of <code>Name</code> is one of the following:</p> <ul> <li> <p> <code>Experiment.DisplayName</code> </p> </li> <li> <p> <code>Experiment.ExperimentName</code> </p> </li> <li> <p> <code>Experiment.Tags</code> </p> </li> <li> <p> <code>Trial.DisplayName</code> </p> </li> <li> <p> <code>Trial.TrialName</code> </p> </li> <li> <p> <code>Trial.Tags</code> </p> </li> <li> <p> <code>TrialComponent.DisplayName</code> </p> </li> <li> <p> <code>TrialComponent.TrialComponentName</code> </p> </li> <li> <p> <code>TrialComponent.Tags</code> </p> </li> <li> <p> <code>TrialComponent.InputArtifacts</code> </p> </li> <li> <p> <code>TrialComponent.OutputArtifacts</code> </p> </li> </ul> <p>A <code>SearchExpression</code> can include only one <code>Contains</code> operator for all other values of <code>Name</code>. In these cases, if you include multiple <code>Contains</code> operators in the <code>SearchExpression</code>, the result is the following error message: &quot;<code>&#39;CONTAINS&#39; operator usage limit of 1 exceeded.</code>&quot;</p> </dd> </dl></p>
     #[serde(rename = "Operator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operator: Option<String>,
+    pub operator: Option<Operator>,
     /// <p>A value used with <code>Name</code> and <code>Operator</code> to determine which resources satisfy the filter's condition. For numerical properties, <code>Value</code> must be an integer or floating-point decimal. For timestamp properties, <code>Value</code> must be an ISO 8601 date-time string of the following format: <code>YYYY-mm-dd'T'HH:MM:SS</code>.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6604,11 +12714,11 @@ pub struct Filter {
 pub struct FinalAutoMLJobObjectiveMetric {
     /// <p>The name of the metric with the best result. For a description of the possible objective metrics, see <a>AutoMLJobObjective$MetricName</a>.</p>
     #[serde(rename = "MetricName")]
-    pub metric_name: String,
+    pub metric_name: AutoMLMetricEnum,
     /// <p>The type of metric with the best result.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<AutoMLJobObjectiveType>,
     /// <p>The value of the metric with the best result.</p>
     #[serde(rename = "Value")]
     pub value: f32,
@@ -6624,7 +12734,7 @@ pub struct FinalHyperParameterTuningJobObjectiveMetric {
     /// <p>Whether to minimize or maximize the objective metric. Valid values are Minimize and Maximize.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<HyperParameterTuningJobObjectiveType>,
     /// <p>The value of the objective metric.</p>
     #[serde(rename = "Value")]
     pub value: f32,
@@ -6640,6 +12750,121 @@ pub struct FlowDefinitionOutputConfig {
     /// <p>The Amazon S3 path where the object containing human output will be made available.</p>
     #[serde(rename = "S3OutputPath")]
     pub s3_output_path: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFlowDefinitionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FlowDefinitionStatus {
+    Active,
+    Deleting,
+    Failed,
+    Initializing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFlowDefinitionStatus),
+}
+
+impl Default for FlowDefinitionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FlowDefinitionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FlowDefinitionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FlowDefinitionStatus {
+    fn into(self) -> String {
+        match self {
+            FlowDefinitionStatus::Active => "Active".to_string(),
+            FlowDefinitionStatus::Deleting => "Deleting".to_string(),
+            FlowDefinitionStatus::Failed => "Failed".to_string(),
+            FlowDefinitionStatus::Initializing => "Initializing".to_string(),
+            FlowDefinitionStatus::UnknownVariant(UnknownFlowDefinitionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FlowDefinitionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FlowDefinitionStatus::Active => &"Active",
+            FlowDefinitionStatus::Deleting => &"Deleting",
+            FlowDefinitionStatus::Failed => &"Failed",
+            FlowDefinitionStatus::Initializing => &"Initializing",
+            FlowDefinitionStatus::UnknownVariant(UnknownFlowDefinitionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FlowDefinitionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => FlowDefinitionStatus::Active,
+            "Deleting" => FlowDefinitionStatus::Deleting,
+            "Failed" => FlowDefinitionStatus::Failed,
+            "Initializing" => FlowDefinitionStatus::Initializing,
+            _ => FlowDefinitionStatus::UnknownVariant(UnknownFlowDefinitionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FlowDefinitionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => FlowDefinitionStatus::Active,
+            "Deleting" => FlowDefinitionStatus::Deleting,
+            "Failed" => FlowDefinitionStatus::Failed,
+            "Initializing" => FlowDefinitionStatus::Initializing,
+            _ => FlowDefinitionStatus::UnknownVariant(UnknownFlowDefinitionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlowDefinitionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FlowDefinitionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FlowDefinitionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains summary information about the flow definition.</p>
@@ -6661,7 +12886,142 @@ pub struct FlowDefinitionSummary {
     pub flow_definition_name: String,
     /// <p>The status of the flow definition. Valid values:</p>
     #[serde(rename = "FlowDefinitionStatus")]
-    pub flow_definition_status: String,
+    pub flow_definition_status: FlowDefinitionStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFramework {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Framework {
+    Darknet,
+    Keras,
+    Mxnet,
+    Onnx,
+    Pytorch,
+    Sklearn,
+    Tensorflow,
+    Tflite,
+    Xgboost,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFramework),
+}
+
+impl Default for Framework {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Framework {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Framework {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Framework {
+    fn into(self) -> String {
+        match self {
+            Framework::Darknet => "DARKNET".to_string(),
+            Framework::Keras => "KERAS".to_string(),
+            Framework::Mxnet => "MXNET".to_string(),
+            Framework::Onnx => "ONNX".to_string(),
+            Framework::Pytorch => "PYTORCH".to_string(),
+            Framework::Sklearn => "SKLEARN".to_string(),
+            Framework::Tensorflow => "TENSORFLOW".to_string(),
+            Framework::Tflite => "TFLITE".to_string(),
+            Framework::Xgboost => "XGBOOST".to_string(),
+            Framework::UnknownVariant(UnknownFramework { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Framework {
+    fn into(self) -> &'a str {
+        match self {
+            Framework::Darknet => &"DARKNET",
+            Framework::Keras => &"KERAS",
+            Framework::Mxnet => &"MXNET",
+            Framework::Onnx => &"ONNX",
+            Framework::Pytorch => &"PYTORCH",
+            Framework::Sklearn => &"SKLEARN",
+            Framework::Tensorflow => &"TENSORFLOW",
+            Framework::Tflite => &"TFLITE",
+            Framework::Xgboost => &"XGBOOST",
+            Framework::UnknownVariant(UnknownFramework { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Framework {
+    fn from(name: &str) -> Self {
+        match name {
+            "DARKNET" => Framework::Darknet,
+            "KERAS" => Framework::Keras,
+            "MXNET" => Framework::Mxnet,
+            "ONNX" => Framework::Onnx,
+            "PYTORCH" => Framework::Pytorch,
+            "SKLEARN" => Framework::Sklearn,
+            "TENSORFLOW" => Framework::Tensorflow,
+            "TFLITE" => Framework::Tflite,
+            "XGBOOST" => Framework::Xgboost,
+            _ => Framework::UnknownVariant(UnknownFramework {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Framework {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DARKNET" => Framework::Darknet,
+            "KERAS" => Framework::Keras,
+            "MXNET" => Framework::Mxnet,
+            "ONNX" => Framework::Onnx,
+            "PYTORCH" => Framework::Pytorch,
+            "SKLEARN" => Framework::Sklearn,
+            "TENSORFLOW" => Framework::Tensorflow,
+            "TFLITE" => Framework::Tflite,
+            "XGBOOST" => Framework::Xgboost,
+            _ => Framework::UnknownVariant(UnknownFramework { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Framework {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Framework {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Framework {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -6733,7 +13093,7 @@ pub struct GetSagemakerServicecatalogPortfolioStatusOutput {
     /// <p>Whether Service Catalog is enabled or disabled in SageMaker.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SagemakerServicecatalogStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -6741,7 +13101,7 @@ pub struct GetSagemakerServicecatalogPortfolioStatusOutput {
 pub struct GetSearchSuggestionsRequest {
     /// <p>The name of the Amazon SageMaker resource to search for.</p>
     #[serde(rename = "Resource")]
-    pub resource: String,
+    pub resource: ResourceType,
     /// <p>Limits the property names that are included in the response.</p>
     #[serde(rename = "SuggestionQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6839,7 +13199,7 @@ pub struct HumanLoopConfig {
 pub struct HumanLoopRequestSource {
     /// <p>Specifies whether Amazon Rekognition or Amazon Textract are used as the integration source. The default field settings and JSON parsing rules are different based on the integration source. Valid values:</p>
     #[serde(rename = "AwsManagedHumanLoopRequestSource")]
-    pub aws_managed_human_loop_request_source: String,
+    pub aws_managed_human_loop_request_source: AwsManagedHumanLoopRequestSource,
 }
 
 /// <p>Information required for human workers to complete a labeling task.</p>
@@ -6887,6 +13247,111 @@ pub struct HumanTaskConfig {
     pub workteam_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHumanTaskUiStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HumanTaskUiStatus {
+    Active,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHumanTaskUiStatus),
+}
+
+impl Default for HumanTaskUiStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HumanTaskUiStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HumanTaskUiStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HumanTaskUiStatus {
+    fn into(self) -> String {
+        match self {
+            HumanTaskUiStatus::Active => "Active".to_string(),
+            HumanTaskUiStatus::Deleting => "Deleting".to_string(),
+            HumanTaskUiStatus::UnknownVariant(UnknownHumanTaskUiStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HumanTaskUiStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HumanTaskUiStatus::Active => &"Active",
+            HumanTaskUiStatus::Deleting => &"Deleting",
+            HumanTaskUiStatus::UnknownVariant(UnknownHumanTaskUiStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HumanTaskUiStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => HumanTaskUiStatus::Active,
+            "Deleting" => HumanTaskUiStatus::Deleting,
+            _ => HumanTaskUiStatus::UnknownVariant(UnknownHumanTaskUiStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HumanTaskUiStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => HumanTaskUiStatus::Active,
+            "Deleting" => HumanTaskUiStatus::Deleting,
+            _ => HumanTaskUiStatus::UnknownVariant(UnknownHumanTaskUiStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HumanTaskUiStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HumanTaskUiStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HumanTaskUiStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Container for human task user interface information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -6919,7 +13384,123 @@ pub struct HyperParameterAlgorithmSpecification {
     pub training_image: Option<String>,
     /// <p>The input mode that the algorithm supports: File or Pipe. In File input mode, Amazon SageMaker downloads the training data from Amazon S3 to the storage volume that is attached to the training instance and mounts the directory to the Docker volume for the training container. In Pipe input mode, Amazon SageMaker streams data directly from Amazon S3 to the container. </p> <p>If you specify File mode, make sure that you provision the storage volume that is attached to the training instance with enough capacity to accommodate the training data downloaded from Amazon S3, the model artifacts, and intermediate information.</p> <p/> <p>For more information about input modes, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p>
     #[serde(rename = "TrainingInputMode")]
-    pub training_input_mode: String,
+    pub training_input_mode: TrainingInputMode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterScalingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterScalingType {
+    Auto,
+    Linear,
+    Logarithmic,
+    ReverseLogarithmic,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterScalingType),
+}
+
+impl Default for HyperParameterScalingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterScalingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterScalingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterScalingType {
+    fn into(self) -> String {
+        match self {
+            HyperParameterScalingType::Auto => "Auto".to_string(),
+            HyperParameterScalingType::Linear => "Linear".to_string(),
+            HyperParameterScalingType::Logarithmic => "Logarithmic".to_string(),
+            HyperParameterScalingType::ReverseLogarithmic => "ReverseLogarithmic".to_string(),
+            HyperParameterScalingType::UnknownVariant(UnknownHyperParameterScalingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterScalingType {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterScalingType::Auto => &"Auto",
+            HyperParameterScalingType::Linear => &"Linear",
+            HyperParameterScalingType::Logarithmic => &"Logarithmic",
+            HyperParameterScalingType::ReverseLogarithmic => &"ReverseLogarithmic",
+            HyperParameterScalingType::UnknownVariant(UnknownHyperParameterScalingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterScalingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Auto" => HyperParameterScalingType::Auto,
+            "Linear" => HyperParameterScalingType::Linear,
+            "Logarithmic" => HyperParameterScalingType::Logarithmic,
+            "ReverseLogarithmic" => HyperParameterScalingType::ReverseLogarithmic,
+            _ => HyperParameterScalingType::UnknownVariant(UnknownHyperParameterScalingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HyperParameterScalingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Auto" => HyperParameterScalingType::Auto,
+            "Linear" => HyperParameterScalingType::Linear,
+            "Logarithmic" => HyperParameterScalingType::Logarithmic,
+            "ReverseLogarithmic" => HyperParameterScalingType::ReverseLogarithmic,
+            _ => {
+                HyperParameterScalingType::UnknownVariant(UnknownHyperParameterScalingType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterScalingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HyperParameterScalingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Defines a hyperparameter to be used by an algorithm.</p>
@@ -6950,7 +13531,7 @@ pub struct HyperParameterSpecification {
     pub range: Option<ParameterRange>,
     /// <p>The type of this hyperparameter. The valid types are <code>Integer</code>, <code>Continuous</code>, <code>Categorical</code>, and <code>FreeText</code>.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ParameterType,
 }
 
 /// <p>Defines the training jobs launched by a hyperparameter tuning job.</p>
@@ -7029,7 +13610,7 @@ pub struct HyperParameterTrainingJobSummary {
     /// <p><p>The status of the objective metric for the training job:</p> <ul> <li> <p>Succeeded: The final objective metric for the training job was evaluated by the hyperparameter tuning job and used in the hyperparameter tuning process.</p> </li> </ul> <ul> <li> <p>Pending: The training job is in progress and evaluation of its final objective metric is pending.</p> </li> </ul> <ul> <li> <p>Failed: The final objective metric for the training job was not evaluated, and was not used in the hyperparameter tuning process. This typically occurs when the training job failed or did not emit an objective metric.</p> </li> </ul></p>
     #[serde(rename = "ObjectiveStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub objective_status: Option<String>,
+    pub objective_status: Option<ObjectiveStatus>,
     /// <p>Specifies the time when the training job ends on training instances. You are billed for the time interval between the value of <code>TrainingStartTime</code> and this time. For successful jobs and stopped jobs, this is the time after model artifacts are uploaded. For failed jobs, this is the time when Amazon SageMaker detects a job failure.</p>
     #[serde(rename = "TrainingEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7046,7 +13627,7 @@ pub struct HyperParameterTrainingJobSummary {
     pub training_job_name: String,
     /// <p>The status of the training job.</p>
     #[serde(rename = "TrainingJobStatus")]
-    pub training_job_status: String,
+    pub training_job_status: TrainingJobStatus,
     /// <p>The date and time that the training job started.</p>
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7076,11 +13657,11 @@ pub struct HyperParameterTuningJobConfig {
     pub resource_limits: ResourceLimits,
     /// <p>Specifies how hyperparameter tuning chooses the combinations of hyperparameter values to use for the training job it launches. To use the Bayesian search strategy, set this to <code>Bayesian</code>. To randomly search, set it to <code>Random</code>. For information about search strategies, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html">How Hyperparameter Tuning Works</a>.</p>
     #[serde(rename = "Strategy")]
-    pub strategy: String,
+    pub strategy: HyperParameterTuningJobStrategyType,
     /// <p><p>Specifies whether to use early stopping for training jobs launched by the hyperparameter tuning job. This can be one of the following values (the default value is <code>OFF</code>):</p> <dl> <dt>OFF</dt> <dd> <p>Training jobs launched by the hyperparameter tuning job do not use early stopping.</p> </dd> <dt>AUTO</dt> <dd> <p>Amazon SageMaker stops training jobs launched by the hyperparameter tuning job when they are unlikely to perform better than previously completed training jobs. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html">Stop Training Jobs Early</a>.</p> </dd> </dl></p>
     #[serde(rename = "TrainingJobEarlyStoppingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_job_early_stopping_type: Option<String>,
+    pub training_job_early_stopping_type: Option<TrainingJobEarlyStoppingType>,
     /// <p>The tuning job's completion criteria.</p>
     #[serde(rename = "TuningJobCompletionCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7095,7 +13676,462 @@ pub struct HyperParameterTuningJobObjective {
     pub metric_name: String,
     /// <p>Whether to minimize or maximize the objective metric.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: HyperParameterTuningJobObjectiveType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterTuningJobObjectiveType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterTuningJobObjectiveType {
+    Maximize,
+    Minimize,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterTuningJobObjectiveType),
+}
+
+impl Default for HyperParameterTuningJobObjectiveType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterTuningJobObjectiveType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterTuningJobObjectiveType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterTuningJobObjectiveType {
+    fn into(self) -> String {
+        match self {
+            HyperParameterTuningJobObjectiveType::Maximize => "Maximize".to_string(),
+            HyperParameterTuningJobObjectiveType::Minimize => "Minimize".to_string(),
+            HyperParameterTuningJobObjectiveType::UnknownVariant(
+                UnknownHyperParameterTuningJobObjectiveType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterTuningJobObjectiveType {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterTuningJobObjectiveType::Maximize => &"Maximize",
+            HyperParameterTuningJobObjectiveType::Minimize => &"Minimize",
+            HyperParameterTuningJobObjectiveType::UnknownVariant(
+                UnknownHyperParameterTuningJobObjectiveType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterTuningJobObjectiveType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Maximize" => HyperParameterTuningJobObjectiveType::Maximize,
+            "Minimize" => HyperParameterTuningJobObjectiveType::Minimize,
+            _ => HyperParameterTuningJobObjectiveType::UnknownVariant(
+                UnknownHyperParameterTuningJobObjectiveType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for HyperParameterTuningJobObjectiveType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Maximize" => HyperParameterTuningJobObjectiveType::Maximize,
+            "Minimize" => HyperParameterTuningJobObjectiveType::Minimize,
+            _ => HyperParameterTuningJobObjectiveType::UnknownVariant(
+                UnknownHyperParameterTuningJobObjectiveType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterTuningJobObjectiveType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterTuningJobObjectiveType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HyperParameterTuningJobObjectiveType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterTuningJobSortByOptions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterTuningJobSortByOptions {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterTuningJobSortByOptions),
+}
+
+impl Default for HyperParameterTuningJobSortByOptions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterTuningJobSortByOptions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterTuningJobSortByOptions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterTuningJobSortByOptions {
+    fn into(self) -> String {
+        match self {
+            HyperParameterTuningJobSortByOptions::CreationTime => "CreationTime".to_string(),
+            HyperParameterTuningJobSortByOptions::Name => "Name".to_string(),
+            HyperParameterTuningJobSortByOptions::Status => "Status".to_string(),
+            HyperParameterTuningJobSortByOptions::UnknownVariant(
+                UnknownHyperParameterTuningJobSortByOptions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterTuningJobSortByOptions {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterTuningJobSortByOptions::CreationTime => &"CreationTime",
+            HyperParameterTuningJobSortByOptions::Name => &"Name",
+            HyperParameterTuningJobSortByOptions::Status => &"Status",
+            HyperParameterTuningJobSortByOptions::UnknownVariant(
+                UnknownHyperParameterTuningJobSortByOptions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterTuningJobSortByOptions {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => HyperParameterTuningJobSortByOptions::CreationTime,
+            "Name" => HyperParameterTuningJobSortByOptions::Name,
+            "Status" => HyperParameterTuningJobSortByOptions::Status,
+            _ => HyperParameterTuningJobSortByOptions::UnknownVariant(
+                UnknownHyperParameterTuningJobSortByOptions {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for HyperParameterTuningJobSortByOptions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => HyperParameterTuningJobSortByOptions::CreationTime,
+            "Name" => HyperParameterTuningJobSortByOptions::Name,
+            "Status" => HyperParameterTuningJobSortByOptions::Status,
+            _ => HyperParameterTuningJobSortByOptions::UnknownVariant(
+                UnknownHyperParameterTuningJobSortByOptions { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterTuningJobSortByOptions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterTuningJobSortByOptions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HyperParameterTuningJobSortByOptions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterTuningJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterTuningJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterTuningJobStatus),
+}
+
+impl Default for HyperParameterTuningJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterTuningJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterTuningJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterTuningJobStatus {
+    fn into(self) -> String {
+        match self {
+            HyperParameterTuningJobStatus::Completed => "Completed".to_string(),
+            HyperParameterTuningJobStatus::Failed => "Failed".to_string(),
+            HyperParameterTuningJobStatus::InProgress => "InProgress".to_string(),
+            HyperParameterTuningJobStatus::Stopped => "Stopped".to_string(),
+            HyperParameterTuningJobStatus::Stopping => "Stopping".to_string(),
+            HyperParameterTuningJobStatus::UnknownVariant(
+                UnknownHyperParameterTuningJobStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterTuningJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterTuningJobStatus::Completed => &"Completed",
+            HyperParameterTuningJobStatus::Failed => &"Failed",
+            HyperParameterTuningJobStatus::InProgress => &"InProgress",
+            HyperParameterTuningJobStatus::Stopped => &"Stopped",
+            HyperParameterTuningJobStatus::Stopping => &"Stopping",
+            HyperParameterTuningJobStatus::UnknownVariant(
+                UnknownHyperParameterTuningJobStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterTuningJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => HyperParameterTuningJobStatus::Completed,
+            "Failed" => HyperParameterTuningJobStatus::Failed,
+            "InProgress" => HyperParameterTuningJobStatus::InProgress,
+            "Stopped" => HyperParameterTuningJobStatus::Stopped,
+            "Stopping" => HyperParameterTuningJobStatus::Stopping,
+            _ => HyperParameterTuningJobStatus::UnknownVariant(
+                UnknownHyperParameterTuningJobStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for HyperParameterTuningJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => HyperParameterTuningJobStatus::Completed,
+            "Failed" => HyperParameterTuningJobStatus::Failed,
+            "InProgress" => HyperParameterTuningJobStatus::InProgress,
+            "Stopped" => HyperParameterTuningJobStatus::Stopped,
+            "Stopping" => HyperParameterTuningJobStatus::Stopping,
+            _ => HyperParameterTuningJobStatus::UnknownVariant(
+                UnknownHyperParameterTuningJobStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterTuningJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterTuningJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HyperParameterTuningJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The strategy hyperparameter tuning uses to find the best combination of hyperparameters for your model. Currently, the only supported value is <code>Bayesian</code>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterTuningJobStrategyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterTuningJobStrategyType {
+    Bayesian,
+    Random,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterTuningJobStrategyType),
+}
+
+impl Default for HyperParameterTuningJobStrategyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterTuningJobStrategyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterTuningJobStrategyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterTuningJobStrategyType {
+    fn into(self) -> String {
+        match self {
+            HyperParameterTuningJobStrategyType::Bayesian => "Bayesian".to_string(),
+            HyperParameterTuningJobStrategyType::Random => "Random".to_string(),
+            HyperParameterTuningJobStrategyType::UnknownVariant(
+                UnknownHyperParameterTuningJobStrategyType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterTuningJobStrategyType {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterTuningJobStrategyType::Bayesian => &"Bayesian",
+            HyperParameterTuningJobStrategyType::Random => &"Random",
+            HyperParameterTuningJobStrategyType::UnknownVariant(
+                UnknownHyperParameterTuningJobStrategyType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterTuningJobStrategyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bayesian" => HyperParameterTuningJobStrategyType::Bayesian,
+            "Random" => HyperParameterTuningJobStrategyType::Random,
+            _ => HyperParameterTuningJobStrategyType::UnknownVariant(
+                UnknownHyperParameterTuningJobStrategyType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for HyperParameterTuningJobStrategyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bayesian" => HyperParameterTuningJobStrategyType::Bayesian,
+            "Random" => HyperParameterTuningJobStrategyType::Random,
+            _ => HyperParameterTuningJobStrategyType::UnknownVariant(
+                UnknownHyperParameterTuningJobStrategyType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterTuningJobStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterTuningJobStrategyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HyperParameterTuningJobStrategyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides summary information about a hyperparameter tuning job.</p>
@@ -7117,7 +14153,7 @@ pub struct HyperParameterTuningJobSummary {
     pub hyper_parameter_tuning_job_name: String,
     /// <p>The status of the tuning job.</p>
     #[serde(rename = "HyperParameterTuningJobStatus")]
-    pub hyper_parameter_tuning_job_status: String,
+    pub hyper_parameter_tuning_job_status: HyperParameterTuningJobStatus,
     /// <p>The date and time that the tuning job was modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7131,7 +14167,7 @@ pub struct HyperParameterTuningJobSummary {
     pub resource_limits: Option<ResourceLimits>,
     /// <p>Specifies the search strategy hyperparameter tuning uses to choose which hyperparameters to use for each iteration. Currently, the only valid value is Bayesian.</p>
     #[serde(rename = "Strategy")]
-    pub strategy: String,
+    pub strategy: HyperParameterTuningJobStrategyType,
     /// <p>The <a>TrainingJobStatusCounters</a> object that specifies the numbers of training jobs, categorized by status, that this tuning job launched.</p>
     #[serde(rename = "TrainingJobStatusCounters")]
     pub training_job_status_counters: TrainingJobStatusCounters,
@@ -7145,7 +14181,125 @@ pub struct HyperParameterTuningJobWarmStartConfig {
     pub parent_hyper_parameter_tuning_jobs: Vec<ParentHyperParameterTuningJob>,
     /// <p><p>Specifies one of the following:</p> <dl> <dt>IDENTICAL<em>DATA</em>AND<em>ALGORITHM</dt> <dd> <p>The new hyperparameter tuning job uses the same input data and training image as the parent tuning jobs. You can change the hyperparameter ranges to search and the maximum number of training jobs that the hyperparameter tuning job launches. You cannot use a new version of the training algorithm, unless the changes in the new version do not affect the algorithm itself. For example, changes that improve logging or adding support for a different data format are allowed. You can also change hyperparameters from tunable to static, and from static to tunable, but the total number of static plus tunable hyperparameters must remain the same as it is in all parent jobs. The objective metric for the new tuning job must be the same as for all parent jobs.</p> </dd> <dt>TRANSFER</em>LEARNING</dt> <dd> <p>The new hyperparameter tuning job can include input data, hyperparameter ranges, maximum number of concurrent training jobs, and maximum number of training jobs that are different than those of its parent hyperparameter tuning jobs. The training image can also be a different version from the version used in the parent hyperparameter tuning job. You can also change hyperparameters from tunable to static, and from static to tunable, but the total number of static plus tunable hyperparameters must remain the same as it is in all parent jobs. The objective metric for the new tuning job must be the same as for all parent jobs.</p> </dd> </dl></p>
     #[serde(rename = "WarmStartType")]
-    pub warm_start_type: String,
+    pub warm_start_type: HyperParameterTuningJobWarmStartType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHyperParameterTuningJobWarmStartType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HyperParameterTuningJobWarmStartType {
+    IdenticalDataAndAlgorithm,
+    TransferLearning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHyperParameterTuningJobWarmStartType),
+}
+
+impl Default for HyperParameterTuningJobWarmStartType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HyperParameterTuningJobWarmStartType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HyperParameterTuningJobWarmStartType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HyperParameterTuningJobWarmStartType {
+    fn into(self) -> String {
+        match self {
+            HyperParameterTuningJobWarmStartType::IdenticalDataAndAlgorithm => {
+                "IdenticalDataAndAlgorithm".to_string()
+            }
+            HyperParameterTuningJobWarmStartType::TransferLearning => {
+                "TransferLearning".to_string()
+            }
+            HyperParameterTuningJobWarmStartType::UnknownVariant(
+                UnknownHyperParameterTuningJobWarmStartType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HyperParameterTuningJobWarmStartType {
+    fn into(self) -> &'a str {
+        match self {
+            HyperParameterTuningJobWarmStartType::IdenticalDataAndAlgorithm => {
+                &"IdenticalDataAndAlgorithm"
+            }
+            HyperParameterTuningJobWarmStartType::TransferLearning => &"TransferLearning",
+            HyperParameterTuningJobWarmStartType::UnknownVariant(
+                UnknownHyperParameterTuningJobWarmStartType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for HyperParameterTuningJobWarmStartType {
+    fn from(name: &str) -> Self {
+        match name {
+            "IdenticalDataAndAlgorithm" => {
+                HyperParameterTuningJobWarmStartType::IdenticalDataAndAlgorithm
+            }
+            "TransferLearning" => HyperParameterTuningJobWarmStartType::TransferLearning,
+            _ => HyperParameterTuningJobWarmStartType::UnknownVariant(
+                UnknownHyperParameterTuningJobWarmStartType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for HyperParameterTuningJobWarmStartType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IdenticalDataAndAlgorithm" => {
+                HyperParameterTuningJobWarmStartType::IdenticalDataAndAlgorithm
+            }
+            "TransferLearning" => HyperParameterTuningJobWarmStartType::TransferLearning,
+            _ => HyperParameterTuningJobWarmStartType::UnknownVariant(
+                UnknownHyperParameterTuningJobWarmStartType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HyperParameterTuningJobWarmStartType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HyperParameterTuningJobWarmStartType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HyperParameterTuningJobWarmStartType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A SageMaker image. A SageMaker image represents a set of container images that are derived from a common base container image. Each of these container images is represented by a SageMaker <code>ImageVersion</code>.</p>
@@ -7175,7 +14329,7 @@ pub struct Image {
     pub image_name: String,
     /// <p>The status of the image.</p>
     #[serde(rename = "ImageStatus")]
-    pub image_status: String,
+    pub image_status: ImageStatus,
     /// <p>When the image was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
@@ -7186,7 +14340,340 @@ pub struct Image {
 pub struct ImageConfig {
     /// <p><p>Set this to one of the following values:</p> <ul> <li> <p> <code>Platform</code> - The model image is hosted in Amazon ECR.</p> </li> <li> <p> <code>Vpc</code> - The model image is hosted in a private Docker registry in your VPC.</p> </li> </ul></p>
     #[serde(rename = "RepositoryAccessMode")]
-    pub repository_access_mode: String,
+    pub repository_access_mode: RepositoryAccessMode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageSortBy {
+    CreationTime,
+    ImageName,
+    LastModifiedTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageSortBy),
+}
+
+impl Default for ImageSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageSortBy {
+    fn into(self) -> String {
+        match self {
+            ImageSortBy::CreationTime => "CREATION_TIME".to_string(),
+            ImageSortBy::ImageName => "IMAGE_NAME".to_string(),
+            ImageSortBy::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ImageSortBy::UnknownVariant(UnknownImageSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ImageSortBy::CreationTime => &"CREATION_TIME",
+            ImageSortBy::ImageName => &"IMAGE_NAME",
+            ImageSortBy::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ImageSortBy::UnknownVariant(UnknownImageSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_TIME" => ImageSortBy::CreationTime,
+            "IMAGE_NAME" => ImageSortBy::ImageName,
+            "LAST_MODIFIED_TIME" => ImageSortBy::LastModifiedTime,
+            _ => ImageSortBy::UnknownVariant(UnknownImageSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_TIME" => ImageSortBy::CreationTime,
+            "IMAGE_NAME" => ImageSortBy::ImageName,
+            "LAST_MODIFIED_TIME" => ImageSortBy::LastModifiedTime,
+            _ => ImageSortBy::UnknownVariant(UnknownImageSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImageSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageSortOrder),
+}
+
+impl Default for ImageSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageSortOrder {
+    fn into(self) -> String {
+        match self {
+            ImageSortOrder::Ascending => "ASCENDING".to_string(),
+            ImageSortOrder::Descending => "DESCENDING".to_string(),
+            ImageSortOrder::UnknownVariant(UnknownImageSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            ImageSortOrder::Ascending => &"ASCENDING",
+            ImageSortOrder::Descending => &"DESCENDING",
+            ImageSortOrder::UnknownVariant(UnknownImageSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => ImageSortOrder::Ascending,
+            "DESCENDING" => ImageSortOrder::Descending,
+            _ => ImageSortOrder::UnknownVariant(UnknownImageSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => ImageSortOrder::Ascending,
+            "DESCENDING" => ImageSortOrder::Descending,
+            _ => ImageSortOrder::UnknownVariant(UnknownImageSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImageSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageStatus {
+    Created,
+    CreateFailed,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageStatus),
+}
+
+impl Default for ImageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageStatus {
+    fn into(self) -> String {
+        match self {
+            ImageStatus::Created => "CREATED".to_string(),
+            ImageStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            ImageStatus::Creating => "CREATING".to_string(),
+            ImageStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            ImageStatus::Deleting => "DELETING".to_string(),
+            ImageStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            ImageStatus::Updating => "UPDATING".to_string(),
+            ImageStatus::UnknownVariant(UnknownImageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ImageStatus::Created => &"CREATED",
+            ImageStatus::CreateFailed => &"CREATE_FAILED",
+            ImageStatus::Creating => &"CREATING",
+            ImageStatus::DeleteFailed => &"DELETE_FAILED",
+            ImageStatus::Deleting => &"DELETING",
+            ImageStatus::UpdateFailed => &"UPDATE_FAILED",
+            ImageStatus::Updating => &"UPDATING",
+            ImageStatus::UnknownVariant(UnknownImageStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ImageStatus::Created,
+            "CREATE_FAILED" => ImageStatus::CreateFailed,
+            "CREATING" => ImageStatus::Creating,
+            "DELETE_FAILED" => ImageStatus::DeleteFailed,
+            "DELETING" => ImageStatus::Deleting,
+            "UPDATE_FAILED" => ImageStatus::UpdateFailed,
+            "UPDATING" => ImageStatus::Updating,
+            _ => ImageStatus::UnknownVariant(UnknownImageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ImageStatus::Created,
+            "CREATE_FAILED" => ImageStatus::CreateFailed,
+            "CREATING" => ImageStatus::Creating,
+            "DELETE_FAILED" => ImageStatus::DeleteFailed,
+            "DELETING" => ImageStatus::Deleting,
+            "UPDATE_FAILED" => ImageStatus::UpdateFailed,
+            "UPDATING" => ImageStatus::Updating,
+            _ => ImageStatus::UnknownVariant(UnknownImageStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A version of a SageMaker <code>Image</code>. A version represents an existing container image.</p>
@@ -7208,13 +14695,348 @@ pub struct ImageVersion {
     pub image_version_arn: String,
     /// <p>The status of the version.</p>
     #[serde(rename = "ImageVersionStatus")]
-    pub image_version_status: String,
+    pub image_version_status: ImageVersionStatus,
     /// <p>When the version was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
     /// <p>The version number.</p>
     #[serde(rename = "Version")]
     pub version: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageVersionSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageVersionSortBy {
+    CreationTime,
+    LastModifiedTime,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageVersionSortBy),
+}
+
+impl Default for ImageVersionSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageVersionSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageVersionSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageVersionSortBy {
+    fn into(self) -> String {
+        match self {
+            ImageVersionSortBy::CreationTime => "CREATION_TIME".to_string(),
+            ImageVersionSortBy::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ImageVersionSortBy::Version => "VERSION".to_string(),
+            ImageVersionSortBy::UnknownVariant(UnknownImageVersionSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageVersionSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ImageVersionSortBy::CreationTime => &"CREATION_TIME",
+            ImageVersionSortBy::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ImageVersionSortBy::Version => &"VERSION",
+            ImageVersionSortBy::UnknownVariant(UnknownImageVersionSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ImageVersionSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_TIME" => ImageVersionSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ImageVersionSortBy::LastModifiedTime,
+            "VERSION" => ImageVersionSortBy::Version,
+            _ => ImageVersionSortBy::UnknownVariant(UnknownImageVersionSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageVersionSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_TIME" => ImageVersionSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ImageVersionSortBy::LastModifiedTime,
+            "VERSION" => ImageVersionSortBy::Version,
+            _ => ImageVersionSortBy::UnknownVariant(UnknownImageVersionSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageVersionSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageVersionSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImageVersionSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageVersionSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageVersionSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageVersionSortOrder),
+}
+
+impl Default for ImageVersionSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageVersionSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageVersionSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageVersionSortOrder {
+    fn into(self) -> String {
+        match self {
+            ImageVersionSortOrder::Ascending => "ASCENDING".to_string(),
+            ImageVersionSortOrder::Descending => "DESCENDING".to_string(),
+            ImageVersionSortOrder::UnknownVariant(UnknownImageVersionSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageVersionSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            ImageVersionSortOrder::Ascending => &"ASCENDING",
+            ImageVersionSortOrder::Descending => &"DESCENDING",
+            ImageVersionSortOrder::UnknownVariant(UnknownImageVersionSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageVersionSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => ImageVersionSortOrder::Ascending,
+            "DESCENDING" => ImageVersionSortOrder::Descending,
+            _ => ImageVersionSortOrder::UnknownVariant(UnknownImageVersionSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageVersionSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => ImageVersionSortOrder::Ascending,
+            "DESCENDING" => ImageVersionSortOrder::Descending,
+            _ => ImageVersionSortOrder::UnknownVariant(UnknownImageVersionSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageVersionSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageVersionSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImageVersionSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageVersionStatus {
+    Created,
+    CreateFailed,
+    Creating,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageVersionStatus),
+}
+
+impl Default for ImageVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageVersionStatus {
+    fn into(self) -> String {
+        match self {
+            ImageVersionStatus::Created => "CREATED".to_string(),
+            ImageVersionStatus::CreateFailed => "CREATE_FAILED".to_string(),
+            ImageVersionStatus::Creating => "CREATING".to_string(),
+            ImageVersionStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            ImageVersionStatus::Deleting => "DELETING".to_string(),
+            ImageVersionStatus::UnknownVariant(UnknownImageVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ImageVersionStatus::Created => &"CREATED",
+            ImageVersionStatus::CreateFailed => &"CREATE_FAILED",
+            ImageVersionStatus::Creating => &"CREATING",
+            ImageVersionStatus::DeleteFailed => &"DELETE_FAILED",
+            ImageVersionStatus::Deleting => &"DELETING",
+            ImageVersionStatus::UnknownVariant(UnknownImageVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ImageVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ImageVersionStatus::Created,
+            "CREATE_FAILED" => ImageVersionStatus::CreateFailed,
+            "CREATING" => ImageVersionStatus::Creating,
+            "DELETE_FAILED" => ImageVersionStatus::DeleteFailed,
+            "DELETING" => ImageVersionStatus::Deleting,
+            _ => ImageVersionStatus::UnknownVariant(UnknownImageVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ImageVersionStatus::Created,
+            "CREATE_FAILED" => ImageVersionStatus::CreateFailed,
+            "CREATING" => ImageVersionStatus::Creating,
+            "DELETE_FAILED" => ImageVersionStatus::DeleteFailed,
+            "DELETING" => ImageVersionStatus::Deleting,
+            _ => ImageVersionStatus::UnknownVariant(UnknownImageVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Defines how to perform inference generation after a training job is run.</p>
@@ -7229,14 +15051,14 @@ pub struct InferenceSpecification {
     /// <p>A list of the instance types that are used to generate inferences in real-time.</p> <p>This parameter is required for unversioned models, and optional for versioned models.</p>
     #[serde(rename = "SupportedRealtimeInferenceInstanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_realtime_inference_instance_types: Option<Vec<String>>,
+    pub supported_realtime_inference_instance_types: Option<Vec<ProductionVariantInstanceType>>,
     /// <p>The supported MIME types for the output data.</p>
     #[serde(rename = "SupportedResponseMIMETypes")]
     pub supported_response_mime_types: Vec<String>,
     /// <p>A list of the instance types on which a transformation job can be run or on which an endpoint can be deployed.</p> <p>This parameter is required for unversioned models, and optional for versioned models.</p>
     #[serde(rename = "SupportedTransformInstanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_transform_instance_types: Option<Vec<String>>,
+    pub supported_transform_instance_types: Option<Vec<TransformInstanceType>>,
 }
 
 /// <p>Contains information about the location of input model artifacts, the name and shape of the expected data inputs, and the framework in which the model was trained.</p>
@@ -7247,10 +15069,390 @@ pub struct InputConfig {
     pub data_input_config: String,
     /// <p>Identifies the framework in which the model was trained. For example: TENSORFLOW.</p>
     #[serde(rename = "Framework")]
-    pub framework: String,
+    pub framework: Framework,
     /// <p>The S3 path where the model artifacts, which result from model training, are stored. This path must point to a single gzip compressed tar archive (.tar.gz suffix).</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInputMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InputMode {
+    File,
+    Pipe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInputMode),
+}
+
+impl Default for InputMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InputMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InputMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InputMode {
+    fn into(self) -> String {
+        match self {
+            InputMode::File => "File".to_string(),
+            InputMode::Pipe => "Pipe".to_string(),
+            InputMode::UnknownVariant(UnknownInputMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InputMode {
+    fn into(self) -> &'a str {
+        match self {
+            InputMode::File => &"File",
+            InputMode::Pipe => &"Pipe",
+            InputMode::UnknownVariant(UnknownInputMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InputMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "File" => InputMode::File,
+            "Pipe" => InputMode::Pipe,
+            _ => InputMode::UnknownVariant(UnknownInputMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InputMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "File" => InputMode::File,
+            "Pipe" => InputMode::Pipe,
+            _ => InputMode::UnknownVariant(UnknownInputMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InputMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InputMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InputMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceType {
+    MlC42Xlarge,
+    MlC44Xlarge,
+    MlC48Xlarge,
+    MlC4Xlarge,
+    MlC518Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Xlarge,
+    MlC5D18Xlarge,
+    MlC5D2Xlarge,
+    MlC5D4Xlarge,
+    MlC5D9Xlarge,
+    MlC5DXlarge,
+    MlM410Xlarge,
+    MlM416Xlarge,
+    MlM42Xlarge,
+    MlM44Xlarge,
+    MlM4Xlarge,
+    MlM512Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM5Xlarge,
+    MlP216Xlarge,
+    MlP28Xlarge,
+    MlP2Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    MlT22Xlarge,
+    MlT2Large,
+    MlT2Medium,
+    MlT2Xlarge,
+    MlT32Xlarge,
+    MlT3Large,
+    MlT3Medium,
+    MlT3Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceType),
+}
+
+impl Default for InstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceType {
+    fn into(self) -> String {
+        match self {
+            InstanceType::MlC42Xlarge => "ml.c4.2xlarge".to_string(),
+            InstanceType::MlC44Xlarge => "ml.c4.4xlarge".to_string(),
+            InstanceType::MlC48Xlarge => "ml.c4.8xlarge".to_string(),
+            InstanceType::MlC4Xlarge => "ml.c4.xlarge".to_string(),
+            InstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            InstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            InstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            InstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            InstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            InstanceType::MlC5D18Xlarge => "ml.c5d.18xlarge".to_string(),
+            InstanceType::MlC5D2Xlarge => "ml.c5d.2xlarge".to_string(),
+            InstanceType::MlC5D4Xlarge => "ml.c5d.4xlarge".to_string(),
+            InstanceType::MlC5D9Xlarge => "ml.c5d.9xlarge".to_string(),
+            InstanceType::MlC5DXlarge => "ml.c5d.xlarge".to_string(),
+            InstanceType::MlM410Xlarge => "ml.m4.10xlarge".to_string(),
+            InstanceType::MlM416Xlarge => "ml.m4.16xlarge".to_string(),
+            InstanceType::MlM42Xlarge => "ml.m4.2xlarge".to_string(),
+            InstanceType::MlM44Xlarge => "ml.m4.4xlarge".to_string(),
+            InstanceType::MlM4Xlarge => "ml.m4.xlarge".to_string(),
+            InstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            InstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            InstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            InstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            InstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            InstanceType::MlP216Xlarge => "ml.p2.16xlarge".to_string(),
+            InstanceType::MlP28Xlarge => "ml.p2.8xlarge".to_string(),
+            InstanceType::MlP2Xlarge => "ml.p2.xlarge".to_string(),
+            InstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            InstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            InstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            InstanceType::MlT22Xlarge => "ml.t2.2xlarge".to_string(),
+            InstanceType::MlT2Large => "ml.t2.large".to_string(),
+            InstanceType::MlT2Medium => "ml.t2.medium".to_string(),
+            InstanceType::MlT2Xlarge => "ml.t2.xlarge".to_string(),
+            InstanceType::MlT32Xlarge => "ml.t3.2xlarge".to_string(),
+            InstanceType::MlT3Large => "ml.t3.large".to_string(),
+            InstanceType::MlT3Medium => "ml.t3.medium".to_string(),
+            InstanceType::MlT3Xlarge => "ml.t3.xlarge".to_string(),
+            InstanceType::UnknownVariant(UnknownInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceType::MlC42Xlarge => &"ml.c4.2xlarge",
+            InstanceType::MlC44Xlarge => &"ml.c4.4xlarge",
+            InstanceType::MlC48Xlarge => &"ml.c4.8xlarge",
+            InstanceType::MlC4Xlarge => &"ml.c4.xlarge",
+            InstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            InstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            InstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            InstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            InstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            InstanceType::MlC5D18Xlarge => &"ml.c5d.18xlarge",
+            InstanceType::MlC5D2Xlarge => &"ml.c5d.2xlarge",
+            InstanceType::MlC5D4Xlarge => &"ml.c5d.4xlarge",
+            InstanceType::MlC5D9Xlarge => &"ml.c5d.9xlarge",
+            InstanceType::MlC5DXlarge => &"ml.c5d.xlarge",
+            InstanceType::MlM410Xlarge => &"ml.m4.10xlarge",
+            InstanceType::MlM416Xlarge => &"ml.m4.16xlarge",
+            InstanceType::MlM42Xlarge => &"ml.m4.2xlarge",
+            InstanceType::MlM44Xlarge => &"ml.m4.4xlarge",
+            InstanceType::MlM4Xlarge => &"ml.m4.xlarge",
+            InstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            InstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            InstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            InstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            InstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            InstanceType::MlP216Xlarge => &"ml.p2.16xlarge",
+            InstanceType::MlP28Xlarge => &"ml.p2.8xlarge",
+            InstanceType::MlP2Xlarge => &"ml.p2.xlarge",
+            InstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            InstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            InstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            InstanceType::MlT22Xlarge => &"ml.t2.2xlarge",
+            InstanceType::MlT2Large => &"ml.t2.large",
+            InstanceType::MlT2Medium => &"ml.t2.medium",
+            InstanceType::MlT2Xlarge => &"ml.t2.xlarge",
+            InstanceType::MlT32Xlarge => &"ml.t3.2xlarge",
+            InstanceType::MlT3Large => &"ml.t3.large",
+            InstanceType::MlT3Medium => &"ml.t3.medium",
+            InstanceType::MlT3Xlarge => &"ml.t3.xlarge",
+            InstanceType::UnknownVariant(UnknownInstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c4.2xlarge" => InstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => InstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => InstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => InstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => InstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => InstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => InstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => InstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => InstanceType::MlC5Xlarge,
+            "ml.c5d.18xlarge" => InstanceType::MlC5D18Xlarge,
+            "ml.c5d.2xlarge" => InstanceType::MlC5D2Xlarge,
+            "ml.c5d.4xlarge" => InstanceType::MlC5D4Xlarge,
+            "ml.c5d.9xlarge" => InstanceType::MlC5D9Xlarge,
+            "ml.c5d.xlarge" => InstanceType::MlC5DXlarge,
+            "ml.m4.10xlarge" => InstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => InstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => InstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => InstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => InstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => InstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => InstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => InstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => InstanceType::MlM54Xlarge,
+            "ml.m5.xlarge" => InstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => InstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => InstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => InstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => InstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => InstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => InstanceType::MlP38Xlarge,
+            "ml.t2.2xlarge" => InstanceType::MlT22Xlarge,
+            "ml.t2.large" => InstanceType::MlT2Large,
+            "ml.t2.medium" => InstanceType::MlT2Medium,
+            "ml.t2.xlarge" => InstanceType::MlT2Xlarge,
+            "ml.t3.2xlarge" => InstanceType::MlT32Xlarge,
+            "ml.t3.large" => InstanceType::MlT3Large,
+            "ml.t3.medium" => InstanceType::MlT3Medium,
+            "ml.t3.xlarge" => InstanceType::MlT3Xlarge,
+            _ => InstanceType::UnknownVariant(UnknownInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c4.2xlarge" => InstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => InstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => InstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => InstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => InstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => InstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => InstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => InstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => InstanceType::MlC5Xlarge,
+            "ml.c5d.18xlarge" => InstanceType::MlC5D18Xlarge,
+            "ml.c5d.2xlarge" => InstanceType::MlC5D2Xlarge,
+            "ml.c5d.4xlarge" => InstanceType::MlC5D4Xlarge,
+            "ml.c5d.9xlarge" => InstanceType::MlC5D9Xlarge,
+            "ml.c5d.xlarge" => InstanceType::MlC5DXlarge,
+            "ml.m4.10xlarge" => InstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => InstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => InstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => InstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => InstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => InstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => InstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => InstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => InstanceType::MlM54Xlarge,
+            "ml.m5.xlarge" => InstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => InstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => InstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => InstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => InstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => InstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => InstanceType::MlP38Xlarge,
+            "ml.t2.2xlarge" => InstanceType::MlT22Xlarge,
+            "ml.t2.large" => InstanceType::MlT2Large,
+            "ml.t2.medium" => InstanceType::MlT2Medium,
+            "ml.t2.xlarge" => InstanceType::MlT2Xlarge,
+            "ml.t3.2xlarge" => InstanceType::MlT32Xlarge,
+            "ml.t3.large" => InstanceType::MlT3Large,
+            "ml.t3.medium" => InstanceType::MlT3Medium,
+            "ml.t3.xlarge" => InstanceType::MlT3Xlarge,
+            _ => InstanceType::UnknownVariant(UnknownInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>For a hyperparameter of the integer type, specifies the range that a hyperparameter tuning job searches.</p>
@@ -7268,7 +15470,7 @@ pub struct IntegerParameterRange {
     /// <p><p>The scale that hyperparameter tuning uses to search the hyperparameter range. For information about choosing a hyperparameter scale, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon SageMaker hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have only values greater than 0.</p> </dd> </dl></p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_type: Option<String>,
+    pub scaling_type: Option<HyperParameterScalingType>,
 }
 
 /// <p>Defines the possible values for an integer hyperparameter.</p>
@@ -7280,6 +15482,106 @@ pub struct IntegerParameterRangeSpecification {
     /// <p>The minimum integer value allowed.</p>
     #[serde(rename = "MinValue")]
     pub min_value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJoinSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JoinSource {
+    Input,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJoinSource),
+}
+
+impl Default for JoinSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JoinSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JoinSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JoinSource {
+    fn into(self) -> String {
+        match self {
+            JoinSource::Input => "Input".to_string(),
+            JoinSource::None => "None".to_string(),
+            JoinSource::UnknownVariant(UnknownJoinSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JoinSource {
+    fn into(self) -> &'a str {
+        match self {
+            JoinSource::Input => &"Input",
+            JoinSource::None => &"None",
+            JoinSource::UnknownVariant(UnknownJoinSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JoinSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "Input" => JoinSource::Input,
+            "None" => JoinSource::None,
+            _ => JoinSource::UnknownVariant(UnknownJoinSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JoinSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Input" => JoinSource::Input,
+            "None" => JoinSource::None,
+            _ => JoinSource::UnknownVariant(UnknownJoinSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JoinSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for JoinSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for JoinSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The JupyterServer app settings.</p>
@@ -7394,7 +15696,7 @@ pub struct LabelingJobDataAttributes {
     /// <p>Declares that your content is free of personally identifiable information or adult content. Amazon SageMaker may restrict the Amazon Mechanical Turk workers that can view your task based on this information.</p>
     #[serde(rename = "ContentClassifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_classifiers: Option<Vec<String>>,
+    pub content_classifiers: Option<Vec<ContentClassifier>>,
 }
 
 /// <p>Provides information about the location of input data.</p> <p>You must specify at least one of the following: <code>S3DataSource</code> or <code>SnsDataSource</code>.</p> <p>Use <code>SnsDataSource</code> to specify an SNS input topic for a streaming labeling job. If you do not specify and SNS input topic ARN, Ground Truth will create a one-time labeling job.</p> <p>Use <code>S3DataSource</code> to specify an input manifest file for both streaming and one-time labeling jobs. Adding an <code>S3DataSource</code> is optional if you use <code>SnsDataSource</code> to create a streaming labeling job.</p>
@@ -7503,6 +15805,130 @@ pub struct LabelingJobSnsDataSource {
     pub sns_topic_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLabelingJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LabelingJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Initializing,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLabelingJobStatus),
+}
+
+impl Default for LabelingJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LabelingJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LabelingJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LabelingJobStatus {
+    fn into(self) -> String {
+        match self {
+            LabelingJobStatus::Completed => "Completed".to_string(),
+            LabelingJobStatus::Failed => "Failed".to_string(),
+            LabelingJobStatus::InProgress => "InProgress".to_string(),
+            LabelingJobStatus::Initializing => "Initializing".to_string(),
+            LabelingJobStatus::Stopped => "Stopped".to_string(),
+            LabelingJobStatus::Stopping => "Stopping".to_string(),
+            LabelingJobStatus::UnknownVariant(UnknownLabelingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LabelingJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LabelingJobStatus::Completed => &"Completed",
+            LabelingJobStatus::Failed => &"Failed",
+            LabelingJobStatus::InProgress => &"InProgress",
+            LabelingJobStatus::Initializing => &"Initializing",
+            LabelingJobStatus::Stopped => &"Stopped",
+            LabelingJobStatus::Stopping => &"Stopping",
+            LabelingJobStatus::UnknownVariant(UnknownLabelingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LabelingJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => LabelingJobStatus::Completed,
+            "Failed" => LabelingJobStatus::Failed,
+            "InProgress" => LabelingJobStatus::InProgress,
+            "Initializing" => LabelingJobStatus::Initializing,
+            "Stopped" => LabelingJobStatus::Stopped,
+            "Stopping" => LabelingJobStatus::Stopping,
+            _ => LabelingJobStatus::UnknownVariant(UnknownLabelingJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LabelingJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => LabelingJobStatus::Completed,
+            "Failed" => LabelingJobStatus::Failed,
+            "InProgress" => LabelingJobStatus::InProgress,
+            "Initializing" => LabelingJobStatus::Initializing,
+            "Stopped" => LabelingJobStatus::Stopped,
+            "Stopping" => LabelingJobStatus::Stopping,
+            _ => LabelingJobStatus::UnknownVariant(UnknownLabelingJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LabelingJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LabelingJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LabelingJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>A set of conditions for stopping a labeling job. If any of the conditions are met, the job is automatically stopped. You can use these conditions to control the cost of data labeling.</p> <note> <p>Labeling jobs fail after 30 days with an appropriate client error message.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LabelingJobStoppingConditions {
@@ -7550,7 +15976,7 @@ pub struct LabelingJobSummary {
     pub labeling_job_output: Option<LabelingJobOutput>,
     /// <p>The current status of the labeling job. </p>
     #[serde(rename = "LabelingJobStatus")]
-    pub labeling_job_status: String,
+    pub labeling_job_status: LabelingJobStatus,
     /// <p>The date and time that the job was last modified (timestamp).</p>
     #[serde(rename = "LastModifiedTime")]
     pub last_modified_time: f64,
@@ -7588,11 +16014,11 @@ pub struct ListActionsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortActionsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only actions with the specified source URI.</p>
     #[serde(rename = "SourceUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7638,11 +16064,11 @@ pub struct ListAlgorithmsInput {
     /// <p>The parameter by which to sort the results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<AlgorithmSortBy>,
     /// <p>The sort order for the results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -7691,11 +16117,11 @@ pub struct ListAppImageConfigsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<AppImageConfigSortKey>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -7729,11 +16155,11 @@ pub struct ListAppsRequest {
     /// <p>The parameter by which to sort the results. The default is CreationTime.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<AppSortKey>,
     /// <p>The sort order for the results. The default is Ascending.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A parameter to search by user profile name.</p>
     #[serde(rename = "UserProfileNameEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7779,11 +16205,11 @@ pub struct ListArtifactsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortArtifactsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only artifacts with the specified source URI.</p>
     #[serde(rename = "SourceUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7809,7 +16235,7 @@ pub struct ListAssociationsRequest {
     /// <p>A filter that returns only associations of the specified type.</p>
     #[serde(rename = "AssociationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub association_type: Option<String>,
+    pub association_type: Option<AssociationEdgeType>,
     /// <p>A filter that returns only associations created on or after the specified time.</p>
     #[serde(rename = "CreatedAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7837,11 +16263,11 @@ pub struct ListAssociationsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortAssociationsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only associations with the specified source ARN.</p>
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7899,15 +16325,15 @@ pub struct ListAutoMLJobsRequest {
     /// <p>The parameter by which to sort the results. The default is AutoMLJobName.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<AutoMLSortBy>,
     /// <p>The sort order for the results. The default is Descending.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<AutoMLSortOrder>,
     /// <p>Request a list of jobs, using a filter for status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<AutoMLJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -7943,15 +16369,15 @@ pub struct ListCandidatesForAutoMLJobRequest {
     /// <p>The parameter by which to sort the results. The default is Descending.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<CandidateSortBy>,
     /// <p>The sort order for the results. The default is Ascending.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<AutoMLSortOrder>,
     /// <p>List the Candidates for the job and filter by status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<CandidateStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8000,11 +16426,11 @@ pub struct ListCodeRepositoriesInput {
     /// <p>The field to sort results by. The default is <code>Name</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<CodeRepositorySortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<CodeRepositorySortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8053,15 +16479,15 @@ pub struct ListCompilationJobsRequest {
     /// <p>The field by which to sort results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListCompilationJobsSortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves model compilation jobs with a specific <a>DescribeCompilationJobResponse$CompilationJobStatus</a> status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<CompilationJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8074,6 +16500,118 @@ pub struct ListCompilationJobsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListCompilationJobsSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListCompilationJobsSortBy {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListCompilationJobsSortBy),
+}
+
+impl Default for ListCompilationJobsSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListCompilationJobsSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListCompilationJobsSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListCompilationJobsSortBy {
+    fn into(self) -> String {
+        match self {
+            ListCompilationJobsSortBy::CreationTime => "CreationTime".to_string(),
+            ListCompilationJobsSortBy::Name => "Name".to_string(),
+            ListCompilationJobsSortBy::Status => "Status".to_string(),
+            ListCompilationJobsSortBy::UnknownVariant(UnknownListCompilationJobsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListCompilationJobsSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ListCompilationJobsSortBy::CreationTime => &"CreationTime",
+            ListCompilationJobsSortBy::Name => &"Name",
+            ListCompilationJobsSortBy::Status => &"Status",
+            ListCompilationJobsSortBy::UnknownVariant(UnknownListCompilationJobsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListCompilationJobsSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ListCompilationJobsSortBy::CreationTime,
+            "Name" => ListCompilationJobsSortBy::Name,
+            "Status" => ListCompilationJobsSortBy::Status,
+            _ => ListCompilationJobsSortBy::UnknownVariant(UnknownListCompilationJobsSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListCompilationJobsSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ListCompilationJobsSortBy::CreationTime,
+            "Name" => ListCompilationJobsSortBy::Name,
+            "Status" => ListCompilationJobsSortBy::Status,
+            _ => {
+                ListCompilationJobsSortBy::UnknownVariant(UnknownListCompilationJobsSortBy { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListCompilationJobsSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListCompilationJobsSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListCompilationJobsSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8102,11 +16640,11 @@ pub struct ListContextsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortContextsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only contexts with the specified source URI.</p>
     #[serde(rename = "SourceUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8156,11 +16694,11 @@ pub struct ListDataQualityJobDefinitionsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringJobDefinitionSortKey>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8209,11 +16747,11 @@ pub struct ListDeviceFleetsRequest {
     /// <p>The column to sort by.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListDeviceFleetsSortBy>,
     /// <p>What direction to sort in.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8226,6 +16764,116 @@ pub struct ListDeviceFleetsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListDeviceFleetsSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListDeviceFleetsSortBy {
+    CreationTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListDeviceFleetsSortBy),
+}
+
+impl Default for ListDeviceFleetsSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListDeviceFleetsSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListDeviceFleetsSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListDeviceFleetsSortBy {
+    fn into(self) -> String {
+        match self {
+            ListDeviceFleetsSortBy::CreationTime => "CREATION_TIME".to_string(),
+            ListDeviceFleetsSortBy::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ListDeviceFleetsSortBy::Name => "NAME".to_string(),
+            ListDeviceFleetsSortBy::UnknownVariant(UnknownListDeviceFleetsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListDeviceFleetsSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ListDeviceFleetsSortBy::CreationTime => &"CREATION_TIME",
+            ListDeviceFleetsSortBy::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ListDeviceFleetsSortBy::Name => &"NAME",
+            ListDeviceFleetsSortBy::UnknownVariant(UnknownListDeviceFleetsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListDeviceFleetsSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_TIME" => ListDeviceFleetsSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ListDeviceFleetsSortBy::LastModifiedTime,
+            "NAME" => ListDeviceFleetsSortBy::Name,
+            _ => ListDeviceFleetsSortBy::UnknownVariant(UnknownListDeviceFleetsSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListDeviceFleetsSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_TIME" => ListDeviceFleetsSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ListDeviceFleetsSortBy::LastModifiedTime,
+            "NAME" => ListDeviceFleetsSortBy::Name,
+            _ => ListDeviceFleetsSortBy::UnknownVariant(UnknownListDeviceFleetsSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListDeviceFleetsSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListDeviceFleetsSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListDeviceFleetsSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8329,15 +16977,15 @@ pub struct ListEdgePackagingJobsRequest {
     /// <p>Use to specify what column to sort by.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListEdgePackagingJobsSortBy>,
     /// <p>What direction to sort by.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>The job status to filter for.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<EdgePackagingJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8350,6 +16998,128 @@ pub struct ListEdgePackagingJobsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListEdgePackagingJobsSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListEdgePackagingJobsSortBy {
+    CreationTime,
+    LastModifiedTime,
+    ModelName,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListEdgePackagingJobsSortBy),
+}
+
+impl Default for ListEdgePackagingJobsSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListEdgePackagingJobsSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListEdgePackagingJobsSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListEdgePackagingJobsSortBy {
+    fn into(self) -> String {
+        match self {
+            ListEdgePackagingJobsSortBy::CreationTime => "CREATION_TIME".to_string(),
+            ListEdgePackagingJobsSortBy::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ListEdgePackagingJobsSortBy::ModelName => "MODEL_NAME".to_string(),
+            ListEdgePackagingJobsSortBy::Name => "NAME".to_string(),
+            ListEdgePackagingJobsSortBy::Status => "STATUS".to_string(),
+            ListEdgePackagingJobsSortBy::UnknownVariant(UnknownListEdgePackagingJobsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListEdgePackagingJobsSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ListEdgePackagingJobsSortBy::CreationTime => &"CREATION_TIME",
+            ListEdgePackagingJobsSortBy::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ListEdgePackagingJobsSortBy::ModelName => &"MODEL_NAME",
+            ListEdgePackagingJobsSortBy::Name => &"NAME",
+            ListEdgePackagingJobsSortBy::Status => &"STATUS",
+            ListEdgePackagingJobsSortBy::UnknownVariant(UnknownListEdgePackagingJobsSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListEdgePackagingJobsSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_TIME" => ListEdgePackagingJobsSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ListEdgePackagingJobsSortBy::LastModifiedTime,
+            "MODEL_NAME" => ListEdgePackagingJobsSortBy::ModelName,
+            "NAME" => ListEdgePackagingJobsSortBy::Name,
+            "STATUS" => ListEdgePackagingJobsSortBy::Status,
+            _ => ListEdgePackagingJobsSortBy::UnknownVariant(UnknownListEdgePackagingJobsSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListEdgePackagingJobsSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_TIME" => ListEdgePackagingJobsSortBy::CreationTime,
+            "LAST_MODIFIED_TIME" => ListEdgePackagingJobsSortBy::LastModifiedTime,
+            "MODEL_NAME" => ListEdgePackagingJobsSortBy::ModelName,
+            "NAME" => ListEdgePackagingJobsSortBy::Name,
+            "STATUS" => ListEdgePackagingJobsSortBy::Status,
+            _ => ListEdgePackagingJobsSortBy::UnknownVariant(UnknownListEdgePackagingJobsSortBy {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListEdgePackagingJobsSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListEdgePackagingJobsSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListEdgePackagingJobsSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8378,11 +17148,11 @@ pub struct ListEndpointConfigsInput {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<EndpointConfigSortKey>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<OrderKey>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8431,15 +17201,15 @@ pub struct ListEndpointsInput {
     /// <p>Sorts the list of results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<EndpointSortKey>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<OrderKey>,
     /// <p> A filter that returns only endpoints with the specified status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<EndpointStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8476,11 +17246,11 @@ pub struct ListExperimentsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortExperimentsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8510,7 +17280,7 @@ pub struct ListFeatureGroupsRequest {
     /// <p>A <code>FeatureGroup</code> status. Filters by <code>FeatureGroup</code> status. </p>
     #[serde(rename = "FeatureGroupStatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feature_group_status_equals: Option<String>,
+    pub feature_group_status_equals: Option<FeatureGroupStatus>,
     /// <p>The maximum number of results returned by <code>ListFeatureGroups</code>.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8526,15 +17296,15 @@ pub struct ListFeatureGroupsRequest {
     /// <p>An <code>OfflineStore</code> status. Filters by <code>OfflineStore</code> status. </p>
     #[serde(rename = "OfflineStoreStatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offline_store_status_equals: Option<String>,
+    pub offline_store_status_equals: Option<OfflineStoreStatusValue>,
     /// <p>The value on which the feature group list is sorted.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<FeatureGroupSortBy>,
     /// <p>The order in which feature groups are listed.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<FeatureGroupSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8570,7 +17340,7 @@ pub struct ListFlowDefinitionsRequest {
     /// <p>An optional value that specifies whether you want the results sorted in <code>Ascending</code> or <code>Descending</code> order.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8607,7 +17377,7 @@ pub struct ListHumanTaskUisRequest {
     /// <p>An optional value that specifies whether you want the results sorted in <code>Ascending</code> or <code>Descending</code> order.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8656,15 +17426,15 @@ pub struct ListHyperParameterTuningJobsRequest {
     /// <p>The field to sort results by. The default is <code>Name</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<HyperParameterTuningJobSortByOptions>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only tuning jobs with the specified status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<HyperParameterTuningJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8712,11 +17482,11 @@ pub struct ListImageVersionsRequest {
     /// <p>The property used to sort results. The default value is <code>CREATION_TIME</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ImageVersionSortBy>,
     /// <p>The sort order. The default value is <code>DESCENDING</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<ImageVersionSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8766,11 +17536,11 @@ pub struct ListImagesRequest {
     /// <p>The property used to sort results. The default value is <code>CREATION_TIME</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ImageSortBy>,
     /// <p>The sort order. The default value is <code>DESCENDING</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<ImageSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8812,11 +17582,11 @@ pub struct ListLabelingJobsForWorkteamRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListLabelingJobsForWorkteamSortByOptions>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>The Amazon Resource Name (ARN) of the work team for which you want to see labeling jobs for.</p>
     #[serde(rename = "WorkteamArn")]
     pub workteam_arn: String,
@@ -8832,6 +17602,110 @@ pub struct ListLabelingJobsForWorkteamResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListLabelingJobsForWorkteamSortByOptions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListLabelingJobsForWorkteamSortByOptions {
+    CreationTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListLabelingJobsForWorkteamSortByOptions),
+}
+
+impl Default for ListLabelingJobsForWorkteamSortByOptions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListLabelingJobsForWorkteamSortByOptions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListLabelingJobsForWorkteamSortByOptions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListLabelingJobsForWorkteamSortByOptions {
+    fn into(self) -> String {
+        match self {
+            ListLabelingJobsForWorkteamSortByOptions::CreationTime => "CreationTime".to_string(),
+            ListLabelingJobsForWorkteamSortByOptions::UnknownVariant(
+                UnknownListLabelingJobsForWorkteamSortByOptions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListLabelingJobsForWorkteamSortByOptions {
+    fn into(self) -> &'a str {
+        match self {
+            ListLabelingJobsForWorkteamSortByOptions::CreationTime => &"CreationTime",
+            ListLabelingJobsForWorkteamSortByOptions::UnknownVariant(
+                UnknownListLabelingJobsForWorkteamSortByOptions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ListLabelingJobsForWorkteamSortByOptions {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ListLabelingJobsForWorkteamSortByOptions::CreationTime,
+            _ => ListLabelingJobsForWorkteamSortByOptions::UnknownVariant(
+                UnknownListLabelingJobsForWorkteamSortByOptions {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ListLabelingJobsForWorkteamSortByOptions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ListLabelingJobsForWorkteamSortByOptions::CreationTime,
+            _ => ListLabelingJobsForWorkteamSortByOptions::UnknownVariant(
+                UnknownListLabelingJobsForWorkteamSortByOptions { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListLabelingJobsForWorkteamSortByOptions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListLabelingJobsForWorkteamSortByOptions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListLabelingJobsForWorkteamSortByOptions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -8868,15 +17742,15 @@ pub struct ListLabelingJobsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves only labeling jobs with a specific status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<LabelingJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8922,11 +17796,11 @@ pub struct ListModelBiasJobDefinitionsRequest {
     /// <p>Whether to sort results by the <code>Name</code> or <code>CreationTime</code> field. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringJobDefinitionSortKey>,
     /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -8971,11 +17845,11 @@ pub struct ListModelExplainabilityJobDefinitionsRequest {
     /// <p>Whether to sort results by the <code>Name</code> or <code>CreationTime</code> field. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringJobDefinitionSortKey>,
     /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9016,11 +17890,11 @@ pub struct ListModelPackageGroupsInput {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ModelPackageGroupSortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9053,7 +17927,7 @@ pub struct ListModelPackagesInput {
     /// <p>A filter that returns only the model packages with the specified approval status.</p>
     #[serde(rename = "ModelApprovalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_approval_status: Option<String>,
+    pub model_approval_status: Option<ModelApprovalStatus>,
     /// <p>A filter that returns only model versions that belong to the specified model group.</p>
     #[serde(rename = "ModelPackageGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9061,7 +17935,7 @@ pub struct ListModelPackagesInput {
     /// <p><p>A filter that returns onlyl the model packages of the specified type. This can be one of the following values.</p> <ul> <li> <p> <code>VERSIONED</code> - List only versioned models.</p> </li> <li> <p> <code>UNVERSIONED</code> - List only unversioined models.</p> </li> <li> <p> <code>BOTH</code> - List both versioned and unversioned models.</p> </li> </ul></p>
     #[serde(rename = "ModelPackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_package_type: Option<String>,
+    pub model_package_type: Option<ModelPackageType>,
     /// <p>A string in the model package name. This filter returns only model packages whose name contains the specified string.</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9073,11 +17947,11 @@ pub struct ListModelPackagesInput {
     /// <p>The parameter by which to sort the results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ModelPackageSortBy>,
     /// <p>The sort order for the results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9122,11 +17996,11 @@ pub struct ListModelQualityJobDefinitionsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringJobDefinitionSortKey>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9167,11 +18041,11 @@ pub struct ListModelsInput {
     /// <p>Sorts the list of results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ModelSortKey>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<OrderKey>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9224,7 +18098,7 @@ pub struct ListMonitoringExecutionsRequest {
     /// <p>A filter that returns only the monitoring job runs of the specified monitoring type.</p>
     #[serde(rename = "MonitoringTypeEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type_equals: Option<String>,
+    pub monitoring_type_equals: Option<MonitoringType>,
     /// <p>The token returned if the response is truncated. To retrieve the next set of job executions, use it in the next request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9240,15 +18114,15 @@ pub struct ListMonitoringExecutionsRequest {
     /// <p>Whether to sort results by <code>Status</code>, <code>CreationTime</code>, <code>ScheduledTime</code> field. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringExecutionSortKey>,
     /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves only jobs with a specific status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<ExecutionStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9297,7 +18171,7 @@ pub struct ListMonitoringSchedulesRequest {
     /// <p>A filter that returns only the monitoring schedules for the specified monitoring type.</p>
     #[serde(rename = "MonitoringTypeEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type_equals: Option<String>,
+    pub monitoring_type_equals: Option<MonitoringType>,
     /// <p>Filter for monitoring schedules whose name contains a specified string.</p>
     #[serde(rename = "NameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -9309,15 +18183,15 @@ pub struct ListMonitoringSchedulesRequest {
     /// <p>Whether to sort results by <code>Status</code>, <code>CreationTime</code>, <code>ScheduledTime</code> field. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<MonitoringScheduleSortKey>,
     /// <p>Whether to sort the results in <code>Ascending</code> or <code>Descending</code> order. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only monitoring schedules modified before a specified time.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<ScheduleStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9366,11 +18240,11 @@ pub struct ListNotebookInstanceLifecycleConfigsInput {
     /// <p>Sorts the list of results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<NotebookInstanceLifecycleConfigSortKey>,
     /// <p>The sort order for results.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<NotebookInstanceLifecycleConfigSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9432,15 +18306,15 @@ pub struct ListNotebookInstancesInput {
     /// <p>The field to sort results by. The default is <code>Name</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<NotebookInstanceSortKey>,
     /// <p>The sort order for results. </p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<NotebookInstanceSortOrder>,
     /// <p>A filter that returns only notebook instances with the specified status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<NotebookInstanceStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9474,7 +18348,7 @@ pub struct ListPipelineExecutionStepsRequest {
     /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9515,11 +18389,11 @@ pub struct ListPipelineExecutionsRequest {
     /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortPipelineExecutionsBy>,
     /// <p>The sort order for results.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9590,11 +18464,11 @@ pub struct ListPipelinesRequest {
     /// <p>The field by which to sort results. The default is <code>CreatedTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortPipelinesBy>,
     /// <p>The sort order for results.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9644,15 +18518,15 @@ pub struct ListProcessingJobsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves only processing jobs with a specific status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<ProcessingJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9693,11 +18567,11 @@ pub struct ListProjectsInput {
     /// <p>The field by which to sort results. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ProjectSortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<ProjectSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9787,15 +18661,15 @@ pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
     /// <p>The field to sort results by. The default is <code>Name</code>.</p> <p>If the value of this field is <code>FinalObjectiveMetricValue</code>, any training jobs that did not return an objective metric are not listed.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<TrainingJobSortByOptions>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only training jobs with the specified status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<TrainingJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9844,15 +18718,15 @@ pub struct ListTrainingJobsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortBy>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves only training jobs with a specific status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<TrainingJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9901,15 +18775,15 @@ pub struct ListTransformJobsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortBy>,
     /// <p>The sort order for results. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that retrieves only transform jobs with a specific status.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<TransformJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -9950,11 +18824,11 @@ pub struct ListTrialComponentsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortTrialComponentsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only components that have the specified source Amazon Resource Name (ARN). If you specify <code>SourceArn</code>, you can't filter by <code>ExperimentName</code> or <code>TrialName</code>.</p>
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10004,11 +18878,11 @@ pub struct ListTrialsRequest {
     /// <p>The property used to sort results. The default value is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortTrialsBy>,
     /// <p>The sort order. The default value is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A filter that returns only trials that are associated with the specified trial component.</p>
     #[serde(rename = "TrialComponentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10046,11 +18920,11 @@ pub struct ListUserProfilesRequest {
     /// <p>The parameter by which to sort the results. The default is CreationTime.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<UserProfileSortKey>,
     /// <p>The sort order for the results. The default is Ascending.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
     /// <p>A parameter by which to filter the results.</p>
     #[serde(rename = "UserProfileNameContains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10088,11 +18962,11 @@ pub struct ListWorkforcesRequest {
     /// <p>Sort workforces using the workforce name or creation date.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListWorkforcesSortByOptions>,
     /// <p>Sort workforces in ascending or descending order.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -10105,6 +18979,113 @@ pub struct ListWorkforcesResponse {
     /// <p>A list containing information about your workforce.</p>
     #[serde(rename = "Workforces")]
     pub workforces: Vec<Workforce>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListWorkforcesSortByOptions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListWorkforcesSortByOptions {
+    CreateDate,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListWorkforcesSortByOptions),
+}
+
+impl Default for ListWorkforcesSortByOptions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListWorkforcesSortByOptions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListWorkforcesSortByOptions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListWorkforcesSortByOptions {
+    fn into(self) -> String {
+        match self {
+            ListWorkforcesSortByOptions::CreateDate => "CreateDate".to_string(),
+            ListWorkforcesSortByOptions::Name => "Name".to_string(),
+            ListWorkforcesSortByOptions::UnknownVariant(UnknownListWorkforcesSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListWorkforcesSortByOptions {
+    fn into(self) -> &'a str {
+        match self {
+            ListWorkforcesSortByOptions::CreateDate => &"CreateDate",
+            ListWorkforcesSortByOptions::Name => &"Name",
+            ListWorkforcesSortByOptions::UnknownVariant(UnknownListWorkforcesSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListWorkforcesSortByOptions {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreateDate" => ListWorkforcesSortByOptions::CreateDate,
+            "Name" => ListWorkforcesSortByOptions::Name,
+            _ => ListWorkforcesSortByOptions::UnknownVariant(UnknownListWorkforcesSortByOptions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListWorkforcesSortByOptions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreateDate" => ListWorkforcesSortByOptions::CreateDate,
+            "Name" => ListWorkforcesSortByOptions::Name,
+            _ => ListWorkforcesSortByOptions::UnknownVariant(UnknownListWorkforcesSortByOptions {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListWorkforcesSortByOptions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListWorkforcesSortByOptions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListWorkforcesSortByOptions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -10125,11 +19106,11 @@ pub struct ListWorkteamsRequest {
     /// <p>The field to sort results by. The default is <code>CreationTime</code>.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ListWorkteamsSortByOptions>,
     /// <p>The sort order for results. The default is <code>Ascending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -10142,6 +19123,113 @@ pub struct ListWorkteamsResponse {
     /// <p>An array of <code>Workteam</code> objects, each describing a work team.</p>
     #[serde(rename = "Workteams")]
     pub workteams: Vec<Workteam>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownListWorkteamsSortByOptions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ListWorkteamsSortByOptions {
+    CreateDate,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownListWorkteamsSortByOptions),
+}
+
+impl Default for ListWorkteamsSortByOptions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ListWorkteamsSortByOptions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ListWorkteamsSortByOptions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ListWorkteamsSortByOptions {
+    fn into(self) -> String {
+        match self {
+            ListWorkteamsSortByOptions::CreateDate => "CreateDate".to_string(),
+            ListWorkteamsSortByOptions::Name => "Name".to_string(),
+            ListWorkteamsSortByOptions::UnknownVariant(UnknownListWorkteamsSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ListWorkteamsSortByOptions {
+    fn into(self) -> &'a str {
+        match self {
+            ListWorkteamsSortByOptions::CreateDate => &"CreateDate",
+            ListWorkteamsSortByOptions::Name => &"Name",
+            ListWorkteamsSortByOptions::UnknownVariant(UnknownListWorkteamsSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ListWorkteamsSortByOptions {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreateDate" => ListWorkteamsSortByOptions::CreateDate,
+            "Name" => ListWorkteamsSortByOptions::Name,
+            _ => ListWorkteamsSortByOptions::UnknownVariant(UnknownListWorkteamsSortByOptions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ListWorkteamsSortByOptions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreateDate" => ListWorkteamsSortByOptions::CreateDate,
+            "Name" => ListWorkteamsSortByOptions::Name,
+            _ => ListWorkteamsSortByOptions::UnknownVariant(UnknownListWorkteamsSortByOptions {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ListWorkteamsSortByOptions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ListWorkteamsSortByOptions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ListWorkteamsSortByOptions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Defines an Amazon Cognito or your own OIDC IdP user group that is part of a work team.</p>
@@ -10220,6 +19308,115 @@ pub struct MetricsSource {
     /// <p><p/></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelApprovalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelApprovalStatus {
+    Approved,
+    PendingManualApproval,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelApprovalStatus),
+}
+
+impl Default for ModelApprovalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelApprovalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelApprovalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelApprovalStatus {
+    fn into(self) -> String {
+        match self {
+            ModelApprovalStatus::Approved => "Approved".to_string(),
+            ModelApprovalStatus::PendingManualApproval => "PendingManualApproval".to_string(),
+            ModelApprovalStatus::Rejected => "Rejected".to_string(),
+            ModelApprovalStatus::UnknownVariant(UnknownModelApprovalStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelApprovalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelApprovalStatus::Approved => &"Approved",
+            ModelApprovalStatus::PendingManualApproval => &"PendingManualApproval",
+            ModelApprovalStatus::Rejected => &"Rejected",
+            ModelApprovalStatus::UnknownVariant(UnknownModelApprovalStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelApprovalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approved" => ModelApprovalStatus::Approved,
+            "PendingManualApproval" => ModelApprovalStatus::PendingManualApproval,
+            "Rejected" => ModelApprovalStatus::Rejected,
+            _ => ModelApprovalStatus::UnknownVariant(UnknownModelApprovalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelApprovalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approved" => ModelApprovalStatus::Approved,
+            "PendingManualApproval" => ModelApprovalStatus::PendingManualApproval,
+            "Rejected" => ModelApprovalStatus::Rejected,
+            _ => ModelApprovalStatus::UnknownVariant(UnknownModelApprovalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelApprovalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelApprovalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelApprovalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about the location that is configured for storing model artifacts. </p> <p>Model artifacts are the output that results from training a model, and typically consist of trained parameters, a model defintion that desribes how to compute inferences, and other metadata.</p>
@@ -10394,7 +19591,7 @@ pub struct ModelPackage {
     /// <p><p>The approval status of the model. This can be one of the following values.</p> <ul> <li> <p> <code>APPROVED</code> - The model is approved</p> </li> <li> <p> <code>REJECTED</code> - The model is rejected.</p> </li> <li> <p> <code>PENDING<em>MANUAL</em>APPROVAL</code> - The model is waiting for manual approval.</p> </li> </ul></p>
     #[serde(rename = "ModelApprovalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_approval_status: Option<String>,
+    pub model_approval_status: Option<ModelApprovalStatus>,
     /// <p>Metrics for the model.</p>
     #[serde(rename = "ModelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10418,7 +19615,7 @@ pub struct ModelPackage {
     /// <p><p>The status of the model package. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The model package is pending being created.</p> </li> <li> <p> <code>IN_PROGRESS</code> - The model package is in the process of being created.</p> </li> <li> <p> <code>COMPLETED</code> - The model package was successfully created.</p> </li> <li> <p> <code>FAILED</code> - The model package failed.</p> </li> <li> <p> <code>DELETING</code> - The model package is in the process of being deleted.</p> </li> </ul></p>
     #[serde(rename = "ModelPackageStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_package_status: Option<String>,
+    pub model_package_status: Option<ModelPackageStatus>,
     #[serde(rename = "ModelPackageStatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_status_details: Option<ModelPackageStatusDetails>,
@@ -10488,11 +19685,241 @@ pub struct ModelPackageGroup {
     /// <p><p>The status of the model group. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The model group is pending being created.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - The model group is in the process of being created.</p> </li> <li> <p> <code>COMPLETED</code> - The model group was successfully created.</p> </li> <li> <p> <code>FAILED</code> - The model group failed.</p> </li> <li> <p> <code>DELETING</code> - The model group is in the process of being deleted.</p> </li> <li> <p> <code>DELETE</em>FAILED</code> - SageMaker failed to delete the model group.</p> </li> </ul></p>
     #[serde(rename = "ModelPackageGroupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_package_group_status: Option<String>,
+    pub model_package_group_status: Option<ModelPackageGroupStatus>,
     /// <p>A list of the tags associated with the model group. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelPackageGroupSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelPackageGroupSortBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelPackageGroupSortBy),
+}
+
+impl Default for ModelPackageGroupSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelPackageGroupSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelPackageGroupSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelPackageGroupSortBy {
+    fn into(self) -> String {
+        match self {
+            ModelPackageGroupSortBy::CreationTime => "CreationTime".to_string(),
+            ModelPackageGroupSortBy::Name => "Name".to_string(),
+            ModelPackageGroupSortBy::UnknownVariant(UnknownModelPackageGroupSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelPackageGroupSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ModelPackageGroupSortBy::CreationTime => &"CreationTime",
+            ModelPackageGroupSortBy::Name => &"Name",
+            ModelPackageGroupSortBy::UnknownVariant(UnknownModelPackageGroupSortBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelPackageGroupSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ModelPackageGroupSortBy::CreationTime,
+            "Name" => ModelPackageGroupSortBy::Name,
+            _ => ModelPackageGroupSortBy::UnknownVariant(UnknownModelPackageGroupSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelPackageGroupSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ModelPackageGroupSortBy::CreationTime,
+            "Name" => ModelPackageGroupSortBy::Name,
+            _ => ModelPackageGroupSortBy::UnknownVariant(UnknownModelPackageGroupSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelPackageGroupSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelPackageGroupSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ModelPackageGroupSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelPackageGroupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelPackageGroupStatus {
+    Completed,
+    DeleteFailed,
+    Deleting,
+    Failed,
+    InProgress,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelPackageGroupStatus),
+}
+
+impl Default for ModelPackageGroupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelPackageGroupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelPackageGroupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelPackageGroupStatus {
+    fn into(self) -> String {
+        match self {
+            ModelPackageGroupStatus::Completed => "Completed".to_string(),
+            ModelPackageGroupStatus::DeleteFailed => "DeleteFailed".to_string(),
+            ModelPackageGroupStatus::Deleting => "Deleting".to_string(),
+            ModelPackageGroupStatus::Failed => "Failed".to_string(),
+            ModelPackageGroupStatus::InProgress => "InProgress".to_string(),
+            ModelPackageGroupStatus::Pending => "Pending".to_string(),
+            ModelPackageGroupStatus::UnknownVariant(UnknownModelPackageGroupStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelPackageGroupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelPackageGroupStatus::Completed => &"Completed",
+            ModelPackageGroupStatus::DeleteFailed => &"DeleteFailed",
+            ModelPackageGroupStatus::Deleting => &"Deleting",
+            ModelPackageGroupStatus::Failed => &"Failed",
+            ModelPackageGroupStatus::InProgress => &"InProgress",
+            ModelPackageGroupStatus::Pending => &"Pending",
+            ModelPackageGroupStatus::UnknownVariant(UnknownModelPackageGroupStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelPackageGroupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ModelPackageGroupStatus::Completed,
+            "DeleteFailed" => ModelPackageGroupStatus::DeleteFailed,
+            "Deleting" => ModelPackageGroupStatus::Deleting,
+            "Failed" => ModelPackageGroupStatus::Failed,
+            "InProgress" => ModelPackageGroupStatus::InProgress,
+            "Pending" => ModelPackageGroupStatus::Pending,
+            _ => ModelPackageGroupStatus::UnknownVariant(UnknownModelPackageGroupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelPackageGroupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ModelPackageGroupStatus::Completed,
+            "DeleteFailed" => ModelPackageGroupStatus::DeleteFailed,
+            "Deleting" => ModelPackageGroupStatus::Deleting,
+            "Failed" => ModelPackageGroupStatus::Failed,
+            "InProgress" => ModelPackageGroupStatus::InProgress,
+            "Pending" => ModelPackageGroupStatus::Pending,
+            _ => ModelPackageGroupStatus::UnknownVariant(UnknownModelPackageGroupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelPackageGroupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ModelPackageGroupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelPackageGroupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about a model group.</p>
@@ -10514,7 +19941,232 @@ pub struct ModelPackageGroupSummary {
     pub model_package_group_name: String,
     /// <p>The status of the model group.</p>
     #[serde(rename = "ModelPackageGroupStatus")]
-    pub model_package_group_status: String,
+    pub model_package_group_status: ModelPackageGroupStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelPackageSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelPackageSortBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelPackageSortBy),
+}
+
+impl Default for ModelPackageSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelPackageSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelPackageSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelPackageSortBy {
+    fn into(self) -> String {
+        match self {
+            ModelPackageSortBy::CreationTime => "CreationTime".to_string(),
+            ModelPackageSortBy::Name => "Name".to_string(),
+            ModelPackageSortBy::UnknownVariant(UnknownModelPackageSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelPackageSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ModelPackageSortBy::CreationTime => &"CreationTime",
+            ModelPackageSortBy::Name => &"Name",
+            ModelPackageSortBy::UnknownVariant(UnknownModelPackageSortBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelPackageSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ModelPackageSortBy::CreationTime,
+            "Name" => ModelPackageSortBy::Name,
+            _ => ModelPackageSortBy::UnknownVariant(UnknownModelPackageSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelPackageSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ModelPackageSortBy::CreationTime,
+            "Name" => ModelPackageSortBy::Name,
+            _ => ModelPackageSortBy::UnknownVariant(UnknownModelPackageSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelPackageSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelPackageSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ModelPackageSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelPackageStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelPackageStatus {
+    Completed,
+    Deleting,
+    Failed,
+    InProgress,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelPackageStatus),
+}
+
+impl Default for ModelPackageStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelPackageStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelPackageStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelPackageStatus {
+    fn into(self) -> String {
+        match self {
+            ModelPackageStatus::Completed => "Completed".to_string(),
+            ModelPackageStatus::Deleting => "Deleting".to_string(),
+            ModelPackageStatus::Failed => "Failed".to_string(),
+            ModelPackageStatus::InProgress => "InProgress".to_string(),
+            ModelPackageStatus::Pending => "Pending".to_string(),
+            ModelPackageStatus::UnknownVariant(UnknownModelPackageStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelPackageStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelPackageStatus::Completed => &"Completed",
+            ModelPackageStatus::Deleting => &"Deleting",
+            ModelPackageStatus::Failed => &"Failed",
+            ModelPackageStatus::InProgress => &"InProgress",
+            ModelPackageStatus::Pending => &"Pending",
+            ModelPackageStatus::UnknownVariant(UnknownModelPackageStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelPackageStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ModelPackageStatus::Completed,
+            "Deleting" => ModelPackageStatus::Deleting,
+            "Failed" => ModelPackageStatus::Failed,
+            "InProgress" => ModelPackageStatus::InProgress,
+            "Pending" => ModelPackageStatus::Pending,
+            _ => ModelPackageStatus::UnknownVariant(UnknownModelPackageStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelPackageStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ModelPackageStatus::Completed,
+            "Deleting" => ModelPackageStatus::Deleting,
+            "Failed" => ModelPackageStatus::Failed,
+            "InProgress" => ModelPackageStatus::InProgress,
+            "Pending" => ModelPackageStatus::Pending,
+            _ => ModelPackageStatus::UnknownVariant(UnknownModelPackageStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelPackageStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ModelPackageStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelPackageStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the validation and image scan statuses of the model package.</p>
@@ -10543,7 +20195,7 @@ pub struct ModelPackageStatusItem {
     pub name: String,
     /// <p>The current status.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: DetailedModelPackageStatus,
 }
 
 /// <p>Provides summary information about a model package.</p>
@@ -10556,7 +20208,7 @@ pub struct ModelPackageSummary {
     /// <p><p>The approval status of the model. This can be one of the following values.</p> <ul> <li> <p> <code>APPROVED</code> - The model is approved</p> </li> <li> <p> <code>REJECTED</code> - The model is rejected.</p> </li> <li> <p> <code>PENDING<em>MANUAL</em>APPROVAL</code> - The model is waiting for manual approval.</p> </li> </ul></p>
     #[serde(rename = "ModelApprovalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_approval_status: Option<String>,
+    pub model_approval_status: Option<ModelApprovalStatus>,
     /// <p>The Amazon Resource Name (ARN) of the model package.</p>
     #[serde(rename = "ModelPackageArn")]
     pub model_package_arn: String,
@@ -10573,11 +20225,121 @@ pub struct ModelPackageSummary {
     pub model_package_name: String,
     /// <p>The overall status of the model package.</p>
     #[serde(rename = "ModelPackageStatus")]
-    pub model_package_status: String,
+    pub model_package_status: ModelPackageStatus,
     /// <p>If the model package is a versioned model, the version of the model.</p>
     #[serde(rename = "ModelPackageVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_package_version: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelPackageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelPackageType {
+    Both,
+    Unversioned,
+    Versioned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelPackageType),
+}
+
+impl Default for ModelPackageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelPackageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelPackageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelPackageType {
+    fn into(self) -> String {
+        match self {
+            ModelPackageType::Both => "Both".to_string(),
+            ModelPackageType::Unversioned => "Unversioned".to_string(),
+            ModelPackageType::Versioned => "Versioned".to_string(),
+            ModelPackageType::UnknownVariant(UnknownModelPackageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelPackageType {
+    fn into(self) -> &'a str {
+        match self {
+            ModelPackageType::Both => &"Both",
+            ModelPackageType::Unversioned => &"Unversioned",
+            ModelPackageType::Versioned => &"Versioned",
+            ModelPackageType::UnknownVariant(UnknownModelPackageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ModelPackageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Both" => ModelPackageType::Both,
+            "Unversioned" => ModelPackageType::Unversioned,
+            "Versioned" => ModelPackageType::Versioned,
+            _ => ModelPackageType::UnknownVariant(UnknownModelPackageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelPackageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Both" => ModelPackageType::Both,
+            "Unversioned" => ModelPackageType::Unversioned,
+            "Versioned" => ModelPackageType::Versioned,
+            _ => ModelPackageType::UnknownVariant(UnknownModelPackageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelPackageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelPackageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ModelPackageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains data, such as the inputs and targeted instance types that are used in the process of validating the model package.</p> <p>The data provided in the validation profile is made available to your buyers on AWS Marketplace.</p>
@@ -10640,7 +20402,7 @@ pub struct ModelQualityAppSpecification {
     /// <p>The machine learning problem type of the model that the monitoring job monitors.</p>
     #[serde(rename = "ProblemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub problem_type: Option<String>,
+    pub problem_type: Option<MonitoringProblemType>,
     /// <p>An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers.</p>
     #[serde(rename = "RecordPreprocessorSourceUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10667,6 +20429,107 @@ pub struct ModelQualityJobInput {
     /// <p>The ground truth label provided for the model.</p>
     #[serde(rename = "GroundTruthS3Input")]
     pub ground_truth_s3_input: MonitoringGroundTruthS3Input,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelSortKey {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelSortKey),
+}
+
+impl Default for ModelSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelSortKey {
+    fn into(self) -> String {
+        match self {
+            ModelSortKey::CreationTime => "CreationTime".to_string(),
+            ModelSortKey::Name => "Name".to_string(),
+            ModelSortKey::UnknownVariant(UnknownModelSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            ModelSortKey::CreationTime => &"CreationTime",
+            ModelSortKey::Name => &"Name",
+            ModelSortKey::UnknownVariant(UnknownModelSortKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ModelSortKey::CreationTime,
+            "Name" => ModelSortKey::Name,
+            _ => ModelSortKey::UnknownVariant(UnknownModelSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ModelSortKey::CreationTime,
+            "Name" => ModelSortKey::Name,
+            _ => ModelSortKey::UnknownVariant(UnknownModelSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ModelSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata for Model steps.</p>
@@ -10743,7 +20606,7 @@ pub struct MonitoringClusterConfig {
     pub instance_count: i64,
     /// <p>The ML compute instance type for the processing job.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: ProcessingInstanceType,
     /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the model monitoring job.</p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10760,6 +20623,118 @@ pub struct MonitoringConstraintsResource {
     #[serde(rename = "S3Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitoringExecutionSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitoringExecutionSortKey {
+    CreationTime,
+    ScheduledTime,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitoringExecutionSortKey),
+}
+
+impl Default for MonitoringExecutionSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitoringExecutionSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitoringExecutionSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitoringExecutionSortKey {
+    fn into(self) -> String {
+        match self {
+            MonitoringExecutionSortKey::CreationTime => "CreationTime".to_string(),
+            MonitoringExecutionSortKey::ScheduledTime => "ScheduledTime".to_string(),
+            MonitoringExecutionSortKey::Status => "Status".to_string(),
+            MonitoringExecutionSortKey::UnknownVariant(UnknownMonitoringExecutionSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitoringExecutionSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            MonitoringExecutionSortKey::CreationTime => &"CreationTime",
+            MonitoringExecutionSortKey::ScheduledTime => &"ScheduledTime",
+            MonitoringExecutionSortKey::Status => &"Status",
+            MonitoringExecutionSortKey::UnknownVariant(UnknownMonitoringExecutionSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitoringExecutionSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => MonitoringExecutionSortKey::CreationTime,
+            "ScheduledTime" => MonitoringExecutionSortKey::ScheduledTime,
+            "Status" => MonitoringExecutionSortKey::Status,
+            _ => MonitoringExecutionSortKey::UnknownVariant(UnknownMonitoringExecutionSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitoringExecutionSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => MonitoringExecutionSortKey::CreationTime,
+            "ScheduledTime" => MonitoringExecutionSortKey::ScheduledTime,
+            "Status" => MonitoringExecutionSortKey::Status,
+            _ => MonitoringExecutionSortKey::UnknownVariant(UnknownMonitoringExecutionSortKey {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringExecutionSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitoringExecutionSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MonitoringExecutionSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary of information about the last monitoring job to run.</p>
@@ -10782,7 +20757,7 @@ pub struct MonitoringExecutionSummary {
     pub last_modified_time: f64,
     /// <p>The status of the monitoring job.</p>
     #[serde(rename = "MonitoringExecutionStatus")]
-    pub monitoring_execution_status: String,
+    pub monitoring_execution_status: ExecutionStatus,
     /// <p>The name of the monitoring job.</p>
     #[serde(rename = "MonitoringJobDefinitionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10793,7 +20768,7 @@ pub struct MonitoringExecutionSummary {
     /// <p>The type of the monitoring job.</p>
     #[serde(rename = "MonitoringType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type: Option<String>,
+    pub monitoring_type: Option<MonitoringType>,
     /// <p>The Amazon Resource Name (ARN) of the monitoring job.</p>
     #[serde(rename = "ProcessingJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10856,6 +20831,115 @@ pub struct MonitoringJobDefinition {
     pub stopping_condition: Option<MonitoringStoppingCondition>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitoringJobDefinitionSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitoringJobDefinitionSortKey {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitoringJobDefinitionSortKey),
+}
+
+impl Default for MonitoringJobDefinitionSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitoringJobDefinitionSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitoringJobDefinitionSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitoringJobDefinitionSortKey {
+    fn into(self) -> String {
+        match self {
+            MonitoringJobDefinitionSortKey::CreationTime => "CreationTime".to_string(),
+            MonitoringJobDefinitionSortKey::Name => "Name".to_string(),
+            MonitoringJobDefinitionSortKey::UnknownVariant(
+                UnknownMonitoringJobDefinitionSortKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitoringJobDefinitionSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            MonitoringJobDefinitionSortKey::CreationTime => &"CreationTime",
+            MonitoringJobDefinitionSortKey::Name => &"Name",
+            MonitoringJobDefinitionSortKey::UnknownVariant(
+                UnknownMonitoringJobDefinitionSortKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitoringJobDefinitionSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => MonitoringJobDefinitionSortKey::CreationTime,
+            "Name" => MonitoringJobDefinitionSortKey::Name,
+            _ => MonitoringJobDefinitionSortKey::UnknownVariant(
+                UnknownMonitoringJobDefinitionSortKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for MonitoringJobDefinitionSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => MonitoringJobDefinitionSortKey::CreationTime,
+            "Name" => MonitoringJobDefinitionSortKey::Name,
+            _ => MonitoringJobDefinitionSortKey::UnknownVariant(
+                UnknownMonitoringJobDefinitionSortKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringJobDefinitionSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitoringJobDefinitionSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MonitoringJobDefinitionSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Summary information about a monitoring job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -10910,6 +20994,117 @@ pub struct MonitoringOutputConfig {
     pub monitoring_outputs: Vec<MonitoringOutput>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitoringProblemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitoringProblemType {
+    BinaryClassification,
+    MulticlassClassification,
+    Regression,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitoringProblemType),
+}
+
+impl Default for MonitoringProblemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitoringProblemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitoringProblemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitoringProblemType {
+    fn into(self) -> String {
+        match self {
+            MonitoringProblemType::BinaryClassification => "BinaryClassification".to_string(),
+            MonitoringProblemType::MulticlassClassification => {
+                "MulticlassClassification".to_string()
+            }
+            MonitoringProblemType::Regression => "Regression".to_string(),
+            MonitoringProblemType::UnknownVariant(UnknownMonitoringProblemType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitoringProblemType {
+    fn into(self) -> &'a str {
+        match self {
+            MonitoringProblemType::BinaryClassification => &"BinaryClassification",
+            MonitoringProblemType::MulticlassClassification => &"MulticlassClassification",
+            MonitoringProblemType::Regression => &"Regression",
+            MonitoringProblemType::UnknownVariant(UnknownMonitoringProblemType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitoringProblemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BinaryClassification" => MonitoringProblemType::BinaryClassification,
+            "MulticlassClassification" => MonitoringProblemType::MulticlassClassification,
+            "Regression" => MonitoringProblemType::Regression,
+            _ => MonitoringProblemType::UnknownVariant(UnknownMonitoringProblemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitoringProblemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BinaryClassification" => MonitoringProblemType::BinaryClassification,
+            "MulticlassClassification" => MonitoringProblemType::MulticlassClassification,
+            "Regression" => MonitoringProblemType::Regression,
+            _ => MonitoringProblemType::UnknownVariant(UnknownMonitoringProblemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringProblemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitoringProblemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MonitoringProblemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Identifies the resources to deploy for a monitoring job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MonitoringResources {
@@ -10927,7 +21122,7 @@ pub struct MonitoringS3Output {
     /// <p>Whether to upload the results of the monitoring job continuously or after the job completes.</p>
     #[serde(rename = "S3UploadMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_upload_mode: Option<String>,
+    pub s3_upload_mode: Option<ProcessingS3UploadMode>,
     /// <p>A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
@@ -10970,11 +21165,11 @@ pub struct MonitoringSchedule {
     /// <p><p>The status of the monitoring schedule. This can be one of the following values.</p> <ul> <li> <p> <code>PENDING</code> - The schedule is pending being created.</p> </li> <li> <p> <code>FAILED</code> - The schedule failed.</p> </li> <li> <p> <code>SCHEDULED</code> - The schedule was successfully created.</p> </li> <li> <p> <code>STOPPED</code> - The schedule was stopped.</p> </li> </ul></p>
     #[serde(rename = "MonitoringScheduleStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_schedule_status: Option<String>,
+    pub monitoring_schedule_status: Option<ScheduleStatus>,
     /// <p>The type of the monitoring job definition to schedule.</p>
     #[serde(rename = "MonitoringType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type: Option<String>,
+    pub monitoring_type: Option<MonitoringType>,
     /// <p>A list of the tags associated with the monitoring schedlue. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS resources</a> in the <i>AWS General Reference Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10995,11 +21190,123 @@ pub struct MonitoringScheduleConfig {
     /// <p>The type of the monitoring job definition to schedule.</p>
     #[serde(rename = "MonitoringType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type: Option<String>,
+    pub monitoring_type: Option<MonitoringType>,
     /// <p>Configures the monitoring schedule.</p>
     #[serde(rename = "ScheduleConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_config: Option<ScheduleConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitoringScheduleSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitoringScheduleSortKey {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitoringScheduleSortKey),
+}
+
+impl Default for MonitoringScheduleSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitoringScheduleSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitoringScheduleSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitoringScheduleSortKey {
+    fn into(self) -> String {
+        match self {
+            MonitoringScheduleSortKey::CreationTime => "CreationTime".to_string(),
+            MonitoringScheduleSortKey::Name => "Name".to_string(),
+            MonitoringScheduleSortKey::Status => "Status".to_string(),
+            MonitoringScheduleSortKey::UnknownVariant(UnknownMonitoringScheduleSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitoringScheduleSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            MonitoringScheduleSortKey::CreationTime => &"CreationTime",
+            MonitoringScheduleSortKey::Name => &"Name",
+            MonitoringScheduleSortKey::Status => &"Status",
+            MonitoringScheduleSortKey::UnknownVariant(UnknownMonitoringScheduleSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitoringScheduleSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => MonitoringScheduleSortKey::CreationTime,
+            "Name" => MonitoringScheduleSortKey::Name,
+            "Status" => MonitoringScheduleSortKey::Status,
+            _ => MonitoringScheduleSortKey::UnknownVariant(UnknownMonitoringScheduleSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitoringScheduleSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => MonitoringScheduleSortKey::CreationTime,
+            "Name" => MonitoringScheduleSortKey::Name,
+            "Status" => MonitoringScheduleSortKey::Status,
+            _ => {
+                MonitoringScheduleSortKey::UnknownVariant(UnknownMonitoringScheduleSortKey { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringScheduleSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitoringScheduleSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MonitoringScheduleSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summarizes the monitoring schedule.</p>
@@ -11028,11 +21335,11 @@ pub struct MonitoringScheduleSummary {
     pub monitoring_schedule_name: String,
     /// <p>The status of the monitoring schedule.</p>
     #[serde(rename = "MonitoringScheduleStatus")]
-    pub monitoring_schedule_status: String,
+    pub monitoring_schedule_status: ScheduleStatus,
     /// <p>The type of the monitoring job definition that the schedule is for.</p>
     #[serde(rename = "MonitoringType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitoring_type: Option<String>,
+    pub monitoring_type: Option<MonitoringType>,
 }
 
 /// <p>The statistics resource for a monitoring job.</p>
@@ -11050,6 +21357,116 @@ pub struct MonitoringStoppingCondition {
     /// <p>The maximum runtime allowed in seconds.</p>
     #[serde(rename = "MaxRuntimeInSeconds")]
     pub max_runtime_in_seconds: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitoringType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitoringType {
+    DataQuality,
+    ModelBias,
+    ModelExplainability,
+    ModelQuality,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitoringType),
+}
+
+impl Default for MonitoringType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitoringType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitoringType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitoringType {
+    fn into(self) -> String {
+        match self {
+            MonitoringType::DataQuality => "DataQuality".to_string(),
+            MonitoringType::ModelBias => "ModelBias".to_string(),
+            MonitoringType::ModelExplainability => "ModelExplainability".to_string(),
+            MonitoringType::ModelQuality => "ModelQuality".to_string(),
+            MonitoringType::UnknownVariant(UnknownMonitoringType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitoringType {
+    fn into(self) -> &'a str {
+        match self {
+            MonitoringType::DataQuality => &"DataQuality",
+            MonitoringType::ModelBias => &"ModelBias",
+            MonitoringType::ModelExplainability => &"ModelExplainability",
+            MonitoringType::ModelQuality => &"ModelQuality",
+            MonitoringType::UnknownVariant(UnknownMonitoringType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitoringType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DataQuality" => MonitoringType::DataQuality,
+            "ModelBias" => MonitoringType::ModelBias,
+            "ModelExplainability" => MonitoringType::ModelExplainability,
+            "ModelQuality" => MonitoringType::ModelQuality,
+            _ => MonitoringType::UnknownVariant(UnknownMonitoringType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitoringType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DataQuality" => MonitoringType::DataQuality,
+            "ModelBias" => MonitoringType::ModelBias,
+            "ModelExplainability" => MonitoringType::ModelExplainability,
+            "ModelQuality" => MonitoringType::ModelQuality,
+            _ => MonitoringType::UnknownVariant(UnknownMonitoringType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitoringType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitoringType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MonitoringType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>A list of nested <a>Filter</a> objects. A resource must satisfy the conditions of all filters to be included in the results returned from the <a>Search</a> API.</p> <p>For example, to filter on a training job&#39;s <code>InputDataConfig</code> property with a specific channel name and <code>S3Uri</code> prefix, define the following filters:</p> <ul> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.ChannelName&quot;, &quot;Operator&quot;:&quot;Equals&quot;, &quot;Value&quot;:&quot;train&quot;}&#39;,</code> </p> </li> <li> <p> <code>&#39;{Name:&quot;InputDataConfig.DataSource.S3DataSource.S3Uri&quot;, &quot;Operator&quot;:&quot;Contains&quot;, &quot;Value&quot;:&quot;mybucket/catdata&quot;}&#39;</code> </p> </li> </ul></p>
@@ -11078,6 +21495,359 @@ pub struct NetworkConfig {
     #[serde(rename = "VpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VpcConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceAcceleratorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceAcceleratorType {
+    MlEia1Large,
+    MlEia1Medium,
+    MlEia1Xlarge,
+    MlEia2Large,
+    MlEia2Medium,
+    MlEia2Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceAcceleratorType),
+}
+
+impl Default for NotebookInstanceAcceleratorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceAcceleratorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceAcceleratorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceAcceleratorType {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceAcceleratorType::MlEia1Large => "ml.eia1.large".to_string(),
+            NotebookInstanceAcceleratorType::MlEia1Medium => "ml.eia1.medium".to_string(),
+            NotebookInstanceAcceleratorType::MlEia1Xlarge => "ml.eia1.xlarge".to_string(),
+            NotebookInstanceAcceleratorType::MlEia2Large => "ml.eia2.large".to_string(),
+            NotebookInstanceAcceleratorType::MlEia2Medium => "ml.eia2.medium".to_string(),
+            NotebookInstanceAcceleratorType::MlEia2Xlarge => "ml.eia2.xlarge".to_string(),
+            NotebookInstanceAcceleratorType::UnknownVariant(
+                UnknownNotebookInstanceAcceleratorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceAcceleratorType {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceAcceleratorType::MlEia1Large => &"ml.eia1.large",
+            NotebookInstanceAcceleratorType::MlEia1Medium => &"ml.eia1.medium",
+            NotebookInstanceAcceleratorType::MlEia1Xlarge => &"ml.eia1.xlarge",
+            NotebookInstanceAcceleratorType::MlEia2Large => &"ml.eia2.large",
+            NotebookInstanceAcceleratorType::MlEia2Medium => &"ml.eia2.medium",
+            NotebookInstanceAcceleratorType::MlEia2Xlarge => &"ml.eia2.xlarge",
+            NotebookInstanceAcceleratorType::UnknownVariant(
+                UnknownNotebookInstanceAcceleratorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceAcceleratorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.eia1.large" => NotebookInstanceAcceleratorType::MlEia1Large,
+            "ml.eia1.medium" => NotebookInstanceAcceleratorType::MlEia1Medium,
+            "ml.eia1.xlarge" => NotebookInstanceAcceleratorType::MlEia1Xlarge,
+            "ml.eia2.large" => NotebookInstanceAcceleratorType::MlEia2Large,
+            "ml.eia2.medium" => NotebookInstanceAcceleratorType::MlEia2Medium,
+            "ml.eia2.xlarge" => NotebookInstanceAcceleratorType::MlEia2Xlarge,
+            _ => NotebookInstanceAcceleratorType::UnknownVariant(
+                UnknownNotebookInstanceAcceleratorType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceAcceleratorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.eia1.large" => NotebookInstanceAcceleratorType::MlEia1Large,
+            "ml.eia1.medium" => NotebookInstanceAcceleratorType::MlEia1Medium,
+            "ml.eia1.xlarge" => NotebookInstanceAcceleratorType::MlEia1Xlarge,
+            "ml.eia2.large" => NotebookInstanceAcceleratorType::MlEia2Large,
+            "ml.eia2.medium" => NotebookInstanceAcceleratorType::MlEia2Medium,
+            "ml.eia2.xlarge" => NotebookInstanceAcceleratorType::MlEia2Xlarge,
+            _ => NotebookInstanceAcceleratorType::UnknownVariant(
+                UnknownNotebookInstanceAcceleratorType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceAcceleratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceAcceleratorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotebookInstanceAcceleratorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceLifecycleConfigSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceLifecycleConfigSortKey {
+    CreationTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceLifecycleConfigSortKey),
+}
+
+impl Default for NotebookInstanceLifecycleConfigSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceLifecycleConfigSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceLifecycleConfigSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceLifecycleConfigSortKey {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceLifecycleConfigSortKey::CreationTime => "CreationTime".to_string(),
+            NotebookInstanceLifecycleConfigSortKey::LastModifiedTime => {
+                "LastModifiedTime".to_string()
+            }
+            NotebookInstanceLifecycleConfigSortKey::Name => "Name".to_string(),
+            NotebookInstanceLifecycleConfigSortKey::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceLifecycleConfigSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceLifecycleConfigSortKey::CreationTime => &"CreationTime",
+            NotebookInstanceLifecycleConfigSortKey::LastModifiedTime => &"LastModifiedTime",
+            NotebookInstanceLifecycleConfigSortKey::Name => &"Name",
+            NotebookInstanceLifecycleConfigSortKey::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortKey { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceLifecycleConfigSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => NotebookInstanceLifecycleConfigSortKey::CreationTime,
+            "LastModifiedTime" => NotebookInstanceLifecycleConfigSortKey::LastModifiedTime,
+            "Name" => NotebookInstanceLifecycleConfigSortKey::Name,
+            _ => NotebookInstanceLifecycleConfigSortKey::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortKey {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceLifecycleConfigSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => NotebookInstanceLifecycleConfigSortKey::CreationTime,
+            "LastModifiedTime" => NotebookInstanceLifecycleConfigSortKey::LastModifiedTime,
+            "Name" => NotebookInstanceLifecycleConfigSortKey::Name,
+            _ => NotebookInstanceLifecycleConfigSortKey::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortKey { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceLifecycleConfigSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceLifecycleConfigSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotebookInstanceLifecycleConfigSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceLifecycleConfigSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceLifecycleConfigSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceLifecycleConfigSortOrder),
+}
+
+impl Default for NotebookInstanceLifecycleConfigSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceLifecycleConfigSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceLifecycleConfigSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceLifecycleConfigSortOrder {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceLifecycleConfigSortOrder::Ascending => "Ascending".to_string(),
+            NotebookInstanceLifecycleConfigSortOrder::Descending => "Descending".to_string(),
+            NotebookInstanceLifecycleConfigSortOrder::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortOrder { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceLifecycleConfigSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceLifecycleConfigSortOrder::Ascending => &"Ascending",
+            NotebookInstanceLifecycleConfigSortOrder::Descending => &"Descending",
+            NotebookInstanceLifecycleConfigSortOrder::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortOrder { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceLifecycleConfigSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => NotebookInstanceLifecycleConfigSortOrder::Ascending,
+            "Descending" => NotebookInstanceLifecycleConfigSortOrder::Descending,
+            _ => NotebookInstanceLifecycleConfigSortOrder::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortOrder {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceLifecycleConfigSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => NotebookInstanceLifecycleConfigSortOrder::Ascending,
+            "Descending" => NotebookInstanceLifecycleConfigSortOrder::Descending,
+            _ => NotebookInstanceLifecycleConfigSortOrder::UnknownVariant(
+                UnknownNotebookInstanceLifecycleConfigSortOrder { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceLifecycleConfigSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceLifecycleConfigSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotebookInstanceLifecycleConfigSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary of a notebook instance lifecycle configuration.</p>
@@ -11109,6 +21879,352 @@ pub struct NotebookInstanceLifecycleHook {
     pub content: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceSortKey {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceSortKey),
+}
+
+impl Default for NotebookInstanceSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceSortKey {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceSortKey::CreationTime => "CreationTime".to_string(),
+            NotebookInstanceSortKey::Name => "Name".to_string(),
+            NotebookInstanceSortKey::Status => "Status".to_string(),
+            NotebookInstanceSortKey::UnknownVariant(UnknownNotebookInstanceSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceSortKey::CreationTime => &"CreationTime",
+            NotebookInstanceSortKey::Name => &"Name",
+            NotebookInstanceSortKey::Status => &"Status",
+            NotebookInstanceSortKey::UnknownVariant(UnknownNotebookInstanceSortKey {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => NotebookInstanceSortKey::CreationTime,
+            "Name" => NotebookInstanceSortKey::Name,
+            "Status" => NotebookInstanceSortKey::Status,
+            _ => NotebookInstanceSortKey::UnknownVariant(UnknownNotebookInstanceSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => NotebookInstanceSortKey::CreationTime,
+            "Name" => NotebookInstanceSortKey::Name,
+            "Status" => NotebookInstanceSortKey::Status,
+            _ => NotebookInstanceSortKey::UnknownVariant(UnknownNotebookInstanceSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotebookInstanceSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceSortOrder),
+}
+
+impl Default for NotebookInstanceSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceSortOrder {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceSortOrder::Ascending => "Ascending".to_string(),
+            NotebookInstanceSortOrder::Descending => "Descending".to_string(),
+            NotebookInstanceSortOrder::UnknownVariant(UnknownNotebookInstanceSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceSortOrder::Ascending => &"Ascending",
+            NotebookInstanceSortOrder::Descending => &"Descending",
+            NotebookInstanceSortOrder::UnknownVariant(UnknownNotebookInstanceSortOrder {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => NotebookInstanceSortOrder::Ascending,
+            "Descending" => NotebookInstanceSortOrder::Descending,
+            _ => NotebookInstanceSortOrder::UnknownVariant(UnknownNotebookInstanceSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => NotebookInstanceSortOrder::Ascending,
+            "Descending" => NotebookInstanceSortOrder::Descending,
+            _ => {
+                NotebookInstanceSortOrder::UnknownVariant(UnknownNotebookInstanceSortOrder { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotebookInstanceSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookInstanceStatus {
+    Deleting,
+    Failed,
+    InService,
+    Pending,
+    Stopped,
+    Stopping,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookInstanceStatus),
+}
+
+impl Default for NotebookInstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookInstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookInstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookInstanceStatus {
+    fn into(self) -> String {
+        match self {
+            NotebookInstanceStatus::Deleting => "Deleting".to_string(),
+            NotebookInstanceStatus::Failed => "Failed".to_string(),
+            NotebookInstanceStatus::InService => "InService".to_string(),
+            NotebookInstanceStatus::Pending => "Pending".to_string(),
+            NotebookInstanceStatus::Stopped => "Stopped".to_string(),
+            NotebookInstanceStatus::Stopping => "Stopping".to_string(),
+            NotebookInstanceStatus::Updating => "Updating".to_string(),
+            NotebookInstanceStatus::UnknownVariant(UnknownNotebookInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookInstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookInstanceStatus::Deleting => &"Deleting",
+            NotebookInstanceStatus::Failed => &"Failed",
+            NotebookInstanceStatus::InService => &"InService",
+            NotebookInstanceStatus::Pending => &"Pending",
+            NotebookInstanceStatus::Stopped => &"Stopped",
+            NotebookInstanceStatus::Stopping => &"Stopping",
+            NotebookInstanceStatus::Updating => &"Updating",
+            NotebookInstanceStatus::UnknownVariant(UnknownNotebookInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookInstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Deleting" => NotebookInstanceStatus::Deleting,
+            "Failed" => NotebookInstanceStatus::Failed,
+            "InService" => NotebookInstanceStatus::InService,
+            "Pending" => NotebookInstanceStatus::Pending,
+            "Stopped" => NotebookInstanceStatus::Stopped,
+            "Stopping" => NotebookInstanceStatus::Stopping,
+            "Updating" => NotebookInstanceStatus::Updating,
+            _ => NotebookInstanceStatus::UnknownVariant(UnknownNotebookInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotebookInstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Deleting" => NotebookInstanceStatus::Deleting,
+            "Failed" => NotebookInstanceStatus::Failed,
+            "InService" => NotebookInstanceStatus::InService,
+            "Pending" => NotebookInstanceStatus::Pending,
+            "Stopped" => NotebookInstanceStatus::Stopped,
+            "Stopping" => NotebookInstanceStatus::Stopping,
+            "Updating" => NotebookInstanceStatus::Updating,
+            _ => NotebookInstanceStatus::UnknownVariant(UnknownNotebookInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookInstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookInstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotebookInstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides summary information for an Amazon SageMaker notebook instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -11128,7 +22244,7 @@ pub struct NotebookInstanceSummary {
     /// <p>The type of ML compute instance that the notebook instance is running on.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<InstanceType>,
     /// <p>A timestamp that shows when the notebook instance was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11146,11 +22262,115 @@ pub struct NotebookInstanceSummary {
     /// <p>The status of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notebook_instance_status: Option<String>,
+    pub notebook_instance_status: Option<NotebookInstanceStatus>,
     /// <p>The URL that you use to connect to the Jupyter instance running in your notebook instance. </p>
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotebookOutputOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotebookOutputOption {
+    Allowed,
+    Disabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotebookOutputOption),
+}
+
+impl Default for NotebookOutputOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotebookOutputOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotebookOutputOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotebookOutputOption {
+    fn into(self) -> String {
+        match self {
+            NotebookOutputOption::Allowed => "Allowed".to_string(),
+            NotebookOutputOption::Disabled => "Disabled".to_string(),
+            NotebookOutputOption::UnknownVariant(UnknownNotebookOutputOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotebookOutputOption {
+    fn into(self) -> &'a str {
+        match self {
+            NotebookOutputOption::Allowed => &"Allowed",
+            NotebookOutputOption::Disabled => &"Disabled",
+            NotebookOutputOption::UnknownVariant(UnknownNotebookOutputOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotebookOutputOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "Allowed" => NotebookOutputOption::Allowed,
+            "Disabled" => NotebookOutputOption::Disabled,
+            _ => NotebookOutputOption::UnknownVariant(UnknownNotebookOutputOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotebookOutputOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Allowed" => NotebookOutputOption::Allowed,
+            "Disabled" => NotebookOutputOption::Disabled,
+            _ => NotebookOutputOption::UnknownVariant(UnknownNotebookOutputOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotebookOutputOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotebookOutputOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotebookOutputOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configures SNS notifications of available or expiring work items for work teams.</p>
@@ -11160,6 +22380,112 @@ pub struct NotificationConfiguration {
     #[serde(rename = "NotificationTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectiveStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectiveStatus {
+    Failed,
+    Pending,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectiveStatus),
+}
+
+impl Default for ObjectiveStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectiveStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectiveStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectiveStatus {
+    fn into(self) -> String {
+        match self {
+            ObjectiveStatus::Failed => "Failed".to_string(),
+            ObjectiveStatus::Pending => "Pending".to_string(),
+            ObjectiveStatus::Succeeded => "Succeeded".to_string(),
+            ObjectiveStatus::UnknownVariant(UnknownObjectiveStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectiveStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectiveStatus::Failed => &"Failed",
+            ObjectiveStatus::Pending => &"Pending",
+            ObjectiveStatus::Succeeded => &"Succeeded",
+            ObjectiveStatus::UnknownVariant(UnknownObjectiveStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectiveStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => ObjectiveStatus::Failed,
+            "Pending" => ObjectiveStatus::Pending,
+            "Succeeded" => ObjectiveStatus::Succeeded,
+            _ => ObjectiveStatus::UnknownVariant(UnknownObjectiveStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectiveStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => ObjectiveStatus::Failed,
+            "Pending" => ObjectiveStatus::Pending,
+            "Succeeded" => ObjectiveStatus::Succeeded,
+            _ => ObjectiveStatus::UnknownVariant(UnknownObjectiveStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectiveStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ObjectiveStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ObjectiveStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the number of training jobs that this hyperparameter tuning job launched, categorized by the status of their objective metric. The objective metric status shows whether the final objective metric for the training job has been evaluated by the tuning job and used in the hyperparameter tuning process.</p>
@@ -11206,7 +22532,116 @@ pub struct OfflineStoreStatus {
     pub blocked_reason: Option<String>,
     /// <p>An <code>OfflineStore</code> status.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: OfflineStoreStatusValue,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOfflineStoreStatusValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OfflineStoreStatusValue {
+    Active,
+    Blocked,
+    Disabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOfflineStoreStatusValue),
+}
+
+impl Default for OfflineStoreStatusValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OfflineStoreStatusValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OfflineStoreStatusValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OfflineStoreStatusValue {
+    fn into(self) -> String {
+        match self {
+            OfflineStoreStatusValue::Active => "Active".to_string(),
+            OfflineStoreStatusValue::Blocked => "Blocked".to_string(),
+            OfflineStoreStatusValue::Disabled => "Disabled".to_string(),
+            OfflineStoreStatusValue::UnknownVariant(UnknownOfflineStoreStatusValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OfflineStoreStatusValue {
+    fn into(self) -> &'a str {
+        match self {
+            OfflineStoreStatusValue::Active => &"Active",
+            OfflineStoreStatusValue::Blocked => &"Blocked",
+            OfflineStoreStatusValue::Disabled => &"Disabled",
+            OfflineStoreStatusValue::UnknownVariant(UnknownOfflineStoreStatusValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OfflineStoreStatusValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => OfflineStoreStatusValue::Active,
+            "Blocked" => OfflineStoreStatusValue::Blocked,
+            "Disabled" => OfflineStoreStatusValue::Disabled,
+            _ => OfflineStoreStatusValue::UnknownVariant(UnknownOfflineStoreStatusValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OfflineStoreStatusValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => OfflineStoreStatusValue::Active,
+            "Blocked" => OfflineStoreStatusValue::Blocked,
+            "Disabled" => OfflineStoreStatusValue::Disabled,
+            _ => OfflineStoreStatusValue::UnknownVariant(UnknownOfflineStoreStatusValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfflineStoreStatusValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OfflineStoreStatusValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OfflineStoreStatusValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Use this parameter to configure your OIDC Identity Provider (IdP).</p>
@@ -11303,6 +22738,248 @@ pub struct OnlineStoreSecurityConfig {
     pub kms_key_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Operator {
+    Contains,
+    Equals,
+    Exists,
+    GreaterThan,
+    GreaterThanOrEqualTo,
+    In,
+    LessThan,
+    LessThanOrEqualTo,
+    NotEquals,
+    NotExists,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperator),
+}
+
+impl Default for Operator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Operator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Operator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Operator {
+    fn into(self) -> String {
+        match self {
+            Operator::Contains => "Contains".to_string(),
+            Operator::Equals => "Equals".to_string(),
+            Operator::Exists => "Exists".to_string(),
+            Operator::GreaterThan => "GreaterThan".to_string(),
+            Operator::GreaterThanOrEqualTo => "GreaterThanOrEqualTo".to_string(),
+            Operator::In => "In".to_string(),
+            Operator::LessThan => "LessThan".to_string(),
+            Operator::LessThanOrEqualTo => "LessThanOrEqualTo".to_string(),
+            Operator::NotEquals => "NotEquals".to_string(),
+            Operator::NotExists => "NotExists".to_string(),
+            Operator::UnknownVariant(UnknownOperator { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Operator {
+    fn into(self) -> &'a str {
+        match self {
+            Operator::Contains => &"Contains",
+            Operator::Equals => &"Equals",
+            Operator::Exists => &"Exists",
+            Operator::GreaterThan => &"GreaterThan",
+            Operator::GreaterThanOrEqualTo => &"GreaterThanOrEqualTo",
+            Operator::In => &"In",
+            Operator::LessThan => &"LessThan",
+            Operator::LessThanOrEqualTo => &"LessThanOrEqualTo",
+            Operator::NotEquals => &"NotEquals",
+            Operator::NotExists => &"NotExists",
+            Operator::UnknownVariant(UnknownOperator { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Operator {
+    fn from(name: &str) -> Self {
+        match name {
+            "Contains" => Operator::Contains,
+            "Equals" => Operator::Equals,
+            "Exists" => Operator::Exists,
+            "GreaterThan" => Operator::GreaterThan,
+            "GreaterThanOrEqualTo" => Operator::GreaterThanOrEqualTo,
+            "In" => Operator::In,
+            "LessThan" => Operator::LessThan,
+            "LessThanOrEqualTo" => Operator::LessThanOrEqualTo,
+            "NotEquals" => Operator::NotEquals,
+            "NotExists" => Operator::NotExists,
+            _ => Operator::UnknownVariant(UnknownOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Operator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Contains" => Operator::Contains,
+            "Equals" => Operator::Equals,
+            "Exists" => Operator::Exists,
+            "GreaterThan" => Operator::GreaterThan,
+            "GreaterThanOrEqualTo" => Operator::GreaterThanOrEqualTo,
+            "In" => Operator::In,
+            "LessThan" => Operator::LessThan,
+            "LessThanOrEqualTo" => Operator::LessThanOrEqualTo,
+            "NotEquals" => Operator::NotEquals,
+            "NotExists" => Operator::NotExists,
+            _ => Operator::UnknownVariant(UnknownOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Operator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Operator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Operator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderKey {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderKey),
+}
+
+impl Default for OrderKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderKey {
+    fn into(self) -> String {
+        match self {
+            OrderKey::Ascending => "Ascending".to_string(),
+            OrderKey::Descending => "Descending".to_string(),
+            OrderKey::UnknownVariant(UnknownOrderKey { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderKey {
+    fn into(self) -> &'a str {
+        match self {
+            OrderKey::Ascending => &"Ascending",
+            OrderKey::Descending => &"Descending",
+            OrderKey::UnknownVariant(UnknownOrderKey { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => OrderKey::Ascending,
+            "Descending" => OrderKey::Descending,
+            _ => OrderKey::UnknownVariant(UnknownOrderKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => OrderKey::Ascending,
+            "Descending" => OrderKey::Descending,
+            _ => OrderKey::UnknownVariant(UnknownOrderKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the output location for the compiled model and the target device that the model runs on. <code>TargetDevice</code> and <code>TargetPlatform</code> are mutually exclusive, so you need to choose one between the two to specify your target device or platform. If you cannot find your device you want to use from the <code>TargetDevice</code> list, use <code>TargetPlatform</code> to describe the platform of your edge device and <code>CompilerOptions</code> if there are specific settings that are required or recommended to use for particular TargetPlatform.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputConfig {
@@ -11320,7 +22997,7 @@ pub struct OutputConfig {
     /// <p>Identifies the target device or the machine learning instance that you want to run your model on after the compilation has completed. Alternatively, you can specify OS, architecture, and accelerator using <a>TargetPlatform</a> fields. It can be used instead of <code>TargetPlatform</code>.</p>
     #[serde(rename = "TargetDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_device: Option<String>,
+    pub target_device: Option<TargetDevice>,
     /// <p><p>Contains information about a target platform that you want your model to run on, such as OS, architecture, and accelerators. It is an alternative of <code>TargetDevice</code>.</p> <p>The following examples show how to configure the <code>TargetPlatform</code> and <code>CompilerOptions</code> JSON strings for popular target platforms: </p> <ul> <li> <p>Raspberry Pi 3 Model B+</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM<em>EABIHF&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;mattr&#39;: [&#39;+neon&#39;]}</code> </p> </li> <li> <p>Jetson TX2</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM64&quot;, &quot;Accelerator&quot;: &quot;NVIDIA&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;gpu-code&#39;: &#39;sm</em>62&#39;, &#39;trt-ver&#39;: &#39;6.0.1&#39;, &#39;cuda-ver&#39;: &#39;10.0&#39;}</code> </p> </li> <li> <p>EC2 m5.2xlarge instance OS</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;X86<em>64&quot;, &quot;Accelerator&quot;: &quot;NVIDIA&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;mcpu&#39;: &#39;skylake-avx512&#39;}</code> </p> </li> <li> <p>RK3399</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;LINUX&quot;, &quot;Arch&quot;: &quot;ARM64&quot;, &quot;Accelerator&quot;: &quot;MALI&quot;}</code> </p> </li> <li> <p>ARMv7 phone (CPU)</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;ANDROID&quot;, &quot;Arch&quot;: &quot;ARM</em>EABI&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;ANDROID<em>PLATFORM&#39;: 25, &#39;mattr&#39;: [&#39;+neon&#39;]}</code> </p> </li> <li> <p>ARMv8 phone (CPU)</p> <p> <code>&quot;TargetPlatform&quot;: {&quot;Os&quot;: &quot;ANDROID&quot;, &quot;Arch&quot;: &quot;ARM64&quot;},</code> </p> <p> <code> &quot;CompilerOptions&quot;: {&#39;ANDROID</em>PLATFORM&#39;: 29}</code> </p> </li> </ul></p>
     #[serde(rename = "TargetPlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11382,6 +23059,116 @@ pub struct ParameterRanges {
     #[serde(rename = "IntegerParameterRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integer_parameter_ranges: Option<Vec<IntegerParameterRange>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParameterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParameterType {
+    Categorical,
+    Continuous,
+    FreeText,
+    Integer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParameterType),
+}
+
+impl Default for ParameterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParameterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParameterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParameterType {
+    fn into(self) -> String {
+        match self {
+            ParameterType::Categorical => "Categorical".to_string(),
+            ParameterType::Continuous => "Continuous".to_string(),
+            ParameterType::FreeText => "FreeText".to_string(),
+            ParameterType::Integer => "Integer".to_string(),
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParameterType {
+    fn into(self) -> &'a str {
+        match self {
+            ParameterType::Categorical => &"Categorical",
+            ParameterType::Continuous => &"Continuous",
+            ParameterType::FreeText => &"FreeText",
+            ParameterType::Integer => &"Integer",
+            ParameterType::UnknownVariant(UnknownParameterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParameterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Categorical" => ParameterType::Categorical,
+            "Continuous" => ParameterType::Continuous,
+            "FreeText" => ParameterType::FreeText,
+            "Integer" => ParameterType::Integer,
+            _ => ParameterType::UnknownVariant(UnknownParameterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParameterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Categorical" => ParameterType::Categorical,
+            "Continuous" => ParameterType::Continuous,
+            "FreeText" => ParameterType::FreeText,
+            "Integer" => ParameterType::Integer,
+            _ => ParameterType::UnknownVariant(UnknownParameterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParameterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParameterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParameterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The trial that a trial component is associated with and the experiment the trial is part of. A component might not be associated with a trial. A component can be associated with multiple trials.</p>
@@ -11448,7 +23235,7 @@ pub struct Pipeline {
     /// <p>The status of the pipeline.</p>
     #[serde(rename = "PipelineStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_status: Option<String>,
+    pub pipeline_status: Option<PipelineStatus>,
     /// <p>The Amazon Resource Name (ARN) of the role that created the pipeline.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11496,11 +23283,131 @@ pub struct PipelineExecution {
     /// <p>The status of the pipeline status.</p>
     #[serde(rename = "PipelineExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_execution_status: Option<String>,
+    pub pipeline_execution_status: Option<PipelineExecutionStatus>,
     /// <p>Contains a list of pipeline parameters. This list can be empty. </p>
     #[serde(rename = "PipelineParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_parameters: Option<Vec<Parameter>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineExecutionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineExecutionStatus {
+    Executing,
+    Failed,
+    Stopped,
+    Stopping,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineExecutionStatus),
+}
+
+impl Default for PipelineExecutionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineExecutionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineExecutionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineExecutionStatus {
+    fn into(self) -> String {
+        match self {
+            PipelineExecutionStatus::Executing => "Executing".to_string(),
+            PipelineExecutionStatus::Failed => "Failed".to_string(),
+            PipelineExecutionStatus::Stopped => "Stopped".to_string(),
+            PipelineExecutionStatus::Stopping => "Stopping".to_string(),
+            PipelineExecutionStatus::Succeeded => "Succeeded".to_string(),
+            PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineExecutionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineExecutionStatus::Executing => &"Executing",
+            PipelineExecutionStatus::Failed => &"Failed",
+            PipelineExecutionStatus::Stopped => &"Stopped",
+            PipelineExecutionStatus::Stopping => &"Stopping",
+            PipelineExecutionStatus::Succeeded => &"Succeeded",
+            PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineExecutionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Executing" => PipelineExecutionStatus::Executing,
+            "Failed" => PipelineExecutionStatus::Failed,
+            "Stopped" => PipelineExecutionStatus::Stopped,
+            "Stopping" => PipelineExecutionStatus::Stopping,
+            "Succeeded" => PipelineExecutionStatus::Succeeded,
+            _ => PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PipelineExecutionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Executing" => PipelineExecutionStatus::Executing,
+            "Failed" => PipelineExecutionStatus::Failed,
+            "Stopped" => PipelineExecutionStatus::Stopped,
+            "Stopping" => PipelineExecutionStatus::Stopping,
+            "Succeeded" => PipelineExecutionStatus::Succeeded,
+            _ => PipelineExecutionStatus::UnknownVariant(UnknownPipelineExecutionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineExecutionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PipelineExecutionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineExecutionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An execution of a step in a pipeline.</p>
@@ -11534,7 +23441,7 @@ pub struct PipelineExecutionStep {
     /// <p>The status of the step execution.</p>
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub step_status: Option<String>,
+    pub step_status: Option<StepStatus>,
 }
 
 /// <p>Metadata for a step execution.</p>
@@ -11586,11 +23493,107 @@ pub struct PipelineExecutionSummary {
     /// <p>The status of the pipeline execution.</p>
     #[serde(rename = "PipelineExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pipeline_execution_status: Option<String>,
+    pub pipeline_execution_status: Option<PipelineExecutionStatus>,
     /// <p>The start time of the pipeline execution.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPipelineStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PipelineStatus {
+    Active,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPipelineStatus),
+}
+
+impl Default for PipelineStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PipelineStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PipelineStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PipelineStatus {
+    fn into(self) -> String {
+        match self {
+            PipelineStatus::Active => "Active".to_string(),
+            PipelineStatus::UnknownVariant(UnknownPipelineStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PipelineStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PipelineStatus::Active => &"Active",
+            PipelineStatus::UnknownVariant(UnknownPipelineStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PipelineStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => PipelineStatus::Active,
+            _ => PipelineStatus::UnknownVariant(UnknownPipelineStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PipelineStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => PipelineStatus::Active,
+            _ => PipelineStatus::UnknownVariant(UnknownPipelineStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PipelineStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PipelineStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PipelineStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of a pipeline.</p>
@@ -11631,6 +23634,111 @@ pub struct PipelineSummary {
     pub role_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProblemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProblemType {
+    BinaryClassification,
+    MulticlassClassification,
+    Regression,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProblemType),
+}
+
+impl Default for ProblemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProblemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProblemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProblemType {
+    fn into(self) -> String {
+        match self {
+            ProblemType::BinaryClassification => "BinaryClassification".to_string(),
+            ProblemType::MulticlassClassification => "MulticlassClassification".to_string(),
+            ProblemType::Regression => "Regression".to_string(),
+            ProblemType::UnknownVariant(UnknownProblemType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProblemType {
+    fn into(self) -> &'a str {
+        match self {
+            ProblemType::BinaryClassification => &"BinaryClassification",
+            ProblemType::MulticlassClassification => &"MulticlassClassification",
+            ProblemType::Regression => &"Regression",
+            ProblemType::UnknownVariant(UnknownProblemType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProblemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BinaryClassification" => ProblemType::BinaryClassification,
+            "MulticlassClassification" => ProblemType::MulticlassClassification,
+            "Regression" => ProblemType::Regression,
+            _ => ProblemType::UnknownVariant(UnknownProblemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProblemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BinaryClassification" => ProblemType::BinaryClassification,
+            "MulticlassClassification" => ProblemType::MulticlassClassification,
+            "Regression" => ProblemType::Regression,
+            _ => ProblemType::UnknownVariant(UnknownProblemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProblemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProblemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProblemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration for the cluster used to run a processing job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingClusterConfig {
@@ -11639,7 +23747,7 @@ pub struct ProcessingClusterConfig {
     pub instance_count: i64,
     /// <p>The ML compute instance type for the processing job.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: ProcessingInstanceType,
     /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the processing job. </p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11675,6 +23783,290 @@ pub struct ProcessingInput {
     #[serde(rename = "S3Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_input: Option<ProcessingS3Input>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingInstanceType {
+    MlC42Xlarge,
+    MlC44Xlarge,
+    MlC48Xlarge,
+    MlC4Xlarge,
+    MlC518Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Xlarge,
+    MlM410Xlarge,
+    MlM416Xlarge,
+    MlM42Xlarge,
+    MlM44Xlarge,
+    MlM4Xlarge,
+    MlM512Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM5Large,
+    MlM5Xlarge,
+    MlP216Xlarge,
+    MlP28Xlarge,
+    MlP2Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    MlR512Xlarge,
+    MlR516Xlarge,
+    MlR524Xlarge,
+    MlR52Xlarge,
+    MlR54Xlarge,
+    MlR58Xlarge,
+    MlR5Large,
+    MlR5Xlarge,
+    MlT32Xlarge,
+    MlT3Large,
+    MlT3Medium,
+    MlT3Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingInstanceType),
+}
+
+impl Default for ProcessingInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingInstanceType {
+    fn into(self) -> String {
+        match self {
+            ProcessingInstanceType::MlC42Xlarge => "ml.c4.2xlarge".to_string(),
+            ProcessingInstanceType::MlC44Xlarge => "ml.c4.4xlarge".to_string(),
+            ProcessingInstanceType::MlC48Xlarge => "ml.c4.8xlarge".to_string(),
+            ProcessingInstanceType::MlC4Xlarge => "ml.c4.xlarge".to_string(),
+            ProcessingInstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            ProcessingInstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            ProcessingInstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            ProcessingInstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            ProcessingInstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            ProcessingInstanceType::MlM410Xlarge => "ml.m4.10xlarge".to_string(),
+            ProcessingInstanceType::MlM416Xlarge => "ml.m4.16xlarge".to_string(),
+            ProcessingInstanceType::MlM42Xlarge => "ml.m4.2xlarge".to_string(),
+            ProcessingInstanceType::MlM44Xlarge => "ml.m4.4xlarge".to_string(),
+            ProcessingInstanceType::MlM4Xlarge => "ml.m4.xlarge".to_string(),
+            ProcessingInstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            ProcessingInstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            ProcessingInstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            ProcessingInstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            ProcessingInstanceType::MlM5Large => "ml.m5.large".to_string(),
+            ProcessingInstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            ProcessingInstanceType::MlP216Xlarge => "ml.p2.16xlarge".to_string(),
+            ProcessingInstanceType::MlP28Xlarge => "ml.p2.8xlarge".to_string(),
+            ProcessingInstanceType::MlP2Xlarge => "ml.p2.xlarge".to_string(),
+            ProcessingInstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            ProcessingInstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            ProcessingInstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            ProcessingInstanceType::MlR512Xlarge => "ml.r5.12xlarge".to_string(),
+            ProcessingInstanceType::MlR516Xlarge => "ml.r5.16xlarge".to_string(),
+            ProcessingInstanceType::MlR524Xlarge => "ml.r5.24xlarge".to_string(),
+            ProcessingInstanceType::MlR52Xlarge => "ml.r5.2xlarge".to_string(),
+            ProcessingInstanceType::MlR54Xlarge => "ml.r5.4xlarge".to_string(),
+            ProcessingInstanceType::MlR58Xlarge => "ml.r5.8xlarge".to_string(),
+            ProcessingInstanceType::MlR5Large => "ml.r5.large".to_string(),
+            ProcessingInstanceType::MlR5Xlarge => "ml.r5.xlarge".to_string(),
+            ProcessingInstanceType::MlT32Xlarge => "ml.t3.2xlarge".to_string(),
+            ProcessingInstanceType::MlT3Large => "ml.t3.large".to_string(),
+            ProcessingInstanceType::MlT3Medium => "ml.t3.medium".to_string(),
+            ProcessingInstanceType::MlT3Xlarge => "ml.t3.xlarge".to_string(),
+            ProcessingInstanceType::UnknownVariant(UnknownProcessingInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingInstanceType::MlC42Xlarge => &"ml.c4.2xlarge",
+            ProcessingInstanceType::MlC44Xlarge => &"ml.c4.4xlarge",
+            ProcessingInstanceType::MlC48Xlarge => &"ml.c4.8xlarge",
+            ProcessingInstanceType::MlC4Xlarge => &"ml.c4.xlarge",
+            ProcessingInstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            ProcessingInstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            ProcessingInstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            ProcessingInstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            ProcessingInstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            ProcessingInstanceType::MlM410Xlarge => &"ml.m4.10xlarge",
+            ProcessingInstanceType::MlM416Xlarge => &"ml.m4.16xlarge",
+            ProcessingInstanceType::MlM42Xlarge => &"ml.m4.2xlarge",
+            ProcessingInstanceType::MlM44Xlarge => &"ml.m4.4xlarge",
+            ProcessingInstanceType::MlM4Xlarge => &"ml.m4.xlarge",
+            ProcessingInstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            ProcessingInstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            ProcessingInstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            ProcessingInstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            ProcessingInstanceType::MlM5Large => &"ml.m5.large",
+            ProcessingInstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            ProcessingInstanceType::MlP216Xlarge => &"ml.p2.16xlarge",
+            ProcessingInstanceType::MlP28Xlarge => &"ml.p2.8xlarge",
+            ProcessingInstanceType::MlP2Xlarge => &"ml.p2.xlarge",
+            ProcessingInstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            ProcessingInstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            ProcessingInstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            ProcessingInstanceType::MlR512Xlarge => &"ml.r5.12xlarge",
+            ProcessingInstanceType::MlR516Xlarge => &"ml.r5.16xlarge",
+            ProcessingInstanceType::MlR524Xlarge => &"ml.r5.24xlarge",
+            ProcessingInstanceType::MlR52Xlarge => &"ml.r5.2xlarge",
+            ProcessingInstanceType::MlR54Xlarge => &"ml.r5.4xlarge",
+            ProcessingInstanceType::MlR58Xlarge => &"ml.r5.8xlarge",
+            ProcessingInstanceType::MlR5Large => &"ml.r5.large",
+            ProcessingInstanceType::MlR5Xlarge => &"ml.r5.xlarge",
+            ProcessingInstanceType::MlT32Xlarge => &"ml.t3.2xlarge",
+            ProcessingInstanceType::MlT3Large => &"ml.t3.large",
+            ProcessingInstanceType::MlT3Medium => &"ml.t3.medium",
+            ProcessingInstanceType::MlT3Xlarge => &"ml.t3.xlarge",
+            ProcessingInstanceType::UnknownVariant(UnknownProcessingInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c4.2xlarge" => ProcessingInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => ProcessingInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => ProcessingInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => ProcessingInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => ProcessingInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => ProcessingInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => ProcessingInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => ProcessingInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => ProcessingInstanceType::MlC5Xlarge,
+            "ml.m4.10xlarge" => ProcessingInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => ProcessingInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => ProcessingInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => ProcessingInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => ProcessingInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => ProcessingInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => ProcessingInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => ProcessingInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => ProcessingInstanceType::MlM54Xlarge,
+            "ml.m5.large" => ProcessingInstanceType::MlM5Large,
+            "ml.m5.xlarge" => ProcessingInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => ProcessingInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => ProcessingInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => ProcessingInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => ProcessingInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => ProcessingInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => ProcessingInstanceType::MlP38Xlarge,
+            "ml.r5.12xlarge" => ProcessingInstanceType::MlR512Xlarge,
+            "ml.r5.16xlarge" => ProcessingInstanceType::MlR516Xlarge,
+            "ml.r5.24xlarge" => ProcessingInstanceType::MlR524Xlarge,
+            "ml.r5.2xlarge" => ProcessingInstanceType::MlR52Xlarge,
+            "ml.r5.4xlarge" => ProcessingInstanceType::MlR54Xlarge,
+            "ml.r5.8xlarge" => ProcessingInstanceType::MlR58Xlarge,
+            "ml.r5.large" => ProcessingInstanceType::MlR5Large,
+            "ml.r5.xlarge" => ProcessingInstanceType::MlR5Xlarge,
+            "ml.t3.2xlarge" => ProcessingInstanceType::MlT32Xlarge,
+            "ml.t3.large" => ProcessingInstanceType::MlT3Large,
+            "ml.t3.medium" => ProcessingInstanceType::MlT3Medium,
+            "ml.t3.xlarge" => ProcessingInstanceType::MlT3Xlarge,
+            _ => ProcessingInstanceType::UnknownVariant(UnknownProcessingInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c4.2xlarge" => ProcessingInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => ProcessingInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => ProcessingInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => ProcessingInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => ProcessingInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => ProcessingInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => ProcessingInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => ProcessingInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => ProcessingInstanceType::MlC5Xlarge,
+            "ml.m4.10xlarge" => ProcessingInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => ProcessingInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => ProcessingInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => ProcessingInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => ProcessingInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => ProcessingInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => ProcessingInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => ProcessingInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => ProcessingInstanceType::MlM54Xlarge,
+            "ml.m5.large" => ProcessingInstanceType::MlM5Large,
+            "ml.m5.xlarge" => ProcessingInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => ProcessingInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => ProcessingInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => ProcessingInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => ProcessingInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => ProcessingInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => ProcessingInstanceType::MlP38Xlarge,
+            "ml.r5.12xlarge" => ProcessingInstanceType::MlR512Xlarge,
+            "ml.r5.16xlarge" => ProcessingInstanceType::MlR516Xlarge,
+            "ml.r5.24xlarge" => ProcessingInstanceType::MlR524Xlarge,
+            "ml.r5.2xlarge" => ProcessingInstanceType::MlR52Xlarge,
+            "ml.r5.4xlarge" => ProcessingInstanceType::MlR54Xlarge,
+            "ml.r5.8xlarge" => ProcessingInstanceType::MlR58Xlarge,
+            "ml.r5.large" => ProcessingInstanceType::MlR5Large,
+            "ml.r5.xlarge" => ProcessingInstanceType::MlR5Xlarge,
+            "ml.t3.2xlarge" => ProcessingInstanceType::MlT32Xlarge,
+            "ml.t3.large" => ProcessingInstanceType::MlT3Large,
+            "ml.t3.medium" => ProcessingInstanceType::MlT3Medium,
+            "ml.t3.xlarge" => ProcessingInstanceType::MlT3Xlarge,
+            _ => ProcessingInstanceType::UnknownVariant(UnknownProcessingInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An Amazon SageMaker processing job that is used to analyze data and evaluate models. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html">Process Data and Evaluate Models</a>.</p>
@@ -11737,7 +24129,7 @@ pub struct ProcessingJob {
     /// <p>The status of the processing job.</p>
     #[serde(rename = "ProcessingJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub processing_job_status: Option<String>,
+    pub processing_job_status: Option<ProcessingJobStatus>,
     #[serde(rename = "ProcessingOutputConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_output_config: Option<ProcessingOutputConfig>,
@@ -11763,6 +24155,125 @@ pub struct ProcessingJob {
     #[serde(rename = "TrainingJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_job_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingJobStatus),
+}
+
+impl Default for ProcessingJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingJobStatus {
+    fn into(self) -> String {
+        match self {
+            ProcessingJobStatus::Completed => "Completed".to_string(),
+            ProcessingJobStatus::Failed => "Failed".to_string(),
+            ProcessingJobStatus::InProgress => "InProgress".to_string(),
+            ProcessingJobStatus::Stopped => "Stopped".to_string(),
+            ProcessingJobStatus::Stopping => "Stopping".to_string(),
+            ProcessingJobStatus::UnknownVariant(UnknownProcessingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingJobStatus::Completed => &"Completed",
+            ProcessingJobStatus::Failed => &"Failed",
+            ProcessingJobStatus::InProgress => &"InProgress",
+            ProcessingJobStatus::Stopped => &"Stopped",
+            ProcessingJobStatus::Stopping => &"Stopping",
+            ProcessingJobStatus::UnknownVariant(UnknownProcessingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProcessingJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => ProcessingJobStatus::Completed,
+            "Failed" => ProcessingJobStatus::Failed,
+            "InProgress" => ProcessingJobStatus::InProgress,
+            "Stopped" => ProcessingJobStatus::Stopped,
+            "Stopping" => ProcessingJobStatus::Stopping,
+            _ => ProcessingJobStatus::UnknownVariant(UnknownProcessingJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => ProcessingJobStatus::Completed,
+            "Failed" => ProcessingJobStatus::Failed,
+            "InProgress" => ProcessingJobStatus::InProgress,
+            "Stopped" => ProcessingJobStatus::Stopped,
+            "Stopping" => ProcessingJobStatus::Stopping,
+            _ => ProcessingJobStatus::UnknownVariant(UnknownProcessingJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata for a processing job step.</p>
@@ -11806,7 +24317,7 @@ pub struct ProcessingJobSummary {
     pub processing_job_name: String,
     /// <p>The status of the processing job.</p>
     #[serde(rename = "ProcessingJobStatus")]
-    pub processing_job_status: String,
+    pub processing_job_status: ProcessingJobStatus,
 }
 
 /// <p>Describes the results of a processing job. The processing output must specify exactly one of either <code>S3Output</code> or <code>FeatureStoreOutput</code> types.</p>
@@ -11849,6 +24360,324 @@ pub struct ProcessingResources {
     pub cluster_config: ProcessingClusterConfig,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingS3CompressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingS3CompressionType {
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingS3CompressionType),
+}
+
+impl Default for ProcessingS3CompressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingS3CompressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingS3CompressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingS3CompressionType {
+    fn into(self) -> String {
+        match self {
+            ProcessingS3CompressionType::Gzip => "Gzip".to_string(),
+            ProcessingS3CompressionType::None => "None".to_string(),
+            ProcessingS3CompressionType::UnknownVariant(UnknownProcessingS3CompressionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingS3CompressionType {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingS3CompressionType::Gzip => &"Gzip",
+            ProcessingS3CompressionType::None => &"None",
+            ProcessingS3CompressionType::UnknownVariant(UnknownProcessingS3CompressionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingS3CompressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Gzip" => ProcessingS3CompressionType::Gzip,
+            "None" => ProcessingS3CompressionType::None,
+            _ => ProcessingS3CompressionType::UnknownVariant(UnknownProcessingS3CompressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingS3CompressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Gzip" => ProcessingS3CompressionType::Gzip,
+            "None" => ProcessingS3CompressionType::None,
+            _ => ProcessingS3CompressionType::UnknownVariant(UnknownProcessingS3CompressionType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingS3CompressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingS3CompressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingS3CompressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingS3DataDistributionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingS3DataDistributionType {
+    FullyReplicated,
+    ShardedByS3Key,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingS3DataDistributionType),
+}
+
+impl Default for ProcessingS3DataDistributionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingS3DataDistributionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingS3DataDistributionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingS3DataDistributionType {
+    fn into(self) -> String {
+        match self {
+            ProcessingS3DataDistributionType::FullyReplicated => "FullyReplicated".to_string(),
+            ProcessingS3DataDistributionType::ShardedByS3Key => "ShardedByS3Key".to_string(),
+            ProcessingS3DataDistributionType::UnknownVariant(
+                UnknownProcessingS3DataDistributionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingS3DataDistributionType {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingS3DataDistributionType::FullyReplicated => &"FullyReplicated",
+            ProcessingS3DataDistributionType::ShardedByS3Key => &"ShardedByS3Key",
+            ProcessingS3DataDistributionType::UnknownVariant(
+                UnknownProcessingS3DataDistributionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingS3DataDistributionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FullyReplicated" => ProcessingS3DataDistributionType::FullyReplicated,
+            "ShardedByS3Key" => ProcessingS3DataDistributionType::ShardedByS3Key,
+            _ => ProcessingS3DataDistributionType::UnknownVariant(
+                UnknownProcessingS3DataDistributionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ProcessingS3DataDistributionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FullyReplicated" => ProcessingS3DataDistributionType::FullyReplicated,
+            "ShardedByS3Key" => ProcessingS3DataDistributionType::ShardedByS3Key,
+            _ => ProcessingS3DataDistributionType::UnknownVariant(
+                UnknownProcessingS3DataDistributionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingS3DataDistributionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingS3DataDistributionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingS3DataDistributionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingS3DataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingS3DataType {
+    ManifestFile,
+    S3Prefix,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingS3DataType),
+}
+
+impl Default for ProcessingS3DataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingS3DataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingS3DataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingS3DataType {
+    fn into(self) -> String {
+        match self {
+            ProcessingS3DataType::ManifestFile => "ManifestFile".to_string(),
+            ProcessingS3DataType::S3Prefix => "S3Prefix".to_string(),
+            ProcessingS3DataType::UnknownVariant(UnknownProcessingS3DataType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingS3DataType {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingS3DataType::ManifestFile => &"ManifestFile",
+            ProcessingS3DataType::S3Prefix => &"S3Prefix",
+            ProcessingS3DataType::UnknownVariant(UnknownProcessingS3DataType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingS3DataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ManifestFile" => ProcessingS3DataType::ManifestFile,
+            "S3Prefix" => ProcessingS3DataType::S3Prefix,
+            _ => ProcessingS3DataType::UnknownVariant(UnknownProcessingS3DataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingS3DataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ManifestFile" => ProcessingS3DataType::ManifestFile,
+            "S3Prefix" => ProcessingS3DataType::S3Prefix,
+            _ => ProcessingS3DataType::UnknownVariant(UnknownProcessingS3DataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingS3DataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingS3DataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingS3DataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration for processing job inputs in Amazon S3.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProcessingS3Input {
@@ -11859,21 +24688,125 @@ pub struct ProcessingS3Input {
     /// <p>Whether to use <code>Gzip</code> compression for Amazon S3 storage.</p>
     #[serde(rename = "S3CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_compression_type: Option<String>,
+    pub s3_compression_type: Option<ProcessingS3CompressionType>,
     /// <p>Whether the data stored in Amazon S3 is <code>FullyReplicated</code> or <code>ShardedByS3Key</code>.</p>
     #[serde(rename = "S3DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_data_distribution_type: Option<String>,
+    pub s3_data_distribution_type: Option<ProcessingS3DataDistributionType>,
     /// <p>Whether you use an <code>S3Prefix</code> or a <code>ManifestFile</code> for the data type. If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for the processing job. If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for the processing job.</p>
     #[serde(rename = "S3DataType")]
-    pub s3_data_type: String,
+    pub s3_data_type: ProcessingS3DataType,
     /// <p>Whether to use <code>File</code> or <code>Pipe</code> input mode. In <code>File</code> mode, Amazon SageMaker copies the data from the input source onto the local Amazon Elastic Block Store (Amazon EBS) volumes before starting your training algorithm. This is the most commonly used input mode. In <code>Pipe</code> mode, Amazon SageMaker streams input data from the source directly to your algorithm without using the EBS volume.This is a required parameter when <code>AppManaged</code> is <code>False</code> (default).</p>
     #[serde(rename = "S3InputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_input_mode: Option<String>,
+    pub s3_input_mode: Option<ProcessingS3InputMode>,
     /// <p>The URI for the Amazon S3 storage where you want Amazon SageMaker to download the artifacts needed to run a processing job.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingS3InputMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingS3InputMode {
+    File,
+    Pipe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingS3InputMode),
+}
+
+impl Default for ProcessingS3InputMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingS3InputMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingS3InputMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingS3InputMode {
+    fn into(self) -> String {
+        match self {
+            ProcessingS3InputMode::File => "File".to_string(),
+            ProcessingS3InputMode::Pipe => "Pipe".to_string(),
+            ProcessingS3InputMode::UnknownVariant(UnknownProcessingS3InputMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingS3InputMode {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingS3InputMode::File => &"File",
+            ProcessingS3InputMode::Pipe => &"Pipe",
+            ProcessingS3InputMode::UnknownVariant(UnknownProcessingS3InputMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingS3InputMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "File" => ProcessingS3InputMode::File,
+            "Pipe" => ProcessingS3InputMode::Pipe,
+            _ => ProcessingS3InputMode::UnknownVariant(UnknownProcessingS3InputMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingS3InputMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "File" => ProcessingS3InputMode::File,
+            "Pipe" => ProcessingS3InputMode::Pipe,
+            _ => ProcessingS3InputMode::UnknownVariant(UnknownProcessingS3InputMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingS3InputMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingS3InputMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingS3InputMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration for processing job outputs in Amazon S3.</p>
@@ -11884,10 +24817,114 @@ pub struct ProcessingS3Output {
     pub local_path: String,
     /// <p>Whether to upload the results of the processing job continuously or after the job completes.</p>
     #[serde(rename = "S3UploadMode")]
-    pub s3_upload_mode: String,
+    pub s3_upload_mode: ProcessingS3UploadMode,
     /// <p>A URI that identifies the Amazon S3 bucket where you want Amazon SageMaker to save the results of a processing job.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessingS3UploadMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessingS3UploadMode {
+    Continuous,
+    EndOfJob,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessingS3UploadMode),
+}
+
+impl Default for ProcessingS3UploadMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessingS3UploadMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessingS3UploadMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessingS3UploadMode {
+    fn into(self) -> String {
+        match self {
+            ProcessingS3UploadMode::Continuous => "Continuous".to_string(),
+            ProcessingS3UploadMode::EndOfJob => "EndOfJob".to_string(),
+            ProcessingS3UploadMode::UnknownVariant(UnknownProcessingS3UploadMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessingS3UploadMode {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessingS3UploadMode::Continuous => &"Continuous",
+            ProcessingS3UploadMode::EndOfJob => &"EndOfJob",
+            ProcessingS3UploadMode::UnknownVariant(UnknownProcessingS3UploadMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessingS3UploadMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Continuous" => ProcessingS3UploadMode::Continuous,
+            "EndOfJob" => ProcessingS3UploadMode::EndOfJob,
+            _ => ProcessingS3UploadMode::UnknownVariant(UnknownProcessingS3UploadMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessingS3UploadMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Continuous" => ProcessingS3UploadMode::Continuous,
+            "EndOfJob" => ProcessingS3UploadMode::EndOfJob,
+            _ => ProcessingS3UploadMode::UnknownVariant(UnknownProcessingS3UploadMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessingS3UploadMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessingS3UploadMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessingS3UploadMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies a time limit for how long the processing job is allowed to run.</p>
@@ -11904,7 +24941,7 @@ pub struct ProductionVariant {
     /// <p>The size of the Elastic Inference (EI) instance to use for the production variant. EI instances provide on-demand GPU computing for inference. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub accelerator_type: Option<String>,
+    pub accelerator_type: Option<ProductionVariantAcceleratorType>,
     /// <p>Number of instances to launch initially.</p>
     #[serde(rename = "InitialInstanceCount")]
     pub initial_instance_count: i64,
@@ -11914,13 +24951,569 @@ pub struct ProductionVariant {
     pub initial_variant_weight: Option<f32>,
     /// <p>The ML compute instance type.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: ProductionVariantInstanceType,
     /// <p>The name of the model that you want to host. This is the name that you specified when creating the model.</p>
     #[serde(rename = "ModelName")]
     pub model_name: String,
     /// <p>The name of the production variant.</p>
     #[serde(rename = "VariantName")]
     pub variant_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProductionVariantAcceleratorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProductionVariantAcceleratorType {
+    MlEia1Large,
+    MlEia1Medium,
+    MlEia1Xlarge,
+    MlEia2Large,
+    MlEia2Medium,
+    MlEia2Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProductionVariantAcceleratorType),
+}
+
+impl Default for ProductionVariantAcceleratorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProductionVariantAcceleratorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProductionVariantAcceleratorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProductionVariantAcceleratorType {
+    fn into(self) -> String {
+        match self {
+            ProductionVariantAcceleratorType::MlEia1Large => "ml.eia1.large".to_string(),
+            ProductionVariantAcceleratorType::MlEia1Medium => "ml.eia1.medium".to_string(),
+            ProductionVariantAcceleratorType::MlEia1Xlarge => "ml.eia1.xlarge".to_string(),
+            ProductionVariantAcceleratorType::MlEia2Large => "ml.eia2.large".to_string(),
+            ProductionVariantAcceleratorType::MlEia2Medium => "ml.eia2.medium".to_string(),
+            ProductionVariantAcceleratorType::MlEia2Xlarge => "ml.eia2.xlarge".to_string(),
+            ProductionVariantAcceleratorType::UnknownVariant(
+                UnknownProductionVariantAcceleratorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProductionVariantAcceleratorType {
+    fn into(self) -> &'a str {
+        match self {
+            ProductionVariantAcceleratorType::MlEia1Large => &"ml.eia1.large",
+            ProductionVariantAcceleratorType::MlEia1Medium => &"ml.eia1.medium",
+            ProductionVariantAcceleratorType::MlEia1Xlarge => &"ml.eia1.xlarge",
+            ProductionVariantAcceleratorType::MlEia2Large => &"ml.eia2.large",
+            ProductionVariantAcceleratorType::MlEia2Medium => &"ml.eia2.medium",
+            ProductionVariantAcceleratorType::MlEia2Xlarge => &"ml.eia2.xlarge",
+            ProductionVariantAcceleratorType::UnknownVariant(
+                UnknownProductionVariantAcceleratorType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ProductionVariantAcceleratorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.eia1.large" => ProductionVariantAcceleratorType::MlEia1Large,
+            "ml.eia1.medium" => ProductionVariantAcceleratorType::MlEia1Medium,
+            "ml.eia1.xlarge" => ProductionVariantAcceleratorType::MlEia1Xlarge,
+            "ml.eia2.large" => ProductionVariantAcceleratorType::MlEia2Large,
+            "ml.eia2.medium" => ProductionVariantAcceleratorType::MlEia2Medium,
+            "ml.eia2.xlarge" => ProductionVariantAcceleratorType::MlEia2Xlarge,
+            _ => ProductionVariantAcceleratorType::UnknownVariant(
+                UnknownProductionVariantAcceleratorType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ProductionVariantAcceleratorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.eia1.large" => ProductionVariantAcceleratorType::MlEia1Large,
+            "ml.eia1.medium" => ProductionVariantAcceleratorType::MlEia1Medium,
+            "ml.eia1.xlarge" => ProductionVariantAcceleratorType::MlEia1Xlarge,
+            "ml.eia2.large" => ProductionVariantAcceleratorType::MlEia2Large,
+            "ml.eia2.medium" => ProductionVariantAcceleratorType::MlEia2Medium,
+            "ml.eia2.xlarge" => ProductionVariantAcceleratorType::MlEia2Xlarge,
+            _ => ProductionVariantAcceleratorType::UnknownVariant(
+                UnknownProductionVariantAcceleratorType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductionVariantAcceleratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProductionVariantAcceleratorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProductionVariantAcceleratorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProductionVariantInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProductionVariantInstanceType {
+    MlC42Xlarge,
+    MlC44Xlarge,
+    MlC48Xlarge,
+    MlC4Large,
+    MlC4Xlarge,
+    MlC518Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Large,
+    MlC5Xlarge,
+    MlC5D18Xlarge,
+    MlC5D2Xlarge,
+    MlC5D4Xlarge,
+    MlC5D9Xlarge,
+    MlC5DLarge,
+    MlC5DXlarge,
+    MlG4Dn12Xlarge,
+    MlG4Dn16Xlarge,
+    MlG4Dn2Xlarge,
+    MlG4Dn4Xlarge,
+    MlG4Dn8Xlarge,
+    MlG4DnXlarge,
+    MlInf124Xlarge,
+    MlInf12Xlarge,
+    MlInf16Xlarge,
+    MlInf1Xlarge,
+    MlM410Xlarge,
+    MlM416Xlarge,
+    MlM42Xlarge,
+    MlM44Xlarge,
+    MlM4Xlarge,
+    MlM512Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM5Large,
+    MlM5Xlarge,
+    MlM5D12Xlarge,
+    MlM5D24Xlarge,
+    MlM5D2Xlarge,
+    MlM5D4Xlarge,
+    MlM5DLarge,
+    MlM5DXlarge,
+    MlP216Xlarge,
+    MlP28Xlarge,
+    MlP2Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    MlR512Xlarge,
+    MlR524Xlarge,
+    MlR52Xlarge,
+    MlR54Xlarge,
+    MlR5Large,
+    MlR5Xlarge,
+    MlR5D12Xlarge,
+    MlR5D24Xlarge,
+    MlR5D2Xlarge,
+    MlR5D4Xlarge,
+    MlR5DLarge,
+    MlR5DXlarge,
+    MlT22Xlarge,
+    MlT2Large,
+    MlT2Medium,
+    MlT2Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProductionVariantInstanceType),
+}
+
+impl Default for ProductionVariantInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProductionVariantInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProductionVariantInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProductionVariantInstanceType {
+    fn into(self) -> String {
+        match self {
+            ProductionVariantInstanceType::MlC42Xlarge => "ml.c4.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlC44Xlarge => "ml.c4.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlC48Xlarge => "ml.c4.8xlarge".to_string(),
+            ProductionVariantInstanceType::MlC4Large => "ml.c4.large".to_string(),
+            ProductionVariantInstanceType::MlC4Xlarge => "ml.c4.xlarge".to_string(),
+            ProductionVariantInstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            ProductionVariantInstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5Large => "ml.c5.large".to_string(),
+            ProductionVariantInstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5D18Xlarge => "ml.c5d.18xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5D2Xlarge => "ml.c5d.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5D4Xlarge => "ml.c5d.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5D9Xlarge => "ml.c5d.9xlarge".to_string(),
+            ProductionVariantInstanceType::MlC5DLarge => "ml.c5d.large".to_string(),
+            ProductionVariantInstanceType::MlC5DXlarge => "ml.c5d.xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4Dn12Xlarge => "ml.g4dn.12xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4Dn16Xlarge => "ml.g4dn.16xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4Dn2Xlarge => "ml.g4dn.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4Dn4Xlarge => "ml.g4dn.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4Dn8Xlarge => "ml.g4dn.8xlarge".to_string(),
+            ProductionVariantInstanceType::MlG4DnXlarge => "ml.g4dn.xlarge".to_string(),
+            ProductionVariantInstanceType::MlInf124Xlarge => "ml.inf1.24xlarge".to_string(),
+            ProductionVariantInstanceType::MlInf12Xlarge => "ml.inf1.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlInf16Xlarge => "ml.inf1.6xlarge".to_string(),
+            ProductionVariantInstanceType::MlInf1Xlarge => "ml.inf1.xlarge".to_string(),
+            ProductionVariantInstanceType::MlM410Xlarge => "ml.m4.10xlarge".to_string(),
+            ProductionVariantInstanceType::MlM416Xlarge => "ml.m4.16xlarge".to_string(),
+            ProductionVariantInstanceType::MlM42Xlarge => "ml.m4.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlM44Xlarge => "ml.m4.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlM4Xlarge => "ml.m4.xlarge".to_string(),
+            ProductionVariantInstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            ProductionVariantInstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            ProductionVariantInstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5Large => "ml.m5.large".to_string(),
+            ProductionVariantInstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5D12Xlarge => "ml.m5d.12xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5D24Xlarge => "ml.m5d.24xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5D2Xlarge => "ml.m5d.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5D4Xlarge => "ml.m5d.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlM5DLarge => "ml.m5d.large".to_string(),
+            ProductionVariantInstanceType::MlM5DXlarge => "ml.m5d.xlarge".to_string(),
+            ProductionVariantInstanceType::MlP216Xlarge => "ml.p2.16xlarge".to_string(),
+            ProductionVariantInstanceType::MlP28Xlarge => "ml.p2.8xlarge".to_string(),
+            ProductionVariantInstanceType::MlP2Xlarge => "ml.p2.xlarge".to_string(),
+            ProductionVariantInstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            ProductionVariantInstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            ProductionVariantInstanceType::MlR512Xlarge => "ml.r5.12xlarge".to_string(),
+            ProductionVariantInstanceType::MlR524Xlarge => "ml.r5.24xlarge".to_string(),
+            ProductionVariantInstanceType::MlR52Xlarge => "ml.r5.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlR54Xlarge => "ml.r5.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5Large => "ml.r5.large".to_string(),
+            ProductionVariantInstanceType::MlR5Xlarge => "ml.r5.xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5D12Xlarge => "ml.r5d.12xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5D24Xlarge => "ml.r5d.24xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5D2Xlarge => "ml.r5d.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5D4Xlarge => "ml.r5d.4xlarge".to_string(),
+            ProductionVariantInstanceType::MlR5DLarge => "ml.r5d.large".to_string(),
+            ProductionVariantInstanceType::MlR5DXlarge => "ml.r5d.xlarge".to_string(),
+            ProductionVariantInstanceType::MlT22Xlarge => "ml.t2.2xlarge".to_string(),
+            ProductionVariantInstanceType::MlT2Large => "ml.t2.large".to_string(),
+            ProductionVariantInstanceType::MlT2Medium => "ml.t2.medium".to_string(),
+            ProductionVariantInstanceType::MlT2Xlarge => "ml.t2.xlarge".to_string(),
+            ProductionVariantInstanceType::UnknownVariant(
+                UnknownProductionVariantInstanceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProductionVariantInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            ProductionVariantInstanceType::MlC42Xlarge => &"ml.c4.2xlarge",
+            ProductionVariantInstanceType::MlC44Xlarge => &"ml.c4.4xlarge",
+            ProductionVariantInstanceType::MlC48Xlarge => &"ml.c4.8xlarge",
+            ProductionVariantInstanceType::MlC4Large => &"ml.c4.large",
+            ProductionVariantInstanceType::MlC4Xlarge => &"ml.c4.xlarge",
+            ProductionVariantInstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            ProductionVariantInstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            ProductionVariantInstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            ProductionVariantInstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            ProductionVariantInstanceType::MlC5Large => &"ml.c5.large",
+            ProductionVariantInstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            ProductionVariantInstanceType::MlC5D18Xlarge => &"ml.c5d.18xlarge",
+            ProductionVariantInstanceType::MlC5D2Xlarge => &"ml.c5d.2xlarge",
+            ProductionVariantInstanceType::MlC5D4Xlarge => &"ml.c5d.4xlarge",
+            ProductionVariantInstanceType::MlC5D9Xlarge => &"ml.c5d.9xlarge",
+            ProductionVariantInstanceType::MlC5DLarge => &"ml.c5d.large",
+            ProductionVariantInstanceType::MlC5DXlarge => &"ml.c5d.xlarge",
+            ProductionVariantInstanceType::MlG4Dn12Xlarge => &"ml.g4dn.12xlarge",
+            ProductionVariantInstanceType::MlG4Dn16Xlarge => &"ml.g4dn.16xlarge",
+            ProductionVariantInstanceType::MlG4Dn2Xlarge => &"ml.g4dn.2xlarge",
+            ProductionVariantInstanceType::MlG4Dn4Xlarge => &"ml.g4dn.4xlarge",
+            ProductionVariantInstanceType::MlG4Dn8Xlarge => &"ml.g4dn.8xlarge",
+            ProductionVariantInstanceType::MlG4DnXlarge => &"ml.g4dn.xlarge",
+            ProductionVariantInstanceType::MlInf124Xlarge => &"ml.inf1.24xlarge",
+            ProductionVariantInstanceType::MlInf12Xlarge => &"ml.inf1.2xlarge",
+            ProductionVariantInstanceType::MlInf16Xlarge => &"ml.inf1.6xlarge",
+            ProductionVariantInstanceType::MlInf1Xlarge => &"ml.inf1.xlarge",
+            ProductionVariantInstanceType::MlM410Xlarge => &"ml.m4.10xlarge",
+            ProductionVariantInstanceType::MlM416Xlarge => &"ml.m4.16xlarge",
+            ProductionVariantInstanceType::MlM42Xlarge => &"ml.m4.2xlarge",
+            ProductionVariantInstanceType::MlM44Xlarge => &"ml.m4.4xlarge",
+            ProductionVariantInstanceType::MlM4Xlarge => &"ml.m4.xlarge",
+            ProductionVariantInstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            ProductionVariantInstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            ProductionVariantInstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            ProductionVariantInstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            ProductionVariantInstanceType::MlM5Large => &"ml.m5.large",
+            ProductionVariantInstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            ProductionVariantInstanceType::MlM5D12Xlarge => &"ml.m5d.12xlarge",
+            ProductionVariantInstanceType::MlM5D24Xlarge => &"ml.m5d.24xlarge",
+            ProductionVariantInstanceType::MlM5D2Xlarge => &"ml.m5d.2xlarge",
+            ProductionVariantInstanceType::MlM5D4Xlarge => &"ml.m5d.4xlarge",
+            ProductionVariantInstanceType::MlM5DLarge => &"ml.m5d.large",
+            ProductionVariantInstanceType::MlM5DXlarge => &"ml.m5d.xlarge",
+            ProductionVariantInstanceType::MlP216Xlarge => &"ml.p2.16xlarge",
+            ProductionVariantInstanceType::MlP28Xlarge => &"ml.p2.8xlarge",
+            ProductionVariantInstanceType::MlP2Xlarge => &"ml.p2.xlarge",
+            ProductionVariantInstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            ProductionVariantInstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            ProductionVariantInstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            ProductionVariantInstanceType::MlR512Xlarge => &"ml.r5.12xlarge",
+            ProductionVariantInstanceType::MlR524Xlarge => &"ml.r5.24xlarge",
+            ProductionVariantInstanceType::MlR52Xlarge => &"ml.r5.2xlarge",
+            ProductionVariantInstanceType::MlR54Xlarge => &"ml.r5.4xlarge",
+            ProductionVariantInstanceType::MlR5Large => &"ml.r5.large",
+            ProductionVariantInstanceType::MlR5Xlarge => &"ml.r5.xlarge",
+            ProductionVariantInstanceType::MlR5D12Xlarge => &"ml.r5d.12xlarge",
+            ProductionVariantInstanceType::MlR5D24Xlarge => &"ml.r5d.24xlarge",
+            ProductionVariantInstanceType::MlR5D2Xlarge => &"ml.r5d.2xlarge",
+            ProductionVariantInstanceType::MlR5D4Xlarge => &"ml.r5d.4xlarge",
+            ProductionVariantInstanceType::MlR5DLarge => &"ml.r5d.large",
+            ProductionVariantInstanceType::MlR5DXlarge => &"ml.r5d.xlarge",
+            ProductionVariantInstanceType::MlT22Xlarge => &"ml.t2.2xlarge",
+            ProductionVariantInstanceType::MlT2Large => &"ml.t2.large",
+            ProductionVariantInstanceType::MlT2Medium => &"ml.t2.medium",
+            ProductionVariantInstanceType::MlT2Xlarge => &"ml.t2.xlarge",
+            ProductionVariantInstanceType::UnknownVariant(
+                UnknownProductionVariantInstanceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ProductionVariantInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c4.2xlarge" => ProductionVariantInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => ProductionVariantInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => ProductionVariantInstanceType::MlC48Xlarge,
+            "ml.c4.large" => ProductionVariantInstanceType::MlC4Large,
+            "ml.c4.xlarge" => ProductionVariantInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => ProductionVariantInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => ProductionVariantInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => ProductionVariantInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => ProductionVariantInstanceType::MlC59Xlarge,
+            "ml.c5.large" => ProductionVariantInstanceType::MlC5Large,
+            "ml.c5.xlarge" => ProductionVariantInstanceType::MlC5Xlarge,
+            "ml.c5d.18xlarge" => ProductionVariantInstanceType::MlC5D18Xlarge,
+            "ml.c5d.2xlarge" => ProductionVariantInstanceType::MlC5D2Xlarge,
+            "ml.c5d.4xlarge" => ProductionVariantInstanceType::MlC5D4Xlarge,
+            "ml.c5d.9xlarge" => ProductionVariantInstanceType::MlC5D9Xlarge,
+            "ml.c5d.large" => ProductionVariantInstanceType::MlC5DLarge,
+            "ml.c5d.xlarge" => ProductionVariantInstanceType::MlC5DXlarge,
+            "ml.g4dn.12xlarge" => ProductionVariantInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => ProductionVariantInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => ProductionVariantInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => ProductionVariantInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => ProductionVariantInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => ProductionVariantInstanceType::MlG4DnXlarge,
+            "ml.inf1.24xlarge" => ProductionVariantInstanceType::MlInf124Xlarge,
+            "ml.inf1.2xlarge" => ProductionVariantInstanceType::MlInf12Xlarge,
+            "ml.inf1.6xlarge" => ProductionVariantInstanceType::MlInf16Xlarge,
+            "ml.inf1.xlarge" => ProductionVariantInstanceType::MlInf1Xlarge,
+            "ml.m4.10xlarge" => ProductionVariantInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => ProductionVariantInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => ProductionVariantInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => ProductionVariantInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => ProductionVariantInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => ProductionVariantInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => ProductionVariantInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => ProductionVariantInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => ProductionVariantInstanceType::MlM54Xlarge,
+            "ml.m5.large" => ProductionVariantInstanceType::MlM5Large,
+            "ml.m5.xlarge" => ProductionVariantInstanceType::MlM5Xlarge,
+            "ml.m5d.12xlarge" => ProductionVariantInstanceType::MlM5D12Xlarge,
+            "ml.m5d.24xlarge" => ProductionVariantInstanceType::MlM5D24Xlarge,
+            "ml.m5d.2xlarge" => ProductionVariantInstanceType::MlM5D2Xlarge,
+            "ml.m5d.4xlarge" => ProductionVariantInstanceType::MlM5D4Xlarge,
+            "ml.m5d.large" => ProductionVariantInstanceType::MlM5DLarge,
+            "ml.m5d.xlarge" => ProductionVariantInstanceType::MlM5DXlarge,
+            "ml.p2.16xlarge" => ProductionVariantInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => ProductionVariantInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => ProductionVariantInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => ProductionVariantInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => ProductionVariantInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => ProductionVariantInstanceType::MlP38Xlarge,
+            "ml.r5.12xlarge" => ProductionVariantInstanceType::MlR512Xlarge,
+            "ml.r5.24xlarge" => ProductionVariantInstanceType::MlR524Xlarge,
+            "ml.r5.2xlarge" => ProductionVariantInstanceType::MlR52Xlarge,
+            "ml.r5.4xlarge" => ProductionVariantInstanceType::MlR54Xlarge,
+            "ml.r5.large" => ProductionVariantInstanceType::MlR5Large,
+            "ml.r5.xlarge" => ProductionVariantInstanceType::MlR5Xlarge,
+            "ml.r5d.12xlarge" => ProductionVariantInstanceType::MlR5D12Xlarge,
+            "ml.r5d.24xlarge" => ProductionVariantInstanceType::MlR5D24Xlarge,
+            "ml.r5d.2xlarge" => ProductionVariantInstanceType::MlR5D2Xlarge,
+            "ml.r5d.4xlarge" => ProductionVariantInstanceType::MlR5D4Xlarge,
+            "ml.r5d.large" => ProductionVariantInstanceType::MlR5DLarge,
+            "ml.r5d.xlarge" => ProductionVariantInstanceType::MlR5DXlarge,
+            "ml.t2.2xlarge" => ProductionVariantInstanceType::MlT22Xlarge,
+            "ml.t2.large" => ProductionVariantInstanceType::MlT2Large,
+            "ml.t2.medium" => ProductionVariantInstanceType::MlT2Medium,
+            "ml.t2.xlarge" => ProductionVariantInstanceType::MlT2Xlarge,
+            _ => ProductionVariantInstanceType::UnknownVariant(
+                UnknownProductionVariantInstanceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ProductionVariantInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c4.2xlarge" => ProductionVariantInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => ProductionVariantInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => ProductionVariantInstanceType::MlC48Xlarge,
+            "ml.c4.large" => ProductionVariantInstanceType::MlC4Large,
+            "ml.c4.xlarge" => ProductionVariantInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => ProductionVariantInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => ProductionVariantInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => ProductionVariantInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => ProductionVariantInstanceType::MlC59Xlarge,
+            "ml.c5.large" => ProductionVariantInstanceType::MlC5Large,
+            "ml.c5.xlarge" => ProductionVariantInstanceType::MlC5Xlarge,
+            "ml.c5d.18xlarge" => ProductionVariantInstanceType::MlC5D18Xlarge,
+            "ml.c5d.2xlarge" => ProductionVariantInstanceType::MlC5D2Xlarge,
+            "ml.c5d.4xlarge" => ProductionVariantInstanceType::MlC5D4Xlarge,
+            "ml.c5d.9xlarge" => ProductionVariantInstanceType::MlC5D9Xlarge,
+            "ml.c5d.large" => ProductionVariantInstanceType::MlC5DLarge,
+            "ml.c5d.xlarge" => ProductionVariantInstanceType::MlC5DXlarge,
+            "ml.g4dn.12xlarge" => ProductionVariantInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => ProductionVariantInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => ProductionVariantInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => ProductionVariantInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => ProductionVariantInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => ProductionVariantInstanceType::MlG4DnXlarge,
+            "ml.inf1.24xlarge" => ProductionVariantInstanceType::MlInf124Xlarge,
+            "ml.inf1.2xlarge" => ProductionVariantInstanceType::MlInf12Xlarge,
+            "ml.inf1.6xlarge" => ProductionVariantInstanceType::MlInf16Xlarge,
+            "ml.inf1.xlarge" => ProductionVariantInstanceType::MlInf1Xlarge,
+            "ml.m4.10xlarge" => ProductionVariantInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => ProductionVariantInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => ProductionVariantInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => ProductionVariantInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => ProductionVariantInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => ProductionVariantInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => ProductionVariantInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => ProductionVariantInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => ProductionVariantInstanceType::MlM54Xlarge,
+            "ml.m5.large" => ProductionVariantInstanceType::MlM5Large,
+            "ml.m5.xlarge" => ProductionVariantInstanceType::MlM5Xlarge,
+            "ml.m5d.12xlarge" => ProductionVariantInstanceType::MlM5D12Xlarge,
+            "ml.m5d.24xlarge" => ProductionVariantInstanceType::MlM5D24Xlarge,
+            "ml.m5d.2xlarge" => ProductionVariantInstanceType::MlM5D2Xlarge,
+            "ml.m5d.4xlarge" => ProductionVariantInstanceType::MlM5D4Xlarge,
+            "ml.m5d.large" => ProductionVariantInstanceType::MlM5DLarge,
+            "ml.m5d.xlarge" => ProductionVariantInstanceType::MlM5DXlarge,
+            "ml.p2.16xlarge" => ProductionVariantInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => ProductionVariantInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => ProductionVariantInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => ProductionVariantInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => ProductionVariantInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => ProductionVariantInstanceType::MlP38Xlarge,
+            "ml.r5.12xlarge" => ProductionVariantInstanceType::MlR512Xlarge,
+            "ml.r5.24xlarge" => ProductionVariantInstanceType::MlR524Xlarge,
+            "ml.r5.2xlarge" => ProductionVariantInstanceType::MlR52Xlarge,
+            "ml.r5.4xlarge" => ProductionVariantInstanceType::MlR54Xlarge,
+            "ml.r5.large" => ProductionVariantInstanceType::MlR5Large,
+            "ml.r5.xlarge" => ProductionVariantInstanceType::MlR5Xlarge,
+            "ml.r5d.12xlarge" => ProductionVariantInstanceType::MlR5D12Xlarge,
+            "ml.r5d.24xlarge" => ProductionVariantInstanceType::MlR5D24Xlarge,
+            "ml.r5d.2xlarge" => ProductionVariantInstanceType::MlR5D2Xlarge,
+            "ml.r5d.4xlarge" => ProductionVariantInstanceType::MlR5D4Xlarge,
+            "ml.r5d.large" => ProductionVariantInstanceType::MlR5DLarge,
+            "ml.r5d.xlarge" => ProductionVariantInstanceType::MlR5DXlarge,
+            "ml.t2.2xlarge" => ProductionVariantInstanceType::MlT22Xlarge,
+            "ml.t2.large" => ProductionVariantInstanceType::MlT2Large,
+            "ml.t2.medium" => ProductionVariantInstanceType::MlT2Medium,
+            "ml.t2.xlarge" => ProductionVariantInstanceType::MlT2Xlarge,
+            _ => ProductionVariantInstanceType::UnknownVariant(
+                UnknownProductionVariantInstanceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProductionVariantInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProductionVariantInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProductionVariantInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes weight and capacities for a production variant associated with an endpoint. If you sent a request to the <code>UpdateEndpointWeightsAndCapacities</code> API and the endpoint status is <code>Updating</code>, you get different desired and current values. </p>
@@ -11996,7 +25589,7 @@ pub struct ProfilerRuleConfiguration {
     /// <p>The instance type to deploy a Debugger custom rule for profiling a training job.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<ProcessingInstanceType>,
     /// <p>Path to local storage location for output of rules. Defaults to <code>/opt/ml/processing/output/rule/</code>. </p>
     #[serde(rename = "LocalPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12040,11 +25633,444 @@ pub struct ProfilerRuleEvaluationStatus {
     /// <p>Status of the rule evaluation.</p>
     #[serde(rename = "RuleEvaluationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_evaluation_status: Option<String>,
+    pub rule_evaluation_status: Option<RuleEvaluationStatus>,
     /// <p>Details from the rule evaluation.</p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProfilingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProfilingStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProfilingStatus),
+}
+
+impl Default for ProfilingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProfilingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProfilingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProfilingStatus {
+    fn into(self) -> String {
+        match self {
+            ProfilingStatus::Disabled => "Disabled".to_string(),
+            ProfilingStatus::Enabled => "Enabled".to_string(),
+            ProfilingStatus::UnknownVariant(UnknownProfilingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProfilingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProfilingStatus::Disabled => &"Disabled",
+            ProfilingStatus::Enabled => &"Enabled",
+            ProfilingStatus::UnknownVariant(UnknownProfilingStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProfilingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ProfilingStatus::Disabled,
+            "Enabled" => ProfilingStatus::Enabled,
+            _ => ProfilingStatus::UnknownVariant(UnknownProfilingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProfilingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ProfilingStatus::Disabled,
+            "Enabled" => ProfilingStatus::Enabled,
+            _ => ProfilingStatus::UnknownVariant(UnknownProfilingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProfilingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProfilingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProfilingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectSortBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectSortBy),
+}
+
+impl Default for ProjectSortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectSortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectSortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectSortBy {
+    fn into(self) -> String {
+        match self {
+            ProjectSortBy::CreationTime => "CreationTime".to_string(),
+            ProjectSortBy::Name => "Name".to_string(),
+            ProjectSortBy::UnknownVariant(UnknownProjectSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectSortBy {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectSortBy::CreationTime => &"CreationTime",
+            ProjectSortBy::Name => &"Name",
+            ProjectSortBy::UnknownVariant(UnknownProjectSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectSortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => ProjectSortBy::CreationTime,
+            "Name" => ProjectSortBy::Name,
+            _ => ProjectSortBy::UnknownVariant(UnknownProjectSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectSortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => ProjectSortBy::CreationTime,
+            "Name" => ProjectSortBy::Name,
+            _ => ProjectSortBy::UnknownVariant(UnknownProjectSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectSortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProjectSortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProjectSortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectSortOrder),
+}
+
+impl Default for ProjectSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectSortOrder {
+    fn into(self) -> String {
+        match self {
+            ProjectSortOrder::Ascending => "Ascending".to_string(),
+            ProjectSortOrder::Descending => "Descending".to_string(),
+            ProjectSortOrder::UnknownVariant(UnknownProjectSortOrder { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectSortOrder::Ascending => &"Ascending",
+            ProjectSortOrder::Descending => &"Descending",
+            ProjectSortOrder::UnknownVariant(UnknownProjectSortOrder { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProjectSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => ProjectSortOrder::Ascending,
+            "Descending" => ProjectSortOrder::Descending,
+            _ => ProjectSortOrder::UnknownVariant(UnknownProjectSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => ProjectSortOrder::Ascending,
+            "Descending" => ProjectSortOrder::Descending,
+            _ => ProjectSortOrder::UnknownVariant(UnknownProjectSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProjectSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProjectSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectStatus {
+    CreateCompleted,
+    CreateFailed,
+    CreateInProgress,
+    DeleteCompleted,
+    DeleteFailed,
+    DeleteInProgress,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectStatus),
+}
+
+impl Default for ProjectStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectStatus {
+    fn into(self) -> String {
+        match self {
+            ProjectStatus::CreateCompleted => "CreateCompleted".to_string(),
+            ProjectStatus::CreateFailed => "CreateFailed".to_string(),
+            ProjectStatus::CreateInProgress => "CreateInProgress".to_string(),
+            ProjectStatus::DeleteCompleted => "DeleteCompleted".to_string(),
+            ProjectStatus::DeleteFailed => "DeleteFailed".to_string(),
+            ProjectStatus::DeleteInProgress => "DeleteInProgress".to_string(),
+            ProjectStatus::Pending => "Pending".to_string(),
+            ProjectStatus::UnknownVariant(UnknownProjectStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectStatus::CreateCompleted => &"CreateCompleted",
+            ProjectStatus::CreateFailed => &"CreateFailed",
+            ProjectStatus::CreateInProgress => &"CreateInProgress",
+            ProjectStatus::DeleteCompleted => &"DeleteCompleted",
+            ProjectStatus::DeleteFailed => &"DeleteFailed",
+            ProjectStatus::DeleteInProgress => &"DeleteInProgress",
+            ProjectStatus::Pending => &"Pending",
+            ProjectStatus::UnknownVariant(UnknownProjectStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreateCompleted" => ProjectStatus::CreateCompleted,
+            "CreateFailed" => ProjectStatus::CreateFailed,
+            "CreateInProgress" => ProjectStatus::CreateInProgress,
+            "DeleteCompleted" => ProjectStatus::DeleteCompleted,
+            "DeleteFailed" => ProjectStatus::DeleteFailed,
+            "DeleteInProgress" => ProjectStatus::DeleteInProgress,
+            "Pending" => ProjectStatus::Pending,
+            _ => ProjectStatus::UnknownVariant(UnknownProjectStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreateCompleted" => ProjectStatus::CreateCompleted,
+            "CreateFailed" => ProjectStatus::CreateFailed,
+            "CreateInProgress" => ProjectStatus::CreateInProgress,
+            "DeleteCompleted" => ProjectStatus::DeleteCompleted,
+            "DeleteFailed" => ProjectStatus::DeleteFailed,
+            "DeleteInProgress" => ProjectStatus::DeleteInProgress,
+            "Pending" => ProjectStatus::Pending,
+            _ => ProjectStatus::UnknownVariant(UnknownProjectStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProjectStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProjectStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a project.</p>
@@ -12069,7 +26095,7 @@ pub struct ProjectSummary {
     pub project_name: String,
     /// <p>The status of the project.</p>
     #[serde(rename = "ProjectStatus")]
-    pub project_status: String,
+    pub project_status: ProjectStatus,
 }
 
 /// <p>Part of the <code>SuggestionQuery</code> type. Specifies a hint for retrieving property names that begin with the specified text.</p>
@@ -12132,6 +26158,106 @@ pub struct PutModelPackageGroupPolicyOutput {
     pub model_package_group_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordWrapper {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordWrapper {
+    None,
+    RecordIO,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordWrapper),
+}
+
+impl Default for RecordWrapper {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordWrapper {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordWrapper {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordWrapper {
+    fn into(self) -> String {
+        match self {
+            RecordWrapper::None => "None".to_string(),
+            RecordWrapper::RecordIO => "RecordIO".to_string(),
+            RecordWrapper::UnknownVariant(UnknownRecordWrapper { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordWrapper {
+    fn into(self) -> &'a str {
+        match self {
+            RecordWrapper::None => &"None",
+            RecordWrapper::RecordIO => &"RecordIO",
+            RecordWrapper::UnknownVariant(UnknownRecordWrapper { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecordWrapper {
+    fn from(name: &str) -> Self {
+        match name {
+            "None" => RecordWrapper::None,
+            "RecordIO" => RecordWrapper::RecordIO,
+            _ => RecordWrapper::UnknownVariant(UnknownRecordWrapper {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordWrapper {
+    fn from(name: String) -> Self {
+        match &*name {
+            "None" => RecordWrapper::None,
+            "RecordIO" => RecordWrapper::RecordIO,
+            _ => RecordWrapper::UnknownVariant(UnknownRecordWrapper { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordWrapper {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecordWrapper {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordWrapper {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration for Redshift Dataset Definition input.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RedshiftDatasetDefinition {
@@ -12150,14 +26276,245 @@ pub struct RedshiftDatasetDefinition {
     pub kms_key_id: Option<String>,
     #[serde(rename = "OutputCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_compression: Option<String>,
+    pub output_compression: Option<RedshiftResultCompressionType>,
     #[serde(rename = "OutputFormat")]
-    pub output_format: String,
+    pub output_format: RedshiftResultFormat,
     /// <p>The location in Amazon S3 where the Redshift query results are stored.</p>
     #[serde(rename = "OutputS3Uri")]
     pub output_s3_uri: String,
     #[serde(rename = "QueryString")]
     pub query_string: String,
+}
+
+/// <p>The compression used for Redshift query results.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedshiftResultCompressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedshiftResultCompressionType {
+    Bzip2,
+    Gzip,
+    None,
+    Snappy,
+    Zstd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedshiftResultCompressionType),
+}
+
+impl Default for RedshiftResultCompressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedshiftResultCompressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedshiftResultCompressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedshiftResultCompressionType {
+    fn into(self) -> String {
+        match self {
+            RedshiftResultCompressionType::Bzip2 => "BZIP2".to_string(),
+            RedshiftResultCompressionType::Gzip => "GZIP".to_string(),
+            RedshiftResultCompressionType::None => "None".to_string(),
+            RedshiftResultCompressionType::Snappy => "SNAPPY".to_string(),
+            RedshiftResultCompressionType::Zstd => "ZSTD".to_string(),
+            RedshiftResultCompressionType::UnknownVariant(
+                UnknownRedshiftResultCompressionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedshiftResultCompressionType {
+    fn into(self) -> &'a str {
+        match self {
+            RedshiftResultCompressionType::Bzip2 => &"BZIP2",
+            RedshiftResultCompressionType::Gzip => &"GZIP",
+            RedshiftResultCompressionType::None => &"None",
+            RedshiftResultCompressionType::Snappy => &"SNAPPY",
+            RedshiftResultCompressionType::Zstd => &"ZSTD",
+            RedshiftResultCompressionType::UnknownVariant(
+                UnknownRedshiftResultCompressionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RedshiftResultCompressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BZIP2" => RedshiftResultCompressionType::Bzip2,
+            "GZIP" => RedshiftResultCompressionType::Gzip,
+            "None" => RedshiftResultCompressionType::None,
+            "SNAPPY" => RedshiftResultCompressionType::Snappy,
+            "ZSTD" => RedshiftResultCompressionType::Zstd,
+            _ => RedshiftResultCompressionType::UnknownVariant(
+                UnknownRedshiftResultCompressionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RedshiftResultCompressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BZIP2" => RedshiftResultCompressionType::Bzip2,
+            "GZIP" => RedshiftResultCompressionType::Gzip,
+            "None" => RedshiftResultCompressionType::None,
+            "SNAPPY" => RedshiftResultCompressionType::Snappy,
+            "ZSTD" => RedshiftResultCompressionType::Zstd,
+            _ => RedshiftResultCompressionType::UnknownVariant(
+                UnknownRedshiftResultCompressionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedshiftResultCompressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RedshiftResultCompressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RedshiftResultCompressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The data storage format for Redshift query results.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedshiftResultFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedshiftResultFormat {
+    Csv,
+    Parquet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedshiftResultFormat),
+}
+
+impl Default for RedshiftResultFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedshiftResultFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedshiftResultFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedshiftResultFormat {
+    fn into(self) -> String {
+        match self {
+            RedshiftResultFormat::Csv => "CSV".to_string(),
+            RedshiftResultFormat::Parquet => "PARQUET".to_string(),
+            RedshiftResultFormat::UnknownVariant(UnknownRedshiftResultFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedshiftResultFormat {
+    fn into(self) -> &'a str {
+        match self {
+            RedshiftResultFormat::Csv => &"CSV",
+            RedshiftResultFormat::Parquet => &"PARQUET",
+            RedshiftResultFormat::UnknownVariant(UnknownRedshiftResultFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RedshiftResultFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => RedshiftResultFormat::Csv,
+            "PARQUET" => RedshiftResultFormat::Parquet,
+            _ => RedshiftResultFormat::UnknownVariant(UnknownRedshiftResultFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RedshiftResultFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => RedshiftResultFormat::Csv,
+            "PARQUET" => RedshiftResultFormat::Parquet,
+            _ => RedshiftResultFormat::UnknownVariant(UnknownRedshiftResultFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedshiftResultFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RedshiftResultFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RedshiftResultFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -12236,6 +26593,110 @@ pub struct RenderingError {
     pub message: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRepositoryAccessMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RepositoryAccessMode {
+    Platform,
+    Vpc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRepositoryAccessMode),
+}
+
+impl Default for RepositoryAccessMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RepositoryAccessMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RepositoryAccessMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RepositoryAccessMode {
+    fn into(self) -> String {
+        match self {
+            RepositoryAccessMode::Platform => "Platform".to_string(),
+            RepositoryAccessMode::Vpc => "Vpc".to_string(),
+            RepositoryAccessMode::UnknownVariant(UnknownRepositoryAccessMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RepositoryAccessMode {
+    fn into(self) -> &'a str {
+        match self {
+            RepositoryAccessMode::Platform => &"Platform",
+            RepositoryAccessMode::Vpc => &"Vpc",
+            RepositoryAccessMode::UnknownVariant(UnknownRepositoryAccessMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RepositoryAccessMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Platform" => RepositoryAccessMode::Platform,
+            "Vpc" => RepositoryAccessMode::Vpc,
+            _ => RepositoryAccessMode::UnknownVariant(UnknownRepositoryAccessMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RepositoryAccessMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Platform" => RepositoryAccessMode::Platform,
+            "Vpc" => RepositoryAccessMode::Vpc,
+            _ => RepositoryAccessMode::UnknownVariant(UnknownRepositoryAccessMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RepositoryAccessMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RepositoryAccessMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RepositoryAccessMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The resolved attributes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -12249,7 +26710,7 @@ pub struct ResolvedAttributes {
     /// <p>The problem type.</p>
     #[serde(rename = "ProblemType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub problem_type: Option<String>,
+    pub problem_type: Option<ProblemType>,
 }
 
 /// <p>Describes the resources, including ML compute instances and ML storage volumes, to use for model training. </p>
@@ -12260,7 +26721,7 @@ pub struct ResourceConfig {
     pub instance_count: i64,
     /// <p>The ML compute instance type. </p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: TrainingInstanceType,
     /// <p><p>The AWS KMS key that Amazon SageMaker uses to encrypt data on the storage volume attached to the ML compute instance(s) that run the training job.</p> <note> <p>Certain Nitro-based instances include local storage, dependent on the instance type. Local storage volumes are encrypted using a hardware module on the instance. You can&#39;t request a <code>VolumeKmsKeyId</code> when using an instance type with local storage.</p> <p>For a list of instance types that support local instance storage, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#instance-store-volumes">Instance Store Volumes</a>.</p> <p>For more information about local instance storage encryption, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ssd-instance-store.html">SSD Instance Store Volumes</a>.</p> </note> <p>The <code>VolumeKmsKeyId</code> can be in any of the following formats:</p> <ul> <li> <p>// KMS Key ID</p> <p> <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>// Amazon Resource Name (ARN) of a KMS Key</p> <p> <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12287,7 +26748,7 @@ pub struct ResourceSpec {
     /// <p>The instance type that the image version runs on.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<AppInstanceType>,
     /// <p>The ARN of the SageMaker image that the image version belongs to.</p>
     #[serde(rename = "SageMakerImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12298,6 +26759,147 @@ pub struct ResourceSpec {
     pub sage_maker_image_version_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Endpoint,
+    Experiment,
+    ExperimentTrial,
+    ExperimentTrialComponent,
+    FeatureGroup,
+    ModelPackage,
+    ModelPackageGroup,
+    Pipeline,
+    PipelineExecution,
+    TrainingJob,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Endpoint => "Endpoint".to_string(),
+            ResourceType::Experiment => "Experiment".to_string(),
+            ResourceType::ExperimentTrial => "ExperimentTrial".to_string(),
+            ResourceType::ExperimentTrialComponent => "ExperimentTrialComponent".to_string(),
+            ResourceType::FeatureGroup => "FeatureGroup".to_string(),
+            ResourceType::ModelPackage => "ModelPackage".to_string(),
+            ResourceType::ModelPackageGroup => "ModelPackageGroup".to_string(),
+            ResourceType::Pipeline => "Pipeline".to_string(),
+            ResourceType::PipelineExecution => "PipelineExecution".to_string(),
+            ResourceType::TrainingJob => "TrainingJob".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Endpoint => &"Endpoint",
+            ResourceType::Experiment => &"Experiment",
+            ResourceType::ExperimentTrial => &"ExperimentTrial",
+            ResourceType::ExperimentTrialComponent => &"ExperimentTrialComponent",
+            ResourceType::FeatureGroup => &"FeatureGroup",
+            ResourceType::ModelPackage => &"ModelPackage",
+            ResourceType::ModelPackageGroup => &"ModelPackageGroup",
+            ResourceType::Pipeline => &"Pipeline",
+            ResourceType::PipelineExecution => &"PipelineExecution",
+            ResourceType::TrainingJob => &"TrainingJob",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Endpoint" => ResourceType::Endpoint,
+            "Experiment" => ResourceType::Experiment,
+            "ExperimentTrial" => ResourceType::ExperimentTrial,
+            "ExperimentTrialComponent" => ResourceType::ExperimentTrialComponent,
+            "FeatureGroup" => ResourceType::FeatureGroup,
+            "ModelPackage" => ResourceType::ModelPackage,
+            "ModelPackageGroup" => ResourceType::ModelPackageGroup,
+            "Pipeline" => ResourceType::Pipeline,
+            "PipelineExecution" => ResourceType::PipelineExecution,
+            "TrainingJob" => ResourceType::TrainingJob,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Endpoint" => ResourceType::Endpoint,
+            "Experiment" => ResourceType::Experiment,
+            "ExperimentTrial" => ResourceType::ExperimentTrial,
+            "ExperimentTrialComponent" => ResourceType::ExperimentTrialComponent,
+            "FeatureGroup" => ResourceType::FeatureGroup,
+            "ModelPackage" => ResourceType::ModelPackage,
+            "ModelPackageGroup" => ResourceType::ModelPackageGroup,
+            "Pipeline" => ResourceType::Pipeline,
+            "PipelineExecution" => ResourceType::PipelineExecution,
+            "TrainingJob" => ResourceType::TrainingJob,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The retention policy for data stored on an Amazon Elastic File System (EFS) volume.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -12305,7 +26907,437 @@ pub struct RetentionPolicy {
     /// <p>The default is <code>Retain</code>, which specifies to keep the data stored on the EFS volume.</p> <p>Specify <code>Delete</code> to delete the data stored on the EFS volume.</p>
     #[serde(rename = "HomeEfsFileSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub home_efs_file_system: Option<String>,
+    pub home_efs_file_system: Option<RetentionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetentionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetentionType {
+    Delete,
+    Retain,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetentionType),
+}
+
+impl Default for RetentionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetentionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetentionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetentionType {
+    fn into(self) -> String {
+        match self {
+            RetentionType::Delete => "Delete".to_string(),
+            RetentionType::Retain => "Retain".to_string(),
+            RetentionType::UnknownVariant(UnknownRetentionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetentionType {
+    fn into(self) -> &'a str {
+        match self {
+            RetentionType::Delete => &"Delete",
+            RetentionType::Retain => &"Retain",
+            RetentionType::UnknownVariant(UnknownRetentionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RetentionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Delete" => RetentionType::Delete,
+            "Retain" => RetentionType::Retain,
+            _ => RetentionType::UnknownVariant(UnknownRetentionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetentionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Delete" => RetentionType::Delete,
+            "Retain" => RetentionType::Retain,
+            _ => RetentionType::UnknownVariant(UnknownRetentionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetentionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetentionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RetentionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRootAccess {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RootAccess {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRootAccess),
+}
+
+impl Default for RootAccess {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RootAccess {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RootAccess {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RootAccess {
+    fn into(self) -> String {
+        match self {
+            RootAccess::Disabled => "Disabled".to_string(),
+            RootAccess::Enabled => "Enabled".to_string(),
+            RootAccess::UnknownVariant(UnknownRootAccess { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RootAccess {
+    fn into(self) -> &'a str {
+        match self {
+            RootAccess::Disabled => &"Disabled",
+            RootAccess::Enabled => &"Enabled",
+            RootAccess::UnknownVariant(UnknownRootAccess { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RootAccess {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => RootAccess::Disabled,
+            "Enabled" => RootAccess::Enabled,
+            _ => RootAccess::UnknownVariant(UnknownRootAccess {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RootAccess {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => RootAccess::Disabled,
+            "Enabled" => RootAccess::Enabled,
+            _ => RootAccess::UnknownVariant(UnknownRootAccess { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RootAccess {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RootAccess {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RootAccess {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuleEvaluationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuleEvaluationStatus {
+    Error,
+    InProgress,
+    IssuesFound,
+    NoIssuesFound,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuleEvaluationStatus),
+}
+
+impl Default for RuleEvaluationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuleEvaluationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuleEvaluationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuleEvaluationStatus {
+    fn into(self) -> String {
+        match self {
+            RuleEvaluationStatus::Error => "Error".to_string(),
+            RuleEvaluationStatus::InProgress => "InProgress".to_string(),
+            RuleEvaluationStatus::IssuesFound => "IssuesFound".to_string(),
+            RuleEvaluationStatus::NoIssuesFound => "NoIssuesFound".to_string(),
+            RuleEvaluationStatus::Stopped => "Stopped".to_string(),
+            RuleEvaluationStatus::Stopping => "Stopping".to_string(),
+            RuleEvaluationStatus::UnknownVariant(UnknownRuleEvaluationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuleEvaluationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RuleEvaluationStatus::Error => &"Error",
+            RuleEvaluationStatus::InProgress => &"InProgress",
+            RuleEvaluationStatus::IssuesFound => &"IssuesFound",
+            RuleEvaluationStatus::NoIssuesFound => &"NoIssuesFound",
+            RuleEvaluationStatus::Stopped => &"Stopped",
+            RuleEvaluationStatus::Stopping => &"Stopping",
+            RuleEvaluationStatus::UnknownVariant(UnknownRuleEvaluationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RuleEvaluationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Error" => RuleEvaluationStatus::Error,
+            "InProgress" => RuleEvaluationStatus::InProgress,
+            "IssuesFound" => RuleEvaluationStatus::IssuesFound,
+            "NoIssuesFound" => RuleEvaluationStatus::NoIssuesFound,
+            "Stopped" => RuleEvaluationStatus::Stopped,
+            "Stopping" => RuleEvaluationStatus::Stopping,
+            _ => RuleEvaluationStatus::UnknownVariant(UnknownRuleEvaluationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuleEvaluationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Error" => RuleEvaluationStatus::Error,
+            "InProgress" => RuleEvaluationStatus::InProgress,
+            "IssuesFound" => RuleEvaluationStatus::IssuesFound,
+            "NoIssuesFound" => RuleEvaluationStatus::NoIssuesFound,
+            "Stopped" => RuleEvaluationStatus::Stopped,
+            "Stopping" => RuleEvaluationStatus::Stopping,
+            _ => RuleEvaluationStatus::UnknownVariant(UnknownRuleEvaluationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleEvaluationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RuleEvaluationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleEvaluationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3DataDistribution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3DataDistribution {
+    FullyReplicated,
+    ShardedByS3Key,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3DataDistribution),
+}
+
+impl Default for S3DataDistribution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3DataDistribution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3DataDistribution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3DataDistribution {
+    fn into(self) -> String {
+        match self {
+            S3DataDistribution::FullyReplicated => "FullyReplicated".to_string(),
+            S3DataDistribution::ShardedByS3Key => "ShardedByS3Key".to_string(),
+            S3DataDistribution::UnknownVariant(UnknownS3DataDistribution { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3DataDistribution {
+    fn into(self) -> &'a str {
+        match self {
+            S3DataDistribution::FullyReplicated => &"FullyReplicated",
+            S3DataDistribution::ShardedByS3Key => &"ShardedByS3Key",
+            S3DataDistribution::UnknownVariant(UnknownS3DataDistribution { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for S3DataDistribution {
+    fn from(name: &str) -> Self {
+        match name {
+            "FullyReplicated" => S3DataDistribution::FullyReplicated,
+            "ShardedByS3Key" => S3DataDistribution::ShardedByS3Key,
+            _ => S3DataDistribution::UnknownVariant(UnknownS3DataDistribution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3DataDistribution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FullyReplicated" => S3DataDistribution::FullyReplicated,
+            "ShardedByS3Key" => S3DataDistribution::ShardedByS3Key,
+            _ => S3DataDistribution::UnknownVariant(UnknownS3DataDistribution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3DataDistribution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3DataDistribution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3DataDistribution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the S3 data source.</p>
@@ -12318,13 +27350,118 @@ pub struct S3DataSource {
     /// <p>If you want Amazon SageMaker to replicate the entire dataset on each ML compute instance that is launched for model training, specify <code>FullyReplicated</code>. </p> <p>If you want Amazon SageMaker to replicate a subset of data on each ML compute instance that is launched for model training, specify <code>ShardedByS3Key</code>. If there are <i>n</i> ML compute instances launched for a training job, each instance gets approximately 1/<i>n</i> of the number of S3 objects. In this case, model training on each machine uses only the subset of training data. </p> <p>Don't choose more ML compute instances for training than available S3 objects. If you do, some nodes won't get any data and you will pay for nodes that aren't getting any training data. This applies in both File and Pipe modes. Keep this in mind when developing algorithms. </p> <p>In distributed training, where you use multiple ML compute EC2 instances, you might choose <code>ShardedByS3Key</code>. If the algorithm requires copying training data to the ML storage volume (when <code>TrainingInputMode</code> is set to <code>File</code>), this copies 1/<i>n</i> of the number of objects. </p>
     #[serde(rename = "S3DataDistributionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_data_distribution_type: Option<String>,
+    pub s3_data_distribution_type: Option<S3DataDistribution>,
     /// <p>If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects that match the specified key name prefix for model training. </p> <p>If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for model training. </p> <p>If you choose <code>AugmentedManifestFile</code>, S3Uri identifies an object that is an augmented manifest file in JSON lines format. This file contains the data you want to use for model training. <code>AugmentedManifestFile</code> can only be used if the Channel's input mode is <code>Pipe</code>.</p>
     #[serde(rename = "S3DataType")]
-    pub s3_data_type: String,
+    pub s3_data_type: S3DataType,
     /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example: </p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code> </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> A manifest is an S3 object which is a JSON file consisting of an array of elements. The first element is a prefix which is followed by one or more suffixes. SageMaker appends the suffix elements to the prefix to get a full set of <code>S3Uri</code>. Note that the prefix must be a valid non-empty <code>S3Uri</code> that precludes users from specifying a manifest whose individual <code>S3Uri</code> is sourced from different S3 buckets.</p> <p> The following code example shows a valid manifest format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code> &quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code> &quot;relative/path/custdata-2&quot;,</code> </p> <p> <code> ...</code> </p> <p> <code> &quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> This JSON is equivalent to the following <code>S3Uri</code> list:</p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p>The complete set of <code>S3Uri</code> in this manifest is the input data for the channel for this data source. The object that each <code>S3Uri</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf. </p> </li> </ul></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3DataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3DataType {
+    AugmentedManifestFile,
+    ManifestFile,
+    S3Prefix,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3DataType),
+}
+
+impl Default for S3DataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3DataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3DataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3DataType {
+    fn into(self) -> String {
+        match self {
+            S3DataType::AugmentedManifestFile => "AugmentedManifestFile".to_string(),
+            S3DataType::ManifestFile => "ManifestFile".to_string(),
+            S3DataType::S3Prefix => "S3Prefix".to_string(),
+            S3DataType::UnknownVariant(UnknownS3DataType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3DataType {
+    fn into(self) -> &'a str {
+        match self {
+            S3DataType::AugmentedManifestFile => &"AugmentedManifestFile",
+            S3DataType::ManifestFile => &"ManifestFile",
+            S3DataType::S3Prefix => &"S3Prefix",
+            S3DataType::UnknownVariant(UnknownS3DataType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for S3DataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AugmentedManifestFile" => S3DataType::AugmentedManifestFile,
+            "ManifestFile" => S3DataType::ManifestFile,
+            "S3Prefix" => S3DataType::S3Prefix,
+            _ => S3DataType::UnknownVariant(UnknownS3DataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3DataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AugmentedManifestFile" => S3DataType::AugmentedManifestFile,
+            "ManifestFile" => S3DataType::ManifestFile,
+            "S3Prefix" => S3DataType::S3Prefix,
+            _ => S3DataType::UnknownVariant(UnknownS3DataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3DataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3DataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3DataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon Simple Storage (Amazon S3) location and and security configuration for <code>OfflineStore</code>.</p>
@@ -12339,12 +27476,231 @@ pub struct S3StorageConfig {
     pub s3_uri: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSagemakerServicecatalogStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SagemakerServicecatalogStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSagemakerServicecatalogStatus),
+}
+
+impl Default for SagemakerServicecatalogStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SagemakerServicecatalogStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SagemakerServicecatalogStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SagemakerServicecatalogStatus {
+    fn into(self) -> String {
+        match self {
+            SagemakerServicecatalogStatus::Disabled => "Disabled".to_string(),
+            SagemakerServicecatalogStatus::Enabled => "Enabled".to_string(),
+            SagemakerServicecatalogStatus::UnknownVariant(
+                UnknownSagemakerServicecatalogStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SagemakerServicecatalogStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SagemakerServicecatalogStatus::Disabled => &"Disabled",
+            SagemakerServicecatalogStatus::Enabled => &"Enabled",
+            SagemakerServicecatalogStatus::UnknownVariant(
+                UnknownSagemakerServicecatalogStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SagemakerServicecatalogStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => SagemakerServicecatalogStatus::Disabled,
+            "Enabled" => SagemakerServicecatalogStatus::Enabled,
+            _ => SagemakerServicecatalogStatus::UnknownVariant(
+                UnknownSagemakerServicecatalogStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SagemakerServicecatalogStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => SagemakerServicecatalogStatus::Disabled,
+            "Enabled" => SagemakerServicecatalogStatus::Enabled,
+            _ => SagemakerServicecatalogStatus::UnknownVariant(
+                UnknownSagemakerServicecatalogStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SagemakerServicecatalogStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SagemakerServicecatalogStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SagemakerServicecatalogStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration details about the monitoring schedule.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScheduleConfig {
     /// <p><p>A cron expression that describes details about the monitoring schedule.</p> <p>Currently the only supported cron expressions are:</p> <ul> <li> <p>If you want to set the job to start every hour, please use the following:</p> <p> <code>Hourly: cron(0 * ? * * *)</code> </p> </li> <li> <p>If you want to start the job daily:</p> <p> <code>cron(0 [00-23] ? * * *)</code> </p> </li> </ul> <p>For example, the following are valid cron expressions:</p> <ul> <li> <p>Daily at noon UTC: <code>cron(0 12 ? * * *)</code> </p> </li> <li> <p>Daily at midnight UTC: <code>cron(0 0 ? * * *)</code> </p> </li> </ul> <p>To support running every 6, 12 hours, the following are also supported:</p> <p> <code>cron(0 [00-23]/[01-24] ? * * *)</code> </p> <p>For example, the following are valid cron expressions:</p> <ul> <li> <p>Every 12 hours, starting at 5pm UTC: <code>cron(0 17/12 ? * * *)</code> </p> </li> <li> <p>Every two hours starting at midnight: <code>cron(0 0/2 ? * * *)</code> </p> </li> </ul> <note> <ul> <li> <p>Even though the cron expression is set to start at 5PM UTC, note that there could be a delay of 0-20 minutes from the actual requested time to run the execution. </p> </li> <li> <p>We recommend that if you would like a daily schedule, you do not provide this parameter. Amazon SageMaker will pick a time for running every day.</p> </li> </ul> </note></p>
     #[serde(rename = "ScheduleExpression")]
     pub schedule_expression: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScheduleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScheduleStatus {
+    Failed,
+    Pending,
+    Scheduled,
+    Stopped,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScheduleStatus),
+}
+
+impl Default for ScheduleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScheduleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScheduleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScheduleStatus {
+    fn into(self) -> String {
+        match self {
+            ScheduleStatus::Failed => "Failed".to_string(),
+            ScheduleStatus::Pending => "Pending".to_string(),
+            ScheduleStatus::Scheduled => "Scheduled".to_string(),
+            ScheduleStatus::Stopped => "Stopped".to_string(),
+            ScheduleStatus::UnknownVariant(UnknownScheduleStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScheduleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ScheduleStatus::Failed => &"Failed",
+            ScheduleStatus::Pending => &"Pending",
+            ScheduleStatus::Scheduled => &"Scheduled",
+            ScheduleStatus::Stopped => &"Stopped",
+            ScheduleStatus::UnknownVariant(UnknownScheduleStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScheduleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => ScheduleStatus::Failed,
+            "Pending" => ScheduleStatus::Pending,
+            "Scheduled" => ScheduleStatus::Scheduled,
+            "Stopped" => ScheduleStatus::Stopped,
+            _ => ScheduleStatus::UnknownVariant(UnknownScheduleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScheduleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => ScheduleStatus::Failed,
+            "Pending" => ScheduleStatus::Pending,
+            "Scheduled" => ScheduleStatus::Scheduled,
+            "Stopped" => ScheduleStatus::Stopped,
+            _ => ScheduleStatus::UnknownVariant(UnknownScheduleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScheduleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScheduleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScheduleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>A multi-expression that searches for the specified resource or resources in a search. All resource objects that satisfy the expression&#39;s condition are included in the search results. You must specify at least one subexpression, filter, or nested filter. A <code>SearchExpression</code> can contain up to twenty elements.</p> <p>A <code>SearchExpression</code> contains the following components:</p> <ul> <li> <p>A list of <code>Filter</code> objects. Each filter defines a simple Boolean expression comprised of a resource property name, Boolean operator, and value.</p> </li> <li> <p>A list of <code>NestedFilter</code> objects. Each nested filter defines a list of Boolean expressions using a list of resource properties. A nested filter is satisfied if a single object in the list satisfies all Boolean expressions.</p> </li> <li> <p>A list of <code>SearchExpression</code> objects. A search expression object can be nested in a list of search expression objects.</p> </li> <li> <p>A Boolean operator: <code>And</code> or <code>Or</code>.</p> </li> </ul></p>
@@ -12362,7 +27718,7 @@ pub struct SearchExpression {
     /// <p>A Boolean operator used to evaluate the search expression. If you want every conditional statement in all lists to be satisfied for the entire search expression to be true, specify <code>And</code>. If only a single conditional statement needs to be true for the entire search expression to be true, specify <code>Or</code>. The default value is <code>And</code>.</p>
     #[serde(rename = "Operator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operator: Option<String>,
+    pub operator: Option<BooleanOperator>,
     /// <p>A list of search expression objects.</p>
     #[serde(rename = "SubExpressions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12422,7 +27778,7 @@ pub struct SearchRequest {
     pub next_token: Option<String>,
     /// <p>The name of the Amazon SageMaker resource to search for.</p>
     #[serde(rename = "Resource")]
-    pub resource: String,
+    pub resource: ResourceType,
     /// <p>A Boolean conditional statement. Resources must satisfy this condition to be included in search results. You must provide at least one subexpression, filter, or nested filter. The maximum number of recursive <code>SubExpressions</code>, <code>NestedFilters</code>, and <code>Filters</code> that can be included in a <code>SearchExpression</code> object is 50.</p>
     #[serde(rename = "SearchExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12434,7 +27790,7 @@ pub struct SearchRequest {
     /// <p>How <code>SearchResults</code> are ordered. Valid values are <code>Ascending</code> or <code>Descending</code>. The default is <code>Descending</code>.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SearchSortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -12450,6 +27806,273 @@ pub struct SearchResponse {
     pub results: Option<Vec<SearchRecord>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSearchSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SearchSortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSearchSortOrder),
+}
+
+impl Default for SearchSortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SearchSortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SearchSortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SearchSortOrder {
+    fn into(self) -> String {
+        match self {
+            SearchSortOrder::Ascending => "Ascending".to_string(),
+            SearchSortOrder::Descending => "Descending".to_string(),
+            SearchSortOrder::UnknownVariant(UnknownSearchSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SearchSortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SearchSortOrder::Ascending => &"Ascending",
+            SearchSortOrder::Descending => &"Descending",
+            SearchSortOrder::UnknownVariant(UnknownSearchSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SearchSortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => SearchSortOrder::Ascending,
+            "Descending" => SearchSortOrder::Descending,
+            _ => SearchSortOrder::UnknownVariant(UnknownSearchSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SearchSortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => SearchSortOrder::Ascending,
+            "Descending" => SearchSortOrder::Descending,
+            _ => SearchSortOrder::UnknownVariant(UnknownSearchSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SearchSortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SearchSortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SearchSortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSecondaryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SecondaryStatus {
+    Completed,
+    Downloading,
+    DownloadingTrainingImage,
+    Failed,
+    Interrupted,
+    LaunchingMLInstances,
+    MaxRuntimeExceeded,
+    MaxWaitTimeExceeded,
+    PreparingTrainingStack,
+    Starting,
+    Stopped,
+    Stopping,
+    Training,
+    Updating,
+    Uploading,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSecondaryStatus),
+}
+
+impl Default for SecondaryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SecondaryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SecondaryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SecondaryStatus {
+    fn into(self) -> String {
+        match self {
+            SecondaryStatus::Completed => "Completed".to_string(),
+            SecondaryStatus::Downloading => "Downloading".to_string(),
+            SecondaryStatus::DownloadingTrainingImage => "DownloadingTrainingImage".to_string(),
+            SecondaryStatus::Failed => "Failed".to_string(),
+            SecondaryStatus::Interrupted => "Interrupted".to_string(),
+            SecondaryStatus::LaunchingMLInstances => "LaunchingMLInstances".to_string(),
+            SecondaryStatus::MaxRuntimeExceeded => "MaxRuntimeExceeded".to_string(),
+            SecondaryStatus::MaxWaitTimeExceeded => "MaxWaitTimeExceeded".to_string(),
+            SecondaryStatus::PreparingTrainingStack => "PreparingTrainingStack".to_string(),
+            SecondaryStatus::Starting => "Starting".to_string(),
+            SecondaryStatus::Stopped => "Stopped".to_string(),
+            SecondaryStatus::Stopping => "Stopping".to_string(),
+            SecondaryStatus::Training => "Training".to_string(),
+            SecondaryStatus::Updating => "Updating".to_string(),
+            SecondaryStatus::Uploading => "Uploading".to_string(),
+            SecondaryStatus::UnknownVariant(UnknownSecondaryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SecondaryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SecondaryStatus::Completed => &"Completed",
+            SecondaryStatus::Downloading => &"Downloading",
+            SecondaryStatus::DownloadingTrainingImage => &"DownloadingTrainingImage",
+            SecondaryStatus::Failed => &"Failed",
+            SecondaryStatus::Interrupted => &"Interrupted",
+            SecondaryStatus::LaunchingMLInstances => &"LaunchingMLInstances",
+            SecondaryStatus::MaxRuntimeExceeded => &"MaxRuntimeExceeded",
+            SecondaryStatus::MaxWaitTimeExceeded => &"MaxWaitTimeExceeded",
+            SecondaryStatus::PreparingTrainingStack => &"PreparingTrainingStack",
+            SecondaryStatus::Starting => &"Starting",
+            SecondaryStatus::Stopped => &"Stopped",
+            SecondaryStatus::Stopping => &"Stopping",
+            SecondaryStatus::Training => &"Training",
+            SecondaryStatus::Updating => &"Updating",
+            SecondaryStatus::Uploading => &"Uploading",
+            SecondaryStatus::UnknownVariant(UnknownSecondaryStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SecondaryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => SecondaryStatus::Completed,
+            "Downloading" => SecondaryStatus::Downloading,
+            "DownloadingTrainingImage" => SecondaryStatus::DownloadingTrainingImage,
+            "Failed" => SecondaryStatus::Failed,
+            "Interrupted" => SecondaryStatus::Interrupted,
+            "LaunchingMLInstances" => SecondaryStatus::LaunchingMLInstances,
+            "MaxRuntimeExceeded" => SecondaryStatus::MaxRuntimeExceeded,
+            "MaxWaitTimeExceeded" => SecondaryStatus::MaxWaitTimeExceeded,
+            "PreparingTrainingStack" => SecondaryStatus::PreparingTrainingStack,
+            "Starting" => SecondaryStatus::Starting,
+            "Stopped" => SecondaryStatus::Stopped,
+            "Stopping" => SecondaryStatus::Stopping,
+            "Training" => SecondaryStatus::Training,
+            "Updating" => SecondaryStatus::Updating,
+            "Uploading" => SecondaryStatus::Uploading,
+            _ => SecondaryStatus::UnknownVariant(UnknownSecondaryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SecondaryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => SecondaryStatus::Completed,
+            "Downloading" => SecondaryStatus::Downloading,
+            "DownloadingTrainingImage" => SecondaryStatus::DownloadingTrainingImage,
+            "Failed" => SecondaryStatus::Failed,
+            "Interrupted" => SecondaryStatus::Interrupted,
+            "LaunchingMLInstances" => SecondaryStatus::LaunchingMLInstances,
+            "MaxRuntimeExceeded" => SecondaryStatus::MaxRuntimeExceeded,
+            "MaxWaitTimeExceeded" => SecondaryStatus::MaxWaitTimeExceeded,
+            "PreparingTrainingStack" => SecondaryStatus::PreparingTrainingStack,
+            "Starting" => SecondaryStatus::Starting,
+            "Stopped" => SecondaryStatus::Stopped,
+            "Stopping" => SecondaryStatus::Stopping,
+            "Training" => SecondaryStatus::Training,
+            "Updating" => SecondaryStatus::Updating,
+            "Uploading" => SecondaryStatus::Uploading,
+            _ => SecondaryStatus::UnknownVariant(UnknownSecondaryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SecondaryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SecondaryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SecondaryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>An array element of <a>DescribeTrainingJobResponse$SecondaryStatusTransitions</a>. It provides additional details about a status that the training job has transitioned through. A training job can be in one of several states, for example, starting, downloading, training, or uploading. Within each state, there are a number of intermediate states. For example, within the starting state, Amazon SageMaker could be starting the training job or launching the ML instances. These transitional states are referred to as the job&#39;s secondary status. </p> <p/></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -12463,7 +28086,7 @@ pub struct SecondaryStatusTransition {
     pub start_time: f64,
     /// <p><p>Contains a secondary status information from a training job.</p> <p>Status might be one of the following secondary statuses:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: SecondaryStatus,
     /// <p><p>A detailed description of the progress within a secondary status. </p> <p>Amazon SageMaker provides secondary statuses and status messages that apply to each of them:</p> <dl> <dt>Starting</dt> <dd> <ul> <li> <p>Starting the training job.</p> </li> <li> <p>Launching requested ML instances.</p> </li> <li> <p>Insufficient capacity error from EC2 while launching instances, retrying!</p> </li> <li> <p>Launched instance was unhealthy, replacing it!</p> </li> <li> <p>Preparing the instances for training.</p> </li> </ul> </dd> <dt>Training</dt> <dd> <ul> <li> <p>Downloading the training image.</p> </li> <li> <p>Training image download completed. Training in progress.</p> </li> </ul> </dd> </dl> <important> <p>Status messages are subject to change. Therefore, we recommend not including them in code that programmatically initiates actions. For examples, don&#39;t use status messages in if statements.</p> </important> <p>To have an overview of your training job&#39;s progress, view <code>TrainingJobStatus</code> and <code>SecondaryStatus</code> in <a>DescribeTrainingJob</a>, and <code>StatusMessage</code> together. For example, at the start of a training job, you might see the following:</p> <ul> <li> <p> <code>TrainingJobStatus</code> - InProgress</p> </li> <li> <p> <code>SecondaryStatus</code> - Training</p> </li> <li> <p> <code>StatusMessage</code> - Downloading the training image</p> </li> </ul></p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12509,7 +28132,7 @@ pub struct SharingSettings {
     /// <p>Whether to include the notebook cell output when sharing the notebook. The default is <code>Disabled</code>.</p>
     #[serde(rename = "NotebookOutputOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notebook_output_option: Option<String>,
+    pub notebook_output_option: Option<NotebookOutputOption>,
     /// <p>When <code>NotebookOutputOption</code> is <code>Allowed</code>, the AWS Key Management Service (KMS) encryption key ID used to encrypt the notebook cell output in the Amazon S3 bucket.</p>
     #[serde(rename = "S3KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12526,6 +28149,1148 @@ pub struct ShuffleConfig {
     /// <p>Determines the shuffling order in <code>ShuffleConfig</code> value.</p>
     #[serde(rename = "Seed")]
     pub seed: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortActionsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortActionsBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortActionsBy),
+}
+
+impl Default for SortActionsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortActionsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortActionsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortActionsBy {
+    fn into(self) -> String {
+        match self {
+            SortActionsBy::CreationTime => "CreationTime".to_string(),
+            SortActionsBy::Name => "Name".to_string(),
+            SortActionsBy::UnknownVariant(UnknownSortActionsBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortActionsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortActionsBy::CreationTime => &"CreationTime",
+            SortActionsBy::Name => &"Name",
+            SortActionsBy::UnknownVariant(UnknownSortActionsBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortActionsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortActionsBy::CreationTime,
+            "Name" => SortActionsBy::Name,
+            _ => SortActionsBy::UnknownVariant(UnknownSortActionsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortActionsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortActionsBy::CreationTime,
+            "Name" => SortActionsBy::Name,
+            _ => SortActionsBy::UnknownVariant(UnknownSortActionsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortActionsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortActionsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortActionsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortArtifactsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortArtifactsBy {
+    CreationTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortArtifactsBy),
+}
+
+impl Default for SortArtifactsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortArtifactsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortArtifactsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortArtifactsBy {
+    fn into(self) -> String {
+        match self {
+            SortArtifactsBy::CreationTime => "CreationTime".to_string(),
+            SortArtifactsBy::UnknownVariant(UnknownSortArtifactsBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortArtifactsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortArtifactsBy::CreationTime => &"CreationTime",
+            SortArtifactsBy::UnknownVariant(UnknownSortArtifactsBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortArtifactsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortArtifactsBy::CreationTime,
+            _ => SortArtifactsBy::UnknownVariant(UnknownSortArtifactsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortArtifactsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortArtifactsBy::CreationTime,
+            _ => SortArtifactsBy::UnknownVariant(UnknownSortArtifactsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortArtifactsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortArtifactsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortArtifactsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortAssociationsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortAssociationsBy {
+    CreationTime,
+    DestinationArn,
+    DestinationType,
+    SourceArn,
+    SourceType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortAssociationsBy),
+}
+
+impl Default for SortAssociationsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortAssociationsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortAssociationsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortAssociationsBy {
+    fn into(self) -> String {
+        match self {
+            SortAssociationsBy::CreationTime => "CreationTime".to_string(),
+            SortAssociationsBy::DestinationArn => "DestinationArn".to_string(),
+            SortAssociationsBy::DestinationType => "DestinationType".to_string(),
+            SortAssociationsBy::SourceArn => "SourceArn".to_string(),
+            SortAssociationsBy::SourceType => "SourceType".to_string(),
+            SortAssociationsBy::UnknownVariant(UnknownSortAssociationsBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortAssociationsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortAssociationsBy::CreationTime => &"CreationTime",
+            SortAssociationsBy::DestinationArn => &"DestinationArn",
+            SortAssociationsBy::DestinationType => &"DestinationType",
+            SortAssociationsBy::SourceArn => &"SourceArn",
+            SortAssociationsBy::SourceType => &"SourceType",
+            SortAssociationsBy::UnknownVariant(UnknownSortAssociationsBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SortAssociationsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortAssociationsBy::CreationTime,
+            "DestinationArn" => SortAssociationsBy::DestinationArn,
+            "DestinationType" => SortAssociationsBy::DestinationType,
+            "SourceArn" => SortAssociationsBy::SourceArn,
+            "SourceType" => SortAssociationsBy::SourceType,
+            _ => SortAssociationsBy::UnknownVariant(UnknownSortAssociationsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortAssociationsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortAssociationsBy::CreationTime,
+            "DestinationArn" => SortAssociationsBy::DestinationArn,
+            "DestinationType" => SortAssociationsBy::DestinationType,
+            "SourceArn" => SortAssociationsBy::SourceArn,
+            "SourceType" => SortAssociationsBy::SourceType,
+            _ => SortAssociationsBy::UnknownVariant(UnknownSortAssociationsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortAssociationsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortAssociationsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortAssociationsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortBy {
+    CreationTime,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortBy),
+}
+
+impl Default for SortBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortBy {
+    fn into(self) -> String {
+        match self {
+            SortBy::CreationTime => "CreationTime".to_string(),
+            SortBy::Name => "Name".to_string(),
+            SortBy::Status => "Status".to_string(),
+            SortBy::UnknownVariant(UnknownSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortBy::CreationTime => &"CreationTime",
+            SortBy::Name => &"Name",
+            SortBy::Status => &"Status",
+            SortBy::UnknownVariant(UnknownSortBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortBy::CreationTime,
+            "Name" => SortBy::Name,
+            "Status" => SortBy::Status,
+            _ => SortBy::UnknownVariant(UnknownSortBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortBy::CreationTime,
+            "Name" => SortBy::Name,
+            "Status" => SortBy::Status,
+            _ => SortBy::UnknownVariant(UnknownSortBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortContextsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortContextsBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortContextsBy),
+}
+
+impl Default for SortContextsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortContextsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortContextsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortContextsBy {
+    fn into(self) -> String {
+        match self {
+            SortContextsBy::CreationTime => "CreationTime".to_string(),
+            SortContextsBy::Name => "Name".to_string(),
+            SortContextsBy::UnknownVariant(UnknownSortContextsBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortContextsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortContextsBy::CreationTime => &"CreationTime",
+            SortContextsBy::Name => &"Name",
+            SortContextsBy::UnknownVariant(UnknownSortContextsBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortContextsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortContextsBy::CreationTime,
+            "Name" => SortContextsBy::Name,
+            _ => SortContextsBy::UnknownVariant(UnknownSortContextsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortContextsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortContextsBy::CreationTime,
+            "Name" => SortContextsBy::Name,
+            _ => SortContextsBy::UnknownVariant(UnknownSortContextsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortContextsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortContextsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortContextsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortExperimentsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortExperimentsBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortExperimentsBy),
+}
+
+impl Default for SortExperimentsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortExperimentsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortExperimentsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortExperimentsBy {
+    fn into(self) -> String {
+        match self {
+            SortExperimentsBy::CreationTime => "CreationTime".to_string(),
+            SortExperimentsBy::Name => "Name".to_string(),
+            SortExperimentsBy::UnknownVariant(UnknownSortExperimentsBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortExperimentsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortExperimentsBy::CreationTime => &"CreationTime",
+            SortExperimentsBy::Name => &"Name",
+            SortExperimentsBy::UnknownVariant(UnknownSortExperimentsBy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SortExperimentsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortExperimentsBy::CreationTime,
+            "Name" => SortExperimentsBy::Name,
+            _ => SortExperimentsBy::UnknownVariant(UnknownSortExperimentsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortExperimentsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortExperimentsBy::CreationTime,
+            "Name" => SortExperimentsBy::Name,
+            _ => SortExperimentsBy::UnknownVariant(UnknownSortExperimentsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortExperimentsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortExperimentsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortExperimentsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "Ascending".to_string(),
+            SortOrder::Descending => "Descending".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"Ascending",
+            SortOrder::Descending => &"Descending",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "Ascending" => SortOrder::Ascending,
+            "Descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Ascending" => SortOrder::Ascending,
+            "Descending" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortPipelineExecutionsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortPipelineExecutionsBy {
+    CreationTime,
+    PipelineExecutionArn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortPipelineExecutionsBy),
+}
+
+impl Default for SortPipelineExecutionsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortPipelineExecutionsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortPipelineExecutionsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortPipelineExecutionsBy {
+    fn into(self) -> String {
+        match self {
+            SortPipelineExecutionsBy::CreationTime => "CreationTime".to_string(),
+            SortPipelineExecutionsBy::PipelineExecutionArn => "PipelineExecutionArn".to_string(),
+            SortPipelineExecutionsBy::UnknownVariant(UnknownSortPipelineExecutionsBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortPipelineExecutionsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortPipelineExecutionsBy::CreationTime => &"CreationTime",
+            SortPipelineExecutionsBy::PipelineExecutionArn => &"PipelineExecutionArn",
+            SortPipelineExecutionsBy::UnknownVariant(UnknownSortPipelineExecutionsBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortPipelineExecutionsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortPipelineExecutionsBy::CreationTime,
+            "PipelineExecutionArn" => SortPipelineExecutionsBy::PipelineExecutionArn,
+            _ => SortPipelineExecutionsBy::UnknownVariant(UnknownSortPipelineExecutionsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortPipelineExecutionsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortPipelineExecutionsBy::CreationTime,
+            "PipelineExecutionArn" => SortPipelineExecutionsBy::PipelineExecutionArn,
+            _ => SortPipelineExecutionsBy::UnknownVariant(UnknownSortPipelineExecutionsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortPipelineExecutionsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortPipelineExecutionsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortPipelineExecutionsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortPipelinesBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortPipelinesBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortPipelinesBy),
+}
+
+impl Default for SortPipelinesBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortPipelinesBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortPipelinesBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortPipelinesBy {
+    fn into(self) -> String {
+        match self {
+            SortPipelinesBy::CreationTime => "CreationTime".to_string(),
+            SortPipelinesBy::Name => "Name".to_string(),
+            SortPipelinesBy::UnknownVariant(UnknownSortPipelinesBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortPipelinesBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortPipelinesBy::CreationTime => &"CreationTime",
+            SortPipelinesBy::Name => &"Name",
+            SortPipelinesBy::UnknownVariant(UnknownSortPipelinesBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortPipelinesBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortPipelinesBy::CreationTime,
+            "Name" => SortPipelinesBy::Name,
+            _ => SortPipelinesBy::UnknownVariant(UnknownSortPipelinesBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortPipelinesBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortPipelinesBy::CreationTime,
+            "Name" => SortPipelinesBy::Name,
+            _ => SortPipelinesBy::UnknownVariant(UnknownSortPipelinesBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortPipelinesBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortPipelinesBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortPipelinesBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortTrialComponentsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortTrialComponentsBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortTrialComponentsBy),
+}
+
+impl Default for SortTrialComponentsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortTrialComponentsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortTrialComponentsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortTrialComponentsBy {
+    fn into(self) -> String {
+        match self {
+            SortTrialComponentsBy::CreationTime => "CreationTime".to_string(),
+            SortTrialComponentsBy::Name => "Name".to_string(),
+            SortTrialComponentsBy::UnknownVariant(UnknownSortTrialComponentsBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortTrialComponentsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortTrialComponentsBy::CreationTime => &"CreationTime",
+            SortTrialComponentsBy::Name => &"Name",
+            SortTrialComponentsBy::UnknownVariant(UnknownSortTrialComponentsBy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortTrialComponentsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortTrialComponentsBy::CreationTime,
+            "Name" => SortTrialComponentsBy::Name,
+            _ => SortTrialComponentsBy::UnknownVariant(UnknownSortTrialComponentsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortTrialComponentsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortTrialComponentsBy::CreationTime,
+            "Name" => SortTrialComponentsBy::Name,
+            _ => SortTrialComponentsBy::UnknownVariant(UnknownSortTrialComponentsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortTrialComponentsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortTrialComponentsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortTrialComponentsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortTrialsBy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortTrialsBy {
+    CreationTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortTrialsBy),
+}
+
+impl Default for SortTrialsBy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortTrialsBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortTrialsBy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortTrialsBy {
+    fn into(self) -> String {
+        match self {
+            SortTrialsBy::CreationTime => "CreationTime".to_string(),
+            SortTrialsBy::Name => "Name".to_string(),
+            SortTrialsBy::UnknownVariant(UnknownSortTrialsBy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortTrialsBy {
+    fn into(self) -> &'a str {
+        match self {
+            SortTrialsBy::CreationTime => &"CreationTime",
+            SortTrialsBy::Name => &"Name",
+            SortTrialsBy::UnknownVariant(UnknownSortTrialsBy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortTrialsBy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => SortTrialsBy::CreationTime,
+            "Name" => SortTrialsBy::Name,
+            _ => SortTrialsBy::UnknownVariant(UnknownSortTrialsBy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortTrialsBy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => SortTrialsBy::CreationTime,
+            "Name" => SortTrialsBy::Name,
+            _ => SortTrialsBy::UnknownVariant(UnknownSortTrialsBy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortTrialsBy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortTrialsBy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortTrialsBy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your Amazon SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.</p>
@@ -12554,6 +29319,116 @@ pub struct SourceIpConfig {
     /// <p><p>A list of one to ten <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">Classless Inter-Domain Routing</a> (CIDR) values.</p> <p>Maximum: Ten CIDR values</p> <note> <p>The following Length Constraints apply to individual CIDR values in the CIDR value list.</p> </note></p>
     #[serde(rename = "Cidrs")]
     pub cidrs: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSplitType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SplitType {
+    Line,
+    None,
+    RecordIO,
+    Tfrecord,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSplitType),
+}
+
+impl Default for SplitType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SplitType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SplitType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SplitType {
+    fn into(self) -> String {
+        match self {
+            SplitType::Line => "Line".to_string(),
+            SplitType::None => "None".to_string(),
+            SplitType::RecordIO => "RecordIO".to_string(),
+            SplitType::Tfrecord => "TFRecord".to_string(),
+            SplitType::UnknownVariant(UnknownSplitType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SplitType {
+    fn into(self) -> &'a str {
+        match self {
+            SplitType::Line => &"Line",
+            SplitType::None => &"None",
+            SplitType::RecordIO => &"RecordIO",
+            SplitType::Tfrecord => &"TFRecord",
+            SplitType::UnknownVariant(UnknownSplitType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SplitType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Line" => SplitType::Line,
+            "None" => SplitType::None,
+            "RecordIO" => SplitType::RecordIO,
+            "TFRecord" => SplitType::Tfrecord,
+            _ => SplitType::UnknownVariant(UnknownSplitType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SplitType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Line" => SplitType::Line,
+            "None" => SplitType::None,
+            "RecordIO" => SplitType::RecordIO,
+            "TFRecord" => SplitType::Tfrecord,
+            _ => SplitType::UnknownVariant(UnknownSplitType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SplitType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SplitType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SplitType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -12602,6 +29477,127 @@ pub struct StartPipelineExecutionResponse {
     #[serde(rename = "PipelineExecutionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_execution_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStepStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StepStatus {
+    Executing,
+    Failed,
+    Starting,
+    Stopped,
+    Stopping,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStepStatus),
+}
+
+impl Default for StepStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StepStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StepStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StepStatus {
+    fn into(self) -> String {
+        match self {
+            StepStatus::Executing => "Executing".to_string(),
+            StepStatus::Failed => "Failed".to_string(),
+            StepStatus::Starting => "Starting".to_string(),
+            StepStatus::Stopped => "Stopped".to_string(),
+            StepStatus::Stopping => "Stopping".to_string(),
+            StepStatus::Succeeded => "Succeeded".to_string(),
+            StepStatus::UnknownVariant(UnknownStepStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StepStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StepStatus::Executing => &"Executing",
+            StepStatus::Failed => &"Failed",
+            StepStatus::Starting => &"Starting",
+            StepStatus::Stopped => &"Stopped",
+            StepStatus::Stopping => &"Stopping",
+            StepStatus::Succeeded => &"Succeeded",
+            StepStatus::UnknownVariant(UnknownStepStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StepStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Executing" => StepStatus::Executing,
+            "Failed" => StepStatus::Failed,
+            "Starting" => StepStatus::Starting,
+            "Stopped" => StepStatus::Stopped,
+            "Stopping" => StepStatus::Stopping,
+            "Succeeded" => StepStatus::Succeeded,
+            _ => StepStatus::UnknownVariant(UnknownStepStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StepStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Executing" => StepStatus::Executing,
+            "Failed" => StepStatus::Failed,
+            "Starting" => StepStatus::Starting,
+            "Stopped" => StepStatus::Stopped,
+            "Stopping" => StepStatus::Stopping,
+            "Succeeded" => StepStatus::Succeeded,
+            _ => StepStatus::UnknownVariant(UnknownStepStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StepStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StepStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StepStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -12763,19 +29759,583 @@ pub struct Tag {
     pub value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetDevice {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetDevice {
+    Aisage,
+    AmbaCv22,
+    Coreml,
+    Deeplens,
+    Imx8Qm,
+    JacintoTda4Vm,
+    JetsonNano,
+    JetsonTx1,
+    JetsonTx2,
+    JetsonXavier,
+    Lambda,
+    MlC4,
+    MlC5,
+    MlG4Dn,
+    MlInf1,
+    MlM4,
+    MlM5,
+    MlP2,
+    MlP3,
+    Qcs603,
+    Qcs605,
+    Rasp3B,
+    Rk3288,
+    Rk3399,
+    SbeC,
+    SitaraAm57X,
+    X86Win32,
+    X86Win64,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetDevice),
+}
+
+impl Default for TargetDevice {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetDevice {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetDevice {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetDevice {
+    fn into(self) -> String {
+        match self {
+            TargetDevice::Aisage => "aisage".to_string(),
+            TargetDevice::AmbaCv22 => "amba_cv22".to_string(),
+            TargetDevice::Coreml => "coreml".to_string(),
+            TargetDevice::Deeplens => "deeplens".to_string(),
+            TargetDevice::Imx8Qm => "imx8qm".to_string(),
+            TargetDevice::JacintoTda4Vm => "jacinto_tda4vm".to_string(),
+            TargetDevice::JetsonNano => "jetson_nano".to_string(),
+            TargetDevice::JetsonTx1 => "jetson_tx1".to_string(),
+            TargetDevice::JetsonTx2 => "jetson_tx2".to_string(),
+            TargetDevice::JetsonXavier => "jetson_xavier".to_string(),
+            TargetDevice::Lambda => "lambda".to_string(),
+            TargetDevice::MlC4 => "ml_c4".to_string(),
+            TargetDevice::MlC5 => "ml_c5".to_string(),
+            TargetDevice::MlG4Dn => "ml_g4dn".to_string(),
+            TargetDevice::MlInf1 => "ml_inf1".to_string(),
+            TargetDevice::MlM4 => "ml_m4".to_string(),
+            TargetDevice::MlM5 => "ml_m5".to_string(),
+            TargetDevice::MlP2 => "ml_p2".to_string(),
+            TargetDevice::MlP3 => "ml_p3".to_string(),
+            TargetDevice::Qcs603 => "qcs603".to_string(),
+            TargetDevice::Qcs605 => "qcs605".to_string(),
+            TargetDevice::Rasp3B => "rasp3b".to_string(),
+            TargetDevice::Rk3288 => "rk3288".to_string(),
+            TargetDevice::Rk3399 => "rk3399".to_string(),
+            TargetDevice::SbeC => "sbe_c".to_string(),
+            TargetDevice::SitaraAm57X => "sitara_am57x".to_string(),
+            TargetDevice::X86Win32 => "x86_win32".to_string(),
+            TargetDevice::X86Win64 => "x86_win64".to_string(),
+            TargetDevice::UnknownVariant(UnknownTargetDevice { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetDevice {
+    fn into(self) -> &'a str {
+        match self {
+            TargetDevice::Aisage => &"aisage",
+            TargetDevice::AmbaCv22 => &"amba_cv22",
+            TargetDevice::Coreml => &"coreml",
+            TargetDevice::Deeplens => &"deeplens",
+            TargetDevice::Imx8Qm => &"imx8qm",
+            TargetDevice::JacintoTda4Vm => &"jacinto_tda4vm",
+            TargetDevice::JetsonNano => &"jetson_nano",
+            TargetDevice::JetsonTx1 => &"jetson_tx1",
+            TargetDevice::JetsonTx2 => &"jetson_tx2",
+            TargetDevice::JetsonXavier => &"jetson_xavier",
+            TargetDevice::Lambda => &"lambda",
+            TargetDevice::MlC4 => &"ml_c4",
+            TargetDevice::MlC5 => &"ml_c5",
+            TargetDevice::MlG4Dn => &"ml_g4dn",
+            TargetDevice::MlInf1 => &"ml_inf1",
+            TargetDevice::MlM4 => &"ml_m4",
+            TargetDevice::MlM5 => &"ml_m5",
+            TargetDevice::MlP2 => &"ml_p2",
+            TargetDevice::MlP3 => &"ml_p3",
+            TargetDevice::Qcs603 => &"qcs603",
+            TargetDevice::Qcs605 => &"qcs605",
+            TargetDevice::Rasp3B => &"rasp3b",
+            TargetDevice::Rk3288 => &"rk3288",
+            TargetDevice::Rk3399 => &"rk3399",
+            TargetDevice::SbeC => &"sbe_c",
+            TargetDevice::SitaraAm57X => &"sitara_am57x",
+            TargetDevice::X86Win32 => &"x86_win32",
+            TargetDevice::X86Win64 => &"x86_win64",
+            TargetDevice::UnknownVariant(UnknownTargetDevice { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetDevice {
+    fn from(name: &str) -> Self {
+        match name {
+            "aisage" => TargetDevice::Aisage,
+            "amba_cv22" => TargetDevice::AmbaCv22,
+            "coreml" => TargetDevice::Coreml,
+            "deeplens" => TargetDevice::Deeplens,
+            "imx8qm" => TargetDevice::Imx8Qm,
+            "jacinto_tda4vm" => TargetDevice::JacintoTda4Vm,
+            "jetson_nano" => TargetDevice::JetsonNano,
+            "jetson_tx1" => TargetDevice::JetsonTx1,
+            "jetson_tx2" => TargetDevice::JetsonTx2,
+            "jetson_xavier" => TargetDevice::JetsonXavier,
+            "lambda" => TargetDevice::Lambda,
+            "ml_c4" => TargetDevice::MlC4,
+            "ml_c5" => TargetDevice::MlC5,
+            "ml_g4dn" => TargetDevice::MlG4Dn,
+            "ml_inf1" => TargetDevice::MlInf1,
+            "ml_m4" => TargetDevice::MlM4,
+            "ml_m5" => TargetDevice::MlM5,
+            "ml_p2" => TargetDevice::MlP2,
+            "ml_p3" => TargetDevice::MlP3,
+            "qcs603" => TargetDevice::Qcs603,
+            "qcs605" => TargetDevice::Qcs605,
+            "rasp3b" => TargetDevice::Rasp3B,
+            "rk3288" => TargetDevice::Rk3288,
+            "rk3399" => TargetDevice::Rk3399,
+            "sbe_c" => TargetDevice::SbeC,
+            "sitara_am57x" => TargetDevice::SitaraAm57X,
+            "x86_win32" => TargetDevice::X86Win32,
+            "x86_win64" => TargetDevice::X86Win64,
+            _ => TargetDevice::UnknownVariant(UnknownTargetDevice {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetDevice {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aisage" => TargetDevice::Aisage,
+            "amba_cv22" => TargetDevice::AmbaCv22,
+            "coreml" => TargetDevice::Coreml,
+            "deeplens" => TargetDevice::Deeplens,
+            "imx8qm" => TargetDevice::Imx8Qm,
+            "jacinto_tda4vm" => TargetDevice::JacintoTda4Vm,
+            "jetson_nano" => TargetDevice::JetsonNano,
+            "jetson_tx1" => TargetDevice::JetsonTx1,
+            "jetson_tx2" => TargetDevice::JetsonTx2,
+            "jetson_xavier" => TargetDevice::JetsonXavier,
+            "lambda" => TargetDevice::Lambda,
+            "ml_c4" => TargetDevice::MlC4,
+            "ml_c5" => TargetDevice::MlC5,
+            "ml_g4dn" => TargetDevice::MlG4Dn,
+            "ml_inf1" => TargetDevice::MlInf1,
+            "ml_m4" => TargetDevice::MlM4,
+            "ml_m5" => TargetDevice::MlM5,
+            "ml_p2" => TargetDevice::MlP2,
+            "ml_p3" => TargetDevice::MlP3,
+            "qcs603" => TargetDevice::Qcs603,
+            "qcs605" => TargetDevice::Qcs605,
+            "rasp3b" => TargetDevice::Rasp3B,
+            "rk3288" => TargetDevice::Rk3288,
+            "rk3399" => TargetDevice::Rk3399,
+            "sbe_c" => TargetDevice::SbeC,
+            "sitara_am57x" => TargetDevice::SitaraAm57X,
+            "x86_win32" => TargetDevice::X86Win32,
+            "x86_win64" => TargetDevice::X86Win64,
+            _ => TargetDevice::UnknownVariant(UnknownTargetDevice { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetDevice {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetDevice {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetDevice {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about a target platform that you want your model to run on, such as OS, architecture, and accelerators. It is an alternative of <code>TargetDevice</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TargetPlatform {
     /// <p><p>Specifies a target platform accelerator (optional).</p> <ul> <li> <p> <code>NVIDIA</code>: Nvidia graphics processing unit. It also requires <code>gpu-code</code>, <code>trt-ver</code>, <code>cuda-ver</code> compiler options</p> </li> <li> <p> <code>MALI</code>: ARM Mali graphics processor</p> </li> <li> <p> <code>INTEL_GRAPHICS</code>: Integrated Intel graphics</p> </li> </ul></p>
     #[serde(rename = "Accelerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub accelerator: Option<String>,
+    pub accelerator: Option<TargetPlatformAccelerator>,
     /// <p><p>Specifies a target platform architecture.</p> <ul> <li> <p> <code>X86<em>64</code>: 64-bit version of the x86 instruction set.</p> </li> <li> <p> <code>X86</code>: 32-bit version of the x86 instruction set.</p> </li> <li> <p> <code>ARM64</code>: ARMv8 64-bit CPU.</p> </li> <li> <p> <code>ARM</em>EABIHF</code>: ARMv7 32-bit, Hard Float.</p> </li> <li> <p> <code>ARM_EABI</code>: ARMv7 32-bit, Soft Float. Used by Android 32-bit ARM platform.</p> </li> </ul></p>
     #[serde(rename = "Arch")]
-    pub arch: String,
+    pub arch: TargetPlatformArch,
     /// <p><p>Specifies a target platform OS.</p> <ul> <li> <p> <code>LINUX</code>: Linux-based operating systems.</p> </li> <li> <p> <code>ANDROID</code>: Android operating systems. Android API level can be specified using the <code>ANDROID<em>PLATFORM</code> compiler option. For example, <code>&quot;CompilerOptions&quot;: {&#39;ANDROID</em>PLATFORM&#39;: 28}</code> </p> </li> </ul></p>
     #[serde(rename = "Os")]
-    pub os: String,
+    pub os: TargetPlatformOs,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetPlatformAccelerator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetPlatformAccelerator {
+    IntelGraphics,
+    Mali,
+    Nvidia,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetPlatformAccelerator),
+}
+
+impl Default for TargetPlatformAccelerator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetPlatformAccelerator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetPlatformAccelerator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetPlatformAccelerator {
+    fn into(self) -> String {
+        match self {
+            TargetPlatformAccelerator::IntelGraphics => "INTEL_GRAPHICS".to_string(),
+            TargetPlatformAccelerator::Mali => "MALI".to_string(),
+            TargetPlatformAccelerator::Nvidia => "NVIDIA".to_string(),
+            TargetPlatformAccelerator::UnknownVariant(UnknownTargetPlatformAccelerator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetPlatformAccelerator {
+    fn into(self) -> &'a str {
+        match self {
+            TargetPlatformAccelerator::IntelGraphics => &"INTEL_GRAPHICS",
+            TargetPlatformAccelerator::Mali => &"MALI",
+            TargetPlatformAccelerator::Nvidia => &"NVIDIA",
+            TargetPlatformAccelerator::UnknownVariant(UnknownTargetPlatformAccelerator {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetPlatformAccelerator {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTEL_GRAPHICS" => TargetPlatformAccelerator::IntelGraphics,
+            "MALI" => TargetPlatformAccelerator::Mali,
+            "NVIDIA" => TargetPlatformAccelerator::Nvidia,
+            _ => TargetPlatformAccelerator::UnknownVariant(UnknownTargetPlatformAccelerator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetPlatformAccelerator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTEL_GRAPHICS" => TargetPlatformAccelerator::IntelGraphics,
+            "MALI" => TargetPlatformAccelerator::Mali,
+            "NVIDIA" => TargetPlatformAccelerator::Nvidia,
+            _ => {
+                TargetPlatformAccelerator::UnknownVariant(UnknownTargetPlatformAccelerator { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetPlatformAccelerator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetPlatformAccelerator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetPlatformAccelerator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetPlatformArch {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetPlatformArch {
+    Arm64,
+    ArmEabi,
+    ArmEabihf,
+    X86,
+    X8664,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetPlatformArch),
+}
+
+impl Default for TargetPlatformArch {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetPlatformArch {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetPlatformArch {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetPlatformArch {
+    fn into(self) -> String {
+        match self {
+            TargetPlatformArch::Arm64 => "ARM64".to_string(),
+            TargetPlatformArch::ArmEabi => "ARM_EABI".to_string(),
+            TargetPlatformArch::ArmEabihf => "ARM_EABIHF".to_string(),
+            TargetPlatformArch::X86 => "X86".to_string(),
+            TargetPlatformArch::X8664 => "X86_64".to_string(),
+            TargetPlatformArch::UnknownVariant(UnknownTargetPlatformArch { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetPlatformArch {
+    fn into(self) -> &'a str {
+        match self {
+            TargetPlatformArch::Arm64 => &"ARM64",
+            TargetPlatformArch::ArmEabi => &"ARM_EABI",
+            TargetPlatformArch::ArmEabihf => &"ARM_EABIHF",
+            TargetPlatformArch::X86 => &"X86",
+            TargetPlatformArch::X8664 => &"X86_64",
+            TargetPlatformArch::UnknownVariant(UnknownTargetPlatformArch { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TargetPlatformArch {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARM64" => TargetPlatformArch::Arm64,
+            "ARM_EABI" => TargetPlatformArch::ArmEabi,
+            "ARM_EABIHF" => TargetPlatformArch::ArmEabihf,
+            "X86" => TargetPlatformArch::X86,
+            "X86_64" => TargetPlatformArch::X8664,
+            _ => TargetPlatformArch::UnknownVariant(UnknownTargetPlatformArch {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetPlatformArch {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARM64" => TargetPlatformArch::Arm64,
+            "ARM_EABI" => TargetPlatformArch::ArmEabi,
+            "ARM_EABIHF" => TargetPlatformArch::ArmEabihf,
+            "X86" => TargetPlatformArch::X86,
+            "X86_64" => TargetPlatformArch::X8664,
+            _ => TargetPlatformArch::UnknownVariant(UnknownTargetPlatformArch { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetPlatformArch {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetPlatformArch {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetPlatformArch {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetPlatformOs {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetPlatformOs {
+    Android,
+    Linux,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetPlatformOs),
+}
+
+impl Default for TargetPlatformOs {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetPlatformOs {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetPlatformOs {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetPlatformOs {
+    fn into(self) -> String {
+        match self {
+            TargetPlatformOs::Android => "ANDROID".to_string(),
+            TargetPlatformOs::Linux => "LINUX".to_string(),
+            TargetPlatformOs::UnknownVariant(UnknownTargetPlatformOs { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetPlatformOs {
+    fn into(self) -> &'a str {
+        match self {
+            TargetPlatformOs::Android => &"ANDROID",
+            TargetPlatformOs::Linux => &"LINUX",
+            TargetPlatformOs::UnknownVariant(UnknownTargetPlatformOs { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TargetPlatformOs {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANDROID" => TargetPlatformOs::Android,
+            "LINUX" => TargetPlatformOs::Linux,
+            _ => TargetPlatformOs::UnknownVariant(UnknownTargetPlatformOs {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetPlatformOs {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANDROID" => TargetPlatformOs::Android,
+            "LINUX" => TargetPlatformOs::Linux,
+            _ => TargetPlatformOs::UnknownVariant(UnknownTargetPlatformOs { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetPlatformOs {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetPlatformOs {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetPlatformOs {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The TensorBoard app settings.</p>
@@ -12808,10 +30368,507 @@ pub struct TrafficRoutingConfig {
     pub canary_size: Option<CapacitySize>,
     /// <p><p/></p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: TrafficRoutingConfigType,
     /// <p><p/></p>
     #[serde(rename = "WaitIntervalInSeconds")]
     pub wait_interval_in_seconds: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrafficRoutingConfigType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrafficRoutingConfigType {
+    AllAtOnce,
+    Canary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrafficRoutingConfigType),
+}
+
+impl Default for TrafficRoutingConfigType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrafficRoutingConfigType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrafficRoutingConfigType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrafficRoutingConfigType {
+    fn into(self) -> String {
+        match self {
+            TrafficRoutingConfigType::AllAtOnce => "ALL_AT_ONCE".to_string(),
+            TrafficRoutingConfigType::Canary => "CANARY".to_string(),
+            TrafficRoutingConfigType::UnknownVariant(UnknownTrafficRoutingConfigType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrafficRoutingConfigType {
+    fn into(self) -> &'a str {
+        match self {
+            TrafficRoutingConfigType::AllAtOnce => &"ALL_AT_ONCE",
+            TrafficRoutingConfigType::Canary => &"CANARY",
+            TrafficRoutingConfigType::UnknownVariant(UnknownTrafficRoutingConfigType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrafficRoutingConfigType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_AT_ONCE" => TrafficRoutingConfigType::AllAtOnce,
+            "CANARY" => TrafficRoutingConfigType::Canary,
+            _ => TrafficRoutingConfigType::UnknownVariant(UnknownTrafficRoutingConfigType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrafficRoutingConfigType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_AT_ONCE" => TrafficRoutingConfigType::AllAtOnce,
+            "CANARY" => TrafficRoutingConfigType::Canary,
+            _ => TrafficRoutingConfigType::UnknownVariant(UnknownTrafficRoutingConfigType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrafficRoutingConfigType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrafficRoutingConfigType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrafficRoutingConfigType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingInputMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingInputMode {
+    File,
+    Pipe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingInputMode),
+}
+
+impl Default for TrainingInputMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingInputMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingInputMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingInputMode {
+    fn into(self) -> String {
+        match self {
+            TrainingInputMode::File => "File".to_string(),
+            TrainingInputMode::Pipe => "Pipe".to_string(),
+            TrainingInputMode::UnknownVariant(UnknownTrainingInputMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingInputMode {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingInputMode::File => &"File",
+            TrainingInputMode::Pipe => &"Pipe",
+            TrainingInputMode::UnknownVariant(UnknownTrainingInputMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TrainingInputMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "File" => TrainingInputMode::File,
+            "Pipe" => TrainingInputMode::Pipe,
+            _ => TrainingInputMode::UnknownVariant(UnknownTrainingInputMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingInputMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "File" => TrainingInputMode::File,
+            "Pipe" => TrainingInputMode::Pipe,
+            _ => TrainingInputMode::UnknownVariant(UnknownTrainingInputMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingInputMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingInputMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingInputMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingInstanceType {
+    MlC42Xlarge,
+    MlC44Xlarge,
+    MlC48Xlarge,
+    MlC4Xlarge,
+    MlC518Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Xlarge,
+    MlC5N18Xlarge,
+    MlC5N2Xlarge,
+    MlC5N4Xlarge,
+    MlC5N9Xlarge,
+    MlC5NXlarge,
+    MlG4Dn12Xlarge,
+    MlG4Dn16Xlarge,
+    MlG4Dn2Xlarge,
+    MlG4Dn4Xlarge,
+    MlG4Dn8Xlarge,
+    MlG4DnXlarge,
+    MlM410Xlarge,
+    MlM416Xlarge,
+    MlM42Xlarge,
+    MlM44Xlarge,
+    MlM4Xlarge,
+    MlM512Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM5Large,
+    MlM5Xlarge,
+    MlP216Xlarge,
+    MlP28Xlarge,
+    MlP2Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    MlP3Dn24Xlarge,
+    MlP4D24Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingInstanceType),
+}
+
+impl Default for TrainingInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingInstanceType {
+    fn into(self) -> String {
+        match self {
+            TrainingInstanceType::MlC42Xlarge => "ml.c4.2xlarge".to_string(),
+            TrainingInstanceType::MlC44Xlarge => "ml.c4.4xlarge".to_string(),
+            TrainingInstanceType::MlC48Xlarge => "ml.c4.8xlarge".to_string(),
+            TrainingInstanceType::MlC4Xlarge => "ml.c4.xlarge".to_string(),
+            TrainingInstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            TrainingInstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            TrainingInstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            TrainingInstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            TrainingInstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            TrainingInstanceType::MlC5N18Xlarge => "ml.c5n.18xlarge".to_string(),
+            TrainingInstanceType::MlC5N2Xlarge => "ml.c5n.2xlarge".to_string(),
+            TrainingInstanceType::MlC5N4Xlarge => "ml.c5n.4xlarge".to_string(),
+            TrainingInstanceType::MlC5N9Xlarge => "ml.c5n.9xlarge".to_string(),
+            TrainingInstanceType::MlC5NXlarge => "ml.c5n.xlarge".to_string(),
+            TrainingInstanceType::MlG4Dn12Xlarge => "ml.g4dn.12xlarge".to_string(),
+            TrainingInstanceType::MlG4Dn16Xlarge => "ml.g4dn.16xlarge".to_string(),
+            TrainingInstanceType::MlG4Dn2Xlarge => "ml.g4dn.2xlarge".to_string(),
+            TrainingInstanceType::MlG4Dn4Xlarge => "ml.g4dn.4xlarge".to_string(),
+            TrainingInstanceType::MlG4Dn8Xlarge => "ml.g4dn.8xlarge".to_string(),
+            TrainingInstanceType::MlG4DnXlarge => "ml.g4dn.xlarge".to_string(),
+            TrainingInstanceType::MlM410Xlarge => "ml.m4.10xlarge".to_string(),
+            TrainingInstanceType::MlM416Xlarge => "ml.m4.16xlarge".to_string(),
+            TrainingInstanceType::MlM42Xlarge => "ml.m4.2xlarge".to_string(),
+            TrainingInstanceType::MlM44Xlarge => "ml.m4.4xlarge".to_string(),
+            TrainingInstanceType::MlM4Xlarge => "ml.m4.xlarge".to_string(),
+            TrainingInstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            TrainingInstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            TrainingInstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            TrainingInstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            TrainingInstanceType::MlM5Large => "ml.m5.large".to_string(),
+            TrainingInstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            TrainingInstanceType::MlP216Xlarge => "ml.p2.16xlarge".to_string(),
+            TrainingInstanceType::MlP28Xlarge => "ml.p2.8xlarge".to_string(),
+            TrainingInstanceType::MlP2Xlarge => "ml.p2.xlarge".to_string(),
+            TrainingInstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            TrainingInstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            TrainingInstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            TrainingInstanceType::MlP3Dn24Xlarge => "ml.p3dn.24xlarge".to_string(),
+            TrainingInstanceType::MlP4D24Xlarge => "ml.p4d.24xlarge".to_string(),
+            TrainingInstanceType::UnknownVariant(UnknownTrainingInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingInstanceType::MlC42Xlarge => &"ml.c4.2xlarge",
+            TrainingInstanceType::MlC44Xlarge => &"ml.c4.4xlarge",
+            TrainingInstanceType::MlC48Xlarge => &"ml.c4.8xlarge",
+            TrainingInstanceType::MlC4Xlarge => &"ml.c4.xlarge",
+            TrainingInstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            TrainingInstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            TrainingInstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            TrainingInstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            TrainingInstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            TrainingInstanceType::MlC5N18Xlarge => &"ml.c5n.18xlarge",
+            TrainingInstanceType::MlC5N2Xlarge => &"ml.c5n.2xlarge",
+            TrainingInstanceType::MlC5N4Xlarge => &"ml.c5n.4xlarge",
+            TrainingInstanceType::MlC5N9Xlarge => &"ml.c5n.9xlarge",
+            TrainingInstanceType::MlC5NXlarge => &"ml.c5n.xlarge",
+            TrainingInstanceType::MlG4Dn12Xlarge => &"ml.g4dn.12xlarge",
+            TrainingInstanceType::MlG4Dn16Xlarge => &"ml.g4dn.16xlarge",
+            TrainingInstanceType::MlG4Dn2Xlarge => &"ml.g4dn.2xlarge",
+            TrainingInstanceType::MlG4Dn4Xlarge => &"ml.g4dn.4xlarge",
+            TrainingInstanceType::MlG4Dn8Xlarge => &"ml.g4dn.8xlarge",
+            TrainingInstanceType::MlG4DnXlarge => &"ml.g4dn.xlarge",
+            TrainingInstanceType::MlM410Xlarge => &"ml.m4.10xlarge",
+            TrainingInstanceType::MlM416Xlarge => &"ml.m4.16xlarge",
+            TrainingInstanceType::MlM42Xlarge => &"ml.m4.2xlarge",
+            TrainingInstanceType::MlM44Xlarge => &"ml.m4.4xlarge",
+            TrainingInstanceType::MlM4Xlarge => &"ml.m4.xlarge",
+            TrainingInstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            TrainingInstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            TrainingInstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            TrainingInstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            TrainingInstanceType::MlM5Large => &"ml.m5.large",
+            TrainingInstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            TrainingInstanceType::MlP216Xlarge => &"ml.p2.16xlarge",
+            TrainingInstanceType::MlP28Xlarge => &"ml.p2.8xlarge",
+            TrainingInstanceType::MlP2Xlarge => &"ml.p2.xlarge",
+            TrainingInstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            TrainingInstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            TrainingInstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            TrainingInstanceType::MlP3Dn24Xlarge => &"ml.p3dn.24xlarge",
+            TrainingInstanceType::MlP4D24Xlarge => &"ml.p4d.24xlarge",
+            TrainingInstanceType::UnknownVariant(UnknownTrainingInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrainingInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c4.2xlarge" => TrainingInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => TrainingInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => TrainingInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => TrainingInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => TrainingInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => TrainingInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => TrainingInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => TrainingInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => TrainingInstanceType::MlC5Xlarge,
+            "ml.c5n.18xlarge" => TrainingInstanceType::MlC5N18Xlarge,
+            "ml.c5n.2xlarge" => TrainingInstanceType::MlC5N2Xlarge,
+            "ml.c5n.4xlarge" => TrainingInstanceType::MlC5N4Xlarge,
+            "ml.c5n.9xlarge" => TrainingInstanceType::MlC5N9Xlarge,
+            "ml.c5n.xlarge" => TrainingInstanceType::MlC5NXlarge,
+            "ml.g4dn.12xlarge" => TrainingInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => TrainingInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => TrainingInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => TrainingInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => TrainingInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => TrainingInstanceType::MlG4DnXlarge,
+            "ml.m4.10xlarge" => TrainingInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => TrainingInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => TrainingInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => TrainingInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => TrainingInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => TrainingInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => TrainingInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => TrainingInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => TrainingInstanceType::MlM54Xlarge,
+            "ml.m5.large" => TrainingInstanceType::MlM5Large,
+            "ml.m5.xlarge" => TrainingInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => TrainingInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => TrainingInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => TrainingInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => TrainingInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => TrainingInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => TrainingInstanceType::MlP38Xlarge,
+            "ml.p3dn.24xlarge" => TrainingInstanceType::MlP3Dn24Xlarge,
+            "ml.p4d.24xlarge" => TrainingInstanceType::MlP4D24Xlarge,
+            _ => TrainingInstanceType::UnknownVariant(UnknownTrainingInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c4.2xlarge" => TrainingInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => TrainingInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => TrainingInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => TrainingInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => TrainingInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => TrainingInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => TrainingInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => TrainingInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => TrainingInstanceType::MlC5Xlarge,
+            "ml.c5n.18xlarge" => TrainingInstanceType::MlC5N18Xlarge,
+            "ml.c5n.2xlarge" => TrainingInstanceType::MlC5N2Xlarge,
+            "ml.c5n.4xlarge" => TrainingInstanceType::MlC5N4Xlarge,
+            "ml.c5n.9xlarge" => TrainingInstanceType::MlC5N9Xlarge,
+            "ml.c5n.xlarge" => TrainingInstanceType::MlC5NXlarge,
+            "ml.g4dn.12xlarge" => TrainingInstanceType::MlG4Dn12Xlarge,
+            "ml.g4dn.16xlarge" => TrainingInstanceType::MlG4Dn16Xlarge,
+            "ml.g4dn.2xlarge" => TrainingInstanceType::MlG4Dn2Xlarge,
+            "ml.g4dn.4xlarge" => TrainingInstanceType::MlG4Dn4Xlarge,
+            "ml.g4dn.8xlarge" => TrainingInstanceType::MlG4Dn8Xlarge,
+            "ml.g4dn.xlarge" => TrainingInstanceType::MlG4DnXlarge,
+            "ml.m4.10xlarge" => TrainingInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => TrainingInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => TrainingInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => TrainingInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => TrainingInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => TrainingInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => TrainingInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => TrainingInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => TrainingInstanceType::MlM54Xlarge,
+            "ml.m5.large" => TrainingInstanceType::MlM5Large,
+            "ml.m5.xlarge" => TrainingInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => TrainingInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => TrainingInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => TrainingInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => TrainingInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => TrainingInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => TrainingInstanceType::MlP38Xlarge,
+            "ml.p3dn.24xlarge" => TrainingInstanceType::MlP3Dn24Xlarge,
+            "ml.p4d.24xlarge" => TrainingInstanceType::MlP4D24Xlarge,
+            _ => TrainingInstanceType::UnknownVariant(UnknownTrainingInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a training job.</p>
@@ -12906,7 +30963,7 @@ pub struct TrainingJob {
     /// <p><p> Provides detailed information about the state of the training job. For detailed information about the secondary status of the training job, see <code>StatusMessage</code> under <a>SecondaryStatusTransition</a>.</p> <p>Amazon SageMaker provides primary statuses and secondary statuses that apply to each of them:</p> <dl> <dt>InProgress</dt> <dd> <ul> <li> <p> <code>Starting</code> - Starting the training job.</p> </li> <li> <p> <code>Downloading</code> - An optional stage for algorithms that support <code>File</code> training input mode. It indicates that data is being downloaded to the ML storage volumes.</p> </li> <li> <p> <code>Training</code> - Training is in progress.</p> </li> <li> <p> <code>Uploading</code> - Training is complete and the model artifacts are being uploaded to the S3 location.</p> </li> </ul> </dd> <dt>Completed</dt> <dd> <ul> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> </ul> </dd> <dt>Failed</dt> <dd> <ul> <li> <p> <code>Failed</code> - The training job has failed. The reason for the failure is returned in the <code>FailureReason</code> field of <code>DescribeTrainingJobResponse</code>.</p> </li> </ul> </dd> <dt>Stopped</dt> <dd> <ul> <li> <p> <code>MaxRuntimeExceeded</code> - The job stopped because it exceeded the maximum allowed runtime.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> </dd> <dt>Stopping</dt> <dd> <ul> <li> <p> <code>Stopping</code> - Stopping the training job.</p> </li> </ul> </dd> </dl> <important> <p>Valid values for <code>SecondaryStatus</code> are subject to change. </p> </important> <p>We no longer support the following secondary statuses:</p> <ul> <li> <p> <code>LaunchingMLInstances</code> </p> </li> <li> <p> <code>PreparingTrainingStack</code> </p> </li> <li> <p> <code>DownloadingTrainingImage</code> </p> </li> </ul></p>
     #[serde(rename = "SecondaryStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub secondary_status: Option<String>,
+    pub secondary_status: Option<SecondaryStatus>,
     /// <p>A history of all of the secondary statuses that the training job has transitioned through.</p>
     #[serde(rename = "SecondaryStatusTransitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12937,7 +30994,7 @@ pub struct TrainingJob {
     /// <p>The status of the training job.</p> <p>Training job statuses are:</p> <ul> <li> <p> <code>InProgress</code> - The training is in progress.</p> </li> <li> <p> <code>Completed</code> - The training job has completed.</p> </li> <li> <p> <code>Failed</code> - The training job has failed. To see the reason for the failure, see the <code>FailureReason</code> field in the response to a <code>DescribeTrainingJobResponse</code> call.</p> </li> <li> <p> <code>Stopping</code> - The training job is stopping.</p> </li> <li> <p> <code>Stopped</code> - The training job has stopped.</p> </li> </ul> <p>For more detailed information, see <code>SecondaryStatus</code>. </p>
     #[serde(rename = "TrainingJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub training_job_status: Option<String>,
+    pub training_job_status: Option<TrainingJobStatus>,
     /// <p>Indicates the time when the training job starts on training instances. You are billed for the time interval between this time and the value of <code>TrainingEndTime</code>. The start time in CloudWatch Logs might be later than this time. The difference is due to the time it takes to download the training data and to the size of the training container.</p>
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -12977,7 +31034,353 @@ pub struct TrainingJobDefinition {
     pub stopping_condition: StoppingCondition,
     /// <p>The input mode used by the algorithm for the training job. For the input modes that Amazon SageMaker algorithms support, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>.</p> <p>If an algorithm supports the <code>File</code> input mode, Amazon SageMaker downloads the training data from S3 to the provisioned ML storage Volume, and mounts the directory to docker volume for training container. If an algorithm supports the <code>Pipe</code> input mode, Amazon SageMaker streams data directly from S3 to the container.</p>
     #[serde(rename = "TrainingInputMode")]
-    pub training_input_mode: String,
+    pub training_input_mode: TrainingInputMode,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingJobEarlyStoppingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingJobEarlyStoppingType {
+    Auto,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingJobEarlyStoppingType),
+}
+
+impl Default for TrainingJobEarlyStoppingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingJobEarlyStoppingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingJobEarlyStoppingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingJobEarlyStoppingType {
+    fn into(self) -> String {
+        match self {
+            TrainingJobEarlyStoppingType::Auto => "Auto".to_string(),
+            TrainingJobEarlyStoppingType::Off => "Off".to_string(),
+            TrainingJobEarlyStoppingType::UnknownVariant(UnknownTrainingJobEarlyStoppingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingJobEarlyStoppingType {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingJobEarlyStoppingType::Auto => &"Auto",
+            TrainingJobEarlyStoppingType::Off => &"Off",
+            TrainingJobEarlyStoppingType::UnknownVariant(UnknownTrainingJobEarlyStoppingType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrainingJobEarlyStoppingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Auto" => TrainingJobEarlyStoppingType::Auto,
+            "Off" => TrainingJobEarlyStoppingType::Off,
+            _ => {
+                TrainingJobEarlyStoppingType::UnknownVariant(UnknownTrainingJobEarlyStoppingType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for TrainingJobEarlyStoppingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Auto" => TrainingJobEarlyStoppingType::Auto,
+            "Off" => TrainingJobEarlyStoppingType::Off,
+            _ => {
+                TrainingJobEarlyStoppingType::UnknownVariant(UnknownTrainingJobEarlyStoppingType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingJobEarlyStoppingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingJobEarlyStoppingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingJobEarlyStoppingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingJobSortByOptions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingJobSortByOptions {
+    CreationTime,
+    FinalObjectiveMetricValue,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingJobSortByOptions),
+}
+
+impl Default for TrainingJobSortByOptions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingJobSortByOptions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingJobSortByOptions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingJobSortByOptions {
+    fn into(self) -> String {
+        match self {
+            TrainingJobSortByOptions::CreationTime => "CreationTime".to_string(),
+            TrainingJobSortByOptions::FinalObjectiveMetricValue => {
+                "FinalObjectiveMetricValue".to_string()
+            }
+            TrainingJobSortByOptions::Name => "Name".to_string(),
+            TrainingJobSortByOptions::Status => "Status".to_string(),
+            TrainingJobSortByOptions::UnknownVariant(UnknownTrainingJobSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingJobSortByOptions {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingJobSortByOptions::CreationTime => &"CreationTime",
+            TrainingJobSortByOptions::FinalObjectiveMetricValue => &"FinalObjectiveMetricValue",
+            TrainingJobSortByOptions::Name => &"Name",
+            TrainingJobSortByOptions::Status => &"Status",
+            TrainingJobSortByOptions::UnknownVariant(UnknownTrainingJobSortByOptions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrainingJobSortByOptions {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => TrainingJobSortByOptions::CreationTime,
+            "FinalObjectiveMetricValue" => TrainingJobSortByOptions::FinalObjectiveMetricValue,
+            "Name" => TrainingJobSortByOptions::Name,
+            "Status" => TrainingJobSortByOptions::Status,
+            _ => TrainingJobSortByOptions::UnknownVariant(UnknownTrainingJobSortByOptions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingJobSortByOptions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => TrainingJobSortByOptions::CreationTime,
+            "FinalObjectiveMetricValue" => TrainingJobSortByOptions::FinalObjectiveMetricValue,
+            "Name" => TrainingJobSortByOptions::Name,
+            "Status" => TrainingJobSortByOptions::Status,
+            _ => TrainingJobSortByOptions::UnknownVariant(UnknownTrainingJobSortByOptions { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingJobSortByOptions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingJobSortByOptions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TrainingJobSortByOptions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrainingJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrainingJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrainingJobStatus),
+}
+
+impl Default for TrainingJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrainingJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrainingJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrainingJobStatus {
+    fn into(self) -> String {
+        match self {
+            TrainingJobStatus::Completed => "Completed".to_string(),
+            TrainingJobStatus::Failed => "Failed".to_string(),
+            TrainingJobStatus::InProgress => "InProgress".to_string(),
+            TrainingJobStatus::Stopped => "Stopped".to_string(),
+            TrainingJobStatus::Stopping => "Stopping".to_string(),
+            TrainingJobStatus::UnknownVariant(UnknownTrainingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrainingJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TrainingJobStatus::Completed => &"Completed",
+            TrainingJobStatus::Failed => &"Failed",
+            TrainingJobStatus::InProgress => &"InProgress",
+            TrainingJobStatus::Stopped => &"Stopped",
+            TrainingJobStatus::Stopping => &"Stopping",
+            TrainingJobStatus::UnknownVariant(UnknownTrainingJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TrainingJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => TrainingJobStatus::Completed,
+            "Failed" => TrainingJobStatus::Failed,
+            "InProgress" => TrainingJobStatus::InProgress,
+            "Stopped" => TrainingJobStatus::Stopped,
+            "Stopping" => TrainingJobStatus::Stopping,
+            _ => TrainingJobStatus::UnknownVariant(UnknownTrainingJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrainingJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => TrainingJobStatus::Completed,
+            "Failed" => TrainingJobStatus::Failed,
+            "InProgress" => TrainingJobStatus::InProgress,
+            "Stopped" => TrainingJobStatus::Stopped,
+            "Stopping" => TrainingJobStatus::Stopping,
+            _ => TrainingJobStatus::UnknownVariant(UnknownTrainingJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrainingJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrainingJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrainingJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The numbers of training jobs launched by a hyperparameter tuning job, categorized by status.</p>
@@ -13039,7 +31442,7 @@ pub struct TrainingJobSummary {
     pub training_job_name: String,
     /// <p>The status of the training job.</p>
     #[serde(rename = "TrainingJobStatus")]
-    pub training_job_status: String,
+    pub training_job_status: TrainingJobStatus,
 }
 
 /// <p>Defines how the algorithm is used for a training job.</p>
@@ -13055,7 +31458,7 @@ pub struct TrainingSpecification {
     pub supported_hyper_parameters: Option<Vec<HyperParameterSpecification>>,
     /// <p>A list of the instance types that this algorithm can use for training.</p>
     #[serde(rename = "SupportedTrainingInstanceTypes")]
-    pub supported_training_instance_types: Vec<String>,
+    pub supported_training_instance_types: Vec<TrainingInstanceType>,
     /// <p>A list of the metrics that the algorithm emits that can be used as the objective metric in a hyperparameter tuning job.</p>
     #[serde(rename = "SupportedTuningJobObjectiveMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13090,7 +31493,7 @@ pub struct TransformInput {
     /// <p>If your transform data is compressed, specify the compression type. Amazon SageMaker automatically decompresses the data for the transform job accordingly. The default value is <code>None</code>.</p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_type: Option<String>,
+    pub compression_type: Option<CompressionType>,
     /// <p>The multipurpose internet mail extension (MIME) type of the data. Amazon SageMaker uses the MIME type with each http call to transfer data to the transform job.</p>
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13101,7 +31504,231 @@ pub struct TransformInput {
     /// <p><p>The method to use to split the transform job&#39;s data files into smaller batches. Splitting is necessary when the total size of each object is too large to fit in a single request. You can also use data splitting to improve performance by processing multiple concurrent mini-batches. The default value for <code>SplitType</code> is <code>None</code>, which indicates that input data files are not split, and request payloads contain the entire contents of an input object. Set the value of this parameter to <code>Line</code> to split records on a newline character boundary. <code>SplitType</code> also supports a number of record-oriented binary data formats. Currently, the supported record formats are:</p> <ul> <li> <p>RecordIO</p> </li> <li> <p>TFRecord</p> </li> </ul> <p>When splitting is enabled, the size of a mini-batch depends on the values of the <code>BatchStrategy</code> and <code>MaxPayloadInMB</code> parameters. When the value of <code>BatchStrategy</code> is <code>MultiRecord</code>, Amazon SageMaker sends the maximum number of records in each request, up to the <code>MaxPayloadInMB</code> limit. If the value of <code>BatchStrategy</code> is <code>SingleRecord</code>, Amazon SageMaker sends individual records in each request.</p> <note> <p>Some data formats represent a record as a binary payload wrapped with extra padding bytes. When splitting is applied to a binary data format, padding is removed if the value of <code>BatchStrategy</code> is set to <code>SingleRecord</code>. Padding is not removed if the value of <code>BatchStrategy</code> is set to <code>MultiRecord</code>.</p> <p>For more information about <code>RecordIO</code>, see <a href="https://mxnet.apache.org/api/faq/recordio">Create a Dataset Using RecordIO</a> in the MXNet documentation. For more information about <code>TFRecord</code>, see <a href="https://www.tensorflow.org/guide/datasets#consuming_tfrecord_data">Consuming TFRecord data</a> in the TensorFlow documentation.</p> </note></p>
     #[serde(rename = "SplitType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub split_type: Option<String>,
+    pub split_type: Option<SplitType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransformInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransformInstanceType {
+    MlC42Xlarge,
+    MlC44Xlarge,
+    MlC48Xlarge,
+    MlC4Xlarge,
+    MlC518Xlarge,
+    MlC52Xlarge,
+    MlC54Xlarge,
+    MlC59Xlarge,
+    MlC5Xlarge,
+    MlM410Xlarge,
+    MlM416Xlarge,
+    MlM42Xlarge,
+    MlM44Xlarge,
+    MlM4Xlarge,
+    MlM512Xlarge,
+    MlM524Xlarge,
+    MlM52Xlarge,
+    MlM54Xlarge,
+    MlM5Large,
+    MlM5Xlarge,
+    MlP216Xlarge,
+    MlP28Xlarge,
+    MlP2Xlarge,
+    MlP316Xlarge,
+    MlP32Xlarge,
+    MlP38Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransformInstanceType),
+}
+
+impl Default for TransformInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransformInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransformInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransformInstanceType {
+    fn into(self) -> String {
+        match self {
+            TransformInstanceType::MlC42Xlarge => "ml.c4.2xlarge".to_string(),
+            TransformInstanceType::MlC44Xlarge => "ml.c4.4xlarge".to_string(),
+            TransformInstanceType::MlC48Xlarge => "ml.c4.8xlarge".to_string(),
+            TransformInstanceType::MlC4Xlarge => "ml.c4.xlarge".to_string(),
+            TransformInstanceType::MlC518Xlarge => "ml.c5.18xlarge".to_string(),
+            TransformInstanceType::MlC52Xlarge => "ml.c5.2xlarge".to_string(),
+            TransformInstanceType::MlC54Xlarge => "ml.c5.4xlarge".to_string(),
+            TransformInstanceType::MlC59Xlarge => "ml.c5.9xlarge".to_string(),
+            TransformInstanceType::MlC5Xlarge => "ml.c5.xlarge".to_string(),
+            TransformInstanceType::MlM410Xlarge => "ml.m4.10xlarge".to_string(),
+            TransformInstanceType::MlM416Xlarge => "ml.m4.16xlarge".to_string(),
+            TransformInstanceType::MlM42Xlarge => "ml.m4.2xlarge".to_string(),
+            TransformInstanceType::MlM44Xlarge => "ml.m4.4xlarge".to_string(),
+            TransformInstanceType::MlM4Xlarge => "ml.m4.xlarge".to_string(),
+            TransformInstanceType::MlM512Xlarge => "ml.m5.12xlarge".to_string(),
+            TransformInstanceType::MlM524Xlarge => "ml.m5.24xlarge".to_string(),
+            TransformInstanceType::MlM52Xlarge => "ml.m5.2xlarge".to_string(),
+            TransformInstanceType::MlM54Xlarge => "ml.m5.4xlarge".to_string(),
+            TransformInstanceType::MlM5Large => "ml.m5.large".to_string(),
+            TransformInstanceType::MlM5Xlarge => "ml.m5.xlarge".to_string(),
+            TransformInstanceType::MlP216Xlarge => "ml.p2.16xlarge".to_string(),
+            TransformInstanceType::MlP28Xlarge => "ml.p2.8xlarge".to_string(),
+            TransformInstanceType::MlP2Xlarge => "ml.p2.xlarge".to_string(),
+            TransformInstanceType::MlP316Xlarge => "ml.p3.16xlarge".to_string(),
+            TransformInstanceType::MlP32Xlarge => "ml.p3.2xlarge".to_string(),
+            TransformInstanceType::MlP38Xlarge => "ml.p3.8xlarge".to_string(),
+            TransformInstanceType::UnknownVariant(UnknownTransformInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransformInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            TransformInstanceType::MlC42Xlarge => &"ml.c4.2xlarge",
+            TransformInstanceType::MlC44Xlarge => &"ml.c4.4xlarge",
+            TransformInstanceType::MlC48Xlarge => &"ml.c4.8xlarge",
+            TransformInstanceType::MlC4Xlarge => &"ml.c4.xlarge",
+            TransformInstanceType::MlC518Xlarge => &"ml.c5.18xlarge",
+            TransformInstanceType::MlC52Xlarge => &"ml.c5.2xlarge",
+            TransformInstanceType::MlC54Xlarge => &"ml.c5.4xlarge",
+            TransformInstanceType::MlC59Xlarge => &"ml.c5.9xlarge",
+            TransformInstanceType::MlC5Xlarge => &"ml.c5.xlarge",
+            TransformInstanceType::MlM410Xlarge => &"ml.m4.10xlarge",
+            TransformInstanceType::MlM416Xlarge => &"ml.m4.16xlarge",
+            TransformInstanceType::MlM42Xlarge => &"ml.m4.2xlarge",
+            TransformInstanceType::MlM44Xlarge => &"ml.m4.4xlarge",
+            TransformInstanceType::MlM4Xlarge => &"ml.m4.xlarge",
+            TransformInstanceType::MlM512Xlarge => &"ml.m5.12xlarge",
+            TransformInstanceType::MlM524Xlarge => &"ml.m5.24xlarge",
+            TransformInstanceType::MlM52Xlarge => &"ml.m5.2xlarge",
+            TransformInstanceType::MlM54Xlarge => &"ml.m5.4xlarge",
+            TransformInstanceType::MlM5Large => &"ml.m5.large",
+            TransformInstanceType::MlM5Xlarge => &"ml.m5.xlarge",
+            TransformInstanceType::MlP216Xlarge => &"ml.p2.16xlarge",
+            TransformInstanceType::MlP28Xlarge => &"ml.p2.8xlarge",
+            TransformInstanceType::MlP2Xlarge => &"ml.p2.xlarge",
+            TransformInstanceType::MlP316Xlarge => &"ml.p3.16xlarge",
+            TransformInstanceType::MlP32Xlarge => &"ml.p3.2xlarge",
+            TransformInstanceType::MlP38Xlarge => &"ml.p3.8xlarge",
+            TransformInstanceType::UnknownVariant(UnknownTransformInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TransformInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ml.c4.2xlarge" => TransformInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => TransformInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => TransformInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => TransformInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => TransformInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => TransformInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => TransformInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => TransformInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => TransformInstanceType::MlC5Xlarge,
+            "ml.m4.10xlarge" => TransformInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => TransformInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => TransformInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => TransformInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => TransformInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => TransformInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => TransformInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => TransformInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => TransformInstanceType::MlM54Xlarge,
+            "ml.m5.large" => TransformInstanceType::MlM5Large,
+            "ml.m5.xlarge" => TransformInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => TransformInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => TransformInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => TransformInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => TransformInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => TransformInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => TransformInstanceType::MlP38Xlarge,
+            _ => TransformInstanceType::UnknownVariant(UnknownTransformInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TransformInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ml.c4.2xlarge" => TransformInstanceType::MlC42Xlarge,
+            "ml.c4.4xlarge" => TransformInstanceType::MlC44Xlarge,
+            "ml.c4.8xlarge" => TransformInstanceType::MlC48Xlarge,
+            "ml.c4.xlarge" => TransformInstanceType::MlC4Xlarge,
+            "ml.c5.18xlarge" => TransformInstanceType::MlC518Xlarge,
+            "ml.c5.2xlarge" => TransformInstanceType::MlC52Xlarge,
+            "ml.c5.4xlarge" => TransformInstanceType::MlC54Xlarge,
+            "ml.c5.9xlarge" => TransformInstanceType::MlC59Xlarge,
+            "ml.c5.xlarge" => TransformInstanceType::MlC5Xlarge,
+            "ml.m4.10xlarge" => TransformInstanceType::MlM410Xlarge,
+            "ml.m4.16xlarge" => TransformInstanceType::MlM416Xlarge,
+            "ml.m4.2xlarge" => TransformInstanceType::MlM42Xlarge,
+            "ml.m4.4xlarge" => TransformInstanceType::MlM44Xlarge,
+            "ml.m4.xlarge" => TransformInstanceType::MlM4Xlarge,
+            "ml.m5.12xlarge" => TransformInstanceType::MlM512Xlarge,
+            "ml.m5.24xlarge" => TransformInstanceType::MlM524Xlarge,
+            "ml.m5.2xlarge" => TransformInstanceType::MlM52Xlarge,
+            "ml.m5.4xlarge" => TransformInstanceType::MlM54Xlarge,
+            "ml.m5.large" => TransformInstanceType::MlM5Large,
+            "ml.m5.xlarge" => TransformInstanceType::MlM5Xlarge,
+            "ml.p2.16xlarge" => TransformInstanceType::MlP216Xlarge,
+            "ml.p2.8xlarge" => TransformInstanceType::MlP28Xlarge,
+            "ml.p2.xlarge" => TransformInstanceType::MlP2Xlarge,
+            "ml.p3.16xlarge" => TransformInstanceType::MlP316Xlarge,
+            "ml.p3.2xlarge" => TransformInstanceType::MlP32Xlarge,
+            "ml.p3.8xlarge" => TransformInstanceType::MlP38Xlarge,
+            _ => TransformInstanceType::UnknownVariant(UnknownTransformInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransformInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TransformInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransformInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A batch transform job. For information about SageMaker batch transform, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">Use Batch Transform</a>.</p>
@@ -13115,7 +31742,7 @@ pub struct TransformJob {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A record is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub batch_strategy: Option<String>,
+    pub batch_strategy: Option<BatchStrategy>,
     /// <p>A timestamp that shows when the transform Job was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13175,7 +31802,7 @@ pub struct TransformJob {
     /// <p><p>The status of the transform job.</p> <p>Transform job statuses are:</p> <ul> <li> <p> <code>InProgress</code> - The job is in progress.</p> </li> <li> <p> <code>Completed</code> - The job has completed.</p> </li> <li> <p> <code>Failed</code> - The transform job has failed. To see the reason for the failure, see the <code>FailureReason</code> field in the response to a <code>DescribeTransformJob</code> call.</p> </li> <li> <p> <code>Stopping</code> - The transform job is stopping.</p> </li> <li> <p> <code>Stopped</code> - The transform job has stopped.</p> </li> </ul></p>
     #[serde(rename = "TransformJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transform_job_status: Option<String>,
+    pub transform_job_status: Option<TransformJobStatus>,
     #[serde(rename = "TransformOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transform_output: Option<TransformOutput>,
@@ -13194,7 +31821,7 @@ pub struct TransformJobDefinition {
     /// <p>A string that determines the number of records included in a single mini-batch.</p> <p> <code>SingleRecord</code> means only one record is used per mini-batch. <code>MultiRecord</code> means a mini-batch is set to contain as many records that can fit within the <code>MaxPayloadInMB</code> limit.</p>
     #[serde(rename = "BatchStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub batch_strategy: Option<String>,
+    pub batch_strategy: Option<BatchStrategy>,
     /// <p>The environment variables to set in the Docker container. We support up to 16 key and values entries in the map.</p>
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13216,6 +31843,125 @@ pub struct TransformJobDefinition {
     /// <p>Identifies the ML compute instances for the transform job.</p>
     #[serde(rename = "TransformResources")]
     pub transform_resources: TransformResources,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransformJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransformJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransformJobStatus),
+}
+
+impl Default for TransformJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransformJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransformJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransformJobStatus {
+    fn into(self) -> String {
+        match self {
+            TransformJobStatus::Completed => "Completed".to_string(),
+            TransformJobStatus::Failed => "Failed".to_string(),
+            TransformJobStatus::InProgress => "InProgress".to_string(),
+            TransformJobStatus::Stopped => "Stopped".to_string(),
+            TransformJobStatus::Stopping => "Stopping".to_string(),
+            TransformJobStatus::UnknownVariant(UnknownTransformJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransformJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TransformJobStatus::Completed => &"Completed",
+            TransformJobStatus::Failed => &"Failed",
+            TransformJobStatus::InProgress => &"InProgress",
+            TransformJobStatus::Stopped => &"Stopped",
+            TransformJobStatus::Stopping => &"Stopping",
+            TransformJobStatus::UnknownVariant(UnknownTransformJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TransformJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => TransformJobStatus::Completed,
+            "Failed" => TransformJobStatus::Failed,
+            "InProgress" => TransformJobStatus::InProgress,
+            "Stopped" => TransformJobStatus::Stopped,
+            "Stopping" => TransformJobStatus::Stopping,
+            _ => TransformJobStatus::UnknownVariant(UnknownTransformJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TransformJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => TransformJobStatus::Completed,
+            "Failed" => TransformJobStatus::Failed,
+            "InProgress" => TransformJobStatus::InProgress,
+            "Stopped" => TransformJobStatus::Stopped,
+            "Stopping" => TransformJobStatus::Stopping,
+            _ => TransformJobStatus::UnknownVariant(UnknownTransformJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransformJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TransformJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransformJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Metadata for a transform job step.</p>
@@ -13255,7 +32001,7 @@ pub struct TransformJobSummary {
     pub transform_job_name: String,
     /// <p>The status of the transform job.</p>
     #[serde(rename = "TransformJobStatus")]
-    pub transform_job_status: String,
+    pub transform_job_status: TransformJobStatus,
 }
 
 /// <p>Describes the results of a transform job.</p>
@@ -13268,7 +32014,7 @@ pub struct TransformOutput {
     /// <p>Defines how to assemble the results of the transform job as a single S3 object. Choose a format that is most convenient to you. To concatenate the results in binary format, specify <code>None</code>. To add a newline character at the end of every transformed record, specify <code>Line</code>.</p>
     #[serde(rename = "AssembleWith")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assemble_with: Option<String>,
+    pub assemble_with: Option<AssemblyType>,
     /// <p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption. The <code>KmsKeyId</code> can be any of the following formats: </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon S3 for your role's account. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">KMS-Managed Encryption Keys</a> in the <i>Amazon Simple Storage Service Developer Guide.</i> </p> <p>The KMS key policy must grant permission to the IAM role that you specify in your <a>CreateModel</a> request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Using Key Policies in AWS KMS</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13286,7 +32032,7 @@ pub struct TransformResources {
     pub instance_count: i64,
     /// <p>The ML compute instance type for the transform job. If you are using built-in algorithms to transform moderately sized datasets, we recommend using ml.m4.xlarge or <code>ml.m5.large</code> instance types.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: TransformInstanceType,
     /// <p><p>The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt model data on the storage volume attached to the ML compute instance(s) that run the batch transform job. The <code>VolumeKmsKeyId</code> can be any of the following formats:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias name ARN: <code>arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul></p>
     #[serde(rename = "VolumeKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13298,7 +32044,7 @@ pub struct TransformResources {
 pub struct TransformS3DataSource {
     /// <p>If you choose <code>S3Prefix</code>, <code>S3Uri</code> identifies a key name prefix. Amazon SageMaker uses all objects with the specified key name prefix for batch transform. </p> <p>If you choose <code>ManifestFile</code>, <code>S3Uri</code> identifies an object that is a manifest file containing a list of object keys that you want Amazon SageMaker to use for batch transform. </p> <p>The following values are compatible: <code>ManifestFile</code>, <code>S3Prefix</code> </p> <p>The following value is not compatible: <code>AugmentedManifestFile</code> </p>
     #[serde(rename = "S3DataType")]
-    pub s3_data_type: String,
+    pub s3_data_type: S3DataType,
     /// <p><p>Depending on the value specified for the <code>S3DataType</code>, identifies either a key name prefix or a manifest. For example:</p> <ul> <li> <p> A key name prefix might look like this: <code>s3://bucketname/exampleprefix</code>. </p> </li> <li> <p> A manifest might look like this: <code>s3://bucketname/example.manifest</code> </p> <p> The manifest is an S3 object which is a JSON file with the following format: </p> <p> <code>[ {&quot;prefix&quot;: &quot;s3://customer<em>bucket/some/prefix/&quot;},</code> </p> <p> <code>&quot;relative/path/to/custdata-1&quot;,</code> </p> <p> <code>&quot;relative/path/custdata-2&quot;,</code> </p> <p> <code>...</code> </p> <p> <code>&quot;relative/path/custdata-N&quot;</code> </p> <p> <code>]</code> </p> <p> The preceding JSON matches the following <code>S3Uris</code>: </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/to/custdata-1</code> </p> <p> <code>s3://customer<em>bucket/some/prefix/relative/path/custdata-2</code> </p> <p> <code>...</code> </p> <p> <code>s3://customer</em>bucket/some/prefix/relative/path/custdata-N</code> </p> <p> The complete set of <code>S3Uris</code> in this manifest constitutes the input data for the channel for this datasource. The object that each <code>S3Uris</code> points to must be readable by the IAM role that Amazon SageMaker uses to perform tasks on your behalf.</p> </li> </ul></p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
@@ -13499,6 +32245,127 @@ pub struct TrialComponentParameterValue {
     pub string_value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTrialComponentPrimaryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TrialComponentPrimaryStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTrialComponentPrimaryStatus),
+}
+
+impl Default for TrialComponentPrimaryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TrialComponentPrimaryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TrialComponentPrimaryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TrialComponentPrimaryStatus {
+    fn into(self) -> String {
+        match self {
+            TrialComponentPrimaryStatus::Completed => "Completed".to_string(),
+            TrialComponentPrimaryStatus::Failed => "Failed".to_string(),
+            TrialComponentPrimaryStatus::InProgress => "InProgress".to_string(),
+            TrialComponentPrimaryStatus::Stopped => "Stopped".to_string(),
+            TrialComponentPrimaryStatus::Stopping => "Stopping".to_string(),
+            TrialComponentPrimaryStatus::UnknownVariant(UnknownTrialComponentPrimaryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TrialComponentPrimaryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TrialComponentPrimaryStatus::Completed => &"Completed",
+            TrialComponentPrimaryStatus::Failed => &"Failed",
+            TrialComponentPrimaryStatus::InProgress => &"InProgress",
+            TrialComponentPrimaryStatus::Stopped => &"Stopped",
+            TrialComponentPrimaryStatus::Stopping => &"Stopping",
+            TrialComponentPrimaryStatus::UnknownVariant(UnknownTrialComponentPrimaryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TrialComponentPrimaryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => TrialComponentPrimaryStatus::Completed,
+            "Failed" => TrialComponentPrimaryStatus::Failed,
+            "InProgress" => TrialComponentPrimaryStatus::InProgress,
+            "Stopped" => TrialComponentPrimaryStatus::Stopped,
+            "Stopping" => TrialComponentPrimaryStatus::Stopping,
+            _ => TrialComponentPrimaryStatus::UnknownVariant(UnknownTrialComponentPrimaryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TrialComponentPrimaryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => TrialComponentPrimaryStatus::Completed,
+            "Failed" => TrialComponentPrimaryStatus::Failed,
+            "InProgress" => TrialComponentPrimaryStatus::InProgress,
+            "Stopped" => TrialComponentPrimaryStatus::Stopped,
+            "Stopping" => TrialComponentPrimaryStatus::Stopping,
+            _ => TrialComponentPrimaryStatus::UnknownVariant(UnknownTrialComponentPrimaryStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TrialComponentPrimaryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TrialComponentPrimaryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TrialComponentPrimaryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A short summary of a trial component.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -13568,7 +32435,7 @@ pub struct TrialComponentStatus {
     /// <p>The status of the trial component.</p>
     #[serde(rename = "PrimaryStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub primary_status: Option<String>,
+    pub primary_status: Option<TrialComponentPrimaryStatus>,
 }
 
 /// <p>A summary of the properties of a trial component. To get all the properties, call the <a>DescribeTrialComponent</a> API and provide the <code>TrialComponentName</code>.</p>
@@ -13744,7 +32611,7 @@ pub struct UpdateActionRequest {
     /// <p>The new status for the action.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ActionStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -14023,7 +32890,7 @@ pub struct UpdateModelPackageInput {
     pub approval_description: Option<String>,
     /// <p>The approval status of the model.</p>
     #[serde(rename = "ModelApprovalStatus")]
-    pub model_approval_status: String,
+    pub model_approval_status: ModelApprovalStatus,
     /// <p>The Amazon Resource Name (ARN) of the model.</p>
     #[serde(rename = "ModelPackageArn")]
     pub model_package_arn: String,
@@ -14062,7 +32929,7 @@ pub struct UpdateNotebookInstanceInput {
     /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub accelerator_types: Option<Vec<String>>,
+    pub accelerator_types: Option<Vec<NotebookInstanceAcceleratorType>>,
     /// <p>An array of up to three Git repositories to associate with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14090,7 +32957,7 @@ pub struct UpdateNotebookInstanceInput {
     /// <p>The Amazon ML compute instance type.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<InstanceType>,
     /// <p>The name of a lifecycle configuration to associate with the notebook instance. For information about lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
     #[serde(rename = "LifecycleConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14105,7 +32972,7 @@ pub struct UpdateNotebookInstanceInput {
     /// <p><p>Whether root access is enabled or disabled for users of the notebook instance. The default value is <code>Enabled</code>.</p> <note> <p>If you set this to <code>Disabled</code>, users don&#39;t have root access on the notebook instance, but lifecycle configuration scripts still run with root permissions.</p> </note></p>
     #[serde(rename = "RootAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_access: Option<String>,
+    pub root_access: Option<RootAccess>,
     /// <p>The size, in GB, of the ML storage volume to attach to the notebook instance. The default value is 5 GB. ML storage volumes are encrypted, so Amazon SageMaker can't determine the amount of available free space on the volume. Because of this, you can increase the volume size when you update a notebook instance, but you can't decrease the volume size. If you want to decrease the size of the ML storage volume in use, create a new notebook instance with the desired size.</p>
     #[serde(rename = "VolumeSizeInGB")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14409,11 +33276,246 @@ pub struct UserProfileDetails {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UserProfileStatus>,
     /// <p>The user profile name.</p>
     #[serde(rename = "UserProfileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_profile_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserProfileSortKey {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserProfileSortKey {
+    CreationTime,
+    LastModifiedTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserProfileSortKey),
+}
+
+impl Default for UserProfileSortKey {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserProfileSortKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserProfileSortKey {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserProfileSortKey {
+    fn into(self) -> String {
+        match self {
+            UserProfileSortKey::CreationTime => "CreationTime".to_string(),
+            UserProfileSortKey::LastModifiedTime => "LastModifiedTime".to_string(),
+            UserProfileSortKey::UnknownVariant(UnknownUserProfileSortKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserProfileSortKey {
+    fn into(self) -> &'a str {
+        match self {
+            UserProfileSortKey::CreationTime => &"CreationTime",
+            UserProfileSortKey::LastModifiedTime => &"LastModifiedTime",
+            UserProfileSortKey::UnknownVariant(UnknownUserProfileSortKey { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UserProfileSortKey {
+    fn from(name: &str) -> Self {
+        match name {
+            "CreationTime" => UserProfileSortKey::CreationTime,
+            "LastModifiedTime" => UserProfileSortKey::LastModifiedTime,
+            _ => UserProfileSortKey::UnknownVariant(UnknownUserProfileSortKey {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserProfileSortKey {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CreationTime" => UserProfileSortKey::CreationTime,
+            "LastModifiedTime" => UserProfileSortKey::LastModifiedTime,
+            _ => UserProfileSortKey::UnknownVariant(UnknownUserProfileSortKey { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserProfileSortKey {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserProfileSortKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UserProfileSortKey {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserProfileStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserProfileStatus {
+    DeleteFailed,
+    Deleting,
+    Failed,
+    InService,
+    Pending,
+    UpdateFailed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserProfileStatus),
+}
+
+impl Default for UserProfileStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserProfileStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserProfileStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserProfileStatus {
+    fn into(self) -> String {
+        match self {
+            UserProfileStatus::DeleteFailed => "Delete_Failed".to_string(),
+            UserProfileStatus::Deleting => "Deleting".to_string(),
+            UserProfileStatus::Failed => "Failed".to_string(),
+            UserProfileStatus::InService => "InService".to_string(),
+            UserProfileStatus::Pending => "Pending".to_string(),
+            UserProfileStatus::UpdateFailed => "Update_Failed".to_string(),
+            UserProfileStatus::Updating => "Updating".to_string(),
+            UserProfileStatus::UnknownVariant(UnknownUserProfileStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserProfileStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UserProfileStatus::DeleteFailed => &"Delete_Failed",
+            UserProfileStatus::Deleting => &"Deleting",
+            UserProfileStatus::Failed => &"Failed",
+            UserProfileStatus::InService => &"InService",
+            UserProfileStatus::Pending => &"Pending",
+            UserProfileStatus::UpdateFailed => &"Update_Failed",
+            UserProfileStatus::Updating => &"Updating",
+            UserProfileStatus::UnknownVariant(UnknownUserProfileStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UserProfileStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Delete_Failed" => UserProfileStatus::DeleteFailed,
+            "Deleting" => UserProfileStatus::Deleting,
+            "Failed" => UserProfileStatus::Failed,
+            "InService" => UserProfileStatus::InService,
+            "Pending" => UserProfileStatus::Pending,
+            "Update_Failed" => UserProfileStatus::UpdateFailed,
+            "Updating" => UserProfileStatus::Updating,
+            _ => UserProfileStatus::UnknownVariant(UnknownUserProfileStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserProfileStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Delete_Failed" => UserProfileStatus::DeleteFailed,
+            "Deleting" => UserProfileStatus::Deleting,
+            "Failed" => UserProfileStatus::Failed,
+            "InService" => UserProfileStatus::InService,
+            "Pending" => UserProfileStatus::Pending,
+            "Update_Failed" => UserProfileStatus::UpdateFailed,
+            "Updating" => UserProfileStatus::Updating,
+            _ => UserProfileStatus::UnknownVariant(UnknownUserProfileStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserProfileStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UserProfileStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserProfileStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A collection of settings.</p>
@@ -14451,7 +33553,117 @@ pub struct UserSettings {
 pub struct VariantProperty {
     /// <p><p>The type of variant property. The supported values are:</p> <ul> <li> <p> <code>DesiredInstanceCount</code>: Overrides the existing variant instance counts using the <a>ProductionVariant$InitialInstanceCount</a> values in the <a>CreateEndpointConfigInput$ProductionVariants</a>.</p> </li> <li> <p> <code>DesiredWeight</code>: Overrides the existing variant weights using the <a>ProductionVariant$InitialVariantWeight</a> values in the <a>CreateEndpointConfigInput$ProductionVariants</a>.</p> </li> <li> <p> <code>DataCaptureConfig</code>: (Not currently supported.)</p> </li> </ul></p>
     #[serde(rename = "VariantPropertyType")]
-    pub variant_property_type: String,
+    pub variant_property_type: VariantPropertyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVariantPropertyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VariantPropertyType {
+    DataCaptureConfig,
+    DesiredInstanceCount,
+    DesiredWeight,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVariantPropertyType),
+}
+
+impl Default for VariantPropertyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VariantPropertyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VariantPropertyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VariantPropertyType {
+    fn into(self) -> String {
+        match self {
+            VariantPropertyType::DataCaptureConfig => "DataCaptureConfig".to_string(),
+            VariantPropertyType::DesiredInstanceCount => "DesiredInstanceCount".to_string(),
+            VariantPropertyType::DesiredWeight => "DesiredWeight".to_string(),
+            VariantPropertyType::UnknownVariant(UnknownVariantPropertyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VariantPropertyType {
+    fn into(self) -> &'a str {
+        match self {
+            VariantPropertyType::DataCaptureConfig => &"DataCaptureConfig",
+            VariantPropertyType::DesiredInstanceCount => &"DesiredInstanceCount",
+            VariantPropertyType::DesiredWeight => &"DesiredWeight",
+            VariantPropertyType::UnknownVariant(UnknownVariantPropertyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for VariantPropertyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DataCaptureConfig" => VariantPropertyType::DataCaptureConfig,
+            "DesiredInstanceCount" => VariantPropertyType::DesiredInstanceCount,
+            "DesiredWeight" => VariantPropertyType::DesiredWeight,
+            _ => VariantPropertyType::UnknownVariant(UnknownVariantPropertyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VariantPropertyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DataCaptureConfig" => VariantPropertyType::DataCaptureConfig,
+            "DesiredInstanceCount" => VariantPropertyType::DesiredInstanceCount,
+            "DesiredWeight" => VariantPropertyType::DesiredWeight,
+            _ => VariantPropertyType::UnknownVariant(UnknownVariantPropertyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VariantPropertyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VariantPropertyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for VariantPropertyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies a VPC that your training jobs and hosted models have access to. Control access to and from your training and model containers by configuring the VPC. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html">Protect Endpoints by Using an Amazon Virtual Private Cloud</a> and <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html">Protect Training Jobs by Using an Amazon Virtual Private Cloud</a>. </p>

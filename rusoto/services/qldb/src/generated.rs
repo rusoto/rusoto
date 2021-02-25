@@ -57,7 +57,7 @@ pub struct CreateLedgerRequest {
     pub name: String,
     /// <p>The permissions mode to assign to the ledger that you want to create.</p>
     #[serde(rename = "PermissionsMode")]
-    pub permissions_mode: String,
+    pub permissions_mode: PermissionsMode,
     /// <p>The key-value pairs to add as tags to the ledger that you want to create. Tag keys are case sensitive. Tag values are case sensitive and can be null.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,7 +86,7 @@ pub struct CreateLedgerResponse {
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LedgerState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -166,7 +166,108 @@ pub struct DescribeLedgerResponse {
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LedgerState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCause {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCause {
+    IamPermissionRevoked,
+    KinesisStreamNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCause),
+}
+
+impl Default for ErrorCause {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCause {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCause {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCause {
+    fn into(self) -> String {
+        match self {
+            ErrorCause::IamPermissionRevoked => "IAM_PERMISSION_REVOKED".to_string(),
+            ErrorCause::KinesisStreamNotFound => "KINESIS_STREAM_NOT_FOUND".to_string(),
+            ErrorCause::UnknownVariant(UnknownErrorCause { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCause {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCause::IamPermissionRevoked => &"IAM_PERMISSION_REVOKED",
+            ErrorCause::KinesisStreamNotFound => &"KINESIS_STREAM_NOT_FOUND",
+            ErrorCause::UnknownVariant(UnknownErrorCause { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCause {
+    fn from(name: &str) -> Self {
+        match name {
+            "IAM_PERMISSION_REVOKED" => ErrorCause::IamPermissionRevoked,
+            "KINESIS_STREAM_NOT_FOUND" => ErrorCause::KinesisStreamNotFound,
+            _ => ErrorCause::UnknownVariant(UnknownErrorCause {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCause {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IAM_PERMISSION_REVOKED" => ErrorCause::IamPermissionRevoked,
+            "KINESIS_STREAM_NOT_FOUND" => ErrorCause::KinesisStreamNotFound,
+            _ => ErrorCause::UnknownVariant(UnknownErrorCause { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCause {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCause {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCause {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -195,6 +296,112 @@ pub struct ExportJournalToS3Response {
     /// <p>The unique ID that QLDB assigns to each journal export job.</p> <p>To describe your export request and check the status of the job, you can use <code>ExportId</code> to call <code>DescribeJournalS3Export</code>.</p>
     #[serde(rename = "ExportId")]
     pub export_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportStatus {
+    Cancelled,
+    Completed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportStatus),
+}
+
+impl Default for ExportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportStatus {
+    fn into(self) -> String {
+        match self {
+            ExportStatus::Cancelled => "CANCELLED".to_string(),
+            ExportStatus::Completed => "COMPLETED".to_string(),
+            ExportStatus::InProgress => "IN_PROGRESS".to_string(),
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExportStatus::Cancelled => &"CANCELLED",
+            ExportStatus::Completed => &"COMPLETED",
+            ExportStatus::InProgress => &"IN_PROGRESS",
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => ExportStatus::Cancelled,
+            "COMPLETED" => ExportStatus::Completed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => ExportStatus::Cancelled,
+            "COMPLETED" => ExportStatus::Completed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -293,7 +500,7 @@ pub struct JournalKinesisStreamDescription {
     /// <p>The error message that describes the reason that a stream has a status of <code>IMPAIRED</code> or <code>FAILED</code>. This is not applicable to streams that have other status values.</p>
     #[serde(rename = "ErrorCause")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_cause: Option<String>,
+    pub error_cause: Option<ErrorCause>,
     /// <p>The exclusive date and time that specifies when the stream ends. If this parameter is blank, the stream runs indefinitely until you cancel it.</p>
     #[serde(rename = "ExclusiveEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -313,7 +520,7 @@ pub struct JournalKinesisStreamDescription {
     pub role_arn: String,
     /// <p>The current state of the QLDB journal stream.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: StreamStatus,
     /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
     #[serde(rename = "StreamId")]
     pub stream_id: String,
@@ -348,7 +555,7 @@ pub struct JournalS3ExportDescription {
     pub s3_export_configuration: S3ExportConfiguration,
     /// <p>The current state of the journal export job.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: ExportStatus,
 }
 
 /// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your Amazon QLDB journal stream.</p>
@@ -361,6 +568,117 @@ pub struct KinesisConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream resource.</p>
     #[serde(rename = "StreamArn")]
     pub stream_arn: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLedgerState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LedgerState {
+    Active,
+    Creating,
+    Deleted,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLedgerState),
+}
+
+impl Default for LedgerState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LedgerState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LedgerState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LedgerState {
+    fn into(self) -> String {
+        match self {
+            LedgerState::Active => "ACTIVE".to_string(),
+            LedgerState::Creating => "CREATING".to_string(),
+            LedgerState::Deleted => "DELETED".to_string(),
+            LedgerState::Deleting => "DELETING".to_string(),
+            LedgerState::UnknownVariant(UnknownLedgerState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LedgerState {
+    fn into(self) -> &'a str {
+        match self {
+            LedgerState::Active => &"ACTIVE",
+            LedgerState::Creating => &"CREATING",
+            LedgerState::Deleted => &"DELETED",
+            LedgerState::Deleting => &"DELETING",
+            LedgerState::UnknownVariant(UnknownLedgerState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LedgerState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => LedgerState::Active,
+            "CREATING" => LedgerState::Creating,
+            "DELETED" => LedgerState::Deleted,
+            "DELETING" => LedgerState::Deleting,
+            _ => LedgerState::UnknownVariant(UnknownLedgerState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LedgerState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => LedgerState::Active,
+            "CREATING" => LedgerState::Creating,
+            "DELETED" => LedgerState::Deleted,
+            "DELETING" => LedgerState::Deleting,
+            _ => LedgerState::UnknownVariant(UnknownLedgerState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LedgerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LedgerState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LedgerState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a ledger, including its name, state, and when it was created.</p>
@@ -378,7 +696,7 @@ pub struct LedgerSummary {
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LedgerState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -508,6 +826,102 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermissionsMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PermissionsMode {
+    AllowAll,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermissionsMode),
+}
+
+impl Default for PermissionsMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PermissionsMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PermissionsMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PermissionsMode {
+    fn into(self) -> String {
+        match self {
+            PermissionsMode::AllowAll => "ALLOW_ALL".to_string(),
+            PermissionsMode::UnknownVariant(UnknownPermissionsMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PermissionsMode {
+    fn into(self) -> &'a str {
+        match self {
+            PermissionsMode::AllowAll => &"ALLOW_ALL",
+            PermissionsMode::UnknownVariant(UnknownPermissionsMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PermissionsMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW_ALL" => PermissionsMode::AllowAll,
+            _ => PermissionsMode::UnknownVariant(UnknownPermissionsMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PermissionsMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW_ALL" => PermissionsMode::AllowAll,
+            _ => PermissionsMode::UnknownVariant(UnknownPermissionsMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PermissionsMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PermissionsMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PermissionsMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The encryption settings that are used by a journal export job to write data in an Amazon Simple Storage Service (Amazon S3) bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3EncryptionConfiguration {
@@ -517,7 +931,7 @@ pub struct S3EncryptionConfiguration {
     pub kms_key_arn: Option<String>,
     /// <p>The Amazon S3 object encryption type.</p> <p>To learn more about server-side encryption options in Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     #[serde(rename = "ObjectEncryptionType")]
-    pub object_encryption_type: String,
+    pub object_encryption_type: S3ObjectEncryptionType,
 }
 
 /// <p>The Amazon Simple Storage Service (Amazon S3) bucket location in which a journal export job writes the journal contents.</p>
@@ -532,6 +946,115 @@ pub struct S3ExportConfiguration {
     /// <p><p>The prefix for the Amazon S3 bucket in which a journal export job writes the journal contents.</p> <p>The prefix must comply with Amazon S3 key naming rules and restrictions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html">Object Key and Metadata</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>The following are examples of valid <code>Prefix</code> values:</p> <ul> <li> <p> <code>JournalExports-ForMyLedger/Testing/</code> </p> </li> <li> <p> <code>JournalExports</code> </p> </li> <li> <p> <code>My:Tests/</code> </p> </li> </ul></p>
     #[serde(rename = "Prefix")]
     pub prefix: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3ObjectEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3ObjectEncryptionType {
+    NoEncryption,
+    SseKms,
+    SseS3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3ObjectEncryptionType),
+}
+
+impl Default for S3ObjectEncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3ObjectEncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3ObjectEncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3ObjectEncryptionType {
+    fn into(self) -> String {
+        match self {
+            S3ObjectEncryptionType::NoEncryption => "NO_ENCRYPTION".to_string(),
+            S3ObjectEncryptionType::SseKms => "SSE_KMS".to_string(),
+            S3ObjectEncryptionType::SseS3 => "SSE_S3".to_string(),
+            S3ObjectEncryptionType::UnknownVariant(UnknownS3ObjectEncryptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3ObjectEncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            S3ObjectEncryptionType::NoEncryption => &"NO_ENCRYPTION",
+            S3ObjectEncryptionType::SseKms => &"SSE_KMS",
+            S3ObjectEncryptionType::SseS3 => &"SSE_S3",
+            S3ObjectEncryptionType::UnknownVariant(UnknownS3ObjectEncryptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for S3ObjectEncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_ENCRYPTION" => S3ObjectEncryptionType::NoEncryption,
+            "SSE_KMS" => S3ObjectEncryptionType::SseKms,
+            "SSE_S3" => S3ObjectEncryptionType::SseS3,
+            _ => S3ObjectEncryptionType::UnknownVariant(UnknownS3ObjectEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3ObjectEncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_ENCRYPTION" => S3ObjectEncryptionType::NoEncryption,
+            "SSE_KMS" => S3ObjectEncryptionType::SseKms,
+            "SSE_S3" => S3ObjectEncryptionType::SseS3,
+            _ => S3ObjectEncryptionType::UnknownVariant(UnknownS3ObjectEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3ObjectEncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3ObjectEncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3ObjectEncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -569,6 +1092,122 @@ pub struct StreamJournalToKinesisResponse {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamStatus {
+    Active,
+    Canceled,
+    Completed,
+    Failed,
+    Impaired,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamStatus),
+}
+
+impl Default for StreamStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamStatus {
+    fn into(self) -> String {
+        match self {
+            StreamStatus::Active => "ACTIVE".to_string(),
+            StreamStatus::Canceled => "CANCELED".to_string(),
+            StreamStatus::Completed => "COMPLETED".to_string(),
+            StreamStatus::Failed => "FAILED".to_string(),
+            StreamStatus::Impaired => "IMPAIRED".to_string(),
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StreamStatus::Active => &"ACTIVE",
+            StreamStatus::Canceled => &"CANCELED",
+            StreamStatus::Completed => &"COMPLETED",
+            StreamStatus::Failed => &"FAILED",
+            StreamStatus::Impaired => &"IMPAIRED",
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => StreamStatus::Active,
+            "CANCELED" => StreamStatus::Canceled,
+            "COMPLETED" => StreamStatus::Completed,
+            "FAILED" => StreamStatus::Failed,
+            "IMPAIRED" => StreamStatus::Impaired,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => StreamStatus::Active,
+            "CANCELED" => StreamStatus::Canceled,
+            "COMPLETED" => StreamStatus::Completed,
+            "FAILED" => StreamStatus::Failed,
+            "IMPAIRED" => StreamStatus::Impaired,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StreamStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -635,7 +1274,7 @@ pub struct UpdateLedgerResponse {
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LedgerState>,
 }
 
 /// <p>A structure that can contain a value in multiple encoding formats.</p>

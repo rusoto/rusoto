@@ -55,6 +55,349 @@ impl MarketplaceCommerceAnalyticsClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSetType {
+    CustomerProfileByGeography,
+    CustomerProfileByIndustry,
+    CustomerProfileByRevenue,
+    CustomerSubscriberAnnualSubscriptions,
+    CustomerSubscriberHourlyMonthlySubscriptions,
+    DailyBusinessCanceledProductSubscribers,
+    DailyBusinessFees,
+    DailyBusinessFreeTrialConversions,
+    DailyBusinessNewInstances,
+    DailyBusinessNewProductSubscribers,
+    DailyBusinessUsageByInstanceType,
+    DisbursedAmountByAgeOfDisbursedFunds,
+    DisbursedAmountByAgeOfPastDueFunds,
+    DisbursedAmountByAgeOfUncollectedFunds,
+    DisbursedAmountByCustomerGeo,
+    DisbursedAmountByInstanceHours,
+    DisbursedAmountByProduct,
+    DisbursedAmountByProductWithUncollectedFunds,
+    DisbursedAmountByUncollectedFundsBreakdown,
+    MonthlyRevenueAnnualSubscriptions,
+    MonthlyRevenueBillingAndRevenueData,
+    MonthlyRevenueFieldDemonstrationUsage,
+    MonthlyRevenueFlexiblePaymentSchedule,
+    SalesCompensationBilledRevenue,
+    UsSalesAndUseTaxRecords,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSetType),
+}
+
+impl Default for DataSetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSetType {
+    fn into(self) -> String {
+        match self {
+            DataSetType::CustomerProfileByGeography => "customer_profile_by_geography".to_string(),
+            DataSetType::CustomerProfileByIndustry => "customer_profile_by_industry".to_string(),
+            DataSetType::CustomerProfileByRevenue => "customer_profile_by_revenue".to_string(),
+            DataSetType::CustomerSubscriberAnnualSubscriptions => {
+                "customer_subscriber_annual_subscriptions".to_string()
+            }
+            DataSetType::CustomerSubscriberHourlyMonthlySubscriptions => {
+                "customer_subscriber_hourly_monthly_subscriptions".to_string()
+            }
+            DataSetType::DailyBusinessCanceledProductSubscribers => {
+                "daily_business_canceled_product_subscribers".to_string()
+            }
+            DataSetType::DailyBusinessFees => "daily_business_fees".to_string(),
+            DataSetType::DailyBusinessFreeTrialConversions => {
+                "daily_business_free_trial_conversions".to_string()
+            }
+            DataSetType::DailyBusinessNewInstances => "daily_business_new_instances".to_string(),
+            DataSetType::DailyBusinessNewProductSubscribers => {
+                "daily_business_new_product_subscribers".to_string()
+            }
+            DataSetType::DailyBusinessUsageByInstanceType => {
+                "daily_business_usage_by_instance_type".to_string()
+            }
+            DataSetType::DisbursedAmountByAgeOfDisbursedFunds => {
+                "disbursed_amount_by_age_of_disbursed_funds".to_string()
+            }
+            DataSetType::DisbursedAmountByAgeOfPastDueFunds => {
+                "disbursed_amount_by_age_of_past_due_funds".to_string()
+            }
+            DataSetType::DisbursedAmountByAgeOfUncollectedFunds => {
+                "disbursed_amount_by_age_of_uncollected_funds".to_string()
+            }
+            DataSetType::DisbursedAmountByCustomerGeo => {
+                "disbursed_amount_by_customer_geo".to_string()
+            }
+            DataSetType::DisbursedAmountByInstanceHours => {
+                "disbursed_amount_by_instance_hours".to_string()
+            }
+            DataSetType::DisbursedAmountByProduct => "disbursed_amount_by_product".to_string(),
+            DataSetType::DisbursedAmountByProductWithUncollectedFunds => {
+                "disbursed_amount_by_product_with_uncollected_funds".to_string()
+            }
+            DataSetType::DisbursedAmountByUncollectedFundsBreakdown => {
+                "disbursed_amount_by_uncollected_funds_breakdown".to_string()
+            }
+            DataSetType::MonthlyRevenueAnnualSubscriptions => {
+                "monthly_revenue_annual_subscriptions".to_string()
+            }
+            DataSetType::MonthlyRevenueBillingAndRevenueData => {
+                "monthly_revenue_billing_and_revenue_data".to_string()
+            }
+            DataSetType::MonthlyRevenueFieldDemonstrationUsage => {
+                "monthly_revenue_field_demonstration_usage".to_string()
+            }
+            DataSetType::MonthlyRevenueFlexiblePaymentSchedule => {
+                "monthly_revenue_flexible_payment_schedule".to_string()
+            }
+            DataSetType::SalesCompensationBilledRevenue => {
+                "sales_compensation_billed_revenue".to_string()
+            }
+            DataSetType::UsSalesAndUseTaxRecords => "us_sales_and_use_tax_records".to_string(),
+            DataSetType::UnknownVariant(UnknownDataSetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSetType {
+    fn into(self) -> &'a str {
+        match self {
+            DataSetType::CustomerProfileByGeography => &"customer_profile_by_geography",
+            DataSetType::CustomerProfileByIndustry => &"customer_profile_by_industry",
+            DataSetType::CustomerProfileByRevenue => &"customer_profile_by_revenue",
+            DataSetType::CustomerSubscriberAnnualSubscriptions => {
+                &"customer_subscriber_annual_subscriptions"
+            }
+            DataSetType::CustomerSubscriberHourlyMonthlySubscriptions => {
+                &"customer_subscriber_hourly_monthly_subscriptions"
+            }
+            DataSetType::DailyBusinessCanceledProductSubscribers => {
+                &"daily_business_canceled_product_subscribers"
+            }
+            DataSetType::DailyBusinessFees => &"daily_business_fees",
+            DataSetType::DailyBusinessFreeTrialConversions => {
+                &"daily_business_free_trial_conversions"
+            }
+            DataSetType::DailyBusinessNewInstances => &"daily_business_new_instances",
+            DataSetType::DailyBusinessNewProductSubscribers => {
+                &"daily_business_new_product_subscribers"
+            }
+            DataSetType::DailyBusinessUsageByInstanceType => {
+                &"daily_business_usage_by_instance_type"
+            }
+            DataSetType::DisbursedAmountByAgeOfDisbursedFunds => {
+                &"disbursed_amount_by_age_of_disbursed_funds"
+            }
+            DataSetType::DisbursedAmountByAgeOfPastDueFunds => {
+                &"disbursed_amount_by_age_of_past_due_funds"
+            }
+            DataSetType::DisbursedAmountByAgeOfUncollectedFunds => {
+                &"disbursed_amount_by_age_of_uncollected_funds"
+            }
+            DataSetType::DisbursedAmountByCustomerGeo => &"disbursed_amount_by_customer_geo",
+            DataSetType::DisbursedAmountByInstanceHours => &"disbursed_amount_by_instance_hours",
+            DataSetType::DisbursedAmountByProduct => &"disbursed_amount_by_product",
+            DataSetType::DisbursedAmountByProductWithUncollectedFunds => {
+                &"disbursed_amount_by_product_with_uncollected_funds"
+            }
+            DataSetType::DisbursedAmountByUncollectedFundsBreakdown => {
+                &"disbursed_amount_by_uncollected_funds_breakdown"
+            }
+            DataSetType::MonthlyRevenueAnnualSubscriptions => {
+                &"monthly_revenue_annual_subscriptions"
+            }
+            DataSetType::MonthlyRevenueBillingAndRevenueData => {
+                &"monthly_revenue_billing_and_revenue_data"
+            }
+            DataSetType::MonthlyRevenueFieldDemonstrationUsage => {
+                &"monthly_revenue_field_demonstration_usage"
+            }
+            DataSetType::MonthlyRevenueFlexiblePaymentSchedule => {
+                &"monthly_revenue_flexible_payment_schedule"
+            }
+            DataSetType::SalesCompensationBilledRevenue => &"sales_compensation_billed_revenue",
+            DataSetType::UsSalesAndUseTaxRecords => &"us_sales_and_use_tax_records",
+            DataSetType::UnknownVariant(UnknownDataSetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "customer_profile_by_geography" => DataSetType::CustomerProfileByGeography,
+            "customer_profile_by_industry" => DataSetType::CustomerProfileByIndustry,
+            "customer_profile_by_revenue" => DataSetType::CustomerProfileByRevenue,
+            "customer_subscriber_annual_subscriptions" => {
+                DataSetType::CustomerSubscriberAnnualSubscriptions
+            }
+            "customer_subscriber_hourly_monthly_subscriptions" => {
+                DataSetType::CustomerSubscriberHourlyMonthlySubscriptions
+            }
+            "daily_business_canceled_product_subscribers" => {
+                DataSetType::DailyBusinessCanceledProductSubscribers
+            }
+            "daily_business_fees" => DataSetType::DailyBusinessFees,
+            "daily_business_free_trial_conversions" => {
+                DataSetType::DailyBusinessFreeTrialConversions
+            }
+            "daily_business_new_instances" => DataSetType::DailyBusinessNewInstances,
+            "daily_business_new_product_subscribers" => {
+                DataSetType::DailyBusinessNewProductSubscribers
+            }
+            "daily_business_usage_by_instance_type" => {
+                DataSetType::DailyBusinessUsageByInstanceType
+            }
+            "disbursed_amount_by_age_of_disbursed_funds" => {
+                DataSetType::DisbursedAmountByAgeOfDisbursedFunds
+            }
+            "disbursed_amount_by_age_of_past_due_funds" => {
+                DataSetType::DisbursedAmountByAgeOfPastDueFunds
+            }
+            "disbursed_amount_by_age_of_uncollected_funds" => {
+                DataSetType::DisbursedAmountByAgeOfUncollectedFunds
+            }
+            "disbursed_amount_by_customer_geo" => DataSetType::DisbursedAmountByCustomerGeo,
+            "disbursed_amount_by_instance_hours" => DataSetType::DisbursedAmountByInstanceHours,
+            "disbursed_amount_by_product" => DataSetType::DisbursedAmountByProduct,
+            "disbursed_amount_by_product_with_uncollected_funds" => {
+                DataSetType::DisbursedAmountByProductWithUncollectedFunds
+            }
+            "disbursed_amount_by_uncollected_funds_breakdown" => {
+                DataSetType::DisbursedAmountByUncollectedFundsBreakdown
+            }
+            "monthly_revenue_annual_subscriptions" => {
+                DataSetType::MonthlyRevenueAnnualSubscriptions
+            }
+            "monthly_revenue_billing_and_revenue_data" => {
+                DataSetType::MonthlyRevenueBillingAndRevenueData
+            }
+            "monthly_revenue_field_demonstration_usage" => {
+                DataSetType::MonthlyRevenueFieldDemonstrationUsage
+            }
+            "monthly_revenue_flexible_payment_schedule" => {
+                DataSetType::MonthlyRevenueFlexiblePaymentSchedule
+            }
+            "sales_compensation_billed_revenue" => DataSetType::SalesCompensationBilledRevenue,
+            "us_sales_and_use_tax_records" => DataSetType::UsSalesAndUseTaxRecords,
+            _ => DataSetType::UnknownVariant(UnknownDataSetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "customer_profile_by_geography" => DataSetType::CustomerProfileByGeography,
+            "customer_profile_by_industry" => DataSetType::CustomerProfileByIndustry,
+            "customer_profile_by_revenue" => DataSetType::CustomerProfileByRevenue,
+            "customer_subscriber_annual_subscriptions" => {
+                DataSetType::CustomerSubscriberAnnualSubscriptions
+            }
+            "customer_subscriber_hourly_monthly_subscriptions" => {
+                DataSetType::CustomerSubscriberHourlyMonthlySubscriptions
+            }
+            "daily_business_canceled_product_subscribers" => {
+                DataSetType::DailyBusinessCanceledProductSubscribers
+            }
+            "daily_business_fees" => DataSetType::DailyBusinessFees,
+            "daily_business_free_trial_conversions" => {
+                DataSetType::DailyBusinessFreeTrialConversions
+            }
+            "daily_business_new_instances" => DataSetType::DailyBusinessNewInstances,
+            "daily_business_new_product_subscribers" => {
+                DataSetType::DailyBusinessNewProductSubscribers
+            }
+            "daily_business_usage_by_instance_type" => {
+                DataSetType::DailyBusinessUsageByInstanceType
+            }
+            "disbursed_amount_by_age_of_disbursed_funds" => {
+                DataSetType::DisbursedAmountByAgeOfDisbursedFunds
+            }
+            "disbursed_amount_by_age_of_past_due_funds" => {
+                DataSetType::DisbursedAmountByAgeOfPastDueFunds
+            }
+            "disbursed_amount_by_age_of_uncollected_funds" => {
+                DataSetType::DisbursedAmountByAgeOfUncollectedFunds
+            }
+            "disbursed_amount_by_customer_geo" => DataSetType::DisbursedAmountByCustomerGeo,
+            "disbursed_amount_by_instance_hours" => DataSetType::DisbursedAmountByInstanceHours,
+            "disbursed_amount_by_product" => DataSetType::DisbursedAmountByProduct,
+            "disbursed_amount_by_product_with_uncollected_funds" => {
+                DataSetType::DisbursedAmountByProductWithUncollectedFunds
+            }
+            "disbursed_amount_by_uncollected_funds_breakdown" => {
+                DataSetType::DisbursedAmountByUncollectedFundsBreakdown
+            }
+            "monthly_revenue_annual_subscriptions" => {
+                DataSetType::MonthlyRevenueAnnualSubscriptions
+            }
+            "monthly_revenue_billing_and_revenue_data" => {
+                DataSetType::MonthlyRevenueBillingAndRevenueData
+            }
+            "monthly_revenue_field_demonstration_usage" => {
+                DataSetType::MonthlyRevenueFieldDemonstrationUsage
+            }
+            "monthly_revenue_flexible_payment_schedule" => {
+                DataSetType::MonthlyRevenueFlexiblePaymentSchedule
+            }
+            "sales_compensation_billed_revenue" => DataSetType::SalesCompensationBilledRevenue,
+            "us_sales_and_use_tax_records" => DataSetType::UsSalesAndUseTaxRecords,
+            _ => DataSetType::UnknownVariant(UnknownDataSetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DataSetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -68,7 +411,7 @@ pub struct GenerateDataSetRequest {
     pub data_set_publication_date: f64,
     /// <p>The desired data set type.</p> <p> <ul> <li> <strong>customer_subscriber_hourly_monthly_subscriptions</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>customer_subscriber_annual_subscriptions</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_usage_by_instance_type</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_fees</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_free_trial_conversions</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_new_instances</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_new_product_subscribers</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>daily_business_canceled_product_subscribers</strong> <p>From 2017-09-15 to present: Available daily by 24:00 UTC.</p> </li> <li> <strong>monthly_revenue_billing_and_revenue_data</strong> <p>From 2017-09-15 to present: Available monthly on the 15th day of the month by 24:00 UTC. Data includes metered transactions (e.g. hourly) from one month prior.</p> </li> <li> <strong>monthly_revenue_annual_subscriptions</strong> <p>From 2017-09-15 to present: Available monthly on the 15th day of the month by 24:00 UTC. Data includes up-front software charges (e.g. annual) from one month prior.</p> </li> <li> <strong>monthly_revenue_field_demonstration_usage</strong> <p>From 2018-03-15 to present: Available monthly on the 15th day of the month by 24:00 UTC.</p> </li> <li> <strong>monthly_revenue_flexible_payment_schedule</strong> <p>From 2018-11-15 to present: Available monthly on the 15th day of the month by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_product</strong> <p>From 2017-09-15 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_instance_hours</strong> <p>From 2017-09-15 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_customer_geo</strong> <p>From 2017-09-15 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_age_of_uncollected_funds</strong> <p>From 2017-09-15 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_age_of_disbursed_funds</strong> <p>From 2017-09-15 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_age_of_past_due_funds</strong> <p>From 2018-04-07 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_uncollected_funds_breakdown</strong> <p>From 2019-10-04 to present: Available every 30 days by 24:00 UTC.</p> </li> <li> <strong>sales_compensation_billed_revenue</strong> <p>From 2017-09-15 to present: Available monthly on the 15th day of the month by 24:00 UTC. Data includes metered transactions (e.g. hourly) from one month prior, and up-front software charges (e.g. annual) from one month prior.</p> </li> <li> <strong>us_sales_and_use_tax_records</strong> <p>From 2017-09-15 to present: Available monthly on the 15th day of the month by 24:00 UTC.</p> </li> <li> <strong>disbursed_amount_by_product_with_uncollected_funds</strong> <p>This data set is deprecated. Download related reports from AMMP instead!</p> </li> <li> <strong>customer_profile_by_industry</strong> <p>This data set is deprecated. Download related reports from AMMP instead!</p> </li> <li> <strong>customer_profile_by_revenue</strong> <p>This data set is deprecated. Download related reports from AMMP instead!</p> </li> <li> <strong>customer_profile_by_geography</strong> <p>This data set is deprecated. Download related reports from AMMP instead!</p> </li> </ul> </p>
     #[serde(rename = "dataSetType")]
-    pub data_set_type: String,
+    pub data_set_type: DataSetType,
     /// <p>The name (friendly name, not ARN) of the destination S3 bucket.</p>
     #[serde(rename = "destinationS3BucketName")]
     pub destination_s3_bucket_name: String,
@@ -104,7 +447,7 @@ pub struct StartSupportDataExportRequest {
     pub customer_defined_values: Option<::std::collections::HashMap<String, String>>,
     /// <p> Specifies the data set type to be written to the output csv file. The data set types customer_support_contacts_data and test_customer_support_contacts_data both result in a csv file containing the following fields: Product Id, Product Code, Customer Guid, Subscription Guid, Subscription Start Date, Organization, AWS Account Id, Given Name, Surname, Telephone Number, Email, Title, Country Code, ZIP Code, Operation Type, and Operation Time. </p> <p> <ul> <li><i>customer_support_contacts_data</i> Customer support contact data. The data set will contain all changes (Creates, Updates, and Deletes) to customer support contact data from the date specified in the from_date parameter.</li> <li><i>test_customer_support_contacts_data</i> An example data set containing static test data in the same format as customer_support_contacts_data</li> </ul> </p>
     #[serde(rename = "dataSetType")]
-    pub data_set_type: String,
+    pub data_set_type: SupportDataSetType,
     /// <p>The name (friendly name, not ARN) of the destination S3 bucket.</p>
     #[serde(rename = "destinationS3BucketName")]
     pub destination_s3_bucket_name: String,
@@ -131,6 +474,121 @@ pub struct StartSupportDataExportResult {
     #[serde(rename = "dataSetRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_set_request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSupportDataSetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SupportDataSetType {
+    CustomerSupportContactsData,
+    TestCustomerSupportContactsData,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSupportDataSetType),
+}
+
+impl Default for SupportDataSetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SupportDataSetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SupportDataSetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SupportDataSetType {
+    fn into(self) -> String {
+        match self {
+            SupportDataSetType::CustomerSupportContactsData => {
+                "customer_support_contacts_data".to_string()
+            }
+            SupportDataSetType::TestCustomerSupportContactsData => {
+                "test_customer_support_contacts_data".to_string()
+            }
+            SupportDataSetType::UnknownVariant(UnknownSupportDataSetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SupportDataSetType {
+    fn into(self) -> &'a str {
+        match self {
+            SupportDataSetType::CustomerSupportContactsData => &"customer_support_contacts_data",
+            SupportDataSetType::TestCustomerSupportContactsData => {
+                &"test_customer_support_contacts_data"
+            }
+            SupportDataSetType::UnknownVariant(UnknownSupportDataSetType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SupportDataSetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "customer_support_contacts_data" => SupportDataSetType::CustomerSupportContactsData,
+            "test_customer_support_contacts_data" => {
+                SupportDataSetType::TestCustomerSupportContactsData
+            }
+            _ => SupportDataSetType::UnknownVariant(UnknownSupportDataSetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SupportDataSetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "customer_support_contacts_data" => SupportDataSetType::CustomerSupportContactsData,
+            "test_customer_support_contacts_data" => {
+                SupportDataSetType::TestCustomerSupportContactsData
+            }
+            _ => SupportDataSetType::UnknownVariant(UnknownSupportDataSetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SupportDataSetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SupportDataSetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SupportDataSetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by GenerateDataSet

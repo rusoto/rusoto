@@ -131,7 +131,7 @@ pub struct ColumnInfo {
     /// <p>Indicates the column's nullable status.</p>
     #[serde(rename = "Nullable")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nullable: Option<String>,
+    pub nullable: Option<ColumnNullable>,
     /// <p>For <code>DECIMAL</code> data types, specifies the total number of digits, up to 38. For performance reasons, we recommend up to 18 digits.</p>
     #[serde(rename = "Precision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -151,6 +151,112 @@ pub struct ColumnInfo {
     /// <p>The data type of the column.</p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownColumnNullable {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ColumnNullable {
+    NotNull,
+    Nullable,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownColumnNullable),
+}
+
+impl Default for ColumnNullable {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ColumnNullable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ColumnNullable {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ColumnNullable {
+    fn into(self) -> String {
+        match self {
+            ColumnNullable::NotNull => "NOT_NULL".to_string(),
+            ColumnNullable::Nullable => "NULLABLE".to_string(),
+            ColumnNullable::Unknown => "UNKNOWN".to_string(),
+            ColumnNullable::UnknownVariant(UnknownColumnNullable { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ColumnNullable {
+    fn into(self) -> &'a str {
+        match self {
+            ColumnNullable::NotNull => &"NOT_NULL",
+            ColumnNullable::Nullable => &"NULLABLE",
+            ColumnNullable::Unknown => &"UNKNOWN",
+            ColumnNullable::UnknownVariant(UnknownColumnNullable { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ColumnNullable {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_NULL" => ColumnNullable::NotNull,
+            "NULLABLE" => ColumnNullable::Nullable,
+            "UNKNOWN" => ColumnNullable::Unknown,
+            _ => ColumnNullable::UnknownVariant(UnknownColumnNullable {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ColumnNullable {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_NULL" => ColumnNullable::NotNull,
+            "NULLABLE" => ColumnNullable::Nullable,
+            "UNKNOWN" => ColumnNullable::Unknown,
+            _ => ColumnNullable::UnknownVariant(UnknownColumnNullable { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ColumnNullable {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ColumnNullable {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ColumnNullable {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -173,7 +279,7 @@ pub struct CreateDataCatalogInput {
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of data catalog to create: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataCatalogType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -256,7 +362,7 @@ pub struct DataCatalog {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of data catalog: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataCatalogType,
 }
 
 /// <p>The summary information for the data catalog, which includes its name and type.</p>
@@ -270,7 +376,112 @@ pub struct DataCatalogSummary {
     /// <p>The data catalog type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataCatalogType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataCatalogType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataCatalogType {
+    Glue,
+    Hive,
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataCatalogType),
+}
+
+impl Default for DataCatalogType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataCatalogType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataCatalogType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataCatalogType {
+    fn into(self) -> String {
+        match self {
+            DataCatalogType::Glue => "GLUE".to_string(),
+            DataCatalogType::Hive => "HIVE".to_string(),
+            DataCatalogType::Lambda => "LAMBDA".to_string(),
+            DataCatalogType::UnknownVariant(UnknownDataCatalogType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataCatalogType {
+    fn into(self) -> &'a str {
+        match self {
+            DataCatalogType::Glue => &"GLUE",
+            DataCatalogType::Hive => &"HIVE",
+            DataCatalogType::Lambda => &"LAMBDA",
+            DataCatalogType::UnknownVariant(UnknownDataCatalogType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataCatalogType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GLUE" => DataCatalogType::Glue,
+            "HIVE" => DataCatalogType::Hive,
+            "LAMBDA" => DataCatalogType::Lambda,
+            _ => DataCatalogType::UnknownVariant(UnknownDataCatalogType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataCatalogType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GLUE" => DataCatalogType::Glue,
+            "HIVE" => DataCatalogType::Hive,
+            "LAMBDA" => DataCatalogType::Lambda,
+            _ => DataCatalogType::UnknownVariant(UnknownDataCatalogType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataCatalogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataCatalogType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataCatalogType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains metadata information for a database in a data catalog.</p>
@@ -345,11 +556,120 @@ pub struct DeleteWorkGroupOutput {}
 pub struct EncryptionConfiguration {
     /// <p>Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (<code>SSE-S3</code>), server-side encryption with KMS-managed keys (<code>SSE-KMS</code>), or client-side encryption with KMS-managed keys (CSE-KMS) is used.</p> <p>If a query runs in a workgroup and the workgroup overrides client-side settings, then the workgroup's setting for encryption is used. It specifies whether query results must be encrypted, for all queries that run in this workgroup. </p>
     #[serde(rename = "EncryptionOption")]
-    pub encryption_option: String,
+    pub encryption_option: EncryptionOption,
     /// <p>For <code>SSE-KMS</code> and <code>CSE-KMS</code>, this is the KMS key ARN or ID.</p>
     #[serde(rename = "KmsKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionOption {
+    CseKms,
+    SseKms,
+    SseS3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionOption),
+}
+
+impl Default for EncryptionOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionOption {
+    fn into(self) -> String {
+        match self {
+            EncryptionOption::CseKms => "CSE_KMS".to_string(),
+            EncryptionOption::SseKms => "SSE_KMS".to_string(),
+            EncryptionOption::SseS3 => "SSE_S3".to_string(),
+            EncryptionOption::UnknownVariant(UnknownEncryptionOption { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionOption {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionOption::CseKms => &"CSE_KMS",
+            EncryptionOption::SseKms => &"SSE_KMS",
+            EncryptionOption::SseS3 => &"SSE_S3",
+            EncryptionOption::UnknownVariant(UnknownEncryptionOption { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSE_KMS" => EncryptionOption::CseKms,
+            "SSE_KMS" => EncryptionOption::SseKms,
+            "SSE_S3" => EncryptionOption::SseS3,
+            _ => EncryptionOption::UnknownVariant(UnknownEncryptionOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSE_KMS" => EncryptionOption::CseKms,
+            "SSE_KMS" => EncryptionOption::SseKms,
+            "SSE_S3" => EncryptionOption::SseS3,
+            _ => EncryptionOption::UnknownVariant(UnknownEncryptionOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -752,7 +1072,7 @@ pub struct QueryExecution {
     /// <p>The type of query statement that was run. <code>DDL</code> indicates DDL query statements. <code>DML</code> indicates DML (Data Manipulation Language) query statements, such as <code>CREATE TABLE AS SELECT</code>. <code>UTILITY</code> indicates query statements other than DDL and DML, such as <code>SHOW CREATE TABLE</code>, or <code>DESCRIBE &lt;table&gt;</code>.</p>
     #[serde(rename = "StatementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statement_type: Option<String>,
+    pub statement_type: Option<StatementType>,
     /// <p>Query execution statistics, such as the amount of data scanned, the amount of time that the query took to process, and the type of statement that was run.</p>
     #[serde(rename = "Statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -778,6 +1098,126 @@ pub struct QueryExecutionContext {
     #[serde(rename = "Database")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryExecutionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryExecutionState {
+    Cancelled,
+    Failed,
+    Queued,
+    Running,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryExecutionState),
+}
+
+impl Default for QueryExecutionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryExecutionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryExecutionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryExecutionState {
+    fn into(self) -> String {
+        match self {
+            QueryExecutionState::Cancelled => "CANCELLED".to_string(),
+            QueryExecutionState::Failed => "FAILED".to_string(),
+            QueryExecutionState::Queued => "QUEUED".to_string(),
+            QueryExecutionState::Running => "RUNNING".to_string(),
+            QueryExecutionState::Succeeded => "SUCCEEDED".to_string(),
+            QueryExecutionState::UnknownVariant(UnknownQueryExecutionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryExecutionState {
+    fn into(self) -> &'a str {
+        match self {
+            QueryExecutionState::Cancelled => &"CANCELLED",
+            QueryExecutionState::Failed => &"FAILED",
+            QueryExecutionState::Queued => &"QUEUED",
+            QueryExecutionState::Running => &"RUNNING",
+            QueryExecutionState::Succeeded => &"SUCCEEDED",
+            QueryExecutionState::UnknownVariant(UnknownQueryExecutionState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for QueryExecutionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => QueryExecutionState::Cancelled,
+            "FAILED" => QueryExecutionState::Failed,
+            "QUEUED" => QueryExecutionState::Queued,
+            "RUNNING" => QueryExecutionState::Running,
+            "SUCCEEDED" => QueryExecutionState::Succeeded,
+            _ => QueryExecutionState::UnknownVariant(UnknownQueryExecutionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryExecutionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => QueryExecutionState::Cancelled,
+            "FAILED" => QueryExecutionState::Failed,
+            "QUEUED" => QueryExecutionState::Queued,
+            "RUNNING" => QueryExecutionState::Running,
+            "SUCCEEDED" => QueryExecutionState::Succeeded,
+            _ => QueryExecutionState::UnknownVariant(UnknownQueryExecutionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryExecutionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for QueryExecutionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryExecutionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>
@@ -825,7 +1265,7 @@ pub struct QueryExecutionStatus {
     /// <p><p>The state of query execution. <code>QUEUED</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>RUNNING</code> indicates that the query is in execution phase. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution.</p> <note> <p>Athena automatically retries your queries in cases of certain transient errors. As a result, you may see the query state transition from <code>RUNNING</code> or <code>FAILED</code> to <code>QUEUED</code>. </p> </note></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<QueryExecutionState>,
     /// <p>Further detail about the status of the query.</p>
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -938,6 +1378,112 @@ pub struct StartQueryExecutionOutput {
     pub query_execution_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatementType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatementType {
+    Ddl,
+    Dml,
+    Utility,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatementType),
+}
+
+impl Default for StatementType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatementType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatementType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatementType {
+    fn into(self) -> String {
+        match self {
+            StatementType::Ddl => "DDL".to_string(),
+            StatementType::Dml => "DML".to_string(),
+            StatementType::Utility => "UTILITY".to_string(),
+            StatementType::UnknownVariant(UnknownStatementType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatementType {
+    fn into(self) -> &'a str {
+        match self {
+            StatementType::Ddl => &"DDL",
+            StatementType::Dml => &"DML",
+            StatementType::Utility => &"UTILITY",
+            StatementType::UnknownVariant(UnknownStatementType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatementType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DDL" => StatementType::Ddl,
+            "DML" => StatementType::Dml,
+            "UTILITY" => StatementType::Utility,
+            _ => StatementType::UnknownVariant(UnknownStatementType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatementType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DDL" => StatementType::Ddl,
+            "DML" => StatementType::Dml,
+            "UTILITY" => StatementType::Utility,
+            _ => StatementType::UnknownVariant(UnknownStatementType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatementType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StatementType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StatementType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopQueryExecutionInput {
@@ -1011,6 +1557,107 @@ pub struct TagResourceInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
+/// <p>The reason for the query throttling, for example, when it exceeds the concurrent query limit.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThrottleReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThrottleReason {
+    ConcurrentQueryLimitExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThrottleReason),
+}
+
+impl Default for ThrottleReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThrottleReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThrottleReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThrottleReason {
+    fn into(self) -> String {
+        match self {
+            ThrottleReason::ConcurrentQueryLimitExceeded => {
+                "CONCURRENT_QUERY_LIMIT_EXCEEDED".to_string()
+            }
+            ThrottleReason::UnknownVariant(UnknownThrottleReason { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThrottleReason {
+    fn into(self) -> &'a str {
+        match self {
+            ThrottleReason::ConcurrentQueryLimitExceeded => &"CONCURRENT_QUERY_LIMIT_EXCEEDED",
+            ThrottleReason::UnknownVariant(UnknownThrottleReason { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThrottleReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONCURRENT_QUERY_LIMIT_EXCEEDED" => ThrottleReason::ConcurrentQueryLimitExceeded,
+            _ => ThrottleReason::UnknownVariant(UnknownThrottleReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThrottleReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONCURRENT_QUERY_LIMIT_EXCEEDED" => ThrottleReason::ConcurrentQueryLimitExceeded,
+            _ => ThrottleReason::UnknownVariant(UnknownThrottleReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThrottleReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ThrottleReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ThrottleReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1078,7 +1725,7 @@ pub struct UpdateDataCatalogInput {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies the type of data catalog to update. Specify <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataCatalogType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1099,7 +1746,7 @@ pub struct UpdateWorkGroupInput {
     /// <p>The workgroup state that will be updated for the given workgroup.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkGroupState>,
     /// <p>The specified workgroup that will be updated.</p>
     #[serde(rename = "WorkGroup")]
     pub work_group: String,
@@ -1131,7 +1778,7 @@ pub struct WorkGroup {
     /// <p>The state of the workgroup: ENABLED or DISABLED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkGroupState>,
 }
 
 /// <p>The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup and whether workgroup settings override query settings, and the data usage limits for the amount of data scanned per query or per workgroup. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>. </p>
@@ -1189,6 +1836,106 @@ pub struct WorkGroupConfigurationUpdates {
     pub result_configuration_updates: Option<ResultConfigurationUpdates>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorkGroupState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorkGroupState {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorkGroupState),
+}
+
+impl Default for WorkGroupState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorkGroupState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorkGroupState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorkGroupState {
+    fn into(self) -> String {
+        match self {
+            WorkGroupState::Disabled => "DISABLED".to_string(),
+            WorkGroupState::Enabled => "ENABLED".to_string(),
+            WorkGroupState::UnknownVariant(UnknownWorkGroupState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorkGroupState {
+    fn into(self) -> &'a str {
+        match self {
+            WorkGroupState::Disabled => &"DISABLED",
+            WorkGroupState::Enabled => &"ENABLED",
+            WorkGroupState::UnknownVariant(UnknownWorkGroupState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorkGroupState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => WorkGroupState::Disabled,
+            "ENABLED" => WorkGroupState::Enabled,
+            _ => WorkGroupState::UnknownVariant(UnknownWorkGroupState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorkGroupState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => WorkGroupState::Disabled,
+            "ENABLED" => WorkGroupState::Enabled,
+            _ => WorkGroupState::UnknownVariant(UnknownWorkGroupState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorkGroupState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WorkGroupState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorkGroupState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary information for the workgroup, which includes its name, state, description, and the date and time it was created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1208,7 +1955,7 @@ pub struct WorkGroupSummary {
     /// <p>The state of the workgroup.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<WorkGroupState>,
 }
 
 /// Errors returned by BatchGetNamedQuery

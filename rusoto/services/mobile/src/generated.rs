@@ -30,7 +30,7 @@ use serde::{Deserialize, Serialize};
 pub struct BundleDetails {
     #[serde(rename = "availablePlatforms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub available_platforms: Option<Vec<String>>,
+    pub available_platforms: Option<Vec<Platform>>,
     #[serde(rename = "bundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
@@ -159,7 +159,7 @@ pub struct ExportBundleRequest {
     /// <p> Developer desktop or target application platform. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<Platform>,
     /// <p> Unique project identifier. </p>
     #[serde(rename = "projectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -257,6 +257,133 @@ pub struct ListProjectsResult {
     pub projects: Option<Vec<ProjectSummary>>,
 }
 
+/// <p> Developer desktop or target mobile app or website platform. </p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Platform {
+    Android,
+    Javascript,
+    Linux,
+    Objc,
+    Osx,
+    Swift,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatform),
+}
+
+impl Default for Platform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Platform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Platform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Platform {
+    fn into(self) -> String {
+        match self {
+            Platform::Android => "ANDROID".to_string(),
+            Platform::Javascript => "JAVASCRIPT".to_string(),
+            Platform::Linux => "LINUX".to_string(),
+            Platform::Objc => "OBJC".to_string(),
+            Platform::Osx => "OSX".to_string(),
+            Platform::Swift => "SWIFT".to_string(),
+            Platform::Windows => "WINDOWS".to_string(),
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Platform {
+    fn into(self) -> &'a str {
+        match self {
+            Platform::Android => &"ANDROID",
+            Platform::Javascript => &"JAVASCRIPT",
+            Platform::Linux => &"LINUX",
+            Platform::Objc => &"OBJC",
+            Platform::Osx => &"OSX",
+            Platform::Swift => &"SWIFT",
+            Platform::Windows => &"WINDOWS",
+            Platform::UnknownVariant(UnknownPlatform { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Platform {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANDROID" => Platform::Android,
+            "JAVASCRIPT" => Platform::Javascript,
+            "LINUX" => Platform::Linux,
+            "OBJC" => Platform::Objc,
+            "OSX" => Platform::Osx,
+            "SWIFT" => Platform::Swift,
+            "WINDOWS" => Platform::Windows,
+            _ => Platform::UnknownVariant(UnknownPlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Platform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANDROID" => Platform::Android,
+            "JAVASCRIPT" => Platform::Javascript,
+            "LINUX" => Platform::Linux,
+            "OBJC" => Platform::Objc,
+            "OSX" => Platform::Osx,
+            "SWIFT" => Platform::Swift,
+            "WINDOWS" => Platform::Windows,
+            _ => Platform::UnknownVariant(UnknownPlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Platform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Platform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Platform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Detailed information about an AWS Mobile Hub project. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -287,7 +414,115 @@ pub struct ProjectDetails {
     pub resources: Option<Vec<Resource>>,
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ProjectState>,
+}
+
+/// <p> Synchronization state for a project. </p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectState {
+    Importing,
+    Normal,
+    Syncing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectState),
+}
+
+impl Default for ProjectState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectState {
+    fn into(self) -> String {
+        match self {
+            ProjectState::Importing => "IMPORTING".to_string(),
+            ProjectState::Normal => "NORMAL".to_string(),
+            ProjectState::Syncing => "SYNCING".to_string(),
+            ProjectState::UnknownVariant(UnknownProjectState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectState {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectState::Importing => &"IMPORTING",
+            ProjectState::Normal => &"NORMAL",
+            ProjectState::Syncing => &"SYNCING",
+            ProjectState::UnknownVariant(UnknownProjectState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectState {
+    fn from(name: &str) -> Self {
+        match name {
+            "IMPORTING" => ProjectState::Importing,
+            "NORMAL" => ProjectState::Normal,
+            "SYNCING" => ProjectState::Syncing,
+            _ => ProjectState::UnknownVariant(UnknownProjectState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IMPORTING" => ProjectState::Importing,
+            "NORMAL" => ProjectState::Normal,
+            "SYNCING" => ProjectState::Syncing,
+            _ => ProjectState::UnknownVariant(UnknownProjectState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ProjectState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProjectState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Summary information about an AWS Mobile Hub project. </p>

@@ -50,6 +50,108 @@ impl LightsailClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessDirection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessDirection {
+    Inbound,
+    Outbound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessDirection),
+}
+
+impl Default for AccessDirection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessDirection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessDirection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessDirection {
+    fn into(self) -> String {
+        match self {
+            AccessDirection::Inbound => "inbound".to_string(),
+            AccessDirection::Outbound => "outbound".to_string(),
+            AccessDirection::UnknownVariant(UnknownAccessDirection { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessDirection {
+    fn into(self) -> &'a str {
+        match self {
+            AccessDirection::Inbound => &"inbound",
+            AccessDirection::Outbound => &"outbound",
+            AccessDirection::UnknownVariant(UnknownAccessDirection { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessDirection {
+    fn from(name: &str) -> Self {
+        match name {
+            "inbound" => AccessDirection::Inbound,
+            "outbound" => AccessDirection::Outbound,
+            _ => AccessDirection::UnknownVariant(UnknownAccessDirection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccessDirection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "inbound" => AccessDirection::Inbound,
+            "outbound" => AccessDirection::Outbound,
+            _ => AccessDirection::UnknownVariant(UnknownAccessDirection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDirection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AccessDirection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccessDirection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes an add-on that is enabled for an Amazon Lightsail resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -78,11 +180,107 @@ pub struct AddOn {
 pub struct AddOnRequest {
     /// <p>The add-on type.</p>
     #[serde(rename = "addOnType")]
-    pub add_on_type: String,
+    pub add_on_type: AddOnType,
     /// <p>An object that represents additional parameters when enabling or modifying the automatic snapshot add-on.</p>
     #[serde(rename = "autoSnapshotAddOnRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_snapshot_add_on_request: Option<AutoSnapshotAddOnRequest>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAddOnType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AddOnType {
+    AutoSnapshot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAddOnType),
+}
+
+impl Default for AddOnType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AddOnType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AddOnType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AddOnType {
+    fn into(self) -> String {
+        match self {
+            AddOnType::AutoSnapshot => "AutoSnapshot".to_string(),
+            AddOnType::UnknownVariant(UnknownAddOnType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AddOnType {
+    fn into(self) -> &'a str {
+        match self {
+            AddOnType::AutoSnapshot => &"AutoSnapshot",
+            AddOnType::UnknownVariant(UnknownAddOnType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AddOnType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AutoSnapshot" => AddOnType::AutoSnapshot,
+            _ => AddOnType::UnknownVariant(UnknownAddOnType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AddOnType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AutoSnapshot" => AddOnType::AutoSnapshot,
+            _ => AddOnType::UnknownVariant(UnknownAddOnType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AddOnType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AddOnType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AddOnType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an alarm.</p> <p>An alarm is a way to monitor your Amazon Lightsail resource metrics. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
@@ -96,11 +294,11 @@ pub struct Alarm {
     /// <p>The arithmetic operation used when comparing the specified statistic and threshold.</p>
     #[serde(rename = "comparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p>The contact protocols for the alarm, such as <code>Email</code>, <code>SMS</code> (text messaging), or both.</p>
     #[serde(rename = "contactProtocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_protocols: Option<Vec<String>>,
+    pub contact_protocols: Option<Vec<ContactProtocol>>,
     /// <p>The timestamp when the alarm was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -120,7 +318,7 @@ pub struct Alarm {
     /// <p>The name of the metric associated with the alarm.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<MetricName>,
     /// <p>An object that lists information about the resource monitored by the alarm.</p>
     #[serde(rename = "monitoredResourceInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,7 +334,7 @@ pub struct Alarm {
     /// <p>The alarm states that trigger a notification.</p>
     #[serde(rename = "notificationTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notification_triggers: Option<Vec<String>>,
+    pub notification_triggers: Option<Vec<AlarmState>>,
     /// <p>The period, in seconds, over which the statistic is applied.</p>
     #[serde(rename = "period")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -144,15 +342,15 @@ pub struct Alarm {
     /// <p>The Lightsail resource type (e.g., <code>Alarm</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p><p>The current state of the alarm.</p> <p>An alarm has the following possible states:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul></p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<AlarmState>,
     /// <p><p>The statistic for the metric associated with the alarm.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub statistic: Option<String>,
+    pub statistic: Option<MetricStatistic>,
     /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail alarm. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,11 +362,116 @@ pub struct Alarm {
     /// <p><p>Specifies how the alarm handles missing data points.</p> <p>An alarm can treat missing data in the following ways:</p> <ul> <li> <p> <code>breaching</code> - Assume the missing data is not within the threshold. Missing data counts towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>notBreaching</code> - Assume the missing data is within the threshold. Missing data does not count towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>ignore</code> - Ignore the missing data. Maintains the current alarm state.</p> </li> <li> <p> <code>missing</code> - Missing data is treated as missing.</p> </li> </ul></p>
     #[serde(rename = "treatMissingData")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub treat_missing_data: Option<String>,
+    pub treat_missing_data: Option<TreatMissingData>,
     /// <p>The unit of the metric associated with the alarm.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<MetricUnit>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlarmState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlarmState {
+    Alarm,
+    InsufficientData,
+    Ok,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlarmState),
+}
+
+impl Default for AlarmState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlarmState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlarmState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlarmState {
+    fn into(self) -> String {
+        match self {
+            AlarmState::Alarm => "ALARM".to_string(),
+            AlarmState::InsufficientData => "INSUFFICIENT_DATA".to_string(),
+            AlarmState::Ok => "OK".to_string(),
+            AlarmState::UnknownVariant(UnknownAlarmState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlarmState {
+    fn into(self) -> &'a str {
+        match self {
+            AlarmState::Alarm => &"ALARM",
+            AlarmState::InsufficientData => &"INSUFFICIENT_DATA",
+            AlarmState::Ok => &"OK",
+            AlarmState::UnknownVariant(UnknownAlarmState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AlarmState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALARM" => AlarmState::Alarm,
+            "INSUFFICIENT_DATA" => AlarmState::InsufficientData,
+            "OK" => AlarmState::Ok,
+            _ => AlarmState::UnknownVariant(UnknownAlarmState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlarmState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALARM" => AlarmState::Alarm,
+            "INSUFFICIENT_DATA" => AlarmState::InsufficientData,
+            "OK" => AlarmState::Ok,
+            _ => AlarmState::UnknownVariant(UnknownAlarmState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlarmState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AlarmState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AlarmState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -334,7 +637,122 @@ pub struct AutoSnapshotDetails {
     /// <p>The status of the automatic snapshot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AutoSnapshotStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAutoSnapshotStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AutoSnapshotStatus {
+    Failed,
+    InProgress,
+    NotFound,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAutoSnapshotStatus),
+}
+
+impl Default for AutoSnapshotStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AutoSnapshotStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AutoSnapshotStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AutoSnapshotStatus {
+    fn into(self) -> String {
+        match self {
+            AutoSnapshotStatus::Failed => "Failed".to_string(),
+            AutoSnapshotStatus::InProgress => "InProgress".to_string(),
+            AutoSnapshotStatus::NotFound => "NotFound".to_string(),
+            AutoSnapshotStatus::Success => "Success".to_string(),
+            AutoSnapshotStatus::UnknownVariant(UnknownAutoSnapshotStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AutoSnapshotStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AutoSnapshotStatus::Failed => &"Failed",
+            AutoSnapshotStatus::InProgress => &"InProgress",
+            AutoSnapshotStatus::NotFound => &"NotFound",
+            AutoSnapshotStatus::Success => &"Success",
+            AutoSnapshotStatus::UnknownVariant(UnknownAutoSnapshotStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AutoSnapshotStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => AutoSnapshotStatus::Failed,
+            "InProgress" => AutoSnapshotStatus::InProgress,
+            "NotFound" => AutoSnapshotStatus::NotFound,
+            "Success" => AutoSnapshotStatus::Success,
+            _ => AutoSnapshotStatus::UnknownVariant(UnknownAutoSnapshotStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AutoSnapshotStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => AutoSnapshotStatus::Failed,
+            "InProgress" => AutoSnapshotStatus::InProgress,
+            "NotFound" => AutoSnapshotStatus::NotFound,
+            "Success" => AutoSnapshotStatus::Success,
+            _ => AutoSnapshotStatus::UnknownVariant(UnknownAutoSnapshotStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AutoSnapshotStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AutoSnapshotStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AutoSnapshotStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an Availability Zone.</p>
@@ -349,6 +767,106 @@ pub struct AvailabilityZone {
     #[serde(rename = "zoneName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zone_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBehaviorEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BehaviorEnum {
+    Cache,
+    DontCache,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBehaviorEnum),
+}
+
+impl Default for BehaviorEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BehaviorEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BehaviorEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BehaviorEnum {
+    fn into(self) -> String {
+        match self {
+            BehaviorEnum::Cache => "cache".to_string(),
+            BehaviorEnum::DontCache => "dont-cache".to_string(),
+            BehaviorEnum::UnknownVariant(UnknownBehaviorEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BehaviorEnum {
+    fn into(self) -> &'a str {
+        match self {
+            BehaviorEnum::Cache => &"cache",
+            BehaviorEnum::DontCache => &"dont-cache",
+            BehaviorEnum::UnknownVariant(UnknownBehaviorEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BehaviorEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "cache" => BehaviorEnum::Cache,
+            "dont-cache" => BehaviorEnum::DontCache,
+            _ => BehaviorEnum::UnknownVariant(UnknownBehaviorEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BehaviorEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cache" => BehaviorEnum::Cache,
+            "dont-cache" => BehaviorEnum::DontCache,
+            _ => BehaviorEnum::UnknownVariant(UnknownBehaviorEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BehaviorEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BehaviorEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BehaviorEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a blueprint (a virtual private server image).</p>
@@ -386,7 +904,7 @@ pub struct Blueprint {
     /// <p>The operating system platform (either Linux/Unix-based or Windows Server-based) of the blueprint.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<InstancePlatform>,
     /// <p>The product URL to learn more about the image or blueprint.</p>
     #[serde(rename = "productUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -394,7 +912,7 @@ pub struct Blueprint {
     /// <p>The type of the blueprint (e.g., <code>os</code> or <code>app</code>).</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<BlueprintType>,
     /// <p>The version number of the operating system, application, or stack (e.g., <code>2016.03.0</code>).</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -403,6 +921,107 @@ pub struct Blueprint {
     #[serde(rename = "versionCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBlueprintType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BlueprintType {
+    App,
+    Os,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBlueprintType),
+}
+
+impl Default for BlueprintType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BlueprintType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BlueprintType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BlueprintType {
+    fn into(self) -> String {
+        match self {
+            BlueprintType::App => "app".to_string(),
+            BlueprintType::Os => "os".to_string(),
+            BlueprintType::UnknownVariant(UnknownBlueprintType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BlueprintType {
+    fn into(self) -> &'a str {
+        match self {
+            BlueprintType::App => &"app",
+            BlueprintType::Os => &"os",
+            BlueprintType::UnknownVariant(UnknownBlueprintType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BlueprintType {
+    fn from(name: &str) -> Self {
+        match name {
+            "app" => BlueprintType::App,
+            "os" => BlueprintType::Os,
+            _ => BlueprintType::UnknownVariant(UnknownBlueprintType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BlueprintType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "app" => BlueprintType::App,
+            "os" => BlueprintType::Os,
+            _ => BlueprintType::UnknownVariant(UnknownBlueprintType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BlueprintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BlueprintType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BlueprintType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a bundle, which is a set of specs describing your virtual private server (or <i>instance</i>).</p>
@@ -448,7 +1067,7 @@ pub struct Bundle {
     /// <p>The operating system platform (Linux/Unix-based or Windows Server-based) that the bundle supports. You can only launch a <code>WINDOWS</code> bundle on a blueprint that supports the <code>WINDOWS</code> platform. <code>LINUX_UNIX</code> blueprints require a <code>LINUX_UNIX</code> bundle.</p>
     #[serde(rename = "supportedPlatforms")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_platforms: Option<Vec<String>>,
+    pub supported_platforms: Option<Vec<InstancePlatform>>,
     /// <p>The data transfer rate per month in GB (e.g., <code>2000</code>).</p>
     #[serde(rename = "transferPerMonthInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -461,7 +1080,7 @@ pub struct CacheBehavior {
     /// <p><p>The cache behavior of the distribution.</p> <p>The following cache behaviors can be specified:</p> <ul> <li> <p> <b> <code>cache</code> </b> - This option is best for static sites. When specified, your distribution caches and serves your entire website as static content. This behavior is ideal for websites with static content that doesn&#39;t change depending on who views it, or for websites that don&#39;t use cookies, headers, or query strings to personalize content.</p> </li> <li> <p> <b> <code>dont-cache</code> </b> - This option is best for sites that serve a mix of static and dynamic content. When specified, your distribution caches and serve only the content that is specified in the distribution&#39;s <code>CacheBehaviorPerPath</code> parameter. This behavior is ideal for websites or web applications that use cookies, headers, and query strings to personalize content for individual users.</p> </li> </ul></p>
     #[serde(rename = "behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub behavior: Option<String>,
+    pub behavior: Option<BehaviorEnum>,
 }
 
 /// <p>Describes the per-path cache behavior of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A per-path cache behavior is used to override, or add an exception to, the default cache behavior of a distribution. For example, if the <code>cacheBehavior</code> is set to <code>cache</code>, then a per-path cache behavior can be used to specify a directory, file, or file type that your distribution will cache. Alternately, if the distribution's <code>cacheBehavior</code> is <code>dont-cache</code>, then a per-path cache behavior can be used to specify a directory, file, or file type that your distribution will not cache.</p> <p>if the cacheBehavior's behavior is set to 'cache', then</p>
@@ -470,7 +1089,7 @@ pub struct CacheBehaviorPerPath {
     /// <p><p>The cache behavior for the specified path.</p> <p>You can specify one of the following per-path cache behaviors:</p> <ul> <li> <p> <b> <code>cache</code> </b> - This behavior caches the specified path. </p> </li> <li> <p> <b> <code>dont-cache</code> </b> - This behavior doesn&#39;t cache the specified path. </p> </li> </ul></p>
     #[serde(rename = "behavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub behavior: Option<String>,
+    pub behavior: Option<BehaviorEnum>,
     /// <p><p>The path to a directory or file to cached, or not cache. Use an asterisk symbol to specify wildcard directories (<code>path/to/assets/<em></code>), and file types (<code></em>.html, *jpg, <em>js</code>). Directories and file paths are case-sensitive.</p> <p>Examples:</p> <ul> <li> <p>Specify the following to cache all files in the document root of an Apache web server running on a Lightsail instance.</p> <p> <code>var/www/html/</code> </p> </li> <li> <p>Specify the following file to cache only the index page in the document root of an Apache web server.</p> <p> <code>var/www/html/index.html</code> </p> </li> <li> <p>Specify the following to cache only the .html files in the document root of an Apache web server.</p> <p> <code>var/www/html/</em>.html</code> </p> </li> <li> <p>Specify the following to cache only the .jpg, .png, and .gif files in the images sub-directory of the document root of an Apache web server.</p> <p> <code>var/www/html/images/<em>.jpg</code> </p> <p> <code>var/www/html/images/</em>.png</code> </p> <p> <code>var/www/html/images/*.gif</code> </p> <p>Specify the following to cache all files in the images sub-directory of the document root of an Apache web server.</p> <p> <code>var/www/html/images/</code> </p> </li> </ul></p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -589,7 +1208,7 @@ pub struct Certificate {
     /// <p>The validation status of the certificate.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CertificateStatus>,
     /// <p>An array of strings that specify the alternate domains (e.g., <code>example2.com</code>) and subdomains (e.g., <code>blog.example.com</code>) of the certificate.</p>
     #[serde(rename = "subjectAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -602,6 +1221,135 @@ pub struct Certificate {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateStatus {
+    Expired,
+    Failed,
+    Inactive,
+    Issued,
+    PendingValidation,
+    Revoked,
+    ValidationTimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateStatus),
+}
+
+impl Default for CertificateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateStatus {
+    fn into(self) -> String {
+        match self {
+            CertificateStatus::Expired => "EXPIRED".to_string(),
+            CertificateStatus::Failed => "FAILED".to_string(),
+            CertificateStatus::Inactive => "INACTIVE".to_string(),
+            CertificateStatus::Issued => "ISSUED".to_string(),
+            CertificateStatus::PendingValidation => "PENDING_VALIDATION".to_string(),
+            CertificateStatus::Revoked => "REVOKED".to_string(),
+            CertificateStatus::ValidationTimedOut => "VALIDATION_TIMED_OUT".to_string(),
+            CertificateStatus::UnknownVariant(UnknownCertificateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateStatus::Expired => &"EXPIRED",
+            CertificateStatus::Failed => &"FAILED",
+            CertificateStatus::Inactive => &"INACTIVE",
+            CertificateStatus::Issued => &"ISSUED",
+            CertificateStatus::PendingValidation => &"PENDING_VALIDATION",
+            CertificateStatus::Revoked => &"REVOKED",
+            CertificateStatus::ValidationTimedOut => &"VALIDATION_TIMED_OUT",
+            CertificateStatus::UnknownVariant(UnknownCertificateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CertificateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPIRED" => CertificateStatus::Expired,
+            "FAILED" => CertificateStatus::Failed,
+            "INACTIVE" => CertificateStatus::Inactive,
+            "ISSUED" => CertificateStatus::Issued,
+            "PENDING_VALIDATION" => CertificateStatus::PendingValidation,
+            "REVOKED" => CertificateStatus::Revoked,
+            "VALIDATION_TIMED_OUT" => CertificateStatus::ValidationTimedOut,
+            _ => CertificateStatus::UnknownVariant(UnknownCertificateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPIRED" => CertificateStatus::Expired,
+            "FAILED" => CertificateStatus::Failed,
+            "INACTIVE" => CertificateStatus::Inactive,
+            "ISSUED" => CertificateStatus::Issued,
+            "PENDING_VALIDATION" => CertificateStatus::PendingValidation,
+            "REVOKED" => CertificateStatus::Revoked,
+            "VALIDATION_TIMED_OUT" => CertificateStatus::ValidationTimedOut,
+            _ => CertificateStatus::UnknownVariant(UnknownCertificateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CertificateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes an Amazon Lightsail SSL/TLS certificate.</p>
@@ -677,7 +1425,7 @@ pub struct CloudFormationStackRecord {
     /// <p>The Lightsail resource type (e.g., <code>CloudFormationStackRecord</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>A list of objects describing the source of the CloudFormation stack record.</p>
     #[serde(rename = "sourceInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -685,7 +1433,7 @@ pub struct CloudFormationStackRecord {
     /// <p>The current state of the CloudFormation stack record.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RecordState>,
 }
 
 /// <p>Describes the source of a CloudFormation stack record (i.e., the export snapshot record).</p>
@@ -703,7 +1451,231 @@ pub struct CloudFormationStackRecordSourceInfo {
     /// <p>The Lightsail resource type (e.g., <code>ExportSnapshotRecord</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<CloudFormationStackRecordSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCloudFormationStackRecordSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CloudFormationStackRecordSourceType {
+    ExportSnapshotRecord,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCloudFormationStackRecordSourceType),
+}
+
+impl Default for CloudFormationStackRecordSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CloudFormationStackRecordSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CloudFormationStackRecordSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CloudFormationStackRecordSourceType {
+    fn into(self) -> String {
+        match self {
+            CloudFormationStackRecordSourceType::ExportSnapshotRecord => {
+                "ExportSnapshotRecord".to_string()
+            }
+            CloudFormationStackRecordSourceType::UnknownVariant(
+                UnknownCloudFormationStackRecordSourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CloudFormationStackRecordSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            CloudFormationStackRecordSourceType::ExportSnapshotRecord => &"ExportSnapshotRecord",
+            CloudFormationStackRecordSourceType::UnknownVariant(
+                UnknownCloudFormationStackRecordSourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CloudFormationStackRecordSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ExportSnapshotRecord" => CloudFormationStackRecordSourceType::ExportSnapshotRecord,
+            _ => CloudFormationStackRecordSourceType::UnknownVariant(
+                UnknownCloudFormationStackRecordSourceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CloudFormationStackRecordSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ExportSnapshotRecord" => CloudFormationStackRecordSourceType::ExportSnapshotRecord,
+            _ => CloudFormationStackRecordSourceType::UnknownVariant(
+                UnknownCloudFormationStackRecordSourceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CloudFormationStackRecordSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CloudFormationStackRecordSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CloudFormationStackRecordSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => {
+                "GreaterThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::GreaterThanThreshold => "GreaterThanThreshold".to_string(),
+            ComparisonOperator::LessThanOrEqualToThreshold => {
+                "LessThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperator::LessThanThreshold => "LessThanThreshold".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::GreaterThanOrEqualToThreshold => &"GreaterThanOrEqualToThreshold",
+            ComparisonOperator::GreaterThanThreshold => &"GreaterThanThreshold",
+            ComparisonOperator::LessThanOrEqualToThreshold => &"LessThanOrEqualToThreshold",
+            ComparisonOperator::LessThanThreshold => &"LessThanThreshold",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreaterThanOrEqualToThreshold" => ComparisonOperator::GreaterThanOrEqualToThreshold,
+            "GreaterThanThreshold" => ComparisonOperator::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperator::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperator::LessThanThreshold,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a contact method.</p> <p>A contact method is a way to send you notifications. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
@@ -732,19 +1704,333 @@ pub struct ContactMethod {
     /// <p>The protocol of the contact method, such as email or SMS (text messaging).</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<ContactProtocol>,
     /// <p>The Lightsail resource type (e.g., <code>ContactMethod</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p><p>The current status of the contact method.</p> <p>A contact method has the following possible status:</p> <ul> <li> <p> <code>PendingVerification</code> - The contact method has not yet been verified, and the verification has not yet expired.</p> </li> <li> <p> <code>Valid</code> - The contact method has been verified.</p> </li> <li> <p> <code>InValid</code> - An attempt was made to verify the contact method, but the verification has expired.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ContactMethodStatus>,
     /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail contact method. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactMethodStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactMethodStatus {
+    Invalid,
+    PendingVerification,
+    Valid,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactMethodStatus),
+}
+
+impl Default for ContactMethodStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactMethodStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactMethodStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactMethodStatus {
+    fn into(self) -> String {
+        match self {
+            ContactMethodStatus::Invalid => "Invalid".to_string(),
+            ContactMethodStatus::PendingVerification => "PendingVerification".to_string(),
+            ContactMethodStatus::Valid => "Valid".to_string(),
+            ContactMethodStatus::UnknownVariant(UnknownContactMethodStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactMethodStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContactMethodStatus::Invalid => &"Invalid",
+            ContactMethodStatus::PendingVerification => &"PendingVerification",
+            ContactMethodStatus::Valid => &"Valid",
+            ContactMethodStatus::UnknownVariant(UnknownContactMethodStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContactMethodStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Invalid" => ContactMethodStatus::Invalid,
+            "PendingVerification" => ContactMethodStatus::PendingVerification,
+            "Valid" => ContactMethodStatus::Valid,
+            _ => ContactMethodStatus::UnknownVariant(UnknownContactMethodStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactMethodStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Invalid" => ContactMethodStatus::Invalid,
+            "PendingVerification" => ContactMethodStatus::PendingVerification,
+            "Valid" => ContactMethodStatus::Valid,
+            _ => ContactMethodStatus::UnknownVariant(UnknownContactMethodStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactMethodStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContactMethodStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactMethodStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactMethodVerificationProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactMethodVerificationProtocol {
+    Email,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactMethodVerificationProtocol),
+}
+
+impl Default for ContactMethodVerificationProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactMethodVerificationProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactMethodVerificationProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactMethodVerificationProtocol {
+    fn into(self) -> String {
+        match self {
+            ContactMethodVerificationProtocol::Email => "Email".to_string(),
+            ContactMethodVerificationProtocol::UnknownVariant(
+                UnknownContactMethodVerificationProtocol { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactMethodVerificationProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            ContactMethodVerificationProtocol::Email => &"Email",
+            ContactMethodVerificationProtocol::UnknownVariant(
+                UnknownContactMethodVerificationProtocol { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactMethodVerificationProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "Email" => ContactMethodVerificationProtocol::Email,
+            _ => ContactMethodVerificationProtocol::UnknownVariant(
+                UnknownContactMethodVerificationProtocol {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ContactMethodVerificationProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Email" => ContactMethodVerificationProtocol::Email,
+            _ => ContactMethodVerificationProtocol::UnknownVariant(
+                UnknownContactMethodVerificationProtocol { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactMethodVerificationProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactMethodVerificationProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContactMethodVerificationProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContactProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContactProtocol {
+    Email,
+    Sms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContactProtocol),
+}
+
+impl Default for ContactProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContactProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContactProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContactProtocol {
+    fn into(self) -> String {
+        match self {
+            ContactProtocol::Email => "Email".to_string(),
+            ContactProtocol::Sms => "SMS".to_string(),
+            ContactProtocol::UnknownVariant(UnknownContactProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContactProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            ContactProtocol::Email => &"Email",
+            ContactProtocol::Sms => &"SMS",
+            ContactProtocol::UnknownVariant(UnknownContactProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContactProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "Email" => ContactProtocol::Email,
+            "SMS" => ContactProtocol::Sms,
+            _ => ContactProtocol::UnknownVariant(UnknownContactProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContactProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Email" => ContactProtocol::Email,
+            "SMS" => ContactProtocol::Sms,
+            _ => ContactProtocol::UnknownVariant(UnknownContactProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContactProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContactProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContactProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the settings of a container that will be launched, or that is launched, to an Amazon Lightsail container service.</p>
@@ -765,7 +2051,7 @@ pub struct Container {
     /// <p>The open firewall ports of the container.</p>
     #[serde(rename = "ports")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ports: Option<::std::collections::HashMap<String, String>>,
+    pub ports: Option<::std::collections::HashMap<String, ContainerServiceProtocol>>,
 }
 
 /// <p>Describes a container image that is registered to an Amazon Lightsail container service.</p>
@@ -821,7 +2107,7 @@ pub struct ContainerService {
     /// <p>The power specification of the container service.</p> <p>The power specifies the amount of RAM, the number of vCPUs, and the base price of the container service.</p>
     #[serde(rename = "power")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub power: Option<String>,
+    pub power: Option<ContainerServicePowerName>,
     /// <p>The ID of the power of the container service.</p>
     #[serde(rename = "powerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +2127,7 @@ pub struct ContainerService {
     /// <p>The Lightsail resource type of the container service (i.e., <code>ContainerService</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The scale specification of the container service.</p> <p>The scale specifies the allocated compute nodes of the container service.</p>
     #[serde(rename = "scale")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -849,7 +2135,7 @@ pub struct ContainerService {
     /// <p><p>The current state of the container service.</p> <p>The state can be:</p> <ul> <li> <p> <code>Pending</code> - The container service is being created.</p> </li> <li> <p> <code>Ready</code> - The container service is created but does not have a container deployment.</p> </li> <li> <p> <code>Disabled</code> - The container service is disabled.</p> </li> <li> <p> <code>Updating</code> - The container service capacity or other setting is being updated.</p> </li> <li> <p> <code>Deploying</code> - The container service is launching a container deployment.</p> </li> <li> <p> <code>Running</code> - The container service is created and it has a container deployment.</p> </li> </ul></p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ContainerServiceState>,
     /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -879,7 +2165,7 @@ pub struct ContainerServiceDeployment {
     /// <p><p>The state of the deployment.</p> <p>A deployment can be in one of the following states:</p> <ul> <li> <p> <code>Activating</code> - The deployment is being created.</p> </li> <li> <p> <code>Active</code> - The deployment was successfully created, and it&#39;s currently running on the container service. The container service can have only one deployment in an active state at a time.</p> </li> <li> <p> <code>Inactive</code> - The deployment was previously successfully created, but it is not currently running on the container service.</p> </li> <li> <p> <code>Failed</code> - The deployment failed. Use the <code>GetContainerLog</code> action to view the log events for the containers in the deployment to try to determine the reason for the failure.</p> </li> </ul></p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ContainerServiceDeploymentState>,
     /// <p>The version number of the deployment.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -898,6 +2184,125 @@ pub struct ContainerServiceDeploymentRequest {
     #[serde(rename = "publicEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_endpoint: Option<EndpointRequest>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerServiceDeploymentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerServiceDeploymentState {
+    Activating,
+    Active,
+    Failed,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerServiceDeploymentState),
+}
+
+impl Default for ContainerServiceDeploymentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerServiceDeploymentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerServiceDeploymentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerServiceDeploymentState {
+    fn into(self) -> String {
+        match self {
+            ContainerServiceDeploymentState::Activating => "ACTIVATING".to_string(),
+            ContainerServiceDeploymentState::Active => "ACTIVE".to_string(),
+            ContainerServiceDeploymentState::Failed => "FAILED".to_string(),
+            ContainerServiceDeploymentState::Inactive => "INACTIVE".to_string(),
+            ContainerServiceDeploymentState::UnknownVariant(
+                UnknownContainerServiceDeploymentState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerServiceDeploymentState {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerServiceDeploymentState::Activating => &"ACTIVATING",
+            ContainerServiceDeploymentState::Active => &"ACTIVE",
+            ContainerServiceDeploymentState::Failed => &"FAILED",
+            ContainerServiceDeploymentState::Inactive => &"INACTIVE",
+            ContainerServiceDeploymentState::UnknownVariant(
+                UnknownContainerServiceDeploymentState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerServiceDeploymentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => ContainerServiceDeploymentState::Activating,
+            "ACTIVE" => ContainerServiceDeploymentState::Active,
+            "FAILED" => ContainerServiceDeploymentState::Failed,
+            "INACTIVE" => ContainerServiceDeploymentState::Inactive,
+            _ => ContainerServiceDeploymentState::UnknownVariant(
+                UnknownContainerServiceDeploymentState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ContainerServiceDeploymentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => ContainerServiceDeploymentState::Activating,
+            "ACTIVE" => ContainerServiceDeploymentState::Active,
+            "FAILED" => ContainerServiceDeploymentState::Failed,
+            "INACTIVE" => ContainerServiceDeploymentState::Inactive,
+            _ => ContainerServiceDeploymentState::UnknownVariant(
+                UnknownContainerServiceDeploymentState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerServiceDeploymentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContainerServiceDeploymentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerServiceDeploymentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the public endpoint configuration of a deployment of an Amazon Lightsail container service.</p>
@@ -961,6 +2366,112 @@ pub struct ContainerServiceLogEvent {
     pub message: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerServiceMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerServiceMetricName {
+    Cpuutilization,
+    MemoryUtilization,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerServiceMetricName),
+}
+
+impl Default for ContainerServiceMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerServiceMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerServiceMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerServiceMetricName {
+    fn into(self) -> String {
+        match self {
+            ContainerServiceMetricName::Cpuutilization => "CPUUtilization".to_string(),
+            ContainerServiceMetricName::MemoryUtilization => "MemoryUtilization".to_string(),
+            ContainerServiceMetricName::UnknownVariant(UnknownContainerServiceMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerServiceMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerServiceMetricName::Cpuutilization => &"CPUUtilization",
+            ContainerServiceMetricName::MemoryUtilization => &"MemoryUtilization",
+            ContainerServiceMetricName::UnknownVariant(UnknownContainerServiceMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerServiceMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "CPUUtilization" => ContainerServiceMetricName::Cpuutilization,
+            "MemoryUtilization" => ContainerServiceMetricName::MemoryUtilization,
+            _ => ContainerServiceMetricName::UnknownVariant(UnknownContainerServiceMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerServiceMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CPUUtilization" => ContainerServiceMetricName::Cpuutilization,
+            "MemoryUtilization" => ContainerServiceMetricName::MemoryUtilization,
+            _ => ContainerServiceMetricName::UnknownVariant(UnknownContainerServiceMetricName {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerServiceMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerServiceMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerServiceMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the powers that can be specified for an Amazon Lightsail container service.</p> <p>The power specifies the amount of RAM, the number of vCPUs, and the base price of the container service.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -991,6 +2502,246 @@ pub struct ContainerServicePower {
     pub ram_size_in_gb: Option<f32>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerServicePowerName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerServicePowerName {
+    Large,
+    Medium,
+    Micro,
+    Nano,
+    Small,
+    Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerServicePowerName),
+}
+
+impl Default for ContainerServicePowerName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerServicePowerName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerServicePowerName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerServicePowerName {
+    fn into(self) -> String {
+        match self {
+            ContainerServicePowerName::Large => "large".to_string(),
+            ContainerServicePowerName::Medium => "medium".to_string(),
+            ContainerServicePowerName::Micro => "micro".to_string(),
+            ContainerServicePowerName::Nano => "nano".to_string(),
+            ContainerServicePowerName::Small => "small".to_string(),
+            ContainerServicePowerName::Xlarge => "xlarge".to_string(),
+            ContainerServicePowerName::UnknownVariant(UnknownContainerServicePowerName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerServicePowerName {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerServicePowerName::Large => &"large",
+            ContainerServicePowerName::Medium => &"medium",
+            ContainerServicePowerName::Micro => &"micro",
+            ContainerServicePowerName::Nano => &"nano",
+            ContainerServicePowerName::Small => &"small",
+            ContainerServicePowerName::Xlarge => &"xlarge",
+            ContainerServicePowerName::UnknownVariant(UnknownContainerServicePowerName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerServicePowerName {
+    fn from(name: &str) -> Self {
+        match name {
+            "large" => ContainerServicePowerName::Large,
+            "medium" => ContainerServicePowerName::Medium,
+            "micro" => ContainerServicePowerName::Micro,
+            "nano" => ContainerServicePowerName::Nano,
+            "small" => ContainerServicePowerName::Small,
+            "xlarge" => ContainerServicePowerName::Xlarge,
+            _ => ContainerServicePowerName::UnknownVariant(UnknownContainerServicePowerName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerServicePowerName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "large" => ContainerServicePowerName::Large,
+            "medium" => ContainerServicePowerName::Medium,
+            "micro" => ContainerServicePowerName::Micro,
+            "nano" => ContainerServicePowerName::Nano,
+            "small" => ContainerServicePowerName::Small,
+            "xlarge" => ContainerServicePowerName::Xlarge,
+            _ => {
+                ContainerServicePowerName::UnknownVariant(UnknownContainerServicePowerName { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerServicePowerName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerServicePowerName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerServicePowerName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerServiceProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerServiceProtocol {
+    Http,
+    Https,
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerServiceProtocol),
+}
+
+impl Default for ContainerServiceProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerServiceProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerServiceProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerServiceProtocol {
+    fn into(self) -> String {
+        match self {
+            ContainerServiceProtocol::Http => "HTTP".to_string(),
+            ContainerServiceProtocol::Https => "HTTPS".to_string(),
+            ContainerServiceProtocol::Tcp => "TCP".to_string(),
+            ContainerServiceProtocol::Udp => "UDP".to_string(),
+            ContainerServiceProtocol::UnknownVariant(UnknownContainerServiceProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerServiceProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerServiceProtocol::Http => &"HTTP",
+            ContainerServiceProtocol::Https => &"HTTPS",
+            ContainerServiceProtocol::Tcp => &"TCP",
+            ContainerServiceProtocol::Udp => &"UDP",
+            ContainerServiceProtocol::UnknownVariant(UnknownContainerServiceProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerServiceProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP" => ContainerServiceProtocol::Http,
+            "HTTPS" => ContainerServiceProtocol::Https,
+            "TCP" => ContainerServiceProtocol::Tcp,
+            "UDP" => ContainerServiceProtocol::Udp,
+            _ => ContainerServiceProtocol::UnknownVariant(UnknownContainerServiceProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerServiceProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP" => ContainerServiceProtocol::Http,
+            "HTTPS" => ContainerServiceProtocol::Https,
+            "TCP" => ContainerServiceProtocol::Tcp,
+            "UDP" => ContainerServiceProtocol::Udp,
+            _ => ContainerServiceProtocol::UnknownVariant(UnknownContainerServiceProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerServiceProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerServiceProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerServiceProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the login information for the container image registry of an Amazon Lightsail account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1013,6 +2764,131 @@ pub struct ContainerServiceRegistryLogin {
     pub username: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerServiceState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerServiceState {
+    Deleting,
+    Disabled,
+    Pending,
+    Ready,
+    Running,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerServiceState),
+}
+
+impl Default for ContainerServiceState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerServiceState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerServiceState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerServiceState {
+    fn into(self) -> String {
+        match self {
+            ContainerServiceState::Deleting => "DELETING".to_string(),
+            ContainerServiceState::Disabled => "DISABLED".to_string(),
+            ContainerServiceState::Pending => "PENDING".to_string(),
+            ContainerServiceState::Ready => "READY".to_string(),
+            ContainerServiceState::Running => "RUNNING".to_string(),
+            ContainerServiceState::Updating => "UPDATING".to_string(),
+            ContainerServiceState::UnknownVariant(UnknownContainerServiceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerServiceState {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerServiceState::Deleting => &"DELETING",
+            ContainerServiceState::Disabled => &"DISABLED",
+            ContainerServiceState::Pending => &"PENDING",
+            ContainerServiceState::Ready => &"READY",
+            ContainerServiceState::Running => &"RUNNING",
+            ContainerServiceState::Updating => &"UPDATING",
+            ContainerServiceState::UnknownVariant(UnknownContainerServiceState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerServiceState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => ContainerServiceState::Deleting,
+            "DISABLED" => ContainerServiceState::Disabled,
+            "PENDING" => ContainerServiceState::Pending,
+            "READY" => ContainerServiceState::Ready,
+            "RUNNING" => ContainerServiceState::Running,
+            "UPDATING" => ContainerServiceState::Updating,
+            _ => ContainerServiceState::UnknownVariant(UnknownContainerServiceState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerServiceState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => ContainerServiceState::Deleting,
+            "DISABLED" => ContainerServiceState::Disabled,
+            "PENDING" => ContainerServiceState::Pending,
+            "READY" => ContainerServiceState::Ready,
+            "RUNNING" => ContainerServiceState::Running,
+            "UPDATING" => ContainerServiceState::Updating,
+            _ => ContainerServiceState::UnknownVariant(UnknownContainerServiceState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerServiceState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContainerServiceState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerServiceState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContainerServicesListResult {
@@ -1032,7 +2908,7 @@ pub struct CookieObject {
     /// <p>Specifies which cookies to forward to the distribution's origin for a cache behavior: <code>all</code>, <code>none</code>, or <code>allow-list</code> to forward only the cookies specified in the <code>cookiesAllowList</code> parameter.</p>
     #[serde(rename = "option")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub option: Option<String>,
+    pub option: Option<ForwardValues>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1044,7 +2920,7 @@ pub struct CopySnapshotRequest {
     pub restore_date: Option<String>,
     /// <p>The AWS Region where the source manual or automatic snapshot is located.</p>
     #[serde(rename = "sourceRegion")]
-    pub source_region: String,
+    pub source_region: RegionName,
     /// <p><p>The name of the source instance or disk from which the source automatic snapshot was created.</p> <p>Constraint:</p> <ul> <li> <p>Define this parameter only when copying an automatic snapshot as a manual snapshot. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-keeping-automatic-snapshots">Lightsail Dev Guide</a>.</p> </li> </ul></p>
     #[serde(rename = "sourceResourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1128,7 +3004,7 @@ pub struct CreateContactMethodRequest {
     pub contact_endpoint: String,
     /// <p>The protocol of the contact method, such as <code>Email</code> or <code>SMS</code> (text messaging).</p> <p>The <code>SMS</code> protocol is supported only in the following AWS Regions.</p> <ul> <li> <p>US East (N. Virginia) (<code>us-east-1</code>)</p> </li> <li> <p>US West (Oregon) (<code>us-west-2</code>)</p> </li> <li> <p>Europe (Ireland) (<code>eu-west-1</code>)</p> </li> <li> <p>Asia Pacific (Tokyo) (<code>ap-northeast-1</code>)</p> </li> <li> <p>Asia Pacific (Singapore) (<code>ap-southeast-1</code>)</p> </li> <li> <p>Asia Pacific (Sydney) (<code>ap-southeast-2</code>)</p> </li> </ul> <p>For a list of countries/regions where SMS text messages can be sent, and the latest AWS Regions where SMS text messaging is supported, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html">Supported Regions and Countries</a> in the <i>Amazon SNS Developer Guide</i>.</p> <p>For more information about notifications in Amazon Lightsail, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: ContactProtocol,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1187,7 +3063,7 @@ pub struct CreateContainerServiceRequest {
     pub deployment: Option<ContainerServiceDeploymentRequest>,
     /// <p>The power specification for the container service.</p> <p>The power specifies the amount of memory, vCPUs, and base monthly cost of each node of the container service. The <code>power</code> and <code>scale</code> of a container service makes up its configured capacity. To determine the monthly price of your container service, multiply the base price of the <code>power</code> with the <code>scale</code> (the number of nodes) of the service.</p> <p>Use the <code>GetContainerServicePowers</code> action to get a list of power options that you can specify using this parameter, and their base monthly cost.</p>
     #[serde(rename = "power")]
-    pub power: String,
+    pub power: ContainerServicePowerName,
     /// <p>The public domain names to use with the container service, such as <code>example.com</code> and <code>www.example.com</code>.</p> <p>You can specify up to four public domain names for a container service. The domain names that you specify are used when you create a deployment with a container configured as the public endpoint of your container service.</p> <p>If you don't specify public domain names, then you can use the default domain of the container service.</p> <important> <p>You must create and validate an SSL/TLS certificate before you can use public domain names with your container service. Use the <code>CreateCertificate</code> action to create a certificate for the public domain names you want to use with your container service.</p> </important> <p>You can specify public domain names using a string to array map as shown in the example later on this page.</p>
     #[serde(rename = "publicDomainNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1817,7 +3693,7 @@ pub struct DeleteCertificateResult {
 pub struct DeleteContactMethodRequest {
     /// <p><p>The protocol that will be deleted, such as <code>Email</code> or <code>SMS</code> (text messaging).</p> <note> <p>To delete an <code>Email</code> and an <code>SMS</code> contact method if you added both, you must run separate <code>DeleteContactMethod</code> actions to delete each protocol.</p> </note></p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: ContactProtocol,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2194,7 +4070,7 @@ pub struct DetachStaticIpResult {
 pub struct DisableAddOnRequest {
     /// <p>The add-on type to disable.</p>
     #[serde(rename = "addOnType")]
-    pub add_on_type: String,
+    pub add_on_type: AddOnType,
     /// <p>The name of the source resource for which to disable the add-on.</p>
     #[serde(rename = "resourceName")]
     pub resource_name: String,
@@ -2256,7 +4132,7 @@ pub struct Disk {
     /// <p>The Lightsail resource type (e.g., <code>Disk</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The size of the disk in GB.</p>
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2264,7 +4140,7 @@ pub struct Disk {
     /// <p>Describes the status of the disk.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiskState>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2358,7 +4234,7 @@ pub struct DiskSnapshot {
     /// <p>The Lightsail resource type (e.g., <code>DiskSnapshot</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The size of the disk in GB.</p>
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2366,7 +4242,7 @@ pub struct DiskSnapshot {
     /// <p>The status of the disk snapshot operation.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DiskSnapshotState>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2385,6 +4261,237 @@ pub struct DiskSnapshotInfo {
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size_in_gb: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDiskSnapshotState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DiskSnapshotState {
+    Completed,
+    Error,
+    Pending,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDiskSnapshotState),
+}
+
+impl Default for DiskSnapshotState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DiskSnapshotState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DiskSnapshotState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DiskSnapshotState {
+    fn into(self) -> String {
+        match self {
+            DiskSnapshotState::Completed => "completed".to_string(),
+            DiskSnapshotState::Error => "error".to_string(),
+            DiskSnapshotState::Pending => "pending".to_string(),
+            DiskSnapshotState::Unknown => "unknown".to_string(),
+            DiskSnapshotState::UnknownVariant(UnknownDiskSnapshotState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DiskSnapshotState {
+    fn into(self) -> &'a str {
+        match self {
+            DiskSnapshotState::Completed => &"completed",
+            DiskSnapshotState::Error => &"error",
+            DiskSnapshotState::Pending => &"pending",
+            DiskSnapshotState::Unknown => &"unknown",
+            DiskSnapshotState::UnknownVariant(UnknownDiskSnapshotState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DiskSnapshotState {
+    fn from(name: &str) -> Self {
+        match name {
+            "completed" => DiskSnapshotState::Completed,
+            "error" => DiskSnapshotState::Error,
+            "pending" => DiskSnapshotState::Pending,
+            "unknown" => DiskSnapshotState::Unknown,
+            _ => DiskSnapshotState::UnknownVariant(UnknownDiskSnapshotState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DiskSnapshotState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "completed" => DiskSnapshotState::Completed,
+            "error" => DiskSnapshotState::Error,
+            "pending" => DiskSnapshotState::Pending,
+            "unknown" => DiskSnapshotState::Unknown,
+            _ => DiskSnapshotState::UnknownVariant(UnknownDiskSnapshotState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DiskSnapshotState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DiskSnapshotState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DiskSnapshotState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDiskState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DiskState {
+    Available,
+    Error,
+    InUse,
+    Pending,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDiskState),
+}
+
+impl Default for DiskState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DiskState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DiskState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DiskState {
+    fn into(self) -> String {
+        match self {
+            DiskState::Available => "available".to_string(),
+            DiskState::Error => "error".to_string(),
+            DiskState::InUse => "in-use".to_string(),
+            DiskState::Pending => "pending".to_string(),
+            DiskState::Unknown => "unknown".to_string(),
+            DiskState::UnknownVariant(UnknownDiskState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DiskState {
+    fn into(self) -> &'a str {
+        match self {
+            DiskState::Available => &"available",
+            DiskState::Error => &"error",
+            DiskState::InUse => &"in-use",
+            DiskState::Pending => &"pending",
+            DiskState::Unknown => &"unknown",
+            DiskState::UnknownVariant(UnknownDiskState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DiskState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => DiskState::Available,
+            "error" => DiskState::Error,
+            "in-use" => DiskState::InUse,
+            "pending" => DiskState::Pending,
+            "unknown" => DiskState::Unknown,
+            _ => DiskState::UnknownVariant(UnknownDiskState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DiskState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => DiskState::Available,
+            "error" => DiskState::Error,
+            "in-use" => DiskState::InUse,
+            "pending" => DiskState::Pending,
+            "unknown" => DiskState::Unknown,
+            _ => DiskState::UnknownVariant(UnknownDiskState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DiskState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DiskState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DiskState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the specifications of a distribution bundle.</p>
@@ -2411,6 +4518,130 @@ pub struct DistributionBundle {
     #[serde(rename = "transferPerMonthInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_per_month_in_gb: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDistributionMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DistributionMetricName {
+    BytesDownloaded,
+    BytesUploaded,
+    Http4XxErrorRate,
+    Http5XxErrorRate,
+    Requests,
+    TotalErrorRate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDistributionMetricName),
+}
+
+impl Default for DistributionMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DistributionMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DistributionMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DistributionMetricName {
+    fn into(self) -> String {
+        match self {
+            DistributionMetricName::BytesDownloaded => "BytesDownloaded".to_string(),
+            DistributionMetricName::BytesUploaded => "BytesUploaded".to_string(),
+            DistributionMetricName::Http4XxErrorRate => "Http4xxErrorRate".to_string(),
+            DistributionMetricName::Http5XxErrorRate => "Http5xxErrorRate".to_string(),
+            DistributionMetricName::Requests => "Requests".to_string(),
+            DistributionMetricName::TotalErrorRate => "TotalErrorRate".to_string(),
+            DistributionMetricName::UnknownVariant(UnknownDistributionMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DistributionMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            DistributionMetricName::BytesDownloaded => &"BytesDownloaded",
+            DistributionMetricName::BytesUploaded => &"BytesUploaded",
+            DistributionMetricName::Http4XxErrorRate => &"Http4xxErrorRate",
+            DistributionMetricName::Http5XxErrorRate => &"Http5xxErrorRate",
+            DistributionMetricName::Requests => &"Requests",
+            DistributionMetricName::TotalErrorRate => &"TotalErrorRate",
+            DistributionMetricName::UnknownVariant(UnknownDistributionMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DistributionMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "BytesDownloaded" => DistributionMetricName::BytesDownloaded,
+            "BytesUploaded" => DistributionMetricName::BytesUploaded,
+            "Http4xxErrorRate" => DistributionMetricName::Http4XxErrorRate,
+            "Http5xxErrorRate" => DistributionMetricName::Http5XxErrorRate,
+            "Requests" => DistributionMetricName::Requests,
+            "TotalErrorRate" => DistributionMetricName::TotalErrorRate,
+            _ => DistributionMetricName::UnknownVariant(UnknownDistributionMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DistributionMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BytesDownloaded" => DistributionMetricName::BytesDownloaded,
+            "BytesUploaded" => DistributionMetricName::BytesUploaded,
+            "Http4xxErrorRate" => DistributionMetricName::Http4XxErrorRate,
+            "Http5xxErrorRate" => DistributionMetricName::Http5XxErrorRate,
+            "Requests" => DistributionMetricName::Requests,
+            "TotalErrorRate" => DistributionMetricName::TotalErrorRate,
+            _ => DistributionMetricName::UnknownVariant(UnknownDistributionMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DistributionMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DistributionMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DistributionMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a domain where you are storing recordsets in Lightsail.</p>
@@ -2440,7 +4671,7 @@ pub struct Domain {
     /// <p>The resource type. </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2570,7 +4801,7 @@ pub struct ExportSnapshotRecord {
     /// <p>The Lightsail resource type (e.g., <code>ExportSnapshotRecord</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>A list of objects describing the source of the export snapshot record.</p>
     #[serde(rename = "sourceInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2578,7 +4809,7 @@ pub struct ExportSnapshotRecord {
     /// <p>The state of the export snapshot record.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<RecordState>,
 }
 
 /// <p>Describes the source of an export snapshot record.</p>
@@ -2616,7 +4847,116 @@ pub struct ExportSnapshotRecordSourceInfo {
     /// <p>The Lightsail resource type (e.g., <code>InstanceSnapshot</code> or <code>DiskSnapshot</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ExportSnapshotRecordSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportSnapshotRecordSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportSnapshotRecordSourceType {
+    DiskSnapshot,
+    InstanceSnapshot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportSnapshotRecordSourceType),
+}
+
+impl Default for ExportSnapshotRecordSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportSnapshotRecordSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportSnapshotRecordSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportSnapshotRecordSourceType {
+    fn into(self) -> String {
+        match self {
+            ExportSnapshotRecordSourceType::DiskSnapshot => "DiskSnapshot".to_string(),
+            ExportSnapshotRecordSourceType::InstanceSnapshot => "InstanceSnapshot".to_string(),
+            ExportSnapshotRecordSourceType::UnknownVariant(
+                UnknownExportSnapshotRecordSourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportSnapshotRecordSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ExportSnapshotRecordSourceType::DiskSnapshot => &"DiskSnapshot",
+            ExportSnapshotRecordSourceType::InstanceSnapshot => &"InstanceSnapshot",
+            ExportSnapshotRecordSourceType::UnknownVariant(
+                UnknownExportSnapshotRecordSourceType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportSnapshotRecordSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DiskSnapshot" => ExportSnapshotRecordSourceType::DiskSnapshot,
+            "InstanceSnapshot" => ExportSnapshotRecordSourceType::InstanceSnapshot,
+            _ => ExportSnapshotRecordSourceType::UnknownVariant(
+                UnknownExportSnapshotRecordSourceType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ExportSnapshotRecordSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DiskSnapshot" => ExportSnapshotRecordSourceType::DiskSnapshot,
+            "InstanceSnapshot" => ExportSnapshotRecordSourceType::InstanceSnapshot,
+            _ => ExportSnapshotRecordSourceType::UnknownVariant(
+                UnknownExportSnapshotRecordSourceType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportSnapshotRecordSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExportSnapshotRecordSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportSnapshotRecordSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2634,6 +4974,111 @@ pub struct ExportSnapshotResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownForwardValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ForwardValues {
+    All,
+    AllowList,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownForwardValues),
+}
+
+impl Default for ForwardValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ForwardValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ForwardValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ForwardValues {
+    fn into(self) -> String {
+        match self {
+            ForwardValues::All => "all".to_string(),
+            ForwardValues::AllowList => "allow-list".to_string(),
+            ForwardValues::None => "none".to_string(),
+            ForwardValues::UnknownVariant(UnknownForwardValues { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ForwardValues {
+    fn into(self) -> &'a str {
+        match self {
+            ForwardValues::All => &"all",
+            ForwardValues::AllowList => &"allow-list",
+            ForwardValues::None => &"none",
+            ForwardValues::UnknownVariant(UnknownForwardValues { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ForwardValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => ForwardValues::All,
+            "allow-list" => ForwardValues::AllowList,
+            "none" => ForwardValues::None,
+            _ => ForwardValues::UnknownVariant(UnknownForwardValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ForwardValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => ForwardValues::All,
+            "allow-list" => ForwardValues::AllowList,
+            "none" => ForwardValues::None,
+            _ => ForwardValues::UnknownVariant(UnknownForwardValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ForwardValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ForwardValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ForwardValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2710,7 +5155,7 @@ pub struct GetAutoSnapshotsResult {
     /// <p>The resource type (e.g., <code>Instance</code> or <code>Disk</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2775,7 +5220,7 @@ pub struct GetCertificatesRequest {
     /// <p>The status of the certificates for which to return information.</p> <p>For example, specify <code>ISSUED</code> to return only certificates with an <code>ISSUED</code> status.</p> <p>When omitted, the response includes all of your certificates in the AWS Region where the request is made, regardless of their current status.</p>
     #[serde(rename = "certificateStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_statuses: Option<Vec<String>>,
+    pub certificate_statuses: Option<Vec<CertificateStatus>>,
     /// <p>Indicates whether to include detailed information about the certificates in the response.</p> <p>When omitted, the response includes only the certificate names, Amazon Resource Names (ARNs), domain names, and tags.</p>
     #[serde(rename = "includeCertificateDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2819,7 +5264,7 @@ pub struct GetContactMethodsRequest {
     /// <p>The protocols used to send notifications, such as <code>Email</code>, or <code>SMS</code> (text messaging).</p> <p>Specify a protocol in your request to return information about a specific contact method protocol.</p>
     #[serde(rename = "protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocols: Option<Vec<String>>,
+    pub protocols: Option<Vec<ContactProtocol>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2926,7 +5371,7 @@ pub struct GetContainerServiceMetricDataRequest {
     pub end_time: f64,
     /// <p><p>The metric for which you want to return information.</p> <p>Valid container service metric names are listed below, along with the most useful statistics to include in your request, and the published unit value.</p> <ul> <li> <p> <code>CPUUtilization</code> - The average percentage of compute units that are currently in use across all nodes of the container service. This metric identifies the processing power required to run containers on each node of the container service.</p> <p>Statistics: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p>Unit: The published unit is <code>Percent</code>.</p> </li> <li> <p> <code>MemoryUtilization</code> - The average percentage of available memory that is currently in use across all nodes of the container service. This metric identifies the memory required to run containers on each node of the container service.</p> <p>Statistics: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p>Unit: The published unit is <code>Percent</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: ContainerServiceMetricName,
     /// <p>The granularity, in seconds, of the returned data points.</p> <p>All container service metric data is available in 5-minute (300 seconds) granularity.</p>
     #[serde(rename = "period")]
     pub period: i64,
@@ -2938,7 +5383,7 @@ pub struct GetContainerServiceMetricDataRequest {
     pub start_time: f64,
     /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of <code>Sum</code> / <code>SampleCount</code> during the specified period. By comparing this statistic with the <code>Minimum</code> and <code>Maximum</code> values, you can determine the full scope of a metric and how close the average use is to the <code>Minimum</code> and <code>Maximum</code> values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
-    pub statistics: Vec<String>,
+    pub statistics: Vec<MetricStatistic>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2951,7 +5396,7 @@ pub struct GetContainerServiceMetricDataResult {
     /// <p>The name of the metric returned. </p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<ContainerServiceMetricName>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3100,7 +5545,7 @@ pub struct GetDistributionMetricDataRequest {
     pub end_time: f64,
     /// <p><p>The metric for which you want to return information.</p> <p>Valid distribution metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>Requests</code> </b> - The total number of viewer requests received by your Lightsail distribution, for all HTTP methods, and for both HTTP and HTTPS requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>BytesDownloaded</code> </b> - The number of bytes downloaded by viewers for GET, HEAD, and OPTIONS requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>BytesUploaded </code> </b> - The number of bytes uploaded to your origin by your Lightsail distribution, using POST and PUT requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>TotalErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status code was 4xx or 5xx.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>4xxErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status cod was 4xx. In these cases, the client or client viewer may have made an error. For example, a status code of 404 (Not Found) means that the client requested an object that could not be found.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>5xxErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status code was 5xx. In these cases, the origin server did not satisfy the requests. For example, a status code of 503 (Service Unavailable) means that the origin server is currently unavailable.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: DistributionMetricName,
     /// <p>The granularity, in seconds, for the metric data points that will be returned.</p>
     #[serde(rename = "period")]
     pub period: i64,
@@ -3109,10 +5554,10 @@ pub struct GetDistributionMetricDataRequest {
     pub start_time: f64,
     /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
-    pub statistics: Vec<String>,
+    pub statistics: Vec<MetricStatistic>,
     /// <p>The unit for the metric data request.</p> <p>Valid units depend on the metric data being requested. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
-    pub unit: String,
+    pub unit: MetricUnit,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3125,7 +5570,7 @@ pub struct GetDistributionMetricDataResult {
     /// <p>The name of the metric returned.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<DistributionMetricName>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3224,7 +5669,7 @@ pub struct GetInstanceAccessDetailsRequest {
     /// <p>The protocol to use to connect to your instance. Defaults to <code>ssh</code>.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<InstanceAccessProtocol>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3247,7 +5692,7 @@ pub struct GetInstanceMetricDataRequest {
     pub instance_name: String,
     /// <p><p>The metric for which you want to return information.</p> <p>Valid instance metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>BurstCapacityPercentage</code> </b> - The percentage of CPU performance available for your instance to burst above its baseline. Your instance continuously accrues and consumes burst capacity. Burst capacity stops accruing when your instance&#39;s <code>BurstCapacityPercentage</code> reaches 100%. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-viewing-instance-burst-capacity">Viewing instance burst capacity in Amazon Lightsail</a>.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>BurstCapacityTime</code> </b> - The available amount of time for your instance to burst at 100% CPU utilization. Your instance continuously accrues and consumes burst capacity. Burst capacity time stops accruing when your instance&#39;s <code>BurstCapacityPercentage</code> metric reaches 100%.</p> <p>Burst capacity time is consumed at the full rate only when your instance operates at 100% CPU utilization. For example, if your instance operates at 50% CPU utilization in the burstable zone for a 5-minute period, then it consumes CPU burst capacity minutes at a 50% rate in that period. Your instance consumed 2 minutes and 30 seconds of CPU burst capacity minutes in the 5-minute period. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-viewing-instance-burst-capacity">Viewing instance burst capacity in Amazon Lightsail</a>.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Seconds</code>.</p> </li> <li> <p> <b> <code>CPUUtilization</code> </b> - The percentage of allocated compute units that are currently in use on the instance. This metric identifies the processing power to run the applications on the instance. Tools in your operating system can show a lower percentage than Lightsail when the instance is not allocated a full processor core.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>NetworkIn</code> </b> - The number of bytes received on all network interfaces by the instance. This metric identifies the volume of incoming network traffic to the instance. The number reported is the number of bytes received during the period. Because this metric is reported in 5-minute intervals, divide the reported number by 300 to find Bytes/second.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>NetworkOut</code> </b> - The number of bytes sent out on all network interfaces by the instance. This metric identifies the volume of outgoing network traffic from the instance. The number reported is the number of bytes sent during the period. Because this metric is reported in 5-minute intervals, divide the reported number by 300 to find Bytes/second.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed</code> </b> - Reports whether the instance passed or failed both the instance status check and the system status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed<em>Instance</code> </b> - Reports whether the instance passed or failed the instance status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>StatusCheckFailed</em>System</code> </b> - Reports whether the instance passed or failed the system status check. This metric can be either 0 (passed) or 1 (failed). This metric data is available in 1-minute (60 seconds) granularity.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: InstanceMetricName,
     /// <p>The granularity, in seconds, of the returned data points.</p> <p>The <code>StatusCheckFailed</code>, <code>StatusCheckFailed_Instance</code>, and <code>StatusCheckFailed_System</code> instance metric data is available in 1-minute (60 seconds) granularity. All other instance metric data is available in 5-minute (300 seconds) granularity.</p>
     #[serde(rename = "period")]
     pub period: i64,
@@ -3256,10 +5701,10 @@ pub struct GetInstanceMetricDataRequest {
     pub start_time: f64,
     /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
-    pub statistics: Vec<String>,
+    pub statistics: Vec<MetricStatistic>,
     /// <p>The unit for the metric data request. Valid units depend on the metric data being requested. For the valid units to specify with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
-    pub unit: String,
+    pub unit: MetricUnit,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3272,7 +5717,7 @@ pub struct GetInstanceMetricDataResult {
     /// <p>The name of the metric returned.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<InstanceMetricName>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3437,7 +5882,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     pub load_balancer_name: String,
     /// <p><p>The metric for which you want to return information.</p> <p>Valid load balancer metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer due to a TLS error generated by the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP 2XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP 3XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP 4XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP 5XX response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originated from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests were not received by the target instance. This count does not include response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originated from the load balancer. This does not include any response codes generated by the target instance. This metric is reported if there are no healthy instances attached to the load balancer, or if the request rate exceeds the capacity of the instances (spillover) or the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Seconds</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: LoadBalancerMetricName,
     /// <p>The granularity, in seconds, of the returned data points.</p>
     #[serde(rename = "period")]
     pub period: i64,
@@ -3446,10 +5891,10 @@ pub struct GetLoadBalancerMetricDataRequest {
     pub start_time: f64,
     /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
-    pub statistics: Vec<String>,
+    pub statistics: Vec<MetricStatistic>,
     /// <p>The unit for the metric data request. Valid units depend on the metric data being requested. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
-    pub unit: String,
+    pub unit: MetricUnit,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3462,7 +5907,7 @@ pub struct GetLoadBalancerMetricDataResult {
     /// <p>The name of the metric returned.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<LoadBalancerMetricName>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3747,7 +6192,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordRequest {
     /// <p>The password version to return.</p> <p>Specifying <code>CURRENT</code> or <code>PREVIOUS</code> returns the current or previous passwords respectively. Specifying <code>PENDING</code> returns the newest version of the password that will rotate to <code>CURRENT</code>. After the <code>PENDING</code> password rotates to <code>CURRENT</code>, the <code>PENDING</code> password is no longer available.</p> <p>Default: <code>CURRENT</code> </p>
     #[serde(rename = "passwordVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub password_version: Option<String>,
+    pub password_version: Option<RelationalDatabasePasswordVersion>,
     /// <p>The name of your database for which to get the master user password.</p>
     #[serde(rename = "relationalDatabaseName")]
     pub relational_database_name: String,
@@ -3774,7 +6219,7 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     pub end_time: f64,
     /// <p><p>The metric for which you want to return information.</p> <p>Valid relational database metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value. All relational database metric data is available in 1-minute (60 seconds) granularity.</p> <ul> <li> <p> <b> <code>CPUUtilization</code> </b> - The percentage of CPU utilization currently in use on the database.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>DatabaseConnections</code> </b> - The number of database connections in use.</p> <p> <code>Statistics</code>: The most useful statistics are <code>Maximum</code> and <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>DiskQueueDepth</code> </b> - The number of outstanding IOs (read/write requests) that are waiting to access the disk.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Count</code>.</p> </li> <li> <p> <b> <code>FreeStorageSpace</code> </b> - The amount of available storage space.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes</code>.</p> </li> <li> <p> <b> <code>NetworkReceiveThroughput</code> </b> - The incoming (Receive) network traffic on the database, including both customer database traffic and AWS traffic used for monitoring and replication.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes/Second</code>.</p> </li> <li> <p> <b> <code>NetworkTransmitThroughput</code> </b> - The outgoing (Transmit) network traffic on the database, including both customer database traffic and AWS traffic used for monitoring and replication.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Bytes/Second</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: RelationalDatabaseMetricName,
     /// <p>The granularity, in seconds, of the returned data points.</p> <p>All relational database metric data is available in 1-minute (60 seconds) granularity.</p>
     #[serde(rename = "period")]
     pub period: i64,
@@ -3786,10 +6231,10 @@ pub struct GetRelationalDatabaseMetricDataRequest {
     pub start_time: f64,
     /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
-    pub statistics: Vec<String>,
+    pub statistics: Vec<MetricStatistic>,
     /// <p>The unit for the metric data request. Valid units depend on the metric data being requested. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
     #[serde(rename = "unit")]
-    pub unit: String,
+    pub unit: MetricUnit,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3802,7 +6247,7 @@ pub struct GetRelationalDatabaseMetricDataResult {
     /// <p>The name of the metric returned.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<RelationalDatabaseMetricName>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3947,17 +6392,182 @@ pub struct GetStaticIpsResult {
     pub static_ips: Option<Vec<StaticIp>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHeaderEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HeaderEnum {
+    Accept,
+    AcceptCharset,
+    AcceptDatetime,
+    AcceptEncoding,
+    AcceptLanguage,
+    Authorization,
+    CloudFrontForwardedProto,
+    CloudFrontIsDesktopViewer,
+    CloudFrontIsMobileViewer,
+    CloudFrontIsSmartTVViewer,
+    CloudFrontIsTabletViewer,
+    CloudFrontViewerCountry,
+    Host,
+    Origin,
+    Referer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHeaderEnum),
+}
+
+impl Default for HeaderEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HeaderEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HeaderEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HeaderEnum {
+    fn into(self) -> String {
+        match self {
+            HeaderEnum::Accept => "Accept".to_string(),
+            HeaderEnum::AcceptCharset => "Accept-Charset".to_string(),
+            HeaderEnum::AcceptDatetime => "Accept-Datetime".to_string(),
+            HeaderEnum::AcceptEncoding => "Accept-Encoding".to_string(),
+            HeaderEnum::AcceptLanguage => "Accept-Language".to_string(),
+            HeaderEnum::Authorization => "Authorization".to_string(),
+            HeaderEnum::CloudFrontForwardedProto => "CloudFront-Forwarded-Proto".to_string(),
+            HeaderEnum::CloudFrontIsDesktopViewer => "CloudFront-Is-Desktop-Viewer".to_string(),
+            HeaderEnum::CloudFrontIsMobileViewer => "CloudFront-Is-Mobile-Viewer".to_string(),
+            HeaderEnum::CloudFrontIsSmartTVViewer => "CloudFront-Is-SmartTV-Viewer".to_string(),
+            HeaderEnum::CloudFrontIsTabletViewer => "CloudFront-Is-Tablet-Viewer".to_string(),
+            HeaderEnum::CloudFrontViewerCountry => "CloudFront-Viewer-Country".to_string(),
+            HeaderEnum::Host => "Host".to_string(),
+            HeaderEnum::Origin => "Origin".to_string(),
+            HeaderEnum::Referer => "Referer".to_string(),
+            HeaderEnum::UnknownVariant(UnknownHeaderEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HeaderEnum {
+    fn into(self) -> &'a str {
+        match self {
+            HeaderEnum::Accept => &"Accept",
+            HeaderEnum::AcceptCharset => &"Accept-Charset",
+            HeaderEnum::AcceptDatetime => &"Accept-Datetime",
+            HeaderEnum::AcceptEncoding => &"Accept-Encoding",
+            HeaderEnum::AcceptLanguage => &"Accept-Language",
+            HeaderEnum::Authorization => &"Authorization",
+            HeaderEnum::CloudFrontForwardedProto => &"CloudFront-Forwarded-Proto",
+            HeaderEnum::CloudFrontIsDesktopViewer => &"CloudFront-Is-Desktop-Viewer",
+            HeaderEnum::CloudFrontIsMobileViewer => &"CloudFront-Is-Mobile-Viewer",
+            HeaderEnum::CloudFrontIsSmartTVViewer => &"CloudFront-Is-SmartTV-Viewer",
+            HeaderEnum::CloudFrontIsTabletViewer => &"CloudFront-Is-Tablet-Viewer",
+            HeaderEnum::CloudFrontViewerCountry => &"CloudFront-Viewer-Country",
+            HeaderEnum::Host => &"Host",
+            HeaderEnum::Origin => &"Origin",
+            HeaderEnum::Referer => &"Referer",
+            HeaderEnum::UnknownVariant(UnknownHeaderEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HeaderEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "Accept" => HeaderEnum::Accept,
+            "Accept-Charset" => HeaderEnum::AcceptCharset,
+            "Accept-Datetime" => HeaderEnum::AcceptDatetime,
+            "Accept-Encoding" => HeaderEnum::AcceptEncoding,
+            "Accept-Language" => HeaderEnum::AcceptLanguage,
+            "Authorization" => HeaderEnum::Authorization,
+            "CloudFront-Forwarded-Proto" => HeaderEnum::CloudFrontForwardedProto,
+            "CloudFront-Is-Desktop-Viewer" => HeaderEnum::CloudFrontIsDesktopViewer,
+            "CloudFront-Is-Mobile-Viewer" => HeaderEnum::CloudFrontIsMobileViewer,
+            "CloudFront-Is-SmartTV-Viewer" => HeaderEnum::CloudFrontIsSmartTVViewer,
+            "CloudFront-Is-Tablet-Viewer" => HeaderEnum::CloudFrontIsTabletViewer,
+            "CloudFront-Viewer-Country" => HeaderEnum::CloudFrontViewerCountry,
+            "Host" => HeaderEnum::Host,
+            "Origin" => HeaderEnum::Origin,
+            "Referer" => HeaderEnum::Referer,
+            _ => HeaderEnum::UnknownVariant(UnknownHeaderEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HeaderEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Accept" => HeaderEnum::Accept,
+            "Accept-Charset" => HeaderEnum::AcceptCharset,
+            "Accept-Datetime" => HeaderEnum::AcceptDatetime,
+            "Accept-Encoding" => HeaderEnum::AcceptEncoding,
+            "Accept-Language" => HeaderEnum::AcceptLanguage,
+            "Authorization" => HeaderEnum::Authorization,
+            "CloudFront-Forwarded-Proto" => HeaderEnum::CloudFrontForwardedProto,
+            "CloudFront-Is-Desktop-Viewer" => HeaderEnum::CloudFrontIsDesktopViewer,
+            "CloudFront-Is-Mobile-Viewer" => HeaderEnum::CloudFrontIsMobileViewer,
+            "CloudFront-Is-SmartTV-Viewer" => HeaderEnum::CloudFrontIsSmartTVViewer,
+            "CloudFront-Is-Tablet-Viewer" => HeaderEnum::CloudFrontIsTabletViewer,
+            "CloudFront-Viewer-Country" => HeaderEnum::CloudFrontViewerCountry,
+            "Host" => HeaderEnum::Host,
+            "Origin" => HeaderEnum::Origin,
+            "Referer" => HeaderEnum::Referer,
+            _ => HeaderEnum::UnknownVariant(UnknownHeaderEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HeaderEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HeaderEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HeaderEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the request headers that a Lightsail distribution bases caching on.</p> <p>For the headers that you specify, your distribution caches separate versions of the specified content based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure your distribution to cache your content based on values in the <code>product</code> header. Your distribution forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HeaderObject {
     /// <p>The specific headers to forward to your distribution's origin.</p>
     #[serde(rename = "headersAllowList")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub headers_allow_list: Option<Vec<String>>,
+    pub headers_allow_list: Option<Vec<HeaderEnum>>,
     /// <p><p>The headers that you want your distribution to forward to your origin and base caching on.</p> <p>You can configure your distribution to do one of the following:</p> <ul> <li> <p> <b> <code>all</code> </b> - Forward all headers to your origin.</p> </li> <li> <p> <b> <code>none</code> </b> - Forward only the default headers.</p> </li> <li> <p> <b> <code>allow-list</code> </b> - Forward only the headers you specify using the <code>headersAllowList</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "option")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub option: Option<String>,
+    pub option: Option<ForwardValues>,
 }
 
 /// <p>Describes the public SSH host keys or the RDP certificate.</p>
@@ -4025,11 +6635,11 @@ pub struct InputOrigin {
     /// <p>The protocol that your Amazon Lightsail distribution uses when establishing a connection with your origin to pull content.</p>
     #[serde(rename = "protocolPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_policy: Option<String>,
+    pub protocol_policy: Option<OriginProtocolPolicyEnum>,
     /// <p>The AWS Region name of the origin resource.</p>
     #[serde(rename = "regionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub region_name: Option<String>,
+    pub region_name: Option<RegionName>,
 }
 
 /// <p>Describes an instance (a virtual private server).</p>
@@ -4095,7 +6705,7 @@ pub struct Instance {
     /// <p>The type of resource (usually <code>Instance</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The name of the SSH key being used to connect to the instance (e.g., <code>LightsailDefaultKeyPair</code>).</p>
     #[serde(rename = "sshKeyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4157,11 +6767,115 @@ pub struct InstanceAccessDetails {
     /// <p>The protocol for these Amazon Lightsail instance access details.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<InstanceAccessProtocol>,
     /// <p>The user name to use when logging in to the Amazon Lightsail instance.</p>
     #[serde(rename = "username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceAccessProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceAccessProtocol {
+    Rdp,
+    Ssh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceAccessProtocol),
+}
+
+impl Default for InstanceAccessProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceAccessProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceAccessProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceAccessProtocol {
+    fn into(self) -> String {
+        match self {
+            InstanceAccessProtocol::Rdp => "rdp".to_string(),
+            InstanceAccessProtocol::Ssh => "ssh".to_string(),
+            InstanceAccessProtocol::UnknownVariant(UnknownInstanceAccessProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceAccessProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceAccessProtocol::Rdp => &"rdp",
+            InstanceAccessProtocol::Ssh => &"ssh",
+            InstanceAccessProtocol::UnknownVariant(UnknownInstanceAccessProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceAccessProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "rdp" => InstanceAccessProtocol::Rdp,
+            "ssh" => InstanceAccessProtocol::Ssh,
+            _ => InstanceAccessProtocol::UnknownVariant(UnknownInstanceAccessProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceAccessProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "rdp" => InstanceAccessProtocol::Rdp,
+            "ssh" => InstanceAccessProtocol::Ssh,
+            _ => InstanceAccessProtocol::UnknownVariant(UnknownInstanceAccessProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceAccessProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceAccessProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceAccessProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the Amazon Elastic Compute Cloud instance and related resources to be created using the <code>create cloud formation stack</code> operation.</p>
@@ -4176,7 +6890,7 @@ pub struct InstanceEntry {
     pub instance_type: String,
     /// <p><p>The port configuration to use for the new Amazon EC2 instance.</p> <p>The following configuration options are available:</p> <ul> <li> <p> <code>DEFAULT</code> - Use the default firewall settings from the Lightsail instance blueprint.</p> </li> <li> <p> <code>INSTANCE</code> - Use the configured firewall settings from the source Lightsail instance.</p> </li> <li> <p> <code>NONE</code> - Use the default Amazon EC2 security group.</p> </li> <li> <p> <code>CLOSED</code> - All ports closed.</p> </li> </ul> <note> <p>If you configured <code>lightsail-connect</code> as a <code>cidrListAliases</code> on your instance, or if you chose to allow the Lightsail browser-based SSH or RDP clients to connect to your instance, that configuration is not carried over to your new Amazon EC2 instance.</p> </note></p>
     #[serde(rename = "portInfoSource")]
-    pub port_info_source: String,
+    pub port_info_source: PortInfoSourceType,
     /// <p>The name of the export snapshot record, which contains the exported Lightsail instance snapshot that will be used as the source of the new Amazon EC2 instance.</p> <p>Use the <code>get export snapshot records</code> operation to get a list of export snapshot records that you can use to create a CloudFormation stack.</p>
     #[serde(rename = "sourceName")]
     pub source_name: String,
@@ -4204,6 +6918,295 @@ pub struct InstanceHardware {
     pub ram_size_in_gb: Option<f32>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceHealthReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceHealthReason {
+    InstanceDeregistrationInProgress,
+    InstanceFailedHealthChecks,
+    InstanceInvalidState,
+    InstanceIpUnusable,
+    InstanceNotInUse,
+    InstanceNotRegistered,
+    InstanceResponseCodeMismatch,
+    InstanceTimeout,
+    LbInitialHealthChecking,
+    LbInternalError,
+    LbRegistrationInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceHealthReason),
+}
+
+impl Default for InstanceHealthReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceHealthReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceHealthReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceHealthReason {
+    fn into(self) -> String {
+        match self {
+            InstanceHealthReason::InstanceDeregistrationInProgress => {
+                "Instance.DeregistrationInProgress".to_string()
+            }
+            InstanceHealthReason::InstanceFailedHealthChecks => {
+                "Instance.FailedHealthChecks".to_string()
+            }
+            InstanceHealthReason::InstanceInvalidState => "Instance.InvalidState".to_string(),
+            InstanceHealthReason::InstanceIpUnusable => "Instance.IpUnusable".to_string(),
+            InstanceHealthReason::InstanceNotInUse => "Instance.NotInUse".to_string(),
+            InstanceHealthReason::InstanceNotRegistered => "Instance.NotRegistered".to_string(),
+            InstanceHealthReason::InstanceResponseCodeMismatch => {
+                "Instance.ResponseCodeMismatch".to_string()
+            }
+            InstanceHealthReason::InstanceTimeout => "Instance.Timeout".to_string(),
+            InstanceHealthReason::LbInitialHealthChecking => "Lb.InitialHealthChecking".to_string(),
+            InstanceHealthReason::LbInternalError => "Lb.InternalError".to_string(),
+            InstanceHealthReason::LbRegistrationInProgress => {
+                "Lb.RegistrationInProgress".to_string()
+            }
+            InstanceHealthReason::UnknownVariant(UnknownInstanceHealthReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceHealthReason {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceHealthReason::InstanceDeregistrationInProgress => {
+                &"Instance.DeregistrationInProgress"
+            }
+            InstanceHealthReason::InstanceFailedHealthChecks => &"Instance.FailedHealthChecks",
+            InstanceHealthReason::InstanceInvalidState => &"Instance.InvalidState",
+            InstanceHealthReason::InstanceIpUnusable => &"Instance.IpUnusable",
+            InstanceHealthReason::InstanceNotInUse => &"Instance.NotInUse",
+            InstanceHealthReason::InstanceNotRegistered => &"Instance.NotRegistered",
+            InstanceHealthReason::InstanceResponseCodeMismatch => &"Instance.ResponseCodeMismatch",
+            InstanceHealthReason::InstanceTimeout => &"Instance.Timeout",
+            InstanceHealthReason::LbInitialHealthChecking => &"Lb.InitialHealthChecking",
+            InstanceHealthReason::LbInternalError => &"Lb.InternalError",
+            InstanceHealthReason::LbRegistrationInProgress => &"Lb.RegistrationInProgress",
+            InstanceHealthReason::UnknownVariant(UnknownInstanceHealthReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceHealthReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "Instance.DeregistrationInProgress" => {
+                InstanceHealthReason::InstanceDeregistrationInProgress
+            }
+            "Instance.FailedHealthChecks" => InstanceHealthReason::InstanceFailedHealthChecks,
+            "Instance.InvalidState" => InstanceHealthReason::InstanceInvalidState,
+            "Instance.IpUnusable" => InstanceHealthReason::InstanceIpUnusable,
+            "Instance.NotInUse" => InstanceHealthReason::InstanceNotInUse,
+            "Instance.NotRegistered" => InstanceHealthReason::InstanceNotRegistered,
+            "Instance.ResponseCodeMismatch" => InstanceHealthReason::InstanceResponseCodeMismatch,
+            "Instance.Timeout" => InstanceHealthReason::InstanceTimeout,
+            "Lb.InitialHealthChecking" => InstanceHealthReason::LbInitialHealthChecking,
+            "Lb.InternalError" => InstanceHealthReason::LbInternalError,
+            "Lb.RegistrationInProgress" => InstanceHealthReason::LbRegistrationInProgress,
+            _ => InstanceHealthReason::UnknownVariant(UnknownInstanceHealthReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceHealthReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Instance.DeregistrationInProgress" => {
+                InstanceHealthReason::InstanceDeregistrationInProgress
+            }
+            "Instance.FailedHealthChecks" => InstanceHealthReason::InstanceFailedHealthChecks,
+            "Instance.InvalidState" => InstanceHealthReason::InstanceInvalidState,
+            "Instance.IpUnusable" => InstanceHealthReason::InstanceIpUnusable,
+            "Instance.NotInUse" => InstanceHealthReason::InstanceNotInUse,
+            "Instance.NotRegistered" => InstanceHealthReason::InstanceNotRegistered,
+            "Instance.ResponseCodeMismatch" => InstanceHealthReason::InstanceResponseCodeMismatch,
+            "Instance.Timeout" => InstanceHealthReason::InstanceTimeout,
+            "Lb.InitialHealthChecking" => InstanceHealthReason::LbInitialHealthChecking,
+            "Lb.InternalError" => InstanceHealthReason::LbInternalError,
+            "Lb.RegistrationInProgress" => InstanceHealthReason::LbRegistrationInProgress,
+            _ => InstanceHealthReason::UnknownVariant(UnknownInstanceHealthReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceHealthReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceHealthReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceHealthReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceHealthState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceHealthState {
+    Draining,
+    Healthy,
+    Initial,
+    Unavailable,
+    Unhealthy,
+    Unused,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceHealthState),
+}
+
+impl Default for InstanceHealthState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceHealthState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceHealthState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceHealthState {
+    fn into(self) -> String {
+        match self {
+            InstanceHealthState::Draining => "draining".to_string(),
+            InstanceHealthState::Healthy => "healthy".to_string(),
+            InstanceHealthState::Initial => "initial".to_string(),
+            InstanceHealthState::Unavailable => "unavailable".to_string(),
+            InstanceHealthState::Unhealthy => "unhealthy".to_string(),
+            InstanceHealthState::Unused => "unused".to_string(),
+            InstanceHealthState::UnknownVariant(UnknownInstanceHealthState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceHealthState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceHealthState::Draining => &"draining",
+            InstanceHealthState::Healthy => &"healthy",
+            InstanceHealthState::Initial => &"initial",
+            InstanceHealthState::Unavailable => &"unavailable",
+            InstanceHealthState::Unhealthy => &"unhealthy",
+            InstanceHealthState::Unused => &"unused",
+            InstanceHealthState::UnknownVariant(UnknownInstanceHealthState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceHealthState {
+    fn from(name: &str) -> Self {
+        match name {
+            "draining" => InstanceHealthState::Draining,
+            "healthy" => InstanceHealthState::Healthy,
+            "initial" => InstanceHealthState::Initial,
+            "unavailable" => InstanceHealthState::Unavailable,
+            "unhealthy" => InstanceHealthState::Unhealthy,
+            "unused" => InstanceHealthState::Unused,
+            _ => InstanceHealthState::UnknownVariant(UnknownInstanceHealthState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceHealthState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "draining" => InstanceHealthState::Draining,
+            "healthy" => InstanceHealthState::Healthy,
+            "initial" => InstanceHealthState::Initial,
+            "unavailable" => InstanceHealthState::Unavailable,
+            "unhealthy" => InstanceHealthState::Unhealthy,
+            "unused" => InstanceHealthState::Unused,
+            _ => InstanceHealthState::UnknownVariant(UnknownInstanceHealthState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceHealthState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceHealthState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceHealthState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes information about the health of the instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4211,15 +7214,151 @@ pub struct InstanceHealthSummary {
     /// <p>Describes the overall instance health. Valid values are below.</p>
     #[serde(rename = "instanceHealth")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_health: Option<String>,
+    pub instance_health: Option<InstanceHealthState>,
     /// <p><p>More information about the instance health. If the <code>instanceHealth</code> is <code>healthy</code>, then an <code>instanceHealthReason</code> value is not provided.</p> <p>If <b> <code>instanceHealth</code> </b> is <code>initial</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Lb.RegistrationInProgress</code> </b> - The target instance is in the process of being registered with the load balancer.</p> </li> <li> <p> <b> <code>Lb.InitialHealthChecking</code> </b> - The Lightsail load balancer is still sending the target instance the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>unhealthy</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.ResponseCodeMismatch</code> </b> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <b> <code>Instance.Timeout</code> </b> - The health check requests timed out.</p> </li> <li> <p> <b> <code>Instance.FailedHealthChecks</code> </b> - The health checks failed because the connection to the target instance timed out, the target instance response was malformed, or the target instance failed the health check for an unknown reason.</p> </li> <li> <p> <b> <code>Lb.InternalError</code> </b> - The health checks failed due to an internal error.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>unused</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.NotRegistered</code> </b> - The target instance is not registered with the target group.</p> </li> <li> <p> <b> <code>Instance.NotInUse</code> </b> - The target group is not used by any load balancer, or the target instance is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <b> <code>Instance.IpUnusable</code> </b> - The target IP address is reserved for use by a Lightsail load balancer.</p> </li> <li> <p> <b> <code>Instance.InvalidState</code> </b> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>draining</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.DeregistrationInProgress</code> </b> - The target instance is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul></p>
     #[serde(rename = "instanceHealthReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_health_reason: Option<String>,
+    pub instance_health_reason: Option<InstanceHealthReason>,
     /// <p>The name of the Lightsail instance for which you are requesting health check data.</p>
     #[serde(rename = "instanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceMetricName {
+    BurstCapacityPercentage,
+    BurstCapacityTime,
+    Cpuutilization,
+    NetworkIn,
+    NetworkOut,
+    StatusCheckFailed,
+    StatusCheckFailedInstance,
+    StatusCheckFailedSystem,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceMetricName),
+}
+
+impl Default for InstanceMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceMetricName {
+    fn into(self) -> String {
+        match self {
+            InstanceMetricName::BurstCapacityPercentage => "BurstCapacityPercentage".to_string(),
+            InstanceMetricName::BurstCapacityTime => "BurstCapacityTime".to_string(),
+            InstanceMetricName::Cpuutilization => "CPUUtilization".to_string(),
+            InstanceMetricName::NetworkIn => "NetworkIn".to_string(),
+            InstanceMetricName::NetworkOut => "NetworkOut".to_string(),
+            InstanceMetricName::StatusCheckFailed => "StatusCheckFailed".to_string(),
+            InstanceMetricName::StatusCheckFailedInstance => {
+                "StatusCheckFailed_Instance".to_string()
+            }
+            InstanceMetricName::StatusCheckFailedSystem => "StatusCheckFailed_System".to_string(),
+            InstanceMetricName::UnknownVariant(UnknownInstanceMetricName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceMetricName::BurstCapacityPercentage => &"BurstCapacityPercentage",
+            InstanceMetricName::BurstCapacityTime => &"BurstCapacityTime",
+            InstanceMetricName::Cpuutilization => &"CPUUtilization",
+            InstanceMetricName::NetworkIn => &"NetworkIn",
+            InstanceMetricName::NetworkOut => &"NetworkOut",
+            InstanceMetricName::StatusCheckFailed => &"StatusCheckFailed",
+            InstanceMetricName::StatusCheckFailedInstance => &"StatusCheckFailed_Instance",
+            InstanceMetricName::StatusCheckFailedSystem => &"StatusCheckFailed_System",
+            InstanceMetricName::UnknownVariant(UnknownInstanceMetricName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstanceMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "BurstCapacityPercentage" => InstanceMetricName::BurstCapacityPercentage,
+            "BurstCapacityTime" => InstanceMetricName::BurstCapacityTime,
+            "CPUUtilization" => InstanceMetricName::Cpuutilization,
+            "NetworkIn" => InstanceMetricName::NetworkIn,
+            "NetworkOut" => InstanceMetricName::NetworkOut,
+            "StatusCheckFailed" => InstanceMetricName::StatusCheckFailed,
+            "StatusCheckFailed_Instance" => InstanceMetricName::StatusCheckFailedInstance,
+            "StatusCheckFailed_System" => InstanceMetricName::StatusCheckFailedSystem,
+            _ => InstanceMetricName::UnknownVariant(UnknownInstanceMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BurstCapacityPercentage" => InstanceMetricName::BurstCapacityPercentage,
+            "BurstCapacityTime" => InstanceMetricName::BurstCapacityTime,
+            "CPUUtilization" => InstanceMetricName::Cpuutilization,
+            "NetworkIn" => InstanceMetricName::NetworkIn,
+            "NetworkOut" => InstanceMetricName::NetworkOut,
+            "StatusCheckFailed" => InstanceMetricName::StatusCheckFailed,
+            "StatusCheckFailed_Instance" => InstanceMetricName::StatusCheckFailedInstance,
+            "StatusCheckFailed_System" => InstanceMetricName::StatusCheckFailedSystem,
+            _ => InstanceMetricName::UnknownVariant(UnknownInstanceMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InstanceMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes monthly data transfer rates and port information for an instance.</p>
@@ -4236,6 +7375,111 @@ pub struct InstanceNetworking {
     pub ports: Option<Vec<InstancePortInfo>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstancePlatform {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstancePlatform {
+    LinuxUnix,
+    Windows,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstancePlatform),
+}
+
+impl Default for InstancePlatform {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstancePlatform {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstancePlatform {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstancePlatform {
+    fn into(self) -> String {
+        match self {
+            InstancePlatform::LinuxUnix => "LINUX_UNIX".to_string(),
+            InstancePlatform::Windows => "WINDOWS".to_string(),
+            InstancePlatform::UnknownVariant(UnknownInstancePlatform { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstancePlatform {
+    fn into(self) -> &'a str {
+        match self {
+            InstancePlatform::LinuxUnix => &"LINUX_UNIX",
+            InstancePlatform::Windows => &"WINDOWS",
+            InstancePlatform::UnknownVariant(UnknownInstancePlatform { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InstancePlatform {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINUX_UNIX" => InstancePlatform::LinuxUnix,
+            "WINDOWS" => InstancePlatform::Windows,
+            _ => InstancePlatform::UnknownVariant(UnknownInstancePlatform {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstancePlatform {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINUX_UNIX" => InstancePlatform::LinuxUnix,
+            "WINDOWS" => InstancePlatform::Windows,
+            _ => InstancePlatform::UnknownVariant(UnknownInstancePlatform { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstancePlatform {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstancePlatform {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstancePlatform {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes information about ports for an Amazon Lightsail instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4243,7 +7487,7 @@ pub struct InstancePortInfo {
     /// <p><p>The access direction (<code>inbound</code> or <code>outbound</code>).</p> <note> <p>Lightsail currently supports only <code>inbound</code> access direction.</p> </note></p>
     #[serde(rename = "accessDirection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub access_direction: Option<String>,
+    pub access_direction: Option<AccessDirection>,
     /// <p>The location from which access is allowed. For example, <code>Anywhere (0.0.0.0/0)</code>, or <code>Custom</code> if a specific IP address or range of IP addresses is allowed.</p>
     #[serde(rename = "accessFrom")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4251,7 +7495,7 @@ pub struct InstancePortInfo {
     /// <p>The type of access (<code>Public</code> or <code>Private</code>).</p>
     #[serde(rename = "accessType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub access_type: Option<String>,
+    pub access_type: Option<PortAccessType>,
     /// <p>An alias that defines access for a preconfigured range of IP addresses.</p> <p>The only alias currently supported is <code>lightsail-connect</code>, which allows IP addresses of the browser-based RDP/SSH client in the Lightsail console to connect to your instance.</p>
     #[serde(rename = "cidrListAliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4271,7 +7515,7 @@ pub struct InstancePortInfo {
     /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached. When you specify <code>icmp</code> as the <code>protocol</code>, you must specify the ICMP type using the <code>fromPort</code> parameter, and ICMP code using the <code>toPort</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<NetworkProtocol>,
     /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - The ICMP code. For example, specify <code>8</code> as the <code>fromPort</code> (ICMP type), and <code>-1</code> as the <code>toPort</code> (ICMP code), to enable ICMP Ping. For more information, see <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages">Control Messages</a> on <i>Wikipedia</i>.</p> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4297,11 +7541,11 @@ pub struct InstancePortState {
     /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached. When you specify <code>icmp</code> as the <code>protocol</code>, you must specify the ICMP type using the <code>fromPort</code> parameter, and ICMP code using the <code>toPort</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<NetworkProtocol>,
     /// <p><p>Specifies whether the instance port is <code>open</code> or <code>closed</code>.</p> <note> <p>The port state for Lightsail instances is always <code>open</code>.</p> </note></p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<PortState>,
     /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - The ICMP code. For example, specify <code>8</code> as the <code>fromPort</code> (ICMP type), and <code>-1</code> as the <code>toPort</code> (ICMP code), to enable ICMP Ping. For more information, see <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages">Control Messages</a> on <i>Wikipedia</i>.</p> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4359,7 +7603,7 @@ pub struct InstanceSnapshot {
     /// <p>The type of resource (usually <code>InstanceSnapshot</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The size in GB of the SSD.</p>
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4367,7 +7611,7 @@ pub struct InstanceSnapshot {
     /// <p>The state the snapshot is in.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<InstanceSnapshotState>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4394,6 +7638,116 @@ pub struct InstanceSnapshotInfo {
     #[serde(rename = "fromDiskInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_disk_info: Option<Vec<DiskInfo>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceSnapshotState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceSnapshotState {
+    Available,
+    Error,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceSnapshotState),
+}
+
+impl Default for InstanceSnapshotState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceSnapshotState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceSnapshotState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceSnapshotState {
+    fn into(self) -> String {
+        match self {
+            InstanceSnapshotState::Available => "available".to_string(),
+            InstanceSnapshotState::Error => "error".to_string(),
+            InstanceSnapshotState::Pending => "pending".to_string(),
+            InstanceSnapshotState::UnknownVariant(UnknownInstanceSnapshotState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceSnapshotState {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceSnapshotState::Available => &"available",
+            InstanceSnapshotState::Error => &"error",
+            InstanceSnapshotState::Pending => &"pending",
+            InstanceSnapshotState::UnknownVariant(UnknownInstanceSnapshotState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceSnapshotState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => InstanceSnapshotState::Available,
+            "error" => InstanceSnapshotState::Error,
+            "pending" => InstanceSnapshotState::Pending,
+            _ => InstanceSnapshotState::UnknownVariant(UnknownInstanceSnapshotState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceSnapshotState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => InstanceSnapshotState::Available,
+            "error" => InstanceSnapshotState::Error,
+            "pending" => InstanceSnapshotState::Pending,
+            _ => InstanceSnapshotState::UnknownVariant(UnknownInstanceSnapshotState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceSnapshotState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceSnapshotState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceSnapshotState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the virtual private server (or <i>instance</i>) status.</p>
@@ -4450,7 +7804,7 @@ pub struct KeyPair {
     /// <p>The resource type (usually <code>KeyPair</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4528,7 +7882,7 @@ pub struct LightsailDistribution {
     /// <p>The Lightsail resource type (e.g., <code>Distribution</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The status of the distribution.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4554,7 +7908,8 @@ pub struct LoadBalancer {
     /// <p>A string to string map of the configuration options for your load balancer. Valid values are listed below.</p>
     #[serde(rename = "configurationOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_options: Option<::std::collections::HashMap<String, String>>,
+    pub configuration_options:
+        Option<::std::collections::HashMap<LoadBalancerAttributeName, String>>,
     /// <p>The date when your load balancer was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4586,7 +7941,7 @@ pub struct LoadBalancer {
     /// <p>The protocol you have enabled for your load balancer. Valid values are below.</p> <p>You can't just have <code>HTTP_HTTPS</code>, but you can have just <code>HTTP</code>.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<LoadBalancerProtocol>,
     /// <p>An array of public port settings for your load balancer. For HTTP, use port 80. For HTTPS, use port 443.</p>
     #[serde(rename = "publicPorts")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4594,11 +7949,11 @@ pub struct LoadBalancer {
     /// <p>The resource type (e.g., <code>LoadBalancer</code>.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The status of your load balancer. Valid values are below.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<LoadBalancerState>,
     /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail load balancer. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4611,6 +7966,524 @@ pub struct LoadBalancer {
     #[serde(rename = "tlsCertificateSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tls_certificate_summaries: Option<Vec<LoadBalancerTlsCertificateSummary>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerAttributeName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerAttributeName {
+    HealthCheckPath,
+    SessionStickinessEnabled,
+    SessionStickinessLBCookieDurationSeconds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerAttributeName),
+}
+
+impl Default for LoadBalancerAttributeName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerAttributeName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerAttributeName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerAttributeName {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerAttributeName::HealthCheckPath => "HealthCheckPath".to_string(),
+            LoadBalancerAttributeName::SessionStickinessEnabled => {
+                "SessionStickinessEnabled".to_string()
+            }
+            LoadBalancerAttributeName::SessionStickinessLBCookieDurationSeconds => {
+                "SessionStickiness_LB_CookieDurationSeconds".to_string()
+            }
+            LoadBalancerAttributeName::UnknownVariant(UnknownLoadBalancerAttributeName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerAttributeName {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerAttributeName::HealthCheckPath => &"HealthCheckPath",
+            LoadBalancerAttributeName::SessionStickinessEnabled => &"SessionStickinessEnabled",
+            LoadBalancerAttributeName::SessionStickinessLBCookieDurationSeconds => {
+                &"SessionStickiness_LB_CookieDurationSeconds"
+            }
+            LoadBalancerAttributeName::UnknownVariant(UnknownLoadBalancerAttributeName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerAttributeName {
+    fn from(name: &str) -> Self {
+        match name {
+            "HealthCheckPath" => LoadBalancerAttributeName::HealthCheckPath,
+            "SessionStickinessEnabled" => LoadBalancerAttributeName::SessionStickinessEnabled,
+            "SessionStickiness_LB_CookieDurationSeconds" => {
+                LoadBalancerAttributeName::SessionStickinessLBCookieDurationSeconds
+            }
+            _ => LoadBalancerAttributeName::UnknownVariant(UnknownLoadBalancerAttributeName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerAttributeName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HealthCheckPath" => LoadBalancerAttributeName::HealthCheckPath,
+            "SessionStickinessEnabled" => LoadBalancerAttributeName::SessionStickinessEnabled,
+            "SessionStickiness_LB_CookieDurationSeconds" => {
+                LoadBalancerAttributeName::SessionStickinessLBCookieDurationSeconds
+            }
+            _ => {
+                LoadBalancerAttributeName::UnknownVariant(UnknownLoadBalancerAttributeName { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerAttributeName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoadBalancerAttributeName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerAttributeName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerMetricName {
+    ClientTLSNegotiationErrorCount,
+    HttpcodeInstance2XXCount,
+    HttpcodeInstance3XXCount,
+    HttpcodeInstance4XXCount,
+    HttpcodeInstance5XXCount,
+    HttpcodeLB4XXCount,
+    HttpcodeLB5XXCount,
+    HealthyHostCount,
+    InstanceResponseTime,
+    RejectedConnectionCount,
+    RequestCount,
+    UnhealthyHostCount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerMetricName),
+}
+
+impl Default for LoadBalancerMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerMetricName {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerMetricName::ClientTLSNegotiationErrorCount => {
+                "ClientTLSNegotiationErrorCount".to_string()
+            }
+            LoadBalancerMetricName::HttpcodeInstance2XXCount => {
+                "HTTPCode_Instance_2XX_Count".to_string()
+            }
+            LoadBalancerMetricName::HttpcodeInstance3XXCount => {
+                "HTTPCode_Instance_3XX_Count".to_string()
+            }
+            LoadBalancerMetricName::HttpcodeInstance4XXCount => {
+                "HTTPCode_Instance_4XX_Count".to_string()
+            }
+            LoadBalancerMetricName::HttpcodeInstance5XXCount => {
+                "HTTPCode_Instance_5XX_Count".to_string()
+            }
+            LoadBalancerMetricName::HttpcodeLB4XXCount => "HTTPCode_LB_4XX_Count".to_string(),
+            LoadBalancerMetricName::HttpcodeLB5XXCount => "HTTPCode_LB_5XX_Count".to_string(),
+            LoadBalancerMetricName::HealthyHostCount => "HealthyHostCount".to_string(),
+            LoadBalancerMetricName::InstanceResponseTime => "InstanceResponseTime".to_string(),
+            LoadBalancerMetricName::RejectedConnectionCount => {
+                "RejectedConnectionCount".to_string()
+            }
+            LoadBalancerMetricName::RequestCount => "RequestCount".to_string(),
+            LoadBalancerMetricName::UnhealthyHostCount => "UnhealthyHostCount".to_string(),
+            LoadBalancerMetricName::UnknownVariant(UnknownLoadBalancerMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerMetricName::ClientTLSNegotiationErrorCount => {
+                &"ClientTLSNegotiationErrorCount"
+            }
+            LoadBalancerMetricName::HttpcodeInstance2XXCount => &"HTTPCode_Instance_2XX_Count",
+            LoadBalancerMetricName::HttpcodeInstance3XXCount => &"HTTPCode_Instance_3XX_Count",
+            LoadBalancerMetricName::HttpcodeInstance4XXCount => &"HTTPCode_Instance_4XX_Count",
+            LoadBalancerMetricName::HttpcodeInstance5XXCount => &"HTTPCode_Instance_5XX_Count",
+            LoadBalancerMetricName::HttpcodeLB4XXCount => &"HTTPCode_LB_4XX_Count",
+            LoadBalancerMetricName::HttpcodeLB5XXCount => &"HTTPCode_LB_5XX_Count",
+            LoadBalancerMetricName::HealthyHostCount => &"HealthyHostCount",
+            LoadBalancerMetricName::InstanceResponseTime => &"InstanceResponseTime",
+            LoadBalancerMetricName::RejectedConnectionCount => &"RejectedConnectionCount",
+            LoadBalancerMetricName::RequestCount => &"RequestCount",
+            LoadBalancerMetricName::UnhealthyHostCount => &"UnhealthyHostCount",
+            LoadBalancerMetricName::UnknownVariant(UnknownLoadBalancerMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ClientTLSNegotiationErrorCount" => {
+                LoadBalancerMetricName::ClientTLSNegotiationErrorCount
+            }
+            "HTTPCode_Instance_2XX_Count" => LoadBalancerMetricName::HttpcodeInstance2XXCount,
+            "HTTPCode_Instance_3XX_Count" => LoadBalancerMetricName::HttpcodeInstance3XXCount,
+            "HTTPCode_Instance_4XX_Count" => LoadBalancerMetricName::HttpcodeInstance4XXCount,
+            "HTTPCode_Instance_5XX_Count" => LoadBalancerMetricName::HttpcodeInstance5XXCount,
+            "HTTPCode_LB_4XX_Count" => LoadBalancerMetricName::HttpcodeLB4XXCount,
+            "HTTPCode_LB_5XX_Count" => LoadBalancerMetricName::HttpcodeLB5XXCount,
+            "HealthyHostCount" => LoadBalancerMetricName::HealthyHostCount,
+            "InstanceResponseTime" => LoadBalancerMetricName::InstanceResponseTime,
+            "RejectedConnectionCount" => LoadBalancerMetricName::RejectedConnectionCount,
+            "RequestCount" => LoadBalancerMetricName::RequestCount,
+            "UnhealthyHostCount" => LoadBalancerMetricName::UnhealthyHostCount,
+            _ => LoadBalancerMetricName::UnknownVariant(UnknownLoadBalancerMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ClientTLSNegotiationErrorCount" => {
+                LoadBalancerMetricName::ClientTLSNegotiationErrorCount
+            }
+            "HTTPCode_Instance_2XX_Count" => LoadBalancerMetricName::HttpcodeInstance2XXCount,
+            "HTTPCode_Instance_3XX_Count" => LoadBalancerMetricName::HttpcodeInstance3XXCount,
+            "HTTPCode_Instance_4XX_Count" => LoadBalancerMetricName::HttpcodeInstance4XXCount,
+            "HTTPCode_Instance_5XX_Count" => LoadBalancerMetricName::HttpcodeInstance5XXCount,
+            "HTTPCode_LB_4XX_Count" => LoadBalancerMetricName::HttpcodeLB4XXCount,
+            "HTTPCode_LB_5XX_Count" => LoadBalancerMetricName::HttpcodeLB5XXCount,
+            "HealthyHostCount" => LoadBalancerMetricName::HealthyHostCount,
+            "InstanceResponseTime" => LoadBalancerMetricName::InstanceResponseTime,
+            "RejectedConnectionCount" => LoadBalancerMetricName::RejectedConnectionCount,
+            "RequestCount" => LoadBalancerMetricName::RequestCount,
+            "UnhealthyHostCount" => LoadBalancerMetricName::UnhealthyHostCount,
+            _ => LoadBalancerMetricName::UnknownVariant(UnknownLoadBalancerMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoadBalancerMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerProtocol {
+    Http,
+    HttpHttps,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerProtocol),
+}
+
+impl Default for LoadBalancerProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerProtocol {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerProtocol::Http => "HTTP".to_string(),
+            LoadBalancerProtocol::HttpHttps => "HTTP_HTTPS".to_string(),
+            LoadBalancerProtocol::UnknownVariant(UnknownLoadBalancerProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerProtocol::Http => &"HTTP",
+            LoadBalancerProtocol::HttpHttps => &"HTTP_HTTPS",
+            LoadBalancerProtocol::UnknownVariant(UnknownLoadBalancerProtocol {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP" => LoadBalancerProtocol::Http,
+            "HTTP_HTTPS" => LoadBalancerProtocol::HttpHttps,
+            _ => LoadBalancerProtocol::UnknownVariant(UnknownLoadBalancerProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP" => LoadBalancerProtocol::Http,
+            "HTTP_HTTPS" => LoadBalancerProtocol::HttpHttps,
+            _ => LoadBalancerProtocol::UnknownVariant(UnknownLoadBalancerProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerState {
+    Active,
+    ActiveImpaired,
+    Failed,
+    Provisioning,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerState),
+}
+
+impl Default for LoadBalancerState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerState {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerState::Active => "active".to_string(),
+            LoadBalancerState::ActiveImpaired => "active_impaired".to_string(),
+            LoadBalancerState::Failed => "failed".to_string(),
+            LoadBalancerState::Provisioning => "provisioning".to_string(),
+            LoadBalancerState::Unknown => "unknown".to_string(),
+            LoadBalancerState::UnknownVariant(UnknownLoadBalancerState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerState {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerState::Active => &"active",
+            LoadBalancerState::ActiveImpaired => &"active_impaired",
+            LoadBalancerState::Failed => &"failed",
+            LoadBalancerState::Provisioning => &"provisioning",
+            LoadBalancerState::Unknown => &"unknown",
+            LoadBalancerState::UnknownVariant(UnknownLoadBalancerState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerState {
+    fn from(name: &str) -> Self {
+        match name {
+            "active" => LoadBalancerState::Active,
+            "active_impaired" => LoadBalancerState::ActiveImpaired,
+            "failed" => LoadBalancerState::Failed,
+            "provisioning" => LoadBalancerState::Provisioning,
+            "unknown" => LoadBalancerState::Unknown,
+            _ => LoadBalancerState::UnknownVariant(UnknownLoadBalancerState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "active" => LoadBalancerState::Active,
+            "active_impaired" => LoadBalancerState::ActiveImpaired,
+            "failed" => LoadBalancerState::Failed,
+            "provisioning" => LoadBalancerState::Provisioning,
+            "unknown" => LoadBalancerState::Unknown,
+            _ => LoadBalancerState::UnknownVariant(UnknownLoadBalancerState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a load balancer SSL/TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
@@ -4636,7 +8509,7 @@ pub struct LoadBalancerTlsCertificate {
     /// <p><p>The validation failure reason, if any, of the certificate.</p> <p>The following failure reasons are possible:</p> <ul> <li> <p> <b> <code>NO<em>AVAILABLE</em>CONTACTS</code> </b> - This failure applies to email validation, which is not available for Lightsail certificates.</p> </li> <li> <p> <b> <code>ADDITIONAL<em>VERIFICATION</em>REQUIRED</code> </b> - Lightsail requires additional information to process this certificate request. This can happen as a fraud-protection measure, such as when the domain ranks within the Alexa top 1000 websites. To provide the required information, use the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> to contact AWS Support.</p> <note> <p>You cannot request a certificate for Amazon-owned domain names such as those ending in amazonaws.com, cloudfront.net, or elasticbeanstalk.com.</p> </note> </li> <li> <p> <b> <code>DOMAIN<em>NOT</em>ALLOWED</code> </b> - One or more of the domain names in the certificate request was reported as an unsafe domain by <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a>. To correct the problem, search for your domain name on the <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a> website. If your domain is reported as suspicious, see <a href="https://www.google.com/webmasters/hacked/?hl=en">Google Help for Hacked Websites</a> to learn what you can do.</p> <p>If you believe that the result is a false positive, notify the organization that is reporting the domain. VirusTotal is an aggregate of several antivirus and URL scanners and cannot remove your domain from a block list itself. After you correct the problem and the VirusTotal registry has been updated, request a new certificate.</p> <p>If you see this error and your domain is not included in the VirusTotal list, visit the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> and create a case.</p> </li> <li> <p> <b> <code>INVALID<em>PUBLIC</em>DOMAIN</code> </b> - One or more of the domain names in the certificate request is not valid. Typically, this is because a domain name in the request is not a valid top-level domain. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request, and ensure that all domain names in the request are for valid top-level domains. For example, you cannot request a certificate for <code>example.invalidpublicdomain</code> because <code>invalidpublicdomain</code> is not a valid top-level domain.</p> </li> <li> <p> <b> <code>OTHER</code> </b> - Typically, this failure occurs when there is a typographical error in one or more of the domain names in the certificate request. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request. </p> </li> </ul></p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_reason: Option<String>,
+    pub failure_reason: Option<LoadBalancerTlsCertificateFailureReason>,
     /// <p>When <code>true</code>, the SSL/TLS certificate is attached to the Lightsail load balancer.</p>
     #[serde(rename = "isAttached")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4680,11 +8553,11 @@ pub struct LoadBalancerTlsCertificate {
     /// <p><p>The resource type (e.g., <code>LoadBalancerTlsCertificate</code>).</p> <ul> <li> <p> <b> <code>Instance</code> </b> - A Lightsail instance (a virtual private server)</p> </li> <li> <p> <b> <code>StaticIp</code> </b> - A static IP address</p> </li> <li> <p> <b> <code>KeyPair</code> </b> - The key pair used to connect to a Lightsail instance</p> </li> <li> <p> <b> <code>InstanceSnapshot</code> </b> - A Lightsail instance snapshot</p> </li> <li> <p> <b> <code>Domain</code> </b> - A DNS zone</p> </li> <li> <p> <b> <code>PeeredVpc</code> </b> - A peered VPC</p> </li> <li> <p> <b> <code>LoadBalancer</code> </b> - A Lightsail load balancer</p> </li> <li> <p> <b> <code>LoadBalancerTlsCertificate</code> </b> - An SSL/TLS certificate associated with a Lightsail load balancer</p> </li> <li> <p> <b> <code>Disk</code> </b> - A Lightsail block storage disk</p> </li> <li> <p> <b> <code>DiskSnapshot</code> </b> - A block storage disk snapshot</p> </li> </ul></p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The reason the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
     #[serde(rename = "revocationReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub revocation_reason: Option<String>,
+    pub revocation_reason: Option<LoadBalancerTlsCertificateRevocationReason>,
     /// <p>The timestamp when the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
     #[serde(rename = "revokedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4700,7 +8573,7 @@ pub struct LoadBalancerTlsCertificate {
     /// <p>The validation status of the SSL/TLS certificate. Valid values are below.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LoadBalancerTlsCertificateStatus>,
     /// <p>The name of the entity that is associated with the public key contained in the certificate.</p>
     #[serde(rename = "subject")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4719,6 +8592,122 @@ pub struct LoadBalancerTlsCertificate {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTlsCertificateDomainStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTlsCertificateDomainStatus {
+    Failed,
+    PendingValidation,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTlsCertificateDomainStatus),
+}
+
+impl Default for LoadBalancerTlsCertificateDomainStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTlsCertificateDomainStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTlsCertificateDomainStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTlsCertificateDomainStatus {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTlsCertificateDomainStatus::Failed => "FAILED".to_string(),
+            LoadBalancerTlsCertificateDomainStatus::PendingValidation => {
+                "PENDING_VALIDATION".to_string()
+            }
+            LoadBalancerTlsCertificateDomainStatus::Success => "SUCCESS".to_string(),
+            LoadBalancerTlsCertificateDomainStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateDomainStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTlsCertificateDomainStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTlsCertificateDomainStatus::Failed => &"FAILED",
+            LoadBalancerTlsCertificateDomainStatus::PendingValidation => &"PENDING_VALIDATION",
+            LoadBalancerTlsCertificateDomainStatus::Success => &"SUCCESS",
+            LoadBalancerTlsCertificateDomainStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateDomainStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTlsCertificateDomainStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => LoadBalancerTlsCertificateDomainStatus::Failed,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateDomainStatus::PendingValidation,
+            "SUCCESS" => LoadBalancerTlsCertificateDomainStatus::Success,
+            _ => LoadBalancerTlsCertificateDomainStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateDomainStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTlsCertificateDomainStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => LoadBalancerTlsCertificateDomainStatus::Failed,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateDomainStatus::PendingValidation,
+            "SUCCESS" => LoadBalancerTlsCertificateDomainStatus::Success,
+            _ => LoadBalancerTlsCertificateDomainStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateDomainStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTlsCertificateDomainStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerTlsCertificateDomainStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerTlsCertificateDomainStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains information about the domain names on an SSL/TLS certificate that you will use to validate domain ownership.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4730,7 +8719,7 @@ pub struct LoadBalancerTlsCertificateDomainValidationOption {
     /// <p>The status of the domain validation. Valid values are listed below.</p>
     #[serde(rename = "validationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_status: Option<String>,
+    pub validation_status: Option<LoadBalancerTlsCertificateDomainStatus>,
 }
 
 /// <p>Describes the validation record of each domain name in the SSL/TLS certificate.</p>
@@ -4752,11 +8741,276 @@ pub struct LoadBalancerTlsCertificateDomainValidationRecord {
     /// <p>The validation status. Valid values are listed below.</p>
     #[serde(rename = "validationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_status: Option<String>,
+    pub validation_status: Option<LoadBalancerTlsCertificateDomainStatus>,
     /// <p>The value for that type.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTlsCertificateFailureReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTlsCertificateFailureReason {
+    AdditionalVerificationRequired,
+    DomainNotAllowed,
+    InvalidPublicDomain,
+    NoAvailableContacts,
+    Other,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTlsCertificateFailureReason),
+}
+
+impl Default for LoadBalancerTlsCertificateFailureReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTlsCertificateFailureReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTlsCertificateFailureReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTlsCertificateFailureReason {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTlsCertificateFailureReason::AdditionalVerificationRequired => {
+                "ADDITIONAL_VERIFICATION_REQUIRED".to_string()
+            }
+            LoadBalancerTlsCertificateFailureReason::DomainNotAllowed => {
+                "DOMAIN_NOT_ALLOWED".to_string()
+            }
+            LoadBalancerTlsCertificateFailureReason::InvalidPublicDomain => {
+                "INVALID_PUBLIC_DOMAIN".to_string()
+            }
+            LoadBalancerTlsCertificateFailureReason::NoAvailableContacts => {
+                "NO_AVAILABLE_CONTACTS".to_string()
+            }
+            LoadBalancerTlsCertificateFailureReason::Other => "OTHER".to_string(),
+            LoadBalancerTlsCertificateFailureReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateFailureReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTlsCertificateFailureReason {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTlsCertificateFailureReason::AdditionalVerificationRequired => {
+                &"ADDITIONAL_VERIFICATION_REQUIRED"
+            }
+            LoadBalancerTlsCertificateFailureReason::DomainNotAllowed => &"DOMAIN_NOT_ALLOWED",
+            LoadBalancerTlsCertificateFailureReason::InvalidPublicDomain => {
+                &"INVALID_PUBLIC_DOMAIN"
+            }
+            LoadBalancerTlsCertificateFailureReason::NoAvailableContacts => {
+                &"NO_AVAILABLE_CONTACTS"
+            }
+            LoadBalancerTlsCertificateFailureReason::Other => &"OTHER",
+            LoadBalancerTlsCertificateFailureReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateFailureReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTlsCertificateFailureReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADDITIONAL_VERIFICATION_REQUIRED" => {
+                LoadBalancerTlsCertificateFailureReason::AdditionalVerificationRequired
+            }
+            "DOMAIN_NOT_ALLOWED" => LoadBalancerTlsCertificateFailureReason::DomainNotAllowed,
+            "INVALID_PUBLIC_DOMAIN" => LoadBalancerTlsCertificateFailureReason::InvalidPublicDomain,
+            "NO_AVAILABLE_CONTACTS" => LoadBalancerTlsCertificateFailureReason::NoAvailableContacts,
+            "OTHER" => LoadBalancerTlsCertificateFailureReason::Other,
+            _ => LoadBalancerTlsCertificateFailureReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateFailureReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTlsCertificateFailureReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADDITIONAL_VERIFICATION_REQUIRED" => {
+                LoadBalancerTlsCertificateFailureReason::AdditionalVerificationRequired
+            }
+            "DOMAIN_NOT_ALLOWED" => LoadBalancerTlsCertificateFailureReason::DomainNotAllowed,
+            "INVALID_PUBLIC_DOMAIN" => LoadBalancerTlsCertificateFailureReason::InvalidPublicDomain,
+            "NO_AVAILABLE_CONTACTS" => LoadBalancerTlsCertificateFailureReason::NoAvailableContacts,
+            "OTHER" => LoadBalancerTlsCertificateFailureReason::Other,
+            _ => LoadBalancerTlsCertificateFailureReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateFailureReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTlsCertificateFailureReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerTlsCertificateFailureReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerTlsCertificateFailureReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTlsCertificateRenewalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTlsCertificateRenewalStatus {
+    Failed,
+    PendingAutoRenewal,
+    PendingValidation,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTlsCertificateRenewalStatus),
+}
+
+impl Default for LoadBalancerTlsCertificateRenewalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTlsCertificateRenewalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTlsCertificateRenewalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTlsCertificateRenewalStatus {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTlsCertificateRenewalStatus::Failed => "FAILED".to_string(),
+            LoadBalancerTlsCertificateRenewalStatus::PendingAutoRenewal => {
+                "PENDING_AUTO_RENEWAL".to_string()
+            }
+            LoadBalancerTlsCertificateRenewalStatus::PendingValidation => {
+                "PENDING_VALIDATION".to_string()
+            }
+            LoadBalancerTlsCertificateRenewalStatus::Success => "SUCCESS".to_string(),
+            LoadBalancerTlsCertificateRenewalStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRenewalStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTlsCertificateRenewalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTlsCertificateRenewalStatus::Failed => &"FAILED",
+            LoadBalancerTlsCertificateRenewalStatus::PendingAutoRenewal => &"PENDING_AUTO_RENEWAL",
+            LoadBalancerTlsCertificateRenewalStatus::PendingValidation => &"PENDING_VALIDATION",
+            LoadBalancerTlsCertificateRenewalStatus::Success => &"SUCCESS",
+            LoadBalancerTlsCertificateRenewalStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRenewalStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTlsCertificateRenewalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => LoadBalancerTlsCertificateRenewalStatus::Failed,
+            "PENDING_AUTO_RENEWAL" => LoadBalancerTlsCertificateRenewalStatus::PendingAutoRenewal,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateRenewalStatus::PendingValidation,
+            "SUCCESS" => LoadBalancerTlsCertificateRenewalStatus::Success,
+            _ => LoadBalancerTlsCertificateRenewalStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRenewalStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTlsCertificateRenewalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => LoadBalancerTlsCertificateRenewalStatus::Failed,
+            "PENDING_AUTO_RENEWAL" => LoadBalancerTlsCertificateRenewalStatus::PendingAutoRenewal,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateRenewalStatus::PendingValidation,
+            "SUCCESS" => LoadBalancerTlsCertificateRenewalStatus::Success,
+            _ => LoadBalancerTlsCertificateRenewalStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRenewalStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTlsCertificateRenewalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerTlsCertificateRenewalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerTlsCertificateRenewalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Contains information about the status of Lightsail&#39;s managed renewal for the certificate.</p> <p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names in the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names in the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. If you used DNS validation, check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
@@ -4770,7 +9024,321 @@ pub struct LoadBalancerTlsCertificateRenewalSummary {
     /// <p><p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names of the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names of the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. Check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
     #[serde(rename = "renewalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub renewal_status: Option<String>,
+    pub renewal_status: Option<LoadBalancerTlsCertificateRenewalStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTlsCertificateRevocationReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTlsCertificateRevocationReason {
+    AffiliationChanged,
+    AACompromise,
+    CaCompromise,
+    CertificateHold,
+    CessationOfOperation,
+    KeyCompromise,
+    PrivilegeWithdrawn,
+    RemoveFromCrl,
+    Superceded,
+    Unspecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTlsCertificateRevocationReason),
+}
+
+impl Default for LoadBalancerTlsCertificateRevocationReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTlsCertificateRevocationReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTlsCertificateRevocationReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTlsCertificateRevocationReason {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTlsCertificateRevocationReason::AffiliationChanged => {
+                "AFFILIATION_CHANGED".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::AACompromise => {
+                "A_A_COMPROMISE".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::CaCompromise => "CA_COMPROMISE".to_string(),
+            LoadBalancerTlsCertificateRevocationReason::CertificateHold => {
+                "CERTIFICATE_HOLD".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::CessationOfOperation => {
+                "CESSATION_OF_OPERATION".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::KeyCompromise => {
+                "KEY_COMPROMISE".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::PrivilegeWithdrawn => {
+                "PRIVILEGE_WITHDRAWN".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::RemoveFromCrl => {
+                "REMOVE_FROM_CRL".to_string()
+            }
+            LoadBalancerTlsCertificateRevocationReason::Superceded => "SUPERCEDED".to_string(),
+            LoadBalancerTlsCertificateRevocationReason::Unspecified => "UNSPECIFIED".to_string(),
+            LoadBalancerTlsCertificateRevocationReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRevocationReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTlsCertificateRevocationReason {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTlsCertificateRevocationReason::AffiliationChanged => {
+                &"AFFILIATION_CHANGED"
+            }
+            LoadBalancerTlsCertificateRevocationReason::AACompromise => &"A_A_COMPROMISE",
+            LoadBalancerTlsCertificateRevocationReason::CaCompromise => &"CA_COMPROMISE",
+            LoadBalancerTlsCertificateRevocationReason::CertificateHold => &"CERTIFICATE_HOLD",
+            LoadBalancerTlsCertificateRevocationReason::CessationOfOperation => {
+                &"CESSATION_OF_OPERATION"
+            }
+            LoadBalancerTlsCertificateRevocationReason::KeyCompromise => &"KEY_COMPROMISE",
+            LoadBalancerTlsCertificateRevocationReason::PrivilegeWithdrawn => {
+                &"PRIVILEGE_WITHDRAWN"
+            }
+            LoadBalancerTlsCertificateRevocationReason::RemoveFromCrl => &"REMOVE_FROM_CRL",
+            LoadBalancerTlsCertificateRevocationReason::Superceded => &"SUPERCEDED",
+            LoadBalancerTlsCertificateRevocationReason::Unspecified => &"UNSPECIFIED",
+            LoadBalancerTlsCertificateRevocationReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRevocationReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTlsCertificateRevocationReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFFILIATION_CHANGED" => LoadBalancerTlsCertificateRevocationReason::AffiliationChanged,
+            "A_A_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::AACompromise,
+            "CA_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::CaCompromise,
+            "CERTIFICATE_HOLD" => LoadBalancerTlsCertificateRevocationReason::CertificateHold,
+            "CESSATION_OF_OPERATION" => {
+                LoadBalancerTlsCertificateRevocationReason::CessationOfOperation
+            }
+            "KEY_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::KeyCompromise,
+            "PRIVILEGE_WITHDRAWN" => LoadBalancerTlsCertificateRevocationReason::PrivilegeWithdrawn,
+            "REMOVE_FROM_CRL" => LoadBalancerTlsCertificateRevocationReason::RemoveFromCrl,
+            "SUPERCEDED" => LoadBalancerTlsCertificateRevocationReason::Superceded,
+            "UNSPECIFIED" => LoadBalancerTlsCertificateRevocationReason::Unspecified,
+            _ => LoadBalancerTlsCertificateRevocationReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRevocationReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTlsCertificateRevocationReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFFILIATION_CHANGED" => LoadBalancerTlsCertificateRevocationReason::AffiliationChanged,
+            "A_A_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::AACompromise,
+            "CA_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::CaCompromise,
+            "CERTIFICATE_HOLD" => LoadBalancerTlsCertificateRevocationReason::CertificateHold,
+            "CESSATION_OF_OPERATION" => {
+                LoadBalancerTlsCertificateRevocationReason::CessationOfOperation
+            }
+            "KEY_COMPROMISE" => LoadBalancerTlsCertificateRevocationReason::KeyCompromise,
+            "PRIVILEGE_WITHDRAWN" => LoadBalancerTlsCertificateRevocationReason::PrivilegeWithdrawn,
+            "REMOVE_FROM_CRL" => LoadBalancerTlsCertificateRevocationReason::RemoveFromCrl,
+            "SUPERCEDED" => LoadBalancerTlsCertificateRevocationReason::Superceded,
+            "UNSPECIFIED" => LoadBalancerTlsCertificateRevocationReason::Unspecified,
+            _ => LoadBalancerTlsCertificateRevocationReason::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateRevocationReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTlsCertificateRevocationReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerTlsCertificateRevocationReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerTlsCertificateRevocationReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTlsCertificateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTlsCertificateStatus {
+    Expired,
+    Failed,
+    Inactive,
+    Issued,
+    PendingValidation,
+    Revoked,
+    Unknown,
+    ValidationTimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTlsCertificateStatus),
+}
+
+impl Default for LoadBalancerTlsCertificateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTlsCertificateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTlsCertificateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTlsCertificateStatus {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTlsCertificateStatus::Expired => "EXPIRED".to_string(),
+            LoadBalancerTlsCertificateStatus::Failed => "FAILED".to_string(),
+            LoadBalancerTlsCertificateStatus::Inactive => "INACTIVE".to_string(),
+            LoadBalancerTlsCertificateStatus::Issued => "ISSUED".to_string(),
+            LoadBalancerTlsCertificateStatus::PendingValidation => "PENDING_VALIDATION".to_string(),
+            LoadBalancerTlsCertificateStatus::Revoked => "REVOKED".to_string(),
+            LoadBalancerTlsCertificateStatus::Unknown => "UNKNOWN".to_string(),
+            LoadBalancerTlsCertificateStatus::ValidationTimedOut => {
+                "VALIDATION_TIMED_OUT".to_string()
+            }
+            LoadBalancerTlsCertificateStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTlsCertificateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTlsCertificateStatus::Expired => &"EXPIRED",
+            LoadBalancerTlsCertificateStatus::Failed => &"FAILED",
+            LoadBalancerTlsCertificateStatus::Inactive => &"INACTIVE",
+            LoadBalancerTlsCertificateStatus::Issued => &"ISSUED",
+            LoadBalancerTlsCertificateStatus::PendingValidation => &"PENDING_VALIDATION",
+            LoadBalancerTlsCertificateStatus::Revoked => &"REVOKED",
+            LoadBalancerTlsCertificateStatus::Unknown => &"UNKNOWN",
+            LoadBalancerTlsCertificateStatus::ValidationTimedOut => &"VALIDATION_TIMED_OUT",
+            LoadBalancerTlsCertificateStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTlsCertificateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPIRED" => LoadBalancerTlsCertificateStatus::Expired,
+            "FAILED" => LoadBalancerTlsCertificateStatus::Failed,
+            "INACTIVE" => LoadBalancerTlsCertificateStatus::Inactive,
+            "ISSUED" => LoadBalancerTlsCertificateStatus::Issued,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateStatus::PendingValidation,
+            "REVOKED" => LoadBalancerTlsCertificateStatus::Revoked,
+            "UNKNOWN" => LoadBalancerTlsCertificateStatus::Unknown,
+            "VALIDATION_TIMED_OUT" => LoadBalancerTlsCertificateStatus::ValidationTimedOut,
+            _ => LoadBalancerTlsCertificateStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTlsCertificateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPIRED" => LoadBalancerTlsCertificateStatus::Expired,
+            "FAILED" => LoadBalancerTlsCertificateStatus::Failed,
+            "INACTIVE" => LoadBalancerTlsCertificateStatus::Inactive,
+            "ISSUED" => LoadBalancerTlsCertificateStatus::Issued,
+            "PENDING_VALIDATION" => LoadBalancerTlsCertificateStatus::PendingValidation,
+            "REVOKED" => LoadBalancerTlsCertificateStatus::Revoked,
+            "UNKNOWN" => LoadBalancerTlsCertificateStatus::Unknown,
+            "VALIDATION_TIMED_OUT" => LoadBalancerTlsCertificateStatus::ValidationTimedOut,
+            _ => LoadBalancerTlsCertificateStatus::UnknownVariant(
+                UnknownLoadBalancerTlsCertificateStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTlsCertificateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LoadBalancerTlsCertificateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadBalancerTlsCertificateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary of SSL/TLS certificate metadata.</p>
@@ -4832,7 +9400,564 @@ pub struct MetricDatapoint {
     /// <p>The unit. </p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<MetricUnit>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricName {
+    BurstCapacityPercentage,
+    BurstCapacityTime,
+    Cpuutilization,
+    ClientTLSNegotiationErrorCount,
+    DatabaseConnections,
+    DiskQueueDepth,
+    FreeStorageSpace,
+    HttpcodeInstance2XXCount,
+    HttpcodeInstance3XXCount,
+    HttpcodeInstance4XXCount,
+    HttpcodeInstance5XXCount,
+    HttpcodeLB4XXCount,
+    HttpcodeLB5XXCount,
+    HealthyHostCount,
+    InstanceResponseTime,
+    NetworkIn,
+    NetworkOut,
+    NetworkReceiveThroughput,
+    NetworkTransmitThroughput,
+    RejectedConnectionCount,
+    RequestCount,
+    StatusCheckFailed,
+    StatusCheckFailedInstance,
+    StatusCheckFailedSystem,
+    UnhealthyHostCount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricName),
+}
+
+impl Default for MetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricName {
+    fn into(self) -> String {
+        match self {
+            MetricName::BurstCapacityPercentage => "BurstCapacityPercentage".to_string(),
+            MetricName::BurstCapacityTime => "BurstCapacityTime".to_string(),
+            MetricName::Cpuutilization => "CPUUtilization".to_string(),
+            MetricName::ClientTLSNegotiationErrorCount => {
+                "ClientTLSNegotiationErrorCount".to_string()
+            }
+            MetricName::DatabaseConnections => "DatabaseConnections".to_string(),
+            MetricName::DiskQueueDepth => "DiskQueueDepth".to_string(),
+            MetricName::FreeStorageSpace => "FreeStorageSpace".to_string(),
+            MetricName::HttpcodeInstance2XXCount => "HTTPCode_Instance_2XX_Count".to_string(),
+            MetricName::HttpcodeInstance3XXCount => "HTTPCode_Instance_3XX_Count".to_string(),
+            MetricName::HttpcodeInstance4XXCount => "HTTPCode_Instance_4XX_Count".to_string(),
+            MetricName::HttpcodeInstance5XXCount => "HTTPCode_Instance_5XX_Count".to_string(),
+            MetricName::HttpcodeLB4XXCount => "HTTPCode_LB_4XX_Count".to_string(),
+            MetricName::HttpcodeLB5XXCount => "HTTPCode_LB_5XX_Count".to_string(),
+            MetricName::HealthyHostCount => "HealthyHostCount".to_string(),
+            MetricName::InstanceResponseTime => "InstanceResponseTime".to_string(),
+            MetricName::NetworkIn => "NetworkIn".to_string(),
+            MetricName::NetworkOut => "NetworkOut".to_string(),
+            MetricName::NetworkReceiveThroughput => "NetworkReceiveThroughput".to_string(),
+            MetricName::NetworkTransmitThroughput => "NetworkTransmitThroughput".to_string(),
+            MetricName::RejectedConnectionCount => "RejectedConnectionCount".to_string(),
+            MetricName::RequestCount => "RequestCount".to_string(),
+            MetricName::StatusCheckFailed => "StatusCheckFailed".to_string(),
+            MetricName::StatusCheckFailedInstance => "StatusCheckFailed_Instance".to_string(),
+            MetricName::StatusCheckFailedSystem => "StatusCheckFailed_System".to_string(),
+            MetricName::UnhealthyHostCount => "UnhealthyHostCount".to_string(),
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricName {
+    fn into(self) -> &'a str {
+        match self {
+            MetricName::BurstCapacityPercentage => &"BurstCapacityPercentage",
+            MetricName::BurstCapacityTime => &"BurstCapacityTime",
+            MetricName::Cpuutilization => &"CPUUtilization",
+            MetricName::ClientTLSNegotiationErrorCount => &"ClientTLSNegotiationErrorCount",
+            MetricName::DatabaseConnections => &"DatabaseConnections",
+            MetricName::DiskQueueDepth => &"DiskQueueDepth",
+            MetricName::FreeStorageSpace => &"FreeStorageSpace",
+            MetricName::HttpcodeInstance2XXCount => &"HTTPCode_Instance_2XX_Count",
+            MetricName::HttpcodeInstance3XXCount => &"HTTPCode_Instance_3XX_Count",
+            MetricName::HttpcodeInstance4XXCount => &"HTTPCode_Instance_4XX_Count",
+            MetricName::HttpcodeInstance5XXCount => &"HTTPCode_Instance_5XX_Count",
+            MetricName::HttpcodeLB4XXCount => &"HTTPCode_LB_4XX_Count",
+            MetricName::HttpcodeLB5XXCount => &"HTTPCode_LB_5XX_Count",
+            MetricName::HealthyHostCount => &"HealthyHostCount",
+            MetricName::InstanceResponseTime => &"InstanceResponseTime",
+            MetricName::NetworkIn => &"NetworkIn",
+            MetricName::NetworkOut => &"NetworkOut",
+            MetricName::NetworkReceiveThroughput => &"NetworkReceiveThroughput",
+            MetricName::NetworkTransmitThroughput => &"NetworkTransmitThroughput",
+            MetricName::RejectedConnectionCount => &"RejectedConnectionCount",
+            MetricName::RequestCount => &"RequestCount",
+            MetricName::StatusCheckFailed => &"StatusCheckFailed",
+            MetricName::StatusCheckFailedInstance => &"StatusCheckFailed_Instance",
+            MetricName::StatusCheckFailedSystem => &"StatusCheckFailed_System",
+            MetricName::UnhealthyHostCount => &"UnhealthyHostCount",
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "BurstCapacityPercentage" => MetricName::BurstCapacityPercentage,
+            "BurstCapacityTime" => MetricName::BurstCapacityTime,
+            "CPUUtilization" => MetricName::Cpuutilization,
+            "ClientTLSNegotiationErrorCount" => MetricName::ClientTLSNegotiationErrorCount,
+            "DatabaseConnections" => MetricName::DatabaseConnections,
+            "DiskQueueDepth" => MetricName::DiskQueueDepth,
+            "FreeStorageSpace" => MetricName::FreeStorageSpace,
+            "HTTPCode_Instance_2XX_Count" => MetricName::HttpcodeInstance2XXCount,
+            "HTTPCode_Instance_3XX_Count" => MetricName::HttpcodeInstance3XXCount,
+            "HTTPCode_Instance_4XX_Count" => MetricName::HttpcodeInstance4XXCount,
+            "HTTPCode_Instance_5XX_Count" => MetricName::HttpcodeInstance5XXCount,
+            "HTTPCode_LB_4XX_Count" => MetricName::HttpcodeLB4XXCount,
+            "HTTPCode_LB_5XX_Count" => MetricName::HttpcodeLB5XXCount,
+            "HealthyHostCount" => MetricName::HealthyHostCount,
+            "InstanceResponseTime" => MetricName::InstanceResponseTime,
+            "NetworkIn" => MetricName::NetworkIn,
+            "NetworkOut" => MetricName::NetworkOut,
+            "NetworkReceiveThroughput" => MetricName::NetworkReceiveThroughput,
+            "NetworkTransmitThroughput" => MetricName::NetworkTransmitThroughput,
+            "RejectedConnectionCount" => MetricName::RejectedConnectionCount,
+            "RequestCount" => MetricName::RequestCount,
+            "StatusCheckFailed" => MetricName::StatusCheckFailed,
+            "StatusCheckFailed_Instance" => MetricName::StatusCheckFailedInstance,
+            "StatusCheckFailed_System" => MetricName::StatusCheckFailedSystem,
+            "UnhealthyHostCount" => MetricName::UnhealthyHostCount,
+            _ => MetricName::UnknownVariant(UnknownMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BurstCapacityPercentage" => MetricName::BurstCapacityPercentage,
+            "BurstCapacityTime" => MetricName::BurstCapacityTime,
+            "CPUUtilization" => MetricName::Cpuutilization,
+            "ClientTLSNegotiationErrorCount" => MetricName::ClientTLSNegotiationErrorCount,
+            "DatabaseConnections" => MetricName::DatabaseConnections,
+            "DiskQueueDepth" => MetricName::DiskQueueDepth,
+            "FreeStorageSpace" => MetricName::FreeStorageSpace,
+            "HTTPCode_Instance_2XX_Count" => MetricName::HttpcodeInstance2XXCount,
+            "HTTPCode_Instance_3XX_Count" => MetricName::HttpcodeInstance3XXCount,
+            "HTTPCode_Instance_4XX_Count" => MetricName::HttpcodeInstance4XXCount,
+            "HTTPCode_Instance_5XX_Count" => MetricName::HttpcodeInstance5XXCount,
+            "HTTPCode_LB_4XX_Count" => MetricName::HttpcodeLB4XXCount,
+            "HTTPCode_LB_5XX_Count" => MetricName::HttpcodeLB5XXCount,
+            "HealthyHostCount" => MetricName::HealthyHostCount,
+            "InstanceResponseTime" => MetricName::InstanceResponseTime,
+            "NetworkIn" => MetricName::NetworkIn,
+            "NetworkOut" => MetricName::NetworkOut,
+            "NetworkReceiveThroughput" => MetricName::NetworkReceiveThroughput,
+            "NetworkTransmitThroughput" => MetricName::NetworkTransmitThroughput,
+            "RejectedConnectionCount" => MetricName::RejectedConnectionCount,
+            "RequestCount" => MetricName::RequestCount,
+            "StatusCheckFailed" => MetricName::StatusCheckFailed,
+            "StatusCheckFailed_Instance" => MetricName::StatusCheckFailedInstance,
+            "StatusCheckFailed_System" => MetricName::StatusCheckFailedSystem,
+            "UnhealthyHostCount" => MetricName::UnhealthyHostCount,
+            _ => MetricName::UnknownVariant(UnknownMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricStatistic),
+}
+
+impl Default for MetricStatistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricStatistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricStatistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        match self {
+            MetricStatistic::Average => "Average".to_string(),
+            MetricStatistic::Maximum => "Maximum".to_string(),
+            MetricStatistic::Minimum => "Minimum".to_string(),
+            MetricStatistic::SampleCount => "SampleCount".to_string(),
+            MetricStatistic::Sum => "Sum".to_string(),
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricStatistic {
+    fn into(self) -> &'a str {
+        match self {
+            MetricStatistic::Average => &"Average",
+            MetricStatistic::Maximum => &"Maximum",
+            MetricStatistic::Minimum => &"Minimum",
+            MetricStatistic::SampleCount => &"SampleCount",
+            MetricStatistic::Sum => &"Sum",
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricStatistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricStatistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricStatistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricStatistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricUnit),
+}
+
+impl Default for MetricUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricUnit {
+    fn into(self) -> String {
+        match self {
+            MetricUnit::Bits => "Bits".to_string(),
+            MetricUnit::BitsSecond => "Bits/Second".to_string(),
+            MetricUnit::Bytes => "Bytes".to_string(),
+            MetricUnit::BytesSecond => "Bytes/Second".to_string(),
+            MetricUnit::Count => "Count".to_string(),
+            MetricUnit::CountSecond => "Count/Second".to_string(),
+            MetricUnit::Gigabits => "Gigabits".to_string(),
+            MetricUnit::GigabitsSecond => "Gigabits/Second".to_string(),
+            MetricUnit::Gigabytes => "Gigabytes".to_string(),
+            MetricUnit::GigabytesSecond => "Gigabytes/Second".to_string(),
+            MetricUnit::Kilobits => "Kilobits".to_string(),
+            MetricUnit::KilobitsSecond => "Kilobits/Second".to_string(),
+            MetricUnit::Kilobytes => "Kilobytes".to_string(),
+            MetricUnit::KilobytesSecond => "Kilobytes/Second".to_string(),
+            MetricUnit::Megabits => "Megabits".to_string(),
+            MetricUnit::MegabitsSecond => "Megabits/Second".to_string(),
+            MetricUnit::Megabytes => "Megabytes".to_string(),
+            MetricUnit::MegabytesSecond => "Megabytes/Second".to_string(),
+            MetricUnit::Microseconds => "Microseconds".to_string(),
+            MetricUnit::Milliseconds => "Milliseconds".to_string(),
+            MetricUnit::None => "None".to_string(),
+            MetricUnit::Percent => "Percent".to_string(),
+            MetricUnit::Seconds => "Seconds".to_string(),
+            MetricUnit::Terabits => "Terabits".to_string(),
+            MetricUnit::TerabitsSecond => "Terabits/Second".to_string(),
+            MetricUnit::Terabytes => "Terabytes".to_string(),
+            MetricUnit::TerabytesSecond => "Terabytes/Second".to_string(),
+            MetricUnit::UnknownVariant(UnknownMetricUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricUnit {
+    fn into(self) -> &'a str {
+        match self {
+            MetricUnit::Bits => &"Bits",
+            MetricUnit::BitsSecond => &"Bits/Second",
+            MetricUnit::Bytes => &"Bytes",
+            MetricUnit::BytesSecond => &"Bytes/Second",
+            MetricUnit::Count => &"Count",
+            MetricUnit::CountSecond => &"Count/Second",
+            MetricUnit::Gigabits => &"Gigabits",
+            MetricUnit::GigabitsSecond => &"Gigabits/Second",
+            MetricUnit::Gigabytes => &"Gigabytes",
+            MetricUnit::GigabytesSecond => &"Gigabytes/Second",
+            MetricUnit::Kilobits => &"Kilobits",
+            MetricUnit::KilobitsSecond => &"Kilobits/Second",
+            MetricUnit::Kilobytes => &"Kilobytes",
+            MetricUnit::KilobytesSecond => &"Kilobytes/Second",
+            MetricUnit::Megabits => &"Megabits",
+            MetricUnit::MegabitsSecond => &"Megabits/Second",
+            MetricUnit::Megabytes => &"Megabytes",
+            MetricUnit::MegabytesSecond => &"Megabytes/Second",
+            MetricUnit::Microseconds => &"Microseconds",
+            MetricUnit::Milliseconds => &"Milliseconds",
+            MetricUnit::None => &"None",
+            MetricUnit::Percent => &"Percent",
+            MetricUnit::Seconds => &"Seconds",
+            MetricUnit::Terabits => &"Terabits",
+            MetricUnit::TerabitsSecond => &"Terabits/Second",
+            MetricUnit::Terabytes => &"Terabytes",
+            MetricUnit::TerabytesSecond => &"Terabytes/Second",
+            MetricUnit::UnknownVariant(UnknownMetricUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bits" => MetricUnit::Bits,
+            "Bits/Second" => MetricUnit::BitsSecond,
+            "Bytes" => MetricUnit::Bytes,
+            "Bytes/Second" => MetricUnit::BytesSecond,
+            "Count" => MetricUnit::Count,
+            "Count/Second" => MetricUnit::CountSecond,
+            "Gigabits" => MetricUnit::Gigabits,
+            "Gigabits/Second" => MetricUnit::GigabitsSecond,
+            "Gigabytes" => MetricUnit::Gigabytes,
+            "Gigabytes/Second" => MetricUnit::GigabytesSecond,
+            "Kilobits" => MetricUnit::Kilobits,
+            "Kilobits/Second" => MetricUnit::KilobitsSecond,
+            "Kilobytes" => MetricUnit::Kilobytes,
+            "Kilobytes/Second" => MetricUnit::KilobytesSecond,
+            "Megabits" => MetricUnit::Megabits,
+            "Megabits/Second" => MetricUnit::MegabitsSecond,
+            "Megabytes" => MetricUnit::Megabytes,
+            "Megabytes/Second" => MetricUnit::MegabytesSecond,
+            "Microseconds" => MetricUnit::Microseconds,
+            "Milliseconds" => MetricUnit::Milliseconds,
+            "None" => MetricUnit::None,
+            "Percent" => MetricUnit::Percent,
+            "Seconds" => MetricUnit::Seconds,
+            "Terabits" => MetricUnit::Terabits,
+            "Terabits/Second" => MetricUnit::TerabitsSecond,
+            "Terabytes" => MetricUnit::Terabytes,
+            "Terabytes/Second" => MetricUnit::TerabytesSecond,
+            _ => MetricUnit::UnknownVariant(UnknownMetricUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bits" => MetricUnit::Bits,
+            "Bits/Second" => MetricUnit::BitsSecond,
+            "Bytes" => MetricUnit::Bytes,
+            "Bytes/Second" => MetricUnit::BytesSecond,
+            "Count" => MetricUnit::Count,
+            "Count/Second" => MetricUnit::CountSecond,
+            "Gigabits" => MetricUnit::Gigabits,
+            "Gigabits/Second" => MetricUnit::GigabitsSecond,
+            "Gigabytes" => MetricUnit::Gigabytes,
+            "Gigabytes/Second" => MetricUnit::GigabytesSecond,
+            "Kilobits" => MetricUnit::Kilobits,
+            "Kilobits/Second" => MetricUnit::KilobitsSecond,
+            "Kilobytes" => MetricUnit::Kilobytes,
+            "Kilobytes/Second" => MetricUnit::KilobytesSecond,
+            "Megabits" => MetricUnit::Megabits,
+            "Megabits/Second" => MetricUnit::MegabitsSecond,
+            "Megabytes" => MetricUnit::Megabytes,
+            "Megabytes/Second" => MetricUnit::MegabytesSecond,
+            "Microseconds" => MetricUnit::Microseconds,
+            "Milliseconds" => MetricUnit::Milliseconds,
+            "None" => MetricUnit::None,
+            "Percent" => MetricUnit::Percent,
+            "Seconds" => MetricUnit::Seconds,
+            "Terabits" => MetricUnit::Terabits,
+            "Terabits/Second" => MetricUnit::TerabitsSecond,
+            "Terabytes" => MetricUnit::Terabytes,
+            "Terabytes/Second" => MetricUnit::TerabytesSecond,
+            _ => MetricUnit::UnknownVariant(UnknownMetricUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes resource being monitored by an alarm.</p> <p>An alarm is a way to monitor your Amazon Lightsail resource metrics. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-alarms">Alarms in Amazon Lightsail</a>.</p>
@@ -4850,7 +9975,7 @@ pub struct MonitoredResourceInfo {
     /// <p>The Lightsail resource type of the resource being monitored.</p> <p>Instances, load balancers, and relational databases are the only Lightsail resources that can currently be monitored by alarms.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Describes the monthly data transfer in and out of your virtual private server (or <i>instance</i>).</p>
@@ -4861,6 +9986,116 @@ pub struct MonthlyTransfer {
     #[serde(rename = "gbPerMonthAllocated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gb_per_month_allocated: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNetworkProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NetworkProtocol {
+    All,
+    Icmp,
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNetworkProtocol),
+}
+
+impl Default for NetworkProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NetworkProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NetworkProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NetworkProtocol {
+    fn into(self) -> String {
+        match self {
+            NetworkProtocol::All => "all".to_string(),
+            NetworkProtocol::Icmp => "icmp".to_string(),
+            NetworkProtocol::Tcp => "tcp".to_string(),
+            NetworkProtocol::Udp => "udp".to_string(),
+            NetworkProtocol::UnknownVariant(UnknownNetworkProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NetworkProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            NetworkProtocol::All => &"all",
+            NetworkProtocol::Icmp => &"icmp",
+            NetworkProtocol::Tcp => &"tcp",
+            NetworkProtocol::Udp => &"udp",
+            NetworkProtocol::UnknownVariant(UnknownNetworkProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NetworkProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => NetworkProtocol::All,
+            "icmp" => NetworkProtocol::Icmp,
+            "tcp" => NetworkProtocol::Tcp,
+            "udp" => NetworkProtocol::Udp,
+            _ => NetworkProtocol::UnknownVariant(UnknownNetworkProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NetworkProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => NetworkProtocol::All,
+            "icmp" => NetworkProtocol::Icmp,
+            "tcp" => NetworkProtocol::Tcp,
+            "udp" => NetworkProtocol::Udp,
+            _ => NetworkProtocol::UnknownVariant(UnknownNetworkProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NetworkProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NetworkProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4918,7 +10153,7 @@ pub struct Operation {
     /// <p>The type of operation. </p>
     #[serde(rename = "operationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_type: Option<String>,
+    pub operation_type: Option<OperationType>,
     /// <p>The resource name.</p>
     #[serde(rename = "resourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4926,15 +10161,625 @@ pub struct Operation {
     /// <p>The resource type. </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The status of the operation. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<OperationStatus>,
     /// <p>The timestamp when the status was changed (e.g., <code>1479816991.349</code>).</p>
     #[serde(rename = "statusChangedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_changed_at: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationStatus {
+    Completed,
+    Failed,
+    NotStarted,
+    Started,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationStatus),
+}
+
+impl Default for OperationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationStatus {
+    fn into(self) -> String {
+        match self {
+            OperationStatus::Completed => "Completed".to_string(),
+            OperationStatus::Failed => "Failed".to_string(),
+            OperationStatus::NotStarted => "NotStarted".to_string(),
+            OperationStatus::Started => "Started".to_string(),
+            OperationStatus::Succeeded => "Succeeded".to_string(),
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OperationStatus::Completed => &"Completed",
+            OperationStatus::Failed => &"Failed",
+            OperationStatus::NotStarted => &"NotStarted",
+            OperationStatus::Started => &"Started",
+            OperationStatus::Succeeded => &"Succeeded",
+            OperationStatus::UnknownVariant(UnknownOperationStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => OperationStatus::Completed,
+            "Failed" => OperationStatus::Failed,
+            "NotStarted" => OperationStatus::NotStarted,
+            "Started" => OperationStatus::Started,
+            "Succeeded" => OperationStatus::Succeeded,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => OperationStatus::Completed,
+            "Failed" => OperationStatus::Failed,
+            "NotStarted" => OperationStatus::NotStarted,
+            "Started" => OperationStatus::Started,
+            "Succeeded" => OperationStatus::Succeeded,
+            _ => OperationStatus::UnknownVariant(UnknownOperationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperationType {
+    AllocateStaticIp,
+    AttachCertificateToDistribution,
+    AttachDisk,
+    AttachInstancesToLoadBalancer,
+    AttachLoadBalancerTlsCertificate,
+    AttachStaticIp,
+    CloseInstancePublicPorts,
+    CreateCertificate,
+    CreateContactMethod,
+    CreateContainerService,
+    CreateContainerServiceDeployment,
+    CreateContainerServiceRegistryLogin,
+    CreateDisk,
+    CreateDiskFromSnapshot,
+    CreateDiskSnapshot,
+    CreateDistribution,
+    CreateDomain,
+    CreateInstance,
+    CreateInstanceSnapshot,
+    CreateInstancesFromSnapshot,
+    CreateLoadBalancer,
+    CreateLoadBalancerTlsCertificate,
+    CreateRelationalDatabase,
+    CreateRelationalDatabaseFromSnapshot,
+    CreateRelationalDatabaseSnapshot,
+    DeleteAlarm,
+    DeleteCertificate,
+    DeleteContactMethod,
+    DeleteContainerImage,
+    DeleteContainerService,
+    DeleteDisk,
+    DeleteDiskSnapshot,
+    DeleteDistribution,
+    DeleteDomain,
+    DeleteDomainEntry,
+    DeleteInstance,
+    DeleteInstanceSnapshot,
+    DeleteKnownHostKeys,
+    DeleteLoadBalancer,
+    DeleteLoadBalancerTlsCertificate,
+    DeleteRelationalDatabase,
+    DeleteRelationalDatabaseSnapshot,
+    DetachCertificateFromDistribution,
+    DetachDisk,
+    DetachInstancesFromLoadBalancer,
+    DetachStaticIp,
+    DisableAddOn,
+    EnableAddOn,
+    GetAlarms,
+    GetContactMethods,
+    OpenInstancePublicPorts,
+    PutAlarm,
+    PutInstancePublicPorts,
+    RebootInstance,
+    RebootRelationalDatabase,
+    RegisterContainerImage,
+    ReleaseStaticIp,
+    ResetDistributionCache,
+    SendContactMethodVerification,
+    StartInstance,
+    StartRelationalDatabase,
+    StopInstance,
+    StopRelationalDatabase,
+    TestAlarm,
+    UpdateContainerService,
+    UpdateDistribution,
+    UpdateDistributionBundle,
+    UpdateDomainEntry,
+    UpdateLoadBalancerAttribute,
+    UpdateRelationalDatabase,
+    UpdateRelationalDatabaseParameters,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperationType),
+}
+
+impl Default for OperationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperationType {
+    fn into(self) -> String {
+        match self {
+            OperationType::AllocateStaticIp => "AllocateStaticIp".to_string(),
+            OperationType::AttachCertificateToDistribution => {
+                "AttachCertificateToDistribution".to_string()
+            }
+            OperationType::AttachDisk => "AttachDisk".to_string(),
+            OperationType::AttachInstancesToLoadBalancer => {
+                "AttachInstancesToLoadBalancer".to_string()
+            }
+            OperationType::AttachLoadBalancerTlsCertificate => {
+                "AttachLoadBalancerTlsCertificate".to_string()
+            }
+            OperationType::AttachStaticIp => "AttachStaticIp".to_string(),
+            OperationType::CloseInstancePublicPorts => "CloseInstancePublicPorts".to_string(),
+            OperationType::CreateCertificate => "CreateCertificate".to_string(),
+            OperationType::CreateContactMethod => "CreateContactMethod".to_string(),
+            OperationType::CreateContainerService => "CreateContainerService".to_string(),
+            OperationType::CreateContainerServiceDeployment => {
+                "CreateContainerServiceDeployment".to_string()
+            }
+            OperationType::CreateContainerServiceRegistryLogin => {
+                "CreateContainerServiceRegistryLogin".to_string()
+            }
+            OperationType::CreateDisk => "CreateDisk".to_string(),
+            OperationType::CreateDiskFromSnapshot => "CreateDiskFromSnapshot".to_string(),
+            OperationType::CreateDiskSnapshot => "CreateDiskSnapshot".to_string(),
+            OperationType::CreateDistribution => "CreateDistribution".to_string(),
+            OperationType::CreateDomain => "CreateDomain".to_string(),
+            OperationType::CreateInstance => "CreateInstance".to_string(),
+            OperationType::CreateInstanceSnapshot => "CreateInstanceSnapshot".to_string(),
+            OperationType::CreateInstancesFromSnapshot => "CreateInstancesFromSnapshot".to_string(),
+            OperationType::CreateLoadBalancer => "CreateLoadBalancer".to_string(),
+            OperationType::CreateLoadBalancerTlsCertificate => {
+                "CreateLoadBalancerTlsCertificate".to_string()
+            }
+            OperationType::CreateRelationalDatabase => "CreateRelationalDatabase".to_string(),
+            OperationType::CreateRelationalDatabaseFromSnapshot => {
+                "CreateRelationalDatabaseFromSnapshot".to_string()
+            }
+            OperationType::CreateRelationalDatabaseSnapshot => {
+                "CreateRelationalDatabaseSnapshot".to_string()
+            }
+            OperationType::DeleteAlarm => "DeleteAlarm".to_string(),
+            OperationType::DeleteCertificate => "DeleteCertificate".to_string(),
+            OperationType::DeleteContactMethod => "DeleteContactMethod".to_string(),
+            OperationType::DeleteContainerImage => "DeleteContainerImage".to_string(),
+            OperationType::DeleteContainerService => "DeleteContainerService".to_string(),
+            OperationType::DeleteDisk => "DeleteDisk".to_string(),
+            OperationType::DeleteDiskSnapshot => "DeleteDiskSnapshot".to_string(),
+            OperationType::DeleteDistribution => "DeleteDistribution".to_string(),
+            OperationType::DeleteDomain => "DeleteDomain".to_string(),
+            OperationType::DeleteDomainEntry => "DeleteDomainEntry".to_string(),
+            OperationType::DeleteInstance => "DeleteInstance".to_string(),
+            OperationType::DeleteInstanceSnapshot => "DeleteInstanceSnapshot".to_string(),
+            OperationType::DeleteKnownHostKeys => "DeleteKnownHostKeys".to_string(),
+            OperationType::DeleteLoadBalancer => "DeleteLoadBalancer".to_string(),
+            OperationType::DeleteLoadBalancerTlsCertificate => {
+                "DeleteLoadBalancerTlsCertificate".to_string()
+            }
+            OperationType::DeleteRelationalDatabase => "DeleteRelationalDatabase".to_string(),
+            OperationType::DeleteRelationalDatabaseSnapshot => {
+                "DeleteRelationalDatabaseSnapshot".to_string()
+            }
+            OperationType::DetachCertificateFromDistribution => {
+                "DetachCertificateFromDistribution".to_string()
+            }
+            OperationType::DetachDisk => "DetachDisk".to_string(),
+            OperationType::DetachInstancesFromLoadBalancer => {
+                "DetachInstancesFromLoadBalancer".to_string()
+            }
+            OperationType::DetachStaticIp => "DetachStaticIp".to_string(),
+            OperationType::DisableAddOn => "DisableAddOn".to_string(),
+            OperationType::EnableAddOn => "EnableAddOn".to_string(),
+            OperationType::GetAlarms => "GetAlarms".to_string(),
+            OperationType::GetContactMethods => "GetContactMethods".to_string(),
+            OperationType::OpenInstancePublicPorts => "OpenInstancePublicPorts".to_string(),
+            OperationType::PutAlarm => "PutAlarm".to_string(),
+            OperationType::PutInstancePublicPorts => "PutInstancePublicPorts".to_string(),
+            OperationType::RebootInstance => "RebootInstance".to_string(),
+            OperationType::RebootRelationalDatabase => "RebootRelationalDatabase".to_string(),
+            OperationType::RegisterContainerImage => "RegisterContainerImage".to_string(),
+            OperationType::ReleaseStaticIp => "ReleaseStaticIp".to_string(),
+            OperationType::ResetDistributionCache => "ResetDistributionCache".to_string(),
+            OperationType::SendContactMethodVerification => {
+                "SendContactMethodVerification".to_string()
+            }
+            OperationType::StartInstance => "StartInstance".to_string(),
+            OperationType::StartRelationalDatabase => "StartRelationalDatabase".to_string(),
+            OperationType::StopInstance => "StopInstance".to_string(),
+            OperationType::StopRelationalDatabase => "StopRelationalDatabase".to_string(),
+            OperationType::TestAlarm => "TestAlarm".to_string(),
+            OperationType::UpdateContainerService => "UpdateContainerService".to_string(),
+            OperationType::UpdateDistribution => "UpdateDistribution".to_string(),
+            OperationType::UpdateDistributionBundle => "UpdateDistributionBundle".to_string(),
+            OperationType::UpdateDomainEntry => "UpdateDomainEntry".to_string(),
+            OperationType::UpdateLoadBalancerAttribute => "UpdateLoadBalancerAttribute".to_string(),
+            OperationType::UpdateRelationalDatabase => "UpdateRelationalDatabase".to_string(),
+            OperationType::UpdateRelationalDatabaseParameters => {
+                "UpdateRelationalDatabaseParameters".to_string()
+            }
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperationType {
+    fn into(self) -> &'a str {
+        match self {
+            OperationType::AllocateStaticIp => &"AllocateStaticIp",
+            OperationType::AttachCertificateToDistribution => &"AttachCertificateToDistribution",
+            OperationType::AttachDisk => &"AttachDisk",
+            OperationType::AttachInstancesToLoadBalancer => &"AttachInstancesToLoadBalancer",
+            OperationType::AttachLoadBalancerTlsCertificate => &"AttachLoadBalancerTlsCertificate",
+            OperationType::AttachStaticIp => &"AttachStaticIp",
+            OperationType::CloseInstancePublicPorts => &"CloseInstancePublicPorts",
+            OperationType::CreateCertificate => &"CreateCertificate",
+            OperationType::CreateContactMethod => &"CreateContactMethod",
+            OperationType::CreateContainerService => &"CreateContainerService",
+            OperationType::CreateContainerServiceDeployment => &"CreateContainerServiceDeployment",
+            OperationType::CreateContainerServiceRegistryLogin => {
+                &"CreateContainerServiceRegistryLogin"
+            }
+            OperationType::CreateDisk => &"CreateDisk",
+            OperationType::CreateDiskFromSnapshot => &"CreateDiskFromSnapshot",
+            OperationType::CreateDiskSnapshot => &"CreateDiskSnapshot",
+            OperationType::CreateDistribution => &"CreateDistribution",
+            OperationType::CreateDomain => &"CreateDomain",
+            OperationType::CreateInstance => &"CreateInstance",
+            OperationType::CreateInstanceSnapshot => &"CreateInstanceSnapshot",
+            OperationType::CreateInstancesFromSnapshot => &"CreateInstancesFromSnapshot",
+            OperationType::CreateLoadBalancer => &"CreateLoadBalancer",
+            OperationType::CreateLoadBalancerTlsCertificate => &"CreateLoadBalancerTlsCertificate",
+            OperationType::CreateRelationalDatabase => &"CreateRelationalDatabase",
+            OperationType::CreateRelationalDatabaseFromSnapshot => {
+                &"CreateRelationalDatabaseFromSnapshot"
+            }
+            OperationType::CreateRelationalDatabaseSnapshot => &"CreateRelationalDatabaseSnapshot",
+            OperationType::DeleteAlarm => &"DeleteAlarm",
+            OperationType::DeleteCertificate => &"DeleteCertificate",
+            OperationType::DeleteContactMethod => &"DeleteContactMethod",
+            OperationType::DeleteContainerImage => &"DeleteContainerImage",
+            OperationType::DeleteContainerService => &"DeleteContainerService",
+            OperationType::DeleteDisk => &"DeleteDisk",
+            OperationType::DeleteDiskSnapshot => &"DeleteDiskSnapshot",
+            OperationType::DeleteDistribution => &"DeleteDistribution",
+            OperationType::DeleteDomain => &"DeleteDomain",
+            OperationType::DeleteDomainEntry => &"DeleteDomainEntry",
+            OperationType::DeleteInstance => &"DeleteInstance",
+            OperationType::DeleteInstanceSnapshot => &"DeleteInstanceSnapshot",
+            OperationType::DeleteKnownHostKeys => &"DeleteKnownHostKeys",
+            OperationType::DeleteLoadBalancer => &"DeleteLoadBalancer",
+            OperationType::DeleteLoadBalancerTlsCertificate => &"DeleteLoadBalancerTlsCertificate",
+            OperationType::DeleteRelationalDatabase => &"DeleteRelationalDatabase",
+            OperationType::DeleteRelationalDatabaseSnapshot => &"DeleteRelationalDatabaseSnapshot",
+            OperationType::DetachCertificateFromDistribution => {
+                &"DetachCertificateFromDistribution"
+            }
+            OperationType::DetachDisk => &"DetachDisk",
+            OperationType::DetachInstancesFromLoadBalancer => &"DetachInstancesFromLoadBalancer",
+            OperationType::DetachStaticIp => &"DetachStaticIp",
+            OperationType::DisableAddOn => &"DisableAddOn",
+            OperationType::EnableAddOn => &"EnableAddOn",
+            OperationType::GetAlarms => &"GetAlarms",
+            OperationType::GetContactMethods => &"GetContactMethods",
+            OperationType::OpenInstancePublicPorts => &"OpenInstancePublicPorts",
+            OperationType::PutAlarm => &"PutAlarm",
+            OperationType::PutInstancePublicPorts => &"PutInstancePublicPorts",
+            OperationType::RebootInstance => &"RebootInstance",
+            OperationType::RebootRelationalDatabase => &"RebootRelationalDatabase",
+            OperationType::RegisterContainerImage => &"RegisterContainerImage",
+            OperationType::ReleaseStaticIp => &"ReleaseStaticIp",
+            OperationType::ResetDistributionCache => &"ResetDistributionCache",
+            OperationType::SendContactMethodVerification => &"SendContactMethodVerification",
+            OperationType::StartInstance => &"StartInstance",
+            OperationType::StartRelationalDatabase => &"StartRelationalDatabase",
+            OperationType::StopInstance => &"StopInstance",
+            OperationType::StopRelationalDatabase => &"StopRelationalDatabase",
+            OperationType::TestAlarm => &"TestAlarm",
+            OperationType::UpdateContainerService => &"UpdateContainerService",
+            OperationType::UpdateDistribution => &"UpdateDistribution",
+            OperationType::UpdateDistributionBundle => &"UpdateDistributionBundle",
+            OperationType::UpdateDomainEntry => &"UpdateDomainEntry",
+            OperationType::UpdateLoadBalancerAttribute => &"UpdateLoadBalancerAttribute",
+            OperationType::UpdateRelationalDatabase => &"UpdateRelationalDatabase",
+            OperationType::UpdateRelationalDatabaseParameters => {
+                &"UpdateRelationalDatabaseParameters"
+            }
+            OperationType::UnknownVariant(UnknownOperationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllocateStaticIp" => OperationType::AllocateStaticIp,
+            "AttachCertificateToDistribution" => OperationType::AttachCertificateToDistribution,
+            "AttachDisk" => OperationType::AttachDisk,
+            "AttachInstancesToLoadBalancer" => OperationType::AttachInstancesToLoadBalancer,
+            "AttachLoadBalancerTlsCertificate" => OperationType::AttachLoadBalancerTlsCertificate,
+            "AttachStaticIp" => OperationType::AttachStaticIp,
+            "CloseInstancePublicPorts" => OperationType::CloseInstancePublicPorts,
+            "CreateCertificate" => OperationType::CreateCertificate,
+            "CreateContactMethod" => OperationType::CreateContactMethod,
+            "CreateContainerService" => OperationType::CreateContainerService,
+            "CreateContainerServiceDeployment" => OperationType::CreateContainerServiceDeployment,
+            "CreateContainerServiceRegistryLogin" => {
+                OperationType::CreateContainerServiceRegistryLogin
+            }
+            "CreateDisk" => OperationType::CreateDisk,
+            "CreateDiskFromSnapshot" => OperationType::CreateDiskFromSnapshot,
+            "CreateDiskSnapshot" => OperationType::CreateDiskSnapshot,
+            "CreateDistribution" => OperationType::CreateDistribution,
+            "CreateDomain" => OperationType::CreateDomain,
+            "CreateInstance" => OperationType::CreateInstance,
+            "CreateInstanceSnapshot" => OperationType::CreateInstanceSnapshot,
+            "CreateInstancesFromSnapshot" => OperationType::CreateInstancesFromSnapshot,
+            "CreateLoadBalancer" => OperationType::CreateLoadBalancer,
+            "CreateLoadBalancerTlsCertificate" => OperationType::CreateLoadBalancerTlsCertificate,
+            "CreateRelationalDatabase" => OperationType::CreateRelationalDatabase,
+            "CreateRelationalDatabaseFromSnapshot" => {
+                OperationType::CreateRelationalDatabaseFromSnapshot
+            }
+            "CreateRelationalDatabaseSnapshot" => OperationType::CreateRelationalDatabaseSnapshot,
+            "DeleteAlarm" => OperationType::DeleteAlarm,
+            "DeleteCertificate" => OperationType::DeleteCertificate,
+            "DeleteContactMethod" => OperationType::DeleteContactMethod,
+            "DeleteContainerImage" => OperationType::DeleteContainerImage,
+            "DeleteContainerService" => OperationType::DeleteContainerService,
+            "DeleteDisk" => OperationType::DeleteDisk,
+            "DeleteDiskSnapshot" => OperationType::DeleteDiskSnapshot,
+            "DeleteDistribution" => OperationType::DeleteDistribution,
+            "DeleteDomain" => OperationType::DeleteDomain,
+            "DeleteDomainEntry" => OperationType::DeleteDomainEntry,
+            "DeleteInstance" => OperationType::DeleteInstance,
+            "DeleteInstanceSnapshot" => OperationType::DeleteInstanceSnapshot,
+            "DeleteKnownHostKeys" => OperationType::DeleteKnownHostKeys,
+            "DeleteLoadBalancer" => OperationType::DeleteLoadBalancer,
+            "DeleteLoadBalancerTlsCertificate" => OperationType::DeleteLoadBalancerTlsCertificate,
+            "DeleteRelationalDatabase" => OperationType::DeleteRelationalDatabase,
+            "DeleteRelationalDatabaseSnapshot" => OperationType::DeleteRelationalDatabaseSnapshot,
+            "DetachCertificateFromDistribution" => OperationType::DetachCertificateFromDistribution,
+            "DetachDisk" => OperationType::DetachDisk,
+            "DetachInstancesFromLoadBalancer" => OperationType::DetachInstancesFromLoadBalancer,
+            "DetachStaticIp" => OperationType::DetachStaticIp,
+            "DisableAddOn" => OperationType::DisableAddOn,
+            "EnableAddOn" => OperationType::EnableAddOn,
+            "GetAlarms" => OperationType::GetAlarms,
+            "GetContactMethods" => OperationType::GetContactMethods,
+            "OpenInstancePublicPorts" => OperationType::OpenInstancePublicPorts,
+            "PutAlarm" => OperationType::PutAlarm,
+            "PutInstancePublicPorts" => OperationType::PutInstancePublicPorts,
+            "RebootInstance" => OperationType::RebootInstance,
+            "RebootRelationalDatabase" => OperationType::RebootRelationalDatabase,
+            "RegisterContainerImage" => OperationType::RegisterContainerImage,
+            "ReleaseStaticIp" => OperationType::ReleaseStaticIp,
+            "ResetDistributionCache" => OperationType::ResetDistributionCache,
+            "SendContactMethodVerification" => OperationType::SendContactMethodVerification,
+            "StartInstance" => OperationType::StartInstance,
+            "StartRelationalDatabase" => OperationType::StartRelationalDatabase,
+            "StopInstance" => OperationType::StopInstance,
+            "StopRelationalDatabase" => OperationType::StopRelationalDatabase,
+            "TestAlarm" => OperationType::TestAlarm,
+            "UpdateContainerService" => OperationType::UpdateContainerService,
+            "UpdateDistribution" => OperationType::UpdateDistribution,
+            "UpdateDistributionBundle" => OperationType::UpdateDistributionBundle,
+            "UpdateDomainEntry" => OperationType::UpdateDomainEntry,
+            "UpdateLoadBalancerAttribute" => OperationType::UpdateLoadBalancerAttribute,
+            "UpdateRelationalDatabase" => OperationType::UpdateRelationalDatabase,
+            "UpdateRelationalDatabaseParameters" => {
+                OperationType::UpdateRelationalDatabaseParameters
+            }
+            _ => OperationType::UnknownVariant(UnknownOperationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllocateStaticIp" => OperationType::AllocateStaticIp,
+            "AttachCertificateToDistribution" => OperationType::AttachCertificateToDistribution,
+            "AttachDisk" => OperationType::AttachDisk,
+            "AttachInstancesToLoadBalancer" => OperationType::AttachInstancesToLoadBalancer,
+            "AttachLoadBalancerTlsCertificate" => OperationType::AttachLoadBalancerTlsCertificate,
+            "AttachStaticIp" => OperationType::AttachStaticIp,
+            "CloseInstancePublicPorts" => OperationType::CloseInstancePublicPorts,
+            "CreateCertificate" => OperationType::CreateCertificate,
+            "CreateContactMethod" => OperationType::CreateContactMethod,
+            "CreateContainerService" => OperationType::CreateContainerService,
+            "CreateContainerServiceDeployment" => OperationType::CreateContainerServiceDeployment,
+            "CreateContainerServiceRegistryLogin" => {
+                OperationType::CreateContainerServiceRegistryLogin
+            }
+            "CreateDisk" => OperationType::CreateDisk,
+            "CreateDiskFromSnapshot" => OperationType::CreateDiskFromSnapshot,
+            "CreateDiskSnapshot" => OperationType::CreateDiskSnapshot,
+            "CreateDistribution" => OperationType::CreateDistribution,
+            "CreateDomain" => OperationType::CreateDomain,
+            "CreateInstance" => OperationType::CreateInstance,
+            "CreateInstanceSnapshot" => OperationType::CreateInstanceSnapshot,
+            "CreateInstancesFromSnapshot" => OperationType::CreateInstancesFromSnapshot,
+            "CreateLoadBalancer" => OperationType::CreateLoadBalancer,
+            "CreateLoadBalancerTlsCertificate" => OperationType::CreateLoadBalancerTlsCertificate,
+            "CreateRelationalDatabase" => OperationType::CreateRelationalDatabase,
+            "CreateRelationalDatabaseFromSnapshot" => {
+                OperationType::CreateRelationalDatabaseFromSnapshot
+            }
+            "CreateRelationalDatabaseSnapshot" => OperationType::CreateRelationalDatabaseSnapshot,
+            "DeleteAlarm" => OperationType::DeleteAlarm,
+            "DeleteCertificate" => OperationType::DeleteCertificate,
+            "DeleteContactMethod" => OperationType::DeleteContactMethod,
+            "DeleteContainerImage" => OperationType::DeleteContainerImage,
+            "DeleteContainerService" => OperationType::DeleteContainerService,
+            "DeleteDisk" => OperationType::DeleteDisk,
+            "DeleteDiskSnapshot" => OperationType::DeleteDiskSnapshot,
+            "DeleteDistribution" => OperationType::DeleteDistribution,
+            "DeleteDomain" => OperationType::DeleteDomain,
+            "DeleteDomainEntry" => OperationType::DeleteDomainEntry,
+            "DeleteInstance" => OperationType::DeleteInstance,
+            "DeleteInstanceSnapshot" => OperationType::DeleteInstanceSnapshot,
+            "DeleteKnownHostKeys" => OperationType::DeleteKnownHostKeys,
+            "DeleteLoadBalancer" => OperationType::DeleteLoadBalancer,
+            "DeleteLoadBalancerTlsCertificate" => OperationType::DeleteLoadBalancerTlsCertificate,
+            "DeleteRelationalDatabase" => OperationType::DeleteRelationalDatabase,
+            "DeleteRelationalDatabaseSnapshot" => OperationType::DeleteRelationalDatabaseSnapshot,
+            "DetachCertificateFromDistribution" => OperationType::DetachCertificateFromDistribution,
+            "DetachDisk" => OperationType::DetachDisk,
+            "DetachInstancesFromLoadBalancer" => OperationType::DetachInstancesFromLoadBalancer,
+            "DetachStaticIp" => OperationType::DetachStaticIp,
+            "DisableAddOn" => OperationType::DisableAddOn,
+            "EnableAddOn" => OperationType::EnableAddOn,
+            "GetAlarms" => OperationType::GetAlarms,
+            "GetContactMethods" => OperationType::GetContactMethods,
+            "OpenInstancePublicPorts" => OperationType::OpenInstancePublicPorts,
+            "PutAlarm" => OperationType::PutAlarm,
+            "PutInstancePublicPorts" => OperationType::PutInstancePublicPorts,
+            "RebootInstance" => OperationType::RebootInstance,
+            "RebootRelationalDatabase" => OperationType::RebootRelationalDatabase,
+            "RegisterContainerImage" => OperationType::RegisterContainerImage,
+            "ReleaseStaticIp" => OperationType::ReleaseStaticIp,
+            "ResetDistributionCache" => OperationType::ResetDistributionCache,
+            "SendContactMethodVerification" => OperationType::SendContactMethodVerification,
+            "StartInstance" => OperationType::StartInstance,
+            "StartRelationalDatabase" => OperationType::StartRelationalDatabase,
+            "StopInstance" => OperationType::StopInstance,
+            "StopRelationalDatabase" => OperationType::StopRelationalDatabase,
+            "TestAlarm" => OperationType::TestAlarm,
+            "UpdateContainerService" => OperationType::UpdateContainerService,
+            "UpdateDistribution" => OperationType::UpdateDistribution,
+            "UpdateDistributionBundle" => OperationType::UpdateDistributionBundle,
+            "UpdateDomainEntry" => OperationType::UpdateDomainEntry,
+            "UpdateLoadBalancerAttribute" => OperationType::UpdateLoadBalancerAttribute,
+            "UpdateRelationalDatabase" => OperationType::UpdateRelationalDatabase,
+            "UpdateRelationalDatabaseParameters" => {
+                OperationType::UpdateRelationalDatabaseParameters
+            }
+            _ => OperationType::UnknownVariant(UnknownOperationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OperationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the origin resource of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>An origin can be a Lightsail instance or load balancer. A distribution pulls content from an origin, caches it, and serves it to viewers via a worldwide network of edge servers.</p>
@@ -4948,15 +10793,119 @@ pub struct Origin {
     /// <p>The protocol that your Amazon Lightsail distribution uses when establishing a connection with your origin to pull content.</p>
     #[serde(rename = "protocolPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol_policy: Option<String>,
+    pub protocol_policy: Option<OriginProtocolPolicyEnum>,
     /// <p>The AWS Region name of the origin resource.</p>
     #[serde(rename = "regionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub region_name: Option<String>,
+    pub region_name: Option<RegionName>,
     /// <p>The resource type of the origin resource (e.g., <i>Instance</i>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginProtocolPolicyEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginProtocolPolicyEnum {
+    HttpOnly,
+    HttpsOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginProtocolPolicyEnum),
+}
+
+impl Default for OriginProtocolPolicyEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginProtocolPolicyEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginProtocolPolicyEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginProtocolPolicyEnum {
+    fn into(self) -> String {
+        match self {
+            OriginProtocolPolicyEnum::HttpOnly => "http-only".to_string(),
+            OriginProtocolPolicyEnum::HttpsOnly => "https-only".to_string(),
+            OriginProtocolPolicyEnum::UnknownVariant(UnknownOriginProtocolPolicyEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginProtocolPolicyEnum {
+    fn into(self) -> &'a str {
+        match self {
+            OriginProtocolPolicyEnum::HttpOnly => &"http-only",
+            OriginProtocolPolicyEnum::HttpsOnly => &"https-only",
+            OriginProtocolPolicyEnum::UnknownVariant(UnknownOriginProtocolPolicyEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginProtocolPolicyEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "http-only" => OriginProtocolPolicyEnum::HttpOnly,
+            "https-only" => OriginProtocolPolicyEnum::HttpsOnly,
+            _ => OriginProtocolPolicyEnum::UnknownVariant(UnknownOriginProtocolPolicyEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginProtocolPolicyEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "http-only" => OriginProtocolPolicyEnum::HttpOnly,
+            "https-only" => OriginProtocolPolicyEnum::HttpsOnly,
+            _ => OriginProtocolPolicyEnum::UnknownVariant(UnknownOriginProtocolPolicyEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginProtocolPolicyEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OriginProtocolPolicyEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OriginProtocolPolicyEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The password data for the Windows Server-based instance, including the ciphertext and the key pair name.</p>
@@ -5022,6 +10971,107 @@ pub struct PendingModifiedRelationalDatabaseValues {
     pub master_user_password: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPortAccessType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PortAccessType {
+    Private,
+    Public,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPortAccessType),
+}
+
+impl Default for PortAccessType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PortAccessType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PortAccessType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PortAccessType {
+    fn into(self) -> String {
+        match self {
+            PortAccessType::Private => "Private".to_string(),
+            PortAccessType::Public => "Public".to_string(),
+            PortAccessType::UnknownVariant(UnknownPortAccessType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PortAccessType {
+    fn into(self) -> &'a str {
+        match self {
+            PortAccessType::Private => &"Private",
+            PortAccessType::Public => &"Public",
+            PortAccessType::UnknownVariant(UnknownPortAccessType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PortAccessType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Private" => PortAccessType::Private,
+            "Public" => PortAccessType::Public,
+            _ => PortAccessType::UnknownVariant(UnknownPortAccessType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PortAccessType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Private" => PortAccessType::Private,
+            "Public" => PortAccessType::Public,
+            _ => PortAccessType::UnknownVariant(UnknownPortAccessType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortAccessType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PortAccessType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PortAccessType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes ports to open on an instance, the IP addresses allowed to connect to the instance through the ports, and the protocol.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5041,11 +11091,227 @@ pub struct PortInfo {
     /// <p><p>The IP protocol name.</p> <p>The name can be one of the following:</p> <ul> <li> <p> <code>tcp</code> - Transmission Control Protocol (TCP) provides reliable, ordered, and error-checked delivery of streamed data between applications running on hosts communicating by an IP network. If you have an application that doesn&#39;t require reliable data stream service, use UDP instead.</p> </li> <li> <p> <code>all</code> - All transport layer protocol types. For more general information, see <a href="https://en.wikipedia.org/wiki/Transport_layer">Transport layer</a> on <i>Wikipedia</i>.</p> </li> <li> <p> <code>udp</code> - With User Datagram Protocol (UDP), computer applications can send messages (or datagrams) to other hosts on an Internet Protocol (IP) network. Prior communications are not required to set up transmission channels or data paths. Applications that don&#39;t require reliable data stream service can use UDP, which provides a connectionless datagram service that emphasizes reduced latency over reliability. If you do require reliable data stream service, use TCP instead.</p> </li> <li> <p> <code>icmp</code> - Internet Control Message Protocol (ICMP) is used to send error messages and operational information indicating success or failure when communicating with an instance. For example, an error is indicated when an instance could not be reached. When you specify <code>icmp</code> as the <code>protocol</code>, you must specify the ICMP type using the <code>fromPort</code> parameter, and ICMP code using the <code>toPort</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<NetworkProtocol>,
     /// <p><p>The last port in a range of open ports on an instance.</p> <p>Allowed ports:</p> <ul> <li> <p>TCP and UDP - <code>0</code> to <code>65535</code> </p> </li> <li> <p>ICMP - The ICMP code. For example, specify <code>8</code> as the <code>fromPort</code> (ICMP type), and <code>-1</code> as the <code>toPort</code> (ICMP code), to enable ICMP Ping. For more information, see <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages">Control Messages</a> on <i>Wikipedia</i>.</p> </li> </ul></p>
     #[serde(rename = "toPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_port: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPortInfoSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PortInfoSourceType {
+    Closed,
+    Default,
+    Instance,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPortInfoSourceType),
+}
+
+impl Default for PortInfoSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PortInfoSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PortInfoSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PortInfoSourceType {
+    fn into(self) -> String {
+        match self {
+            PortInfoSourceType::Closed => "CLOSED".to_string(),
+            PortInfoSourceType::Default => "DEFAULT".to_string(),
+            PortInfoSourceType::Instance => "INSTANCE".to_string(),
+            PortInfoSourceType::None => "NONE".to_string(),
+            PortInfoSourceType::UnknownVariant(UnknownPortInfoSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PortInfoSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            PortInfoSourceType::Closed => &"CLOSED",
+            PortInfoSourceType::Default => &"DEFAULT",
+            PortInfoSourceType::Instance => &"INSTANCE",
+            PortInfoSourceType::None => &"NONE",
+            PortInfoSourceType::UnknownVariant(UnknownPortInfoSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PortInfoSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOSED" => PortInfoSourceType::Closed,
+            "DEFAULT" => PortInfoSourceType::Default,
+            "INSTANCE" => PortInfoSourceType::Instance,
+            "NONE" => PortInfoSourceType::None,
+            _ => PortInfoSourceType::UnknownVariant(UnknownPortInfoSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PortInfoSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOSED" => PortInfoSourceType::Closed,
+            "DEFAULT" => PortInfoSourceType::Default,
+            "INSTANCE" => PortInfoSourceType::Instance,
+            "NONE" => PortInfoSourceType::None,
+            _ => PortInfoSourceType::UnknownVariant(UnknownPortInfoSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortInfoSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PortInfoSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PortInfoSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPortState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PortState {
+    Closed,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPortState),
+}
+
+impl Default for PortState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PortState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PortState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PortState {
+    fn into(self) -> String {
+        match self {
+            PortState::Closed => "closed".to_string(),
+            PortState::Open => "open".to_string(),
+            PortState::UnknownVariant(UnknownPortState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PortState {
+    fn into(self) -> &'a str {
+        match self {
+            PortState::Closed => &"closed",
+            PortState::Open => &"open",
+            PortState::UnknownVariant(UnknownPortState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PortState {
+    fn from(name: &str) -> Self {
+        match name {
+            "closed" => PortState::Closed,
+            "open" => PortState::Open,
+            _ => PortState::UnknownVariant(UnknownPortState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PortState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "closed" => PortState::Closed,
+            "open" => PortState::Open,
+            _ => PortState::UnknownVariant(UnknownPortState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PortState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PortState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PortState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5056,11 +11322,11 @@ pub struct PutAlarmRequest {
     pub alarm_name: String,
     /// <p>The arithmetic operation to use when comparing the specified statistic to the threshold. The specified statistic value is used as the first operand.</p>
     #[serde(rename = "comparisonOperator")]
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
     /// <p>The contact protocols to use for the alarm, such as <code>Email</code>, <code>SMS</code> (text messaging), or both.</p> <p>A notification is sent via the specified contact protocol if notifications are enabled for the alarm, and when the alarm is triggered.</p> <p>A notification is not sent if a contact protocol is not specified, if the specified contact protocol is not configured in the AWS Region, or if notifications are not enabled for the alarm using the <code>notificationEnabled</code> paramater.</p> <p>Use the <code>CreateContactMethod</code> action to configure a contact protocol in an AWS Region.</p>
     #[serde(rename = "contactProtocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contact_protocols: Option<Vec<String>>,
+    pub contact_protocols: Option<Vec<ContactProtocol>>,
     /// <p>The number of data points that must be not within the specified threshold to trigger the alarm. If you are setting an "M out of N" alarm, this value (<code>datapointsToAlarm</code>) is the M.</p>
     #[serde(rename = "datapointsToAlarm")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5070,7 +11336,7 @@ pub struct PutAlarmRequest {
     pub evaluation_periods: i64,
     /// <p>The name of the metric to associate with the alarm.</p> <p>You can configure up to two alarms per metric.</p> <p>The following metrics are available for each resource type:</p> <ul> <li> <p> <b>Instances</b>: <code>BurstCapacityPercentage</code>, <code>BurstCapacityTime</code>, <code>CPUUtilization</code>, <code>NetworkIn</code>, <code>NetworkOut</code>, <code>StatusCheckFailed</code>, <code>StatusCheckFailed_Instance</code>, and <code>StatusCheckFailed_System</code>.</p> </li> <li> <p> <b>Load balancers</b>: <code>ClientTLSNegotiationErrorCount</code>, <code>HealthyHostCount</code>, <code>UnhealthyHostCount</code>, <code>HTTPCode_LB_4XX_Count</code>, <code>HTTPCode_LB_5XX_Count</code>, <code>HTTPCode_Instance_2XX_Count</code>, <code>HTTPCode_Instance_3XX_Count</code>, <code>HTTPCode_Instance_4XX_Count</code>, <code>HTTPCode_Instance_5XX_Count</code>, <code>InstanceResponseTime</code>, <code>RejectedConnectionCount</code>, and <code>RequestCount</code>.</p> </li> <li> <p> <b>Relational databases</b>: <code>CPUUtilization</code>, <code>DatabaseConnections</code>, <code>DiskQueueDepth</code>, <code>FreeStorageSpace</code>, <code>NetworkReceiveThroughput</code>, and <code>NetworkTransmitThroughput</code>.</p> </li> </ul> <p>For more information about these metrics, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-resource-health-metrics#available-metrics">Metrics available in Lightsail</a>.</p>
     #[serde(rename = "metricName")]
-    pub metric_name: String,
+    pub metric_name: MetricName,
     /// <p>The name of the Lightsail resource that will be monitored.</p> <p>Instances, load balancers, and relational databases are the only Lightsail resources that can currently be monitored by alarms.</p>
     #[serde(rename = "monitoredResourceName")]
     pub monitored_resource_name: String,
@@ -5081,14 +11347,14 @@ pub struct PutAlarmRequest {
     /// <p>The alarm states that trigger a notification.</p> <p>An alarm has the following possible states:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul> <p>When you specify a notification trigger, the <code>ALARM</code> state must be specified. The <code>INSUFFICIENT_DATA</code> and <code>OK</code> states can be specified in addition to the <code>ALARM</code> state.</p> <ul> <li> <p>If you specify <code>OK</code> as an alarm trigger, a notification is sent when the alarm switches from an <code>ALARM</code> or <code>INSUFFICIENT_DATA</code> alarm state to an <code>OK</code> state. This can be thought of as an <i>all clear</i> alarm notification.</p> </li> <li> <p>If you specify <code>INSUFFICIENT_DATA</code> as the alarm trigger, a notification is sent when the alarm switches from an <code>OK</code> or <code>ALARM</code> alarm state to an <code>INSUFFICIENT_DATA</code> state.</p> </li> </ul> <p>The notification trigger defaults to <code>ALARM</code> if you don't specify this parameter.</p>
     #[serde(rename = "notificationTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notification_triggers: Option<Vec<String>>,
+    pub notification_triggers: Option<Vec<AlarmState>>,
     /// <p>The value against which the specified statistic is compared.</p>
     #[serde(rename = "threshold")]
     pub threshold: f64,
     /// <p>Sets how this alarm will handle missing data points.</p> <p>An alarm can treat missing data in the following ways:</p> <ul> <li> <p> <code>breaching</code> - Assume the missing data is not within the threshold. Missing data counts towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>notBreaching</code> - Assume the missing data is within the threshold. Missing data does not count towards the number of times the metric is not within the threshold.</p> </li> <li> <p> <code>ignore</code> - Ignore the missing data. Maintains the current alarm state.</p> </li> <li> <p> <code>missing</code> - Missing data is treated as missing.</p> </li> </ul> <p>If <code>treatMissingData</code> is not specified, the default behavior of <code>missing</code> is used.</p>
     #[serde(rename = "treatMissingData")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub treat_missing_data: Option<String>,
+    pub treat_missing_data: Option<TreatMissingData>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5167,6 +11433,112 @@ pub struct RebootRelationalDatabaseResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecordState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecordState {
+    Failed,
+    Started,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecordState),
+}
+
+impl Default for RecordState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecordState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecordState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecordState {
+    fn into(self) -> String {
+        match self {
+            RecordState::Failed => "Failed".to_string(),
+            RecordState::Started => "Started".to_string(),
+            RecordState::Succeeded => "Succeeded".to_string(),
+            RecordState::UnknownVariant(UnknownRecordState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecordState {
+    fn into(self) -> &'a str {
+        match self {
+            RecordState::Failed => &"Failed",
+            RecordState::Started => &"Started",
+            RecordState::Succeeded => &"Succeeded",
+            RecordState::UnknownVariant(UnknownRecordState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecordState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => RecordState::Failed,
+            "Started" => RecordState::Started,
+            "Succeeded" => RecordState::Succeeded,
+            _ => RecordState::UnknownVariant(UnknownRecordState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecordState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => RecordState::Failed,
+            "Started" => RecordState::Started,
+            "Succeeded" => RecordState::Succeeded,
+            _ => RecordState::UnknownVariant(UnknownRecordState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecordState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RecordState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecordState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the AWS Region.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5190,11 +11562,171 @@ pub struct Region {
     /// <p>The region name (e.g., <code>us-east-2</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<RegionName>,
     /// <p>The Availability Zones for databases. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "relationalDatabaseAvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relational_database_availability_zones: Option<Vec<AvailabilityZone>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRegionName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RegionName {
+    ApNortheast1,
+    ApNortheast2,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    EuCentral1,
+    EuWest1,
+    EuWest2,
+    EuWest3,
+    UsEast1,
+    UsEast2,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRegionName),
+}
+
+impl Default for RegionName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RegionName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RegionName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RegionName {
+    fn into(self) -> String {
+        match self {
+            RegionName::ApNortheast1 => "ap-northeast-1".to_string(),
+            RegionName::ApNortheast2 => "ap-northeast-2".to_string(),
+            RegionName::ApSouth1 => "ap-south-1".to_string(),
+            RegionName::ApSoutheast1 => "ap-southeast-1".to_string(),
+            RegionName::ApSoutheast2 => "ap-southeast-2".to_string(),
+            RegionName::CaCentral1 => "ca-central-1".to_string(),
+            RegionName::EuCentral1 => "eu-central-1".to_string(),
+            RegionName::EuWest1 => "eu-west-1".to_string(),
+            RegionName::EuWest2 => "eu-west-2".to_string(),
+            RegionName::EuWest3 => "eu-west-3".to_string(),
+            RegionName::UsEast1 => "us-east-1".to_string(),
+            RegionName::UsEast2 => "us-east-2".to_string(),
+            RegionName::UsWest1 => "us-west-1".to_string(),
+            RegionName::UsWest2 => "us-west-2".to_string(),
+            RegionName::UnknownVariant(UnknownRegionName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RegionName {
+    fn into(self) -> &'a str {
+        match self {
+            RegionName::ApNortheast1 => &"ap-northeast-1",
+            RegionName::ApNortheast2 => &"ap-northeast-2",
+            RegionName::ApSouth1 => &"ap-south-1",
+            RegionName::ApSoutheast1 => &"ap-southeast-1",
+            RegionName::ApSoutheast2 => &"ap-southeast-2",
+            RegionName::CaCentral1 => &"ca-central-1",
+            RegionName::EuCentral1 => &"eu-central-1",
+            RegionName::EuWest1 => &"eu-west-1",
+            RegionName::EuWest2 => &"eu-west-2",
+            RegionName::EuWest3 => &"eu-west-3",
+            RegionName::UsEast1 => &"us-east-1",
+            RegionName::UsEast2 => &"us-east-2",
+            RegionName::UsWest1 => &"us-west-1",
+            RegionName::UsWest2 => &"us-west-2",
+            RegionName::UnknownVariant(UnknownRegionName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RegionName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ap-northeast-1" => RegionName::ApNortheast1,
+            "ap-northeast-2" => RegionName::ApNortheast2,
+            "ap-south-1" => RegionName::ApSouth1,
+            "ap-southeast-1" => RegionName::ApSoutheast1,
+            "ap-southeast-2" => RegionName::ApSoutheast2,
+            "ca-central-1" => RegionName::CaCentral1,
+            "eu-central-1" => RegionName::EuCentral1,
+            "eu-west-1" => RegionName::EuWest1,
+            "eu-west-2" => RegionName::EuWest2,
+            "eu-west-3" => RegionName::EuWest3,
+            "us-east-1" => RegionName::UsEast1,
+            "us-east-2" => RegionName::UsEast2,
+            "us-west-1" => RegionName::UsWest1,
+            "us-west-2" => RegionName::UsWest2,
+            _ => RegionName::UnknownVariant(UnknownRegionName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RegionName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ap-northeast-1" => RegionName::ApNortheast1,
+            "ap-northeast-2" => RegionName::ApNortheast2,
+            "ap-south-1" => RegionName::ApSouth1,
+            "ap-southeast-1" => RegionName::ApSoutheast1,
+            "ap-southeast-2" => RegionName::ApSoutheast2,
+            "ca-central-1" => RegionName::CaCentral1,
+            "eu-central-1" => RegionName::EuCentral1,
+            "eu-west-1" => RegionName::EuWest1,
+            "eu-west-2" => RegionName::EuWest2,
+            "eu-west-3" => RegionName::EuWest3,
+            "us-east-1" => RegionName::UsEast1,
+            "us-east-2" => RegionName::UsEast2,
+            "us-west-1" => RegionName::UsWest1,
+            "us-west-2" => RegionName::UsWest2,
+            _ => RegionName::UnknownVariant(UnknownRegionName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RegionName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RegionName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RegionName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5310,7 +11842,7 @@ pub struct RelationalDatabase {
     /// <p>The Lightsail resource type for the database (for example, <code>RelationalDatabase</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>Describes the secondary Availability Zone of a high availability database.</p> <p>The secondary database is used for failover support of a high availability database.</p>
     #[serde(rename = "secondaryAvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5340,7 +11872,7 @@ pub struct RelationalDatabaseBlueprint {
     /// <p>The database software of the database blueprint (for example, <code>MySQL</code>).</p>
     #[serde(rename = "engine")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine: Option<String>,
+    pub engine: Option<RelationalDatabaseEngine>,
     /// <p>The description of the database engine for the database blueprint.</p>
     #[serde(rename = "engineDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5415,6 +11947,106 @@ pub struct RelationalDatabaseEndpoint {
     pub port: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelationalDatabaseEngine {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelationalDatabaseEngine {
+    Mysql,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelationalDatabaseEngine),
+}
+
+impl Default for RelationalDatabaseEngine {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelationalDatabaseEngine {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelationalDatabaseEngine {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelationalDatabaseEngine {
+    fn into(self) -> String {
+        match self {
+            RelationalDatabaseEngine::Mysql => "mysql".to_string(),
+            RelationalDatabaseEngine::UnknownVariant(UnknownRelationalDatabaseEngine {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelationalDatabaseEngine {
+    fn into(self) -> &'a str {
+        match self {
+            RelationalDatabaseEngine::Mysql => &"mysql",
+            RelationalDatabaseEngine::UnknownVariant(UnknownRelationalDatabaseEngine {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RelationalDatabaseEngine {
+    fn from(name: &str) -> Self {
+        match name {
+            "mysql" => RelationalDatabaseEngine::Mysql,
+            _ => RelationalDatabaseEngine::UnknownVariant(UnknownRelationalDatabaseEngine {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RelationalDatabaseEngine {
+    fn from(name: String) -> Self {
+        match &*name {
+            "mysql" => RelationalDatabaseEngine::Mysql,
+            _ => RelationalDatabaseEngine::UnknownVariant(UnknownRelationalDatabaseEngine { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationalDatabaseEngine {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RelationalDatabaseEngine {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RelationalDatabaseEngine {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes an event for a database.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5455,6 +12087,140 @@ pub struct RelationalDatabaseHardware {
     pub ram_size_in_gb: Option<f32>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelationalDatabaseMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelationalDatabaseMetricName {
+    Cpuutilization,
+    DatabaseConnections,
+    DiskQueueDepth,
+    FreeStorageSpace,
+    NetworkReceiveThroughput,
+    NetworkTransmitThroughput,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelationalDatabaseMetricName),
+}
+
+impl Default for RelationalDatabaseMetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelationalDatabaseMetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelationalDatabaseMetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelationalDatabaseMetricName {
+    fn into(self) -> String {
+        match self {
+            RelationalDatabaseMetricName::Cpuutilization => "CPUUtilization".to_string(),
+            RelationalDatabaseMetricName::DatabaseConnections => "DatabaseConnections".to_string(),
+            RelationalDatabaseMetricName::DiskQueueDepth => "DiskQueueDepth".to_string(),
+            RelationalDatabaseMetricName::FreeStorageSpace => "FreeStorageSpace".to_string(),
+            RelationalDatabaseMetricName::NetworkReceiveThroughput => {
+                "NetworkReceiveThroughput".to_string()
+            }
+            RelationalDatabaseMetricName::NetworkTransmitThroughput => {
+                "NetworkTransmitThroughput".to_string()
+            }
+            RelationalDatabaseMetricName::UnknownVariant(UnknownRelationalDatabaseMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelationalDatabaseMetricName {
+    fn into(self) -> &'a str {
+        match self {
+            RelationalDatabaseMetricName::Cpuutilization => &"CPUUtilization",
+            RelationalDatabaseMetricName::DatabaseConnections => &"DatabaseConnections",
+            RelationalDatabaseMetricName::DiskQueueDepth => &"DiskQueueDepth",
+            RelationalDatabaseMetricName::FreeStorageSpace => &"FreeStorageSpace",
+            RelationalDatabaseMetricName::NetworkReceiveThroughput => &"NetworkReceiveThroughput",
+            RelationalDatabaseMetricName::NetworkTransmitThroughput => &"NetworkTransmitThroughput",
+            RelationalDatabaseMetricName::UnknownVariant(UnknownRelationalDatabaseMetricName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RelationalDatabaseMetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "CPUUtilization" => RelationalDatabaseMetricName::Cpuutilization,
+            "DatabaseConnections" => RelationalDatabaseMetricName::DatabaseConnections,
+            "DiskQueueDepth" => RelationalDatabaseMetricName::DiskQueueDepth,
+            "FreeStorageSpace" => RelationalDatabaseMetricName::FreeStorageSpace,
+            "NetworkReceiveThroughput" => RelationalDatabaseMetricName::NetworkReceiveThroughput,
+            "NetworkTransmitThroughput" => RelationalDatabaseMetricName::NetworkTransmitThroughput,
+            _ => {
+                RelationalDatabaseMetricName::UnknownVariant(UnknownRelationalDatabaseMetricName {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for RelationalDatabaseMetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CPUUtilization" => RelationalDatabaseMetricName::Cpuutilization,
+            "DatabaseConnections" => RelationalDatabaseMetricName::DatabaseConnections,
+            "DiskQueueDepth" => RelationalDatabaseMetricName::DiskQueueDepth,
+            "FreeStorageSpace" => RelationalDatabaseMetricName::FreeStorageSpace,
+            "NetworkReceiveThroughput" => RelationalDatabaseMetricName::NetworkReceiveThroughput,
+            "NetworkTransmitThroughput" => RelationalDatabaseMetricName::NetworkTransmitThroughput,
+            _ => {
+                RelationalDatabaseMetricName::UnknownVariant(UnknownRelationalDatabaseMetricName {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationalDatabaseMetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RelationalDatabaseMetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RelationalDatabaseMetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the parameters of a database.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RelationalDatabaseParameter {
@@ -5490,6 +12256,120 @@ pub struct RelationalDatabaseParameter {
     #[serde(rename = "parameterValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelationalDatabasePasswordVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelationalDatabasePasswordVersion {
+    Current,
+    Pending,
+    Previous,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelationalDatabasePasswordVersion),
+}
+
+impl Default for RelationalDatabasePasswordVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelationalDatabasePasswordVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelationalDatabasePasswordVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelationalDatabasePasswordVersion {
+    fn into(self) -> String {
+        match self {
+            RelationalDatabasePasswordVersion::Current => "CURRENT".to_string(),
+            RelationalDatabasePasswordVersion::Pending => "PENDING".to_string(),
+            RelationalDatabasePasswordVersion::Previous => "PREVIOUS".to_string(),
+            RelationalDatabasePasswordVersion::UnknownVariant(
+                UnknownRelationalDatabasePasswordVersion { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelationalDatabasePasswordVersion {
+    fn into(self) -> &'a str {
+        match self {
+            RelationalDatabasePasswordVersion::Current => &"CURRENT",
+            RelationalDatabasePasswordVersion::Pending => &"PENDING",
+            RelationalDatabasePasswordVersion::Previous => &"PREVIOUS",
+            RelationalDatabasePasswordVersion::UnknownVariant(
+                UnknownRelationalDatabasePasswordVersion { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RelationalDatabasePasswordVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "CURRENT" => RelationalDatabasePasswordVersion::Current,
+            "PENDING" => RelationalDatabasePasswordVersion::Pending,
+            "PREVIOUS" => RelationalDatabasePasswordVersion::Previous,
+            _ => RelationalDatabasePasswordVersion::UnknownVariant(
+                UnknownRelationalDatabasePasswordVersion {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RelationalDatabasePasswordVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CURRENT" => RelationalDatabasePasswordVersion::Current,
+            "PENDING" => RelationalDatabasePasswordVersion::Pending,
+            "PREVIOUS" => RelationalDatabasePasswordVersion::Previous,
+            _ => RelationalDatabasePasswordVersion::UnknownVariant(
+                UnknownRelationalDatabasePasswordVersion { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationalDatabasePasswordVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RelationalDatabasePasswordVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RelationalDatabasePasswordVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a database snapshot.</p>
@@ -5539,7 +12419,7 @@ pub struct RelationalDatabaseSnapshot {
     /// <p>The Lightsail resource type.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The size of the disk in GB (for example, <code>32</code>) for the database snapshot.</p>
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5575,6 +12455,117 @@ pub struct ReleaseStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRenewalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RenewalStatus {
+    Failed,
+    PendingAutoRenewal,
+    PendingValidation,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRenewalStatus),
+}
+
+impl Default for RenewalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RenewalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RenewalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RenewalStatus {
+    fn into(self) -> String {
+        match self {
+            RenewalStatus::Failed => "Failed".to_string(),
+            RenewalStatus::PendingAutoRenewal => "PendingAutoRenewal".to_string(),
+            RenewalStatus::PendingValidation => "PendingValidation".to_string(),
+            RenewalStatus::Success => "Success".to_string(),
+            RenewalStatus::UnknownVariant(UnknownRenewalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RenewalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RenewalStatus::Failed => &"Failed",
+            RenewalStatus::PendingAutoRenewal => &"PendingAutoRenewal",
+            RenewalStatus::PendingValidation => &"PendingValidation",
+            RenewalStatus::Success => &"Success",
+            RenewalStatus::UnknownVariant(UnknownRenewalStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RenewalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => RenewalStatus::Failed,
+            "PendingAutoRenewal" => RenewalStatus::PendingAutoRenewal,
+            "PendingValidation" => RenewalStatus::PendingValidation,
+            "Success" => RenewalStatus::Success,
+            _ => RenewalStatus::UnknownVariant(UnknownRenewalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RenewalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => RenewalStatus::Failed,
+            "PendingAutoRenewal" => RenewalStatus::PendingAutoRenewal,
+            "PendingValidation" => RenewalStatus::PendingValidation,
+            "Success" => RenewalStatus::Success,
+            _ => RenewalStatus::UnknownVariant(UnknownRenewalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RenewalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RenewalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RenewalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the status of a SSL/TLS certificate renewal managed by Amazon Lightsail.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -5586,7 +12577,7 @@ pub struct RenewalSummary {
     /// <p><p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names of the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names of the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. Check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
     #[serde(rename = "renewalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub renewal_status: Option<String>,
+    pub renewal_status: Option<RenewalStatus>,
     /// <p>The reason for the renewal status of the certificate.</p>
     #[serde(rename = "renewalStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5634,7 +12625,7 @@ pub struct ResourceLocation {
     /// <p>The AWS Region name.</p>
     #[serde(rename = "regionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub region_name: Option<String>,
+    pub region_name: Option<RegionName>,
 }
 
 /// <p>Describes the domain name system (DNS) records to add to your domain's DNS to validate it for an Amazon Lightsail certificate.</p>
@@ -5655,12 +12646,198 @@ pub struct ResourceRecord {
     pub value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Alarm,
+    Certificate,
+    CloudFormationStackRecord,
+    ContactMethod,
+    ContainerService,
+    Disk,
+    DiskSnapshot,
+    Distribution,
+    Domain,
+    ExportSnapshotRecord,
+    Instance,
+    InstanceSnapshot,
+    KeyPair,
+    LoadBalancer,
+    LoadBalancerTlsCertificate,
+    PeeredVpc,
+    RelationalDatabase,
+    RelationalDatabaseSnapshot,
+    StaticIp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Alarm => "Alarm".to_string(),
+            ResourceType::Certificate => "Certificate".to_string(),
+            ResourceType::CloudFormationStackRecord => "CloudFormationStackRecord".to_string(),
+            ResourceType::ContactMethod => "ContactMethod".to_string(),
+            ResourceType::ContainerService => "ContainerService".to_string(),
+            ResourceType::Disk => "Disk".to_string(),
+            ResourceType::DiskSnapshot => "DiskSnapshot".to_string(),
+            ResourceType::Distribution => "Distribution".to_string(),
+            ResourceType::Domain => "Domain".to_string(),
+            ResourceType::ExportSnapshotRecord => "ExportSnapshotRecord".to_string(),
+            ResourceType::Instance => "Instance".to_string(),
+            ResourceType::InstanceSnapshot => "InstanceSnapshot".to_string(),
+            ResourceType::KeyPair => "KeyPair".to_string(),
+            ResourceType::LoadBalancer => "LoadBalancer".to_string(),
+            ResourceType::LoadBalancerTlsCertificate => "LoadBalancerTlsCertificate".to_string(),
+            ResourceType::PeeredVpc => "PeeredVpc".to_string(),
+            ResourceType::RelationalDatabase => "RelationalDatabase".to_string(),
+            ResourceType::RelationalDatabaseSnapshot => "RelationalDatabaseSnapshot".to_string(),
+            ResourceType::StaticIp => "StaticIp".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Alarm => &"Alarm",
+            ResourceType::Certificate => &"Certificate",
+            ResourceType::CloudFormationStackRecord => &"CloudFormationStackRecord",
+            ResourceType::ContactMethod => &"ContactMethod",
+            ResourceType::ContainerService => &"ContainerService",
+            ResourceType::Disk => &"Disk",
+            ResourceType::DiskSnapshot => &"DiskSnapshot",
+            ResourceType::Distribution => &"Distribution",
+            ResourceType::Domain => &"Domain",
+            ResourceType::ExportSnapshotRecord => &"ExportSnapshotRecord",
+            ResourceType::Instance => &"Instance",
+            ResourceType::InstanceSnapshot => &"InstanceSnapshot",
+            ResourceType::KeyPair => &"KeyPair",
+            ResourceType::LoadBalancer => &"LoadBalancer",
+            ResourceType::LoadBalancerTlsCertificate => &"LoadBalancerTlsCertificate",
+            ResourceType::PeeredVpc => &"PeeredVpc",
+            ResourceType::RelationalDatabase => &"RelationalDatabase",
+            ResourceType::RelationalDatabaseSnapshot => &"RelationalDatabaseSnapshot",
+            ResourceType::StaticIp => &"StaticIp",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Alarm" => ResourceType::Alarm,
+            "Certificate" => ResourceType::Certificate,
+            "CloudFormationStackRecord" => ResourceType::CloudFormationStackRecord,
+            "ContactMethod" => ResourceType::ContactMethod,
+            "ContainerService" => ResourceType::ContainerService,
+            "Disk" => ResourceType::Disk,
+            "DiskSnapshot" => ResourceType::DiskSnapshot,
+            "Distribution" => ResourceType::Distribution,
+            "Domain" => ResourceType::Domain,
+            "ExportSnapshotRecord" => ResourceType::ExportSnapshotRecord,
+            "Instance" => ResourceType::Instance,
+            "InstanceSnapshot" => ResourceType::InstanceSnapshot,
+            "KeyPair" => ResourceType::KeyPair,
+            "LoadBalancer" => ResourceType::LoadBalancer,
+            "LoadBalancerTlsCertificate" => ResourceType::LoadBalancerTlsCertificate,
+            "PeeredVpc" => ResourceType::PeeredVpc,
+            "RelationalDatabase" => ResourceType::RelationalDatabase,
+            "RelationalDatabaseSnapshot" => ResourceType::RelationalDatabaseSnapshot,
+            "StaticIp" => ResourceType::StaticIp,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Alarm" => ResourceType::Alarm,
+            "Certificate" => ResourceType::Certificate,
+            "CloudFormationStackRecord" => ResourceType::CloudFormationStackRecord,
+            "ContactMethod" => ResourceType::ContactMethod,
+            "ContainerService" => ResourceType::ContainerService,
+            "Disk" => ResourceType::Disk,
+            "DiskSnapshot" => ResourceType::DiskSnapshot,
+            "Distribution" => ResourceType::Distribution,
+            "Domain" => ResourceType::Domain,
+            "ExportSnapshotRecord" => ResourceType::ExportSnapshotRecord,
+            "Instance" => ResourceType::Instance,
+            "InstanceSnapshot" => ResourceType::InstanceSnapshot,
+            "KeyPair" => ResourceType::KeyPair,
+            "LoadBalancer" => ResourceType::LoadBalancer,
+            "LoadBalancerTlsCertificate" => ResourceType::LoadBalancerTlsCertificate,
+            "PeeredVpc" => ResourceType::PeeredVpc,
+            "RelationalDatabase" => ResourceType::RelationalDatabase,
+            "RelationalDatabaseSnapshot" => ResourceType::RelationalDatabaseSnapshot,
+            "StaticIp" => ResourceType::StaticIp,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendContactMethodVerificationRequest {
     /// <p>The protocol to verify, such as <code>Email</code> or <code>SMS</code> (text messaging).</p>
     #[serde(rename = "protocol")]
-    pub protocol: String,
+    pub protocol: ContactMethodVerificationProtocol,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5741,7 +12918,7 @@ pub struct StaticIp {
     /// <p>The resource type (usually <code>StaticIp</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5835,7 +13012,7 @@ pub struct TestAlarmRequest {
     pub alarm_name: String,
     /// <p><p>The alarm state to test.</p> <p>An alarm has the following possible states that can be tested:</p> <ul> <li> <p> <code>ALARM</code> - The metric is outside of the defined threshold.</p> </li> <li> <p> <code>INSUFFICIENT_DATA</code> - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.</p> </li> <li> <p> <code>OK</code> - The metric is within the defined threshold.</p> </li> </ul></p>
     #[serde(rename = "state")]
-    pub state: String,
+    pub state: AlarmState,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5845,6 +13022,120 @@ pub struct TestAlarmResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTreatMissingData {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TreatMissingData {
+    Breaching,
+    Ignore,
+    Missing,
+    NotBreaching,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTreatMissingData),
+}
+
+impl Default for TreatMissingData {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TreatMissingData {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TreatMissingData {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TreatMissingData {
+    fn into(self) -> String {
+        match self {
+            TreatMissingData::Breaching => "breaching".to_string(),
+            TreatMissingData::Ignore => "ignore".to_string(),
+            TreatMissingData::Missing => "missing".to_string(),
+            TreatMissingData::NotBreaching => "notBreaching".to_string(),
+            TreatMissingData::UnknownVariant(UnknownTreatMissingData { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TreatMissingData {
+    fn into(self) -> &'a str {
+        match self {
+            TreatMissingData::Breaching => &"breaching",
+            TreatMissingData::Ignore => &"ignore",
+            TreatMissingData::Missing => &"missing",
+            TreatMissingData::NotBreaching => &"notBreaching",
+            TreatMissingData::UnknownVariant(UnknownTreatMissingData { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TreatMissingData {
+    fn from(name: &str) -> Self {
+        match name {
+            "breaching" => TreatMissingData::Breaching,
+            "ignore" => TreatMissingData::Ignore,
+            "missing" => TreatMissingData::Missing,
+            "notBreaching" => TreatMissingData::NotBreaching,
+            _ => TreatMissingData::UnknownVariant(UnknownTreatMissingData {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TreatMissingData {
+    fn from(name: String) -> Self {
+        match &*name {
+            "breaching" => TreatMissingData::Breaching,
+            "ignore" => TreatMissingData::Ignore,
+            "missing" => TreatMissingData::Missing,
+            "notBreaching" => TreatMissingData::NotBreaching,
+            _ => TreatMissingData::UnknownVariant(UnknownTreatMissingData { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TreatMissingData {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TreatMissingData {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TreatMissingData {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5894,7 +13185,7 @@ pub struct UpdateContainerServiceRequest {
     /// <p>The power for the container service.</p> <p>The power specifies the amount of memory, vCPUs, and base monthly cost of each node of the container service. The <code>power</code> and <code>scale</code> of a container service makes up its configured capacity. To determine the monthly price of your container service, multiply the base price of the <code>power</code> with the <code>scale</code> (the number of nodes) of the service.</p> <p>Use the <code>GetContainerServicePowers</code> action to view the specifications of each power option.</p>
     #[serde(rename = "power")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub power: Option<String>,
+    pub power: Option<ContainerServicePowerName>,
     /// <p>The public domain names to use with the container service, such as <code>example.com</code> and <code>www.example.com</code>.</p> <p>You can specify up to four public domain names for a container service. The domain names that you specify are used when you create a deployment with a container configured as the public endpoint of your container service.</p> <p>If you don't specify public domain names, then you can use the default domain of the container service.</p> <important> <p>You must create and validate an SSL/TLS certificate before you can use public domain names with your container service. Use the <code>CreateCertificate</code> action to create a certificate for the public domain names you want to use with your container service.</p> </important> <p>You can specify public domain names using a string to array map as shown in the example later on this page.</p>
     #[serde(rename = "publicDomainNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6000,7 +13291,7 @@ pub struct UpdateDomainEntryResult {
 pub struct UpdateLoadBalancerAttributeRequest {
     /// <p>The name of the attribute you want to update. Valid values are below.</p>
     #[serde(rename = "attributeName")]
-    pub attribute_name: String,
+    pub attribute_name: LoadBalancerAttributeName,
     /// <p>The value that you want to specify for the attribute name.</p>
     #[serde(rename = "attributeValue")]
     pub attribute_value: String,

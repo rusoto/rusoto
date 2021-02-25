@@ -137,7 +137,7 @@ pub struct AliasICPRecordal {
     /// <p>A domain name associated with a distribution. </p>
     pub cname: Option<String>,
     /// <p><p>The Internet Content Provider (ICP) recordal status for a CNAME. The ICPRecordalStatus is set to APPROVED for all CNAMEs (aliases) in regions outside of China. </p> <p>The status values returned are the following:</p> <ul> <li> <p> <b>APPROVED</b> indicates that the associated CNAME has a valid ICP recordal number. Multiple CNAMEs can be associated with a distribution, and CNAMEs can correspond to different ICP recordals. To be marked as APPROVED, that is, valid to use with China region, a CNAME must have one ICP recordal number associated with it.</p> </li> <li> <p> <b>SUSPENDED</b> indicates that the associated CNAME does not have a valid ICP recordal number.</p> </li> <li> <p> <b>PENDING</b> indicates that CloudFront can&#39;t determine the ICP recordal status of the CNAME associated with the distribution because there was an error in trying to determine the status. You can try again to see if the error is resolved in which case CloudFront returns an APPROVED or SUSPENDED status.</p> </li> </ul></p>
-    pub icp_recordal_status: Option<String>,
+    pub icp_recordal_status: Option<ICPRecordalStatus>,
 }
 
 #[allow(dead_code)]
@@ -288,7 +288,7 @@ impl AliasesSerializer {
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>
-    pub items: Vec<String>,
+    pub items: Vec<Method>,
     /// <p>The number of HTTP methods that you want CloudFront to forward to your origin. Valid values are 2 (for <code>GET</code> and <code>HEAD</code> requests), 3 (for <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests) and 7 (for <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests).</p>
     pub quantity: i64,
 }
@@ -436,7 +436,7 @@ pub struct CacheBehavior {
     /// <p><important> <p>We recommend using <code>TrustedKeyGroups</code> instead of <code>TrustedSigners</code>.</p> </important> <p>A list of AWS account IDs whose public keys CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted signers, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with the private key of a CloudFront key pair in the trusted signer’s AWS account. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p></p>
     pub trusted_signers: Option<TrustedSigners>,
     /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
-    pub viewer_protocol_policy: String,
+    pub viewer_protocol_policy: ViewerProtocolPolicy,
 }
 
 #[allow(dead_code)]
@@ -811,12 +811,133 @@ impl CachePolicyConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCachePolicyCookieBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CachePolicyCookieBehavior {
+    All,
+    AllExcept,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCachePolicyCookieBehavior),
+}
+
+impl Default for CachePolicyCookieBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CachePolicyCookieBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CachePolicyCookieBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CachePolicyCookieBehavior {
+    fn into(self) -> String {
+        match self {
+            CachePolicyCookieBehavior::All => "all".to_string(),
+            CachePolicyCookieBehavior::AllExcept => "allExcept".to_string(),
+            CachePolicyCookieBehavior::None => "none".to_string(),
+            CachePolicyCookieBehavior::Whitelist => "whitelist".to_string(),
+            CachePolicyCookieBehavior::UnknownVariant(UnknownCachePolicyCookieBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CachePolicyCookieBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            CachePolicyCookieBehavior::All => &"all",
+            CachePolicyCookieBehavior::AllExcept => &"allExcept",
+            CachePolicyCookieBehavior::None => &"none",
+            CachePolicyCookieBehavior::Whitelist => &"whitelist",
+            CachePolicyCookieBehavior::UnknownVariant(UnknownCachePolicyCookieBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CachePolicyCookieBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => CachePolicyCookieBehavior::All,
+            "allExcept" => CachePolicyCookieBehavior::AllExcept,
+            "none" => CachePolicyCookieBehavior::None,
+            "whitelist" => CachePolicyCookieBehavior::Whitelist,
+            _ => CachePolicyCookieBehavior::UnknownVariant(UnknownCachePolicyCookieBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CachePolicyCookieBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => CachePolicyCookieBehavior::All,
+            "allExcept" => CachePolicyCookieBehavior::AllExcept,
+            "none" => CachePolicyCookieBehavior::None,
+            "whitelist" => CachePolicyCookieBehavior::Whitelist,
+            _ => {
+                CachePolicyCookieBehavior::UnknownVariant(UnknownCachePolicyCookieBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for CachePolicyCookieBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CachePolicyCookieBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CachePolicyCookieBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CachePolicyCookieBehaviorDeserializer;
 impl CachePolicyCookieBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyCookieBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -826,12 +947,12 @@ impl CachePolicyCookieBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CachePolicyCookieBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -841,7 +962,7 @@ impl CachePolicyCookieBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachePolicyCookiesConfig {
     /// <p><p>Determines whether any cookies in viewer requests are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Cookies in viewer requests are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any cookies that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The cookies in viewer requests that are listed in the <code>CookieNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allExcept</code> – All cookies in viewer requests that are <i> <b>not</b> </i> listed in the <code>CookieNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All cookies in viewer requests are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
-    pub cookie_behavior: String,
+    pub cookie_behavior: CachePolicyCookieBehavior,
     pub cookies: Option<CookieNames>,
 }
 
@@ -895,12 +1016,123 @@ impl CachePolicyCookiesConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCachePolicyHeaderBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CachePolicyHeaderBehavior {
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCachePolicyHeaderBehavior),
+}
+
+impl Default for CachePolicyHeaderBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CachePolicyHeaderBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CachePolicyHeaderBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CachePolicyHeaderBehavior {
+    fn into(self) -> String {
+        match self {
+            CachePolicyHeaderBehavior::None => "none".to_string(),
+            CachePolicyHeaderBehavior::Whitelist => "whitelist".to_string(),
+            CachePolicyHeaderBehavior::UnknownVariant(UnknownCachePolicyHeaderBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CachePolicyHeaderBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            CachePolicyHeaderBehavior::None => &"none",
+            CachePolicyHeaderBehavior::Whitelist => &"whitelist",
+            CachePolicyHeaderBehavior::UnknownVariant(UnknownCachePolicyHeaderBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CachePolicyHeaderBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "none" => CachePolicyHeaderBehavior::None,
+            "whitelist" => CachePolicyHeaderBehavior::Whitelist,
+            _ => CachePolicyHeaderBehavior::UnknownVariant(UnknownCachePolicyHeaderBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CachePolicyHeaderBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "none" => CachePolicyHeaderBehavior::None,
+            "whitelist" => CachePolicyHeaderBehavior::Whitelist,
+            _ => {
+                CachePolicyHeaderBehavior::UnknownVariant(UnknownCachePolicyHeaderBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for CachePolicyHeaderBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CachePolicyHeaderBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CachePolicyHeaderBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CachePolicyHeaderBehaviorDeserializer;
 impl CachePolicyHeaderBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyHeaderBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -910,12 +1142,12 @@ impl CachePolicyHeaderBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CachePolicyHeaderBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -925,7 +1157,7 @@ impl CachePolicyHeaderBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachePolicyHeadersConfig {
     /// <p><p>Determines whether any HTTP headers are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – HTTP headers are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any headers that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The HTTP headers that are listed in the <code>Headers</code> type are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
-    pub header_behavior: String,
+    pub header_behavior: CachePolicyHeaderBehavior,
     pub headers: Option<Headers>,
 }
 
@@ -1023,12 +1255,136 @@ impl CachePolicyListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCachePolicyQueryStringBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CachePolicyQueryStringBehavior {
+    All,
+    AllExcept,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCachePolicyQueryStringBehavior),
+}
+
+impl Default for CachePolicyQueryStringBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CachePolicyQueryStringBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CachePolicyQueryStringBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CachePolicyQueryStringBehavior {
+    fn into(self) -> String {
+        match self {
+            CachePolicyQueryStringBehavior::All => "all".to_string(),
+            CachePolicyQueryStringBehavior::AllExcept => "allExcept".to_string(),
+            CachePolicyQueryStringBehavior::None => "none".to_string(),
+            CachePolicyQueryStringBehavior::Whitelist => "whitelist".to_string(),
+            CachePolicyQueryStringBehavior::UnknownVariant(
+                UnknownCachePolicyQueryStringBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CachePolicyQueryStringBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            CachePolicyQueryStringBehavior::All => &"all",
+            CachePolicyQueryStringBehavior::AllExcept => &"allExcept",
+            CachePolicyQueryStringBehavior::None => &"none",
+            CachePolicyQueryStringBehavior::Whitelist => &"whitelist",
+            CachePolicyQueryStringBehavior::UnknownVariant(
+                UnknownCachePolicyQueryStringBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for CachePolicyQueryStringBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => CachePolicyQueryStringBehavior::All,
+            "allExcept" => CachePolicyQueryStringBehavior::AllExcept,
+            "none" => CachePolicyQueryStringBehavior::None,
+            "whitelist" => CachePolicyQueryStringBehavior::Whitelist,
+            _ => CachePolicyQueryStringBehavior::UnknownVariant(
+                UnknownCachePolicyQueryStringBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for CachePolicyQueryStringBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => CachePolicyQueryStringBehavior::All,
+            "allExcept" => CachePolicyQueryStringBehavior::AllExcept,
+            "none" => CachePolicyQueryStringBehavior::None,
+            "whitelist" => CachePolicyQueryStringBehavior::Whitelist,
+            _ => CachePolicyQueryStringBehavior::UnknownVariant(
+                UnknownCachePolicyQueryStringBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CachePolicyQueryStringBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CachePolicyQueryStringBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CachePolicyQueryStringBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CachePolicyQueryStringBehaviorDeserializer;
 impl CachePolicyQueryStringBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyQueryStringBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1038,12 +1394,12 @@ impl CachePolicyQueryStringBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CachePolicyQueryStringBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1053,7 +1409,7 @@ impl CachePolicyQueryStringBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachePolicyQueryStringsConfig {
     /// <p><p>Determines whether any URL query strings in viewer requests are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Query strings in viewer requests are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any query strings that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The query strings in viewer requests that are listed in the <code>QueryStringNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allExcept</code> – All query strings in viewer requests that are <i> <b>not</b> </i> listed in the <code>QueryStringNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All query strings in viewer requests are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
-    pub query_string_behavior: String,
+    pub query_string_behavior: CachePolicyQueryStringBehavior,
     /// <p>Contains the specific query strings in viewer requests that either <i> <b>are</b> </i> or <i> <b>are not</b> </i> included in the cache key and automatically included in requests that CloudFront sends to the origin. The behavior depends on whether the <code>QueryStringBehavior</code> field in the <code>CachePolicyQueryStringsConfig</code> type is set to <code>whitelist</code> (the listed query strings <i> <b>are</b> </i> included) or <code>allExcept</code> (the listed query strings <i> <b>are not</b> </i> included, but all other query strings are).</p>
     pub query_strings: Option<QueryStringNames>,
 }
@@ -1123,7 +1479,7 @@ pub struct CachePolicySummary {
     /// <p>The cache policy.</p>
     pub cache_policy: CachePolicy,
     /// <p>The type of cache policy, either <code>managed</code> (created by AWS) or <code>custom</code> (created in this AWS account).</p>
-    pub type_: String,
+    pub type_: CachePolicyType,
 }
 
 #[allow(dead_code)]
@@ -1169,12 +1525,118 @@ impl CachePolicySummaryListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCachePolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CachePolicyType {
+    Custom,
+    Managed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCachePolicyType),
+}
+
+impl Default for CachePolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CachePolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CachePolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CachePolicyType {
+    fn into(self) -> String {
+        match self {
+            CachePolicyType::Custom => "custom".to_string(),
+            CachePolicyType::Managed => "managed".to_string(),
+            CachePolicyType::UnknownVariant(UnknownCachePolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CachePolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            CachePolicyType::Custom => &"custom",
+            CachePolicyType::Managed => &"managed",
+            CachePolicyType::UnknownVariant(UnknownCachePolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CachePolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "custom" => CachePolicyType::Custom,
+            "managed" => CachePolicyType::Managed,
+            _ => CachePolicyType::UnknownVariant(UnknownCachePolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CachePolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "custom" => CachePolicyType::Custom,
+            "managed" => CachePolicyType::Managed,
+            _ => CachePolicyType::UnknownVariant(UnknownCachePolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CachePolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CachePolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CachePolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct CachePolicyTypeDeserializer;
 impl CachePolicyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1184,12 +1646,12 @@ impl CachePolicyTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CachePolicyType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1199,7 +1661,7 @@ impl CachePolicyTypeSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachedMethods {
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>
-    pub items: Vec<String>,
+    pub items: Vec<Method>,
     /// <p>The number of HTTP methods for which you want CloudFront to cache responses. Valid values are <code>2</code> (for caching responses to <code>GET</code> and <code>HEAD</code> requests) and <code>3</code> (for caching responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests).</p>
     pub quantity: i64,
 }
@@ -1243,6 +1705,117 @@ impl CachedMethodsSerializer {
         MethodsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateSource {
+    Acm,
+    Cloudfront,
+    Iam,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateSource),
+}
+
+impl Default for CertificateSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateSource {
+    fn into(self) -> String {
+        match self {
+            CertificateSource::Acm => "acm".to_string(),
+            CertificateSource::Cloudfront => "cloudfront".to_string(),
+            CertificateSource::Iam => "iam".to_string(),
+            CertificateSource::UnknownVariant(UnknownCertificateSource { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateSource {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateSource::Acm => &"acm",
+            CertificateSource::Cloudfront => &"cloudfront",
+            CertificateSource::Iam => &"iam",
+            CertificateSource::UnknownVariant(UnknownCertificateSource { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CertificateSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "acm" => CertificateSource::Acm,
+            "cloudfront" => CertificateSource::Cloudfront,
+            "iam" => CertificateSource::Iam,
+            _ => CertificateSource::UnknownVariant(UnknownCertificateSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "acm" => CertificateSource::Acm,
+            "cloudfront" => CertificateSource::Cloudfront,
+            "iam" => CertificateSource::Iam,
+            _ => CertificateSource::UnknownVariant(UnknownCertificateSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CertificateSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CertificateSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -1508,7 +2081,7 @@ pub struct ContentTypeProfile {
     /// <p>The content type for a field-level encryption content type-profile mapping. </p>
     pub content_type: String,
     /// <p>The format for a field-level encryption content type-profile mapping. </p>
-    pub format: String,
+    pub format: Format,
     /// <p>The profile ID for a field-level encryption content type-profile mapping. </p>
     pub profile_id: Option<String>,
 }
@@ -1827,7 +2400,7 @@ impl CookieNamesSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct CookiePreference {
     /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element.</p>
-    pub forward: String,
+    pub forward: ItemSelection,
     /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Required if you specify <code>whitelist</code> for the value of <code>Forward</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or <code>none</code> for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to <code>all</code> or <code>none</code> and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href="https://docs.aws.amazon.com/general/latest/gr/xrefaws_service_limits.html#limits_cloudfront"> CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
     pub whitelisted_names: Option<CookieNames>,
 }
@@ -2597,7 +3170,7 @@ pub struct CustomOriginConfig {
     /// <p>Specifies how long, in seconds, CloudFront persists its connection to the origin. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 5 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginKeepaliveTimeout">Origin Keep-alive Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_keepalive_timeout: Option<i64>,
     /// <p><p>Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Valid values are:</p> <ul> <li> <p> <code>http-only</code> – CloudFront always uses HTTP to connect to the origin.</p> </li> <li> <p> <code>match-viewer</code> – CloudFront connects to the origin using the same protocol that the viewer used to connect to CloudFront.</p> </li> <li> <p> <code>https-only</code> – CloudFront always uses HTTPS to connect to the origin.</p> </li> </ul></p>
-    pub origin_protocol_policy: String,
+    pub origin_protocol_policy: OriginProtocolPolicy,
     /// <p>Specifies how long, in seconds, CloudFront waits for a response from the origin. This is also known as the <i>origin response timeout</i>. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 30 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginResponseTimeout">Origin Response Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_read_timeout: Option<i64>,
     /// <p>Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS. Valid values include <code>SSLv3</code>, <code>TLSv1</code>, <code>TLSv1.1</code>, and <code>TLSv1.2</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols">Minimum Origin SSL Protocol</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -2710,7 +3283,7 @@ pub struct DefaultCacheBehavior {
     /// <p><important> <p>We recommend using <code>TrustedKeyGroups</code> instead of <code>TrustedSigners</code>.</p> </important> <p>A list of AWS account IDs whose public keys CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted signers, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with the private key of a CloudFront key pair in a trusted signer’s AWS account. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p></p>
     pub trusted_signers: Option<TrustedSigners>,
     /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
-    pub viewer_protocol_policy: String,
+    pub viewer_protocol_policy: ViewerProtocolPolicy,
 }
 
 #[allow(dead_code)]
@@ -3100,7 +3673,7 @@ pub struct DistributionConfig {
     /// <p>From this field, you can enable or disable the selected distribution.</p>
     pub enabled: bool,
     /// <p>(Optional) Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is http2. Viewers that don't support HTTP/2 automatically use an earlier HTTP version.</p> <p>For viewers and CloudFront to use HTTP/2, viewers must support TLS 1.2 or later, and must support Server Name Identification (SNI).</p> <p>In general, configuring CloudFront to communicate with viewers using HTTP/2 reduces latency. You can improve performance by optimizing for HTTP/2. For more information, do an Internet search for "http/2 optimization." </p>
-    pub http_version: Option<String>,
+    pub http_version: Option<HttpVersion>,
     /// <p>If you want CloudFront to respond to IPv6 DNS requests with an IPv6 address for your distribution, specify <code>true</code>. If you specify <code>false</code>, CloudFront responds to IPv6 DNS requests with the DNS response code <code>NOERROR</code> and with no IP addresses. This allows viewers to submit a second request, for an IPv4 address for your distribution. </p> <p>In general, you should enable IPv6 if you have users on IPv6 networks who want to access your content. However, if you're using signed URLs or signed cookies to restrict access to your content, and if you're using a custom policy that includes the <code>IpAddress</code> parameter to restrict the IP addresses that can access your content, don't enable IPv6. If you want to restrict access to some content by IP address and not restrict access to other content (or restrict access but not by IP address), you can create two distributions. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html">Creating a Signed URL Using a Custom Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you're using an Amazon Route 53 alias resource record set to route traffic to your CloudFront distribution, you need to create a second alias resource record set when both of the following are true:</p> <ul> <li> <p>You enable IPv6 for the distribution</p> </li> <li> <p>You're using alternate domain names in the URLs for your objects</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html">Routing Traffic to an Amazon CloudFront Web Distribution by Using Your Domain Name</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If you created a CNAME resource record set, either with Amazon Route 53 or with another DNS service, you don't need to make any changes. A CNAME record will route traffic to your distribution regardless of the IP address format of the viewer request.</p>
     pub is_ipv6_enabled: Option<bool>,
     /// <p>A complex type that controls whether access logs are written for the distribution.</p> <p>For more information about logging, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html">Access Logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -3110,7 +3683,7 @@ pub struct DistributionConfig {
     /// <p>A complex type that contains information about origins for this distribution. </p>
     pub origins: Origins,
     /// <p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes (such as Price Class 100) map to CloudFront regions, see <a href="http://aws.amazon.com/cloudfront/pricing/">Amazon CloudFront Pricing</a>.</p>
-    pub price_class: Option<String>,
+    pub price_class: Option<PriceClass>,
     /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
     pub restrictions: Option<Restrictions>,
     /// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p>
@@ -3453,7 +4026,7 @@ pub struct DistributionSummary {
     /// <p>Whether the distribution is enabled to accept user requests for content.</p>
     pub enabled: bool,
     /// <p> Specify the maximum HTTP version that you want viewers to use to communicate with CloudFront. The default value for new web distributions is <code>http2</code>. Viewers that don't support <code>HTTP/2</code> will automatically use an earlier version.</p>
-    pub http_version: String,
+    pub http_version: HttpVersion,
     /// <p>The identifier for the distribution. For example: <code>EDFDVBD632BHDS5</code>.</p>
     pub id: String,
     /// <p>Whether CloudFront responds to IPv6 DNS requests with an IPv6 address for your distribution.</p>
@@ -3465,7 +4038,7 @@ pub struct DistributionSummary {
     /// <p>A complex type that contains information about origins for this distribution.</p>
     pub origins: Origins,
     /// <p>A complex type that contains information about price class for this streaming distribution. </p>
-    pub price_class: String,
+    pub price_class: PriceClass,
     /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
     pub restrictions: Restrictions,
     /// <p>The current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is propagated to all CloudFront edge locations.</p>
@@ -3841,12 +4414,127 @@ impl EndPointListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    OriginRequest,
+    OriginResponse,
+    ViewerRequest,
+    ViewerResponse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::OriginRequest => "origin-request".to_string(),
+            EventType::OriginResponse => "origin-response".to_string(),
+            EventType::ViewerRequest => "viewer-request".to_string(),
+            EventType::ViewerResponse => "viewer-response".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::OriginRequest => &"origin-request",
+            EventType::OriginResponse => &"origin-response",
+            EventType::ViewerRequest => &"viewer-request",
+            EventType::ViewerResponse => &"viewer-response",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "origin-request" => EventType::OriginRequest,
+            "origin-response" => EventType::OriginResponse,
+            "viewer-request" => EventType::ViewerRequest,
+            "viewer-response" => EventType::ViewerResponse,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "origin-request" => EventType::OriginRequest,
+            "origin-response" => EventType::OriginResponse,
+            "viewer-request" => EventType::ViewerRequest,
+            "viewer-response" => EventType::ViewerResponse,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EventType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3856,12 +4544,12 @@ impl EventTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &EventType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -4515,12 +5203,109 @@ impl FieldPatternsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Format {
+    Urlencoded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFormat),
+}
+
+impl Default for Format {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Format {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Format {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Format {
+    fn into(self) -> String {
+        match self {
+            Format::Urlencoded => "URLEncoded".to_string(),
+            Format::UnknownVariant(UnknownFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Format {
+    fn into(self) -> &'a str {
+        match self {
+            Format::Urlencoded => &"URLEncoded",
+            Format::UnknownVariant(UnknownFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Format {
+    fn from(name: &str) -> Self {
+        match name {
+            "URLEncoded" => Format::Urlencoded,
+            _ => Format::UnknownVariant(UnknownFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Format {
+    fn from(name: String) -> Self {
+        match &*name {
+            "URLEncoded" => Format::Urlencoded,
+            _ => Format::UnknownVariant(UnknownFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Format {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Format {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Format {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct FormatDeserializer;
 impl FormatDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Format, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -4530,12 +5315,12 @@ impl FormatSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Format,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -4562,7 +5347,7 @@ pub struct GeoRestriction {
     /// <p>When geo restriction is <code>enabled</code>, this is the number of countries in your <code>whitelist</code> or <code>blacklist</code>. Otherwise, when it is not enabled, <code>Quantity</code> is <code>0</code>, and you can omit <code>Items</code>.</p>
     pub quantity: i64,
     /// <p><p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you don&#39;t want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul></p>
-    pub restriction_type: String,
+    pub restriction_type: GeoRestrictionType,
 }
 
 #[allow(dead_code)]
@@ -4615,12 +5400,126 @@ impl GeoRestrictionSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGeoRestrictionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GeoRestrictionType {
+    Blacklist,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGeoRestrictionType),
+}
+
+impl Default for GeoRestrictionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GeoRestrictionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GeoRestrictionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GeoRestrictionType {
+    fn into(self) -> String {
+        match self {
+            GeoRestrictionType::Blacklist => "blacklist".to_string(),
+            GeoRestrictionType::None => "none".to_string(),
+            GeoRestrictionType::Whitelist => "whitelist".to_string(),
+            GeoRestrictionType::UnknownVariant(UnknownGeoRestrictionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GeoRestrictionType {
+    fn into(self) -> &'a str {
+        match self {
+            GeoRestrictionType::Blacklist => &"blacklist",
+            GeoRestrictionType::None => &"none",
+            GeoRestrictionType::Whitelist => &"whitelist",
+            GeoRestrictionType::UnknownVariant(UnknownGeoRestrictionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GeoRestrictionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "blacklist" => GeoRestrictionType::Blacklist,
+            "none" => GeoRestrictionType::None,
+            "whitelist" => GeoRestrictionType::Whitelist,
+            _ => GeoRestrictionType::UnknownVariant(UnknownGeoRestrictionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GeoRestrictionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "blacklist" => GeoRestrictionType::Blacklist,
+            "none" => GeoRestrictionType::None,
+            "whitelist" => GeoRestrictionType::Whitelist,
+            _ => GeoRestrictionType::UnknownVariant(UnknownGeoRestrictionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GeoRestrictionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for GeoRestrictionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GeoRestrictionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GeoRestrictionType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -4630,12 +5529,12 @@ impl GeoRestrictionTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &GeoRestrictionType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -5473,12 +6372,117 @@ impl HeadersSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHttpVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HttpVersion {
+    Http11,
+    Http2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHttpVersion),
+}
+
+impl Default for HttpVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HttpVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HttpVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HttpVersion {
+    fn into(self) -> String {
+        match self {
+            HttpVersion::Http11 => "http1.1".to_string(),
+            HttpVersion::Http2 => "http2".to_string(),
+            HttpVersion::UnknownVariant(UnknownHttpVersion { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HttpVersion {
+    fn into(self) -> &'a str {
+        match self {
+            HttpVersion::Http11 => &"http1.1",
+            HttpVersion::Http2 => &"http2",
+            HttpVersion::UnknownVariant(UnknownHttpVersion { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HttpVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "http1.1" => HttpVersion::Http11,
+            "http2" => HttpVersion::Http2,
+            _ => HttpVersion::UnknownVariant(UnknownHttpVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HttpVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "http1.1" => HttpVersion::Http11,
+            "http2" => HttpVersion::Http2,
+            _ => HttpVersion::UnknownVariant(UnknownHttpVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HttpVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for HttpVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for HttpVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HttpVersion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -5488,12 +6492,123 @@ impl HttpVersionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &HttpVersion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownICPRecordalStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ICPRecordalStatus {
+    Approved,
+    Pending,
+    Suspended,
+    #[doc(hidden)]
+    UnknownVariant(UnknownICPRecordalStatus),
+}
+
+impl Default for ICPRecordalStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ICPRecordalStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ICPRecordalStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ICPRecordalStatus {
+    fn into(self) -> String {
+        match self {
+            ICPRecordalStatus::Approved => "APPROVED".to_string(),
+            ICPRecordalStatus::Pending => "PENDING".to_string(),
+            ICPRecordalStatus::Suspended => "SUSPENDED".to_string(),
+            ICPRecordalStatus::UnknownVariant(UnknownICPRecordalStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ICPRecordalStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ICPRecordalStatus::Approved => &"APPROVED",
+            ICPRecordalStatus::Pending => &"PENDING",
+            ICPRecordalStatus::Suspended => &"SUSPENDED",
+            ICPRecordalStatus::UnknownVariant(UnknownICPRecordalStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ICPRecordalStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVED" => ICPRecordalStatus::Approved,
+            "PENDING" => ICPRecordalStatus::Pending,
+            "SUSPENDED" => ICPRecordalStatus::Suspended,
+            _ => ICPRecordalStatus::UnknownVariant(UnknownICPRecordalStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ICPRecordalStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVED" => ICPRecordalStatus::Approved,
+            "PENDING" => ICPRecordalStatus::Pending,
+            "SUSPENDED" => ICPRecordalStatus::Suspended,
+            _ => ICPRecordalStatus::UnknownVariant(UnknownICPRecordalStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ICPRecordalStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ICPRecordalStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ICPRecordalStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -5501,8 +6616,11 @@ impl HttpVersionSerializer {
 struct ICPRecordalStatusDeserializer;
 impl ICPRecordalStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ICPRecordalStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -5737,6 +6855,114 @@ impl InvalidationSummaryListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownItemSelection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ItemSelection {
+    All,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownItemSelection),
+}
+
+impl Default for ItemSelection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ItemSelection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ItemSelection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ItemSelection {
+    fn into(self) -> String {
+        match self {
+            ItemSelection::All => "all".to_string(),
+            ItemSelection::None => "none".to_string(),
+            ItemSelection::Whitelist => "whitelist".to_string(),
+            ItemSelection::UnknownVariant(UnknownItemSelection { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ItemSelection {
+    fn into(self) -> &'a str {
+        match self {
+            ItemSelection::All => &"all",
+            ItemSelection::None => &"none",
+            ItemSelection::Whitelist => &"whitelist",
+            ItemSelection::UnknownVariant(UnknownItemSelection { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ItemSelection {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => ItemSelection::All,
+            "none" => ItemSelection::None,
+            "whitelist" => ItemSelection::Whitelist,
+            _ => ItemSelection::UnknownVariant(UnknownItemSelection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ItemSelection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => ItemSelection::All,
+            "none" => ItemSelection::None,
+            "whitelist" => ItemSelection::Whitelist,
+            _ => ItemSelection::UnknownVariant(UnknownItemSelection { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ItemSelection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ItemSelection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ItemSelection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A list of identifiers for the public keys that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -6113,7 +7339,7 @@ impl LambdaFunctionARNSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociation {
     /// <p><p>Specifies the event type that triggers a Lambda function invocation. You can specify the following values:</p> <ul> <li> <p> <code>viewer-request</code>: The function executes when CloudFront receives a request from a viewer and before it checks to see whether the requested object is in the edge cache. </p> </li> <li> <p> <code>origin-request</code>: The function executes only when CloudFront sends a request to your origin. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>origin-response</code>: The function executes after CloudFront receives a response from the origin and before it caches the object in the response. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>viewer-response</code>: The function executes before CloudFront returns the requested object to the viewer. The function executes regardless of whether the object was already in the edge cache.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> </ul></p>
-    pub event_type: String,
+    pub event_type: EventType,
     /// <p>A flag that allows a Lambda function to have read access to the body content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-include-body-access.html">Accessing the Request Body by Choosing the Include Body Option</a> in the Amazon CloudFront Developer Guide.</p>
     pub include_body: Option<bool>,
     /// <p>The ARN of the Lambda function. You must specify the ARN of a function version; you can't specify a Lambda alias or $LATEST.</p>
@@ -6291,7 +7517,7 @@ pub struct ListCachePoliciesRequest {
     /// <p>The maximum number of cache policies that you want in the response.</p>
     pub max_items: Option<String>,
     /// <p><p>A filter to return only the specified kinds of cache policies. Valid values are:</p> <ul> <li> <p> <code>managed</code> – Returns only the managed policies created by AWS.</p> </li> <li> <p> <code>custom</code> – Returns only the custom policies created in your AWS account.</p> </li> </ul></p>
-    pub type_: Option<String>,
+    pub type_: Option<CachePolicyType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -6741,7 +7967,7 @@ pub struct ListOriginRequestPoliciesRequest {
     /// <p>The maximum number of origin request policies that you want in the response.</p>
     pub max_items: Option<String>,
     /// <p><p>A filter to return only the specified kinds of origin request policies. Valid values are:</p> <ul> <li> <p> <code>managed</code> – Returns only the managed policies created by AWS.</p> </li> <li> <p> <code>custom</code> – Returns only the custom policies created in your AWS account.</p> </li> </ul></p>
-    pub type_: Option<String>,
+    pub type_: Option<OriginRequestPolicyType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -7027,12 +8253,139 @@ impl LongSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Method {
+    Delete,
+    Get,
+    Head,
+    Options,
+    Patch,
+    Post,
+    Put,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMethod),
+}
+
+impl Default for Method {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Method {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Method {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Method {
+    fn into(self) -> String {
+        match self {
+            Method::Delete => "DELETE".to_string(),
+            Method::Get => "GET".to_string(),
+            Method::Head => "HEAD".to_string(),
+            Method::Options => "OPTIONS".to_string(),
+            Method::Patch => "PATCH".to_string(),
+            Method::Post => "POST".to_string(),
+            Method::Put => "PUT".to_string(),
+            Method::UnknownVariant(UnknownMethod { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Method {
+    fn into(self) -> &'a str {
+        match self {
+            Method::Delete => &"DELETE",
+            Method::Get => &"GET",
+            Method::Head => &"HEAD",
+            Method::Options => &"OPTIONS",
+            Method::Patch => &"PATCH",
+            Method::Post => &"POST",
+            Method::Put => &"PUT",
+            Method::UnknownVariant(UnknownMethod { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Method {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE" => Method::Delete,
+            "GET" => Method::Get,
+            "HEAD" => Method::Head,
+            "OPTIONS" => Method::Options,
+            "PATCH" => Method::Patch,
+            "POST" => Method::Post,
+            "PUT" => Method::Put,
+            _ => Method::UnknownVariant(UnknownMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Method {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE" => Method::Delete,
+            "GET" => Method::Get,
+            "HEAD" => Method::Head,
+            "OPTIONS" => Method::Options,
+            "PATCH" => Method::Patch,
+            "POST" => Method::Post,
+            "PUT" => Method::Put,
+            _ => Method::UnknownVariant(UnknownMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Method {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Method {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Method {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MethodDeserializer;
 impl MethodDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Method, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -7042,12 +8395,12 @@ impl MethodSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Method,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -7058,7 +8411,7 @@ impl MethodsListDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<Method>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Method" {
                 obj.push(MethodDeserializer::deserialize("Method", stack)?);
@@ -7076,7 +8429,7 @@ impl MethodsListSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<Method>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -7090,12 +8443,141 @@ impl MethodsListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMinimumProtocolVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MinimumProtocolVersion {
+    Sslv3,
+    Tlsv1,
+    Tlsv112016,
+    Tlsv122018,
+    Tlsv122019,
+    Tlsv12016,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMinimumProtocolVersion),
+}
+
+impl Default for MinimumProtocolVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MinimumProtocolVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MinimumProtocolVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MinimumProtocolVersion {
+    fn into(self) -> String {
+        match self {
+            MinimumProtocolVersion::Sslv3 => "SSLv3".to_string(),
+            MinimumProtocolVersion::Tlsv1 => "TLSv1".to_string(),
+            MinimumProtocolVersion::Tlsv112016 => "TLSv1.1_2016".to_string(),
+            MinimumProtocolVersion::Tlsv122018 => "TLSv1.2_2018".to_string(),
+            MinimumProtocolVersion::Tlsv122019 => "TLSv1.2_2019".to_string(),
+            MinimumProtocolVersion::Tlsv12016 => "TLSv1_2016".to_string(),
+            MinimumProtocolVersion::UnknownVariant(UnknownMinimumProtocolVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MinimumProtocolVersion {
+    fn into(self) -> &'a str {
+        match self {
+            MinimumProtocolVersion::Sslv3 => &"SSLv3",
+            MinimumProtocolVersion::Tlsv1 => &"TLSv1",
+            MinimumProtocolVersion::Tlsv112016 => &"TLSv1.1_2016",
+            MinimumProtocolVersion::Tlsv122018 => &"TLSv1.2_2018",
+            MinimumProtocolVersion::Tlsv122019 => &"TLSv1.2_2019",
+            MinimumProtocolVersion::Tlsv12016 => &"TLSv1_2016",
+            MinimumProtocolVersion::UnknownVariant(UnknownMinimumProtocolVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for MinimumProtocolVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "SSLv3" => MinimumProtocolVersion::Sslv3,
+            "TLSv1" => MinimumProtocolVersion::Tlsv1,
+            "TLSv1.1_2016" => MinimumProtocolVersion::Tlsv112016,
+            "TLSv1.2_2018" => MinimumProtocolVersion::Tlsv122018,
+            "TLSv1.2_2019" => MinimumProtocolVersion::Tlsv122019,
+            "TLSv1_2016" => MinimumProtocolVersion::Tlsv12016,
+            _ => MinimumProtocolVersion::UnknownVariant(UnknownMinimumProtocolVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MinimumProtocolVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SSLv3" => MinimumProtocolVersion::Sslv3,
+            "TLSv1" => MinimumProtocolVersion::Tlsv1,
+            "TLSv1.1_2016" => MinimumProtocolVersion::Tlsv112016,
+            "TLSv1.2_2018" => MinimumProtocolVersion::Tlsv122018,
+            "TLSv1.2_2019" => MinimumProtocolVersion::Tlsv122019,
+            "TLSv1_2016" => MinimumProtocolVersion::Tlsv12016,
+            _ => MinimumProtocolVersion::UnknownVariant(UnknownMinimumProtocolVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MinimumProtocolVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MinimumProtocolVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MinimumProtocolVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MinimumProtocolVersion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -7105,12 +8587,12 @@ impl MinimumProtocolVersionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &MinimumProtocolVersion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -7780,12 +9262,126 @@ impl OriginListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginProtocolPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginProtocolPolicy {
+    HttpOnly,
+    HttpsOnly,
+    MatchViewer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginProtocolPolicy),
+}
+
+impl Default for OriginProtocolPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginProtocolPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginProtocolPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginProtocolPolicy {
+    fn into(self) -> String {
+        match self {
+            OriginProtocolPolicy::HttpOnly => "http-only".to_string(),
+            OriginProtocolPolicy::HttpsOnly => "https-only".to_string(),
+            OriginProtocolPolicy::MatchViewer => "match-viewer".to_string(),
+            OriginProtocolPolicy::UnknownVariant(UnknownOriginProtocolPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginProtocolPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            OriginProtocolPolicy::HttpOnly => &"http-only",
+            OriginProtocolPolicy::HttpsOnly => &"https-only",
+            OriginProtocolPolicy::MatchViewer => &"match-viewer",
+            OriginProtocolPolicy::UnknownVariant(UnknownOriginProtocolPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginProtocolPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "http-only" => OriginProtocolPolicy::HttpOnly,
+            "https-only" => OriginProtocolPolicy::HttpsOnly,
+            "match-viewer" => OriginProtocolPolicy::MatchViewer,
+            _ => OriginProtocolPolicy::UnknownVariant(UnknownOriginProtocolPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginProtocolPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "http-only" => OriginProtocolPolicy::HttpOnly,
+            "https-only" => OriginProtocolPolicy::HttpsOnly,
+            "match-viewer" => OriginProtocolPolicy::MatchViewer,
+            _ => OriginProtocolPolicy::UnknownVariant(UnknownOriginProtocolPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginProtocolPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OriginProtocolPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OriginProtocolPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginProtocolPolicy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -7795,12 +9391,12 @@ impl OriginProtocolPolicySerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OriginProtocolPolicy,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -7946,12 +9542,130 @@ impl OriginRequestPolicyConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginRequestPolicyCookieBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginRequestPolicyCookieBehavior {
+    All,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginRequestPolicyCookieBehavior),
+}
+
+impl Default for OriginRequestPolicyCookieBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginRequestPolicyCookieBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginRequestPolicyCookieBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginRequestPolicyCookieBehavior {
+    fn into(self) -> String {
+        match self {
+            OriginRequestPolicyCookieBehavior::All => "all".to_string(),
+            OriginRequestPolicyCookieBehavior::None => "none".to_string(),
+            OriginRequestPolicyCookieBehavior::Whitelist => "whitelist".to_string(),
+            OriginRequestPolicyCookieBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyCookieBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginRequestPolicyCookieBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            OriginRequestPolicyCookieBehavior::All => &"all",
+            OriginRequestPolicyCookieBehavior::None => &"none",
+            OriginRequestPolicyCookieBehavior::Whitelist => &"whitelist",
+            OriginRequestPolicyCookieBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyCookieBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginRequestPolicyCookieBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => OriginRequestPolicyCookieBehavior::All,
+            "none" => OriginRequestPolicyCookieBehavior::None,
+            "whitelist" => OriginRequestPolicyCookieBehavior::Whitelist,
+            _ => OriginRequestPolicyCookieBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyCookieBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OriginRequestPolicyCookieBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => OriginRequestPolicyCookieBehavior::All,
+            "none" => OriginRequestPolicyCookieBehavior::None,
+            "whitelist" => OriginRequestPolicyCookieBehavior::Whitelist,
+            _ => OriginRequestPolicyCookieBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyCookieBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginRequestPolicyCookieBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OriginRequestPolicyCookieBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OriginRequestPolicyCookieBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OriginRequestPolicyCookieBehaviorDeserializer;
 impl OriginRequestPolicyCookieBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyCookieBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -7961,12 +9675,12 @@ impl OriginRequestPolicyCookieBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OriginRequestPolicyCookieBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -7976,7 +9690,7 @@ impl OriginRequestPolicyCookieBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginRequestPolicyCookiesConfig {
     /// <p><p>Determines whether cookies in viewer requests are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Cookies in viewer requests are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any cookies that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The cookies in viewer requests that are listed in the <code>CookieNames</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All cookies in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
-    pub cookie_behavior: String,
+    pub cookie_behavior: OriginRequestPolicyCookieBehavior,
     pub cookies: Option<CookieNames>,
 }
 
@@ -8031,12 +9745,143 @@ impl OriginRequestPolicyCookiesConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginRequestPolicyHeaderBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginRequestPolicyHeaderBehavior {
+    AllViewer,
+    AllViewerAndWhitelistCloudFront,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginRequestPolicyHeaderBehavior),
+}
+
+impl Default for OriginRequestPolicyHeaderBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginRequestPolicyHeaderBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginRequestPolicyHeaderBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginRequestPolicyHeaderBehavior {
+    fn into(self) -> String {
+        match self {
+            OriginRequestPolicyHeaderBehavior::AllViewer => "allViewer".to_string(),
+            OriginRequestPolicyHeaderBehavior::AllViewerAndWhitelistCloudFront => {
+                "allViewerAndWhitelistCloudFront".to_string()
+            }
+            OriginRequestPolicyHeaderBehavior::None => "none".to_string(),
+            OriginRequestPolicyHeaderBehavior::Whitelist => "whitelist".to_string(),
+            OriginRequestPolicyHeaderBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyHeaderBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginRequestPolicyHeaderBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            OriginRequestPolicyHeaderBehavior::AllViewer => &"allViewer",
+            OriginRequestPolicyHeaderBehavior::AllViewerAndWhitelistCloudFront => {
+                &"allViewerAndWhitelistCloudFront"
+            }
+            OriginRequestPolicyHeaderBehavior::None => &"none",
+            OriginRequestPolicyHeaderBehavior::Whitelist => &"whitelist",
+            OriginRequestPolicyHeaderBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyHeaderBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginRequestPolicyHeaderBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "allViewer" => OriginRequestPolicyHeaderBehavior::AllViewer,
+            "allViewerAndWhitelistCloudFront" => {
+                OriginRequestPolicyHeaderBehavior::AllViewerAndWhitelistCloudFront
+            }
+            "none" => OriginRequestPolicyHeaderBehavior::None,
+            "whitelist" => OriginRequestPolicyHeaderBehavior::Whitelist,
+            _ => OriginRequestPolicyHeaderBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyHeaderBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OriginRequestPolicyHeaderBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "allViewer" => OriginRequestPolicyHeaderBehavior::AllViewer,
+            "allViewerAndWhitelistCloudFront" => {
+                OriginRequestPolicyHeaderBehavior::AllViewerAndWhitelistCloudFront
+            }
+            "none" => OriginRequestPolicyHeaderBehavior::None,
+            "whitelist" => OriginRequestPolicyHeaderBehavior::Whitelist,
+            _ => OriginRequestPolicyHeaderBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyHeaderBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginRequestPolicyHeaderBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OriginRequestPolicyHeaderBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OriginRequestPolicyHeaderBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OriginRequestPolicyHeaderBehaviorDeserializer;
 impl OriginRequestPolicyHeaderBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyHeaderBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -8046,12 +9891,12 @@ impl OriginRequestPolicyHeaderBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OriginRequestPolicyHeaderBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -8061,7 +9906,7 @@ impl OriginRequestPolicyHeaderBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginRequestPolicyHeadersConfig {
     /// <p><p>Determines whether any HTTP headers are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – HTTP headers are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any headers that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The HTTP headers that are listed in the <code>Headers</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allViewer</code> – All HTTP headers in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allViewerAndWhitelistCloudFront</code> – All HTTP headers in viewer requests and the additional CloudFront headers that are listed in the <code>Headers</code> type are included in requests that CloudFront sends to the origin. The additional headers are added by CloudFront.</p> </li> </ul></p>
-    pub header_behavior: String,
+    pub header_behavior: OriginRequestPolicyHeaderBehavior,
     pub headers: Option<Headers>,
 }
 
@@ -8167,12 +10012,131 @@ impl OriginRequestPolicyListDeserializer {
         )
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginRequestPolicyQueryStringBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginRequestPolicyQueryStringBehavior {
+    All,
+    None,
+    Whitelist,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginRequestPolicyQueryStringBehavior),
+}
+
+impl Default for OriginRequestPolicyQueryStringBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginRequestPolicyQueryStringBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginRequestPolicyQueryStringBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginRequestPolicyQueryStringBehavior {
+    fn into(self) -> String {
+        match self {
+            OriginRequestPolicyQueryStringBehavior::All => "all".to_string(),
+            OriginRequestPolicyQueryStringBehavior::None => "none".to_string(),
+            OriginRequestPolicyQueryStringBehavior::Whitelist => "whitelist".to_string(),
+            OriginRequestPolicyQueryStringBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyQueryStringBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginRequestPolicyQueryStringBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            OriginRequestPolicyQueryStringBehavior::All => &"all",
+            OriginRequestPolicyQueryStringBehavior::None => &"none",
+            OriginRequestPolicyQueryStringBehavior::Whitelist => &"whitelist",
+            OriginRequestPolicyQueryStringBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyQueryStringBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginRequestPolicyQueryStringBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => OriginRequestPolicyQueryStringBehavior::All,
+            "none" => OriginRequestPolicyQueryStringBehavior::None,
+            "whitelist" => OriginRequestPolicyQueryStringBehavior::Whitelist,
+            _ => OriginRequestPolicyQueryStringBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyQueryStringBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for OriginRequestPolicyQueryStringBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => OriginRequestPolicyQueryStringBehavior::All,
+            "none" => OriginRequestPolicyQueryStringBehavior::None,
+            "whitelist" => OriginRequestPolicyQueryStringBehavior::Whitelist,
+            _ => OriginRequestPolicyQueryStringBehavior::UnknownVariant(
+                UnknownOriginRequestPolicyQueryStringBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginRequestPolicyQueryStringBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OriginRequestPolicyQueryStringBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OriginRequestPolicyQueryStringBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OriginRequestPolicyQueryStringBehaviorDeserializer;
 impl OriginRequestPolicyQueryStringBehaviorDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyQueryStringBehavior, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -8182,12 +10146,12 @@ impl OriginRequestPolicyQueryStringBehaviorSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OriginRequestPolicyQueryStringBehavior,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -8197,7 +10161,7 @@ impl OriginRequestPolicyQueryStringBehaviorSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginRequestPolicyQueryStringsConfig {
     /// <p><p>Determines whether any URL query strings in viewer requests are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Query strings in viewer requests are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any query strings that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The query strings in viewer requests that are listed in the <code>QueryStringNames</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All query strings in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
-    pub query_string_behavior: String,
+    pub query_string_behavior: OriginRequestPolicyQueryStringBehavior,
     /// <p>Contains a list of the query strings in viewer requests that are included in requests that CloudFront sends to the origin.</p>
     pub query_strings: Option<QueryStringNames>,
 }
@@ -8267,7 +10231,7 @@ pub struct OriginRequestPolicySummary {
     /// <p>The origin request policy.</p>
     pub origin_request_policy: OriginRequestPolicy,
     /// <p>The type of origin request policy, either <code>managed</code> (created by AWS) or <code>custom</code> (created in this AWS account).</p>
-    pub type_: String,
+    pub type_: OriginRequestPolicyType,
 }
 
 #[allow(dead_code)]
@@ -8321,12 +10285,122 @@ impl OriginRequestPolicySummaryListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginRequestPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginRequestPolicyType {
+    Custom,
+    Managed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginRequestPolicyType),
+}
+
+impl Default for OriginRequestPolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginRequestPolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginRequestPolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginRequestPolicyType {
+    fn into(self) -> String {
+        match self {
+            OriginRequestPolicyType::Custom => "custom".to_string(),
+            OriginRequestPolicyType::Managed => "managed".to_string(),
+            OriginRequestPolicyType::UnknownVariant(UnknownOriginRequestPolicyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginRequestPolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            OriginRequestPolicyType::Custom => &"custom",
+            OriginRequestPolicyType::Managed => &"managed",
+            OriginRequestPolicyType::UnknownVariant(UnknownOriginRequestPolicyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for OriginRequestPolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "custom" => OriginRequestPolicyType::Custom,
+            "managed" => OriginRequestPolicyType::Managed,
+            _ => OriginRequestPolicyType::UnknownVariant(UnknownOriginRequestPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginRequestPolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "custom" => OriginRequestPolicyType::Custom,
+            "managed" => OriginRequestPolicyType::Managed,
+            _ => OriginRequestPolicyType::UnknownVariant(UnknownOriginRequestPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginRequestPolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OriginRequestPolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OriginRequestPolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OriginRequestPolicyTypeDeserializer;
 impl OriginRequestPolicyTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -8336,12 +10410,12 @@ impl OriginRequestPolicyTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OriginRequestPolicyType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -8432,7 +10506,7 @@ impl OriginShieldRegionSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginSslProtocols {
     /// <p>A list that contains allowed SSL/TLS protocols for this distribution.</p>
-    pub items: Vec<String>,
+    pub items: Vec<SslProtocol>,
     /// <p>The number of SSL/TLS protocols that you want to allow CloudFront to use when establishing an HTTPS connection with this origin. </p>
     pub quantity: i64,
 }
@@ -8730,12 +10804,122 @@ impl PathsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPriceClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PriceClass {
+    PriceClass100,
+    PriceClass200,
+    PriceClassAll,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPriceClass),
+}
+
+impl Default for PriceClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PriceClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PriceClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PriceClass {
+    fn into(self) -> String {
+        match self {
+            PriceClass::PriceClass100 => "PriceClass_100".to_string(),
+            PriceClass::PriceClass200 => "PriceClass_200".to_string(),
+            PriceClass::PriceClassAll => "PriceClass_All".to_string(),
+            PriceClass::UnknownVariant(UnknownPriceClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PriceClass {
+    fn into(self) -> &'a str {
+        match self {
+            PriceClass::PriceClass100 => &"PriceClass_100",
+            PriceClass::PriceClass200 => &"PriceClass_200",
+            PriceClass::PriceClassAll => &"PriceClass_All",
+            PriceClass::UnknownVariant(UnknownPriceClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PriceClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "PriceClass_100" => PriceClass::PriceClass100,
+            "PriceClass_200" => PriceClass::PriceClass200,
+            "PriceClass_All" => PriceClass::PriceClassAll,
+            _ => PriceClass::UnknownVariant(UnknownPriceClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PriceClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PriceClass_100" => PriceClass::PriceClass100,
+            "PriceClass_200" => PriceClass::PriceClass200,
+            "PriceClass_All" => PriceClass::PriceClassAll,
+            _ => PriceClass::UnknownVariant(UnknownPriceClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PriceClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PriceClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PriceClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PriceClass, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -8745,12 +10929,12 @@ impl PriceClassSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &PriceClass,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9451,7 +11635,7 @@ impl RealtimeLogConfigsDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RealtimeMetricsSubscriptionConfig {
     /// <p>A flag that indicates whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
-    pub realtime_metrics_subscription_status: String,
+    pub realtime_metrics_subscription_status: RealtimeMetricsSubscriptionStatus,
 }
 
 #[allow(dead_code)]
@@ -9503,12 +11687,125 @@ impl RealtimeMetricsSubscriptionConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRealtimeMetricsSubscriptionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RealtimeMetricsSubscriptionStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRealtimeMetricsSubscriptionStatus),
+}
+
+impl Default for RealtimeMetricsSubscriptionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RealtimeMetricsSubscriptionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RealtimeMetricsSubscriptionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RealtimeMetricsSubscriptionStatus {
+    fn into(self) -> String {
+        match self {
+            RealtimeMetricsSubscriptionStatus::Disabled => "Disabled".to_string(),
+            RealtimeMetricsSubscriptionStatus::Enabled => "Enabled".to_string(),
+            RealtimeMetricsSubscriptionStatus::UnknownVariant(
+                UnknownRealtimeMetricsSubscriptionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RealtimeMetricsSubscriptionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RealtimeMetricsSubscriptionStatus::Disabled => &"Disabled",
+            RealtimeMetricsSubscriptionStatus::Enabled => &"Enabled",
+            RealtimeMetricsSubscriptionStatus::UnknownVariant(
+                UnknownRealtimeMetricsSubscriptionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RealtimeMetricsSubscriptionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => RealtimeMetricsSubscriptionStatus::Disabled,
+            "Enabled" => RealtimeMetricsSubscriptionStatus::Enabled,
+            _ => RealtimeMetricsSubscriptionStatus::UnknownVariant(
+                UnknownRealtimeMetricsSubscriptionStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RealtimeMetricsSubscriptionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => RealtimeMetricsSubscriptionStatus::Disabled,
+            "Enabled" => RealtimeMetricsSubscriptionStatus::Enabled,
+            _ => RealtimeMetricsSubscriptionStatus::UnknownVariant(
+                UnknownRealtimeMetricsSubscriptionStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RealtimeMetricsSubscriptionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RealtimeMetricsSubscriptionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RealtimeMetricsSubscriptionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RealtimeMetricsSubscriptionStatusDeserializer;
 impl RealtimeMetricsSubscriptionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RealtimeMetricsSubscriptionStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9518,12 +11815,12 @@ impl RealtimeMetricsSubscriptionStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &RealtimeMetricsSubscriptionStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9697,12 +11994,126 @@ impl S3OriginConfigSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSSLSupportMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SSLSupportMethod {
+    SniOnly,
+    StaticIp,
+    Vip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSSLSupportMethod),
+}
+
+impl Default for SSLSupportMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SSLSupportMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SSLSupportMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SSLSupportMethod {
+    fn into(self) -> String {
+        match self {
+            SSLSupportMethod::SniOnly => "sni-only".to_string(),
+            SSLSupportMethod::StaticIp => "static-ip".to_string(),
+            SSLSupportMethod::Vip => "vip".to_string(),
+            SSLSupportMethod::UnknownVariant(UnknownSSLSupportMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SSLSupportMethod {
+    fn into(self) -> &'a str {
+        match self {
+            SSLSupportMethod::SniOnly => &"sni-only",
+            SSLSupportMethod::StaticIp => &"static-ip",
+            SSLSupportMethod::Vip => &"vip",
+            SSLSupportMethod::UnknownVariant(UnknownSSLSupportMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SSLSupportMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "sni-only" => SSLSupportMethod::SniOnly,
+            "static-ip" => SSLSupportMethod::StaticIp,
+            "vip" => SSLSupportMethod::Vip,
+            _ => SSLSupportMethod::UnknownVariant(UnknownSSLSupportMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SSLSupportMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "sni-only" => SSLSupportMethod::SniOnly,
+            "static-ip" => SSLSupportMethod::StaticIp,
+            "vip" => SSLSupportMethod::Vip,
+            _ => SSLSupportMethod::UnknownVariant(UnknownSSLSupportMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SSLSupportMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SSLSupportMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SSLSupportMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SSLSupportMethod, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9712,12 +12123,12 @@ impl SSLSupportMethodSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &SSLSupportMethod,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9770,12 +12181,128 @@ impl SignerListDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSslProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SslProtocol {
+    Sslv3,
+    Tlsv1,
+    Tlsv11,
+    Tlsv12,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSslProtocol),
+}
+
+impl Default for SslProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SslProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SslProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SslProtocol {
+    fn into(self) -> String {
+        match self {
+            SslProtocol::Sslv3 => "SSLv3".to_string(),
+            SslProtocol::Tlsv1 => "TLSv1".to_string(),
+            SslProtocol::Tlsv11 => "TLSv1.1".to_string(),
+            SslProtocol::Tlsv12 => "TLSv1.2".to_string(),
+            SslProtocol::UnknownVariant(UnknownSslProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SslProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            SslProtocol::Sslv3 => &"SSLv3",
+            SslProtocol::Tlsv1 => &"TLSv1",
+            SslProtocol::Tlsv11 => &"TLSv1.1",
+            SslProtocol::Tlsv12 => &"TLSv1.2",
+            SslProtocol::UnknownVariant(UnknownSslProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SslProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "SSLv3" => SslProtocol::Sslv3,
+            "TLSv1" => SslProtocol::Tlsv1,
+            "TLSv1.1" => SslProtocol::Tlsv11,
+            "TLSv1.2" => SslProtocol::Tlsv12,
+            _ => SslProtocol::UnknownVariant(UnknownSslProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SslProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SSLv3" => SslProtocol::Sslv3,
+            "TLSv1" => SslProtocol::Tlsv1,
+            "TLSv1.1" => SslProtocol::Tlsv11,
+            "TLSv1.2" => SslProtocol::Tlsv12,
+            _ => SslProtocol::UnknownVariant(UnknownSslProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SslProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SslProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SslProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SslProtocol, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9785,12 +12312,12 @@ impl SslProtocolSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &SslProtocol,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9801,7 +12328,7 @@ impl SslProtocolsListDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<SslProtocol>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "SslProtocol" {
                 obj.push(SslProtocolDeserializer::deserialize("SslProtocol", stack)?);
@@ -9819,7 +12346,7 @@ impl SslProtocolsListSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<SslProtocol>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -10008,7 +12535,7 @@ pub struct StreamingDistributionConfig {
     /// <p>A complex type that controls whether access logs are written for the streaming distribution. </p>
     pub logging: Option<StreamingLoggingConfig>,
     /// <p>A complex type that contains information about price class for this streaming distribution. </p>
-    pub price_class: Option<String>,
+    pub price_class: Option<PriceClass>,
     /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution. </p>
     pub s3_origin: S3Origin,
     /// <p>A complex type that specifies any AWS accounts that you want to permit to create signed URLs for private content. If you want the distribution to use signed URLs, include this element; if you want the distribution to use public URLs, remove this element. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
@@ -10207,7 +12734,7 @@ pub struct StreamingDistributionSummary {
     /// <p>The date and time the distribution was last modified.</p>
     pub last_modified_time: String,
     /// <p>A complex type that contains information about price class for this streaming distribution. </p>
-    pub price_class: String,
+    pub price_class: PriceClass,
     /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
     pub s3_origin: S3Origin,
     /// <p> Indicates the current status of the distribution. When the status is <code>Deployed</code>, the distribution's information is fully propagated throughout the Amazon CloudFront system.</p>
@@ -11222,9 +13749,9 @@ pub struct ViewerCertificate {
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>, provide the ID of the IAM certificate.</p> <p>If you specify an IAM certificate ID, you must also specify values for <code>MinimumProtocolVerison</code> and <code>SSLSupportMethod</code>. </p>
     pub iam_certificate_id: Option<String>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
-    pub minimum_protocol_version: Option<String>,
+    pub minimum_protocol_version: Option<MinimumProtocolVersion>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> <li> <p> <code>static-ip</code> - Do not specify this value unless your distribution has been enabled for this feature by the CloudFront team. If you have a use case that requires static IP addresses for a distribution, contact CloudFront through the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a>.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
-    pub ssl_support_method: Option<String>,
+    pub ssl_support_method: Option<SSLSupportMethod>,
 }
 
 #[allow(dead_code)]
@@ -11302,12 +13829,126 @@ impl ViewerCertificateSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownViewerProtocolPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ViewerProtocolPolicy {
+    AllowAll,
+    HttpsOnly,
+    RedirectToHttps,
+    #[doc(hidden)]
+    UnknownVariant(UnknownViewerProtocolPolicy),
+}
+
+impl Default for ViewerProtocolPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ViewerProtocolPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ViewerProtocolPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ViewerProtocolPolicy {
+    fn into(self) -> String {
+        match self {
+            ViewerProtocolPolicy::AllowAll => "allow-all".to_string(),
+            ViewerProtocolPolicy::HttpsOnly => "https-only".to_string(),
+            ViewerProtocolPolicy::RedirectToHttps => "redirect-to-https".to_string(),
+            ViewerProtocolPolicy::UnknownVariant(UnknownViewerProtocolPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ViewerProtocolPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            ViewerProtocolPolicy::AllowAll => &"allow-all",
+            ViewerProtocolPolicy::HttpsOnly => &"https-only",
+            ViewerProtocolPolicy::RedirectToHttps => &"redirect-to-https",
+            ViewerProtocolPolicy::UnknownVariant(UnknownViewerProtocolPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ViewerProtocolPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "allow-all" => ViewerProtocolPolicy::AllowAll,
+            "https-only" => ViewerProtocolPolicy::HttpsOnly,
+            "redirect-to-https" => ViewerProtocolPolicy::RedirectToHttps,
+            _ => ViewerProtocolPolicy::UnknownVariant(UnknownViewerProtocolPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ViewerProtocolPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "allow-all" => ViewerProtocolPolicy::AllowAll,
+            "https-only" => ViewerProtocolPolicy::HttpsOnly,
+            "redirect-to-https" => ViewerProtocolPolicy::RedirectToHttps,
+            _ => ViewerProtocolPolicy::UnknownVariant(UnknownViewerProtocolPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ViewerProtocolPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ViewerProtocolPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ViewerProtocolPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ViewerProtocolPolicy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -11317,12 +13958,12 @@ impl ViewerProtocolPolicySerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ViewerProtocolPolicy,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 

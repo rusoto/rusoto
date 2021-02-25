@@ -50,6 +50,107 @@ impl CostExplorerClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountScope {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountScope {
+    Linked,
+    Payer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountScope),
+}
+
+impl Default for AccountScope {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountScope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountScope {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountScope {
+    fn into(self) -> String {
+        match self {
+            AccountScope::Linked => "LINKED".to_string(),
+            AccountScope::Payer => "PAYER".to_string(),
+            AccountScope::UnknownVariant(UnknownAccountScope { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountScope {
+    fn into(self) -> &'a str {
+        match self {
+            AccountScope::Linked => &"LINKED",
+            AccountScope::Payer => &"PAYER",
+            AccountScope::UnknownVariant(UnknownAccountScope { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccountScope {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINKED" => AccountScope::Linked,
+            "PAYER" => AccountScope::Payer,
+            _ => AccountScope::UnknownVariant(UnknownAccountScope {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountScope {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINKED" => AccountScope::Linked,
+            "PAYER" => AccountScope::Payer,
+            _ => AccountScope::UnknownVariant(UnknownAccountScope { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountScope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AccountScope {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountScope {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> An unusual cost pattern. This consists of the detailed metadata and the current status of the anomaly object. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -75,7 +176,7 @@ pub struct Anomaly {
     /// <p> The feedback value. </p>
     #[serde(rename = "Feedback")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feedback: Option<String>,
+    pub feedback: Option<AnomalyFeedbackType>,
     /// <p> The dollar impact for the anomaly. </p>
     #[serde(rename = "Impact")]
     pub impact: Impact,
@@ -99,6 +200,115 @@ pub struct AnomalyDateInterval {
     /// <p> The first date an anomaly was observed. </p>
     #[serde(rename = "StartDate")]
     pub start_date: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnomalyFeedbackType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnomalyFeedbackType {
+    No,
+    PlannedActivity,
+    Yes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnomalyFeedbackType),
+}
+
+impl Default for AnomalyFeedbackType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnomalyFeedbackType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnomalyFeedbackType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnomalyFeedbackType {
+    fn into(self) -> String {
+        match self {
+            AnomalyFeedbackType::No => "NO".to_string(),
+            AnomalyFeedbackType::PlannedActivity => "PLANNED_ACTIVITY".to_string(),
+            AnomalyFeedbackType::Yes => "YES".to_string(),
+            AnomalyFeedbackType::UnknownVariant(UnknownAnomalyFeedbackType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnomalyFeedbackType {
+    fn into(self) -> &'a str {
+        match self {
+            AnomalyFeedbackType::No => &"NO",
+            AnomalyFeedbackType::PlannedActivity => &"PLANNED_ACTIVITY",
+            AnomalyFeedbackType::Yes => &"YES",
+            AnomalyFeedbackType::UnknownVariant(UnknownAnomalyFeedbackType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AnomalyFeedbackType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO" => AnomalyFeedbackType::No,
+            "PLANNED_ACTIVITY" => AnomalyFeedbackType::PlannedActivity,
+            "YES" => AnomalyFeedbackType::Yes,
+            _ => AnomalyFeedbackType::UnknownVariant(UnknownAnomalyFeedbackType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnomalyFeedbackType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO" => AnomalyFeedbackType::No,
+            "PLANNED_ACTIVITY" => AnomalyFeedbackType::PlannedActivity,
+            "YES" => AnomalyFeedbackType::Yes,
+            _ => AnomalyFeedbackType::UnknownVariant(UnknownAnomalyFeedbackType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnomalyFeedbackType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AnomalyFeedbackType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AnomalyFeedbackType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> This object continuously inspects your account's cost data for anomalies, based on <code>MonitorType</code> and <code>MonitorSpecification</code>. The content consists of detailed metadata and the current status of the monitor object. </p>
@@ -127,7 +337,7 @@ pub struct AnomalyMonitor {
     /// <p> The dimensions to evaluate. </p>
     #[serde(rename = "MonitorDimension")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub monitor_dimension: Option<String>,
+    pub monitor_dimension: Option<MonitorDimension>,
     /// <p> The name of the monitor. </p>
     #[serde(rename = "MonitorName")]
     pub monitor_name: String,
@@ -136,7 +346,7 @@ pub struct AnomalyMonitor {
     pub monitor_specification: Option<Expression>,
     /// <p> The possible type values. </p>
     #[serde(rename = "MonitorType")]
-    pub monitor_type: String,
+    pub monitor_type: MonitorType,
 }
 
 /// <p> Quantifies the anomaly. The higher score means that it is more anomalous. </p>
@@ -160,7 +370,7 @@ pub struct AnomalySubscription {
     pub account_id: Option<String>,
     /// <p> The frequency at which anomaly reports are sent over email. </p>
     #[serde(rename = "Frequency")]
-    pub frequency: String,
+    pub frequency: AnomalySubscriptionFrequency,
     /// <p> A list of cost anomaly monitors. </p>
     #[serde(rename = "MonitorArnList")]
     pub monitor_arn_list: Vec<String>,
@@ -177,6 +387,227 @@ pub struct AnomalySubscription {
     /// <p> The dollar value that triggers a notification if the threshold is exceeded. </p>
     #[serde(rename = "Threshold")]
     pub threshold: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnomalySubscriptionFrequency {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnomalySubscriptionFrequency {
+    Daily,
+    Immediate,
+    Weekly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnomalySubscriptionFrequency),
+}
+
+impl Default for AnomalySubscriptionFrequency {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnomalySubscriptionFrequency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnomalySubscriptionFrequency {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnomalySubscriptionFrequency {
+    fn into(self) -> String {
+        match self {
+            AnomalySubscriptionFrequency::Daily => "DAILY".to_string(),
+            AnomalySubscriptionFrequency::Immediate => "IMMEDIATE".to_string(),
+            AnomalySubscriptionFrequency::Weekly => "WEEKLY".to_string(),
+            AnomalySubscriptionFrequency::UnknownVariant(UnknownAnomalySubscriptionFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnomalySubscriptionFrequency {
+    fn into(self) -> &'a str {
+        match self {
+            AnomalySubscriptionFrequency::Daily => &"DAILY",
+            AnomalySubscriptionFrequency::Immediate => &"IMMEDIATE",
+            AnomalySubscriptionFrequency::Weekly => &"WEEKLY",
+            AnomalySubscriptionFrequency::UnknownVariant(UnknownAnomalySubscriptionFrequency {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnomalySubscriptionFrequency {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAILY" => AnomalySubscriptionFrequency::Daily,
+            "IMMEDIATE" => AnomalySubscriptionFrequency::Immediate,
+            "WEEKLY" => AnomalySubscriptionFrequency::Weekly,
+            _ => {
+                AnomalySubscriptionFrequency::UnknownVariant(UnknownAnomalySubscriptionFrequency {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for AnomalySubscriptionFrequency {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAILY" => AnomalySubscriptionFrequency::Daily,
+            "IMMEDIATE" => AnomalySubscriptionFrequency::Immediate,
+            "WEEKLY" => AnomalySubscriptionFrequency::Weekly,
+            _ => {
+                AnomalySubscriptionFrequency::UnknownVariant(UnknownAnomalySubscriptionFrequency {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnomalySubscriptionFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AnomalySubscriptionFrequency {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AnomalySubscriptionFrequency {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContext {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Context {
+    CostAndUsage,
+    Reservations,
+    SavingsPlans,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContext),
+}
+
+impl Default for Context {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Context {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Context {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Context {
+    fn into(self) -> String {
+        match self {
+            Context::CostAndUsage => "COST_AND_USAGE".to_string(),
+            Context::Reservations => "RESERVATIONS".to_string(),
+            Context::SavingsPlans => "SAVINGS_PLANS".to_string(),
+            Context::UnknownVariant(UnknownContext { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Context {
+    fn into(self) -> &'a str {
+        match self {
+            Context::CostAndUsage => &"COST_AND_USAGE",
+            Context::Reservations => &"RESERVATIONS",
+            Context::SavingsPlans => &"SAVINGS_PLANS",
+            Context::UnknownVariant(UnknownContext { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Context {
+    fn from(name: &str) -> Self {
+        match name {
+            "COST_AND_USAGE" => Context::CostAndUsage,
+            "RESERVATIONS" => Context::Reservations,
+            "SAVINGS_PLANS" => Context::SavingsPlans,
+            _ => Context::UnknownVariant(UnknownContext {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Context {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COST_AND_USAGE" => Context::CostAndUsage,
+            "RESERVATIONS" => Context::Reservations,
+            "SAVINGS_PLANS" => Context::SavingsPlans,
+            _ => Context::UnknownVariant(UnknownContext { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Context {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Context {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Context {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The structure of Cost Categories. This includes detailed metadata and the set of rules for the <code>CostCategory</code> object.</p>
@@ -200,7 +631,7 @@ pub struct CostCategory {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_status: Option<Vec<CostCategoryProcessingStatus>>,
     #[serde(rename = "RuleVersion")]
-    pub rule_version: String,
+    pub rule_version: CostCategoryRuleVersion,
     /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
     #[serde(rename = "Rules")]
     pub rules: Vec<CostCategoryRule>,
@@ -213,11 +644,11 @@ pub struct CostCategoryProcessingStatus {
     /// <p> The Cost Management product name of the applied status. </p>
     #[serde(rename = "Component")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub component: Option<String>,
+    pub component: Option<CostCategoryStatusComponent>,
     /// <p> The process status for a specific cost category. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CostCategoryStatus>,
 }
 
 /// <p>A reference to a Cost Category containing only enough information to identify the Cost Category.</p> <p>You can use this information to retrieve the full Cost Category information using <code>DescribeCostCategory</code>.</p>
@@ -263,6 +694,316 @@ pub struct CostCategoryRule {
     pub value: String,
 }
 
+/// <p>The rule schema version in this particular Cost Category.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCostCategoryRuleVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CostCategoryRuleVersion {
+    CostCategoryExpressionV1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCostCategoryRuleVersion),
+}
+
+impl Default for CostCategoryRuleVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CostCategoryRuleVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CostCategoryRuleVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CostCategoryRuleVersion {
+    fn into(self) -> String {
+        match self {
+            CostCategoryRuleVersion::CostCategoryExpressionV1 => {
+                "CostCategoryExpression.v1".to_string()
+            }
+            CostCategoryRuleVersion::UnknownVariant(UnknownCostCategoryRuleVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CostCategoryRuleVersion {
+    fn into(self) -> &'a str {
+        match self {
+            CostCategoryRuleVersion::CostCategoryExpressionV1 => &"CostCategoryExpression.v1",
+            CostCategoryRuleVersion::UnknownVariant(UnknownCostCategoryRuleVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CostCategoryRuleVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "CostCategoryExpression.v1" => CostCategoryRuleVersion::CostCategoryExpressionV1,
+            _ => CostCategoryRuleVersion::UnknownVariant(UnknownCostCategoryRuleVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CostCategoryRuleVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CostCategoryExpression.v1" => CostCategoryRuleVersion::CostCategoryExpressionV1,
+            _ => CostCategoryRuleVersion::UnknownVariant(UnknownCostCategoryRuleVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CostCategoryRuleVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CostCategoryRuleVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CostCategoryRuleVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCostCategoryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CostCategoryStatus {
+    Applied,
+    Processing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCostCategoryStatus),
+}
+
+impl Default for CostCategoryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CostCategoryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CostCategoryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CostCategoryStatus {
+    fn into(self) -> String {
+        match self {
+            CostCategoryStatus::Applied => "APPLIED".to_string(),
+            CostCategoryStatus::Processing => "PROCESSING".to_string(),
+            CostCategoryStatus::UnknownVariant(UnknownCostCategoryStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CostCategoryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CostCategoryStatus::Applied => &"APPLIED",
+            CostCategoryStatus::Processing => &"PROCESSING",
+            CostCategoryStatus::UnknownVariant(UnknownCostCategoryStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CostCategoryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLIED" => CostCategoryStatus::Applied,
+            "PROCESSING" => CostCategoryStatus::Processing,
+            _ => CostCategoryStatus::UnknownVariant(UnknownCostCategoryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CostCategoryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLIED" => CostCategoryStatus::Applied,
+            "PROCESSING" => CostCategoryStatus::Processing,
+            _ => CostCategoryStatus::UnknownVariant(UnknownCostCategoryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CostCategoryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CostCategoryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CostCategoryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCostCategoryStatusComponent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CostCategoryStatusComponent {
+    CostExplorer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCostCategoryStatusComponent),
+}
+
+impl Default for CostCategoryStatusComponent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CostCategoryStatusComponent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CostCategoryStatusComponent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CostCategoryStatusComponent {
+    fn into(self) -> String {
+        match self {
+            CostCategoryStatusComponent::CostExplorer => "COST_EXPLORER".to_string(),
+            CostCategoryStatusComponent::UnknownVariant(UnknownCostCategoryStatusComponent {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CostCategoryStatusComponent {
+    fn into(self) -> &'a str {
+        match self {
+            CostCategoryStatusComponent::CostExplorer => &"COST_EXPLORER",
+            CostCategoryStatusComponent::UnknownVariant(UnknownCostCategoryStatusComponent {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CostCategoryStatusComponent {
+    fn from(name: &str) -> Self {
+        match name {
+            "COST_EXPLORER" => CostCategoryStatusComponent::CostExplorer,
+            _ => CostCategoryStatusComponent::UnknownVariant(UnknownCostCategoryStatusComponent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CostCategoryStatusComponent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COST_EXPLORER" => CostCategoryStatusComponent::CostExplorer,
+            _ => CostCategoryStatusComponent::UnknownVariant(UnknownCostCategoryStatusComponent {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CostCategoryStatusComponent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CostCategoryStatusComponent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CostCategoryStatusComponent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Cost Categories values used for filtering the costs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CostCategoryValues {
@@ -272,7 +1013,7 @@ pub struct CostCategoryValues {
     /// <p> The match options that you can use to filter your results. MatchOptions is only applicable for only applicable for actions related to cost category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>. </p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub match_options: Option<Vec<String>>,
+    pub match_options: Option<Vec<MatchOption>>,
     /// <p>The specific value of the Cost Category.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -407,7 +1148,7 @@ pub struct CreateCostCategoryDefinitionRequest {
     #[serde(rename = "Name")]
     pub name: String,
     #[serde(rename = "RuleVersion")]
-    pub rule_version: String,
+    pub rule_version: CostCategoryRuleVersion,
     /// <p>The Cost Category rules used to categorize costs. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategoryRule.html">CostCategoryRule</a>.</p>
     #[serde(rename = "Rules")]
     pub rules: Vec<CostCategoryRule>,
@@ -552,17 +1293,252 @@ pub struct DescribeCostCategoryDefinitionResponse {
     pub cost_category: Option<CostCategory>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDimension {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Dimension {
+    Az,
+    BillingEntity,
+    CacheEngine,
+    DatabaseEngine,
+    DeploymentOption,
+    InstanceType,
+    InstanceTypeFamily,
+    LegalEntityName,
+    LinkedAccount,
+    LinkedAccountName,
+    OperatingSystem,
+    Operation,
+    PaymentOption,
+    Platform,
+    PurchaseType,
+    RecordType,
+    Region,
+    ReservationId,
+    ResourceId,
+    RightsizingType,
+    SavingsPlansType,
+    SavingsPlanArn,
+    Scope,
+    Service,
+    ServiceCode,
+    SubscriptionId,
+    Tenancy,
+    UsageType,
+    UsageTypeGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDimension),
+}
+
+impl Default for Dimension {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Dimension {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Dimension {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Dimension {
+    fn into(self) -> String {
+        match self {
+            Dimension::Az => "AZ".to_string(),
+            Dimension::BillingEntity => "BILLING_ENTITY".to_string(),
+            Dimension::CacheEngine => "CACHE_ENGINE".to_string(),
+            Dimension::DatabaseEngine => "DATABASE_ENGINE".to_string(),
+            Dimension::DeploymentOption => "DEPLOYMENT_OPTION".to_string(),
+            Dimension::InstanceType => "INSTANCE_TYPE".to_string(),
+            Dimension::InstanceTypeFamily => "INSTANCE_TYPE_FAMILY".to_string(),
+            Dimension::LegalEntityName => "LEGAL_ENTITY_NAME".to_string(),
+            Dimension::LinkedAccount => "LINKED_ACCOUNT".to_string(),
+            Dimension::LinkedAccountName => "LINKED_ACCOUNT_NAME".to_string(),
+            Dimension::OperatingSystem => "OPERATING_SYSTEM".to_string(),
+            Dimension::Operation => "OPERATION".to_string(),
+            Dimension::PaymentOption => "PAYMENT_OPTION".to_string(),
+            Dimension::Platform => "PLATFORM".to_string(),
+            Dimension::PurchaseType => "PURCHASE_TYPE".to_string(),
+            Dimension::RecordType => "RECORD_TYPE".to_string(),
+            Dimension::Region => "REGION".to_string(),
+            Dimension::ReservationId => "RESERVATION_ID".to_string(),
+            Dimension::ResourceId => "RESOURCE_ID".to_string(),
+            Dimension::RightsizingType => "RIGHTSIZING_TYPE".to_string(),
+            Dimension::SavingsPlansType => "SAVINGS_PLANS_TYPE".to_string(),
+            Dimension::SavingsPlanArn => "SAVINGS_PLAN_ARN".to_string(),
+            Dimension::Scope => "SCOPE".to_string(),
+            Dimension::Service => "SERVICE".to_string(),
+            Dimension::ServiceCode => "SERVICE_CODE".to_string(),
+            Dimension::SubscriptionId => "SUBSCRIPTION_ID".to_string(),
+            Dimension::Tenancy => "TENANCY".to_string(),
+            Dimension::UsageType => "USAGE_TYPE".to_string(),
+            Dimension::UsageTypeGroup => "USAGE_TYPE_GROUP".to_string(),
+            Dimension::UnknownVariant(UnknownDimension { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Dimension {
+    fn into(self) -> &'a str {
+        match self {
+            Dimension::Az => &"AZ",
+            Dimension::BillingEntity => &"BILLING_ENTITY",
+            Dimension::CacheEngine => &"CACHE_ENGINE",
+            Dimension::DatabaseEngine => &"DATABASE_ENGINE",
+            Dimension::DeploymentOption => &"DEPLOYMENT_OPTION",
+            Dimension::InstanceType => &"INSTANCE_TYPE",
+            Dimension::InstanceTypeFamily => &"INSTANCE_TYPE_FAMILY",
+            Dimension::LegalEntityName => &"LEGAL_ENTITY_NAME",
+            Dimension::LinkedAccount => &"LINKED_ACCOUNT",
+            Dimension::LinkedAccountName => &"LINKED_ACCOUNT_NAME",
+            Dimension::OperatingSystem => &"OPERATING_SYSTEM",
+            Dimension::Operation => &"OPERATION",
+            Dimension::PaymentOption => &"PAYMENT_OPTION",
+            Dimension::Platform => &"PLATFORM",
+            Dimension::PurchaseType => &"PURCHASE_TYPE",
+            Dimension::RecordType => &"RECORD_TYPE",
+            Dimension::Region => &"REGION",
+            Dimension::ReservationId => &"RESERVATION_ID",
+            Dimension::ResourceId => &"RESOURCE_ID",
+            Dimension::RightsizingType => &"RIGHTSIZING_TYPE",
+            Dimension::SavingsPlansType => &"SAVINGS_PLANS_TYPE",
+            Dimension::SavingsPlanArn => &"SAVINGS_PLAN_ARN",
+            Dimension::Scope => &"SCOPE",
+            Dimension::Service => &"SERVICE",
+            Dimension::ServiceCode => &"SERVICE_CODE",
+            Dimension::SubscriptionId => &"SUBSCRIPTION_ID",
+            Dimension::Tenancy => &"TENANCY",
+            Dimension::UsageType => &"USAGE_TYPE",
+            Dimension::UsageTypeGroup => &"USAGE_TYPE_GROUP",
+            Dimension::UnknownVariant(UnknownDimension { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Dimension {
+    fn from(name: &str) -> Self {
+        match name {
+            "AZ" => Dimension::Az,
+            "BILLING_ENTITY" => Dimension::BillingEntity,
+            "CACHE_ENGINE" => Dimension::CacheEngine,
+            "DATABASE_ENGINE" => Dimension::DatabaseEngine,
+            "DEPLOYMENT_OPTION" => Dimension::DeploymentOption,
+            "INSTANCE_TYPE" => Dimension::InstanceType,
+            "INSTANCE_TYPE_FAMILY" => Dimension::InstanceTypeFamily,
+            "LEGAL_ENTITY_NAME" => Dimension::LegalEntityName,
+            "LINKED_ACCOUNT" => Dimension::LinkedAccount,
+            "LINKED_ACCOUNT_NAME" => Dimension::LinkedAccountName,
+            "OPERATING_SYSTEM" => Dimension::OperatingSystem,
+            "OPERATION" => Dimension::Operation,
+            "PAYMENT_OPTION" => Dimension::PaymentOption,
+            "PLATFORM" => Dimension::Platform,
+            "PURCHASE_TYPE" => Dimension::PurchaseType,
+            "RECORD_TYPE" => Dimension::RecordType,
+            "REGION" => Dimension::Region,
+            "RESERVATION_ID" => Dimension::ReservationId,
+            "RESOURCE_ID" => Dimension::ResourceId,
+            "RIGHTSIZING_TYPE" => Dimension::RightsizingType,
+            "SAVINGS_PLANS_TYPE" => Dimension::SavingsPlansType,
+            "SAVINGS_PLAN_ARN" => Dimension::SavingsPlanArn,
+            "SCOPE" => Dimension::Scope,
+            "SERVICE" => Dimension::Service,
+            "SERVICE_CODE" => Dimension::ServiceCode,
+            "SUBSCRIPTION_ID" => Dimension::SubscriptionId,
+            "TENANCY" => Dimension::Tenancy,
+            "USAGE_TYPE" => Dimension::UsageType,
+            "USAGE_TYPE_GROUP" => Dimension::UsageTypeGroup,
+            _ => Dimension::UnknownVariant(UnknownDimension {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Dimension {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AZ" => Dimension::Az,
+            "BILLING_ENTITY" => Dimension::BillingEntity,
+            "CACHE_ENGINE" => Dimension::CacheEngine,
+            "DATABASE_ENGINE" => Dimension::DatabaseEngine,
+            "DEPLOYMENT_OPTION" => Dimension::DeploymentOption,
+            "INSTANCE_TYPE" => Dimension::InstanceType,
+            "INSTANCE_TYPE_FAMILY" => Dimension::InstanceTypeFamily,
+            "LEGAL_ENTITY_NAME" => Dimension::LegalEntityName,
+            "LINKED_ACCOUNT" => Dimension::LinkedAccount,
+            "LINKED_ACCOUNT_NAME" => Dimension::LinkedAccountName,
+            "OPERATING_SYSTEM" => Dimension::OperatingSystem,
+            "OPERATION" => Dimension::Operation,
+            "PAYMENT_OPTION" => Dimension::PaymentOption,
+            "PLATFORM" => Dimension::Platform,
+            "PURCHASE_TYPE" => Dimension::PurchaseType,
+            "RECORD_TYPE" => Dimension::RecordType,
+            "REGION" => Dimension::Region,
+            "RESERVATION_ID" => Dimension::ReservationId,
+            "RESOURCE_ID" => Dimension::ResourceId,
+            "RIGHTSIZING_TYPE" => Dimension::RightsizingType,
+            "SAVINGS_PLANS_TYPE" => Dimension::SavingsPlansType,
+            "SAVINGS_PLAN_ARN" => Dimension::SavingsPlanArn,
+            "SCOPE" => Dimension::Scope,
+            "SERVICE" => Dimension::Service,
+            "SERVICE_CODE" => Dimension::ServiceCode,
+            "SUBSCRIPTION_ID" => Dimension::SubscriptionId,
+            "TENANCY" => Dimension::Tenancy,
+            "USAGE_TYPE" => Dimension::UsageType,
+            "USAGE_TYPE_GROUP" => Dimension::UsageTypeGroup,
+            _ => Dimension::UnknownVariant(UnknownDimension { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Dimension {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Dimension {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Dimension {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The metadata that you can use to filter and group your results. You can use <code>GetDimensionValues</code> to find specific values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DimensionValues {
     /// <p>The names of the metadata types that you can use to filter and group your results. For example, <code>AZ</code> returns a list of Availability Zones.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: Option<Dimension>,
     /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> are <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub match_options: Option<Vec<String>>,
+    pub match_options: Option<Vec<MatchOption>>,
     /// <p>The metadata values that you can use to filter and group your results. You can use <code>GetDimensionValues</code> to find specific values.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -713,7 +1689,7 @@ pub struct EC2Specification {
     /// <p>Whether you want a recommendation for standard or convertible reservations.</p>
     #[serde(rename = "OfferingClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_class: Option<String>,
+    pub offering_class: Option<OfferingClass>,
 }
 
 /// <p>Details about the Amazon ES instances that AWS recommends that you purchase.</p>
@@ -832,7 +1808,7 @@ pub struct GetAnomaliesRequest {
     /// <p>Filters anomaly results by the feedback field on the anomaly object. </p>
     #[serde(rename = "Feedback")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub feedback: Option<String>,
+    pub feedback: Option<AnomalyFeedbackType>,
     /// <p> The number of entries a paginated response contains. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -935,7 +1911,7 @@ pub struct GetCostAndUsageRequest {
     /// <p>Sets the AWS cost granularity to <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, cost categories, or any two group by types.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, <code>RECORD_TYPE</code>, and <code>USAGE_TYPE</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -978,7 +1954,7 @@ pub struct GetCostAndUsageWithResourcesRequest {
     /// <p>Sets the AWS cost granularity to <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p>You can group Amazon Web Services costs using up to two different groups: <code>DIMENSION</code>, <code>TAG</code>, <code>COST_CATEGORY</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1022,10 +1998,10 @@ pub struct GetCostForecastRequest {
     pub filter: Option<Expression>,
     /// <p>How granular you want the forecast to be. You can get 3 months of <code>DAILY</code> forecasts or 12 months of <code>MONTHLY</code> forecasts.</p> <p>The <code>GetCostForecast</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
-    pub granularity: String,
+    pub granularity: Granularity,
     /// <p><p>Which metric Cost Explorer uses to create your forecast. For more information about blended and unblended rates, see <a href="http://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/">Why does the &quot;blended&quot; annotation appear on some line items in my bill?</a>. </p> <p>Valid values for a <code>GetCostForecast</code> call are the following:</p> <ul> <li> <p>AMORTIZED<em>COST</p> </li> <li> <p>BLENDED</em>COST</p> </li> <li> <p>NET<em>AMORTIZED</em>COST</p> </li> <li> <p>NET<em>UNBLENDED</em>COST</p> </li> <li> <p>UNBLENDED_COST</p> </li> </ul></p>
     #[serde(rename = "Metric")]
-    pub metric: String,
+    pub metric: Metric,
     /// <p>Cost Explorer always returns the mean forecast as a single point. You can request a prediction interval around the mean by specifying a confidence level. The higher the confidence level, the more confident Cost Explorer is about the actual value falling in the prediction interval. Higher confidence levels result in wider prediction intervals.</p>
     #[serde(rename = "PredictionIntervalLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1054,10 +2030,10 @@ pub struct GetDimensionValuesRequest {
     /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
     #[serde(rename = "Context")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub context: Option<String>,
+    pub context: Option<Context>,
     /// <p>The name of the dimension. Each <code>Dimension</code> is available for a different <code>Context</code>. For more information, see <code>Context</code>. </p>
     #[serde(rename = "Dimension")]
-    pub dimension: String,
+    pub dimension: Dimension,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1100,7 +2076,7 @@ pub struct GetReservationCoverageRequest {
     /// <p>The granularity of the AWS cost data for the reservation. Valid values are <code>MONTHLY</code> and <code>DAILY</code>.</p> <p>If <code>GroupBy</code> is set, <code>Granularity</code> can't be set. If <code>Granularity</code> isn't set, the response object doesn't include <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>.</p> <p>The <code>GetReservationCoverage</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p><p>You can group the data by the following attributes:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE<em>ENGINE</p> </li> <li> <p>DATABASE</em>ENGINE</p> </li> <li> <p>DEPLOYMENT<em>OPTION</p> </li> <li> <p>INSTANCE</em>TYPE</p> </li> <li> <p>LINKED<em>ACCOUNT</p> </li> <li> <p>OPERATING</em>SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>TENANCY</p> </li> </ul></p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1144,11 +2120,11 @@ pub struct GetReservationPurchaseRecommendationRequest {
     /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_scope: Option<String>,
+    pub account_scope: Option<AccountScope>,
     /// <p>The number of previous days that you want AWS to consider when it calculates your recommendations.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lookback_period_in_days: Option<String>,
+    pub lookback_period_in_days: Option<LookbackPeriodInDays>,
     /// <p>The pagination token that indicates the next set of results that you want to retrieve.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1160,7 +2136,7 @@ pub struct GetReservationPurchaseRecommendationRequest {
     /// <p>The reservation purchase option that you want recommendations for.</p>
     #[serde(rename = "PaymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<PaymentOption>,
     /// <p>The specific service that you want recommendations for.</p>
     #[serde(rename = "Service")]
     pub service: String,
@@ -1171,7 +2147,7 @@ pub struct GetReservationPurchaseRecommendationRequest {
     /// <p>The reservation term that you want recommendations for.</p>
     #[serde(rename = "TermInYears")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub term_in_years: Option<String>,
+    pub term_in_years: Option<TermInYears>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1201,7 +2177,7 @@ pub struct GetReservationUtilizationRequest {
     /// <p>If <code>GroupBy</code> is set, <code>Granularity</code> can't be set. If <code>Granularity</code> isn't set, the response object doesn't include <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>. If both <code>GroupBy</code> and <code>Granularity</code> aren't set, <code>GetReservationUtilization</code> defaults to <code>DAILY</code>.</p> <p>The <code>GetReservationUtilization</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p>Groups only by <code>SUBSCRIPTION_ID</code>. Metadata is included.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1289,7 +2265,7 @@ pub struct GetSavingsPlansCoverageRequest {
     /// <p>The granularity of the Amazon Web Services cost data for your Savings Plans. <code>Granularity</code> can't be set if <code>GroupBy</code> is set.</p> <p>The <code>GetSavingsPlansCoverage</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p>You can group the data using the attributes <code>INSTANCE_FAMILY</code>, <code>REGION</code>, or <code>SERVICE</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1329,14 +2305,14 @@ pub struct GetSavingsPlansPurchaseRecommendationRequest {
     /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_scope: Option<String>,
+    pub account_scope: Option<AccountScope>,
     /// <p>You can filter your recommendations by Account ID with the <code>LINKED_ACCOUNT</code> dimension. To filter your recommendations by Account ID, specify <code>Key</code> as <code>LINKED_ACCOUNT</code> and <code>Value</code> as the comma-separated Acount ID(s) for which you want to see Savings Plans purchase recommendations.</p> <p>For GetSavingsPlansPurchaseRecommendation, the <code>Filter</code> does not include <code>CostCategories</code> or <code>Tags</code>. It only includes <code>Dimensions</code>. With <code>Dimensions</code>, <code>Key</code> must be <code>LINKED_ACCOUNT</code> and <code>Value</code> can be a single Account ID or multiple comma-separated Account IDs for which you want to see Savings Plans Purchase Recommendations. <code>AND</code> and <code>OR</code> operators are not supported.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Expression>,
     /// <p>The lookback period used to generate the recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
-    pub lookback_period_in_days: String,
+    pub lookback_period_in_days: LookbackPeriodInDays,
     /// <p>The token to retrieve the next set of results. Amazon Web Services provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1347,13 +2323,13 @@ pub struct GetSavingsPlansPurchaseRecommendationRequest {
     pub page_size: Option<i64>,
     /// <p>The payment option used to generate these recommendations.</p>
     #[serde(rename = "PaymentOption")]
-    pub payment_option: String,
+    pub payment_option: PaymentOption,
     /// <p>The Savings Plans recommendation type requested.</p>
     #[serde(rename = "SavingsPlansType")]
-    pub savings_plans_type: String,
+    pub savings_plans_type: SupportedSavingsPlansType,
     /// <p>The savings plan recommendation term used to generate these recommendations.</p>
     #[serde(rename = "TermInYears")]
-    pub term_in_years: String,
+    pub term_in_years: TermInYears,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1421,7 +2397,7 @@ pub struct GetSavingsPlansUtilizationRequest {
     /// <p>The granularity of the Amazon Web Services utillization data for your Savings Plans.</p> <p>The <code>GetSavingsPlansUtilization</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: Option<Granularity>,
     /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1486,10 +2462,10 @@ pub struct GetUsageForecastRequest {
     pub filter: Option<Expression>,
     /// <p>How granular you want the forecast to be. You can get 3 months of <code>DAILY</code> forecasts or 12 months of <code>MONTHLY</code> forecasts.</p> <p>The <code>GetUsageForecast</code> operation supports only <code>DAILY</code> and <code>MONTHLY</code> granularities.</p>
     #[serde(rename = "Granularity")]
-    pub granularity: String,
+    pub granularity: Granularity,
     /// <p><p>Which metric Cost Explorer uses to create your forecast.</p> <p>Valid values for a <code>GetUsageForecast</code> call are the following:</p> <ul> <li> <p>USAGE<em>QUANTITY</p> </li> <li> <p>NORMALIZED</em>USAGE_AMOUNT</p> </li> </ul></p>
     #[serde(rename = "Metric")]
-    pub metric: String,
+    pub metric: Metric,
     /// <p>Cost Explorer always returns the mean forecast as a single point. You can request a prediction interval around the mean by specifying a confidence level. The higher the confidence level, the more confident Cost Explorer is about the actual value falling in the prediction interval. Higher confidence levels result in wider prediction intervals.</p>
     #[serde(rename = "PredictionIntervalLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1510,6 +2486,112 @@ pub struct GetUsageForecastResponse {
     #[serde(rename = "Total")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<MetricValue>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGranularity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Granularity {
+    Daily,
+    Hourly,
+    Monthly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGranularity),
+}
+
+impl Default for Granularity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Granularity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Granularity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Granularity {
+    fn into(self) -> String {
+        match self {
+            Granularity::Daily => "DAILY".to_string(),
+            Granularity::Hourly => "HOURLY".to_string(),
+            Granularity::Monthly => "MONTHLY".to_string(),
+            Granularity::UnknownVariant(UnknownGranularity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Granularity {
+    fn into(self) -> &'a str {
+        match self {
+            Granularity::Daily => &"DAILY",
+            Granularity::Hourly => &"HOURLY",
+            Granularity::Monthly => &"MONTHLY",
+            Granularity::UnknownVariant(UnknownGranularity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Granularity {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAILY" => Granularity::Daily,
+            "HOURLY" => Granularity::Hourly,
+            "MONTHLY" => Granularity::Monthly,
+            _ => Granularity::UnknownVariant(UnknownGranularity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Granularity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAILY" => Granularity::Daily,
+            "HOURLY" => Granularity::Hourly,
+            "MONTHLY" => Granularity::Monthly,
+            _ => Granularity::UnknownVariant(UnknownGranularity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Granularity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Granularity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Granularity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>One level of grouped data in the results.</p>
@@ -1536,7 +2618,116 @@ pub struct GroupDefinition {
     /// <p>The string that represents the type of group.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<GroupDefinitionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGroupDefinitionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GroupDefinitionType {
+    CostCategory,
+    Dimension,
+    Tag,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGroupDefinitionType),
+}
+
+impl Default for GroupDefinitionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GroupDefinitionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GroupDefinitionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GroupDefinitionType {
+    fn into(self) -> String {
+        match self {
+            GroupDefinitionType::CostCategory => "COST_CATEGORY".to_string(),
+            GroupDefinitionType::Dimension => "DIMENSION".to_string(),
+            GroupDefinitionType::Tag => "TAG".to_string(),
+            GroupDefinitionType::UnknownVariant(UnknownGroupDefinitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GroupDefinitionType {
+    fn into(self) -> &'a str {
+        match self {
+            GroupDefinitionType::CostCategory => &"COST_CATEGORY",
+            GroupDefinitionType::Dimension => &"DIMENSION",
+            GroupDefinitionType::Tag => &"TAG",
+            GroupDefinitionType::UnknownVariant(UnknownGroupDefinitionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GroupDefinitionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COST_CATEGORY" => GroupDefinitionType::CostCategory,
+            "DIMENSION" => GroupDefinitionType::Dimension,
+            "TAG" => GroupDefinitionType::Tag,
+            _ => GroupDefinitionType::UnknownVariant(UnknownGroupDefinitionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GroupDefinitionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COST_CATEGORY" => GroupDefinitionType::CostCategory,
+            "DIMENSION" => GroupDefinitionType::Dimension,
+            "TAG" => GroupDefinitionType::Tag,
+            _ => GroupDefinitionType::UnknownVariant(UnknownGroupDefinitionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GroupDefinitionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GroupDefinitionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GroupDefinitionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The anomaly's dollar value. </p>
@@ -1608,6 +2799,361 @@ pub struct ListCostCategoryDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLookbackPeriodInDays {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LookbackPeriodInDays {
+    SevenDays,
+    SixtyDays,
+    ThirtyDays,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLookbackPeriodInDays),
+}
+
+impl Default for LookbackPeriodInDays {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LookbackPeriodInDays {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LookbackPeriodInDays {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LookbackPeriodInDays {
+    fn into(self) -> String {
+        match self {
+            LookbackPeriodInDays::SevenDays => "SEVEN_DAYS".to_string(),
+            LookbackPeriodInDays::SixtyDays => "SIXTY_DAYS".to_string(),
+            LookbackPeriodInDays::ThirtyDays => "THIRTY_DAYS".to_string(),
+            LookbackPeriodInDays::UnknownVariant(UnknownLookbackPeriodInDays {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LookbackPeriodInDays {
+    fn into(self) -> &'a str {
+        match self {
+            LookbackPeriodInDays::SevenDays => &"SEVEN_DAYS",
+            LookbackPeriodInDays::SixtyDays => &"SIXTY_DAYS",
+            LookbackPeriodInDays::ThirtyDays => &"THIRTY_DAYS",
+            LookbackPeriodInDays::UnknownVariant(UnknownLookbackPeriodInDays {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LookbackPeriodInDays {
+    fn from(name: &str) -> Self {
+        match name {
+            "SEVEN_DAYS" => LookbackPeriodInDays::SevenDays,
+            "SIXTY_DAYS" => LookbackPeriodInDays::SixtyDays,
+            "THIRTY_DAYS" => LookbackPeriodInDays::ThirtyDays,
+            _ => LookbackPeriodInDays::UnknownVariant(UnknownLookbackPeriodInDays {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LookbackPeriodInDays {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SEVEN_DAYS" => LookbackPeriodInDays::SevenDays,
+            "SIXTY_DAYS" => LookbackPeriodInDays::SixtyDays,
+            "THIRTY_DAYS" => LookbackPeriodInDays::ThirtyDays,
+            _ => LookbackPeriodInDays::UnknownVariant(UnknownLookbackPeriodInDays { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LookbackPeriodInDays {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LookbackPeriodInDays {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LookbackPeriodInDays {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMatchOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MatchOption {
+    CaseInsensitive,
+    CaseSensitive,
+    Contains,
+    EndsWith,
+    Equals,
+    StartsWith,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMatchOption),
+}
+
+impl Default for MatchOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MatchOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MatchOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MatchOption {
+    fn into(self) -> String {
+        match self {
+            MatchOption::CaseInsensitive => "CASE_INSENSITIVE".to_string(),
+            MatchOption::CaseSensitive => "CASE_SENSITIVE".to_string(),
+            MatchOption::Contains => "CONTAINS".to_string(),
+            MatchOption::EndsWith => "ENDS_WITH".to_string(),
+            MatchOption::Equals => "EQUALS".to_string(),
+            MatchOption::StartsWith => "STARTS_WITH".to_string(),
+            MatchOption::UnknownVariant(UnknownMatchOption { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MatchOption {
+    fn into(self) -> &'a str {
+        match self {
+            MatchOption::CaseInsensitive => &"CASE_INSENSITIVE",
+            MatchOption::CaseSensitive => &"CASE_SENSITIVE",
+            MatchOption::Contains => &"CONTAINS",
+            MatchOption::EndsWith => &"ENDS_WITH",
+            MatchOption::Equals => &"EQUALS",
+            MatchOption::StartsWith => &"STARTS_WITH",
+            MatchOption::UnknownVariant(UnknownMatchOption { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MatchOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "CASE_INSENSITIVE" => MatchOption::CaseInsensitive,
+            "CASE_SENSITIVE" => MatchOption::CaseSensitive,
+            "CONTAINS" => MatchOption::Contains,
+            "ENDS_WITH" => MatchOption::EndsWith,
+            "EQUALS" => MatchOption::Equals,
+            "STARTS_WITH" => MatchOption::StartsWith,
+            _ => MatchOption::UnknownVariant(UnknownMatchOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MatchOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CASE_INSENSITIVE" => MatchOption::CaseInsensitive,
+            "CASE_SENSITIVE" => MatchOption::CaseSensitive,
+            "CONTAINS" => MatchOption::Contains,
+            "ENDS_WITH" => MatchOption::EndsWith,
+            "EQUALS" => MatchOption::Equals,
+            "STARTS_WITH" => MatchOption::StartsWith,
+            _ => MatchOption::UnknownVariant(UnknownMatchOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MatchOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MatchOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetric {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Metric {
+    AmortizedCost,
+    BlendedCost,
+    NetAmortizedCost,
+    NetUnblendedCost,
+    NormalizedUsageAmount,
+    UnblendedCost,
+    UsageQuantity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetric),
+}
+
+impl Default for Metric {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Metric {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Metric {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Metric {
+    fn into(self) -> String {
+        match self {
+            Metric::AmortizedCost => "AMORTIZED_COST".to_string(),
+            Metric::BlendedCost => "BLENDED_COST".to_string(),
+            Metric::NetAmortizedCost => "NET_AMORTIZED_COST".to_string(),
+            Metric::NetUnblendedCost => "NET_UNBLENDED_COST".to_string(),
+            Metric::NormalizedUsageAmount => "NORMALIZED_USAGE_AMOUNT".to_string(),
+            Metric::UnblendedCost => "UNBLENDED_COST".to_string(),
+            Metric::UsageQuantity => "USAGE_QUANTITY".to_string(),
+            Metric::UnknownVariant(UnknownMetric { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Metric {
+    fn into(self) -> &'a str {
+        match self {
+            Metric::AmortizedCost => &"AMORTIZED_COST",
+            Metric::BlendedCost => &"BLENDED_COST",
+            Metric::NetAmortizedCost => &"NET_AMORTIZED_COST",
+            Metric::NetUnblendedCost => &"NET_UNBLENDED_COST",
+            Metric::NormalizedUsageAmount => &"NORMALIZED_USAGE_AMOUNT",
+            Metric::UnblendedCost => &"UNBLENDED_COST",
+            Metric::UsageQuantity => &"USAGE_QUANTITY",
+            Metric::UnknownVariant(UnknownMetric { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Metric {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMORTIZED_COST" => Metric::AmortizedCost,
+            "BLENDED_COST" => Metric::BlendedCost,
+            "NET_AMORTIZED_COST" => Metric::NetAmortizedCost,
+            "NET_UNBLENDED_COST" => Metric::NetUnblendedCost,
+            "NORMALIZED_USAGE_AMOUNT" => Metric::NormalizedUsageAmount,
+            "UNBLENDED_COST" => Metric::UnblendedCost,
+            "USAGE_QUANTITY" => Metric::UsageQuantity,
+            _ => Metric::UnknownVariant(UnknownMetric {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Metric {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMORTIZED_COST" => Metric::AmortizedCost,
+            "BLENDED_COST" => Metric::BlendedCost,
+            "NET_AMORTIZED_COST" => Metric::NetAmortizedCost,
+            "NET_UNBLENDED_COST" => Metric::NetUnblendedCost,
+            "NORMALIZED_USAGE_AMOUNT" => Metric::NormalizedUsageAmount,
+            "UNBLENDED_COST" => Metric::UnblendedCost,
+            "USAGE_QUANTITY" => Metric::UsageQuantity,
+            _ => Metric::UnknownVariant(UnknownMetric { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Metric {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Metric {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Metric {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The aggregated value for a metric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1632,6 +3178,546 @@ pub struct ModifyRecommendationDetail {
     pub target_instances: Option<Vec<TargetInstance>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitorDimension {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitorDimension {
+    Service,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitorDimension),
+}
+
+impl Default for MonitorDimension {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitorDimension {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitorDimension {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitorDimension {
+    fn into(self) -> String {
+        match self {
+            MonitorDimension::Service => "SERVICE".to_string(),
+            MonitorDimension::UnknownVariant(UnknownMonitorDimension { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitorDimension {
+    fn into(self) -> &'a str {
+        match self {
+            MonitorDimension::Service => &"SERVICE",
+            MonitorDimension::UnknownVariant(UnknownMonitorDimension { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MonitorDimension {
+    fn from(name: &str) -> Self {
+        match name {
+            "SERVICE" => MonitorDimension::Service,
+            _ => MonitorDimension::UnknownVariant(UnknownMonitorDimension {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitorDimension {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SERVICE" => MonitorDimension::Service,
+            _ => MonitorDimension::UnknownVariant(UnknownMonitorDimension { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitorDimension {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitorDimension {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MonitorDimension {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMonitorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MonitorType {
+    Custom,
+    Dimensional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMonitorType),
+}
+
+impl Default for MonitorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MonitorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MonitorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MonitorType {
+    fn into(self) -> String {
+        match self {
+            MonitorType::Custom => "CUSTOM".to_string(),
+            MonitorType::Dimensional => "DIMENSIONAL".to_string(),
+            MonitorType::UnknownVariant(UnknownMonitorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MonitorType {
+    fn into(self) -> &'a str {
+        match self {
+            MonitorType::Custom => &"CUSTOM",
+            MonitorType::Dimensional => &"DIMENSIONAL",
+            MonitorType::UnknownVariant(UnknownMonitorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MonitorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOM" => MonitorType::Custom,
+            "DIMENSIONAL" => MonitorType::Dimensional,
+            _ => MonitorType::UnknownVariant(UnknownMonitorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MonitorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOM" => MonitorType::Custom,
+            "DIMENSIONAL" => MonitorType::Dimensional,
+            _ => MonitorType::UnknownVariant(UnknownMonitorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MonitorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MonitorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MonitorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNumericOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NumericOperator {
+    Between,
+    Equal,
+    GreaterThan,
+    GreaterThanOrEqual,
+    LessThan,
+    LessThanOrEqual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNumericOperator),
+}
+
+impl Default for NumericOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NumericOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NumericOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NumericOperator {
+    fn into(self) -> String {
+        match self {
+            NumericOperator::Between => "BETWEEN".to_string(),
+            NumericOperator::Equal => "EQUAL".to_string(),
+            NumericOperator::GreaterThan => "GREATER_THAN".to_string(),
+            NumericOperator::GreaterThanOrEqual => "GREATER_THAN_OR_EQUAL".to_string(),
+            NumericOperator::LessThan => "LESS_THAN".to_string(),
+            NumericOperator::LessThanOrEqual => "LESS_THAN_OR_EQUAL".to_string(),
+            NumericOperator::UnknownVariant(UnknownNumericOperator { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NumericOperator {
+    fn into(self) -> &'a str {
+        match self {
+            NumericOperator::Between => &"BETWEEN",
+            NumericOperator::Equal => &"EQUAL",
+            NumericOperator::GreaterThan => &"GREATER_THAN",
+            NumericOperator::GreaterThanOrEqual => &"GREATER_THAN_OR_EQUAL",
+            NumericOperator::LessThan => &"LESS_THAN",
+            NumericOperator::LessThanOrEqual => &"LESS_THAN_OR_EQUAL",
+            NumericOperator::UnknownVariant(UnknownNumericOperator { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NumericOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "BETWEEN" => NumericOperator::Between,
+            "EQUAL" => NumericOperator::Equal,
+            "GREATER_THAN" => NumericOperator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL" => NumericOperator::GreaterThanOrEqual,
+            "LESS_THAN" => NumericOperator::LessThan,
+            "LESS_THAN_OR_EQUAL" => NumericOperator::LessThanOrEqual,
+            _ => NumericOperator::UnknownVariant(UnknownNumericOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NumericOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BETWEEN" => NumericOperator::Between,
+            "EQUAL" => NumericOperator::Equal,
+            "GREATER_THAN" => NumericOperator::GreaterThan,
+            "GREATER_THAN_OR_EQUAL" => NumericOperator::GreaterThanOrEqual,
+            "LESS_THAN" => NumericOperator::LessThan,
+            "LESS_THAN_OR_EQUAL" => NumericOperator::LessThanOrEqual,
+            _ => NumericOperator::UnknownVariant(UnknownNumericOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NumericOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NumericOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NumericOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOfferingClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OfferingClass {
+    Convertible,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOfferingClass),
+}
+
+impl Default for OfferingClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OfferingClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OfferingClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OfferingClass {
+    fn into(self) -> String {
+        match self {
+            OfferingClass::Convertible => "CONVERTIBLE".to_string(),
+            OfferingClass::Standard => "STANDARD".to_string(),
+            OfferingClass::UnknownVariant(UnknownOfferingClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OfferingClass {
+    fn into(self) -> &'a str {
+        match self {
+            OfferingClass::Convertible => &"CONVERTIBLE",
+            OfferingClass::Standard => &"STANDARD",
+            OfferingClass::UnknownVariant(UnknownOfferingClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OfferingClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONVERTIBLE" => OfferingClass::Convertible,
+            "STANDARD" => OfferingClass::Standard,
+            _ => OfferingClass::UnknownVariant(UnknownOfferingClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OfferingClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONVERTIBLE" => OfferingClass::Convertible,
+            "STANDARD" => OfferingClass::Standard,
+            _ => OfferingClass::UnknownVariant(UnknownOfferingClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OfferingClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OfferingClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OfferingClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPaymentOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PaymentOption {
+    AllUpfront,
+    HeavyUtilization,
+    LightUtilization,
+    MediumUtilization,
+    NoUpfront,
+    PartialUpfront,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPaymentOption),
+}
+
+impl Default for PaymentOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PaymentOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PaymentOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PaymentOption {
+    fn into(self) -> String {
+        match self {
+            PaymentOption::AllUpfront => "ALL_UPFRONT".to_string(),
+            PaymentOption::HeavyUtilization => "HEAVY_UTILIZATION".to_string(),
+            PaymentOption::LightUtilization => "LIGHT_UTILIZATION".to_string(),
+            PaymentOption::MediumUtilization => "MEDIUM_UTILIZATION".to_string(),
+            PaymentOption::NoUpfront => "NO_UPFRONT".to_string(),
+            PaymentOption::PartialUpfront => "PARTIAL_UPFRONT".to_string(),
+            PaymentOption::UnknownVariant(UnknownPaymentOption { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PaymentOption {
+    fn into(self) -> &'a str {
+        match self {
+            PaymentOption::AllUpfront => &"ALL_UPFRONT",
+            PaymentOption::HeavyUtilization => &"HEAVY_UTILIZATION",
+            PaymentOption::LightUtilization => &"LIGHT_UTILIZATION",
+            PaymentOption::MediumUtilization => &"MEDIUM_UTILIZATION",
+            PaymentOption::NoUpfront => &"NO_UPFRONT",
+            PaymentOption::PartialUpfront => &"PARTIAL_UPFRONT",
+            PaymentOption::UnknownVariant(UnknownPaymentOption { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PaymentOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_UPFRONT" => PaymentOption::AllUpfront,
+            "HEAVY_UTILIZATION" => PaymentOption::HeavyUtilization,
+            "LIGHT_UTILIZATION" => PaymentOption::LightUtilization,
+            "MEDIUM_UTILIZATION" => PaymentOption::MediumUtilization,
+            "NO_UPFRONT" => PaymentOption::NoUpfront,
+            "PARTIAL_UPFRONT" => PaymentOption::PartialUpfront,
+            _ => PaymentOption::UnknownVariant(UnknownPaymentOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PaymentOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_UPFRONT" => PaymentOption::AllUpfront,
+            "HEAVY_UTILIZATION" => PaymentOption::HeavyUtilization,
+            "LIGHT_UTILIZATION" => PaymentOption::LightUtilization,
+            "MEDIUM_UTILIZATION" => PaymentOption::MediumUtilization,
+            "NO_UPFRONT" => PaymentOption::NoUpfront,
+            "PARTIAL_UPFRONT" => PaymentOption::PartialUpfront,
+            _ => PaymentOption::UnknownVariant(UnknownPaymentOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PaymentOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PaymentOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PaymentOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvideAnomalyFeedbackRequest {
@@ -1640,7 +3726,7 @@ pub struct ProvideAnomalyFeedbackRequest {
     pub anomaly_id: String,
     /// <p>Describes whether the cost anomaly was a planned activity or you considered it an anomaly. </p>
     #[serde(rename = "Feedback")]
-    pub feedback: String,
+    pub feedback: AnomalyFeedbackType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1691,6 +3777,110 @@ pub struct RDSInstanceDetails {
     #[serde(rename = "SizeFlexEligible")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size_flex_eligible: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecommendationTarget {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecommendationTarget {
+    CrossInstanceFamily,
+    SameInstanceFamily,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecommendationTarget),
+}
+
+impl Default for RecommendationTarget {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecommendationTarget {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecommendationTarget {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecommendationTarget {
+    fn into(self) -> String {
+        match self {
+            RecommendationTarget::CrossInstanceFamily => "CROSS_INSTANCE_FAMILY".to_string(),
+            RecommendationTarget::SameInstanceFamily => "SAME_INSTANCE_FAMILY".to_string(),
+            RecommendationTarget::UnknownVariant(UnknownRecommendationTarget {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecommendationTarget {
+    fn into(self) -> &'a str {
+        match self {
+            RecommendationTarget::CrossInstanceFamily => &"CROSS_INSTANCE_FAMILY",
+            RecommendationTarget::SameInstanceFamily => &"SAME_INSTANCE_FAMILY",
+            RecommendationTarget::UnknownVariant(UnknownRecommendationTarget {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RecommendationTarget {
+    fn from(name: &str) -> Self {
+        match name {
+            "CROSS_INSTANCE_FAMILY" => RecommendationTarget::CrossInstanceFamily,
+            "SAME_INSTANCE_FAMILY" => RecommendationTarget::SameInstanceFamily,
+            _ => RecommendationTarget::UnknownVariant(UnknownRecommendationTarget {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecommendationTarget {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CROSS_INSTANCE_FAMILY" => RecommendationTarget::CrossInstanceFamily,
+            "SAME_INSTANCE_FAMILY" => RecommendationTarget::SameInstanceFamily,
+            _ => RecommendationTarget::UnknownVariant(UnknownRecommendationTarget { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecommendationTarget {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RecommendationTarget {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecommendationTarget {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about the Amazon Redshift instances that AWS recommends that you purchase.</p>
@@ -1802,15 +3992,15 @@ pub struct ReservationPurchaseRecommendation {
     /// <p>The account scope that AWS recommends that you purchase this instance for. For example, you can purchase this reservation for an entire organization in AWS Organizations.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_scope: Option<String>,
+    pub account_scope: Option<AccountScope>,
     /// <p>How many days of previous usage that AWS considers when making this recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lookback_period_in_days: Option<String>,
+    pub lookback_period_in_days: Option<LookbackPeriodInDays>,
     /// <p>The payment option for the reservation. For example, <code>AllUpfront</code> or <code>NoUpfront</code>.</p>
     #[serde(rename = "PaymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<PaymentOption>,
     /// <p>Details about the recommended purchases.</p>
     #[serde(rename = "RecommendationDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1826,7 +4016,7 @@ pub struct ReservationPurchaseRecommendation {
     /// <p>The term of the reservation that you want recommendations for, in years.</p>
     #[serde(rename = "TermInYears")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub term_in_years: Option<String>,
+    pub term_in_years: Option<TermInYears>,
 }
 
 /// <p>Details about your recommended reservation purchase.</p>
@@ -2026,7 +4216,7 @@ pub struct RightsizingRecommendation {
     /// <p>Recommendation to either terminate or modify the resource.</p>
     #[serde(rename = "RightsizingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rightsizing_type: Option<String>,
+    pub rightsizing_type: Option<RightsizingType>,
     /// <p>Details for termination recommendations.</p>
     #[serde(rename = "TerminateRecommendationDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2041,7 +4231,7 @@ pub struct RightsizingRecommendationConfiguration {
     pub benefits_considered: bool,
     /// <p> The option to see recommendations within the same instance family, or recommendations for instances across other families. The default value is <code>SAME_INSTANCE_FAMILY</code>. </p>
     #[serde(rename = "RecommendationTarget")]
-    pub recommendation_target: String,
+    pub recommendation_target: RecommendationTarget,
 }
 
 /// <p>Metadata for this recommendation set.</p>
@@ -2059,7 +4249,7 @@ pub struct RightsizingRecommendationMetadata {
     /// <p> How many days of previous usage that AWS considers when making this recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lookback_period_in_days: Option<String>,
+    pub lookback_period_in_days: Option<LookbackPeriodInDays>,
     /// <p> The ID for this specific recommendation.</p>
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2086,6 +4276,107 @@ pub struct RightsizingRecommendationSummary {
     #[serde(rename = "TotalRecommendationCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_recommendation_count: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRightsizingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RightsizingType {
+    Modify,
+    Terminate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRightsizingType),
+}
+
+impl Default for RightsizingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RightsizingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RightsizingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RightsizingType {
+    fn into(self) -> String {
+        match self {
+            RightsizingType::Modify => "MODIFY".to_string(),
+            RightsizingType::Terminate => "TERMINATE".to_string(),
+            RightsizingType::UnknownVariant(UnknownRightsizingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RightsizingType {
+    fn into(self) -> &'a str {
+        match self {
+            RightsizingType::Modify => &"MODIFY",
+            RightsizingType::Terminate => &"TERMINATE",
+            RightsizingType::UnknownVariant(UnknownRightsizingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RightsizingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MODIFY" => RightsizingType::Modify,
+            "TERMINATE" => RightsizingType::Terminate,
+            _ => RightsizingType::UnknownVariant(UnknownRightsizingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RightsizingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MODIFY" => RightsizingType::Modify,
+            "TERMINATE" => RightsizingType::Terminate,
+            _ => RightsizingType::UnknownVariant(UnknownRightsizingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RightsizingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RightsizingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RightsizingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The combination of AWS service, linked account, Region, and usage type where a cost anomaly is observed. </p>
@@ -2192,15 +4483,15 @@ pub struct SavingsPlansPurchaseRecommendation {
     /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_scope: Option<String>,
+    pub account_scope: Option<AccountScope>,
     /// <p>The lookback period in days, used to generate the recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lookback_period_in_days: Option<String>,
+    pub lookback_period_in_days: Option<LookbackPeriodInDays>,
     /// <p>The payment option used to generate the recommendation.</p>
     #[serde(rename = "PaymentOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub payment_option: Option<String>,
+    pub payment_option: Option<PaymentOption>,
     /// <p>Details for the Savings Plans we recommend that you purchase to cover existing Savings Plans eligible workloads.</p>
     #[serde(rename = "SavingsPlansPurchaseRecommendationDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2214,11 +4505,11 @@ pub struct SavingsPlansPurchaseRecommendation {
     /// <p>The requested Savings Plans recommendation type.</p>
     #[serde(rename = "SavingsPlansType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub savings_plans_type: Option<String>,
+    pub savings_plans_type: Option<SupportedSavingsPlansType>,
     /// <p>The Savings Plans recommendation term in years, used to generate the recommendation.</p>
     #[serde(rename = "TermInYears")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub term_in_years: Option<String>,
+    pub term_in_years: Option<TermInYears>,
 }
 
 /// <p>Details for your recommended Savings Plans.</p>
@@ -2476,11 +4767,321 @@ pub struct Subscriber {
     /// <p> Indicates if the subscriber accepts the notifications. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SubscriberStatus>,
     /// <p> The notification delivery channel. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<SubscriberType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriberStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriberStatus {
+    Confirmed,
+    Declined,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriberStatus),
+}
+
+impl Default for SubscriberStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriberStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriberStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriberStatus {
+    fn into(self) -> String {
+        match self {
+            SubscriberStatus::Confirmed => "CONFIRMED".to_string(),
+            SubscriberStatus::Declined => "DECLINED".to_string(),
+            SubscriberStatus::UnknownVariant(UnknownSubscriberStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriberStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriberStatus::Confirmed => &"CONFIRMED",
+            SubscriberStatus::Declined => &"DECLINED",
+            SubscriberStatus::UnknownVariant(UnknownSubscriberStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SubscriberStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFIRMED" => SubscriberStatus::Confirmed,
+            "DECLINED" => SubscriberStatus::Declined,
+            _ => SubscriberStatus::UnknownVariant(UnknownSubscriberStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriberStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFIRMED" => SubscriberStatus::Confirmed,
+            "DECLINED" => SubscriberStatus::Declined,
+            _ => SubscriberStatus::UnknownVariant(UnknownSubscriberStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriberStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriberStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriberStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriberType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriberType {
+    Email,
+    Sns,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriberType),
+}
+
+impl Default for SubscriberType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriberType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriberType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriberType {
+    fn into(self) -> String {
+        match self {
+            SubscriberType::Email => "EMAIL".to_string(),
+            SubscriberType::Sns => "SNS".to_string(),
+            SubscriberType::UnknownVariant(UnknownSubscriberType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriberType {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriberType::Email => &"EMAIL",
+            SubscriberType::Sns => &"SNS",
+            SubscriberType::UnknownVariant(UnknownSubscriberType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SubscriberType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EMAIL" => SubscriberType::Email,
+            "SNS" => SubscriberType::Sns,
+            _ => SubscriberType::UnknownVariant(UnknownSubscriberType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriberType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EMAIL" => SubscriberType::Email,
+            "SNS" => SubscriberType::Sns,
+            _ => SubscriberType::UnknownVariant(UnknownSubscriberType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriberType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriberType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriberType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSupportedSavingsPlansType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SupportedSavingsPlansType {
+    ComputeSp,
+    Ec2InstanceSp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSupportedSavingsPlansType),
+}
+
+impl Default for SupportedSavingsPlansType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SupportedSavingsPlansType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SupportedSavingsPlansType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SupportedSavingsPlansType {
+    fn into(self) -> String {
+        match self {
+            SupportedSavingsPlansType::ComputeSp => "COMPUTE_SP".to_string(),
+            SupportedSavingsPlansType::Ec2InstanceSp => "EC2_INSTANCE_SP".to_string(),
+            SupportedSavingsPlansType::UnknownVariant(UnknownSupportedSavingsPlansType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SupportedSavingsPlansType {
+    fn into(self) -> &'a str {
+        match self {
+            SupportedSavingsPlansType::ComputeSp => &"COMPUTE_SP",
+            SupportedSavingsPlansType::Ec2InstanceSp => &"EC2_INSTANCE_SP",
+            SupportedSavingsPlansType::UnknownVariant(UnknownSupportedSavingsPlansType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SupportedSavingsPlansType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPUTE_SP" => SupportedSavingsPlansType::ComputeSp,
+            "EC2_INSTANCE_SP" => SupportedSavingsPlansType::Ec2InstanceSp,
+            _ => SupportedSavingsPlansType::UnknownVariant(UnknownSupportedSavingsPlansType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SupportedSavingsPlansType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPUTE_SP" => SupportedSavingsPlansType::ComputeSp,
+            "EC2_INSTANCE_SP" => SupportedSavingsPlansType::Ec2InstanceSp,
+            _ => {
+                SupportedSavingsPlansType::UnknownVariant(UnknownSupportedSavingsPlansType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SupportedSavingsPlansType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SupportedSavingsPlansType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SupportedSavingsPlansType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The values that are available for a tag.</p>
@@ -2493,7 +5094,7 @@ pub struct TagValues {
     /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> are <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub match_options: Option<Vec<String>>,
+    pub match_options: Option<Vec<MatchOption>>,
     /// <p>The specific value of the tag.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2530,6 +5131,106 @@ pub struct TargetInstance {
     pub resource_details: Option<ResourceDetails>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTermInYears {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TermInYears {
+    OneYear,
+    ThreeYears,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTermInYears),
+}
+
+impl Default for TermInYears {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TermInYears {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TermInYears {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TermInYears {
+    fn into(self) -> String {
+        match self {
+            TermInYears::OneYear => "ONE_YEAR".to_string(),
+            TermInYears::ThreeYears => "THREE_YEARS".to_string(),
+            TermInYears::UnknownVariant(UnknownTermInYears { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TermInYears {
+    fn into(self) -> &'a str {
+        match self {
+            TermInYears::OneYear => &"ONE_YEAR",
+            TermInYears::ThreeYears => &"THREE_YEARS",
+            TermInYears::UnknownVariant(UnknownTermInYears { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TermInYears {
+    fn from(name: &str) -> Self {
+        match name {
+            "ONE_YEAR" => TermInYears::OneYear,
+            "THREE_YEARS" => TermInYears::ThreeYears,
+            _ => TermInYears::UnknownVariant(UnknownTermInYears {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TermInYears {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ONE_YEAR" => TermInYears::OneYear,
+            "THREE_YEARS" => TermInYears::ThreeYears,
+            _ => TermInYears::UnknownVariant(UnknownTermInYears { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TermInYears {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TermInYears {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TermInYears {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Details on termination recommendation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2554,7 +5255,7 @@ pub struct TotalImpactFilter {
     pub end_value: Option<f64>,
     /// <p> The comparing value used in the filter. </p>
     #[serde(rename = "NumericOperator")]
-    pub numeric_operator: String,
+    pub numeric_operator: NumericOperator,
     /// <p> The lower bound dollar value used in the filter. </p>
     #[serde(rename = "StartValue")]
     pub start_value: f64,
@@ -2586,7 +5287,7 @@ pub struct UpdateAnomalySubscriptionRequest {
     /// <p> The update to the frequency value at which subscribers will receive notifications. </p>
     #[serde(rename = "Frequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub frequency: Option<String>,
+    pub frequency: Option<AnomalySubscriptionFrequency>,
     /// <p> A list of cost anomaly monitor ARNs. </p>
     #[serde(rename = "MonitorArnList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2623,7 +5324,7 @@ pub struct UpdateCostCategoryDefinitionRequest {
     #[serde(rename = "CostCategoryArn")]
     pub cost_category_arn: String,
     #[serde(rename = "RuleVersion")]
-    pub rule_version: String,
+    pub rule_version: CostCategoryRuleVersion,
     /// <p>The <code>Expression</code> object used to categorize costs. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategoryRule.html">CostCategoryRule </a>. </p>
     #[serde(rename = "Rules")]
     pub rules: Vec<CostCategoryRule>,

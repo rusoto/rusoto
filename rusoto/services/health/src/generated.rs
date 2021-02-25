@@ -81,7 +81,7 @@ pub struct AffectedEntity {
     /// <p>The most recent status of the entity affected by the event. The possible values are <code>IMPAIRED</code>, <code>UNIMPAIRED</code>, and <code>UNKNOWN</code>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<EntityStatusCode>,
     /// <p><p>A map of entity tags attached to the affected entity.</p> <note> <p>Currently, the <code>tags</code> property isn&#39;t supported.</p> </note></p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,7 +128,7 @@ pub struct DescribeAffectedAccountsForOrganizationResponse {
     /// <p><p>This parameter specifies if the AWS Health event is a public AWS service event or an account-specific event.</p> <ul> <li> <p>If the <code>eventScopeCode</code> value is <code>PUBLIC</code>, then the <code>affectedAccounts</code> value is always empty.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>ACCOUNT_SPECIFIC</code>, then the <code>affectedAccounts</code> value lists the affected AWS accounts in your organization. For example, if an event affects a service such as Amazon Elastic Compute Cloud and you have AWS accounts that use that service, those account IDs appear in the response.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>NONE</code>, then the <code>eventArn</code> that you specified in the request is invalid or doesn&#39;t exist.</p> </li> </ul></p>
     #[serde(rename = "eventScopeCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_scope_code: Option<String>,
+    pub event_scope_code: Option<EventScopeCode>,
     /// <p>If the results of a search are large, only a portion of the results are returned, and a <code>nextToken</code> pagination token is returned in the response. To retrieve the next batch of results, reissue the search request and include the returned token. When all results have been returned, the response does not contain a pagination token value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,7 +228,7 @@ pub struct DescribeEntityAggregatesResponse {
 pub struct DescribeEventAggregatesRequest {
     /// <p>The only currently supported value is <code>eventTypeCategory</code>.</p>
     #[serde(rename = "aggregateField")]
-    pub aggregate_field: String,
+    pub aggregate_field: EventAggregateField,
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -453,11 +453,120 @@ pub struct EntityFilter {
     /// <p>A list of entity status codes (<code>IMPAIRED</code>, <code>UNIMPAIRED</code>, or <code>UNKNOWN</code>).</p>
     #[serde(rename = "statusCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_codes: Option<Vec<String>>,
+    pub status_codes: Option<Vec<EntityStatusCode>>,
     /// <p><p>A map of entity tags attached to the affected entity.</p> <note> <p>Currently, the <code>tags</code> property isn&#39;t supported.</p> </note></p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntityStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntityStatusCode {
+    Impaired,
+    Unimpaired,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntityStatusCode),
+}
+
+impl Default for EntityStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntityStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntityStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntityStatusCode {
+    fn into(self) -> String {
+        match self {
+            EntityStatusCode::Impaired => "IMPAIRED".to_string(),
+            EntityStatusCode::Unimpaired => "UNIMPAIRED".to_string(),
+            EntityStatusCode::Unknown => "UNKNOWN".to_string(),
+            EntityStatusCode::UnknownVariant(UnknownEntityStatusCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntityStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            EntityStatusCode::Impaired => &"IMPAIRED",
+            EntityStatusCode::Unimpaired => &"UNIMPAIRED",
+            EntityStatusCode::Unknown => &"UNKNOWN",
+            EntityStatusCode::UnknownVariant(UnknownEntityStatusCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EntityStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "IMPAIRED" => EntityStatusCode::Impaired,
+            "UNIMPAIRED" => EntityStatusCode::Unimpaired,
+            "UNKNOWN" => EntityStatusCode::Unknown,
+            _ => EntityStatusCode::UnknownVariant(UnknownEntityStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntityStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IMPAIRED" => EntityStatusCode::Impaired,
+            "UNIMPAIRED" => EntityStatusCode::Unimpaired,
+            "UNKNOWN" => EntityStatusCode::Unknown,
+            _ => EntityStatusCode::UnknownVariant(UnknownEntityStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntityStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntityStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntityStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Summary information about an AWS Health event.</p> <p>AWS Health events can be public or account-specific:</p> <ul> <li> <p> <i>Public events</i> might be service events that are not specific to an AWS account. For example, if there is an issue with an AWS Region, AWS Health provides information about the event, even if you don't use services or resources in that Region.</p> </li> <li> <p> <i>Account-specific</i> events are specific to either your AWS account or an account in your organization. For example, if there's an issue with Amazon Elastic Compute Cloud in a Region that you use, AWS Health provides information about the event and the affected resources in the account.</p> </li> </ul> <p>You can determine if an event is public or account-specific by using the <code>eventScopeCode</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html#AWSHealth-Type-Event-eventScopeCode">eventScopeCode</a>.</p>
@@ -479,11 +588,11 @@ pub struct Event {
     /// <p><p>This parameter specifies if the AWS Health event is a public AWS service event or an account-specific event.</p> <ul> <li> <p>If the <code>eventScopeCode</code> value is <code>PUBLIC</code>, then the <code>affectedAccounts</code> value is always empty.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>ACCOUNT_SPECIFIC</code>, then the <code>affectedAccounts</code> value lists the affected AWS accounts in your organization. For example, if an event affects a service such as Amazon Elastic Compute Cloud and you have AWS accounts that use that service, those account IDs appear in the response.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>NONE</code>, then the <code>eventArn</code> that you specified in the request is invalid or doesn&#39;t exist.</p> </li> </ul></p>
     #[serde(rename = "eventScopeCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_scope_code: Option<String>,
+    pub event_scope_code: Option<EventScopeCode>,
     /// <p>The category of the event. Possible values are <code>issue</code>, <code>scheduledChange</code>, and <code>accountNotification</code>.</p>
     #[serde(rename = "eventTypeCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type_category: Option<String>,
+    pub event_type_category: Option<EventTypeCategory>,
     /// <p>The unique identifier for the event type. The format is <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>
     #[serde(rename = "eventTypeCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -507,7 +616,7 @@ pub struct Event {
     /// <p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<EventStatusCode>,
 }
 
 /// <p>The values used to filter results from the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html">DescribeEventDetailsForOrganization</a> and <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeAffectedEntitiesForOrganization.html">DescribeAffectedEntitiesForOrganization</a> operations.</p>
@@ -535,6 +644,106 @@ pub struct EventAggregate {
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventAggregateField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventAggregateField {
+    EventTypeCategory,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventAggregateField),
+}
+
+impl Default for EventAggregateField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventAggregateField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventAggregateField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventAggregateField {
+    fn into(self) -> String {
+        match self {
+            EventAggregateField::EventTypeCategory => "eventTypeCategory".to_string(),
+            EventAggregateField::UnknownVariant(UnknownEventAggregateField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventAggregateField {
+    fn into(self) -> &'a str {
+        match self {
+            EventAggregateField::EventTypeCategory => &"eventTypeCategory",
+            EventAggregateField::UnknownVariant(UnknownEventAggregateField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventAggregateField {
+    fn from(name: &str) -> Self {
+        match name {
+            "eventTypeCategory" => EventAggregateField::EventTypeCategory,
+            _ => EventAggregateField::UnknownVariant(UnknownEventAggregateField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventAggregateField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "eventTypeCategory" => EventAggregateField::EventTypeCategory,
+            _ => EventAggregateField::UnknownVariant(UnknownEventAggregateField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventAggregateField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventAggregateField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventAggregateField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Detailed information about an event. A combination of an <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a> object, an <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EventDescription.html">EventDescription</a> object, and additional metadata about the event. Returned by the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetails.html">DescribeEventDetails</a> operation.</p>
@@ -600,11 +809,11 @@ pub struct EventFilter {
     /// <p>A list of event status codes.</p>
     #[serde(rename = "eventStatusCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_status_codes: Option<Vec<String>>,
+    pub event_status_codes: Option<Vec<EventStatusCode>>,
     /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
     #[serde(rename = "eventTypeCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type_categories: Option<Vec<String>>,
+    pub event_type_categories: Option<Vec<EventTypeCategory>>,
     /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED".</code> </p>
     #[serde(rename = "eventTypeCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -631,6 +840,331 @@ pub struct EventFilter {
     pub tags: Option<Vec<::std::collections::HashMap<String, String>>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventScopeCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventScopeCode {
+    AccountSpecific,
+    None,
+    Public,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventScopeCode),
+}
+
+impl Default for EventScopeCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventScopeCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventScopeCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventScopeCode {
+    fn into(self) -> String {
+        match self {
+            EventScopeCode::AccountSpecific => "ACCOUNT_SPECIFIC".to_string(),
+            EventScopeCode::None => "NONE".to_string(),
+            EventScopeCode::Public => "PUBLIC".to_string(),
+            EventScopeCode::UnknownVariant(UnknownEventScopeCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventScopeCode {
+    fn into(self) -> &'a str {
+        match self {
+            EventScopeCode::AccountSpecific => &"ACCOUNT_SPECIFIC",
+            EventScopeCode::None => &"NONE",
+            EventScopeCode::Public => &"PUBLIC",
+            EventScopeCode::UnknownVariant(UnknownEventScopeCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventScopeCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_SPECIFIC" => EventScopeCode::AccountSpecific,
+            "NONE" => EventScopeCode::None,
+            "PUBLIC" => EventScopeCode::Public,
+            _ => EventScopeCode::UnknownVariant(UnknownEventScopeCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventScopeCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_SPECIFIC" => EventScopeCode::AccountSpecific,
+            "NONE" => EventScopeCode::None,
+            "PUBLIC" => EventScopeCode::Public,
+            _ => EventScopeCode::UnknownVariant(UnknownEventScopeCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventScopeCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventScopeCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventScopeCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventStatusCode {
+    Closed,
+    Open,
+    Upcoming,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventStatusCode),
+}
+
+impl Default for EventStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventStatusCode {
+    fn into(self) -> String {
+        match self {
+            EventStatusCode::Closed => "closed".to_string(),
+            EventStatusCode::Open => "open".to_string(),
+            EventStatusCode::Upcoming => "upcoming".to_string(),
+            EventStatusCode::UnknownVariant(UnknownEventStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            EventStatusCode::Closed => &"closed",
+            EventStatusCode::Open => &"open",
+            EventStatusCode::Upcoming => &"upcoming",
+            EventStatusCode::UnknownVariant(UnknownEventStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "closed" => EventStatusCode::Closed,
+            "open" => EventStatusCode::Open,
+            "upcoming" => EventStatusCode::Upcoming,
+            _ => EventStatusCode::UnknownVariant(UnknownEventStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "closed" => EventStatusCode::Closed,
+            "open" => EventStatusCode::Open,
+            "upcoming" => EventStatusCode::Upcoming,
+            _ => EventStatusCode::UnknownVariant(UnknownEventStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventTypeCategory {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventTypeCategory {
+    AccountNotification,
+    Investigation,
+    Issue,
+    ScheduledChange,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventTypeCategory),
+}
+
+impl Default for EventTypeCategory {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventTypeCategory {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventTypeCategory {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventTypeCategory {
+    fn into(self) -> String {
+        match self {
+            EventTypeCategory::AccountNotification => "accountNotification".to_string(),
+            EventTypeCategory::Investigation => "investigation".to_string(),
+            EventTypeCategory::Issue => "issue".to_string(),
+            EventTypeCategory::ScheduledChange => "scheduledChange".to_string(),
+            EventTypeCategory::UnknownVariant(UnknownEventTypeCategory { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventTypeCategory {
+    fn into(self) -> &'a str {
+        match self {
+            EventTypeCategory::AccountNotification => &"accountNotification",
+            EventTypeCategory::Investigation => &"investigation",
+            EventTypeCategory::Issue => &"issue",
+            EventTypeCategory::ScheduledChange => &"scheduledChange",
+            EventTypeCategory::UnknownVariant(UnknownEventTypeCategory { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EventTypeCategory {
+    fn from(name: &str) -> Self {
+        match name {
+            "accountNotification" => EventTypeCategory::AccountNotification,
+            "investigation" => EventTypeCategory::Investigation,
+            "issue" => EventTypeCategory::Issue,
+            "scheduledChange" => EventTypeCategory::ScheduledChange,
+            _ => EventTypeCategory::UnknownVariant(UnknownEventTypeCategory {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventTypeCategory {
+    fn from(name: String) -> Self {
+        match &*name {
+            "accountNotification" => EventTypeCategory::AccountNotification,
+            "investigation" => EventTypeCategory::Investigation,
+            "issue" => EventTypeCategory::Issue,
+            "scheduledChange" => EventTypeCategory::ScheduledChange,
+            _ => EventTypeCategory::UnknownVariant(UnknownEventTypeCategory { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventTypeCategory {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventTypeCategory {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventTypeCategory {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The values to use to filter results from the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventTypes.html">DescribeEventTypes</a> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -638,7 +1172,7 @@ pub struct EventTypeFilter {
     /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
     #[serde(rename = "eventTypeCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type_categories: Option<Vec<String>>,
+    pub event_type_categories: Option<Vec<EventTypeCategory>>,
     /// <p>A list of event type codes.</p>
     #[serde(rename = "eventTypeCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -686,11 +1220,11 @@ pub struct OrganizationEvent {
     /// <p><p>This parameter specifies if the AWS Health event is a public AWS service event or an account-specific event.</p> <ul> <li> <p>If the <code>eventScopeCode</code> value is <code>PUBLIC</code>, then the <code>affectedAccounts</code> value is always empty.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>ACCOUNT_SPECIFIC</code>, then the <code>affectedAccounts</code> value lists the affected AWS accounts in your organization. For example, if an event affects a service such as Amazon Elastic Compute Cloud and you have AWS accounts that use that service, those account IDs appear in the response.</p> </li> <li> <p>If the <code>eventScopeCode</code> value is <code>NONE</code>, then the <code>eventArn</code> that you specified in the request is invalid or doesn&#39;t exist.</p> </li> </ul></p>
     #[serde(rename = "eventScopeCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_scope_code: Option<String>,
+    pub event_scope_code: Option<EventScopeCode>,
     /// <p>The category of the event type.</p>
     #[serde(rename = "eventTypeCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type_category: Option<String>,
+    pub event_type_category: Option<EventTypeCategory>,
     /// <p>The unique identifier for the event type. The format is <code>AWS_SERVICE_DESCRIPTION</code>. For example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>.</p>
     #[serde(rename = "eventTypeCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -714,7 +1248,7 @@ pub struct OrganizationEvent {
     /// <p>The most recent status of the event. Possible values are <code>open</code>, <code>closed</code>, and <code>upcoming</code>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<EventStatusCode>,
 }
 
 /// <p>Detailed information about an event. A combination of an <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html">Event</a> object, an <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_EventDescription.html">EventDescription</a> object, and additional metadata about the event. Returned by the <a href="https://docs.aws.amazon.com/health/latest/APIReference/API_DescribeEventDetailsForOrganization.html">DescribeEventDetailsForOrganization</a> operation.</p>
@@ -781,11 +1315,11 @@ pub struct OrganizationEventFilter {
     /// <p>A list of event status codes.</p>
     #[serde(rename = "eventStatusCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_status_codes: Option<Vec<String>>,
+    pub event_status_codes: Option<Vec<EventStatusCode>>,
     /// <p>A list of event type category codes (issue, scheduledChange, or accountNotification).</p>
     #[serde(rename = "eventTypeCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_type_categories: Option<Vec<String>>,
+    pub event_type_categories: Option<Vec<EventTypeCategory>>,
     /// <p>A list of unique identifiers for event types. For example, <code>"AWS_EC2_SYSTEM_MAINTENANCE_EVENT","AWS_RDS_MAINTENANCE_SCHEDULED".</code> </p>
     #[serde(rename = "eventTypeCodes")]
     #[serde(skip_serializing_if = "Option::is_none")]

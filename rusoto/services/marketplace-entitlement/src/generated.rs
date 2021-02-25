@@ -100,6 +100,111 @@ pub struct EntitlementValue {
     pub string_value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGetEntitlementFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GetEntitlementFilterName {
+    CustomerIdentifier,
+    Dimension,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGetEntitlementFilterName),
+}
+
+impl Default for GetEntitlementFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GetEntitlementFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GetEntitlementFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GetEntitlementFilterName {
+    fn into(self) -> String {
+        match self {
+            GetEntitlementFilterName::CustomerIdentifier => "CUSTOMER_IDENTIFIER".to_string(),
+            GetEntitlementFilterName::Dimension => "DIMENSION".to_string(),
+            GetEntitlementFilterName::UnknownVariant(UnknownGetEntitlementFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GetEntitlementFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            GetEntitlementFilterName::CustomerIdentifier => &"CUSTOMER_IDENTIFIER",
+            GetEntitlementFilterName::Dimension => &"DIMENSION",
+            GetEntitlementFilterName::UnknownVariant(UnknownGetEntitlementFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GetEntitlementFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOMER_IDENTIFIER" => GetEntitlementFilterName::CustomerIdentifier,
+            "DIMENSION" => GetEntitlementFilterName::Dimension,
+            _ => GetEntitlementFilterName::UnknownVariant(UnknownGetEntitlementFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GetEntitlementFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOMER_IDENTIFIER" => GetEntitlementFilterName::CustomerIdentifier,
+            "DIMENSION" => GetEntitlementFilterName::Dimension,
+            _ => GetEntitlementFilterName::UnknownVariant(UnknownGetEntitlementFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GetEntitlementFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GetEntitlementFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GetEntitlementFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The GetEntitlementsRequest contains parameters for the GetEntitlements operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -107,7 +212,7 @@ pub struct GetEntitlementsRequest {
     /// <p>Filter is used to return entitlements for a specific customer or for a specific dimension. Filters are described as keys mapped to a lists of values. Filtered requests are <i>unioned</i> for each value in the value list, and then <i>intersected</i> for each filter key.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter: Option<::std::collections::HashMap<String, Vec<String>>>,
+    pub filter: Option<::std::collections::HashMap<GetEntitlementFilterName, Vec<String>>>,
     /// <p>The maximum number of items to retrieve from the GetEntitlements operation. For pagination, use the NextToken field in subsequent calls to GetEntitlements.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -50,6 +50,425 @@ impl CodeBuildClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactNamespace {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactNamespace {
+    BuildId,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactNamespace),
+}
+
+impl Default for ArtifactNamespace {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactNamespace {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactNamespace {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactNamespace {
+    fn into(self) -> String {
+        match self {
+            ArtifactNamespace::BuildId => "BUILD_ID".to_string(),
+            ArtifactNamespace::None => "NONE".to_string(),
+            ArtifactNamespace::UnknownVariant(UnknownArtifactNamespace { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactNamespace {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactNamespace::BuildId => &"BUILD_ID",
+            ArtifactNamespace::None => &"NONE",
+            ArtifactNamespace::UnknownVariant(UnknownArtifactNamespace { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ArtifactNamespace {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD_ID" => ArtifactNamespace::BuildId,
+            "NONE" => ArtifactNamespace::None,
+            _ => ArtifactNamespace::UnknownVariant(UnknownArtifactNamespace {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactNamespace {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD_ID" => ArtifactNamespace::BuildId,
+            "NONE" => ArtifactNamespace::None,
+            _ => ArtifactNamespace::UnknownVariant(UnknownArtifactNamespace { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactNamespace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArtifactNamespace {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactNamespace {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactPackaging {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactPackaging {
+    None,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactPackaging),
+}
+
+impl Default for ArtifactPackaging {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactPackaging {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactPackaging {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactPackaging {
+    fn into(self) -> String {
+        match self {
+            ArtifactPackaging::None => "NONE".to_string(),
+            ArtifactPackaging::Zip => "ZIP".to_string(),
+            ArtifactPackaging::UnknownVariant(UnknownArtifactPackaging { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactPackaging {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactPackaging::None => &"NONE",
+            ArtifactPackaging::Zip => &"ZIP",
+            ArtifactPackaging::UnknownVariant(UnknownArtifactPackaging { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ArtifactPackaging {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ArtifactPackaging::None,
+            "ZIP" => ArtifactPackaging::Zip,
+            _ => ArtifactPackaging::UnknownVariant(UnknownArtifactPackaging {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactPackaging {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ArtifactPackaging::None,
+            "ZIP" => ArtifactPackaging::Zip,
+            _ => ArtifactPackaging::UnknownVariant(UnknownArtifactPackaging { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactPackaging {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArtifactPackaging {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactPackaging {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArtifactsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArtifactsType {
+    Codepipeline,
+    NoArtifacts,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArtifactsType),
+}
+
+impl Default for ArtifactsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArtifactsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArtifactsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArtifactsType {
+    fn into(self) -> String {
+        match self {
+            ArtifactsType::Codepipeline => "CODEPIPELINE".to_string(),
+            ArtifactsType::NoArtifacts => "NO_ARTIFACTS".to_string(),
+            ArtifactsType::S3 => "S3".to_string(),
+            ArtifactsType::UnknownVariant(UnknownArtifactsType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArtifactsType {
+    fn into(self) -> &'a str {
+        match self {
+            ArtifactsType::Codepipeline => &"CODEPIPELINE",
+            ArtifactsType::NoArtifacts => &"NO_ARTIFACTS",
+            ArtifactsType::S3 => &"S3",
+            ArtifactsType::UnknownVariant(UnknownArtifactsType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ArtifactsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODEPIPELINE" => ArtifactsType::Codepipeline,
+            "NO_ARTIFACTS" => ArtifactsType::NoArtifacts,
+            "S3" => ArtifactsType::S3,
+            _ => ArtifactsType::UnknownVariant(UnknownArtifactsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArtifactsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODEPIPELINE" => ArtifactsType::Codepipeline,
+            "NO_ARTIFACTS" => ArtifactsType::NoArtifacts,
+            "S3" => ArtifactsType::S3,
+            _ => ArtifactsType::UnknownVariant(UnknownArtifactsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArtifactsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ArtifactsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ArtifactsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthType {
+    BasicAuth,
+    Oauth,
+    PersonalAccessToken,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthType),
+}
+
+impl Default for AuthType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthType {
+    fn into(self) -> String {
+        match self {
+            AuthType::BasicAuth => "BASIC_AUTH".to_string(),
+            AuthType::Oauth => "OAUTH".to_string(),
+            AuthType::PersonalAccessToken => "PERSONAL_ACCESS_TOKEN".to_string(),
+            AuthType::UnknownVariant(UnknownAuthType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthType::BasicAuth => &"BASIC_AUTH",
+            AuthType::Oauth => &"OAUTH",
+            AuthType::PersonalAccessToken => &"PERSONAL_ACCESS_TOKEN",
+            AuthType::UnknownVariant(UnknownAuthType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BASIC_AUTH" => AuthType::BasicAuth,
+            "OAUTH" => AuthType::Oauth,
+            "PERSONAL_ACCESS_TOKEN" => AuthType::PersonalAccessToken,
+            _ => AuthType::UnknownVariant(UnknownAuthType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BASIC_AUTH" => AuthType::BasicAuth,
+            "OAUTH" => AuthType::Oauth,
+            "PERSONAL_ACCESS_TOKEN" => AuthType::PersonalAccessToken,
+            _ => AuthType::UnknownVariant(UnknownAuthType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteBuildsInput {
@@ -216,7 +635,7 @@ pub struct Build {
     /// <p><p>The current status of the build. Valid values include:</p> <ul> <li> <p> <code>FAILED</code>: The build failed.</p> </li> <li> <p> <code>FAULT</code>: The build faulted.</p> </li> <li> <p> <code>IN<em>PROGRESS</code>: The build is still in progress.</p> </li> <li> <p> <code>STOPPED</code>: The build stopped.</p> </li> <li> <p> <code>SUCCEEDED</code>: The build succeeded.</p> </li> <li> <p> <code>TIMED</em>OUT</code>: The build timed out.</p> </li> </ul></p>
     #[serde(rename = "buildStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_status: Option<String>,
+    pub build_status: Option<StatusType>,
     /// <p>Information about the cache for the build.</p>
     #[serde(rename = "cache")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -375,7 +794,7 @@ pub struct BuildBatch {
     /// <p>The status of the batch build.</p>
     #[serde(rename = "buildBatchStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_batch_status: Option<String>,
+    pub build_batch_status: Option<StatusType>,
     /// <p>An array of <code>BuildGroup</code> objects that define the build groups for the batch build.</p>
     #[serde(rename = "buildGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -476,7 +895,7 @@ pub struct BuildBatchFilter {
     /// <p>The status of the batch builds to retrieve. Only batch builds that have this status will be retrieved.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<StatusType>,
 }
 
 /// <p>Contains information about a stage for a batch build.</p>
@@ -498,15 +917,145 @@ pub struct BuildBatchPhase {
     /// <p><p>The current status of the batch build phase. Valid values include:</p> <dl> <dt>FAILED</dt> <dd> <p>The build phase failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build phase faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build phase is still in progress.</p> </dd> <dt>QUEUED</dt> <dd> <p>The build has been submitted and is queued behind other submitted builds.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build phase stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build phase succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build phase timed out.</p> </dd> </dl></p>
     #[serde(rename = "phaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phase_status: Option<String>,
+    pub phase_status: Option<StatusType>,
     /// <p><p>The name of the batch build phase. Valid values include:</p> <dl> <dt>COMBINE<em>ARTIFACTS</dt> <dd> <p>Build output artifacts are being combined and uploaded to the output location.</p> </dd> <dt>DOWNLOAD</em>BATCHSPEC</dt> <dd> <p>The batch build specification is being downloaded.</p> </dd> <dt>FAILED</dt> <dd> <p>One or more of the builds failed.</p> </dd> <dt>IN_PROGRESS</dt> <dd> <p>The batch build is in progress.</p> </dd> <dt>STOPPED</dt> <dd> <p>The batch build was stopped.</p> </dd> <dt>SUBMITTED</dt> <dd> <p>The btach build has been submitted.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The batch build succeeded.</p> </dd> </dl></p>
     #[serde(rename = "phaseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phase_type: Option<String>,
+    pub phase_type: Option<BuildBatchPhaseType>,
     /// <p>When the batch build phase started, expressed in Unix time format.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBuildBatchPhaseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BuildBatchPhaseType {
+    CombineArtifacts,
+    DownloadBatchspec,
+    Failed,
+    InProgress,
+    Stopped,
+    Submitted,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBuildBatchPhaseType),
+}
+
+impl Default for BuildBatchPhaseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BuildBatchPhaseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BuildBatchPhaseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BuildBatchPhaseType {
+    fn into(self) -> String {
+        match self {
+            BuildBatchPhaseType::CombineArtifacts => "COMBINE_ARTIFACTS".to_string(),
+            BuildBatchPhaseType::DownloadBatchspec => "DOWNLOAD_BATCHSPEC".to_string(),
+            BuildBatchPhaseType::Failed => "FAILED".to_string(),
+            BuildBatchPhaseType::InProgress => "IN_PROGRESS".to_string(),
+            BuildBatchPhaseType::Stopped => "STOPPED".to_string(),
+            BuildBatchPhaseType::Submitted => "SUBMITTED".to_string(),
+            BuildBatchPhaseType::Succeeded => "SUCCEEDED".to_string(),
+            BuildBatchPhaseType::UnknownVariant(UnknownBuildBatchPhaseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BuildBatchPhaseType {
+    fn into(self) -> &'a str {
+        match self {
+            BuildBatchPhaseType::CombineArtifacts => &"COMBINE_ARTIFACTS",
+            BuildBatchPhaseType::DownloadBatchspec => &"DOWNLOAD_BATCHSPEC",
+            BuildBatchPhaseType::Failed => &"FAILED",
+            BuildBatchPhaseType::InProgress => &"IN_PROGRESS",
+            BuildBatchPhaseType::Stopped => &"STOPPED",
+            BuildBatchPhaseType::Submitted => &"SUBMITTED",
+            BuildBatchPhaseType::Succeeded => &"SUCCEEDED",
+            BuildBatchPhaseType::UnknownVariant(UnknownBuildBatchPhaseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BuildBatchPhaseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMBINE_ARTIFACTS" => BuildBatchPhaseType::CombineArtifacts,
+            "DOWNLOAD_BATCHSPEC" => BuildBatchPhaseType::DownloadBatchspec,
+            "FAILED" => BuildBatchPhaseType::Failed,
+            "IN_PROGRESS" => BuildBatchPhaseType::InProgress,
+            "STOPPED" => BuildBatchPhaseType::Stopped,
+            "SUBMITTED" => BuildBatchPhaseType::Submitted,
+            "SUCCEEDED" => BuildBatchPhaseType::Succeeded,
+            _ => BuildBatchPhaseType::UnknownVariant(UnknownBuildBatchPhaseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BuildBatchPhaseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMBINE_ARTIFACTS" => BuildBatchPhaseType::CombineArtifacts,
+            "DOWNLOAD_BATCHSPEC" => BuildBatchPhaseType::DownloadBatchspec,
+            "FAILED" => BuildBatchPhaseType::Failed,
+            "IN_PROGRESS" => BuildBatchPhaseType::InProgress,
+            "STOPPED" => BuildBatchPhaseType::Stopped,
+            "SUBMITTED" => BuildBatchPhaseType::Submitted,
+            "SUCCEEDED" => BuildBatchPhaseType::Succeeded,
+            _ => BuildBatchPhaseType::UnknownVariant(UnknownBuildBatchPhaseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BuildBatchPhaseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BuildBatchPhaseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BuildBatchPhaseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about a batch build build group. Build groups are used to combine builds that can run in parallel, while still being able to set dependencies on other build groups.</p>
@@ -568,15 +1117,161 @@ pub struct BuildPhase {
     /// <p><p>The current status of the build phase. Valid values include:</p> <dl> <dt>FAILED</dt> <dd> <p>The build phase failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build phase faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build phase is still in progress.</p> </dd> <dt>QUEUED</dt> <dd> <p>The build has been submitted and is queued behind other submitted builds.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build phase stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build phase succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build phase timed out.</p> </dd> </dl></p>
     #[serde(rename = "phaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phase_status: Option<String>,
+    pub phase_status: Option<StatusType>,
     /// <p><p>The name of the build phase. Valid values include:</p> <ul> <li> <p> <code>BUILD</code>: Core build activities typically occur in this build phase.</p> </li> <li> <p> <code>COMPLETED</code>: The build has been completed.</p> </li> <li> <p> <code>DOWNLOAD<em>SOURCE</code>: Source code is being downloaded in this build phase.</p> </li> <li> <p> <code>FINALIZING</code>: The build process is completing in this build phase.</p> </li> <li> <p> <code>INSTALL</code>: Installation activities typically occur in this build phase.</p> </li> <li> <p> <code>POST</em>BUILD</code>: Post-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PRE<em>BUILD</code>: Pre-build activities typically occur in this build phase.</p> </li> <li> <p> <code>PROVISIONING</code>: The build environment is being set up.</p> </li> <li> <p> <code>QUEUED</code>: The build has been submitted and is queued behind other submitted builds.</p> </li> <li> <p> <code>SUBMITTED</code>: The build has been submitted.</p> </li> <li> <p> <code>UPLOAD</em>ARTIFACTS</code>: Build output artifacts are being uploaded to the output location.</p> </li> </ul></p>
     #[serde(rename = "phaseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub phase_type: Option<String>,
+    pub phase_type: Option<BuildPhaseType>,
     /// <p>When the build phase started, expressed in Unix time format.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBuildPhaseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BuildPhaseType {
+    Build,
+    Completed,
+    DownloadSource,
+    Finalizing,
+    Install,
+    PostBuild,
+    PreBuild,
+    Provisioning,
+    Queued,
+    Submitted,
+    UploadArtifacts,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBuildPhaseType),
+}
+
+impl Default for BuildPhaseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BuildPhaseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BuildPhaseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BuildPhaseType {
+    fn into(self) -> String {
+        match self {
+            BuildPhaseType::Build => "BUILD".to_string(),
+            BuildPhaseType::Completed => "COMPLETED".to_string(),
+            BuildPhaseType::DownloadSource => "DOWNLOAD_SOURCE".to_string(),
+            BuildPhaseType::Finalizing => "FINALIZING".to_string(),
+            BuildPhaseType::Install => "INSTALL".to_string(),
+            BuildPhaseType::PostBuild => "POST_BUILD".to_string(),
+            BuildPhaseType::PreBuild => "PRE_BUILD".to_string(),
+            BuildPhaseType::Provisioning => "PROVISIONING".to_string(),
+            BuildPhaseType::Queued => "QUEUED".to_string(),
+            BuildPhaseType::Submitted => "SUBMITTED".to_string(),
+            BuildPhaseType::UploadArtifacts => "UPLOAD_ARTIFACTS".to_string(),
+            BuildPhaseType::UnknownVariant(UnknownBuildPhaseType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BuildPhaseType {
+    fn into(self) -> &'a str {
+        match self {
+            BuildPhaseType::Build => &"BUILD",
+            BuildPhaseType::Completed => &"COMPLETED",
+            BuildPhaseType::DownloadSource => &"DOWNLOAD_SOURCE",
+            BuildPhaseType::Finalizing => &"FINALIZING",
+            BuildPhaseType::Install => &"INSTALL",
+            BuildPhaseType::PostBuild => &"POST_BUILD",
+            BuildPhaseType::PreBuild => &"PRE_BUILD",
+            BuildPhaseType::Provisioning => &"PROVISIONING",
+            BuildPhaseType::Queued => &"QUEUED",
+            BuildPhaseType::Submitted => &"SUBMITTED",
+            BuildPhaseType::UploadArtifacts => &"UPLOAD_ARTIFACTS",
+            BuildPhaseType::UnknownVariant(UnknownBuildPhaseType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BuildPhaseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD" => BuildPhaseType::Build,
+            "COMPLETED" => BuildPhaseType::Completed,
+            "DOWNLOAD_SOURCE" => BuildPhaseType::DownloadSource,
+            "FINALIZING" => BuildPhaseType::Finalizing,
+            "INSTALL" => BuildPhaseType::Install,
+            "POST_BUILD" => BuildPhaseType::PostBuild,
+            "PRE_BUILD" => BuildPhaseType::PreBuild,
+            "PROVISIONING" => BuildPhaseType::Provisioning,
+            "QUEUED" => BuildPhaseType::Queued,
+            "SUBMITTED" => BuildPhaseType::Submitted,
+            "UPLOAD_ARTIFACTS" => BuildPhaseType::UploadArtifacts,
+            _ => BuildPhaseType::UnknownVariant(UnknownBuildPhaseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BuildPhaseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD" => BuildPhaseType::Build,
+            "COMPLETED" => BuildPhaseType::Completed,
+            "DOWNLOAD_SOURCE" => BuildPhaseType::DownloadSource,
+            "FINALIZING" => BuildPhaseType::Finalizing,
+            "INSTALL" => BuildPhaseType::Install,
+            "POST_BUILD" => BuildPhaseType::PostBuild,
+            "PRE_BUILD" => BuildPhaseType::PreBuild,
+            "PROVISIONING" => BuildPhaseType::Provisioning,
+            "QUEUED" => BuildPhaseType::Queued,
+            "SUBMITTED" => BuildPhaseType::Submitted,
+            "UPLOAD_ARTIFACTS" => BuildPhaseType::UploadArtifacts,
+            _ => BuildPhaseType::UnknownVariant(UnknownBuildPhaseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BuildPhaseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BuildPhaseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BuildPhaseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information that defines how the AWS CodeBuild build project reports the build status to the source provider. </p>
@@ -603,7 +1298,7 @@ pub struct BuildSummary {
     /// <p><p>The status of the build group.</p> <dl> <dt>FAILED</dt> <dd> <p>The build group failed.</p> </dd> <dt>FAULT</dt> <dd> <p>The build group faulted.</p> </dd> <dt>IN<em>PROGRESS</dt> <dd> <p>The build group is still in progress.</p> </dd> <dt>STOPPED</dt> <dd> <p>The build group stopped.</p> </dd> <dt>SUCCEEDED</dt> <dd> <p>The build group succeeded.</p> </dd> <dt>TIMED</em>OUT</dt> <dd> <p>The build group timed out.</p> </dd> </dl></p>
     #[serde(rename = "buildStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_status: Option<String>,
+    pub build_status: Option<StatusType>,
     /// <p>A <code>ResolvedArtifact</code> object that represents the primary build artifacts for the build group.</p>
     #[serde(rename = "primaryArtifact")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -618,6 +1313,216 @@ pub struct BuildSummary {
     pub secondary_artifacts: Option<Vec<ResolvedArtifact>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCacheMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CacheMode {
+    LocalCustomCache,
+    LocalDockerLayerCache,
+    LocalSourceCache,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCacheMode),
+}
+
+impl Default for CacheMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CacheMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CacheMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CacheMode {
+    fn into(self) -> String {
+        match self {
+            CacheMode::LocalCustomCache => "LOCAL_CUSTOM_CACHE".to_string(),
+            CacheMode::LocalDockerLayerCache => "LOCAL_DOCKER_LAYER_CACHE".to_string(),
+            CacheMode::LocalSourceCache => "LOCAL_SOURCE_CACHE".to_string(),
+            CacheMode::UnknownVariant(UnknownCacheMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CacheMode {
+    fn into(self) -> &'a str {
+        match self {
+            CacheMode::LocalCustomCache => &"LOCAL_CUSTOM_CACHE",
+            CacheMode::LocalDockerLayerCache => &"LOCAL_DOCKER_LAYER_CACHE",
+            CacheMode::LocalSourceCache => &"LOCAL_SOURCE_CACHE",
+            CacheMode::UnknownVariant(UnknownCacheMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CacheMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "LOCAL_CUSTOM_CACHE" => CacheMode::LocalCustomCache,
+            "LOCAL_DOCKER_LAYER_CACHE" => CacheMode::LocalDockerLayerCache,
+            "LOCAL_SOURCE_CACHE" => CacheMode::LocalSourceCache,
+            _ => CacheMode::UnknownVariant(UnknownCacheMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CacheMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LOCAL_CUSTOM_CACHE" => CacheMode::LocalCustomCache,
+            "LOCAL_DOCKER_LAYER_CACHE" => CacheMode::LocalDockerLayerCache,
+            "LOCAL_SOURCE_CACHE" => CacheMode::LocalSourceCache,
+            _ => CacheMode::UnknownVariant(UnknownCacheMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CacheMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CacheMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCacheType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CacheType {
+    Local,
+    NoCache,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCacheType),
+}
+
+impl Default for CacheType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CacheType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CacheType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CacheType {
+    fn into(self) -> String {
+        match self {
+            CacheType::Local => "LOCAL".to_string(),
+            CacheType::NoCache => "NO_CACHE".to_string(),
+            CacheType::S3 => "S3".to_string(),
+            CacheType::UnknownVariant(UnknownCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CacheType {
+    fn into(self) -> &'a str {
+        match self {
+            CacheType::Local => &"LOCAL",
+            CacheType::NoCache => &"NO_CACHE",
+            CacheType::S3 => &"S3",
+            CacheType::UnknownVariant(UnknownCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CacheType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LOCAL" => CacheType::Local,
+            "NO_CACHE" => CacheType::NoCache,
+            "S3" => CacheType::S3,
+            _ => CacheType::UnknownVariant(UnknownCacheType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CacheType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LOCAL" => CacheType::Local,
+            "NO_CACHE" => CacheType::NoCache,
+            "S3" => CacheType::S3,
+            _ => CacheType::UnknownVariant(UnknownCacheType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CacheType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CacheType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Information about Amazon CloudWatch Logs for a build project. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsConfig {
@@ -627,7 +1532,7 @@ pub struct CloudWatchLogsConfig {
     pub group_name: Option<String>,
     /// <p><p>The current status of the logs in Amazon CloudWatch Logs for a build project. Valid values are:</p> <ul> <li> <p> <code>ENABLED</code>: Amazon CloudWatch Logs are enabled for this build project.</p> </li> <li> <p> <code>DISABLED</code>: Amazon CloudWatch Logs are not enabled for this build project.</p> </li> </ul></p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: LogsConfigStatusType,
     /// <p> The prefix of the stream name of the Amazon CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html">Working with Log Groups and Log Streams</a>. </p>
     #[serde(rename = "streamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -708,6 +1613,116 @@ pub struct CodeCoverageReportSummary {
     #[serde(rename = "linesMissed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lines_missed: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputeType {
+    BuildGeneral12Xlarge,
+    BuildGeneral1Large,
+    BuildGeneral1Medium,
+    BuildGeneral1Small,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputeType),
+}
+
+impl Default for ComputeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputeType {
+    fn into(self) -> String {
+        match self {
+            ComputeType::BuildGeneral12Xlarge => "BUILD_GENERAL1_2XLARGE".to_string(),
+            ComputeType::BuildGeneral1Large => "BUILD_GENERAL1_LARGE".to_string(),
+            ComputeType::BuildGeneral1Medium => "BUILD_GENERAL1_MEDIUM".to_string(),
+            ComputeType::BuildGeneral1Small => "BUILD_GENERAL1_SMALL".to_string(),
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputeType {
+    fn into(self) -> &'a str {
+        match self {
+            ComputeType::BuildGeneral12Xlarge => &"BUILD_GENERAL1_2XLARGE",
+            ComputeType::BuildGeneral1Large => &"BUILD_GENERAL1_LARGE",
+            ComputeType::BuildGeneral1Medium => &"BUILD_GENERAL1_MEDIUM",
+            ComputeType::BuildGeneral1Small => &"BUILD_GENERAL1_SMALL",
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD_GENERAL1_2XLARGE" => ComputeType::BuildGeneral12Xlarge,
+            "BUILD_GENERAL1_LARGE" => ComputeType::BuildGeneral1Large,
+            "BUILD_GENERAL1_MEDIUM" => ComputeType::BuildGeneral1Medium,
+            "BUILD_GENERAL1_SMALL" => ComputeType::BuildGeneral1Small,
+            _ => ComputeType::UnknownVariant(UnknownComputeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD_GENERAL1_2XLARGE" => ComputeType::BuildGeneral12Xlarge,
+            "BUILD_GENERAL1_LARGE" => ComputeType::BuildGeneral1Large,
+            "BUILD_GENERAL1_MEDIUM" => ComputeType::BuildGeneral1Medium,
+            "BUILD_GENERAL1_SMALL" => ComputeType::BuildGeneral1Small,
+            _ => ComputeType::UnknownVariant(UnknownComputeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComputeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComputeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -814,7 +1829,7 @@ pub struct CreateReportGroupInput {
     pub tags: Option<Vec<Tag>>,
     /// <p> The type of report group. </p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ReportType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -836,7 +1851,7 @@ pub struct CreateWebhookInput {
     /// <p>Specifies the type of build this webhook will trigger.</p>
     #[serde(rename = "buildType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_type: Option<String>,
+    pub build_type: Option<WebhookBuildType>,
     /// <p>An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p>For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -853,6 +1868,105 @@ pub struct CreateWebhookOutput {
     #[serde(rename = "webhook")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub webhook: Option<Webhook>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCredentialProviderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CredentialProviderType {
+    SecretsManager,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCredentialProviderType),
+}
+
+impl Default for CredentialProviderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CredentialProviderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CredentialProviderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CredentialProviderType {
+    fn into(self) -> String {
+        match self {
+            CredentialProviderType::SecretsManager => "SECRETS_MANAGER".to_string(),
+            CredentialProviderType::UnknownVariant(UnknownCredentialProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CredentialProviderType {
+    fn into(self) -> &'a str {
+        match self {
+            CredentialProviderType::SecretsManager => &"SECRETS_MANAGER",
+            CredentialProviderType::UnknownVariant(UnknownCredentialProviderType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CredentialProviderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SECRETS_MANAGER" => CredentialProviderType::SecretsManager,
+            _ => CredentialProviderType::UnknownVariant(UnknownCredentialProviderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CredentialProviderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SECRETS_MANAGER" => CredentialProviderType::SecretsManager,
+            _ => CredentialProviderType::UnknownVariant(UnknownCredentialProviderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CredentialProviderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CredentialProviderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CredentialProviderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains information about the debug session for a build. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/session-manager.html">Viewing a running build in Session Manager</a>.</p>
@@ -1000,11 +2114,11 @@ pub struct DescribeCodeCoveragesInput {
     /// <p><p>Specifies how the results are sorted. Possible values are:</p> <dl> <dt>FILE<em>PATH</dt> <dd> <p>The results are sorted by file path.</p> </dd> <dt>LINE</em>COVERAGE_PERCENTAGE</dt> <dd> <p>The results are sorted by the percentage of lines that are covered.</p> </dd> </dl></p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ReportCodeCoverageSortByType>,
     /// <p>Specifies if the results are sorted in ascending or descending order.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1082,7 +2196,7 @@ pub struct EnvironmentLanguage {
     /// <p>The programming language for the Docker images.</p>
     #[serde(rename = "language")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language: Option<String>,
+    pub language: Option<LanguageType>,
 }
 
 /// <p>A set of Docker images that are related by platform and are managed by AWS CodeBuild.</p>
@@ -1096,7 +2210,124 @@ pub struct EnvironmentPlatform {
     /// <p>The platform's name.</p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub platform: Option<String>,
+    pub platform: Option<PlatformType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentType {
+    ArmContainer,
+    LinuxContainer,
+    LinuxGpuContainer,
+    WindowsContainer,
+    WindowsServer2019Container,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentType),
+}
+
+impl Default for EnvironmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentType {
+    fn into(self) -> String {
+        match self {
+            EnvironmentType::ArmContainer => "ARM_CONTAINER".to_string(),
+            EnvironmentType::LinuxContainer => "LINUX_CONTAINER".to_string(),
+            EnvironmentType::LinuxGpuContainer => "LINUX_GPU_CONTAINER".to_string(),
+            EnvironmentType::WindowsContainer => "WINDOWS_CONTAINER".to_string(),
+            EnvironmentType::WindowsServer2019Container => {
+                "WINDOWS_SERVER_2019_CONTAINER".to_string()
+            }
+            EnvironmentType::UnknownVariant(UnknownEnvironmentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentType {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentType::ArmContainer => &"ARM_CONTAINER",
+            EnvironmentType::LinuxContainer => &"LINUX_CONTAINER",
+            EnvironmentType::LinuxGpuContainer => &"LINUX_GPU_CONTAINER",
+            EnvironmentType::WindowsContainer => &"WINDOWS_CONTAINER",
+            EnvironmentType::WindowsServer2019Container => &"WINDOWS_SERVER_2019_CONTAINER",
+            EnvironmentType::UnknownVariant(UnknownEnvironmentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARM_CONTAINER" => EnvironmentType::ArmContainer,
+            "LINUX_CONTAINER" => EnvironmentType::LinuxContainer,
+            "LINUX_GPU_CONTAINER" => EnvironmentType::LinuxGpuContainer,
+            "WINDOWS_CONTAINER" => EnvironmentType::WindowsContainer,
+            "WINDOWS_SERVER_2019_CONTAINER" => EnvironmentType::WindowsServer2019Container,
+            _ => EnvironmentType::UnknownVariant(UnknownEnvironmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARM_CONTAINER" => EnvironmentType::ArmContainer,
+            "LINUX_CONTAINER" => EnvironmentType::LinuxContainer,
+            "LINUX_GPU_CONTAINER" => EnvironmentType::LinuxGpuContainer,
+            "WINDOWS_CONTAINER" => EnvironmentType::WindowsContainer,
+            "WINDOWS_SERVER_2019_CONTAINER" => EnvironmentType::WindowsServer2019Container,
+            _ => EnvironmentType::UnknownVariant(UnknownEnvironmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EnvironmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about an environment variable for a build project or a build.</p>
@@ -1108,10 +2339,119 @@ pub struct EnvironmentVariable {
     /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER<em>STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store. To learn how to specify a parameter store environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.parameter-store">env/parameter-store</a> in the <i>AWS CodeBuild User Guide</i>.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plain text format. This is the default value.</p> </li> <li> <p> <code>SECRETS</em>MANAGER</code>: An environment variable stored in AWS Secrets Manager. To learn how to specify a secrets manager environment variable, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.secrets-manager">env/secrets-manager</a> in the <i>AWS CodeBuild User Guide</i>.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EnvironmentVariableType>,
     /// <p><p>The value of the environment variable.</p> <important> <p>We strongly discourage the use of <code>PLAINTEXT</code> environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. <code>PLAINTEXT</code> environment variables can be displayed in plain text using the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI). For sensitive values, we recommend you use an environment variable of type <code>PARAMETER<em>STORE</code> or <code>SECRETS</em>MANAGER</code>. </p> </important></p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentVariableType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentVariableType {
+    ParameterStore,
+    Plaintext,
+    SecretsManager,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentVariableType),
+}
+
+impl Default for EnvironmentVariableType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentVariableType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentVariableType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentVariableType {
+    fn into(self) -> String {
+        match self {
+            EnvironmentVariableType::ParameterStore => "PARAMETER_STORE".to_string(),
+            EnvironmentVariableType::Plaintext => "PLAINTEXT".to_string(),
+            EnvironmentVariableType::SecretsManager => "SECRETS_MANAGER".to_string(),
+            EnvironmentVariableType::UnknownVariant(UnknownEnvironmentVariableType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentVariableType {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentVariableType::ParameterStore => &"PARAMETER_STORE",
+            EnvironmentVariableType::Plaintext => &"PLAINTEXT",
+            EnvironmentVariableType::SecretsManager => &"SECRETS_MANAGER",
+            EnvironmentVariableType::UnknownVariant(UnknownEnvironmentVariableType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EnvironmentVariableType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PARAMETER_STORE" => EnvironmentVariableType::ParameterStore,
+            "PLAINTEXT" => EnvironmentVariableType::Plaintext,
+            "SECRETS_MANAGER" => EnvironmentVariableType::SecretsManager,
+            _ => EnvironmentVariableType::UnknownVariant(UnknownEnvironmentVariableType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentVariableType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PARAMETER_STORE" => EnvironmentVariableType::ParameterStore,
+            "PLAINTEXT" => EnvironmentVariableType::Plaintext,
+            "SECRETS_MANAGER" => EnvironmentVariableType::SecretsManager,
+            _ => EnvironmentVariableType::UnknownVariant(UnknownEnvironmentVariableType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentVariableType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EnvironmentVariableType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentVariableType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Information about an exported environment variable. </p>
@@ -1128,6 +2468,101 @@ pub struct ExportedEnvironmentVariable {
     pub value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileSystemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileSystemType {
+    Efs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileSystemType),
+}
+
+impl Default for FileSystemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileSystemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileSystemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileSystemType {
+    fn into(self) -> String {
+        match self {
+            FileSystemType::Efs => "EFS".to_string(),
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileSystemType {
+    fn into(self) -> &'a str {
+        match self {
+            FileSystemType::Efs => &"EFS",
+            FileSystemType::UnknownVariant(UnknownFileSystemType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileSystemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EFS" => FileSystemType::Efs,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileSystemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EFS" => FileSystemType::Efs,
+            _ => FileSystemType::UnknownVariant(UnknownFileSystemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileSystemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileSystemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileSystemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetReportGroupTrendInput {
@@ -1137,7 +2572,7 @@ pub struct GetReportGroupTrendInput {
     #[serde(rename = "reportGroupArn")]
     pub report_group_arn: String,
     #[serde(rename = "trendField")]
-    pub trend_field: String,
+    pub trend_field: ReportGroupTrendFieldType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1176,15 +2611,119 @@ pub struct GitSubmodulesConfig {
     pub fetch_submodules: bool,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImagePullCredentialsType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImagePullCredentialsType {
+    Codebuild,
+    ServiceRole,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImagePullCredentialsType),
+}
+
+impl Default for ImagePullCredentialsType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImagePullCredentialsType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImagePullCredentialsType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImagePullCredentialsType {
+    fn into(self) -> String {
+        match self {
+            ImagePullCredentialsType::Codebuild => "CODEBUILD".to_string(),
+            ImagePullCredentialsType::ServiceRole => "SERVICE_ROLE".to_string(),
+            ImagePullCredentialsType::UnknownVariant(UnknownImagePullCredentialsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImagePullCredentialsType {
+    fn into(self) -> &'a str {
+        match self {
+            ImagePullCredentialsType::Codebuild => &"CODEBUILD",
+            ImagePullCredentialsType::ServiceRole => &"SERVICE_ROLE",
+            ImagePullCredentialsType::UnknownVariant(UnknownImagePullCredentialsType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImagePullCredentialsType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODEBUILD" => ImagePullCredentialsType::Codebuild,
+            "SERVICE_ROLE" => ImagePullCredentialsType::ServiceRole,
+            _ => ImagePullCredentialsType::UnknownVariant(UnknownImagePullCredentialsType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImagePullCredentialsType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODEBUILD" => ImagePullCredentialsType::Codebuild,
+            "SERVICE_ROLE" => ImagePullCredentialsType::ServiceRole,
+            _ => ImagePullCredentialsType::UnknownVariant(UnknownImagePullCredentialsType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImagePullCredentialsType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImagePullCredentialsType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImagePullCredentialsType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportSourceCredentialsInput {
     /// <p> The type of authentication used to connect to a GitHub, GitHub Enterprise, or Bitbucket repository. An OAUTH connection is not supported by the API and must be created using the AWS CodeBuild console. </p>
     #[serde(rename = "authType")]
-    pub auth_type: String,
+    pub auth_type: AuthType,
     /// <p> The source provider used for this project. </p>
     #[serde(rename = "serverType")]
-    pub server_type: String,
+    pub server_type: ServerType,
     /// <p> Set to <code>false</code> to prevent overwriting the repository source credentials. Set to <code>true</code> to overwrite the repository source credentials. The default value is <code>true</code>. </p>
     #[serde(rename = "shouldOverwrite")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1219,6 +2758,147 @@ pub struct InvalidateProjectCacheInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvalidateProjectCacheOutput {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLanguageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LanguageType {
+    Android,
+    Base,
+    Docker,
+    Dotnet,
+    Golang,
+    Java,
+    NodeJs,
+    Php,
+    Python,
+    Ruby,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLanguageType),
+}
+
+impl Default for LanguageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LanguageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LanguageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LanguageType {
+    fn into(self) -> String {
+        match self {
+            LanguageType::Android => "ANDROID".to_string(),
+            LanguageType::Base => "BASE".to_string(),
+            LanguageType::Docker => "DOCKER".to_string(),
+            LanguageType::Dotnet => "DOTNET".to_string(),
+            LanguageType::Golang => "GOLANG".to_string(),
+            LanguageType::Java => "JAVA".to_string(),
+            LanguageType::NodeJs => "NODE_JS".to_string(),
+            LanguageType::Php => "PHP".to_string(),
+            LanguageType::Python => "PYTHON".to_string(),
+            LanguageType::Ruby => "RUBY".to_string(),
+            LanguageType::UnknownVariant(UnknownLanguageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LanguageType {
+    fn into(self) -> &'a str {
+        match self {
+            LanguageType::Android => &"ANDROID",
+            LanguageType::Base => &"BASE",
+            LanguageType::Docker => &"DOCKER",
+            LanguageType::Dotnet => &"DOTNET",
+            LanguageType::Golang => &"GOLANG",
+            LanguageType::Java => &"JAVA",
+            LanguageType::NodeJs => &"NODE_JS",
+            LanguageType::Php => &"PHP",
+            LanguageType::Python => &"PYTHON",
+            LanguageType::Ruby => &"RUBY",
+            LanguageType::UnknownVariant(UnknownLanguageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LanguageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANDROID" => LanguageType::Android,
+            "BASE" => LanguageType::Base,
+            "DOCKER" => LanguageType::Docker,
+            "DOTNET" => LanguageType::Dotnet,
+            "GOLANG" => LanguageType::Golang,
+            "JAVA" => LanguageType::Java,
+            "NODE_JS" => LanguageType::NodeJs,
+            "PHP" => LanguageType::Php,
+            "PYTHON" => LanguageType::Python,
+            "RUBY" => LanguageType::Ruby,
+            _ => LanguageType::UnknownVariant(UnknownLanguageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LanguageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANDROID" => LanguageType::Android,
+            "BASE" => LanguageType::Base,
+            "DOCKER" => LanguageType::Docker,
+            "DOTNET" => LanguageType::Dotnet,
+            "GOLANG" => LanguageType::Golang,
+            "JAVA" => LanguageType::Java,
+            "NODE_JS" => LanguageType::NodeJs,
+            "PHP" => LanguageType::Php,
+            "PYTHON" => LanguageType::Python,
+            "RUBY" => LanguageType::Ruby,
+            _ => LanguageType::UnknownVariant(UnknownLanguageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LanguageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LanguageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBuildBatchesForProjectInput {
@@ -1241,7 +2921,7 @@ pub struct ListBuildBatchesForProjectInput {
     /// <p><p>Specifies the sort order of the returned items. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the batch build identifiers in ascending order by identifier.</p> </li> <li> <p> <code>DESCENDING</code>: List the batch build identifiers in descending order by identifier.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1275,7 +2955,7 @@ pub struct ListBuildBatchesInput {
     /// <p><p>Specifies the sort order of the returned items. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the batch build identifiers in ascending order by identifier.</p> </li> <li> <p> <code>DESCENDING</code>: List the batch build identifiers in descending order by identifier.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1304,7 +2984,7 @@ pub struct ListBuildsForProjectInput {
     /// <p><p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1330,7 +3010,7 @@ pub struct ListBuildsInput {
     /// <p><p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1369,11 +3049,11 @@ pub struct ListProjectsInput {
     /// <p>The criterion to be used to list build project names. Valid values include:</p> <ul> <li> <p> <code>CREATED_TIME</code>: List based on when each build project was created.</p> </li> <li> <p> <code>LAST_MODIFIED_TIME</code>: List based on when information about each build project was last changed.</p> </li> <li> <p> <code>NAME</code>: List based on each build project's name.</p> </li> </ul> <p>Use <code>sortOrder</code> to specify in what order to list the build project names based on the preceding criteria.</p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ProjectSortByType>,
     /// <p>The order in which to list build projects. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List in ascending order.</p> </li> <li> <p> <code>DESCENDING</code>: List in descending order.</p> </li> </ul> <p>Use <code>sortBy</code> to specify the criterion to be used to list build project names.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1403,11 +3083,11 @@ pub struct ListReportGroupsInput {
     /// <p><p> The criterion to be used to list build report groups. Valid values include: </p> <ul> <li> <p> <code>CREATED<em>TIME</code>: List based on when each report group was created.</p> </li> <li> <p> <code>LAST</em>MODIFIED_TIME</code>: List based on when each report group was last changed.</p> </li> <li> <p> <code>NAME</code>: List based on each report group&#39;s name.</p> </li> </ul></p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<ReportGroupSortByType>,
     /// <p> Used to specify the order to sort the list of returned report groups. Valid values are <code>ASCENDING</code> and <code>DESCENDING</code>. </p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1444,7 +3124,7 @@ pub struct ListReportsForReportGroupInput {
     /// <p> Use to specify whether the results are returned in ascending or descending order. </p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1478,7 +3158,7 @@ pub struct ListReportsInput {
     /// <p><p> Specifies the sort order for the list of returned reports. Valid values are: </p> <ul> <li> <p> <code>ASCENDING</code>: return reports in chronological order based on their creation date. </p> </li> <li> <p> <code>DESCENDING</code>: return reports in the reverse chronological order based on their creation date. </p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1508,11 +3188,11 @@ pub struct ListSharedProjectsInput {
     /// <p><p> The criterion to be used to list build projects shared with the current AWS account or user. Valid values include: </p> <ul> <li> <p> <code>ARN</code>: List based on the ARN. </p> </li> <li> <p> <code>MODIFIED_TIME</code>: List based on when information about the shared project was last changed. </p> </li> </ul></p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SharedResourceSortByType>,
     /// <p><p>The order in which to list shared build projects. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List in ascending order.</p> </li> <li> <p> <code>DESCENDING</code>: List in descending order.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1542,11 +3222,11 @@ pub struct ListSharedReportGroupsInput {
     /// <p><p> The criterion to be used to list report groups shared with the current AWS account or user. Valid values include: </p> <ul> <li> <p> <code>ARN</code>: List based on the ARN. </p> </li> <li> <p> <code>MODIFIED_TIME</code>: List based on when information about the shared report group was last changed. </p> </li> </ul></p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SharedResourceSortByType>,
     /// <p><p>The order in which to list shared report groups. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List in ascending order.</p> </li> <li> <p> <code>DESCENDING</code>: List in descending order.</p> </li> </ul></p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrderType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1586,6 +3266,110 @@ pub struct LogsConfig {
     #[serde(rename = "s3Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_logs: Option<S3LogsConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogsConfigStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogsConfigStatusType {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogsConfigStatusType),
+}
+
+impl Default for LogsConfigStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogsConfigStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogsConfigStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogsConfigStatusType {
+    fn into(self) -> String {
+        match self {
+            LogsConfigStatusType::Disabled => "DISABLED".to_string(),
+            LogsConfigStatusType::Enabled => "ENABLED".to_string(),
+            LogsConfigStatusType::UnknownVariant(UnknownLogsConfigStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogsConfigStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            LogsConfigStatusType::Disabled => &"DISABLED",
+            LogsConfigStatusType::Enabled => &"ENABLED",
+            LogsConfigStatusType::UnknownVariant(UnknownLogsConfigStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogsConfigStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => LogsConfigStatusType::Disabled,
+            "ENABLED" => LogsConfigStatusType::Enabled,
+            _ => LogsConfigStatusType::UnknownVariant(UnknownLogsConfigStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogsConfigStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => LogsConfigStatusType::Disabled,
+            "ENABLED" => LogsConfigStatusType::Enabled,
+            _ => LogsConfigStatusType::UnknownVariant(UnknownLogsConfigStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogsConfigStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogsConfigStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogsConfigStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about build logs in Amazon CloudWatch Logs.</p>
@@ -1652,6 +3436,117 @@ pub struct PhaseContext {
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatformType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlatformType {
+    AmazonLinux,
+    Debian,
+    Ubuntu,
+    WindowsServer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatformType),
+}
+
+impl Default for PlatformType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlatformType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlatformType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlatformType {
+    fn into(self) -> String {
+        match self {
+            PlatformType::AmazonLinux => "AMAZON_LINUX".to_string(),
+            PlatformType::Debian => "DEBIAN".to_string(),
+            PlatformType::Ubuntu => "UBUNTU".to_string(),
+            PlatformType::WindowsServer => "WINDOWS_SERVER".to_string(),
+            PlatformType::UnknownVariant(UnknownPlatformType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlatformType {
+    fn into(self) -> &'a str {
+        match self {
+            PlatformType::AmazonLinux => &"AMAZON_LINUX",
+            PlatformType::Debian => &"DEBIAN",
+            PlatformType::Ubuntu => &"UBUNTU",
+            PlatformType::WindowsServer => &"WINDOWS_SERVER",
+            PlatformType::UnknownVariant(UnknownPlatformType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlatformType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMAZON_LINUX" => PlatformType::AmazonLinux,
+            "DEBIAN" => PlatformType::Debian,
+            "UBUNTU" => PlatformType::Ubuntu,
+            "WINDOWS_SERVER" => PlatformType::WindowsServer,
+            _ => PlatformType::UnknownVariant(UnknownPlatformType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlatformType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMAZON_LINUX" => PlatformType::AmazonLinux,
+            "DEBIAN" => PlatformType::Debian,
+            "UBUNTU" => PlatformType::Ubuntu,
+            "WINDOWS_SERVER" => PlatformType::WindowsServer,
+            _ => PlatformType::UnknownVariant(UnknownPlatformType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PlatformType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlatformType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a build project.</p>
@@ -1778,7 +3673,7 @@ pub struct ProjectArtifacts {
     /// <p>Along with <code>path</code> and <code>name</code>, the pattern that AWS CodeBuild uses to determine the name and location to store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>BUILD_ID</code>: Include the build ID in the location of the build output artifact.</p> </li> <li> <p> <code>NONE</code>: Do not include the build ID. This is the default if <code>namespaceType</code> is not specified.</p> </li> </ul> </li> </ul> <p>For example, if <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>BUILD_ID</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, the output artifact is stored in <code>MyArtifacts/&lt;build-ID&gt;/MyArtifact.zip</code>.</p>
     #[serde(rename = "namespaceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub namespace_type: Option<String>,
+    pub namespace_type: Option<ArtifactNamespace>,
     /// <p> If this flag is set, a name specified in the buildspec file overrides the artifact name. The name specified in a buildspec file is calculated at build time and uses the Shell Command Language. For example, you can append a date and time to your artifact name so that it is always unique. </p>
     #[serde(rename = "overrideArtifactName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1786,14 +3681,14 @@ pub struct ProjectArtifacts {
     /// <p><p>The type of build output artifact to create:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output artifacts instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, valid values include:</p> <ul> <li> <p> <code>NONE</code>: AWS CodeBuild creates in the output bucket a folder that contains the build output. This is the default if <code>packaging</code> is not specified.</p> </li> <li> <p> <code>ZIP</code>: AWS CodeBuild creates in the output bucket a ZIP file that contains the build output.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "packaging")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub packaging: Option<String>,
+    pub packaging: Option<ArtifactPackaging>,
     /// <p>Along with <code>namespaceType</code> and <code>name</code>, the pattern that AWS CodeBuild uses to name and store the output artifact:</p> <ul> <li> <p>If <code>type</code> is set to <code>CODEPIPELINE</code>, AWS CodePipeline ignores this value if specified. This is because AWS CodePipeline manages its build output names instead of AWS CodeBuild.</p> </li> <li> <p>If <code>type</code> is set to <code>NO_ARTIFACTS</code>, this value is ignored if specified, because no build output is produced.</p> </li> <li> <p>If <code>type</code> is set to <code>S3</code>, this is the path to the output artifact. If <code>path</code> is not specified, <code>path</code> is not used.</p> </li> </ul> <p>For example, if <code>path</code> is set to <code>MyArtifacts</code>, <code>namespaceType</code> is set to <code>NONE</code>, and <code>name</code> is set to <code>MyArtifact.zip</code>, the output artifact is stored in the output bucket at <code>MyArtifacts/MyArtifact.zip</code>.</p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
     /// <p><p>The type of build output artifact. Valid values include:</p> <ul> <li> <p> <code>CODEPIPELINE</code>: The build project has build output generated through AWS CodePipeline. </p> <note> <p>The <code>CODEPIPELINE</code> type is not supported for <code>secondaryArtifacts</code>.</p> </note> </li> <li> <p> <code>NO_ARTIFACTS</code>: The build project does not produce any build output.</p> </li> <li> <p> <code>S3</code>: The build project stores build output in Amazon Simple Storage Service (Amazon S3).</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ArtifactsType,
 }
 
 /// <p>Information about the build badge for the build project.</p>
@@ -1841,10 +3736,10 @@ pub struct ProjectCache {
     /// <p><p>An array of strings that specify the local cache modes. You can use one or more local cache modes at the same time. This is only used for <code>LOCAL</code> cache types.</p> <p>Possible values are:</p> <dl> <dt>LOCAL<em>SOURCE</em>CACHE</dt> <dd> <p>Caches Git metadata for primary and secondary sources. After the cache is created, subsequent builds pull only the change between commits. This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If you choose this option and your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket), the option is ignored. </p> </dd> <dt>LOCAL<em>DOCKER</em>LAYER<em>CACHE</dt> <dd> <p>Caches existing Docker layers. This mode is a good choice for projects that build or pull large Docker images. It can prevent the performance issues caused by pulling large Docker images down from the network. </p> <note> <ul> <li> <p>You can use a Docker layer cache in the Linux environment only. </p> </li> <li> <p>The <code>privileged</code> flag must be set so that your project has the required Docker permissions. </p> </li> <li> <p>You should consider the security implications before you use a Docker layer cache. </p> </li> </ul> </note> </dd> <dt>LOCAL</em>CUSTOM_CACHE</dt> <dd> <p>Caches directories you specify in the buildspec file. This mode is a good choice if your build scenario is not suited to one of the other three local cache modes. If you use a custom cache: </p> <ul> <li> <p>Only directories can be specified for caching. You cannot specify individual files. </p> </li> <li> <p>Symlinks are used to reference cached directories. </p> </li> <li> <p>Cached directories are linked to your build before it downloads its project sources. Cached items are overridden if a source item has the same name. Directories are specified using cache paths in the buildspec file. </p> </li> </ul> </dd> </dl></p>
     #[serde(rename = "modes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub modes: Option<Vec<String>>,
+    pub modes: Option<Vec<CacheMode>>,
     /// <p><p>The type of cache used by the build project. Valid values include:</p> <ul> <li> <p> <code>NO_CACHE</code>: The build project does not use any cache.</p> </li> <li> <p> <code>S3</code>: The build project reads and writes from and to S3.</p> </li> <li> <p> <code>LOCAL</code>: The build project stores a cache locally on a build host that is only available to that build host.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: CacheType,
 }
 
 /// <p>Information about the build environment of the build project.</p>
@@ -1856,7 +3751,7 @@ pub struct ProjectEnvironment {
     pub certificate: Option<String>,
     /// <p>Information about the compute resources the build project uses. Available values include:</p> <ul> <li> <p> <code>BUILD_GENERAL1_SMALL</code>: Use up to 3 GB memory and 2 vCPUs for builds.</p> </li> <li> <p> <code>BUILD_GENERAL1_MEDIUM</code>: Use up to 7 GB memory and 4 vCPUs for builds.</p> </li> <li> <p> <code>BUILD_GENERAL1_LARGE</code>: Use up to 16 GB memory and 8 vCPUs for builds, depending on your environment type.</p> </li> <li> <p> <code>BUILD_GENERAL1_2XLARGE</code>: Use up to 145 GB memory, 72 vCPUs, and 824 GB of SSD storage for builds. This compute type supports Docker images up to 100 GB uncompressed.</p> </li> </ul> <p> If you use <code>BUILD_GENERAL1_LARGE</code>: </p> <ul> <li> <p> For environment type <code>LINUX_CONTAINER</code>, you can use up to 15 GB memory and 8 vCPUs for builds. </p> </li> <li> <p> For environment type <code>LINUX_GPU_CONTAINER</code>, you can use up to 255 GB memory, 32 vCPUs, and 4 NVIDIA Tesla V100 GPUs for builds.</p> </li> <li> <p> For environment type <code>ARM_CONTAINER</code>, you can use up to 16 GB memory and 8 vCPUs on ARM-based processors for builds.</p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html">Build Environment Compute Types</a> in the <i>AWS CodeBuild User Guide.</i> </p>
     #[serde(rename = "computeType")]
-    pub compute_type: String,
+    pub compute_type: ComputeType,
     /// <p>A set of environment variables to make available to builds for this build project.</p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1867,7 +3762,7 @@ pub struct ProjectEnvironment {
     /// <p> The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values: </p> <ul> <li> <p> <code>CODEBUILD</code> specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal. </p> </li> <li> <p> <code>SERVICE_ROLE</code> specifies that AWS CodeBuild uses your build project's service role. </p> </li> </ul> <p> When you use a cross-account or private registry image, you must use SERVICE_ROLE credentials. When you use an AWS CodeBuild curated image, you must use CODEBUILD credentials. </p>
     #[serde(rename = "imagePullCredentialsType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_pull_credentials_type: Option<String>,
+    pub image_pull_credentials_type: Option<ImagePullCredentialsType>,
     /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is used to build Docker images. Otherwise, a build that attempts to interact with the Docker daemon fails. The default setting is <code>false</code>.</p> <p>You can initialize the Docker daemon during the install phase of your build by adding one of the following sets of commands to the install phase of your buildspec file:</p> <p>If the operating system's base image is Ubuntu Linux:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp;</code> </p> <p> <code>- timeout 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p> <p>If the operating system's base image is Alpine Linux and the previous command does not work, add the <code>-t</code> argument to <code>timeout</code>:</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp;</code> </p> <p> <code>- timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
     #[serde(rename = "privilegedMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1878,7 +3773,7 @@ pub struct ProjectEnvironment {
     pub registry_credential: Option<RegistryCredential>,
     /// <p><p>The type of build environment to use for related builds.</p> <ul> <li> <p>The environment type <code>ARM<em>CONTAINER</code> is available only in regions US East (N. Virginia), US East (Ohio), US West (Oregon), EU (Ireland), Asia Pacific (Mumbai), Asia Pacific (Tokyo), Asia Pacific (Sydney), and EU (Frankfurt).</p> </li> <li> <p>The environment type <code>LINUX</em>CONTAINER</code> with compute type <code>build.general1.2xlarge</code> is available only in regions US East (N. Virginia), US East (Ohio), US West (Oregon), Canada (Central), EU (Ireland), EU (London), EU (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney), China (Beijing), and China (Ningxia).</p> </li> <li> <p>The environment type <code>LINUX<em>GPU</em>CONTAINER</code> is available only in regions US East (N. Virginia), US East (Ohio), US West (Oregon), Canada (Central), EU (Ireland), EU (London), EU (Frankfurt), Asia Pacific (Tokyo), Asia Pacific (Seoul), Asia Pacific (Singapore), Asia Pacific (Sydney) , China (Beijing), and China (Ningxia).</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: EnvironmentType,
 }
 
 /// <p> Information about a file system created by Amazon Elastic File System (EFS). For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html">What Is Amazon Elastic File System?</a> </p>
@@ -1903,7 +3798,117 @@ pub struct ProjectFileSystemLocation {
     /// <p> The type of the file system. The one supported type is <code>EFS</code>. </p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<FileSystemType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectSortByType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectSortByType {
+    CreatedTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectSortByType),
+}
+
+impl Default for ProjectSortByType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectSortByType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectSortByType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectSortByType {
+    fn into(self) -> String {
+        match self {
+            ProjectSortByType::CreatedTime => "CREATED_TIME".to_string(),
+            ProjectSortByType::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ProjectSortByType::Name => "NAME".to_string(),
+            ProjectSortByType::UnknownVariant(UnknownProjectSortByType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectSortByType {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectSortByType::CreatedTime => &"CREATED_TIME",
+            ProjectSortByType::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ProjectSortByType::Name => &"NAME",
+            ProjectSortByType::UnknownVariant(UnknownProjectSortByType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProjectSortByType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED_TIME" => ProjectSortByType::CreatedTime,
+            "LAST_MODIFIED_TIME" => ProjectSortByType::LastModifiedTime,
+            "NAME" => ProjectSortByType::Name,
+            _ => ProjectSortByType::UnknownVariant(UnknownProjectSortByType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectSortByType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED_TIME" => ProjectSortByType::CreatedTime,
+            "LAST_MODIFIED_TIME" => ProjectSortByType::LastModifiedTime,
+            "NAME" => ProjectSortByType::Name,
+            _ => ProjectSortByType::UnknownVariant(UnknownProjectSortByType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectSortByType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProjectSortByType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProjectSortByType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the build input source code for the build project.</p>
@@ -1947,7 +3952,7 @@ pub struct ProjectSource {
     pub source_identifier: Option<String>,
     /// <p><p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>BITBUCKET</code>: The source code is in a Bitbucket repository.</p> </li> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub or GitHub Enterprise Cloud repository.</p> </li> <li> <p> <code>GITHUB<em>ENTERPRISE</code>: The source code is in a GitHub Enterprise Server repository.</p> </li> <li> <p> <code>NO</em>SOURCE</code>: The project does not have input source code.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: SourceType,
 }
 
 /// <p> A source identifier and its corresponding version. </p>
@@ -1989,7 +3994,7 @@ pub struct RegistryCredential {
     pub credential: String,
     /// <p> The service that created the credentials to access a private Docker registry. The valid value, SECRETS_MANAGER, is for AWS Secrets Manager. </p>
     #[serde(rename = "credentialProvider")]
-    pub credential_provider: String,
+    pub credential_provider: CredentialProviderType,
 }
 
 /// <p>Information about the results from running a series of test cases during the run of a build project. The test cases are specified in the buildspec for the build project using one or more paths to the test case files. You can specify any type of tests you want, such as unit tests, integration tests, and functional tests. </p>
@@ -2031,7 +4036,7 @@ pub struct Report {
     /// <p> The status of this report. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReportStatusType>,
     /// <p> A <code>TestReportSummary</code> object that contains information about this test report. </p>
     #[serde(rename = "testSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2043,7 +4048,120 @@ pub struct Report {
     /// <p><p>The type of the report that was run.</p> <dl> <dt>CODE_COVERAGE</dt> <dd> <p>A code coverage report.</p> </dd> <dt>TEST</dt> <dd> <p>A test report.</p> </dd> </dl></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ReportType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportCodeCoverageSortByType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportCodeCoverageSortByType {
+    FilePath,
+    LineCoveragePercentage,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportCodeCoverageSortByType),
+}
+
+impl Default for ReportCodeCoverageSortByType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportCodeCoverageSortByType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportCodeCoverageSortByType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportCodeCoverageSortByType {
+    fn into(self) -> String {
+        match self {
+            ReportCodeCoverageSortByType::FilePath => "FILE_PATH".to_string(),
+            ReportCodeCoverageSortByType::LineCoveragePercentage => {
+                "LINE_COVERAGE_PERCENTAGE".to_string()
+            }
+            ReportCodeCoverageSortByType::UnknownVariant(UnknownReportCodeCoverageSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportCodeCoverageSortByType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportCodeCoverageSortByType::FilePath => &"FILE_PATH",
+            ReportCodeCoverageSortByType::LineCoveragePercentage => &"LINE_COVERAGE_PERCENTAGE",
+            ReportCodeCoverageSortByType::UnknownVariant(UnknownReportCodeCoverageSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportCodeCoverageSortByType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILE_PATH" => ReportCodeCoverageSortByType::FilePath,
+            "LINE_COVERAGE_PERCENTAGE" => ReportCodeCoverageSortByType::LineCoveragePercentage,
+            _ => {
+                ReportCodeCoverageSortByType::UnknownVariant(UnknownReportCodeCoverageSortByType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ReportCodeCoverageSortByType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILE_PATH" => ReportCodeCoverageSortByType::FilePath,
+            "LINE_COVERAGE_PERCENTAGE" => ReportCodeCoverageSortByType::LineCoveragePercentage,
+            _ => {
+                ReportCodeCoverageSortByType::UnknownVariant(UnknownReportCodeCoverageSortByType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportCodeCoverageSortByType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportCodeCoverageSortByType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportCodeCoverageSortByType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Information about the location where the run of a report is exported. </p>
@@ -2052,11 +4170,115 @@ pub struct ReportExportConfig {
     /// <p><p> The export configuration type. Valid values are: </p> <ul> <li> <p> <code>S3</code>: The report results are exported to an S3 bucket. </p> </li> <li> <p> <code>NO_EXPORT</code>: The report results are not exported. </p> </li> </ul></p>
     #[serde(rename = "exportConfigType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_config_type: Option<String>,
+    pub export_config_type: Option<ReportExportConfigType>,
     /// <p> A <code>S3ReportExportConfig</code> object that contains information about the S3 bucket where the run of a report is exported. </p>
     #[serde(rename = "s3Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_destination: Option<S3ReportExportConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportExportConfigType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportExportConfigType {
+    NoExport,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportExportConfigType),
+}
+
+impl Default for ReportExportConfigType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportExportConfigType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportExportConfigType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportExportConfigType {
+    fn into(self) -> String {
+        match self {
+            ReportExportConfigType::NoExport => "NO_EXPORT".to_string(),
+            ReportExportConfigType::S3 => "S3".to_string(),
+            ReportExportConfigType::UnknownVariant(UnknownReportExportConfigType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportExportConfigType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportExportConfigType::NoExport => &"NO_EXPORT",
+            ReportExportConfigType::S3 => &"S3",
+            ReportExportConfigType::UnknownVariant(UnknownReportExportConfigType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportExportConfigType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NO_EXPORT" => ReportExportConfigType::NoExport,
+            "S3" => ReportExportConfigType::S3,
+            _ => ReportExportConfigType::UnknownVariant(UnknownReportExportConfigType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportExportConfigType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NO_EXPORT" => ReportExportConfigType::NoExport,
+            "S3" => ReportExportConfigType::S3,
+            _ => ReportExportConfigType::UnknownVariant(UnknownReportExportConfigType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportExportConfigType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportExportConfigType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportExportConfigType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> A filter used to return reports with the status specified by the input <code>status</code> parameter. </p>
@@ -2066,7 +4288,7 @@ pub struct ReportFilter {
     /// <p> The status used to filter reports. You can filter using one status only. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReportStatusType>,
 }
 
 /// <p> A series of reports. Each report contains information about the results from running a series of test cases. You specify the test cases for a report group in the buildspec for a build project using one or more paths to the test case files. </p>
@@ -2095,7 +4317,7 @@ pub struct ReportGroup {
     pub name: Option<String>,
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReportGroupStatusType>,
     /// <p> A list of tag key and value pairs associated with this report group. </p> <p>These tags are available for use by AWS services that support AWS CodeBuild report group tags.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2103,7 +4325,364 @@ pub struct ReportGroup {
     /// <p> The type of the <code>ReportGroup</code>. The one valid value is <code>TEST</code>. </p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ReportType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportGroupSortByType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportGroupSortByType {
+    CreatedTime,
+    LastModifiedTime,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportGroupSortByType),
+}
+
+impl Default for ReportGroupSortByType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportGroupSortByType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportGroupSortByType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportGroupSortByType {
+    fn into(self) -> String {
+        match self {
+            ReportGroupSortByType::CreatedTime => "CREATED_TIME".to_string(),
+            ReportGroupSortByType::LastModifiedTime => "LAST_MODIFIED_TIME".to_string(),
+            ReportGroupSortByType::Name => "NAME".to_string(),
+            ReportGroupSortByType::UnknownVariant(UnknownReportGroupSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportGroupSortByType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportGroupSortByType::CreatedTime => &"CREATED_TIME",
+            ReportGroupSortByType::LastModifiedTime => &"LAST_MODIFIED_TIME",
+            ReportGroupSortByType::Name => &"NAME",
+            ReportGroupSortByType::UnknownVariant(UnknownReportGroupSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportGroupSortByType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED_TIME" => ReportGroupSortByType::CreatedTime,
+            "LAST_MODIFIED_TIME" => ReportGroupSortByType::LastModifiedTime,
+            "NAME" => ReportGroupSortByType::Name,
+            _ => ReportGroupSortByType::UnknownVariant(UnknownReportGroupSortByType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportGroupSortByType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED_TIME" => ReportGroupSortByType::CreatedTime,
+            "LAST_MODIFIED_TIME" => ReportGroupSortByType::LastModifiedTime,
+            "NAME" => ReportGroupSortByType::Name,
+            _ => ReportGroupSortByType::UnknownVariant(UnknownReportGroupSortByType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportGroupSortByType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportGroupSortByType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportGroupSortByType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportGroupStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportGroupStatusType {
+    Active,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportGroupStatusType),
+}
+
+impl Default for ReportGroupStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportGroupStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportGroupStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportGroupStatusType {
+    fn into(self) -> String {
+        match self {
+            ReportGroupStatusType::Active => "ACTIVE".to_string(),
+            ReportGroupStatusType::Deleting => "DELETING".to_string(),
+            ReportGroupStatusType::UnknownVariant(UnknownReportGroupStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportGroupStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportGroupStatusType::Active => &"ACTIVE",
+            ReportGroupStatusType::Deleting => &"DELETING",
+            ReportGroupStatusType::UnknownVariant(UnknownReportGroupStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportGroupStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReportGroupStatusType::Active,
+            "DELETING" => ReportGroupStatusType::Deleting,
+            _ => ReportGroupStatusType::UnknownVariant(UnknownReportGroupStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportGroupStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReportGroupStatusType::Active,
+            "DELETING" => ReportGroupStatusType::Deleting,
+            _ => ReportGroupStatusType::UnknownVariant(UnknownReportGroupStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportGroupStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReportGroupStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportGroupStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportGroupTrendFieldType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportGroupTrendFieldType {
+    BranchesCovered,
+    BranchesMissed,
+    BranchCoverage,
+    Duration,
+    LinesCovered,
+    LinesMissed,
+    LineCoverage,
+    PassRate,
+    Total,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportGroupTrendFieldType),
+}
+
+impl Default for ReportGroupTrendFieldType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportGroupTrendFieldType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportGroupTrendFieldType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportGroupTrendFieldType {
+    fn into(self) -> String {
+        match self {
+            ReportGroupTrendFieldType::BranchesCovered => "BRANCHES_COVERED".to_string(),
+            ReportGroupTrendFieldType::BranchesMissed => "BRANCHES_MISSED".to_string(),
+            ReportGroupTrendFieldType::BranchCoverage => "BRANCH_COVERAGE".to_string(),
+            ReportGroupTrendFieldType::Duration => "DURATION".to_string(),
+            ReportGroupTrendFieldType::LinesCovered => "LINES_COVERED".to_string(),
+            ReportGroupTrendFieldType::LinesMissed => "LINES_MISSED".to_string(),
+            ReportGroupTrendFieldType::LineCoverage => "LINE_COVERAGE".to_string(),
+            ReportGroupTrendFieldType::PassRate => "PASS_RATE".to_string(),
+            ReportGroupTrendFieldType::Total => "TOTAL".to_string(),
+            ReportGroupTrendFieldType::UnknownVariant(UnknownReportGroupTrendFieldType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportGroupTrendFieldType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportGroupTrendFieldType::BranchesCovered => &"BRANCHES_COVERED",
+            ReportGroupTrendFieldType::BranchesMissed => &"BRANCHES_MISSED",
+            ReportGroupTrendFieldType::BranchCoverage => &"BRANCH_COVERAGE",
+            ReportGroupTrendFieldType::Duration => &"DURATION",
+            ReportGroupTrendFieldType::LinesCovered => &"LINES_COVERED",
+            ReportGroupTrendFieldType::LinesMissed => &"LINES_MISSED",
+            ReportGroupTrendFieldType::LineCoverage => &"LINE_COVERAGE",
+            ReportGroupTrendFieldType::PassRate => &"PASS_RATE",
+            ReportGroupTrendFieldType::Total => &"TOTAL",
+            ReportGroupTrendFieldType::UnknownVariant(UnknownReportGroupTrendFieldType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportGroupTrendFieldType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BRANCHES_COVERED" => ReportGroupTrendFieldType::BranchesCovered,
+            "BRANCHES_MISSED" => ReportGroupTrendFieldType::BranchesMissed,
+            "BRANCH_COVERAGE" => ReportGroupTrendFieldType::BranchCoverage,
+            "DURATION" => ReportGroupTrendFieldType::Duration,
+            "LINES_COVERED" => ReportGroupTrendFieldType::LinesCovered,
+            "LINES_MISSED" => ReportGroupTrendFieldType::LinesMissed,
+            "LINE_COVERAGE" => ReportGroupTrendFieldType::LineCoverage,
+            "PASS_RATE" => ReportGroupTrendFieldType::PassRate,
+            "TOTAL" => ReportGroupTrendFieldType::Total,
+            _ => ReportGroupTrendFieldType::UnknownVariant(UnknownReportGroupTrendFieldType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportGroupTrendFieldType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BRANCHES_COVERED" => ReportGroupTrendFieldType::BranchesCovered,
+            "BRANCHES_MISSED" => ReportGroupTrendFieldType::BranchesMissed,
+            "BRANCH_COVERAGE" => ReportGroupTrendFieldType::BranchCoverage,
+            "DURATION" => ReportGroupTrendFieldType::Duration,
+            "LINES_COVERED" => ReportGroupTrendFieldType::LinesCovered,
+            "LINES_MISSED" => ReportGroupTrendFieldType::LinesMissed,
+            "LINE_COVERAGE" => ReportGroupTrendFieldType::LineCoverage,
+            "PASS_RATE" => ReportGroupTrendFieldType::PassRate,
+            "TOTAL" => ReportGroupTrendFieldType::Total,
+            _ => {
+                ReportGroupTrendFieldType::UnknownVariant(UnknownReportGroupTrendFieldType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportGroupTrendFieldType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportGroupTrendFieldType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReportGroupTrendFieldType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2118,6 +4697,329 @@ pub struct ReportGroupTrendStats {
     #[serde(rename = "min")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportPackagingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportPackagingType {
+    None,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportPackagingType),
+}
+
+impl Default for ReportPackagingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportPackagingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportPackagingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportPackagingType {
+    fn into(self) -> String {
+        match self {
+            ReportPackagingType::None => "NONE".to_string(),
+            ReportPackagingType::Zip => "ZIP".to_string(),
+            ReportPackagingType::UnknownVariant(UnknownReportPackagingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportPackagingType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportPackagingType::None => &"NONE",
+            ReportPackagingType::Zip => &"ZIP",
+            ReportPackagingType::UnknownVariant(UnknownReportPackagingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReportPackagingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ReportPackagingType::None,
+            "ZIP" => ReportPackagingType::Zip,
+            _ => ReportPackagingType::UnknownVariant(UnknownReportPackagingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportPackagingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ReportPackagingType::None,
+            "ZIP" => ReportPackagingType::Zip,
+            _ => ReportPackagingType::UnknownVariant(UnknownReportPackagingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportPackagingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportPackagingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportPackagingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportStatusType {
+    Deleting,
+    Failed,
+    Generating,
+    Incomplete,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportStatusType),
+}
+
+impl Default for ReportStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportStatusType {
+    fn into(self) -> String {
+        match self {
+            ReportStatusType::Deleting => "DELETING".to_string(),
+            ReportStatusType::Failed => "FAILED".to_string(),
+            ReportStatusType::Generating => "GENERATING".to_string(),
+            ReportStatusType::Incomplete => "INCOMPLETE".to_string(),
+            ReportStatusType::Succeeded => "SUCCEEDED".to_string(),
+            ReportStatusType::UnknownVariant(UnknownReportStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportStatusType::Deleting => &"DELETING",
+            ReportStatusType::Failed => &"FAILED",
+            ReportStatusType::Generating => &"GENERATING",
+            ReportStatusType::Incomplete => &"INCOMPLETE",
+            ReportStatusType::Succeeded => &"SUCCEEDED",
+            ReportStatusType::UnknownVariant(UnknownReportStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReportStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => ReportStatusType::Deleting,
+            "FAILED" => ReportStatusType::Failed,
+            "GENERATING" => ReportStatusType::Generating,
+            "INCOMPLETE" => ReportStatusType::Incomplete,
+            "SUCCEEDED" => ReportStatusType::Succeeded,
+            _ => ReportStatusType::UnknownVariant(UnknownReportStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => ReportStatusType::Deleting,
+            "FAILED" => ReportStatusType::Failed,
+            "GENERATING" => ReportStatusType::Generating,
+            "INCOMPLETE" => ReportStatusType::Incomplete,
+            "SUCCEEDED" => ReportStatusType::Succeeded,
+            _ => ReportStatusType::UnknownVariant(UnknownReportStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReportType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReportType {
+    CodeCoverage,
+    Test,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReportType),
+}
+
+impl Default for ReportType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReportType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReportType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReportType {
+    fn into(self) -> String {
+        match self {
+            ReportType::CodeCoverage => "CODE_COVERAGE".to_string(),
+            ReportType::Test => "TEST".to_string(),
+            ReportType::UnknownVariant(UnknownReportType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReportType {
+    fn into(self) -> &'a str {
+        match self {
+            ReportType::CodeCoverage => &"CODE_COVERAGE",
+            ReportType::Test => &"TEST",
+            ReportType::UnknownVariant(UnknownReportType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReportType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODE_COVERAGE" => ReportType::CodeCoverage,
+            "TEST" => ReportType::Test,
+            _ => ReportType::UnknownVariant(UnknownReportType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReportType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODE_COVERAGE" => ReportType::CodeCoverage,
+            "TEST" => ReportType::Test,
+            _ => ReportType::UnknownVariant(UnknownReportType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReportType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReportType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReportType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2146,7 +5048,7 @@ pub struct ResolvedArtifact {
     /// <p>Specifies the type of artifact.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ArtifactsType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2163,7 +5065,7 @@ pub struct RetryBuildBatchInput {
     /// <p>Specifies the type of retry to perform.</p>
     #[serde(rename = "retryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub retry_type: Option<String>,
+    pub retry_type: Option<RetryBuildBatchType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2172,6 +5074,111 @@ pub struct RetryBuildBatchOutput {
     #[serde(rename = "buildBatch")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_batch: Option<BuildBatch>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetryBuildBatchType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetryBuildBatchType {
+    RetryAllBuilds,
+    RetryFailedBuilds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetryBuildBatchType),
+}
+
+impl Default for RetryBuildBatchType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetryBuildBatchType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetryBuildBatchType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetryBuildBatchType {
+    fn into(self) -> String {
+        match self {
+            RetryBuildBatchType::RetryAllBuilds => "RETRY_ALL_BUILDS".to_string(),
+            RetryBuildBatchType::RetryFailedBuilds => "RETRY_FAILED_BUILDS".to_string(),
+            RetryBuildBatchType::UnknownVariant(UnknownRetryBuildBatchType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetryBuildBatchType {
+    fn into(self) -> &'a str {
+        match self {
+            RetryBuildBatchType::RetryAllBuilds => &"RETRY_ALL_BUILDS",
+            RetryBuildBatchType::RetryFailedBuilds => &"RETRY_FAILED_BUILDS",
+            RetryBuildBatchType::UnknownVariant(UnknownRetryBuildBatchType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RetryBuildBatchType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RETRY_ALL_BUILDS" => RetryBuildBatchType::RetryAllBuilds,
+            "RETRY_FAILED_BUILDS" => RetryBuildBatchType::RetryFailedBuilds,
+            _ => RetryBuildBatchType::UnknownVariant(UnknownRetryBuildBatchType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetryBuildBatchType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RETRY_ALL_BUILDS" => RetryBuildBatchType::RetryAllBuilds,
+            "RETRY_FAILED_BUILDS" => RetryBuildBatchType::RetryFailedBuilds,
+            _ => RetryBuildBatchType::UnknownVariant(UnknownRetryBuildBatchType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetryBuildBatchType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetryBuildBatchType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RetryBuildBatchType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2208,7 +5215,7 @@ pub struct S3LogsConfig {
     pub location: Option<String>,
     /// <p><p>The current status of the S3 build logs. Valid values are:</p> <ul> <li> <p> <code>ENABLED</code>: S3 build logs are enabled for this build project.</p> </li> <li> <p> <code>DISABLED</code>: S3 build logs are not enabled for this build project.</p> </li> </ul></p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: LogsConfigStatusType,
 }
 
 /// <p> Information about the S3 bucket where the raw data of a report are exported. </p>
@@ -2229,11 +5236,322 @@ pub struct S3ReportExportConfig {
     /// <p><p> The type of build output artifact to create. Valid values include: </p> <ul> <li> <p> <code>NONE</code>: AWS CodeBuild creates the raw data in the output bucket. This is the default if packaging is not specified. </p> </li> <li> <p> <code>ZIP</code>: AWS CodeBuild creates a ZIP file with the raw data in the output bucket. </p> </li> </ul></p>
     #[serde(rename = "packaging")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub packaging: Option<String>,
+    pub packaging: Option<ReportPackagingType>,
     /// <p> The path to the exported report's raw data results. </p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerType {
+    Bitbucket,
+    Github,
+    GithubEnterprise,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerType),
+}
+
+impl Default for ServerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerType {
+    fn into(self) -> String {
+        match self {
+            ServerType::Bitbucket => "BITBUCKET".to_string(),
+            ServerType::Github => "GITHUB".to_string(),
+            ServerType::GithubEnterprise => "GITHUB_ENTERPRISE".to_string(),
+            ServerType::UnknownVariant(UnknownServerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerType {
+    fn into(self) -> &'a str {
+        match self {
+            ServerType::Bitbucket => &"BITBUCKET",
+            ServerType::Github => &"GITHUB",
+            ServerType::GithubEnterprise => &"GITHUB_ENTERPRISE",
+            ServerType::UnknownVariant(UnknownServerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BITBUCKET" => ServerType::Bitbucket,
+            "GITHUB" => ServerType::Github,
+            "GITHUB_ENTERPRISE" => ServerType::GithubEnterprise,
+            _ => ServerType::UnknownVariant(UnknownServerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BITBUCKET" => ServerType::Bitbucket,
+            "GITHUB" => ServerType::Github,
+            "GITHUB_ENTERPRISE" => ServerType::GithubEnterprise,
+            _ => ServerType::UnknownVariant(UnknownServerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSharedResourceSortByType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SharedResourceSortByType {
+    Arn,
+    ModifiedTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSharedResourceSortByType),
+}
+
+impl Default for SharedResourceSortByType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SharedResourceSortByType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SharedResourceSortByType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SharedResourceSortByType {
+    fn into(self) -> String {
+        match self {
+            SharedResourceSortByType::Arn => "ARN".to_string(),
+            SharedResourceSortByType::ModifiedTime => "MODIFIED_TIME".to_string(),
+            SharedResourceSortByType::UnknownVariant(UnknownSharedResourceSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SharedResourceSortByType {
+    fn into(self) -> &'a str {
+        match self {
+            SharedResourceSortByType::Arn => &"ARN",
+            SharedResourceSortByType::ModifiedTime => &"MODIFIED_TIME",
+            SharedResourceSortByType::UnknownVariant(UnknownSharedResourceSortByType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SharedResourceSortByType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARN" => SharedResourceSortByType::Arn,
+            "MODIFIED_TIME" => SharedResourceSortByType::ModifiedTime,
+            _ => SharedResourceSortByType::UnknownVariant(UnknownSharedResourceSortByType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SharedResourceSortByType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARN" => SharedResourceSortByType::Arn,
+            "MODIFIED_TIME" => SharedResourceSortByType::ModifiedTime,
+            _ => SharedResourceSortByType::UnknownVariant(UnknownSharedResourceSortByType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SharedResourceSortByType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SharedResourceSortByType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SharedResourceSortByType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrderType {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrderType),
+}
+
+impl Default for SortOrderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrderType {
+    fn into(self) -> String {
+        match self {
+            SortOrderType::Ascending => "ASCENDING".to_string(),
+            SortOrderType::Descending => "DESCENDING".to_string(),
+            SortOrderType::UnknownVariant(UnknownSortOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrderType {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrderType::Ascending => &"ASCENDING",
+            SortOrderType::Descending => &"DESCENDING",
+            SortOrderType::UnknownVariant(UnknownSortOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => SortOrderType::Ascending,
+            "DESCENDING" => SortOrderType::Descending,
+            _ => SortOrderType::UnknownVariant(UnknownSortOrderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => SortOrderType::Ascending,
+            "DESCENDING" => SortOrderType::Descending,
+            _ => SortOrderType::UnknownVariant(UnknownSortOrderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly.</p>
@@ -2245,7 +5563,102 @@ pub struct SourceAuth {
     pub resource: Option<String>,
     /// <p><note> <p> This data type is deprecated and is no longer accurate or used. </p> </note> <p>The authorization type to use. The only valid value is <code>OAUTH</code>, which represents the OAuth authorization type.</p></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: SourceAuthType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceAuthType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceAuthType {
+    Oauth,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceAuthType),
+}
+
+impl Default for SourceAuthType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceAuthType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceAuthType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceAuthType {
+    fn into(self) -> String {
+        match self {
+            SourceAuthType::Oauth => "OAUTH".to_string(),
+            SourceAuthType::UnknownVariant(UnknownSourceAuthType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceAuthType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceAuthType::Oauth => &"OAUTH",
+            SourceAuthType::UnknownVariant(UnknownSourceAuthType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceAuthType {
+    fn from(name: &str) -> Self {
+        match name {
+            "OAUTH" => SourceAuthType::Oauth,
+            _ => SourceAuthType::UnknownVariant(UnknownSourceAuthType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceAuthType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OAUTH" => SourceAuthType::Oauth,
+            _ => SourceAuthType::UnknownVariant(UnknownSourceAuthType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceAuthType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceAuthType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceAuthType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Information about the credentials for a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
@@ -2259,11 +5672,136 @@ pub struct SourceCredentialsInfo {
     /// <p> The type of authentication used by the credentials. Valid options are OAUTH, BASIC_AUTH, or PERSONAL_ACCESS_TOKEN. </p>
     #[serde(rename = "authType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth_type: Option<String>,
+    pub auth_type: Option<AuthType>,
     /// <p> The type of source provider. The valid options are GITHUB, GITHUB_ENTERPRISE, or BITBUCKET. </p>
     #[serde(rename = "serverType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub server_type: Option<String>,
+    pub server_type: Option<ServerType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    Bitbucket,
+    Codecommit,
+    Codepipeline,
+    Github,
+    GithubEnterprise,
+    NoSource,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::Bitbucket => "BITBUCKET".to_string(),
+            SourceType::Codecommit => "CODECOMMIT".to_string(),
+            SourceType::Codepipeline => "CODEPIPELINE".to_string(),
+            SourceType::Github => "GITHUB".to_string(),
+            SourceType::GithubEnterprise => "GITHUB_ENTERPRISE".to_string(),
+            SourceType::NoSource => "NO_SOURCE".to_string(),
+            SourceType::S3 => "S3".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::Bitbucket => &"BITBUCKET",
+            SourceType::Codecommit => &"CODECOMMIT",
+            SourceType::Codepipeline => &"CODEPIPELINE",
+            SourceType::Github => &"GITHUB",
+            SourceType::GithubEnterprise => &"GITHUB_ENTERPRISE",
+            SourceType::NoSource => &"NO_SOURCE",
+            SourceType::S3 => &"S3",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BITBUCKET" => SourceType::Bitbucket,
+            "CODECOMMIT" => SourceType::Codecommit,
+            "CODEPIPELINE" => SourceType::Codepipeline,
+            "GITHUB" => SourceType::Github,
+            "GITHUB_ENTERPRISE" => SourceType::GithubEnterprise,
+            "NO_SOURCE" => SourceType::NoSource,
+            "S3" => SourceType::S3,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BITBUCKET" => SourceType::Bitbucket,
+            "CODECOMMIT" => SourceType::Codecommit,
+            "CODEPIPELINE" => SourceType::Codepipeline,
+            "GITHUB" => SourceType::Github,
+            "GITHUB_ENTERPRISE" => SourceType::GithubEnterprise,
+            "NO_SOURCE" => SourceType::NoSource,
+            "S3" => SourceType::S3,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2296,7 +5834,7 @@ pub struct StartBuildBatchInput {
     /// <p>The name of a compute type for this batch build that overrides the one specified in the batch build project.</p>
     #[serde(rename = "computeTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_type_override: Option<String>,
+    pub compute_type_override: Option<ComputeType>,
     /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) that overrides the one specified in the batch build project. The CMK key encrypts the build output artifacts.</p> <note> <p>You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/&lt;alias-name&gt;</code>).</p>
     #[serde(rename = "encryptionKeyOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2304,7 +5842,7 @@ pub struct StartBuildBatchInput {
     /// <p>A container type for this batch build that overrides the one specified in the batch build project.</p>
     #[serde(rename = "environmentTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub environment_type_override: Option<String>,
+    pub environment_type_override: Option<EnvironmentType>,
     /// <p>An array of <code>EnvironmentVariable</code> objects that override, or add to, the environment variables defined in the batch build project.</p>
     #[serde(rename = "environmentVariablesOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2328,7 +5866,7 @@ pub struct StartBuildBatchInput {
     /// <p>The type of credentials AWS CodeBuild uses to pull images in your batch build. There are two valid values: </p> <dl> <dt>CODEBUILD</dt> <dd> <p>Specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal.</p> </dd> <dt>SERVICE_ROLE</dt> <dd> <p>Specifies that AWS CodeBuild uses your build project's service role. </p> </dd> </dl> <p>When using a cross-account or private registry image, you must use <code>SERVICE_ROLE</code> credentials. When using an AWS CodeBuild curated image, you must use <code>CODEBUILD</code> credentials. </p>
     #[serde(rename = "imagePullCredentialsTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_pull_credentials_type_override: Option<String>,
+    pub image_pull_credentials_type_override: Option<ImagePullCredentialsType>,
     /// <p>Enable this flag to override the insecure SSL setting that is specified in the batch build project. The insecure SSL setting determines whether to ignore SSL warnings while connecting to the project source code. This override applies only if the build's source is GitHub Enterprise.</p>
     #[serde(rename = "insecureSslOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2383,7 +5921,7 @@ pub struct StartBuildBatchInput {
     /// <p>The source input type that overrides the source input defined in the batch build project.</p>
     #[serde(rename = "sourceTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type_override: Option<String>,
+    pub source_type_override: Option<SourceType>,
     /// <p>The version of the batch build input to be built, for this build only. If not specified, the latest version is used. If specified, the contents depends on the source provider:</p> <dl> <dt>AWS CodeCommit</dt> <dd> <p>The commit ID, branch, or Git tag to use.</p> </dd> <dt>GitHub</dt> <dd> <p>The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Bitbucket</dt> <dd> <p>The commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Amazon Simple Storage Service (Amazon S3)</dt> <dd> <p>The version ID of the object that represents the build input ZIP file to use.</p> </dd> </dl> <p>If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2425,7 +5963,7 @@ pub struct StartBuildInput {
     /// <p>The name of a compute type for this build that overrides the one specified in the build project.</p>
     #[serde(rename = "computeTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compute_type_override: Option<String>,
+    pub compute_type_override: Option<ComputeType>,
     /// <p>Specifies if session debugging is enabled for this build. For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/session-manager.html">Viewing a running build in Session Manager</a>.</p>
     #[serde(rename = "debugSessionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2437,7 +5975,7 @@ pub struct StartBuildInput {
     /// <p>A container type for this build that overrides the one specified in the build project.</p>
     #[serde(rename = "environmentTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub environment_type_override: Option<String>,
+    pub environment_type_override: Option<EnvironmentType>,
     /// <p>A set of environment variables that overrides, for this build only, the latest ones already defined in the build project.</p>
     #[serde(rename = "environmentVariablesOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2461,7 +5999,7 @@ pub struct StartBuildInput {
     /// <p>The type of credentials AWS CodeBuild uses to pull images in your build. There are two valid values: </p> <dl> <dt>CODEBUILD</dt> <dd> <p>Specifies that AWS CodeBuild uses its own credentials. This requires that you modify your ECR repository policy to trust AWS CodeBuild's service principal.</p> </dd> <dt>SERVICE_ROLE</dt> <dd> <p>Specifies that AWS CodeBuild uses your build project's service role. </p> </dd> </dl> <p>When using a cross-account or private registry image, you must use <code>SERVICE_ROLE</code> credentials. When using an AWS CodeBuild curated image, you must use <code>CODEBUILD</code> credentials. </p>
     #[serde(rename = "imagePullCredentialsTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_pull_credentials_type_override: Option<String>,
+    pub image_pull_credentials_type_override: Option<ImagePullCredentialsType>,
     /// <p>Enable this flag to override the insecure SSL setting that is specified in the build project. The insecure SSL setting determines whether to ignore SSL warnings while connecting to the project source code. This override applies only if the build's source is GitHub Enterprise.</p>
     #[serde(rename = "insecureSslOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2516,7 +6054,7 @@ pub struct StartBuildInput {
     /// <p>A source input type, for this build, that overrides the source input defined in the build project.</p>
     #[serde(rename = "sourceTypeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type_override: Option<String>,
+    pub source_type_override: Option<SourceType>,
     /// <p>The version of the build input to be built, for this build only. If not specified, the latest version is used. If specified, the contents depends on the source provider:</p> <dl> <dt>AWS CodeCommit</dt> <dd> <p>The commit ID, branch, or Git tag to use.</p> </dd> <dt>GitHub</dt> <dd> <p>The commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Bitbucket</dt> <dd> <p>The commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch's HEAD commit ID is used. If not specified, the default branch's HEAD commit ID is used.</p> </dd> <dt>Amazon Simple Storage Service (Amazon S3)</dt> <dd> <p>The version ID of the object that represents the build input ZIP file to use.</p> </dd> </dl> <p>If <code>sourceVersion</code> is specified at the project level, then this <code>sourceVersion</code> (at the build level) takes precedence. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/codebuild/latest/userguide/sample-source-version.html">Source Version Sample with CodeBuild</a> in the <i>AWS CodeBuild User Guide</i>. </p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2534,6 +6072,126 @@ pub struct StartBuildOutput {
     #[serde(rename = "build")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build: Option<Build>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusType {
+    Failed,
+    Fault,
+    InProgress,
+    Stopped,
+    Succeeded,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusType),
+}
+
+impl Default for StatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        match self {
+            StatusType::Failed => "FAILED".to_string(),
+            StatusType::Fault => "FAULT".to_string(),
+            StatusType::InProgress => "IN_PROGRESS".to_string(),
+            StatusType::Stopped => "STOPPED".to_string(),
+            StatusType::Succeeded => "SUCCEEDED".to_string(),
+            StatusType::TimedOut => "TIMED_OUT".to_string(),
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusType {
+    fn into(self) -> &'a str {
+        match self {
+            StatusType::Failed => &"FAILED",
+            StatusType::Fault => &"FAULT",
+            StatusType::InProgress => &"IN_PROGRESS",
+            StatusType::Stopped => &"STOPPED",
+            StatusType::Succeeded => &"SUCCEEDED",
+            StatusType::TimedOut => &"TIMED_OUT",
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => StatusType::Failed,
+            "FAULT" => StatusType::Fault,
+            "IN_PROGRESS" => StatusType::InProgress,
+            "STOPPED" => StatusType::Stopped,
+            "SUCCEEDED" => StatusType::Succeeded,
+            "TIMED_OUT" => StatusType::TimedOut,
+            _ => StatusType::UnknownVariant(UnknownStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => StatusType::Failed,
+            "FAULT" => StatusType::Fault,
+            "IN_PROGRESS" => StatusType::InProgress,
+            "STOPPED" => StatusType::Stopped,
+            "SUCCEEDED" => StatusType::Succeeded,
+            "TIMED_OUT" => StatusType::TimedOut,
+            _ => StatusType::UnknownVariant(UnknownStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2776,7 +6434,7 @@ pub struct UpdateWebhookInput {
     /// <p>Specifies the type of build this webhook will trigger.</p>
     #[serde(rename = "buildType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_type: Option<String>,
+    pub build_type: Option<WebhookBuildType>,
     /// <p> An array of arrays of <code>WebhookFilter</code> objects used to determine if a webhook event can trigger a build. A filter group must contain at least one <code>EVENT</code> <code>WebhookFilter</code>. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2827,7 +6485,7 @@ pub struct Webhook {
     /// <p>Specifies the type of build this webhook will trigger.</p>
     #[serde(rename = "buildType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub build_type: Option<String>,
+    pub build_type: Option<WebhookBuildType>,
     /// <p>An array of arrays of <code>WebhookFilter</code> objects used to determine which webhooks are triggered. At least one <code>WebhookFilter</code> in the array must specify <code>EVENT</code> as its <code>type</code>. </p> <p>For a build to be triggered, at least one filter group in the <code>filterGroups</code> array must pass. For a filter group to pass, each of its filters must pass. </p>
     #[serde(rename = "filterGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2850,6 +6508,110 @@ pub struct Webhook {
     pub url: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWebhookBuildType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WebhookBuildType {
+    Build,
+    BuildBatch,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWebhookBuildType),
+}
+
+impl Default for WebhookBuildType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WebhookBuildType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WebhookBuildType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WebhookBuildType {
+    fn into(self) -> String {
+        match self {
+            WebhookBuildType::Build => "BUILD".to_string(),
+            WebhookBuildType::BuildBatch => "BUILD_BATCH".to_string(),
+            WebhookBuildType::UnknownVariant(UnknownWebhookBuildType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WebhookBuildType {
+    fn into(self) -> &'a str {
+        match self {
+            WebhookBuildType::Build => &"BUILD",
+            WebhookBuildType::BuildBatch => &"BUILD_BATCH",
+            WebhookBuildType::UnknownVariant(UnknownWebhookBuildType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for WebhookBuildType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD" => WebhookBuildType::Build,
+            "BUILD_BATCH" => WebhookBuildType::BuildBatch,
+            _ => WebhookBuildType::UnknownVariant(UnknownWebhookBuildType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WebhookBuildType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD" => WebhookBuildType::Build,
+            "BUILD_BATCH" => WebhookBuildType::BuildBatch,
+            _ => WebhookBuildType::UnknownVariant(UnknownWebhookBuildType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookBuildType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WebhookBuildType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WebhookBuildType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> A filter used to determine which webhooks trigger a build. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebhookFilter {
@@ -2862,7 +6624,131 @@ pub struct WebhookFilter {
     pub pattern: String,
     /// <p><p> The type of webhook filter. There are six webhook filter types: <code>EVENT</code>, <code>ACTOR<em>ACCOUNT</em>ID</code>, <code>HEAD<em>REF</code>, <code>BASE</em>REF</code>, <code>FILE<em>PATH</code>, and <code>COMMIT</em>MESSAGE</code>. </p> <dl> <dt> EVENT </dt> <dd> <p> A webhook event triggers a build when the provided <code>pattern</code> matches one of five event types: <code>PUSH</code>, <code>PULL<em>REQUEST</em>CREATED</code>, <code>PULL<em>REQUEST</em>UPDATED</code>, <code>PULL<em>REQUEST</em>REOPENED</code>, and <code>PULL<em>REQUEST</em>MERGED</code>. The <code>EVENT</code> patterns are specified as a comma-separated string. For example, <code>PUSH, PULL<em>REQUEST</em>CREATED, PULL<em>REQUEST</em>UPDATED</code> filters all push, pull request created, and pull request updated events. </p> <note> <p> The <code>PULL<em>REQUEST</em>REOPENED</code> works with GitHub and GitHub Enterprise only. </p> </note> </dd> <dt> ACTOR<em>ACCOUNT</em>ID </dt> <dd> <p> A webhook event triggers a build when a GitHub, GitHub Enterprise, or Bitbucket account ID matches the regular expression <code>pattern</code>. </p> </dd> <dt> HEAD<em>REF </dt> <dd> <p> A webhook event triggers a build when the head reference matches the regular expression <code>pattern</code>. For example, <code>refs/heads/branch-name</code> and <code>refs/tags/tag-name</code>. </p> <p> Works with GitHub and GitHub Enterprise push, GitHub and GitHub Enterprise pull request, Bitbucket push, and Bitbucket pull request events. </p> </dd> <dt> BASE</em>REF </dt> <dd> <p> A webhook event triggers a build when the base reference matches the regular expression <code>pattern</code>. For example, <code>refs/heads/branch-name</code>. </p> <note> <p> Works with pull request events only. </p> </note> </dd> <dt> FILE<em>PATH </dt> <dd> <p> A webhook triggers a build when the path of a changed file matches the regular expression <code>pattern</code>. </p> <note> <p> Works with GitHub and Bitbucket events push and pull requests events. Also works with GitHub Enterprise push events, but does not work with GitHub Enterprise pull request events. </p> </note> </dd> <dt>COMMIT</em>MESSAGE</dt> <dd> <p>A webhook triggers a build when the head commit message matches the regular expression <code>pattern</code>.</p> <note> <p> Works with GitHub and Bitbucket events push and pull requests events. Also works with GitHub Enterprise push events, but does not work with GitHub Enterprise pull request events. </p> </note> </dd> </dl></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: WebhookFilterType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWebhookFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WebhookFilterType {
+    ActorAccountId,
+    BaseRef,
+    CommitMessage,
+    Event,
+    FilePath,
+    HeadRef,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWebhookFilterType),
+}
+
+impl Default for WebhookFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WebhookFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WebhookFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WebhookFilterType {
+    fn into(self) -> String {
+        match self {
+            WebhookFilterType::ActorAccountId => "ACTOR_ACCOUNT_ID".to_string(),
+            WebhookFilterType::BaseRef => "BASE_REF".to_string(),
+            WebhookFilterType::CommitMessage => "COMMIT_MESSAGE".to_string(),
+            WebhookFilterType::Event => "EVENT".to_string(),
+            WebhookFilterType::FilePath => "FILE_PATH".to_string(),
+            WebhookFilterType::HeadRef => "HEAD_REF".to_string(),
+            WebhookFilterType::UnknownVariant(UnknownWebhookFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WebhookFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            WebhookFilterType::ActorAccountId => &"ACTOR_ACCOUNT_ID",
+            WebhookFilterType::BaseRef => &"BASE_REF",
+            WebhookFilterType::CommitMessage => &"COMMIT_MESSAGE",
+            WebhookFilterType::Event => &"EVENT",
+            WebhookFilterType::FilePath => &"FILE_PATH",
+            WebhookFilterType::HeadRef => &"HEAD_REF",
+            WebhookFilterType::UnknownVariant(UnknownWebhookFilterType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for WebhookFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTOR_ACCOUNT_ID" => WebhookFilterType::ActorAccountId,
+            "BASE_REF" => WebhookFilterType::BaseRef,
+            "COMMIT_MESSAGE" => WebhookFilterType::CommitMessage,
+            "EVENT" => WebhookFilterType::Event,
+            "FILE_PATH" => WebhookFilterType::FilePath,
+            "HEAD_REF" => WebhookFilterType::HeadRef,
+            _ => WebhookFilterType::UnknownVariant(UnknownWebhookFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WebhookFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTOR_ACCOUNT_ID" => WebhookFilterType::ActorAccountId,
+            "BASE_REF" => WebhookFilterType::BaseRef,
+            "COMMIT_MESSAGE" => WebhookFilterType::CommitMessage,
+            "EVENT" => WebhookFilterType::Event,
+            "FILE_PATH" => WebhookFilterType::FilePath,
+            "HEAD_REF" => WebhookFilterType::HeadRef,
+            _ => WebhookFilterType::UnknownVariant(UnknownWebhookFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WebhookFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for WebhookFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WebhookFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by BatchDeleteBuilds

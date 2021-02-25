@@ -112,7 +112,7 @@ impl AbortIncompleteMultipartUploadSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AbortMultipartUploadOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -141,7 +141,7 @@ pub struct AbortMultipartUploadRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>Key of the object for which the multipart upload was initiated.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Upload ID that identifies the multipart upload.</p>
     pub upload_id: String,
 }
@@ -151,7 +151,7 @@ pub struct AbortMultipartUploadRequest {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
-    pub status: Option<String>,
+    pub status: Option<BucketAccelerateStatus>,
 }
 
 pub struct AccelerateConfigurationSerializer;
@@ -211,7 +211,7 @@ impl AccessControlPolicySerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessControlTranslation {
     /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket replication</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-    pub owner: String,
+    pub owner: OwnerOverride,
 }
 
 #[allow(dead_code)]
@@ -818,7 +818,7 @@ pub struct AnalyticsS3BucketDestination {
     /// <p><p>The account ID that owns the destination S3 bucket. If no account ID is provided, the owner is not validated before exporting data.</p> <note> <p> Although this value is optional, we strongly recommend that you set it to help prevent problems if the destination bucket ownership changes. </p> </note></p>
     pub bucket_account_id: Option<String>,
     /// <p>Specifies the file format used when exporting data to Amazon S3.</p>
-    pub format: String,
+    pub format: AnalyticsS3ExportFileFormat,
     /// <p>The prefix to use when exporting data. The prefix is prepended to all results.</p>
     pub prefix: Option<String>,
 }
@@ -884,12 +884,118 @@ impl AnalyticsS3BucketDestinationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnalyticsS3ExportFileFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnalyticsS3ExportFileFormat {
+    Csv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnalyticsS3ExportFileFormat),
+}
+
+impl Default for AnalyticsS3ExportFileFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnalyticsS3ExportFileFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnalyticsS3ExportFileFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnalyticsS3ExportFileFormat {
+    fn into(self) -> String {
+        match self {
+            AnalyticsS3ExportFileFormat::Csv => "CSV".to_string(),
+            AnalyticsS3ExportFileFormat::UnknownVariant(UnknownAnalyticsS3ExportFileFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnalyticsS3ExportFileFormat {
+    fn into(self) -> &'a str {
+        match self {
+            AnalyticsS3ExportFileFormat::Csv => &"CSV",
+            AnalyticsS3ExportFileFormat::UnknownVariant(UnknownAnalyticsS3ExportFileFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnalyticsS3ExportFileFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => AnalyticsS3ExportFileFormat::Csv,
+            _ => AnalyticsS3ExportFileFormat::UnknownVariant(UnknownAnalyticsS3ExportFileFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnalyticsS3ExportFileFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => AnalyticsS3ExportFileFormat::Csv,
+            _ => AnalyticsS3ExportFileFormat::UnknownVariant(UnknownAnalyticsS3ExportFileFormat {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalyticsS3ExportFileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AnalyticsS3ExportFileFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AnalyticsS3ExportFileFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnalyticsS3ExportFileFormat, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -899,15 +1005,128 @@ impl AnalyticsS3ExportFileFormatSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &AnalyticsS3ExportFileFormat,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArchiveStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ArchiveStatus {
+    ArchiveAccess,
+    DeepArchiveAccess,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArchiveStatus),
+}
+
+impl Default for ArchiveStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ArchiveStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ArchiveStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ArchiveStatus {
+    fn into(self) -> String {
+        match self {
+            ArchiveStatus::ArchiveAccess => "ARCHIVE_ACCESS".to_string(),
+            ArchiveStatus::DeepArchiveAccess => "DEEP_ARCHIVE_ACCESS".to_string(),
+            ArchiveStatus::UnknownVariant(UnknownArchiveStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ArchiveStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ArchiveStatus::ArchiveAccess => &"ARCHIVE_ACCESS",
+            ArchiveStatus::DeepArchiveAccess => &"DEEP_ARCHIVE_ACCESS",
+            ArchiveStatus::UnknownVariant(UnknownArchiveStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ArchiveStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVE_ACCESS" => ArchiveStatus::ArchiveAccess,
+            "DEEP_ARCHIVE_ACCESS" => ArchiveStatus::DeepArchiveAccess,
+            _ => ArchiveStatus::UnknownVariant(UnknownArchiveStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ArchiveStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVE_ACCESS" => ArchiveStatus::ArchiveAccess,
+            "DEEP_ARCHIVE_ACCESS" => ArchiveStatus::DeepArchiveAccess,
+            _ => ArchiveStatus::UnknownVariant(UnknownArchiveStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ArchiveStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ArchiveStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ArchiveStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[allow(dead_code)]
+struct ArchiveStatusDeserializer;
+impl ArchiveStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ArchiveStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
+    }
+}
 pub type StreamingBody = ::rusoto_core::ByteStream;
 #[allow(dead_code)]
 struct BodyDeserializer;
@@ -972,12 +1191,122 @@ impl BucketDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBucketAccelerateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BucketAccelerateStatus {
+    Enabled,
+    Suspended,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBucketAccelerateStatus),
+}
+
+impl Default for BucketAccelerateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BucketAccelerateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BucketAccelerateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BucketAccelerateStatus {
+    fn into(self) -> String {
+        match self {
+            BucketAccelerateStatus::Enabled => "Enabled".to_string(),
+            BucketAccelerateStatus::Suspended => "Suspended".to_string(),
+            BucketAccelerateStatus::UnknownVariant(UnknownBucketAccelerateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BucketAccelerateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BucketAccelerateStatus::Enabled => &"Enabled",
+            BucketAccelerateStatus::Suspended => &"Suspended",
+            BucketAccelerateStatus::UnknownVariant(UnknownBucketAccelerateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BucketAccelerateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Enabled" => BucketAccelerateStatus::Enabled,
+            "Suspended" => BucketAccelerateStatus::Suspended,
+            _ => BucketAccelerateStatus::UnknownVariant(UnknownBucketAccelerateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BucketAccelerateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Enabled" => BucketAccelerateStatus::Enabled,
+            "Suspended" => BucketAccelerateStatus::Suspended,
+            _ => BucketAccelerateStatus::UnknownVariant(UnknownBucketAccelerateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketAccelerateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BucketAccelerateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BucketAccelerateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BucketAccelerateStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -987,12 +1316,139 @@ impl BucketAccelerateStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &BucketAccelerateStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBucketCannedACL {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BucketCannedACL {
+    AuthenticatedRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBucketCannedACL),
+}
+
+impl Default for BucketCannedACL {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BucketCannedACL {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BucketCannedACL {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BucketCannedACL {
+    fn into(self) -> String {
+        match self {
+            BucketCannedACL::AuthenticatedRead => "authenticated-read".to_string(),
+            BucketCannedACL::Private => "private".to_string(),
+            BucketCannedACL::PublicRead => "public-read".to_string(),
+            BucketCannedACL::PublicReadWrite => "public-read-write".to_string(),
+            BucketCannedACL::UnknownVariant(UnknownBucketCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BucketCannedACL {
+    fn into(self) -> &'a str {
+        match self {
+            BucketCannedACL::AuthenticatedRead => &"authenticated-read",
+            BucketCannedACL::Private => &"private",
+            BucketCannedACL::PublicRead => &"public-read",
+            BucketCannedACL::PublicReadWrite => &"public-read-write",
+            BucketCannedACL::UnknownVariant(UnknownBucketCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BucketCannedACL {
+    fn from(name: &str) -> Self {
+        match name {
+            "authenticated-read" => BucketCannedACL::AuthenticatedRead,
+            "private" => BucketCannedACL::Private,
+            "public-read" => BucketCannedACL::PublicRead,
+            "public-read-write" => BucketCannedACL::PublicReadWrite,
+            _ => BucketCannedACL::UnknownVariant(UnknownBucketCannedACL {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BucketCannedACL {
+    fn from(name: String) -> Self {
+        match &*name {
+            "authenticated-read" => BucketCannedACL::AuthenticatedRead,
+            "private" => BucketCannedACL::Private,
+            "public-read" => BucketCannedACL::PublicRead,
+            "public-read-write" => BucketCannedACL::PublicReadWrite,
+            _ => BucketCannedACL::UnknownVariant(UnknownBucketCannedACL { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketCannedACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BucketCannedACL {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BucketCannedACL {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+pub struct BucketCannedACLSerializer;
+impl BucketCannedACLSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &BucketCannedACL,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1045,12 +1501,236 @@ impl BucketLifecycleConfigurationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBucketLocationConstraint {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BucketLocationConstraint {
+    Eu,
+    AfSouth1,
+    ApEast1,
+    ApNortheast1,
+    ApNortheast2,
+    ApNortheast3,
+    ApSouth1,
+    ApSoutheast1,
+    ApSoutheast2,
+    CaCentral1,
+    CnNorth1,
+    CnNorthwest1,
+    EuCentral1,
+    EuNorth1,
+    EuSouth1,
+    EuWest1,
+    EuWest2,
+    EuWest3,
+    MeSouth1,
+    SaEast1,
+    UsEast2,
+    UsGovEast1,
+    UsGovWest1,
+    UsWest1,
+    UsWest2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBucketLocationConstraint),
+}
+
+impl Default for BucketLocationConstraint {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BucketLocationConstraint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BucketLocationConstraint {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BucketLocationConstraint {
+    fn into(self) -> String {
+        match self {
+            BucketLocationConstraint::Eu => "EU".to_string(),
+            BucketLocationConstraint::AfSouth1 => "af-south-1".to_string(),
+            BucketLocationConstraint::ApEast1 => "ap-east-1".to_string(),
+            BucketLocationConstraint::ApNortheast1 => "ap-northeast-1".to_string(),
+            BucketLocationConstraint::ApNortheast2 => "ap-northeast-2".to_string(),
+            BucketLocationConstraint::ApNortheast3 => "ap-northeast-3".to_string(),
+            BucketLocationConstraint::ApSouth1 => "ap-south-1".to_string(),
+            BucketLocationConstraint::ApSoutheast1 => "ap-southeast-1".to_string(),
+            BucketLocationConstraint::ApSoutheast2 => "ap-southeast-2".to_string(),
+            BucketLocationConstraint::CaCentral1 => "ca-central-1".to_string(),
+            BucketLocationConstraint::CnNorth1 => "cn-north-1".to_string(),
+            BucketLocationConstraint::CnNorthwest1 => "cn-northwest-1".to_string(),
+            BucketLocationConstraint::EuCentral1 => "eu-central-1".to_string(),
+            BucketLocationConstraint::EuNorth1 => "eu-north-1".to_string(),
+            BucketLocationConstraint::EuSouth1 => "eu-south-1".to_string(),
+            BucketLocationConstraint::EuWest1 => "eu-west-1".to_string(),
+            BucketLocationConstraint::EuWest2 => "eu-west-2".to_string(),
+            BucketLocationConstraint::EuWest3 => "eu-west-3".to_string(),
+            BucketLocationConstraint::MeSouth1 => "me-south-1".to_string(),
+            BucketLocationConstraint::SaEast1 => "sa-east-1".to_string(),
+            BucketLocationConstraint::UsEast2 => "us-east-2".to_string(),
+            BucketLocationConstraint::UsGovEast1 => "us-gov-east-1".to_string(),
+            BucketLocationConstraint::UsGovWest1 => "us-gov-west-1".to_string(),
+            BucketLocationConstraint::UsWest1 => "us-west-1".to_string(),
+            BucketLocationConstraint::UsWest2 => "us-west-2".to_string(),
+            BucketLocationConstraint::UnknownVariant(UnknownBucketLocationConstraint {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BucketLocationConstraint {
+    fn into(self) -> &'a str {
+        match self {
+            BucketLocationConstraint::Eu => &"EU",
+            BucketLocationConstraint::AfSouth1 => &"af-south-1",
+            BucketLocationConstraint::ApEast1 => &"ap-east-1",
+            BucketLocationConstraint::ApNortheast1 => &"ap-northeast-1",
+            BucketLocationConstraint::ApNortheast2 => &"ap-northeast-2",
+            BucketLocationConstraint::ApNortheast3 => &"ap-northeast-3",
+            BucketLocationConstraint::ApSouth1 => &"ap-south-1",
+            BucketLocationConstraint::ApSoutheast1 => &"ap-southeast-1",
+            BucketLocationConstraint::ApSoutheast2 => &"ap-southeast-2",
+            BucketLocationConstraint::CaCentral1 => &"ca-central-1",
+            BucketLocationConstraint::CnNorth1 => &"cn-north-1",
+            BucketLocationConstraint::CnNorthwest1 => &"cn-northwest-1",
+            BucketLocationConstraint::EuCentral1 => &"eu-central-1",
+            BucketLocationConstraint::EuNorth1 => &"eu-north-1",
+            BucketLocationConstraint::EuSouth1 => &"eu-south-1",
+            BucketLocationConstraint::EuWest1 => &"eu-west-1",
+            BucketLocationConstraint::EuWest2 => &"eu-west-2",
+            BucketLocationConstraint::EuWest3 => &"eu-west-3",
+            BucketLocationConstraint::MeSouth1 => &"me-south-1",
+            BucketLocationConstraint::SaEast1 => &"sa-east-1",
+            BucketLocationConstraint::UsEast2 => &"us-east-2",
+            BucketLocationConstraint::UsGovEast1 => &"us-gov-east-1",
+            BucketLocationConstraint::UsGovWest1 => &"us-gov-west-1",
+            BucketLocationConstraint::UsWest1 => &"us-west-1",
+            BucketLocationConstraint::UsWest2 => &"us-west-2",
+            BucketLocationConstraint::UnknownVariant(UnknownBucketLocationConstraint {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BucketLocationConstraint {
+    fn from(name: &str) -> Self {
+        match name {
+            "EU" => BucketLocationConstraint::Eu,
+            "af-south-1" => BucketLocationConstraint::AfSouth1,
+            "ap-east-1" => BucketLocationConstraint::ApEast1,
+            "ap-northeast-1" => BucketLocationConstraint::ApNortheast1,
+            "ap-northeast-2" => BucketLocationConstraint::ApNortheast2,
+            "ap-northeast-3" => BucketLocationConstraint::ApNortheast3,
+            "ap-south-1" => BucketLocationConstraint::ApSouth1,
+            "ap-southeast-1" => BucketLocationConstraint::ApSoutheast1,
+            "ap-southeast-2" => BucketLocationConstraint::ApSoutheast2,
+            "ca-central-1" => BucketLocationConstraint::CaCentral1,
+            "cn-north-1" => BucketLocationConstraint::CnNorth1,
+            "cn-northwest-1" => BucketLocationConstraint::CnNorthwest1,
+            "eu-central-1" => BucketLocationConstraint::EuCentral1,
+            "eu-north-1" => BucketLocationConstraint::EuNorth1,
+            "eu-south-1" => BucketLocationConstraint::EuSouth1,
+            "eu-west-1" => BucketLocationConstraint::EuWest1,
+            "eu-west-2" => BucketLocationConstraint::EuWest2,
+            "eu-west-3" => BucketLocationConstraint::EuWest3,
+            "me-south-1" => BucketLocationConstraint::MeSouth1,
+            "sa-east-1" => BucketLocationConstraint::SaEast1,
+            "us-east-2" => BucketLocationConstraint::UsEast2,
+            "us-gov-east-1" => BucketLocationConstraint::UsGovEast1,
+            "us-gov-west-1" => BucketLocationConstraint::UsGovWest1,
+            "us-west-1" => BucketLocationConstraint::UsWest1,
+            "us-west-2" => BucketLocationConstraint::UsWest2,
+            _ => BucketLocationConstraint::UnknownVariant(UnknownBucketLocationConstraint {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BucketLocationConstraint {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EU" => BucketLocationConstraint::Eu,
+            "af-south-1" => BucketLocationConstraint::AfSouth1,
+            "ap-east-1" => BucketLocationConstraint::ApEast1,
+            "ap-northeast-1" => BucketLocationConstraint::ApNortheast1,
+            "ap-northeast-2" => BucketLocationConstraint::ApNortheast2,
+            "ap-northeast-3" => BucketLocationConstraint::ApNortheast3,
+            "ap-south-1" => BucketLocationConstraint::ApSouth1,
+            "ap-southeast-1" => BucketLocationConstraint::ApSoutheast1,
+            "ap-southeast-2" => BucketLocationConstraint::ApSoutheast2,
+            "ca-central-1" => BucketLocationConstraint::CaCentral1,
+            "cn-north-1" => BucketLocationConstraint::CnNorth1,
+            "cn-northwest-1" => BucketLocationConstraint::CnNorthwest1,
+            "eu-central-1" => BucketLocationConstraint::EuCentral1,
+            "eu-north-1" => BucketLocationConstraint::EuNorth1,
+            "eu-south-1" => BucketLocationConstraint::EuSouth1,
+            "eu-west-1" => BucketLocationConstraint::EuWest1,
+            "eu-west-2" => BucketLocationConstraint::EuWest2,
+            "eu-west-3" => BucketLocationConstraint::EuWest3,
+            "me-south-1" => BucketLocationConstraint::MeSouth1,
+            "sa-east-1" => BucketLocationConstraint::SaEast1,
+            "us-east-2" => BucketLocationConstraint::UsEast2,
+            "us-gov-east-1" => BucketLocationConstraint::UsGovEast1,
+            "us-gov-west-1" => BucketLocationConstraint::UsGovWest1,
+            "us-west-1" => BucketLocationConstraint::UsWest1,
+            "us-west-2" => BucketLocationConstraint::UsWest2,
+            _ => BucketLocationConstraint::UnknownVariant(UnknownBucketLocationConstraint { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketLocationConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BucketLocationConstraint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BucketLocationConstraint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BucketLocationConstraintDeserializer;
 impl BucketLocationConstraintDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BucketLocationConstraint, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1060,12 +1740,12 @@ impl BucketLocationConstraintSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &BucketLocationConstraint,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1095,12 +1775,126 @@ impl BucketLoggingStatusSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBucketLogsPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BucketLogsPermission {
+    FullControl,
+    Read,
+    Write,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBucketLogsPermission),
+}
+
+impl Default for BucketLogsPermission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BucketLogsPermission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BucketLogsPermission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BucketLogsPermission {
+    fn into(self) -> String {
+        match self {
+            BucketLogsPermission::FullControl => "FULL_CONTROL".to_string(),
+            BucketLogsPermission::Read => "READ".to_string(),
+            BucketLogsPermission::Write => "WRITE".to_string(),
+            BucketLogsPermission::UnknownVariant(UnknownBucketLogsPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BucketLogsPermission {
+    fn into(self) -> &'a str {
+        match self {
+            BucketLogsPermission::FullControl => &"FULL_CONTROL",
+            BucketLogsPermission::Read => &"READ",
+            BucketLogsPermission::Write => &"WRITE",
+            BucketLogsPermission::UnknownVariant(UnknownBucketLogsPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BucketLogsPermission {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_CONTROL" => BucketLogsPermission::FullControl,
+            "READ" => BucketLogsPermission::Read,
+            "WRITE" => BucketLogsPermission::Write,
+            _ => BucketLogsPermission::UnknownVariant(UnknownBucketLogsPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BucketLogsPermission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_CONTROL" => BucketLogsPermission::FullControl,
+            "READ" => BucketLogsPermission::Read,
+            "WRITE" => BucketLogsPermission::Write,
+            _ => BucketLogsPermission::UnknownVariant(UnknownBucketLogsPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketLogsPermission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BucketLogsPermission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BucketLogsPermission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BucketLogsPermissionDeserializer;
 impl BucketLogsPermissionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BucketLogsPermission, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1110,12 +1904,12 @@ impl BucketLogsPermissionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &BucketLogsPermission,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1143,12 +1937,121 @@ impl BucketNameSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBucketVersioningStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BucketVersioningStatus {
+    Enabled,
+    Suspended,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBucketVersioningStatus),
+}
+
+impl Default for BucketVersioningStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BucketVersioningStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BucketVersioningStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BucketVersioningStatus {
+    fn into(self) -> String {
+        match self {
+            BucketVersioningStatus::Enabled => "Enabled".to_string(),
+            BucketVersioningStatus::Suspended => "Suspended".to_string(),
+            BucketVersioningStatus::UnknownVariant(UnknownBucketVersioningStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BucketVersioningStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BucketVersioningStatus::Enabled => &"Enabled",
+            BucketVersioningStatus::Suspended => &"Suspended",
+            BucketVersioningStatus::UnknownVariant(UnknownBucketVersioningStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BucketVersioningStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Enabled" => BucketVersioningStatus::Enabled,
+            "Suspended" => BucketVersioningStatus::Suspended,
+            _ => BucketVersioningStatus::UnknownVariant(UnknownBucketVersioningStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BucketVersioningStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Enabled" => BucketVersioningStatus::Enabled,
+            "Suspended" => BucketVersioningStatus::Suspended,
+            _ => BucketVersioningStatus::UnknownVariant(UnknownBucketVersioningStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BucketVersioningStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BucketVersioningStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BucketVersioningStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct BucketVersioningStatusDeserializer;
 impl BucketVersioningStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BucketVersioningStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1158,12 +2061,12 @@ impl BucketVersioningStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &BucketVersioningStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1383,7 +2286,7 @@ pub struct CSVInput {
     /// <p>A single character used to separate individual fields in a record. You can specify an arbitrary delimiter.</p>
     pub field_delimiter: Option<String>,
     /// <p><p>Describes the first line of input. Valid values are:</p> <ul> <li> <p> <code>NONE</code>: First line is not a header.</p> </li> <li> <p> <code>IGNORE</code>: First line is a header, but you can&#39;t use the header values to indicate the column in an expression. You can use column position (such as _1, <em>2, …) to indicate the column (<code>SELECT s.</em>1 FROM OBJECT s</code>).</p> </li> <li> <p> <code>Use</code>: First line is a header, and you can use the header value to identify a column in an expression (<code>SELECT &quot;name&quot; FROM OBJECT</code>). </p> </li> </ul></p>
-    pub file_header_info: Option<String>,
+    pub file_header_info: Option<FileHeaderInfo>,
     /// <p>A single character used for escaping when the field delimiter is part of the value. For example, if the value is <code>a, b</code>, Amazon S3 wraps this field value in quotation marks, as follows: <code>" a , b "</code>.</p> <p>Type: String</p> <p>Default: <code>"</code> </p> <p>Ancestors: <code>CSV</code> </p>
     pub quote_character: Option<String>,
     /// <p>A single character used for escaping the quotation mark character inside an already escaped value. For example, the value """ a , b """ is parsed as " a , b ".</p>
@@ -1440,7 +2343,7 @@ pub struct CSVOutput {
     /// <p>The single character used for escaping the quote character inside an already escaped value.</p>
     pub quote_escape_character: Option<String>,
     /// <p><p>Indicates whether to use quotation marks around output fields. </p> <ul> <li> <p> <code>ALWAYS</code>: Always use quotation marks for output fields.</p> </li> <li> <p> <code>ASNEEDED</code>: Use quotation marks for output fields when needed.</p> </li> </ul></p>
-    pub quote_fields: Option<String>,
+    pub quote_fields: Option<QuoteFields>,
     /// <p>A single character used to separate individual records in the output. Instead of the default value, you can specify an arbitrary delimiter.</p>
     pub record_delimiter: Option<String>,
 }
@@ -1508,7 +2411,7 @@ pub struct CloudFunctionConfiguration {
     /// <p>Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type.</p>
     pub cloud_function: Option<String>,
     /// <p>Bucket events for which to send notifications.</p>
-    pub events: Option<Vec<String>>,
+    pub events: Option<Vec<Event>>,
     pub id: Option<String>,
     /// <p>The role supporting the invocation of the Lambda function</p>
     pub invocation_role: Option<String>,
@@ -1702,11 +2605,11 @@ pub struct CompleteMultipartUploadOutput {
     pub key: Option<String>,
     /// <p>The URI that identifies the newly created object.</p>
     pub location: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>If you specified server-side encryption either with an Amazon S3-managed encryption key or an AWS KMS customer master key (CMK) in your initiate multipart upload request, the response includes this header. It confirms the encryption algorithm that Amazon S3 used to encrypt the object.</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created object, in case the bucket has versioning turned on.</p>
     pub version_id: Option<String>,
 }
@@ -1754,7 +2657,7 @@ pub struct CompleteMultipartUploadRequest {
     pub key: String,
     /// <p>The container for the multipart upload request information.</p>
     pub multipart_upload: Option<CompletedMultipartUpload>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: String,
 }
@@ -1836,18 +2739,125 @@ impl CompletedPartListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompressionType {
+    Bzip2,
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompressionType),
+}
+
+impl Default for CompressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompressionType {
+    fn into(self) -> String {
+        match self {
+            CompressionType::Bzip2 => "BZIP2".to_string(),
+            CompressionType::Gzip => "GZIP".to_string(),
+            CompressionType::None => "NONE".to_string(),
+            CompressionType::UnknownVariant(UnknownCompressionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompressionType {
+    fn into(self) -> &'a str {
+        match self {
+            CompressionType::Bzip2 => &"BZIP2",
+            CompressionType::Gzip => &"GZIP",
+            CompressionType::None => &"NONE",
+            CompressionType::UnknownVariant(UnknownCompressionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CompressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BZIP2" => CompressionType::Bzip2,
+            "GZIP" => CompressionType::Gzip,
+            "NONE" => CompressionType::None,
+            _ => CompressionType::UnknownVariant(UnknownCompressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CompressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BZIP2" => CompressionType::Bzip2,
+            "GZIP" => CompressionType::Gzip,
+            "NONE" => CompressionType::None,
+            _ => CompressionType::UnknownVariant(UnknownCompressionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for CompressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CompressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct CompressionTypeSerializer;
 impl CompressionTypeSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &CompressionType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -1947,7 +2957,7 @@ pub struct CopyObjectOutput {
     pub copy_source_version_id: Option<String>,
     /// <p>If the object expiration is configured, the response includes this header.</p>
     pub expiration: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round-trip message integrity verification of the customer-provided encryption key.</p>
@@ -1957,7 +2967,7 @@ pub struct CopyObjectOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created copy.</p>
     pub version_id: Option<String>,
 }
@@ -1983,7 +2993,7 @@ impl CopyObjectOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyObjectRequest {
     /// <p>The canned ACL to apply to the object.</p> <p>This action is not supported by Amazon S3 on Outposts.</p>
-    pub acl: Option<String>,
+    pub acl: Option<ObjectCannedACL>,
     /// <p>The name of the destination bucket.</p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html">Using S3 on Outposts</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS. </p> <p>Specifying this header with a COPY operation doesn’t affect bucket-level settings for S3 Bucket Key.</p>
@@ -2033,14 +3043,14 @@ pub struct CopyObjectRequest {
     /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request.</p>
-    pub metadata_directive: Option<String>,
+    pub metadata_directive: Option<MetadataDirective>,
     /// <p>Specifies whether you want to apply a Legal Hold to the copied object.</p>
-    pub object_lock_legal_hold_status: Option<String>,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     /// <p>The Object Lock mode that you want to apply to the copied object.</p>
-    pub object_lock_mode: Option<String>,
+    pub object_lock_mode: Option<ObjectLockMode>,
     /// <p>The date and time when you want the copied object's Object Lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
@@ -2052,13 +3062,13 @@ pub struct CopyObjectRequest {
     /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. For information about configuring using any of the officially supported AWS SDKs and AWS CLI, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the Signature Version in Request Authentication</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different Storage Class. Amazon S3 on Outposts only uses the OUTPOSTS Storage Class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The tag-set for the object destination object this value must be used in conjunction with the <code>TaggingDirective</code>. The tag-set must be encoded as URL Query parameters.</p>
     pub tagging: Option<String>,
     /// <p>Specifies whether the object tag-set are copied from the source object or replaced with tag-set provided in the request.</p>
-    pub tagging_directive: Option<String>,
+    pub tagging_directive: Option<TaggingDirective>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
@@ -2138,7 +3148,7 @@ impl CopyPartResultDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the Region where the bucket will be created. If you don't specify a Region, the bucket is created in the US East (N. Virginia) Region (us-east-1).</p>
-    pub location_constraint: Option<String>,
+    pub location_constraint: Option<BucketLocationConstraint>,
 }
 
 pub struct CreateBucketConfigurationSerializer;
@@ -2188,7 +3198,7 @@ impl CreateBucketOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
-    pub acl: Option<String>,
+    pub acl: Option<BucketCannedACL>,
     /// <p>The name of the bucket to create.</p>
     pub bucket: String,
     /// <p>The configuration information for the bucket.</p>
@@ -2220,7 +3230,7 @@ pub struct CreateMultipartUploadOutput {
     pub bucket_key_enabled: Option<bool>,
     /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round-trip message integrity verification of the customer-provided encryption key.</p>
@@ -2230,7 +3240,7 @@ pub struct CreateMultipartUploadOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: Option<String>,
 }
@@ -2270,7 +3280,7 @@ impl CreateMultipartUploadOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultipartUploadRequest {
     /// <p>The canned ACL to apply to the object.</p> <p>This action is not supported by Amazon S3 on Outposts.</p>
-    pub acl: Option<String>,
+    pub acl: Option<ObjectCannedACL>,
     /// <p>The name of the bucket to which to initiate the upload</p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html">Using S3 on Outposts</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.</p> <p>Specifying this header with an object operation doesn’t affect bucket-level settings for S3 Bucket Key.</p>
@@ -2302,12 +3312,12 @@ pub struct CreateMultipartUploadRequest {
     /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies whether you want to apply a Legal Hold to the uploaded object.</p>
-    pub object_lock_legal_hold_status: Option<String>,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     /// <p>Specifies the Object Lock mode that you want to apply to the uploaded object.</p>
-    pub object_lock_mode: Option<String>,
+    pub object_lock_mode: Option<ObjectLockMode>,
     /// <p>Specifies the date and time when you want the Object Lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
@@ -2319,9 +3329,9 @@ pub struct CreateMultipartUploadRequest {
     /// <p>Specifies the ID of the symmetric customer managed AWS KMS CMK to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. For information about configuring using any of the officially supported AWS SDKs and AWS CLI, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the Signature Version in Request Authentication</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different Storage Class. Amazon S3 on Outposts only uses the OUTPOSTS Storage Class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters.</p>
     pub tagging: Option<String>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
@@ -2416,7 +3426,7 @@ pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period.</p>
     pub days: Option<i64>,
     /// <p>The default Object Lock retention mode you want to apply to new objects placed in the specified bucket.</p>
-    pub mode: Option<String>,
+    pub mode: Option<ObjectLockRetentionMode>,
     /// <p>The number of years that you want to specify for the default retention period.</p>
     pub years: Option<i64>,
 }
@@ -2694,7 +3704,7 @@ impl DeleteMarkerEntryDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMarkerReplication {
     /// <p><p>Indicates whether to replicate delete markers.</p> <note> <p>Indicates whether to replicate delete markers.</p> </note></p>
-    pub status: Option<String>,
+    pub status: Option<DeleteMarkerReplicationStatus>,
 }
 
 #[allow(dead_code)]
@@ -2742,12 +3752,125 @@ impl DeleteMarkerReplicationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeleteMarkerReplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeleteMarkerReplicationStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeleteMarkerReplicationStatus),
+}
+
+impl Default for DeleteMarkerReplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeleteMarkerReplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeleteMarkerReplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeleteMarkerReplicationStatus {
+    fn into(self) -> String {
+        match self {
+            DeleteMarkerReplicationStatus::Disabled => "Disabled".to_string(),
+            DeleteMarkerReplicationStatus::Enabled => "Enabled".to_string(),
+            DeleteMarkerReplicationStatus::UnknownVariant(
+                UnknownDeleteMarkerReplicationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeleteMarkerReplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeleteMarkerReplicationStatus::Disabled => &"Disabled",
+            DeleteMarkerReplicationStatus::Enabled => &"Enabled",
+            DeleteMarkerReplicationStatus::UnknownVariant(
+                UnknownDeleteMarkerReplicationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DeleteMarkerReplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => DeleteMarkerReplicationStatus::Disabled,
+            "Enabled" => DeleteMarkerReplicationStatus::Enabled,
+            _ => DeleteMarkerReplicationStatus::UnknownVariant(
+                UnknownDeleteMarkerReplicationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DeleteMarkerReplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => DeleteMarkerReplicationStatus::Disabled,
+            "Enabled" => DeleteMarkerReplicationStatus::Enabled,
+            _ => DeleteMarkerReplicationStatus::UnknownVariant(
+                UnknownDeleteMarkerReplicationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeleteMarkerReplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for DeleteMarkerReplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DeleteMarkerReplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct DeleteMarkerReplicationStatusDeserializer;
 impl DeleteMarkerReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteMarkerReplicationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -2757,12 +3880,12 @@ impl DeleteMarkerReplicationStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &DeleteMarkerReplicationStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -2807,7 +3930,7 @@ impl DeleteMarkersDeserializer {
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
     pub delete_marker: Option<bool>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Returns the version ID of the delete marker created as a result of the DELETE operation.</p>
     pub version_id: Option<String>,
 }
@@ -2842,7 +3965,7 @@ pub struct DeleteObjectRequest {
     pub key: String,
     /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device. Required to permanently delete a versioned object if versioning is configured with MFA delete enabled.</p>
     pub mfa: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
@@ -2891,7 +4014,7 @@ pub struct DeleteObjectsOutput {
     pub deleted: Option<Vec<DeletedObject>>,
     /// <p>Container for a failed delete operation that describes the object that Amazon S3 attempted to delete and the error it encountered.</p>
     pub errors: Option<Vec<S3Error>>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -2933,7 +4056,7 @@ pub struct DeleteObjectsRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device. Required to permanently delete a versioned object if versioning is configured with MFA delete enabled.</p>
     pub mfa: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -3082,7 +4205,7 @@ pub struct Destination {
     /// <p> A container specifying S3 Replication Time Control (S3 RTC), including whether S3 RTC is enabled and the time when all objects and operations on objects must be replicated. Must be specified together with a <code>Metrics</code> block. </p>
     pub replication_time: Option<ReplicationTime>,
     /// <p> The storage class to use when replicating objects, such as S3 Standard or reduced redundancy. By default, Amazon S3 uses the storage class of the source object to create the object replica. </p> <p>For valid values, see the <code>StorageClass</code> element of the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT Bucket replication</a> action in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
 }
 
 #[allow(dead_code)]
@@ -3267,12 +4390,114 @@ impl EnableRequestProgressSerializer {
     }
 }
 
+/// <p>Requests Amazon S3 to encode the object keys in the response and specifies the encoding method to use. An object key may contain any Unicode character; however, XML 1.0 parser cannot parse some characters, such as characters with an ASCII value from 0 to 10. For characters that are not supported in XML 1.0, you can add this parameter to request that Amazon S3 encode the keys in the response.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncodingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncodingType {
+    Url,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncodingType),
+}
+
+impl Default for EncodingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncodingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncodingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncodingType {
+    fn into(self) -> String {
+        match self {
+            EncodingType::Url => "url".to_string(),
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncodingType {
+    fn into(self) -> &'a str {
+        match self {
+            EncodingType::Url => &"url",
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncodingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "url" => EncodingType::Url,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncodingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "url" => EncodingType::Url,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for EncodingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EncodingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EncodingType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3282,12 +4507,12 @@ impl EncodingTypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &EncodingType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3296,7 +4521,7 @@ impl EncodingTypeSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub encryption_type: String,
+    pub encryption_type: ServerSideEncryption,
     /// <p>If the encryption type is <code>aws:kms</code>, this optional value can be used to specify the encryption context for the restore results.</p>
     pub kms_context: Option<String>,
     /// <p>If the encryption type is <code>aws:kms</code>, this optional value specifies the ID of the symmetric customer managed AWS KMS CMK to use for encryption of job results. Amazon S3 only supports symmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
@@ -3537,12 +4762,227 @@ impl ErrorsDeserializer {
         Ok(obj)
     }
 }
+/// <p>The bucket event for which to send notifications.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Event {
+    S3ObjectCreated,
+    S3ObjectCreatedCompleteMultipartUpload,
+    S3ObjectCreatedCopy,
+    S3ObjectCreatedPost,
+    S3ObjectCreatedPut,
+    S3ObjectRemoved,
+    S3ObjectRemovedDelete,
+    S3ObjectRemovedDeleteMarkerCreated,
+    S3ObjectRestore,
+    S3ObjectRestoreCompleted,
+    S3ObjectRestorePost,
+    S3ReducedRedundancyLostObject,
+    S3Replication,
+    S3ReplicationOperationFailedReplication,
+    S3ReplicationOperationMissedThreshold,
+    S3ReplicationOperationNotTracked,
+    S3ReplicationOperationReplicatedAfterThreshold,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEvent),
+}
+
+impl Default for Event {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Event {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Event {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Event {
+    fn into(self) -> String {
+        match self {
+            Event::S3ObjectCreated => "s3:ObjectCreated:*".to_string(),
+            Event::S3ObjectCreatedCompleteMultipartUpload => {
+                "s3:ObjectCreated:CompleteMultipartUpload".to_string()
+            }
+            Event::S3ObjectCreatedCopy => "s3:ObjectCreated:Copy".to_string(),
+            Event::S3ObjectCreatedPost => "s3:ObjectCreated:Post".to_string(),
+            Event::S3ObjectCreatedPut => "s3:ObjectCreated:Put".to_string(),
+            Event::S3ObjectRemoved => "s3:ObjectRemoved:*".to_string(),
+            Event::S3ObjectRemovedDelete => "s3:ObjectRemoved:Delete".to_string(),
+            Event::S3ObjectRemovedDeleteMarkerCreated => {
+                "s3:ObjectRemoved:DeleteMarkerCreated".to_string()
+            }
+            Event::S3ObjectRestore => "s3:ObjectRestore:*".to_string(),
+            Event::S3ObjectRestoreCompleted => "s3:ObjectRestore:Completed".to_string(),
+            Event::S3ObjectRestorePost => "s3:ObjectRestore:Post".to_string(),
+            Event::S3ReducedRedundancyLostObject => "s3:ReducedRedundancyLostObject".to_string(),
+            Event::S3Replication => "s3:Replication:*".to_string(),
+            Event::S3ReplicationOperationFailedReplication => {
+                "s3:Replication:OperationFailedReplication".to_string()
+            }
+            Event::S3ReplicationOperationMissedThreshold => {
+                "s3:Replication:OperationMissedThreshold".to_string()
+            }
+            Event::S3ReplicationOperationNotTracked => {
+                "s3:Replication:OperationNotTracked".to_string()
+            }
+            Event::S3ReplicationOperationReplicatedAfterThreshold => {
+                "s3:Replication:OperationReplicatedAfterThreshold".to_string()
+            }
+            Event::UnknownVariant(UnknownEvent { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Event {
+    fn into(self) -> &'a str {
+        match self {
+            Event::S3ObjectCreated => &"s3:ObjectCreated:*",
+            Event::S3ObjectCreatedCompleteMultipartUpload => {
+                &"s3:ObjectCreated:CompleteMultipartUpload"
+            }
+            Event::S3ObjectCreatedCopy => &"s3:ObjectCreated:Copy",
+            Event::S3ObjectCreatedPost => &"s3:ObjectCreated:Post",
+            Event::S3ObjectCreatedPut => &"s3:ObjectCreated:Put",
+            Event::S3ObjectRemoved => &"s3:ObjectRemoved:*",
+            Event::S3ObjectRemovedDelete => &"s3:ObjectRemoved:Delete",
+            Event::S3ObjectRemovedDeleteMarkerCreated => &"s3:ObjectRemoved:DeleteMarkerCreated",
+            Event::S3ObjectRestore => &"s3:ObjectRestore:*",
+            Event::S3ObjectRestoreCompleted => &"s3:ObjectRestore:Completed",
+            Event::S3ObjectRestorePost => &"s3:ObjectRestore:Post",
+            Event::S3ReducedRedundancyLostObject => &"s3:ReducedRedundancyLostObject",
+            Event::S3Replication => &"s3:Replication:*",
+            Event::S3ReplicationOperationFailedReplication => {
+                &"s3:Replication:OperationFailedReplication"
+            }
+            Event::S3ReplicationOperationMissedThreshold => {
+                &"s3:Replication:OperationMissedThreshold"
+            }
+            Event::S3ReplicationOperationNotTracked => &"s3:Replication:OperationNotTracked",
+            Event::S3ReplicationOperationReplicatedAfterThreshold => {
+                &"s3:Replication:OperationReplicatedAfterThreshold"
+            }
+            Event::UnknownVariant(UnknownEvent { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Event {
+    fn from(name: &str) -> Self {
+        match name {
+            "s3:ObjectCreated:*" => Event::S3ObjectCreated,
+            "s3:ObjectCreated:CompleteMultipartUpload" => {
+                Event::S3ObjectCreatedCompleteMultipartUpload
+            }
+            "s3:ObjectCreated:Copy" => Event::S3ObjectCreatedCopy,
+            "s3:ObjectCreated:Post" => Event::S3ObjectCreatedPost,
+            "s3:ObjectCreated:Put" => Event::S3ObjectCreatedPut,
+            "s3:ObjectRemoved:*" => Event::S3ObjectRemoved,
+            "s3:ObjectRemoved:Delete" => Event::S3ObjectRemovedDelete,
+            "s3:ObjectRemoved:DeleteMarkerCreated" => Event::S3ObjectRemovedDeleteMarkerCreated,
+            "s3:ObjectRestore:*" => Event::S3ObjectRestore,
+            "s3:ObjectRestore:Completed" => Event::S3ObjectRestoreCompleted,
+            "s3:ObjectRestore:Post" => Event::S3ObjectRestorePost,
+            "s3:ReducedRedundancyLostObject" => Event::S3ReducedRedundancyLostObject,
+            "s3:Replication:*" => Event::S3Replication,
+            "s3:Replication:OperationFailedReplication" => {
+                Event::S3ReplicationOperationFailedReplication
+            }
+            "s3:Replication:OperationMissedThreshold" => {
+                Event::S3ReplicationOperationMissedThreshold
+            }
+            "s3:Replication:OperationNotTracked" => Event::S3ReplicationOperationNotTracked,
+            "s3:Replication:OperationReplicatedAfterThreshold" => {
+                Event::S3ReplicationOperationReplicatedAfterThreshold
+            }
+            _ => Event::UnknownVariant(UnknownEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Event {
+    fn from(name: String) -> Self {
+        match &*name {
+            "s3:ObjectCreated:*" => Event::S3ObjectCreated,
+            "s3:ObjectCreated:CompleteMultipartUpload" => {
+                Event::S3ObjectCreatedCompleteMultipartUpload
+            }
+            "s3:ObjectCreated:Copy" => Event::S3ObjectCreatedCopy,
+            "s3:ObjectCreated:Post" => Event::S3ObjectCreatedPost,
+            "s3:ObjectCreated:Put" => Event::S3ObjectCreatedPut,
+            "s3:ObjectRemoved:*" => Event::S3ObjectRemoved,
+            "s3:ObjectRemoved:Delete" => Event::S3ObjectRemovedDelete,
+            "s3:ObjectRemoved:DeleteMarkerCreated" => Event::S3ObjectRemovedDeleteMarkerCreated,
+            "s3:ObjectRestore:*" => Event::S3ObjectRestore,
+            "s3:ObjectRestore:Completed" => Event::S3ObjectRestoreCompleted,
+            "s3:ObjectRestore:Post" => Event::S3ObjectRestorePost,
+            "s3:ReducedRedundancyLostObject" => Event::S3ReducedRedundancyLostObject,
+            "s3:Replication:*" => Event::S3Replication,
+            "s3:Replication:OperationFailedReplication" => {
+                Event::S3ReplicationOperationFailedReplication
+            }
+            "s3:Replication:OperationMissedThreshold" => {
+                Event::S3ReplicationOperationMissedThreshold
+            }
+            "s3:Replication:OperationNotTracked" => Event::S3ReplicationOperationNotTracked,
+            "s3:Replication:OperationReplicatedAfterThreshold" => {
+                Event::S3ReplicationOperationReplicatedAfterThreshold
+            }
+            _ => Event::UnknownVariant(UnknownEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Event {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Event {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Event {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3552,12 +4992,12 @@ impl EventSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Event,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3568,7 +5008,7 @@ impl EventListDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<Event>, XmlParseError> {
         let mut obj = vec![];
 
         loop {
@@ -3596,7 +5036,7 @@ impl EventListSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<Event>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -3614,7 +5054,7 @@ impl EventListSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExistingObjectReplication {
     /// <p><p/></p>
-    pub status: String,
+    pub status: ExistingObjectReplicationStatus,
 }
 
 #[allow(dead_code)]
@@ -3660,12 +5100,125 @@ impl ExistingObjectReplicationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExistingObjectReplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExistingObjectReplicationStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExistingObjectReplicationStatus),
+}
+
+impl Default for ExistingObjectReplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExistingObjectReplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExistingObjectReplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExistingObjectReplicationStatus {
+    fn into(self) -> String {
+        match self {
+            ExistingObjectReplicationStatus::Disabled => "Disabled".to_string(),
+            ExistingObjectReplicationStatus::Enabled => "Enabled".to_string(),
+            ExistingObjectReplicationStatus::UnknownVariant(
+                UnknownExistingObjectReplicationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExistingObjectReplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExistingObjectReplicationStatus::Disabled => &"Disabled",
+            ExistingObjectReplicationStatus::Enabled => &"Enabled",
+            ExistingObjectReplicationStatus::UnknownVariant(
+                UnknownExistingObjectReplicationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ExistingObjectReplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ExistingObjectReplicationStatus::Disabled,
+            "Enabled" => ExistingObjectReplicationStatus::Enabled,
+            _ => ExistingObjectReplicationStatus::UnknownVariant(
+                UnknownExistingObjectReplicationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ExistingObjectReplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ExistingObjectReplicationStatus::Disabled,
+            "Enabled" => ExistingObjectReplicationStatus::Enabled,
+            _ => ExistingObjectReplicationStatus::UnknownVariant(
+                UnknownExistingObjectReplicationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExistingObjectReplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ExistingObjectReplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExistingObjectReplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ExistingObjectReplicationStatusDeserializer;
 impl ExistingObjectReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExistingObjectReplicationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3675,12 +5228,118 @@ impl ExistingObjectReplicationStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ExistingObjectReplicationStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExpirationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExpirationStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExpirationStatus),
+}
+
+impl Default for ExpirationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExpirationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExpirationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExpirationStatus {
+    fn into(self) -> String {
+        match self {
+            ExpirationStatus::Disabled => "Disabled".to_string(),
+            ExpirationStatus::Enabled => "Enabled".to_string(),
+            ExpirationStatus::UnknownVariant(UnknownExpirationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExpirationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExpirationStatus::Disabled => &"Disabled",
+            ExpirationStatus::Enabled => &"Enabled",
+            ExpirationStatus::UnknownVariant(UnknownExpirationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ExpirationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ExpirationStatus::Disabled,
+            "Enabled" => ExpirationStatus::Enabled,
+            _ => ExpirationStatus::UnknownVariant(UnknownExpirationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExpirationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ExpirationStatus::Disabled,
+            "Enabled" => ExpirationStatus::Enabled,
+            _ => ExpirationStatus::UnknownVariant(UnknownExpirationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpirationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ExpirationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExpirationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3688,8 +5347,11 @@ impl ExistingObjectReplicationStatusSerializer {
 struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExpirationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3699,12 +5361,12 @@ impl ExpirationStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ExpirationStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3818,18 +5480,115 @@ impl ExpressionSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExpressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExpressionType {
+    Sql,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExpressionType),
+}
+
+impl Default for ExpressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExpressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExpressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExpressionType {
+    fn into(self) -> String {
+        match self {
+            ExpressionType::Sql => "SQL".to_string(),
+            ExpressionType::UnknownVariant(UnknownExpressionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExpressionType {
+    fn into(self) -> &'a str {
+        match self {
+            ExpressionType::Sql => &"SQL",
+            ExpressionType::UnknownVariant(UnknownExpressionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExpressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SQL" => ExpressionType::Sql,
+            _ => ExpressionType::UnknownVariant(UnknownExpressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExpressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SQL" => ExpressionType::Sql,
+            _ => ExpressionType::UnknownVariant(UnknownExpressionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ExpressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExpressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct ExpressionTypeSerializer;
 impl ExpressionTypeSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ExpressionType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3863,18 +5622,125 @@ impl FieldDelimiterSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileHeaderInfo {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileHeaderInfo {
+    Ignore,
+    None,
+    Use,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileHeaderInfo),
+}
+
+impl Default for FileHeaderInfo {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileHeaderInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileHeaderInfo {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileHeaderInfo {
+    fn into(self) -> String {
+        match self {
+            FileHeaderInfo::Ignore => "IGNORE".to_string(),
+            FileHeaderInfo::None => "NONE".to_string(),
+            FileHeaderInfo::Use => "USE".to_string(),
+            FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileHeaderInfo {
+    fn into(self) -> &'a str {
+        match self {
+            FileHeaderInfo::Ignore => &"IGNORE",
+            FileHeaderInfo::None => &"NONE",
+            FileHeaderInfo::Use => &"USE",
+            FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileHeaderInfo {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => FileHeaderInfo::Ignore,
+            "NONE" => FileHeaderInfo::None,
+            "USE" => FileHeaderInfo::Use,
+            _ => FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileHeaderInfo {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => FileHeaderInfo::Ignore,
+            "NONE" => FileHeaderInfo::None,
+            "USE" => FileHeaderInfo::Use,
+            _ => FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileHeaderInfo {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for FileHeaderInfo {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FileHeaderInfo {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct FileHeaderInfoSerializer;
 impl FileHeaderInfoSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &FileHeaderInfo,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -3884,7 +5750,7 @@ impl FileHeaderInfoSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-    pub name: Option<String>,
+    pub name: Option<FilterRuleName>,
     /// <p>The value that the filter searches for in object key names.</p>
     pub value: Option<String>,
 }
@@ -3981,12 +5847,117 @@ impl FilterRuleListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterRuleName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterRuleName {
+    Prefix,
+    Suffix,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterRuleName),
+}
+
+impl Default for FilterRuleName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterRuleName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterRuleName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterRuleName {
+    fn into(self) -> String {
+        match self {
+            FilterRuleName::Prefix => "prefix".to_string(),
+            FilterRuleName::Suffix => "suffix".to_string(),
+            FilterRuleName::UnknownVariant(UnknownFilterRuleName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterRuleName {
+    fn into(self) -> &'a str {
+        match self {
+            FilterRuleName::Prefix => &"prefix",
+            FilterRuleName::Suffix => &"suffix",
+            FilterRuleName::UnknownVariant(UnknownFilterRuleName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterRuleName {
+    fn from(name: &str) -> Self {
+        match name {
+            "prefix" => FilterRuleName::Prefix,
+            "suffix" => FilterRuleName::Suffix,
+            _ => FilterRuleName::UnknownVariant(UnknownFilterRuleName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterRuleName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "prefix" => FilterRuleName::Prefix,
+            "suffix" => FilterRuleName::Suffix,
+            _ => FilterRuleName::UnknownVariant(UnknownFilterRuleName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterRuleName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for FilterRuleName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterRuleName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct FilterRuleNameDeserializer;
 impl FilterRuleNameDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FilterRuleName, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -3996,12 +5967,12 @@ impl FilterRuleNameSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &FilterRuleName,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -4033,7 +6004,7 @@ impl FilterRuleValueSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
-    pub status: Option<String>,
+    pub status: Option<BucketAccelerateStatus>,
 }
 
 #[allow(dead_code)]
@@ -4374,7 +6345,7 @@ pub struct GetBucketLifecycleRequest {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLocationOutput {
     /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>. Buckets in Region <code>us-east-1</code> have a LocationConstraint of <code>null</code>.</p>
-    pub location_constraint: Option<String>,
+    pub location_constraint: Option<BucketLocationConstraint>,
 }
 
 #[allow(dead_code)]
@@ -4600,7 +6571,7 @@ pub struct GetBucketReplicationRequest {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
-    pub payer: Option<String>,
+    pub payer: Option<Payer>,
 }
 
 #[allow(dead_code)]
@@ -4675,9 +6646,9 @@ pub struct GetBucketTaggingRequest {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
-    pub mfa_delete: Option<String>,
+    pub mfa_delete: Option<MFADeleteStatus>,
     /// <p>The versioning state of the bucket.</p>
-    pub status: Option<String>,
+    pub status: Option<BucketVersioningStatus>,
 }
 
 #[allow(dead_code)]
@@ -4789,7 +6760,7 @@ pub struct GetObjectAclOutput {
     pub grants: Option<Vec<Grant>>,
     /// <p> Container for the bucket owner's display name and ID.</p>
     pub owner: Option<Owner>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -4825,7 +6796,7 @@ pub struct GetObjectAclRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The key of the object for which to get the ACL information.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
@@ -4863,7 +6834,7 @@ pub struct GetObjectLegalHoldRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The key name for the object whose Legal Hold status you want to retrieve.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>The version ID of the object whose Legal Hold status you want to retrieve.</p>
     pub version_id: Option<String>,
 }
@@ -4938,16 +6909,16 @@ pub struct GetObjectOutput {
     /// <p>This is set to the number of metadata entries not returned in <code>x-amz-meta</code> headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
     /// <p>Indicates whether this object has an active legal hold. This field is only returned if you have permission to view an object's legal hold status. </p>
-    pub object_lock_legal_hold_status: Option<String>,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     /// <p>The Object Lock mode currently in place for this object.</p>
-    pub object_lock_mode: Option<String>,
+    pub object_lock_mode: Option<ObjectLockMode>,
     /// <p>The date and time when this object's Object Lock will expire.</p>
     pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     /// <p>Amazon S3 can return this if your request involves a bucket that is either a source or destination in a replication rule.</p>
-    pub replication_status: Option<String>,
-    pub request_charged: Option<String>,
+    pub replication_status: Option<ReplicationStatus>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Provides information about object restoration operation and expiration time of the restored object copy.</p>
     pub restore: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
@@ -4957,9 +6928,9 @@ pub struct GetObjectOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for S3 Standard storage class objects.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The number of tags, if any, on the object.</p>
     pub tag_count: Option<i64>,
     /// <p>Version of the object.</p>
@@ -4989,7 +6960,7 @@ pub struct GetObjectRequest {
     pub part_number: Option<i64>,
     /// <p><p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35">https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p> <note> <p>Amazon S3 doesn&#39;t support retrieving multiple ranges of data per <code>GET</code> request.</p> </note></p>
     pub range: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Sets the <code>Cache-Control</code> header of the response.</p>
     pub response_cache_control: Option<String>,
     /// <p>Sets the <code>Content-Disposition</code> header of the response</p>
@@ -5045,7 +7016,7 @@ pub struct GetObjectRetentionRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The key name for the object whose retention settings you want to retrieve.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>The version ID for the object whose retention settings you want to retrieve.</p>
     pub version_id: Option<String>,
 }
@@ -5096,7 +7067,7 @@ pub struct GetObjectTaggingRequest {
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
     pub body: Option<StreamingBody>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -5108,7 +7079,7 @@ pub struct GetObjectTorrentRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The object key for which to get the information.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -5151,7 +7122,7 @@ pub struct GetPublicAccessBlockRequest {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GlacierJobParameters {
     /// <p>Retrieval tier at which the restore will be processed.</p>
-    pub tier: String,
+    pub tier: Tier,
 }
 
 pub struct GlacierJobParametersSerializer;
@@ -5179,7 +7150,7 @@ pub struct Grant {
     /// <p>The person being granted permissions.</p>
     pub grantee: Option<Grantee>,
     /// <p>Specifies the permission given to the grantee.</p>
-    pub permission: Option<String>,
+    pub permission: Option<Permission>,
 }
 
 #[allow(dead_code)]
@@ -5237,7 +7208,7 @@ pub struct Grantee {
     /// <p>The canonical user ID of the grantee.</p>
     pub id: Option<String>,
     /// <p>Type of grantee</p>
-    pub type_: String,
+    pub type_: Type,
     /// <p>URI of the grantee group.</p>
     pub uri: Option<String>,
 }
@@ -5361,7 +7332,7 @@ pub struct HeadObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<String>,
     /// <p>The archive state of the head object.</p>
-    pub archive_status: Option<String>,
+    pub archive_status: Option<ArchiveStatus>,
     /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with AWS KMS (SSE-KMS).</p>
     pub bucket_key_enabled: Option<bool>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
@@ -5391,16 +7362,16 @@ pub struct HeadObjectOutput {
     /// <p>This is set to the number of metadata entries not returned in <code>x-amz-meta</code> headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
     /// <p>Specifies whether a legal hold is in effect for this object. This header is only returned if the requester has the <code>s3:GetObjectLegalHold</code> permission. This header is not returned if the specified version of this object has never had a legal hold applied. For more information about S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Object Lock</a>.</p>
-    pub object_lock_legal_hold_status: Option<String>,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     /// <p>The Object Lock mode, if any, that's in effect for this object. This header is only returned if the requester has the <code>s3:GetObjectRetention</code> permission. For more information about S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Object Lock</a>. </p>
-    pub object_lock_mode: Option<String>,
+    pub object_lock_mode: Option<ObjectLockMode>,
     /// <p>The date and time when the Object Lock retention period expires. This header is only returned if the requester has the <code>s3:GetObjectRetention</code> permission.</p>
     pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     /// <p>Amazon S3 can return this header if your request involves a bucket that is either a source or a destination in a replication rule.</p> <p>In replication, you have a source bucket on which you configure replication and destination bucket or buckets where Amazon S3 stores object replicas. When you request an object (<code>GetObject</code>) or object metadata (<code>HeadObject</code>) from these buckets, Amazon S3 will return the <code>x-amz-replication-status</code> header in the response as follows:</p> <ul> <li> <p>If requesting an object from the source bucket — Amazon S3 will return the <code>x-amz-replication-status</code> header if the object in your request is eligible for replication.</p> <p> For example, suppose that in your replication configuration, you specify object prefix <code>TaxDocs</code> requesting Amazon S3 to replicate objects with key prefix <code>TaxDocs</code>. Any objects you upload with this key name prefix, for example <code>TaxDocs/document1.pdf</code>, are eligible for replication. For any object request with this key name prefix, Amazon S3 will return the <code>x-amz-replication-status</code> header with value PENDING, COMPLETED or FAILED indicating object replication status.</p> </li> <li> <p>If requesting an object from a destination bucket — Amazon S3 will return the <code>x-amz-replication-status</code> header with value REPLICA if the object in your request is a replica that Amazon S3 created and there is no replica modification replication in progress.</p> </li> <li> <p>When replicating objects to multiple destination buckets the <code>x-amz-replication-status</code> header acts differently. The header of the source object will only return a value of COMPLETED when replication is successful to all destinations. The header will remain at value PENDING until replication has completed for all destinations. If one or more destinations fails replication the header will return FAILED. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Replication</a>.</p>
-    pub replication_status: Option<String>,
-    pub request_charged: Option<String>,
+    pub replication_status: Option<ReplicationStatus>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If the object is an archived object (an object whose storage class is GLACIER), the response includes this header if either the archive restoration is in progress (see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html">RestoreObject</a> or an archive copy is already restored.</p> <p> If an archive copy is already restored, the header value indicates when Amazon S3 is scheduled to delete the object copy. For example:</p> <p> <code>x-amz-restore: ongoing-request="false", expiry-date="Fri, 23 Dec 2012 00:00:00 GMT"</code> </p> <p>If the object restoration is in progress, the header returns the value <code>ongoing-request="true"</code>.</p> <p>For more information about archiving objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html#lifecycle-transition-general-considerations">Transitioning Objects: General Considerations</a>.</p>
     pub restore: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
@@ -5410,9 +7381,9 @@ pub struct HeadObjectOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>If the object is stored using server-side encryption either with an AWS KMS customer master key (CMK) or an Amazon S3-managed encryption key, the response includes this header with the value of the server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for S3 Standard storage class objects.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>Version of the object.</p>
     pub version_id: Option<String>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
@@ -5457,7 +7428,7 @@ pub struct HeadObjectRequest {
     pub part_number: Option<i64>,
     /// <p><p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p> <note> <p>Amazon S3 doesn&#39;t support retrieving multiple ranges of data per <code>GET</code> request.</p> </note></p>
     pub range: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
@@ -5658,7 +7629,7 @@ pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
     /// <p>Specifies object's compression format. Valid values: NONE, GZIP, BZIP2. Default Value: NONE.</p>
-    pub compression_type: Option<String>,
+    pub compression_type: Option<CompressionType>,
     /// <p>Specifies JSON as object's input serialization format.</p>
     pub json: Option<JSONInput>,
     /// <p>Specifies Parquet as object's input serialization format.</p>
@@ -5693,12 +7664,127 @@ impl InputSerializationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntelligentTieringAccessTier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntelligentTieringAccessTier {
+    ArchiveAccess,
+    DeepArchiveAccess,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntelligentTieringAccessTier),
+}
+
+impl Default for IntelligentTieringAccessTier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntelligentTieringAccessTier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntelligentTieringAccessTier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntelligentTieringAccessTier {
+    fn into(self) -> String {
+        match self {
+            IntelligentTieringAccessTier::ArchiveAccess => "ARCHIVE_ACCESS".to_string(),
+            IntelligentTieringAccessTier::DeepArchiveAccess => "DEEP_ARCHIVE_ACCESS".to_string(),
+            IntelligentTieringAccessTier::UnknownVariant(UnknownIntelligentTieringAccessTier {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntelligentTieringAccessTier {
+    fn into(self) -> &'a str {
+        match self {
+            IntelligentTieringAccessTier::ArchiveAccess => &"ARCHIVE_ACCESS",
+            IntelligentTieringAccessTier::DeepArchiveAccess => &"DEEP_ARCHIVE_ACCESS",
+            IntelligentTieringAccessTier::UnknownVariant(UnknownIntelligentTieringAccessTier {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IntelligentTieringAccessTier {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVE_ACCESS" => IntelligentTieringAccessTier::ArchiveAccess,
+            "DEEP_ARCHIVE_ACCESS" => IntelligentTieringAccessTier::DeepArchiveAccess,
+            _ => {
+                IntelligentTieringAccessTier::UnknownVariant(UnknownIntelligentTieringAccessTier {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for IntelligentTieringAccessTier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVE_ACCESS" => IntelligentTieringAccessTier::ArchiveAccess,
+            "DEEP_ARCHIVE_ACCESS" => IntelligentTieringAccessTier::DeepArchiveAccess,
+            _ => {
+                IntelligentTieringAccessTier::UnknownVariant(UnknownIntelligentTieringAccessTier {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntelligentTieringAccessTier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for IntelligentTieringAccessTier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IntelligentTieringAccessTier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct IntelligentTieringAccessTierDeserializer;
 impl IntelligentTieringAccessTierDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IntelligentTieringAccessTier, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -5708,12 +7794,12 @@ impl IntelligentTieringAccessTierSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &IntelligentTieringAccessTier,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -5789,7 +7875,7 @@ pub struct IntelligentTieringConfiguration {
     /// <p>The ID used to identify the S3 Intelligent-Tiering configuration.</p>
     pub id: String,
     /// <p>Specifies the status of the configuration.</p>
-    pub status: String,
+    pub status: IntelligentTieringStatus,
     /// <p>Specifies the S3 Intelligent-Tiering storage class tier of the configuration.</p>
     pub tierings: Vec<Tiering>,
 }
@@ -6000,12 +8086,121 @@ impl IntelligentTieringIdSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntelligentTieringStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntelligentTieringStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntelligentTieringStatus),
+}
+
+impl Default for IntelligentTieringStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntelligentTieringStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntelligentTieringStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntelligentTieringStatus {
+    fn into(self) -> String {
+        match self {
+            IntelligentTieringStatus::Disabled => "Disabled".to_string(),
+            IntelligentTieringStatus::Enabled => "Enabled".to_string(),
+            IntelligentTieringStatus::UnknownVariant(UnknownIntelligentTieringStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntelligentTieringStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IntelligentTieringStatus::Disabled => &"Disabled",
+            IntelligentTieringStatus::Enabled => &"Enabled",
+            IntelligentTieringStatus::UnknownVariant(UnknownIntelligentTieringStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for IntelligentTieringStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => IntelligentTieringStatus::Disabled,
+            "Enabled" => IntelligentTieringStatus::Enabled,
+            _ => IntelligentTieringStatus::UnknownVariant(UnknownIntelligentTieringStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IntelligentTieringStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => IntelligentTieringStatus::Disabled,
+            "Enabled" => IntelligentTieringStatus::Enabled,
+            _ => IntelligentTieringStatus::UnknownVariant(UnknownIntelligentTieringStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntelligentTieringStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for IntelligentTieringStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IntelligentTieringStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct IntelligentTieringStatusDeserializer;
 impl IntelligentTieringStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IntelligentTieringStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6015,12 +8210,12 @@ impl IntelligentTieringStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &IntelligentTieringStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6036,11 +8231,11 @@ pub struct InventoryConfiguration {
     /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
     /// <p>Object versions to include in the inventory list. If set to <code>All</code>, the list includes all the object versions, which adds the version-related fields <code>VersionId</code>, <code>IsLatest</code>, and <code>DeleteMarker</code> to the list. If set to <code>Current</code>, the list does not contain these version-related fields.</p>
-    pub included_object_versions: String,
+    pub included_object_versions: InventoryIncludedObjectVersions,
     /// <p>Specifies whether the inventory is enabled or disabled. If set to <code>True</code>, an inventory list is generated. If set to <code>False</code>, no inventory list is generated.</p>
     pub is_enabled: bool,
     /// <p>Contains the optional fields that are included in the inventory results.</p>
-    pub optional_fields: Option<Vec<String>>,
+    pub optional_fields: Option<Vec<InventoryOptionalField>>,
     /// <p>Specifies the schedule for generating inventory results.</p>
     pub schedule: InventorySchedule,
 }
@@ -6307,12 +8502,122 @@ impl InventoryFilterSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryFormat {
+    Csv,
+    Orc,
+    Parquet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryFormat),
+}
+
+impl Default for InventoryFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryFormat {
+    fn into(self) -> String {
+        match self {
+            InventoryFormat::Csv => "CSV".to_string(),
+            InventoryFormat::Orc => "ORC".to_string(),
+            InventoryFormat::Parquet => "Parquet".to_string(),
+            InventoryFormat::UnknownVariant(UnknownInventoryFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryFormat {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryFormat::Csv => &"CSV",
+            InventoryFormat::Orc => &"ORC",
+            InventoryFormat::Parquet => &"Parquet",
+            InventoryFormat::UnknownVariant(UnknownInventoryFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => InventoryFormat::Csv,
+            "ORC" => InventoryFormat::Orc,
+            "Parquet" => InventoryFormat::Parquet,
+            _ => InventoryFormat::UnknownVariant(UnknownInventoryFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => InventoryFormat::Csv,
+            "ORC" => InventoryFormat::Orc,
+            "Parquet" => InventoryFormat::Parquet,
+            _ => InventoryFormat::UnknownVariant(UnknownInventoryFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InventoryFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InventoryFormat, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6322,12 +8627,118 @@ impl InventoryFormatSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &InventoryFormat,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryFrequency {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryFrequency {
+    Daily,
+    Weekly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryFrequency),
+}
+
+impl Default for InventoryFrequency {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryFrequency {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryFrequency {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryFrequency {
+    fn into(self) -> String {
+        match self {
+            InventoryFrequency::Daily => "Daily".to_string(),
+            InventoryFrequency::Weekly => "Weekly".to_string(),
+            InventoryFrequency::UnknownVariant(UnknownInventoryFrequency { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryFrequency {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryFrequency::Daily => &"Daily",
+            InventoryFrequency::Weekly => &"Weekly",
+            InventoryFrequency::UnknownVariant(UnknownInventoryFrequency { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for InventoryFrequency {
+    fn from(name: &str) -> Self {
+        match name {
+            "Daily" => InventoryFrequency::Daily,
+            "Weekly" => InventoryFrequency::Weekly,
+            _ => InventoryFrequency::UnknownVariant(UnknownInventoryFrequency {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryFrequency {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Daily" => InventoryFrequency::Daily,
+            "Weekly" => InventoryFrequency::Weekly,
+            _ => InventoryFrequency::UnknownVariant(UnknownInventoryFrequency { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryFrequency {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InventoryFrequency {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryFrequency {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6335,8 +8746,11 @@ impl InventoryFormatSerializer {
 struct InventoryFrequencyDeserializer;
 impl InventoryFrequencyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InventoryFrequency, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6346,12 +8760,12 @@ impl InventoryFrequencySerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &InventoryFrequency,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6379,12 +8793,125 @@ impl InventoryIdSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryIncludedObjectVersions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryIncludedObjectVersions {
+    All,
+    Current,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryIncludedObjectVersions),
+}
+
+impl Default for InventoryIncludedObjectVersions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryIncludedObjectVersions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryIncludedObjectVersions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryIncludedObjectVersions {
+    fn into(self) -> String {
+        match self {
+            InventoryIncludedObjectVersions::All => "All".to_string(),
+            InventoryIncludedObjectVersions::Current => "Current".to_string(),
+            InventoryIncludedObjectVersions::UnknownVariant(
+                UnknownInventoryIncludedObjectVersions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryIncludedObjectVersions {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryIncludedObjectVersions::All => &"All",
+            InventoryIncludedObjectVersions::Current => &"Current",
+            InventoryIncludedObjectVersions::UnknownVariant(
+                UnknownInventoryIncludedObjectVersions { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryIncludedObjectVersions {
+    fn from(name: &str) -> Self {
+        match name {
+            "All" => InventoryIncludedObjectVersions::All,
+            "Current" => InventoryIncludedObjectVersions::Current,
+            _ => InventoryIncludedObjectVersions::UnknownVariant(
+                UnknownInventoryIncludedObjectVersions {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for InventoryIncludedObjectVersions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "All" => InventoryIncludedObjectVersions::All,
+            "Current" => InventoryIncludedObjectVersions::Current,
+            _ => InventoryIncludedObjectVersions::UnknownVariant(
+                UnknownInventoryIncludedObjectVersions { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryIncludedObjectVersions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InventoryIncludedObjectVersions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryIncludedObjectVersions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InventoryIncludedObjectVersions, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6394,12 +8921,169 @@ impl InventoryIncludedObjectVersionsSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &InventoryIncludedObjectVersions,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryOptionalField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryOptionalField {
+    Etag,
+    EncryptionStatus,
+    IntelligentTieringAccessTier,
+    IsMultipartUploaded,
+    LastModifiedDate,
+    ObjectLockLegalHoldStatus,
+    ObjectLockMode,
+    ObjectLockRetainUntilDate,
+    ReplicationStatus,
+    Size,
+    StorageClass,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryOptionalField),
+}
+
+impl Default for InventoryOptionalField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryOptionalField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryOptionalField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryOptionalField {
+    fn into(self) -> String {
+        match self {
+            InventoryOptionalField::Etag => "ETag".to_string(),
+            InventoryOptionalField::EncryptionStatus => "EncryptionStatus".to_string(),
+            InventoryOptionalField::IntelligentTieringAccessTier => {
+                "IntelligentTieringAccessTier".to_string()
+            }
+            InventoryOptionalField::IsMultipartUploaded => "IsMultipartUploaded".to_string(),
+            InventoryOptionalField::LastModifiedDate => "LastModifiedDate".to_string(),
+            InventoryOptionalField::ObjectLockLegalHoldStatus => {
+                "ObjectLockLegalHoldStatus".to_string()
+            }
+            InventoryOptionalField::ObjectLockMode => "ObjectLockMode".to_string(),
+            InventoryOptionalField::ObjectLockRetainUntilDate => {
+                "ObjectLockRetainUntilDate".to_string()
+            }
+            InventoryOptionalField::ReplicationStatus => "ReplicationStatus".to_string(),
+            InventoryOptionalField::Size => "Size".to_string(),
+            InventoryOptionalField::StorageClass => "StorageClass".to_string(),
+            InventoryOptionalField::UnknownVariant(UnknownInventoryOptionalField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryOptionalField {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryOptionalField::Etag => &"ETag",
+            InventoryOptionalField::EncryptionStatus => &"EncryptionStatus",
+            InventoryOptionalField::IntelligentTieringAccessTier => &"IntelligentTieringAccessTier",
+            InventoryOptionalField::IsMultipartUploaded => &"IsMultipartUploaded",
+            InventoryOptionalField::LastModifiedDate => &"LastModifiedDate",
+            InventoryOptionalField::ObjectLockLegalHoldStatus => &"ObjectLockLegalHoldStatus",
+            InventoryOptionalField::ObjectLockMode => &"ObjectLockMode",
+            InventoryOptionalField::ObjectLockRetainUntilDate => &"ObjectLockRetainUntilDate",
+            InventoryOptionalField::ReplicationStatus => &"ReplicationStatus",
+            InventoryOptionalField::Size => &"Size",
+            InventoryOptionalField::StorageClass => &"StorageClass",
+            InventoryOptionalField::UnknownVariant(UnknownInventoryOptionalField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryOptionalField {
+    fn from(name: &str) -> Self {
+        match name {
+            "ETag" => InventoryOptionalField::Etag,
+            "EncryptionStatus" => InventoryOptionalField::EncryptionStatus,
+            "IntelligentTieringAccessTier" => InventoryOptionalField::IntelligentTieringAccessTier,
+            "IsMultipartUploaded" => InventoryOptionalField::IsMultipartUploaded,
+            "LastModifiedDate" => InventoryOptionalField::LastModifiedDate,
+            "ObjectLockLegalHoldStatus" => InventoryOptionalField::ObjectLockLegalHoldStatus,
+            "ObjectLockMode" => InventoryOptionalField::ObjectLockMode,
+            "ObjectLockRetainUntilDate" => InventoryOptionalField::ObjectLockRetainUntilDate,
+            "ReplicationStatus" => InventoryOptionalField::ReplicationStatus,
+            "Size" => InventoryOptionalField::Size,
+            "StorageClass" => InventoryOptionalField::StorageClass,
+            _ => InventoryOptionalField::UnknownVariant(UnknownInventoryOptionalField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryOptionalField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ETag" => InventoryOptionalField::Etag,
+            "EncryptionStatus" => InventoryOptionalField::EncryptionStatus,
+            "IntelligentTieringAccessTier" => InventoryOptionalField::IntelligentTieringAccessTier,
+            "IsMultipartUploaded" => InventoryOptionalField::IsMultipartUploaded,
+            "LastModifiedDate" => InventoryOptionalField::LastModifiedDate,
+            "ObjectLockLegalHoldStatus" => InventoryOptionalField::ObjectLockLegalHoldStatus,
+            "ObjectLockMode" => InventoryOptionalField::ObjectLockMode,
+            "ObjectLockRetainUntilDate" => InventoryOptionalField::ObjectLockRetainUntilDate,
+            "ReplicationStatus" => InventoryOptionalField::ReplicationStatus,
+            "Size" => InventoryOptionalField::Size,
+            "StorageClass" => InventoryOptionalField::StorageClass,
+            _ => InventoryOptionalField::UnknownVariant(UnknownInventoryOptionalField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryOptionalField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for InventoryOptionalField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryOptionalField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -6407,8 +9091,11 @@ impl InventoryIncludedObjectVersionsSerializer {
 struct InventoryOptionalFieldDeserializer;
 impl InventoryOptionalFieldDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InventoryOptionalField, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -6418,12 +9105,12 @@ impl InventoryOptionalFieldSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &InventoryOptionalField,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6434,7 +9121,7 @@ impl InventoryOptionalFieldsDeserializer {
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<Vec<String>, XmlParseError> {
+    ) -> Result<Vec<InventoryOptionalField>, XmlParseError> {
         deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
             if name == "Field" {
                 obj.push(InventoryOptionalFieldDeserializer::deserialize(
@@ -6454,7 +9141,7 @@ impl InventoryOptionalFieldsSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &Vec<String>,
+        obj: &Vec<InventoryOptionalField>,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
@@ -6480,7 +9167,7 @@ pub struct InventoryS3BucketDestination {
     /// <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
     pub encryption: Option<InventoryEncryption>,
     /// <p>Specifies the output format of the inventory results.</p>
-    pub format: String,
+    pub format: InventoryFormat,
     /// <p>The prefix that is prepended to all inventory results.</p>
     pub prefix: Option<String>,
 }
@@ -6558,7 +9245,7 @@ impl InventoryS3BucketDestinationSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
-    pub frequency: String,
+    pub frequency: InventoryFrequency,
 }
 
 #[allow(dead_code)]
@@ -6652,7 +9339,7 @@ impl IsTruncatedDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
-    pub type_: Option<String>,
+    pub type_: Option<JSONType>,
 }
 
 pub struct JSONInputSerializer;
@@ -6701,18 +9388,120 @@ impl JSONOutputSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownJSONType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum JSONType {
+    Document,
+    Lines,
+    #[doc(hidden)]
+    UnknownVariant(UnknownJSONType),
+}
+
+impl Default for JSONType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for JSONType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for JSONType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for JSONType {
+    fn into(self) -> String {
+        match self {
+            JSONType::Document => "DOCUMENT".to_string(),
+            JSONType::Lines => "LINES".to_string(),
+            JSONType::UnknownVariant(UnknownJSONType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a JSONType {
+    fn into(self) -> &'a str {
+        match self {
+            JSONType::Document => &"DOCUMENT",
+            JSONType::Lines => &"LINES",
+            JSONType::UnknownVariant(UnknownJSONType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for JSONType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOCUMENT" => JSONType::Document,
+            "LINES" => JSONType::Lines,
+            _ => JSONType::UnknownVariant(UnknownJSONType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for JSONType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOCUMENT" => JSONType::Document,
+            "LINES" => JSONType::Lines,
+            _ => JSONType::UnknownVariant(UnknownJSONType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for JSONType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for JSONType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for JSONType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct JSONTypeSerializer;
 impl JSONTypeSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &JSONType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -6817,7 +9606,7 @@ impl LambdaFunctionArnSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionConfiguration {
     /// <p>The Amazon S3 bucket event for which to invoke the AWS Lambda function. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-    pub events: Vec<String>,
+    pub events: Vec<Event>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the AWS Lambda function that Amazon S3 invokes when the specified event type occurs.</p>
@@ -7055,7 +9844,7 @@ pub struct LifecycleRule {
     /// <p> Specifies the transition rule for the lifecycle rule that describes when noncurrent objects transition to a specific storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to a specific storage class at a set period in the object's lifetime. </p>
     pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
     /// <p>If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.</p>
-    pub status: String,
+    pub status: ExpirationStatus,
     /// <p>Specifies when an Amazon S3 object transitions to a specified storage class.</p>
     pub transitions: Option<Vec<Transition>>,
 }
@@ -7652,7 +10441,7 @@ pub struct ListMultipartUploadsOutput {
     /// <p>Contains the delimiter you specified in the request. If you don't specify a delimiter in your request, this element is absent from the response.</p>
     pub delimiter: Option<String>,
     /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p> <p>If you specify <code>encoding-type</code> request parameter, Amazon S3 includes this element in the response, and returns encoded key name values in the following response elements:</p> <p> <code>Delimiter</code>, <code>KeyMarker</code>, <code>Prefix</code>, <code>NextKeyMarker</code>, <code>Key</code>.</p>
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max uploads.</p>
     pub is_truncated: Option<bool>,
     /// <p>The key at or after which the listing began.</p>
@@ -7755,7 +10544,7 @@ pub struct ListMultipartUploadsRequest {
     pub bucket: String,
     /// <p>Character you use to group keys.</p> <p>All keys that contain the same string between the prefix, if specified, and the first occurrence of the delimiter after the prefix are grouped under a single result element, <code>CommonPrefixes</code>. If you don't specify the prefix parameter, then the substring starts at the beginning of the key. The keys that are grouped under <code>CommonPrefixes</code> result element are not returned elsewhere in the response.</p>
     pub delimiter: Option<String>,
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP <code>403 (Access Denied)</code> error.</p>
     pub expected_bucket_owner: Option<String>,
     /// <p>Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.</p> <p>If <code>upload-id-marker</code> is not specified, only the keys lexicographically greater than the specified <code>key-marker</code> will be included in the list.</p> <p>If <code>upload-id-marker</code> is specified, any multipart uploads for a key equal to the <code>key-marker</code> might also be included, provided those multipart uploads have upload IDs lexicographically greater than the specified <code>upload-id-marker</code>.</p>
@@ -7778,7 +10567,7 @@ pub struct ListObjectVersionsOutput {
     /// <p>The delimiter grouping the included keys. A delimiter is a character that you specify to group keys. All keys that contain the same string between the prefix and the first occurrence of the delimiter are grouped under a single result element in <code>CommonPrefixes</code>. These groups are counted as one result against the max-keys limitation. These keys are not returned elsewhere in the response.</p>
     pub delimiter: Option<String>,
     /// <p> Encoding type used by Amazon S3 to encode object key names in the XML response.</p> <p>If you specify encoding-type request parameter, Amazon S3 includes this element in the response, and returns encoded key name values in the following response elements:</p> <p> <code>KeyMarker, NextKeyMarker, Prefix, Key</code>, and <code>Delimiter</code>.</p>
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search criteria. If your results were truncated, you can make a follow-up paginated request using the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in another request to return the rest of the results.</p>
     pub is_truncated: Option<bool>,
     /// <p>Marks the last key returned in a truncated response.</p>
@@ -7887,7 +10676,7 @@ pub struct ListObjectVersionsRequest {
     pub bucket: String,
     /// <p>A delimiter is a character that you specify to group keys. All keys that contain the same string between the <code>prefix</code> and the first occurrence of the delimiter are grouped under a single result element in CommonPrefixes. These groups are counted as one result against the max-keys limitation. These keys are not returned elsewhere in the response.</p>
     pub delimiter: Option<String>,
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP <code>403 (Access Denied)</code> error.</p>
     pub expected_bucket_owner: Option<String>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
@@ -7910,7 +10699,7 @@ pub struct ListObjectsOutput {
     /// <p>Causes keys that contain the same string between the prefix and the first occurrence of the delimiter to be rolled up into a single result element in the <code>CommonPrefixes</code> collection. These rolled-up keys are not returned elsewhere in the response. Each rolled-up result counts as only one return against the <code>MaxKeys</code> value.</p>
     pub delimiter: Option<String>,
     /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search criteria.</p>
     pub is_truncated: Option<bool>,
     /// <p>Indicates where in the bucket listing begins. Marker is included in the response if it was sent with the request.</p>
@@ -7987,7 +10776,7 @@ pub struct ListObjectsRequest {
     pub bucket: String,
     /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP <code>403 (Access Denied)</code> error.</p>
     pub expected_bucket_owner: Option<String>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
@@ -7997,7 +10786,7 @@ pub struct ListObjectsRequest {
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
     /// <p>Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.</p>
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -8012,7 +10801,7 @@ pub struct ListObjectsV2Output {
     /// <p>Causes keys that contain the same string between the prefix and the first occurrence of the delimiter to be rolled up into a single result element in the CommonPrefixes collection. These rolled-up keys are not returned elsewhere in the response. Each rolled-up result counts as only one return against the <code>MaxKeys</code> value.</p>
     pub delimiter: Option<String>,
     /// <p>Encoding type used by Amazon S3 to encode object key names in the XML response.</p> <p>If you specify the encoding-type request parameter, Amazon S3 includes this element in the response, and returns encoded key name values in the following response elements:</p> <p> <code>Delimiter, Prefix, Key,</code> and <code>StartAfter</code>.</p>
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>Set to false if all of the results were returned. Set to true if more keys are available to return. If the number of results exceeds that specified by MaxKeys, all of the results might not be returned.</p>
     pub is_truncated: Option<bool>,
     /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys </p>
@@ -8104,7 +10893,7 @@ pub struct ListObjectsV2Request {
     /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
     /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>The account id of the expected bucket owner. If the bucket is owned by a different account, the request will fail with an HTTP <code>403 (Access Denied)</code> error.</p>
     pub expected_bucket_owner: Option<String>,
     /// <p>The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true.</p>
@@ -8114,7 +10903,7 @@ pub struct ListObjectsV2Request {
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
     /// <p>Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.</p>
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket.</p>
     pub start_after: Option<String>,
 }
@@ -8144,9 +10933,9 @@ pub struct ListPartsOutput {
     pub part_number_marker: Option<i64>,
     /// <p> Container for elements related to a particular part. A response can contain zero or more <code>Part</code> elements.</p>
     pub parts: Option<Vec<Part>>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Class of storage (STANDARD or REDUCED_REDUNDANCY) used to store the uploaded object.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: Option<String>,
 }
@@ -8228,7 +11017,7 @@ pub struct ListPartsRequest {
     pub max_parts: Option<i64>,
     /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers will be listed.</p>
     pub part_number_marker: Option<i64>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: String,
 }
@@ -8321,18 +11110,222 @@ impl LoggingEnabledSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMFADelete {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MFADelete {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMFADelete),
+}
+
+impl Default for MFADelete {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MFADelete {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MFADelete {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MFADelete {
+    fn into(self) -> String {
+        match self {
+            MFADelete::Disabled => "Disabled".to_string(),
+            MFADelete::Enabled => "Enabled".to_string(),
+            MFADelete::UnknownVariant(UnknownMFADelete { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MFADelete {
+    fn into(self) -> &'a str {
+        match self {
+            MFADelete::Disabled => &"Disabled",
+            MFADelete::Enabled => &"Enabled",
+            MFADelete::UnknownVariant(UnknownMFADelete { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MFADelete {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => MFADelete::Disabled,
+            "Enabled" => MFADelete::Enabled,
+            _ => MFADelete::UnknownVariant(UnknownMFADelete {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MFADelete {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => MFADelete::Disabled,
+            "Enabled" => MFADelete::Enabled,
+            _ => MFADelete::UnknownVariant(UnknownMFADelete { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MFADelete {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MFADelete {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MFADelete {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct MFADeleteSerializer;
 impl MFADeleteSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &MFADelete,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMFADeleteStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MFADeleteStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMFADeleteStatus),
+}
+
+impl Default for MFADeleteStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MFADeleteStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MFADeleteStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MFADeleteStatus {
+    fn into(self) -> String {
+        match self {
+            MFADeleteStatus::Disabled => "Disabled".to_string(),
+            MFADeleteStatus::Enabled => "Enabled".to_string(),
+            MFADeleteStatus::UnknownVariant(UnknownMFADeleteStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MFADeleteStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MFADeleteStatus::Disabled => &"Disabled",
+            MFADeleteStatus::Enabled => &"Enabled",
+            MFADeleteStatus::UnknownVariant(UnknownMFADeleteStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MFADeleteStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => MFADeleteStatus::Disabled,
+            "Enabled" => MFADeleteStatus::Enabled,
+            _ => MFADeleteStatus::UnknownVariant(UnknownMFADeleteStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MFADeleteStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => MFADeleteStatus::Disabled,
+            "Enabled" => MFADeleteStatus::Enabled,
+            _ => MFADeleteStatus::UnknownVariant(UnknownMFADeleteStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MFADeleteStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MFADeleteStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MFADeleteStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -8340,8 +11333,11 @@ impl MFADeleteSerializer {
 struct MFADeleteStatusDeserializer;
 impl MFADeleteStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MFADeleteStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -8472,6 +11468,128 @@ impl MessageDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetadataDirective {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetadataDirective {
+    Copy,
+    Replace,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetadataDirective),
+}
+
+impl Default for MetadataDirective {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetadataDirective {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetadataDirective {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetadataDirective {
+    fn into(self) -> String {
+        match self {
+            MetadataDirective::Copy => "COPY".to_string(),
+            MetadataDirective::Replace => "REPLACE".to_string(),
+            MetadataDirective::UnknownVariant(UnknownMetadataDirective { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetadataDirective {
+    fn into(self) -> &'a str {
+        match self {
+            MetadataDirective::Copy => &"COPY",
+            MetadataDirective::Replace => &"REPLACE",
+            MetadataDirective::UnknownVariant(UnknownMetadataDirective { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MetadataDirective {
+    fn from(name: &str) -> Self {
+        match name {
+            "COPY" => MetadataDirective::Copy,
+            "REPLACE" => MetadataDirective::Replace,
+            _ => MetadataDirective::UnknownVariant(UnknownMetadataDirective {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetadataDirective {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COPY" => MetadataDirective::Copy,
+            "REPLACE" => MetadataDirective::Replace,
+            _ => MetadataDirective::UnknownVariant(UnknownMetadataDirective { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetadataDirective {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MetadataDirective {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MetadataDirective {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+pub struct MetadataDirectiveSerializer;
+impl MetadataDirectiveSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &MetadataDirective,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
 /// <p>A metadata key-value pair to store with an object.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8542,7 +11660,7 @@ pub struct Metrics {
     /// <p> A container specifying the time threshold for emitting the <code>s3:Replication:OperationMissedThreshold</code> event. </p>
     pub event_threshold: Option<ReplicationTimeValue>,
     /// <p> Specifies whether the replication metrics are enabled. </p>
-    pub status: String,
+    pub status: MetricsStatus,
 }
 
 #[allow(dead_code)]
@@ -8821,12 +11939,117 @@ impl MetricsIdSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricsStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricsStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricsStatus),
+}
+
+impl Default for MetricsStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricsStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricsStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricsStatus {
+    fn into(self) -> String {
+        match self {
+            MetricsStatus::Disabled => "Disabled".to_string(),
+            MetricsStatus::Enabled => "Enabled".to_string(),
+            MetricsStatus::UnknownVariant(UnknownMetricsStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricsStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MetricsStatus::Disabled => &"Disabled",
+            MetricsStatus::Enabled => &"Enabled",
+            MetricsStatus::UnknownVariant(UnknownMetricsStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricsStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => MetricsStatus::Disabled,
+            "Enabled" => MetricsStatus::Enabled,
+            _ => MetricsStatus::UnknownVariant(UnknownMetricsStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricsStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => MetricsStatus::Disabled,
+            "Enabled" => MetricsStatus::Enabled,
+            _ => MetricsStatus::UnknownVariant(UnknownMetricsStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricsStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for MetricsStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for MetricsStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct MetricsStatusDeserializer;
 impl MetricsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricsStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -8836,12 +12059,12 @@ impl MetricsStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &MetricsStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -8882,7 +12105,7 @@ pub struct MultipartUpload {
     /// <p>Specifies the owner of the object that is part of the multipart upload. </p>
     pub owner: Option<Owner>,
     /// <p>The class of storage used to store the object.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>Upload ID that identifies the multipart upload.</p>
     pub upload_id: Option<String>,
 }
@@ -9087,7 +12310,7 @@ pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#non-current-days-calculations">How Amazon S3 Calculates How Long an Object Has Been Noncurrent</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub noncurrent_days: Option<i64>,
     /// <p>The class of storage used to store the object.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<TransitionStorageClass>,
 }
 
 #[allow(dead_code)]
@@ -9460,7 +12683,7 @@ pub struct Object {
     /// <p>Size in bytes of the object</p>
     pub size: Option<i64>,
     /// <p>The class of storage used to store the object.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<ObjectStorageClass>,
 }
 
 #[allow(dead_code)]
@@ -9501,18 +12724,145 @@ impl ObjectDeserializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectCannedACL {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectCannedACL {
+    AuthenticatedRead,
+    AwsExecRead,
+    BucketOwnerFullControl,
+    BucketOwnerRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectCannedACL),
+}
+
+impl Default for ObjectCannedACL {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectCannedACL {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectCannedACL {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectCannedACL {
+    fn into(self) -> String {
+        match self {
+            ObjectCannedACL::AuthenticatedRead => "authenticated-read".to_string(),
+            ObjectCannedACL::AwsExecRead => "aws-exec-read".to_string(),
+            ObjectCannedACL::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
+            ObjectCannedACL::BucketOwnerRead => "bucket-owner-read".to_string(),
+            ObjectCannedACL::Private => "private".to_string(),
+            ObjectCannedACL::PublicRead => "public-read".to_string(),
+            ObjectCannedACL::PublicReadWrite => "public-read-write".to_string(),
+            ObjectCannedACL::UnknownVariant(UnknownObjectCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectCannedACL {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectCannedACL::AuthenticatedRead => &"authenticated-read",
+            ObjectCannedACL::AwsExecRead => &"aws-exec-read",
+            ObjectCannedACL::BucketOwnerFullControl => &"bucket-owner-full-control",
+            ObjectCannedACL::BucketOwnerRead => &"bucket-owner-read",
+            ObjectCannedACL::Private => &"private",
+            ObjectCannedACL::PublicRead => &"public-read",
+            ObjectCannedACL::PublicReadWrite => &"public-read-write",
+            ObjectCannedACL::UnknownVariant(UnknownObjectCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectCannedACL {
+    fn from(name: &str) -> Self {
+        match name {
+            "authenticated-read" => ObjectCannedACL::AuthenticatedRead,
+            "aws-exec-read" => ObjectCannedACL::AwsExecRead,
+            "bucket-owner-full-control" => ObjectCannedACL::BucketOwnerFullControl,
+            "bucket-owner-read" => ObjectCannedACL::BucketOwnerRead,
+            "private" => ObjectCannedACL::Private,
+            "public-read" => ObjectCannedACL::PublicRead,
+            "public-read-write" => ObjectCannedACL::PublicReadWrite,
+            _ => ObjectCannedACL::UnknownVariant(UnknownObjectCannedACL {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectCannedACL {
+    fn from(name: String) -> Self {
+        match &*name {
+            "authenticated-read" => ObjectCannedACL::AuthenticatedRead,
+            "aws-exec-read" => ObjectCannedACL::AwsExecRead,
+            "bucket-owner-full-control" => ObjectCannedACL::BucketOwnerFullControl,
+            "bucket-owner-read" => ObjectCannedACL::BucketOwnerRead,
+            "private" => ObjectCannedACL::Private,
+            "public-read" => ObjectCannedACL::PublicRead,
+            "public-read-write" => ObjectCannedACL::PublicReadWrite,
+            _ => ObjectCannedACL::UnknownVariant(UnknownObjectCannedACL { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectCannedACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectCannedACL {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectCannedACL {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct ObjectCannedACLSerializer;
 impl ObjectCannedACLSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ObjectCannedACL,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9622,7 +12972,7 @@ impl ObjectListDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockConfiguration {
     /// <p>Indicates whether this bucket has an Object Lock configuration enabled.</p>
-    pub object_lock_enabled: Option<String>,
+    pub object_lock_enabled: Option<ObjectLockEnabled>,
     /// <p>The Object Lock rule in place for the specified object.</p>
     pub rule: Option<ObjectLockRule>,
 }
@@ -9679,12 +13029,116 @@ impl ObjectLockConfigurationSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectLockEnabled {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectLockEnabled {
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectLockEnabled),
+}
+
+impl Default for ObjectLockEnabled {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectLockEnabled {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectLockEnabled {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectLockEnabled {
+    fn into(self) -> String {
+        match self {
+            ObjectLockEnabled::Enabled => "Enabled".to_string(),
+            ObjectLockEnabled::UnknownVariant(UnknownObjectLockEnabled { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectLockEnabled {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectLockEnabled::Enabled => &"Enabled",
+            ObjectLockEnabled::UnknownVariant(UnknownObjectLockEnabled { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ObjectLockEnabled {
+    fn from(name: &str) -> Self {
+        match name {
+            "Enabled" => ObjectLockEnabled::Enabled,
+            _ => ObjectLockEnabled::UnknownVariant(UnknownObjectLockEnabled {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectLockEnabled {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Enabled" => ObjectLockEnabled::Enabled,
+            _ => ObjectLockEnabled::UnknownVariant(UnknownObjectLockEnabled { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectLockEnabled {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectLockEnabled {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectLockEnabled {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ObjectLockEnabledDeserializer;
 impl ObjectLockEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockEnabled, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9694,12 +13148,12 @@ impl ObjectLockEnabledSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ObjectLockEnabled,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9709,7 +13163,7 @@ impl ObjectLockEnabledSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockLegalHold {
     /// <p>Indicates whether the specified object has a Legal Hold in place.</p>
-    pub status: Option<String>,
+    pub status: Option<ObjectLockLegalHoldStatus>,
 }
 
 #[allow(dead_code)]
@@ -9753,12 +13207,123 @@ impl ObjectLockLegalHoldSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectLockLegalHoldStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectLockLegalHoldStatus {
+    Off,
+    On,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectLockLegalHoldStatus),
+}
+
+impl Default for ObjectLockLegalHoldStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectLockLegalHoldStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectLockLegalHoldStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectLockLegalHoldStatus {
+    fn into(self) -> String {
+        match self {
+            ObjectLockLegalHoldStatus::Off => "OFF".to_string(),
+            ObjectLockLegalHoldStatus::On => "ON".to_string(),
+            ObjectLockLegalHoldStatus::UnknownVariant(UnknownObjectLockLegalHoldStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectLockLegalHoldStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectLockLegalHoldStatus::Off => &"OFF",
+            ObjectLockLegalHoldStatus::On => &"ON",
+            ObjectLockLegalHoldStatus::UnknownVariant(UnknownObjectLockLegalHoldStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectLockLegalHoldStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "OFF" => ObjectLockLegalHoldStatus::Off,
+            "ON" => ObjectLockLegalHoldStatus::On,
+            _ => ObjectLockLegalHoldStatus::UnknownVariant(UnknownObjectLockLegalHoldStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectLockLegalHoldStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OFF" => ObjectLockLegalHoldStatus::Off,
+            "ON" => ObjectLockLegalHoldStatus::On,
+            _ => {
+                ObjectLockLegalHoldStatus::UnknownVariant(UnknownObjectLockLegalHoldStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectLockLegalHoldStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectLockLegalHoldStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectLockLegalHoldStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ObjectLockLegalHoldStatusDeserializer;
 impl ObjectLockLegalHoldStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockLegalHoldStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9768,12 +13333,141 @@ impl ObjectLockLegalHoldStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ObjectLockLegalHoldStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectLockMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectLockMode {
+    Compliance,
+    Governance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectLockMode),
+}
+
+impl Default for ObjectLockMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectLockMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectLockMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectLockMode {
+    fn into(self) -> String {
+        match self {
+            ObjectLockMode::Compliance => "COMPLIANCE".to_string(),
+            ObjectLockMode::Governance => "GOVERNANCE".to_string(),
+            ObjectLockMode::UnknownVariant(UnknownObjectLockMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectLockMode {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectLockMode::Compliance => &"COMPLIANCE",
+            ObjectLockMode::Governance => &"GOVERNANCE",
+            ObjectLockMode::UnknownVariant(UnknownObjectLockMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectLockMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANCE" => ObjectLockMode::Compliance,
+            "GOVERNANCE" => ObjectLockMode::Governance,
+            _ => ObjectLockMode::UnknownVariant(UnknownObjectLockMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectLockMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANCE" => ObjectLockMode::Compliance,
+            "GOVERNANCE" => ObjectLockMode::Governance,
+            _ => ObjectLockMode::UnknownVariant(UnknownObjectLockMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectLockMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectLockMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectLockMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[allow(dead_code)]
+struct ObjectLockModeDeserializer;
+impl ObjectLockModeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockMode, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
+    }
+}
+
+pub struct ObjectLockModeSerializer;
+impl ObjectLockModeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ObjectLockMode,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9783,7 +13477,7 @@ impl ObjectLockLegalHoldStatusSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
-    pub mode: Option<String>,
+    pub mode: Option<ObjectLockRetentionMode>,
     /// <p>The date on which this Object Lock Retention will expire.</p>
     pub retain_until_date: Option<String>,
 }
@@ -9836,12 +13530,121 @@ impl ObjectLockRetentionSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectLockRetentionMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectLockRetentionMode {
+    Compliance,
+    Governance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectLockRetentionMode),
+}
+
+impl Default for ObjectLockRetentionMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectLockRetentionMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectLockRetentionMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectLockRetentionMode {
+    fn into(self) -> String {
+        match self {
+            ObjectLockRetentionMode::Compliance => "COMPLIANCE".to_string(),
+            ObjectLockRetentionMode::Governance => "GOVERNANCE".to_string(),
+            ObjectLockRetentionMode::UnknownVariant(UnknownObjectLockRetentionMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectLockRetentionMode {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectLockRetentionMode::Compliance => &"COMPLIANCE",
+            ObjectLockRetentionMode::Governance => &"GOVERNANCE",
+            ObjectLockRetentionMode::UnknownVariant(UnknownObjectLockRetentionMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectLockRetentionMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANCE" => ObjectLockRetentionMode::Compliance,
+            "GOVERNANCE" => ObjectLockRetentionMode::Governance,
+            _ => ObjectLockRetentionMode::UnknownVariant(UnknownObjectLockRetentionMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectLockRetentionMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANCE" => ObjectLockRetentionMode::Compliance,
+            "GOVERNANCE" => ObjectLockRetentionMode::Governance,
+            _ => ObjectLockRetentionMode::UnknownVariant(UnknownObjectLockRetentionMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectLockRetentionMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectLockRetentionMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectLockRetentionMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ObjectLockRetentionModeDeserializer;
 impl ObjectLockRetentionModeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockRetentionMode, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9851,12 +13654,12 @@ impl ObjectLockRetentionModeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ObjectLockRetentionMode,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -9911,12 +13714,119 @@ impl ObjectLockRuleSerializer {
     }
 }
 
+/// <p>The container element for object ownership for a bucket's ownership controls.</p> <p>BucketOwnerPreferred - Objects uploaded to the bucket change ownership to the bucket owner if the objects are uploaded with the <code>bucket-owner-full-control</code> canned ACL.</p> <p>ObjectWriter - The uploading account will own the object if the object is uploaded with the <code>bucket-owner-full-control</code> canned ACL.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectOwnership {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectOwnership {
+    BucketOwnerPreferred,
+    ObjectWriter,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectOwnership),
+}
+
+impl Default for ObjectOwnership {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectOwnership {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectOwnership {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectOwnership {
+    fn into(self) -> String {
+        match self {
+            ObjectOwnership::BucketOwnerPreferred => "BucketOwnerPreferred".to_string(),
+            ObjectOwnership::ObjectWriter => "ObjectWriter".to_string(),
+            ObjectOwnership::UnknownVariant(UnknownObjectOwnership { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectOwnership {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectOwnership::BucketOwnerPreferred => &"BucketOwnerPreferred",
+            ObjectOwnership::ObjectWriter => &"ObjectWriter",
+            ObjectOwnership::UnknownVariant(UnknownObjectOwnership { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectOwnership {
+    fn from(name: &str) -> Self {
+        match name {
+            "BucketOwnerPreferred" => ObjectOwnership::BucketOwnerPreferred,
+            "ObjectWriter" => ObjectOwnership::ObjectWriter,
+            _ => ObjectOwnership::UnknownVariant(UnknownObjectOwnership {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectOwnership {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BucketOwnerPreferred" => ObjectOwnership::BucketOwnerPreferred,
+            "ObjectWriter" => ObjectOwnership::ObjectWriter,
+            _ => ObjectOwnership::UnknownVariant(UnknownObjectOwnership { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectOwnership {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectOwnership {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectOwnership {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ObjectOwnershipDeserializer;
 impl ObjectOwnershipDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectOwnership, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -9926,12 +13836,148 @@ impl ObjectOwnershipSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ObjectOwnership,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectStorageClass {
+    DeepArchive,
+    Glacier,
+    IntelligentTiering,
+    OnezoneIa,
+    Outposts,
+    ReducedRedundancy,
+    Standard,
+    StandardIa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectStorageClass),
+}
+
+impl Default for ObjectStorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectStorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectStorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectStorageClass {
+    fn into(self) -> String {
+        match self {
+            ObjectStorageClass::DeepArchive => "DEEP_ARCHIVE".to_string(),
+            ObjectStorageClass::Glacier => "GLACIER".to_string(),
+            ObjectStorageClass::IntelligentTiering => "INTELLIGENT_TIERING".to_string(),
+            ObjectStorageClass::OnezoneIa => "ONEZONE_IA".to_string(),
+            ObjectStorageClass::Outposts => "OUTPOSTS".to_string(),
+            ObjectStorageClass::ReducedRedundancy => "REDUCED_REDUNDANCY".to_string(),
+            ObjectStorageClass::Standard => "STANDARD".to_string(),
+            ObjectStorageClass::StandardIa => "STANDARD_IA".to_string(),
+            ObjectStorageClass::UnknownVariant(UnknownObjectStorageClass { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectStorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectStorageClass::DeepArchive => &"DEEP_ARCHIVE",
+            ObjectStorageClass::Glacier => &"GLACIER",
+            ObjectStorageClass::IntelligentTiering => &"INTELLIGENT_TIERING",
+            ObjectStorageClass::OnezoneIa => &"ONEZONE_IA",
+            ObjectStorageClass::Outposts => &"OUTPOSTS",
+            ObjectStorageClass::ReducedRedundancy => &"REDUCED_REDUNDANCY",
+            ObjectStorageClass::Standard => &"STANDARD",
+            ObjectStorageClass::StandardIa => &"STANDARD_IA",
+            ObjectStorageClass::UnknownVariant(UnknownObjectStorageClass { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ObjectStorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEEP_ARCHIVE" => ObjectStorageClass::DeepArchive,
+            "GLACIER" => ObjectStorageClass::Glacier,
+            "INTELLIGENT_TIERING" => ObjectStorageClass::IntelligentTiering,
+            "ONEZONE_IA" => ObjectStorageClass::OnezoneIa,
+            "OUTPOSTS" => ObjectStorageClass::Outposts,
+            "REDUCED_REDUNDANCY" => ObjectStorageClass::ReducedRedundancy,
+            "STANDARD" => ObjectStorageClass::Standard,
+            "STANDARD_IA" => ObjectStorageClass::StandardIa,
+            _ => ObjectStorageClass::UnknownVariant(UnknownObjectStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectStorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEEP_ARCHIVE" => ObjectStorageClass::DeepArchive,
+            "GLACIER" => ObjectStorageClass::Glacier,
+            "INTELLIGENT_TIERING" => ObjectStorageClass::IntelligentTiering,
+            "ONEZONE_IA" => ObjectStorageClass::OnezoneIa,
+            "OUTPOSTS" => ObjectStorageClass::Outposts,
+            "REDUCED_REDUNDANCY" => ObjectStorageClass::ReducedRedundancy,
+            "STANDARD" => ObjectStorageClass::Standard,
+            "STANDARD_IA" => ObjectStorageClass::StandardIa,
+            _ => ObjectStorageClass::UnknownVariant(UnknownObjectStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectStorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectStorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -9939,8 +13985,11 @@ impl ObjectOwnershipSerializer {
 struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectStorageClass, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The version of an object.</p>
@@ -9960,7 +14009,7 @@ pub struct ObjectVersion {
     /// <p>Size in bytes of the object.</p>
     pub size: Option<i64>,
     /// <p>The class of storage used to store the object.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<ObjectVersionStorageClass>,
     /// <p>Version ID of an object.</p>
     pub version_id: Option<String>,
 }
@@ -10066,12 +14115,119 @@ impl ObjectVersionListDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectVersionStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectVersionStorageClass {
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectVersionStorageClass),
+}
+
+impl Default for ObjectVersionStorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectVersionStorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectVersionStorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectVersionStorageClass {
+    fn into(self) -> String {
+        match self {
+            ObjectVersionStorageClass::Standard => "STANDARD".to_string(),
+            ObjectVersionStorageClass::UnknownVariant(UnknownObjectVersionStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectVersionStorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectVersionStorageClass::Standard => &"STANDARD",
+            ObjectVersionStorageClass::UnknownVariant(UnknownObjectVersionStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectVersionStorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "STANDARD" => ObjectVersionStorageClass::Standard,
+            _ => ObjectVersionStorageClass::UnknownVariant(UnknownObjectVersionStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectVersionStorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STANDARD" => ObjectVersionStorageClass::Standard,
+            _ => {
+                ObjectVersionStorageClass::UnknownVariant(UnknownObjectVersionStorageClass { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectVersionStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ObjectVersionStorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ObjectVersionStorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectVersionStorageClass, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Describes the location where the restore job's output is stored.</p>
@@ -10187,12 +14343,112 @@ impl OwnerSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOwnerOverride {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OwnerOverride {
+    Destination,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOwnerOverride),
+}
+
+impl Default for OwnerOverride {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OwnerOverride {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OwnerOverride {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OwnerOverride {
+    fn into(self) -> String {
+        match self {
+            OwnerOverride::Destination => "Destination".to_string(),
+            OwnerOverride::UnknownVariant(UnknownOwnerOverride { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OwnerOverride {
+    fn into(self) -> &'a str {
+        match self {
+            OwnerOverride::Destination => &"Destination",
+            OwnerOverride::UnknownVariant(UnknownOwnerOverride { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OwnerOverride {
+    fn from(name: &str) -> Self {
+        match name {
+            "Destination" => OwnerOverride::Destination,
+            _ => OwnerOverride::UnknownVariant(UnknownOwnerOverride {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OwnerOverride {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Destination" => OwnerOverride::Destination,
+            _ => OwnerOverride::UnknownVariant(UnknownOwnerOverride { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OwnerOverride {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OwnerOverride {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OwnerOverride {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OwnerOverrideDeserializer;
 impl OwnerOverrideDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OwnerOverride, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -10202,12 +14458,12 @@ impl OwnerOverrideSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &OwnerOverride,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -10265,7 +14521,7 @@ impl OwnershipControlsSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OwnershipControlsRule {
-    pub object_ownership: String,
+    pub object_ownership: ObjectOwnership,
 }
 
 #[allow(dead_code)]
@@ -10495,12 +14751,115 @@ impl PartsDeserializer {
         Ok(obj)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPayer {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Payer {
+    BucketOwner,
+    Requester,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPayer),
+}
+
+impl Default for Payer {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Payer {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Payer {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Payer {
+    fn into(self) -> String {
+        match self {
+            Payer::BucketOwner => "BucketOwner".to_string(),
+            Payer::Requester => "Requester".to_string(),
+            Payer::UnknownVariant(UnknownPayer { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Payer {
+    fn into(self) -> &'a str {
+        match self {
+            Payer::BucketOwner => &"BucketOwner",
+            Payer::Requester => &"Requester",
+            Payer::UnknownVariant(UnknownPayer { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Payer {
+    fn from(name: &str) -> Self {
+        match name {
+            "BucketOwner" => Payer::BucketOwner,
+            "Requester" => Payer::Requester,
+            _ => Payer::UnknownVariant(UnknownPayer {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Payer {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BucketOwner" => Payer::BucketOwner,
+            "Requester" => Payer::Requester,
+            _ => Payer::UnknownVariant(UnknownPayer { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Payer {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Payer {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Payer {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PayerDeserializer;
 impl PayerDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Payer, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -10510,12 +14869,129 @@ impl PayerSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Payer,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Permission {
+    FullControl,
+    Read,
+    ReadAcp,
+    Write,
+    WriteAcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermission),
+}
+
+impl Default for Permission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Permission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Permission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Permission {
+    fn into(self) -> String {
+        match self {
+            Permission::FullControl => "FULL_CONTROL".to_string(),
+            Permission::Read => "READ".to_string(),
+            Permission::ReadAcp => "READ_ACP".to_string(),
+            Permission::Write => "WRITE".to_string(),
+            Permission::WriteAcp => "WRITE_ACP".to_string(),
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Permission {
+    fn into(self) -> &'a str {
+        match self {
+            Permission::FullControl => &"FULL_CONTROL",
+            Permission::Read => &"READ",
+            Permission::ReadAcp => &"READ_ACP",
+            Permission::Write => &"WRITE",
+            Permission::WriteAcp => &"WRITE_ACP",
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Permission {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_CONTROL" => Permission::FullControl,
+            "READ" => Permission::Read,
+            "READ_ACP" => Permission::ReadAcp,
+            "WRITE" => Permission::Write,
+            "WRITE_ACP" => Permission::WriteAcp,
+            _ => Permission::UnknownVariant(UnknownPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Permission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_CONTROL" => Permission::FullControl,
+            "READ" => Permission::Read,
+            "READ_ACP" => Permission::ReadAcp,
+            "WRITE" => Permission::Write,
+            "WRITE_ACP" => Permission::WriteAcp,
+            _ => Permission::UnknownVariant(UnknownPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Permission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Permission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -10523,8 +14999,11 @@ impl PayerSerializer {
 struct PermissionDeserializer;
 impl PermissionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Permission, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -10534,12 +15013,12 @@ impl PermissionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Permission,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -10691,12 +15170,118 @@ impl ProgressEventDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Protocol {
+    Http,
+    Https,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtocol),
+}
+
+impl Default for Protocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Protocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Protocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Protocol {
+    fn into(self) -> String {
+        match self {
+            Protocol::Http => "http".to_string(),
+            Protocol::Https => "https".to_string(),
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Protocol {
+    fn into(self) -> &'a str {
+        match self {
+            Protocol::Http => &"http",
+            Protocol::Https => &"https",
+            Protocol::UnknownVariant(UnknownProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Protocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "http" => Protocol::Http,
+            "https" => Protocol::Https,
+            _ => Protocol::UnknownVariant(UnknownProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Protocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "http" => Protocol::Http,
+            "https" => Protocol::Https,
+            _ => Protocol::UnknownVariant(UnknownProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Protocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Protocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Protocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Protocol, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -10706,12 +15291,12 @@ impl ProtocolSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Protocol,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -10814,7 +15399,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
-    pub acl: Option<String>,
+    pub acl: Option<BucketCannedACL>,
     /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p>The bucket to which to apply the ACL.</p>
@@ -11069,7 +15654,7 @@ pub struct PutBucketWebsiteRequest {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectAclOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -11093,7 +15678,7 @@ impl PutObjectAclOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectAclRequest {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
-    pub acl: Option<String>,
+    pub acl: Option<ObjectCannedACL>,
     /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p>The bucket name that contains the object to which you want to attach the ACL. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -11114,7 +15699,7 @@ pub struct PutObjectAclRequest {
     pub grant_write_acp: Option<String>,
     /// <p>Key for which the PUT operation was initiated.</p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html">Using S3 on Outposts</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
@@ -11122,7 +15707,7 @@ pub struct PutObjectAclRequest {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLegalHoldOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -11155,7 +15740,7 @@ pub struct PutObjectLegalHoldRequest {
     pub key: String,
     /// <p>Container element for the Legal Hold configuration you want to apply to the specified object.</p>
     pub legal_hold: Option<ObjectLockLegalHold>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>The version ID of the object that you want to place a Legal Hold on.</p>
     pub version_id: Option<String>,
 }
@@ -11163,7 +15748,7 @@ pub struct PutObjectLegalHoldRequest {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLockConfigurationOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -11194,7 +15779,7 @@ pub struct PutObjectLockConfigurationRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The Object Lock configuration that you want to apply to the specified bucket.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>A token to allow Object Lock to be enabled for an existing bucket.</p>
     pub token: Option<String>,
 }
@@ -11208,7 +15793,7 @@ pub struct PutObjectOutput {
     pub e_tag: Option<String>,
     /// <p> If the expiration is configured for the object (see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html">PutBucketLifecycleConfiguration</a>), the response includes this header. It includes the expiry-date and rule-id key-value pairs that provide information about object expiration. The value of the rule-id is URL encoded.</p>
     pub expiration: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round-trip message integrity verification of the customer-provided encryption key.</p>
@@ -11218,7 +15803,7 @@ pub struct PutObjectOutput {
     /// <p>If <code>x-amz-server-side-encryption</code> is present and has the value of <code>aws:kms</code>, this header specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object. </p>
     pub ssekms_key_id: Option<String>,
     /// <p>If you specified server-side encryption either with an AWS KMS customer master key (CMK) or Amazon S3-managed encryption key in your PUT request, the response includes this header. It confirms the encryption algorithm that Amazon S3 used to encrypt the object.</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version of the object.</p>
     pub version_id: Option<String>,
 }
@@ -11243,7 +15828,7 @@ impl PutObjectOutputDeserializer {
 #[derive(Debug, Default)]
 pub struct PutObjectRequest {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> <p>This action is not supported by Amazon S3 on Outposts.</p>
-    pub acl: Option<String>,
+    pub acl: Option<ObjectCannedACL>,
     /// <p>Object data.</p>
     pub body: Option<StreamingBody>,
     /// <p>The bucket name to which the PUT operation was initiated. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation with an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When using this API with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com. When using this operation using S3 on Outposts through the AWS SDKs, you provide the Outposts bucket ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html">Using S3 on Outposts</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -11281,12 +15866,12 @@ pub struct PutObjectRequest {
     /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies whether a legal hold will be applied to this object. For more information about S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Object Lock</a>.</p>
-    pub object_lock_legal_hold_status: Option<String>,
+    pub object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
     /// <p>The Object Lock mode that you want to apply to this object.</p>
-    pub object_lock_mode: Option<String>,
+    pub object_lock_mode: Option<ObjectLockMode>,
     /// <p>The date and time when you want this object's Object Lock to expire.</p>
     pub object_lock_retain_until_date: Option<String>,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
@@ -11298,9 +15883,9 @@ pub struct PutObjectRequest {
     /// <p>If <code>x-amz-server-side-encryption</code> is present and has the value of <code>aws:kms</code>, this header specifies the ID of the AWS Key Management Service (AWS KMS) symmetrical customer managed customer master key (CMK) that was used for the object.</p> <p> If the value of <code>x-amz-server-side-encryption</code> is <code>aws:kms</code>, this header specifies the ID of the symmetric customer managed AWS KMS CMK that will be used for the object. If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but do not provide<code> x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS to protect the data.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different Storage Class. Amazon S3 on Outposts only uses the OUTPOSTS Storage Class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters. (For example, "Key1=Value1")</p>
     pub tagging: Option<String>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata. For information about object metadata, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html">Object Key and Metadata</a>.</p> <p>In the following example, the request header sets the redirect to an object (anotherPage.html) in the same bucket:</p> <p> <code>x-amz-website-redirect-location: /anotherPage.html</code> </p> <p>In the following example, the request header sets the object redirect to another website:</p> <p> <code>x-amz-website-redirect-location: http://www.example.com/</code> </p> <p>For more information about website hosting in Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">How to Configure Website Page Redirects</a>. </p>
@@ -11310,7 +15895,7 @@ pub struct PutObjectRequest {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectRetentionOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 #[allow(dead_code)]
@@ -11343,7 +15928,7 @@ pub struct PutObjectRetentionRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>The key name for the object that you want to apply this Object Retention configuration to.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>The container element for the Object Retention configuration.</p>
     pub retention: Option<ObjectLockRetention>,
     /// <p>The version ID for the object that you want to apply this Object Retention configuration to.</p>
@@ -11434,7 +16019,7 @@ impl QueueArnSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfiguration {
     /// <p>A collection of bucket events for which to send notifications</p>
-    pub events: Vec<String>,
+    pub events: Vec<Event>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 publishes a message when it detects events of the specified type.</p>
@@ -11503,7 +16088,7 @@ impl QueueConfigurationSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfigurationDeprecated {
     /// <p>A collection of bucket events for which to send notifications</p>
-    pub events: Option<Vec<String>>,
+    pub events: Option<Vec<Event>>,
     pub id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 publishes a message when it detects events of the specified type. </p>
     pub queue: Option<String>,
@@ -11660,18 +16245,120 @@ impl QuoteEscapeCharacterSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQuoteFields {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QuoteFields {
+    Always,
+    Asneeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQuoteFields),
+}
+
+impl Default for QuoteFields {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QuoteFields {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QuoteFields {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QuoteFields {
+    fn into(self) -> String {
+        match self {
+            QuoteFields::Always => "ALWAYS".to_string(),
+            QuoteFields::Asneeded => "ASNEEDED".to_string(),
+            QuoteFields::UnknownVariant(UnknownQuoteFields { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QuoteFields {
+    fn into(self) -> &'a str {
+        match self {
+            QuoteFields::Always => &"ALWAYS",
+            QuoteFields::Asneeded => &"ASNEEDED",
+            QuoteFields::UnknownVariant(UnknownQuoteFields { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QuoteFields {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => QuoteFields::Always,
+            "ASNEEDED" => QuoteFields::Asneeded,
+            _ => QuoteFields::UnknownVariant(UnknownQuoteFields {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QuoteFields {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => QuoteFields::Always,
+            "ASNEEDED" => QuoteFields::Asneeded,
+            _ => QuoteFields::UnknownVariant(UnknownQuoteFields { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QuoteFields {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for QuoteFields {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for QuoteFields {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct QuoteFieldsSerializer;
 impl QuoteFieldsSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &QuoteFields,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -11727,7 +16414,7 @@ pub struct Redirect {
     /// <p>The HTTP redirect code to use on the response. Not required if one of the siblings is present.</p>
     pub http_redirect_code: Option<String>,
     /// <p>Protocol to use when redirecting requests. The default is the protocol that is used in the original request.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
     /// <p>The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix <code>docs/</code> (objects in the <code>docs/</code> folder) to <code>documents/</code>, you can set a condition block with <code>KeyPrefixEquals</code> set to <code>docs/</code> and in the Redirect set <code>ReplaceKeyPrefixWith</code> to <code>/documents</code>. Not required if one of the siblings is present. Can be present only if <code>ReplaceKeyWith</code> is not provided.</p>
     pub replace_key_prefix_with: Option<String>,
     /// <p>The specific object key to use in the redirect request. For example, redirect request to <code>error.html</code>. Not required if one of the siblings is present. Can be present only if <code>ReplaceKeyPrefixWith</code> is not provided.</p>
@@ -11815,7 +16502,7 @@ pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests are redirected.</p>
     pub host_name: String,
     /// <p>Protocol to use when redirecting requests. The default is the protocol that is used in the original request.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<Protocol>,
 }
 
 #[allow(dead_code)]
@@ -11939,7 +16626,7 @@ impl ReplicaKmsKeyIDSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicaModifications {
     /// <p>Specifies whether Amazon S3 replicates modifications on replicas.</p>
-    pub status: String,
+    pub status: ReplicaModificationsStatus,
 }
 
 #[allow(dead_code)]
@@ -11980,12 +16667,123 @@ impl ReplicaModificationsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicaModificationsStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicaModificationsStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicaModificationsStatus),
+}
+
+impl Default for ReplicaModificationsStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicaModificationsStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicaModificationsStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicaModificationsStatus {
+    fn into(self) -> String {
+        match self {
+            ReplicaModificationsStatus::Disabled => "Disabled".to_string(),
+            ReplicaModificationsStatus::Enabled => "Enabled".to_string(),
+            ReplicaModificationsStatus::UnknownVariant(UnknownReplicaModificationsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicaModificationsStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicaModificationsStatus::Disabled => &"Disabled",
+            ReplicaModificationsStatus::Enabled => &"Enabled",
+            ReplicaModificationsStatus::UnknownVariant(UnknownReplicaModificationsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicaModificationsStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ReplicaModificationsStatus::Disabled,
+            "Enabled" => ReplicaModificationsStatus::Enabled,
+            _ => ReplicaModificationsStatus::UnknownVariant(UnknownReplicaModificationsStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicaModificationsStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ReplicaModificationsStatus::Disabled,
+            "Enabled" => ReplicaModificationsStatus::Enabled,
+            _ => ReplicaModificationsStatus::UnknownVariant(UnknownReplicaModificationsStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicaModificationsStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReplicaModificationsStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReplicaModificationsStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReplicaModificationsStatusDeserializer;
 impl ReplicaModificationsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicaModificationsStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -11995,12 +16793,12 @@ impl ReplicaModificationsStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ReplicaModificationsStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -12079,7 +16877,7 @@ pub struct ReplicationRule {
     /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using a customer master key (CMK) stored in AWS Key Management Service (SSE-KMS).</p>
     pub source_selection_criteria: Option<SourceSelectionCriteria>,
     /// <p>Specifies whether the rule is enabled.</p>
-    pub status: String,
+    pub status: ReplicationRuleStatus,
 }
 
 #[allow(dead_code)]
@@ -12313,12 +17111,121 @@ impl ReplicationRuleFilterSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationRuleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationRuleStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationRuleStatus),
+}
+
+impl Default for ReplicationRuleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationRuleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationRuleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationRuleStatus {
+    fn into(self) -> String {
+        match self {
+            ReplicationRuleStatus::Disabled => "Disabled".to_string(),
+            ReplicationRuleStatus::Enabled => "Enabled".to_string(),
+            ReplicationRuleStatus::UnknownVariant(UnknownReplicationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationRuleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationRuleStatus::Disabled => &"Disabled",
+            ReplicationRuleStatus::Enabled => &"Enabled",
+            ReplicationRuleStatus::UnknownVariant(UnknownReplicationRuleStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicationRuleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ReplicationRuleStatus::Disabled,
+            "Enabled" => ReplicationRuleStatus::Enabled,
+            _ => ReplicationRuleStatus::UnknownVariant(UnknownReplicationRuleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationRuleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ReplicationRuleStatus::Disabled,
+            "Enabled" => ReplicationRuleStatus::Enabled,
+            _ => ReplicationRuleStatus::UnknownVariant(UnknownReplicationRuleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReplicationRuleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReplicationRuleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicationRuleStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -12328,12 +17235,12 @@ impl ReplicationRuleStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ReplicationRuleStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -12384,13 +17291,140 @@ impl ReplicationRulesSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationStatus {
+    Complete,
+    Failed,
+    Pending,
+    Replica,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationStatus),
+}
+
+impl Default for ReplicationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationStatus {
+    fn into(self) -> String {
+        match self {
+            ReplicationStatus::Complete => "COMPLETE".to_string(),
+            ReplicationStatus::Failed => "FAILED".to_string(),
+            ReplicationStatus::Pending => "PENDING".to_string(),
+            ReplicationStatus::Replica => "REPLICA".to_string(),
+            ReplicationStatus::UnknownVariant(UnknownReplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationStatus::Complete => &"COMPLETE",
+            ReplicationStatus::Failed => &"FAILED",
+            ReplicationStatus::Pending => &"PENDING",
+            ReplicationStatus::Replica => &"REPLICA",
+            ReplicationStatus::UnknownVariant(UnknownReplicationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplicationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ReplicationStatus::Complete,
+            "FAILED" => ReplicationStatus::Failed,
+            "PENDING" => ReplicationStatus::Pending,
+            "REPLICA" => ReplicationStatus::Replica,
+            _ => ReplicationStatus::UnknownVariant(UnknownReplicationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ReplicationStatus::Complete,
+            "FAILED" => ReplicationStatus::Failed,
+            "PENDING" => ReplicationStatus::Pending,
+            "REPLICA" => ReplicationStatus::Replica,
+            _ => ReplicationStatus::UnknownVariant(UnknownReplicationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReplicationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReplicationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[allow(dead_code)]
+struct ReplicationStatusDeserializer;
+impl ReplicationStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicationStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
+    }
+}
 /// <p> A container specifying S3 Replication Time Control (S3 RTC) related information, including whether S3 RTC is enabled and the time when all objects and operations on objects must be replicated. Must be specified together with a <code>Metrics</code> block. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationTime {
     /// <p> Specifies whether the replication time is enabled. </p>
-    pub status: String,
+    pub status: ReplicationTimeStatus,
     /// <p> A container specifying the time by which replication should be complete for all objects and operations on objects. </p>
     pub time: ReplicationTimeValue,
 }
@@ -12436,12 +17470,121 @@ impl ReplicationTimeSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationTimeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationTimeStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationTimeStatus),
+}
+
+impl Default for ReplicationTimeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationTimeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationTimeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationTimeStatus {
+    fn into(self) -> String {
+        match self {
+            ReplicationTimeStatus::Disabled => "Disabled".to_string(),
+            ReplicationTimeStatus::Enabled => "Enabled".to_string(),
+            ReplicationTimeStatus::UnknownVariant(UnknownReplicationTimeStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationTimeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationTimeStatus::Disabled => &"Disabled",
+            ReplicationTimeStatus::Enabled => &"Enabled",
+            ReplicationTimeStatus::UnknownVariant(UnknownReplicationTimeStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicationTimeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => ReplicationTimeStatus::Disabled,
+            "Enabled" => ReplicationTimeStatus::Enabled,
+            _ => ReplicationTimeStatus::UnknownVariant(UnknownReplicationTimeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicationTimeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => ReplicationTimeStatus::Disabled,
+            "Enabled" => ReplicationTimeStatus::Enabled,
+            _ => ReplicationTimeStatus::UnknownVariant(UnknownReplicationTimeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationTimeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReplicationTimeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReplicationTimeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ReplicationTimeStatusDeserializer;
 impl ReplicationTimeStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicationTimeStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -12451,12 +17594,12 @@ impl ReplicationTimeStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ReplicationTimeStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -12508,12 +17651,236 @@ impl ReplicationTimeValueSerializer {
     }
 }
 
+/// <p>If present, indicates that the requester was successfully charged for the request.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestCharged {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestCharged {
+    Requester,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestCharged),
+}
+
+impl Default for RequestCharged {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestCharged {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestCharged {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestCharged {
+    fn into(self) -> String {
+        match self {
+            RequestCharged::Requester => "requester".to_string(),
+            RequestCharged::UnknownVariant(UnknownRequestCharged { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestCharged {
+    fn into(self) -> &'a str {
+        match self {
+            RequestCharged::Requester => &"requester",
+            RequestCharged::UnknownVariant(UnknownRequestCharged { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RequestCharged {
+    fn from(name: &str) -> Self {
+        match name {
+            "requester" => RequestCharged::Requester,
+            _ => RequestCharged::UnknownVariant(UnknownRequestCharged {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RequestCharged {
+    fn from(name: String) -> Self {
+        match &*name {
+            "requester" => RequestCharged::Requester,
+            _ => RequestCharged::UnknownVariant(UnknownRequestCharged { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestCharged {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RequestCharged {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RequestCharged {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[allow(dead_code)]
+struct RequestChargedDeserializer;
+impl RequestChargedDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RequestCharged, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
+    }
+}
+/// <p>Confirms that the requester knows that they will be charged for the request. Bucket owners need not specify this parameter in their requests. For information about downloading objects from requester pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html">Downloading Objects in Requestor Pays Buckets</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestPayer {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestPayer {
+    Requester,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestPayer),
+}
+
+impl Default for RequestPayer {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestPayer {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestPayer {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestPayer {
+    fn into(self) -> String {
+        match self {
+            RequestPayer::Requester => "requester".to_string(),
+            RequestPayer::UnknownVariant(UnknownRequestPayer { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestPayer {
+    fn into(self) -> &'a str {
+        match self {
+            RequestPayer::Requester => &"requester",
+            RequestPayer::UnknownVariant(UnknownRequestPayer { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RequestPayer {
+    fn from(name: &str) -> Self {
+        match name {
+            "requester" => RequestPayer::Requester,
+            _ => RequestPayer::UnknownVariant(UnknownRequestPayer {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RequestPayer {
+    fn from(name: String) -> Self {
+        match &*name {
+            "requester" => RequestPayer::Requester,
+            _ => RequestPayer::UnknownVariant(UnknownRequestPayer { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestPayer {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RequestPayer {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RequestPayer {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+pub struct RequestPayerSerializer;
+impl RequestPayerSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &RequestPayer,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
 /// <p>Container for Payer.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
-    pub payer: String,
+    pub payer: Payer,
 }
 
 pub struct RequestPaymentConfigurationSerializer;
@@ -12653,7 +18020,7 @@ impl ResponseExpiresSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreObjectOutput {
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be restored to.</p>
     pub restore_output_path: Option<String>,
 }
@@ -12684,7 +18051,7 @@ pub struct RestoreObjectRequest {
     pub expected_bucket_owner: Option<String>,
     /// <p>Object key for which the operation was initiated.</p>
     pub key: String,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     pub restore_request: Option<RestoreRequest>,
     /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
@@ -12705,9 +18072,9 @@ pub struct RestoreRequest {
     /// <p>Describes the parameters for Select job types.</p>
     pub select_parameters: Option<SelectParameters>,
     /// <p>Retrieval tier at which the restore will be processed.</p>
-    pub tier: Option<String>,
+    pub tier: Option<Tier>,
     /// <p>Type of restore request.</p>
-    pub type_: Option<String>,
+    pub type_: Option<RestoreRequestType>,
 }
 
 pub struct RestoreRequestSerializer;
@@ -12747,18 +18114,119 @@ impl RestoreRequestSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRestoreRequestType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RestoreRequestType {
+    Select,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRestoreRequestType),
+}
+
+impl Default for RestoreRequestType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RestoreRequestType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RestoreRequestType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RestoreRequestType {
+    fn into(self) -> String {
+        match self {
+            RestoreRequestType::Select => "SELECT".to_string(),
+            RestoreRequestType::UnknownVariant(UnknownRestoreRequestType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RestoreRequestType {
+    fn into(self) -> &'a str {
+        match self {
+            RestoreRequestType::Select => &"SELECT",
+            RestoreRequestType::UnknownVariant(UnknownRestoreRequestType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RestoreRequestType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SELECT" => RestoreRequestType::Select,
+            _ => RestoreRequestType::UnknownVariant(UnknownRestoreRequestType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RestoreRequestType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SELECT" => RestoreRequestType::Select,
+            _ => RestoreRequestType::UnknownVariant(UnknownRestoreRequestType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RestoreRequestType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RestoreRequestType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RestoreRequestType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct RestoreRequestTypeSerializer;
 impl RestoreRequestTypeSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &RestoreRequestType,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -12894,7 +18362,7 @@ pub struct Rule {
     /// <p>Object key prefix that identifies one or more objects to which this rule applies.</p>
     pub prefix: String,
     /// <p>If <code>Enabled</code>, the rule is currently being applied. If <code>Disabled</code>, the rule is not currently being applied.</p>
-    pub status: String,
+    pub status: ExpirationStatus,
     /// <p>Specifies when an object transitions to a specified storage class. For more information about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub transition: Option<Transition>,
 }
@@ -13106,12 +18574,12 @@ pub struct S3Location {
     /// <p>The name of the bucket where the restore results will be placed.</p>
     pub bucket_name: String,
     /// <p>The canned ACL to apply to the restore results.</p>
-    pub canned_acl: Option<String>,
+    pub canned_acl: Option<ObjectCannedACL>,
     pub encryption: Option<Encryption>,
     /// <p>The prefix that is prepended to the restore results for this request.</p>
     pub prefix: String,
     /// <p>The class of storage used to store the restore results.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The tag-set that is applied to the restore results.</p>
     pub tagging: Option<Tagging>,
     /// <p>A list of metadata to store with the restore results in S3.</p>
@@ -13328,7 +18796,7 @@ pub struct SelectObjectContentRequest {
     /// <p>The expression that is used to query the object.</p>
     pub expression: String,
     /// <p>The type of the provided expression (for example, SQL).</p>
-    pub expression_type: String,
+    pub expression_type: ExpressionType,
     /// <p>Describes the format of the data in the object that is being queried.</p>
     pub input_serialization: InputSerialization,
     /// <p>The object key.</p>
@@ -13388,7 +18856,7 @@ pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
     pub expression: String,
     /// <p>The type of the provided expression (for example, SQL).</p>
-    pub expression_type: String,
+    pub expression_type: ExpressionType,
     /// <p>Describes the serialization format of the object.</p>
     pub input_serialization: InputSerialization,
     /// <p>Describes how the results of the Select job are serialized.</p>
@@ -13423,12 +18891,121 @@ impl SelectParametersSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerSideEncryption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerSideEncryption {
+    Aes256,
+    AwsKms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerSideEncryption),
+}
+
+impl Default for ServerSideEncryption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerSideEncryption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerSideEncryption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerSideEncryption {
+    fn into(self) -> String {
+        match self {
+            ServerSideEncryption::Aes256 => "AES256".to_string(),
+            ServerSideEncryption::AwsKms => "aws:kms".to_string(),
+            ServerSideEncryption::UnknownVariant(UnknownServerSideEncryption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerSideEncryption {
+    fn into(self) -> &'a str {
+        match self {
+            ServerSideEncryption::Aes256 => &"AES256",
+            ServerSideEncryption::AwsKms => &"aws:kms",
+            ServerSideEncryption::UnknownVariant(UnknownServerSideEncryption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerSideEncryption {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => ServerSideEncryption::Aes256,
+            "aws:kms" => ServerSideEncryption::AwsKms,
+            _ => ServerSideEncryption::UnknownVariant(UnknownServerSideEncryption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerSideEncryption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => ServerSideEncryption::Aes256,
+            "aws:kms" => ServerSideEncryption::AwsKms,
+            _ => ServerSideEncryption::UnknownVariant(UnknownServerSideEncryption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerSideEncryption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServerSideEncryption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServerSideEncryption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ServerSideEncryptionDeserializer;
 impl ServerSideEncryptionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServerSideEncryption, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -13438,12 +19015,12 @@ impl ServerSideEncryptionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &ServerSideEncryption,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -13455,7 +19032,7 @@ pub struct ServerSideEncryptionByDefault {
     /// <p><p>AWS Key Management Service (KMS) customer master key ID to use for the default encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to <code>aws:kms</code>.</p> <p>You can specify the key ID or the Amazon Resource Name (ARN) of the CMK. However, if you are using encryption with cross-account operations, you must use a fully qualified CMK ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy">Using encryption for cross-account operations</a>. </p> <p> <b>For example:</b> </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <important> <p>Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </important></p>
     pub kms_master_key_id: Option<String>,
     /// <p>Server-side encryption algorithm to use for the default encryption.</p>
-    pub sse_algorithm: String,
+    pub sse_algorithm: ServerSideEncryption,
 }
 
 #[allow(dead_code)]
@@ -13792,7 +19369,7 @@ impl SourceSelectionCriteriaSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SseKmsEncryptedObjects {
     /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using a customer master key (CMK) stored in AWS Key Management Service.</p>
-    pub status: String,
+    pub status: SseKmsEncryptedObjectsStatus,
 }
 
 #[allow(dead_code)]
@@ -13833,12 +19410,127 @@ impl SseKmsEncryptedObjectsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSseKmsEncryptedObjectsStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SseKmsEncryptedObjectsStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSseKmsEncryptedObjectsStatus),
+}
+
+impl Default for SseKmsEncryptedObjectsStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SseKmsEncryptedObjectsStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SseKmsEncryptedObjectsStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SseKmsEncryptedObjectsStatus {
+    fn into(self) -> String {
+        match self {
+            SseKmsEncryptedObjectsStatus::Disabled => "Disabled".to_string(),
+            SseKmsEncryptedObjectsStatus::Enabled => "Enabled".to_string(),
+            SseKmsEncryptedObjectsStatus::UnknownVariant(UnknownSseKmsEncryptedObjectsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SseKmsEncryptedObjectsStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SseKmsEncryptedObjectsStatus::Disabled => &"Disabled",
+            SseKmsEncryptedObjectsStatus::Enabled => &"Enabled",
+            SseKmsEncryptedObjectsStatus::UnknownVariant(UnknownSseKmsEncryptedObjectsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SseKmsEncryptedObjectsStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => SseKmsEncryptedObjectsStatus::Disabled,
+            "Enabled" => SseKmsEncryptedObjectsStatus::Enabled,
+            _ => {
+                SseKmsEncryptedObjectsStatus::UnknownVariant(UnknownSseKmsEncryptedObjectsStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for SseKmsEncryptedObjectsStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => SseKmsEncryptedObjectsStatus::Disabled,
+            "Enabled" => SseKmsEncryptedObjectsStatus::Enabled,
+            _ => {
+                SseKmsEncryptedObjectsStatus::UnknownVariant(UnknownSseKmsEncryptedObjectsStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SseKmsEncryptedObjectsStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SseKmsEncryptedObjectsStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SseKmsEncryptedObjectsStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct SseKmsEncryptedObjectsStatusDeserializer;
 impl SseKmsEncryptedObjectsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SseKmsEncryptedObjectsStatus, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -13848,12 +19540,12 @@ impl SseKmsEncryptedObjectsStatusSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &SseKmsEncryptedObjectsStatus,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -13966,12 +19658,148 @@ impl StatsEventDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageClass {
+    DeepArchive,
+    Glacier,
+    IntelligentTiering,
+    OnezoneIa,
+    Outposts,
+    ReducedRedundancy,
+    Standard,
+    StandardIa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageClass),
+}
+
+impl Default for StorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageClass {
+    fn into(self) -> String {
+        match self {
+            StorageClass::DeepArchive => "DEEP_ARCHIVE".to_string(),
+            StorageClass::Glacier => "GLACIER".to_string(),
+            StorageClass::IntelligentTiering => "INTELLIGENT_TIERING".to_string(),
+            StorageClass::OnezoneIa => "ONEZONE_IA".to_string(),
+            StorageClass::Outposts => "OUTPOSTS".to_string(),
+            StorageClass::ReducedRedundancy => "REDUCED_REDUNDANCY".to_string(),
+            StorageClass::Standard => "STANDARD".to_string(),
+            StorageClass::StandardIa => "STANDARD_IA".to_string(),
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            StorageClass::DeepArchive => &"DEEP_ARCHIVE",
+            StorageClass::Glacier => &"GLACIER",
+            StorageClass::IntelligentTiering => &"INTELLIGENT_TIERING",
+            StorageClass::OnezoneIa => &"ONEZONE_IA",
+            StorageClass::Outposts => &"OUTPOSTS",
+            StorageClass::ReducedRedundancy => &"REDUCED_REDUNDANCY",
+            StorageClass::Standard => &"STANDARD",
+            StorageClass::StandardIa => &"STANDARD_IA",
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEEP_ARCHIVE" => StorageClass::DeepArchive,
+            "GLACIER" => StorageClass::Glacier,
+            "INTELLIGENT_TIERING" => StorageClass::IntelligentTiering,
+            "ONEZONE_IA" => StorageClass::OnezoneIa,
+            "OUTPOSTS" => StorageClass::Outposts,
+            "REDUCED_REDUNDANCY" => StorageClass::ReducedRedundancy,
+            "STANDARD" => StorageClass::Standard,
+            "STANDARD_IA" => StorageClass::StandardIa,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEEP_ARCHIVE" => StorageClass::DeepArchive,
+            "GLACIER" => StorageClass::Glacier,
+            "INTELLIGENT_TIERING" => StorageClass::IntelligentTiering,
+            "ONEZONE_IA" => StorageClass::OnezoneIa,
+            "OUTPOSTS" => StorageClass::Outposts,
+            "REDUCED_REDUNDANCY" => StorageClass::ReducedRedundancy,
+            "STANDARD" => StorageClass::Standard,
+            "STANDARD_IA" => StorageClass::StandardIa,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StorageClassDeserializer;
 impl StorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StorageClass, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -13981,12 +19809,12 @@ impl StorageClassSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &StorageClass,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -14050,7 +19878,7 @@ pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
     /// <p>The version of the output schema to use when exporting data. Must be <code>V_1</code>.</p>
-    pub output_schema_version: String,
+    pub output_schema_version: StorageClassAnalysisSchemaVersion,
 }
 
 #[allow(dead_code)]
@@ -14113,12 +19941,120 @@ impl StorageClassAnalysisDataExportSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageClassAnalysisSchemaVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageClassAnalysisSchemaVersion {
+    V1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageClassAnalysisSchemaVersion),
+}
+
+impl Default for StorageClassAnalysisSchemaVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageClassAnalysisSchemaVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageClassAnalysisSchemaVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageClassAnalysisSchemaVersion {
+    fn into(self) -> String {
+        match self {
+            StorageClassAnalysisSchemaVersion::V1 => "V_1".to_string(),
+            StorageClassAnalysisSchemaVersion::UnknownVariant(
+                UnknownStorageClassAnalysisSchemaVersion { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageClassAnalysisSchemaVersion {
+    fn into(self) -> &'a str {
+        match self {
+            StorageClassAnalysisSchemaVersion::V1 => &"V_1",
+            StorageClassAnalysisSchemaVersion::UnknownVariant(
+                UnknownStorageClassAnalysisSchemaVersion { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageClassAnalysisSchemaVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "V_1" => StorageClassAnalysisSchemaVersion::V1,
+            _ => StorageClassAnalysisSchemaVersion::UnknownVariant(
+                UnknownStorageClassAnalysisSchemaVersion {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for StorageClassAnalysisSchemaVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V_1" => StorageClassAnalysisSchemaVersion::V1,
+            _ => StorageClassAnalysisSchemaVersion::UnknownVariant(
+                UnknownStorageClassAnalysisSchemaVersion { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClassAnalysisSchemaVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for StorageClassAnalysisSchemaVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StorageClassAnalysisSchemaVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct StorageClassAnalysisSchemaVersionDeserializer;
 impl StorageClassAnalysisSchemaVersionDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StorageClassAnalysisSchemaVersion, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -14128,12 +20064,12 @@ impl StorageClassAnalysisSchemaVersionSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &StorageClassAnalysisSchemaVersion,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -14274,6 +20210,127 @@ impl TaggingSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaggingDirective {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaggingDirective {
+    Copy,
+    Replace,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaggingDirective),
+}
+
+impl Default for TaggingDirective {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaggingDirective {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaggingDirective {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaggingDirective {
+    fn into(self) -> String {
+        match self {
+            TaggingDirective::Copy => "COPY".to_string(),
+            TaggingDirective::Replace => "REPLACE".to_string(),
+            TaggingDirective::UnknownVariant(UnknownTaggingDirective { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaggingDirective {
+    fn into(self) -> &'a str {
+        match self {
+            TaggingDirective::Copy => &"COPY",
+            TaggingDirective::Replace => &"REPLACE",
+            TaggingDirective::UnknownVariant(UnknownTaggingDirective { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TaggingDirective {
+    fn from(name: &str) -> Self {
+        match name {
+            "COPY" => TaggingDirective::Copy,
+            "REPLACE" => TaggingDirective::Replace,
+            _ => TaggingDirective::UnknownVariant(UnknownTaggingDirective {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaggingDirective {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COPY" => TaggingDirective::Copy,
+            "REPLACE" => TaggingDirective::Replace,
+            _ => TaggingDirective::UnknownVariant(UnknownTaggingDirective { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaggingDirective {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TaggingDirective {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaggingDirective {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+pub struct TaggingDirectiveSerializer;
+impl TaggingDirectiveSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &TaggingDirective,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
@@ -14306,7 +20363,7 @@ pub struct TargetGrant {
     /// <p>Container for the person being granted permissions.</p>
     pub grantee: Option<Grantee>,
     /// <p>Logging permissions assigned to the grantee for the bucket.</p>
-    pub permission: Option<String>,
+    pub permission: Option<BucketLogsPermission>,
 }
 
 #[allow(dead_code)]
@@ -14420,18 +20477,125 @@ impl TargetPrefixSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTier {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Tier {
+    Bulk,
+    Expedited,
+    Standard,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTier),
+}
+
+impl Default for Tier {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Tier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Tier {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Tier {
+    fn into(self) -> String {
+        match self {
+            Tier::Bulk => "Bulk".to_string(),
+            Tier::Expedited => "Expedited".to_string(),
+            Tier::Standard => "Standard".to_string(),
+            Tier::UnknownVariant(UnknownTier { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Tier {
+    fn into(self) -> &'a str {
+        match self {
+            Tier::Bulk => &"Bulk",
+            Tier::Expedited => &"Expedited",
+            Tier::Standard => &"Standard",
+            Tier::UnknownVariant(UnknownTier { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Tier {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bulk" => Tier::Bulk,
+            "Expedited" => Tier::Expedited,
+            "Standard" => Tier::Standard,
+            _ => Tier::UnknownVariant(UnknownTier {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Tier {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bulk" => Tier::Bulk,
+            "Expedited" => Tier::Expedited,
+            "Standard" => Tier::Standard,
+            _ => Tier::UnknownVariant(UnknownTier { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Tier {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Tier {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Tier {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 pub struct TierSerializer;
 impl TierSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Tier,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -14441,7 +20605,7 @@ impl TierSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tiering {
     /// <p>S3 Intelligent-Tiering access tier. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for automatically optimizing frequently and infrequently accessed objects</a> for a list of access tiers in the S3 Intelligent-Tiering storage class.</p>
-    pub access_tier: String,
+    pub access_tier: IntelligentTieringAccessTier,
     /// <p>The number of consecutive days of no access after which an object will be eligible to be transitioned to the corresponding tier. The minimum number of days specified for Archive Access tier must be at least 90 days and Deep Archive Access tier must be at least 180 days. The maximum can be up to 2 years (730 days).</p>
     pub days: i64,
 }
@@ -14589,7 +20753,7 @@ impl TopicArnSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfiguration {
     /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported Event Types</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-    pub events: Vec<String>,
+    pub events: Vec<Event>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 publishes a message when it detects events of the specified type.</p>
@@ -14658,7 +20822,7 @@ impl TopicConfigurationSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfigurationDeprecated {
     /// <p>A collection of events related to objects</p>
-    pub events: Option<Vec<String>>,
+    pub events: Option<Vec<Event>>,
     pub id: Option<String>,
     /// <p>Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket.</p>
     pub topic: Option<String>,
@@ -14780,7 +20944,7 @@ pub struct Transition {
     /// <p>Indicates the number of days after creation when objects are transitioned to the specified storage class. The value must be a positive integer.</p>
     pub days: Option<i64>,
     /// <p>The storage class to which you want the object to transition.</p>
-    pub storage_class: Option<String>,
+    pub storage_class: Option<TransitionStorageClass>,
 }
 
 #[allow(dead_code)]
@@ -14884,12 +21048,136 @@ impl TransitionListSerializer {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransitionStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransitionStorageClass {
+    DeepArchive,
+    Glacier,
+    IntelligentTiering,
+    OnezoneIa,
+    StandardIa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransitionStorageClass),
+}
+
+impl Default for TransitionStorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransitionStorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransitionStorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransitionStorageClass {
+    fn into(self) -> String {
+        match self {
+            TransitionStorageClass::DeepArchive => "DEEP_ARCHIVE".to_string(),
+            TransitionStorageClass::Glacier => "GLACIER".to_string(),
+            TransitionStorageClass::IntelligentTiering => "INTELLIGENT_TIERING".to_string(),
+            TransitionStorageClass::OnezoneIa => "ONEZONE_IA".to_string(),
+            TransitionStorageClass::StandardIa => "STANDARD_IA".to_string(),
+            TransitionStorageClass::UnknownVariant(UnknownTransitionStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransitionStorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            TransitionStorageClass::DeepArchive => &"DEEP_ARCHIVE",
+            TransitionStorageClass::Glacier => &"GLACIER",
+            TransitionStorageClass::IntelligentTiering => &"INTELLIGENT_TIERING",
+            TransitionStorageClass::OnezoneIa => &"ONEZONE_IA",
+            TransitionStorageClass::StandardIa => &"STANDARD_IA",
+            TransitionStorageClass::UnknownVariant(UnknownTransitionStorageClass {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TransitionStorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEEP_ARCHIVE" => TransitionStorageClass::DeepArchive,
+            "GLACIER" => TransitionStorageClass::Glacier,
+            "INTELLIGENT_TIERING" => TransitionStorageClass::IntelligentTiering,
+            "ONEZONE_IA" => TransitionStorageClass::OnezoneIa,
+            "STANDARD_IA" => TransitionStorageClass::StandardIa,
+            _ => TransitionStorageClass::UnknownVariant(UnknownTransitionStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TransitionStorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEEP_ARCHIVE" => TransitionStorageClass::DeepArchive,
+            "GLACIER" => TransitionStorageClass::Glacier,
+            "INTELLIGENT_TIERING" => TransitionStorageClass::IntelligentTiering,
+            "ONEZONE_IA" => TransitionStorageClass::OnezoneIa,
+            "STANDARD_IA" => TransitionStorageClass::StandardIa,
+            _ => TransitionStorageClass::UnknownVariant(UnknownTransitionStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransitionStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TransitionStorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TransitionStorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TransitionStorageClass, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -14899,12 +21187,119 @@ impl TransitionStorageClassSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &TransitionStorageClass,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    AmazonCustomerByEmail,
+    CanonicalUser,
+    Group,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::AmazonCustomerByEmail => "AmazonCustomerByEmail".to_string(),
+            Type::CanonicalUser => "CanonicalUser".to_string(),
+            Type::Group => "Group".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::AmazonCustomerByEmail => &"AmazonCustomerByEmail",
+            Type::CanonicalUser => &"CanonicalUser",
+            Type::Group => &"Group",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "AmazonCustomerByEmail" => Type::AmazonCustomerByEmail,
+            "CanonicalUser" => Type::CanonicalUser,
+            "Group" => Type::Group,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AmazonCustomerByEmail" => Type::AmazonCustomerByEmail,
+            "CanonicalUser" => Type::CanonicalUser,
+            "Group" => Type::Group,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -14912,8 +21307,8 @@ impl TransitionStorageClassSerializer {
 struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Type, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -14923,12 +21318,12 @@ impl TypeSerializer {
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &Type,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        write_characters_element(writer, name, obj.into())
     }
 }
 
@@ -14989,7 +21384,7 @@ pub struct UploadPartCopyOutput {
     pub copy_part_result: Option<CopyPartResult>,
     /// <p>The version of the source object that was copied, if you have enabled versioning on the source bucket.</p>
     pub copy_source_version_id: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round-trip message integrity verification of the customer-provided encryption key.</p>
@@ -14997,7 +21392,7 @@ pub struct UploadPartCopyOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
 #[allow(dead_code)]
@@ -15048,7 +21443,7 @@ pub struct UploadPartCopyRequest {
     pub key: String,
     /// <p>Part number of part being copied. This is a positive integer between 1 and 10,000.</p>
     pub part_number: i64,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header. This must be the same encryption key specified in the initiate multipart upload request.</p>
@@ -15066,7 +21461,7 @@ pub struct UploadPartOutput {
     pub bucket_key_enabled: Option<bool>,
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
-    pub request_charged: Option<String>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round-trip message integrity verification of the customer-provided encryption key.</p>
@@ -15074,7 +21469,7 @@ pub struct UploadPartOutput {
     /// <p>If present, specifies the ID of the AWS Key Management Service (AWS KMS) symmetric customer managed customer master key (CMK) was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
-    pub server_side_encryption: Option<String>,
+    pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
 #[allow(dead_code)]
@@ -15110,7 +21505,7 @@ pub struct UploadPartRequest {
     pub key: String,
     /// <p>Part number of part being uploaded. This is a positive integer between 1 and 10,000.</p>
     pub part_number: i64,
-    pub request_payer: Option<String>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
     pub sse_customer_algorithm: Option<String>,
     /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm header</code>. This must be the same encryption key specified in the initiate multipart upload request.</p>
@@ -15194,9 +21589,9 @@ impl VersionIdMarkerSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
-    pub mfa_delete: Option<String>,
+    pub mfa_delete: Option<MFADelete>,
     /// <p>The versioning state of the bucket.</p>
-    pub status: Option<String>,
+    pub status: Option<BucketVersioningStatus>,
 }
 
 pub struct VersioningConfigurationSerializer;
@@ -19270,7 +25665,10 @@ impl S3 for S3Client {
 
         let result = AbortMultipartUploadOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -19319,11 +25717,17 @@ impl S3 for S3Client {
             .remove("x-amz-server-side-encryption-bucket-key-enabled")
             .map(|value| value.parse::<bool>().unwrap());
         result.expiration = response.headers.remove("x-amz-expiration");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into());
         result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
@@ -19462,7 +25866,10 @@ impl S3 for S3Client {
             .map(|value| value.parse::<bool>().unwrap());
         result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
         result.expiration = response.headers.remove("x-amz-expiration");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.sse_customer_algorithm = response
             .headers
             .remove("x-amz-server-side-encryption-customer-algorithm");
@@ -19475,7 +25882,10 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into());
         result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
@@ -19625,7 +26035,10 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-server-side-encryption-bucket-key-enabled")
             .map(|value| value.parse::<bool>().unwrap());
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.sse_customer_algorithm = response
             .headers
             .remove("x-amz-server-side-encryption-customer-algorithm");
@@ -19638,7 +26051,10 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -20025,7 +26441,10 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-delete-marker")
             .map(|value| value.parse::<bool>().unwrap());
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
@@ -20099,7 +26518,10 @@ impl S3 for S3Client {
         })
         .await?;
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -20963,9 +27385,14 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-missing-meta")
             .map(|value| value.parse::<i64>().unwrap());
-        result.object_lock_legal_hold_status =
-            response.headers.remove("x-amz-object-lock-legal-hold");
-        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_legal_hold_status = response
+            .headers
+            .remove("x-amz-object-lock-legal-hold")
+            .map(|value| value.into());
+        result.object_lock_mode = response
+            .headers
+            .remove("x-amz-object-lock-mode")
+            .map(|value| value.into());
         result.object_lock_retain_until_date = response
             .headers
             .remove("x-amz-object-lock-retain-until-date");
@@ -20973,8 +27400,14 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-mp-parts-count")
             .map(|value| value.parse::<i64>().unwrap());
-        result.replication_status = response.headers.remove("x-amz-replication-status");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.replication_status = response
+            .headers
+            .remove("x-amz-replication-status")
+            .map(|value| value.into());
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.restore = response.headers.remove("x-amz-restore");
         result.sse_customer_algorithm = response
             .headers
@@ -20985,8 +27418,14 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
-        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into());
+        result.storage_class = response
+            .headers
+            .remove("x-amz-storage-class")
+            .map(|value| value.into());
         result.tag_count = response
             .headers
             .remove("x-amz-tagging-count")
@@ -21029,7 +27468,10 @@ impl S3 for S3Client {
         })
         .await?;
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -21198,7 +27640,10 @@ impl S3 for S3Client {
 
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         Ok(result)
     }
 
@@ -21305,7 +27750,10 @@ impl S3 for S3Client {
         let result = HeadObjectOutput::default();
         let mut result = result;
         result.accept_ranges = response.headers.remove("accept-ranges");
-        result.archive_status = response.headers.remove("x-amz-archive-status");
+        result.archive_status = response
+            .headers
+            .remove("x-amz-archive-status")
+            .map(|value| value.into());
         result.bucket_key_enabled = response
             .headers
             .remove("x-amz-server-side-encryption-bucket-key-enabled")
@@ -21341,9 +27789,14 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-missing-meta")
             .map(|value| value.parse::<i64>().unwrap());
-        result.object_lock_legal_hold_status =
-            response.headers.remove("x-amz-object-lock-legal-hold");
-        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_legal_hold_status = response
+            .headers
+            .remove("x-amz-object-lock-legal-hold")
+            .map(|value| value.into());
+        result.object_lock_mode = response
+            .headers
+            .remove("x-amz-object-lock-mode")
+            .map(|value| value.into());
         result.object_lock_retain_until_date = response
             .headers
             .remove("x-amz-object-lock-retain-until-date");
@@ -21351,8 +27804,14 @@ impl S3 for S3Client {
             .headers
             .remove("x-amz-mp-parts-count")
             .map(|value| value.parse::<i64>().unwrap());
-        result.replication_status = response.headers.remove("x-amz-replication-status");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.replication_status = response
+            .headers
+            .remove("x-amz-replication-status")
+            .map(|value| value.into());
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.restore = response.headers.remove("x-amz-restore");
         result.sse_customer_algorithm = response
             .headers
@@ -21363,8 +27822,14 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
-        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into());
+        result.storage_class = response
+            .headers
+            .remove("x-amz-storage-class")
+            .map(|value| value.into());
         result.version_id = response.headers.remove("x-amz-version-id");
         result.website_redirect_location =
             response.headers.remove("x-amz-website-redirect-location"); // parse non-payload
@@ -21790,7 +28255,10 @@ impl S3 for S3Client {
         let mut result = result;
         result.abort_date = response.headers.remove("x-amz-abort-date");
         result.abort_rule_id = response.headers.remove("x-amz-abort-rule-id");
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -22605,7 +29073,10 @@ impl S3 for S3Client {
             .map(|value| value.parse::<bool>().unwrap());
         result.e_tag = response.headers.remove("ETag");
         result.expiration = response.headers.remove("x-amz-expiration");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.sse_customer_algorithm = response
             .headers
             .remove("x-amz-server-side-encryption-customer-algorithm");
@@ -22618,7 +29089,10 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into());
         result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
@@ -22673,7 +29147,10 @@ impl S3 for S3Client {
 
         let result = PutObjectAclOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -22718,7 +29195,10 @@ impl S3 for S3Client {
 
         let result = PutObjectLegalHoldOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -22762,7 +29242,10 @@ impl S3 for S3Client {
 
         let result = PutObjectLockConfigurationOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -22811,7 +29294,10 @@ impl S3 for S3Client {
 
         let result = PutObjectRetentionOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -22925,7 +29411,10 @@ impl S3 for S3Client {
 
         let result = RestoreObjectOutput::default();
         let mut result = result;
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.restore_output_path = response.headers.remove("x-amz-restore-output-path"); // parse non-payload
         Ok(result)
     }
@@ -23024,7 +29513,10 @@ impl S3 for S3Client {
             .remove("x-amz-server-side-encryption-bucket-key-enabled")
             .map(|value| value.parse::<bool>().unwrap());
         result.e_tag = response.headers.remove("ETag");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.sse_customer_algorithm = response
             .headers
             .remove("x-amz-server-side-encryption-customer-algorithm");
@@ -23034,7 +29526,10 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 
@@ -23119,7 +29614,10 @@ impl S3 for S3Client {
             .remove("x-amz-server-side-encryption-bucket-key-enabled")
             .map(|value| value.parse::<bool>().unwrap());
         result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
-        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.request_charged = response
+            .headers
+            .remove("x-amz-request-charged")
+            .map(|value| value.into());
         result.sse_customer_algorithm = response
             .headers
             .remove("x-amz-server-side-encryption-customer-algorithm");
@@ -23129,7 +29627,10 @@ impl S3 for S3Client {
         result.ssekms_key_id = response
             .headers
             .remove("x-amz-server-side-encryption-aws-kms-key-id");
-        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
+        result.server_side_encryption = response
+            .headers
+            .remove("x-amz-server-side-encryption")
+            .map(|value| value.into()); // parse non-payload
         Ok(result)
     }
 }

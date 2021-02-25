@@ -100,7 +100,287 @@ pub struct Activity {
     /// <p>The activity type.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ActivityType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActivityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActivityType {
+    DocumentAnnotationAdded,
+    DocumentAnnotationDeleted,
+    DocumentCheckedIn,
+    DocumentCheckedOut,
+    DocumentCommentAdded,
+    DocumentCommentDeleted,
+    DocumentMoved,
+    DocumentRecycled,
+    DocumentRenamed,
+    DocumentRestored,
+    DocumentReverted,
+    DocumentShareableLinkCreated,
+    DocumentShareableLinkPermissionChanged,
+    DocumentShareableLinkRemoved,
+    DocumentShared,
+    DocumentSharePermissionChanged,
+    DocumentUnshared,
+    DocumentVersionDeleted,
+    DocumentVersionDownloaded,
+    DocumentVersionUploaded,
+    DocumentVersionViewed,
+    FolderCreated,
+    FolderDeleted,
+    FolderMoved,
+    FolderRecycled,
+    FolderRenamed,
+    FolderRestored,
+    FolderShareableLinkCreated,
+    FolderShareableLinkPermissionChanged,
+    FolderShareableLinkRemoved,
+    FolderShared,
+    FolderSharePermissionChanged,
+    FolderUnshared,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActivityType),
+}
+
+impl Default for ActivityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActivityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActivityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActivityType {
+    fn into(self) -> String {
+        match self {
+            ActivityType::DocumentAnnotationAdded => "DOCUMENT_ANNOTATION_ADDED".to_string(),
+            ActivityType::DocumentAnnotationDeleted => "DOCUMENT_ANNOTATION_DELETED".to_string(),
+            ActivityType::DocumentCheckedIn => "DOCUMENT_CHECKED_IN".to_string(),
+            ActivityType::DocumentCheckedOut => "DOCUMENT_CHECKED_OUT".to_string(),
+            ActivityType::DocumentCommentAdded => "DOCUMENT_COMMENT_ADDED".to_string(),
+            ActivityType::DocumentCommentDeleted => "DOCUMENT_COMMENT_DELETED".to_string(),
+            ActivityType::DocumentMoved => "DOCUMENT_MOVED".to_string(),
+            ActivityType::DocumentRecycled => "DOCUMENT_RECYCLED".to_string(),
+            ActivityType::DocumentRenamed => "DOCUMENT_RENAMED".to_string(),
+            ActivityType::DocumentRestored => "DOCUMENT_RESTORED".to_string(),
+            ActivityType::DocumentReverted => "DOCUMENT_REVERTED".to_string(),
+            ActivityType::DocumentShareableLinkCreated => {
+                "DOCUMENT_SHAREABLE_LINK_CREATED".to_string()
+            }
+            ActivityType::DocumentShareableLinkPermissionChanged => {
+                "DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED".to_string()
+            }
+            ActivityType::DocumentShareableLinkRemoved => {
+                "DOCUMENT_SHAREABLE_LINK_REMOVED".to_string()
+            }
+            ActivityType::DocumentShared => "DOCUMENT_SHARED".to_string(),
+            ActivityType::DocumentSharePermissionChanged => {
+                "DOCUMENT_SHARE_PERMISSION_CHANGED".to_string()
+            }
+            ActivityType::DocumentUnshared => "DOCUMENT_UNSHARED".to_string(),
+            ActivityType::DocumentVersionDeleted => "DOCUMENT_VERSION_DELETED".to_string(),
+            ActivityType::DocumentVersionDownloaded => "DOCUMENT_VERSION_DOWNLOADED".to_string(),
+            ActivityType::DocumentVersionUploaded => "DOCUMENT_VERSION_UPLOADED".to_string(),
+            ActivityType::DocumentVersionViewed => "DOCUMENT_VERSION_VIEWED".to_string(),
+            ActivityType::FolderCreated => "FOLDER_CREATED".to_string(),
+            ActivityType::FolderDeleted => "FOLDER_DELETED".to_string(),
+            ActivityType::FolderMoved => "FOLDER_MOVED".to_string(),
+            ActivityType::FolderRecycled => "FOLDER_RECYCLED".to_string(),
+            ActivityType::FolderRenamed => "FOLDER_RENAMED".to_string(),
+            ActivityType::FolderRestored => "FOLDER_RESTORED".to_string(),
+            ActivityType::FolderShareableLinkCreated => "FOLDER_SHAREABLE_LINK_CREATED".to_string(),
+            ActivityType::FolderShareableLinkPermissionChanged => {
+                "FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED".to_string()
+            }
+            ActivityType::FolderShareableLinkRemoved => "FOLDER_SHAREABLE_LINK_REMOVED".to_string(),
+            ActivityType::FolderShared => "FOLDER_SHARED".to_string(),
+            ActivityType::FolderSharePermissionChanged => {
+                "FOLDER_SHARE_PERMISSION_CHANGED".to_string()
+            }
+            ActivityType::FolderUnshared => "FOLDER_UNSHARED".to_string(),
+            ActivityType::UnknownVariant(UnknownActivityType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActivityType {
+    fn into(self) -> &'a str {
+        match self {
+            ActivityType::DocumentAnnotationAdded => &"DOCUMENT_ANNOTATION_ADDED",
+            ActivityType::DocumentAnnotationDeleted => &"DOCUMENT_ANNOTATION_DELETED",
+            ActivityType::DocumentCheckedIn => &"DOCUMENT_CHECKED_IN",
+            ActivityType::DocumentCheckedOut => &"DOCUMENT_CHECKED_OUT",
+            ActivityType::DocumentCommentAdded => &"DOCUMENT_COMMENT_ADDED",
+            ActivityType::DocumentCommentDeleted => &"DOCUMENT_COMMENT_DELETED",
+            ActivityType::DocumentMoved => &"DOCUMENT_MOVED",
+            ActivityType::DocumentRecycled => &"DOCUMENT_RECYCLED",
+            ActivityType::DocumentRenamed => &"DOCUMENT_RENAMED",
+            ActivityType::DocumentRestored => &"DOCUMENT_RESTORED",
+            ActivityType::DocumentReverted => &"DOCUMENT_REVERTED",
+            ActivityType::DocumentShareableLinkCreated => &"DOCUMENT_SHAREABLE_LINK_CREATED",
+            ActivityType::DocumentShareableLinkPermissionChanged => {
+                &"DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED"
+            }
+            ActivityType::DocumentShareableLinkRemoved => &"DOCUMENT_SHAREABLE_LINK_REMOVED",
+            ActivityType::DocumentShared => &"DOCUMENT_SHARED",
+            ActivityType::DocumentSharePermissionChanged => &"DOCUMENT_SHARE_PERMISSION_CHANGED",
+            ActivityType::DocumentUnshared => &"DOCUMENT_UNSHARED",
+            ActivityType::DocumentVersionDeleted => &"DOCUMENT_VERSION_DELETED",
+            ActivityType::DocumentVersionDownloaded => &"DOCUMENT_VERSION_DOWNLOADED",
+            ActivityType::DocumentVersionUploaded => &"DOCUMENT_VERSION_UPLOADED",
+            ActivityType::DocumentVersionViewed => &"DOCUMENT_VERSION_VIEWED",
+            ActivityType::FolderCreated => &"FOLDER_CREATED",
+            ActivityType::FolderDeleted => &"FOLDER_DELETED",
+            ActivityType::FolderMoved => &"FOLDER_MOVED",
+            ActivityType::FolderRecycled => &"FOLDER_RECYCLED",
+            ActivityType::FolderRenamed => &"FOLDER_RENAMED",
+            ActivityType::FolderRestored => &"FOLDER_RESTORED",
+            ActivityType::FolderShareableLinkCreated => &"FOLDER_SHAREABLE_LINK_CREATED",
+            ActivityType::FolderShareableLinkPermissionChanged => {
+                &"FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED"
+            }
+            ActivityType::FolderShareableLinkRemoved => &"FOLDER_SHAREABLE_LINK_REMOVED",
+            ActivityType::FolderShared => &"FOLDER_SHARED",
+            ActivityType::FolderSharePermissionChanged => &"FOLDER_SHARE_PERMISSION_CHANGED",
+            ActivityType::FolderUnshared => &"FOLDER_UNSHARED",
+            ActivityType::UnknownVariant(UnknownActivityType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActivityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOCUMENT_ANNOTATION_ADDED" => ActivityType::DocumentAnnotationAdded,
+            "DOCUMENT_ANNOTATION_DELETED" => ActivityType::DocumentAnnotationDeleted,
+            "DOCUMENT_CHECKED_IN" => ActivityType::DocumentCheckedIn,
+            "DOCUMENT_CHECKED_OUT" => ActivityType::DocumentCheckedOut,
+            "DOCUMENT_COMMENT_ADDED" => ActivityType::DocumentCommentAdded,
+            "DOCUMENT_COMMENT_DELETED" => ActivityType::DocumentCommentDeleted,
+            "DOCUMENT_MOVED" => ActivityType::DocumentMoved,
+            "DOCUMENT_RECYCLED" => ActivityType::DocumentRecycled,
+            "DOCUMENT_RENAMED" => ActivityType::DocumentRenamed,
+            "DOCUMENT_RESTORED" => ActivityType::DocumentRestored,
+            "DOCUMENT_REVERTED" => ActivityType::DocumentReverted,
+            "DOCUMENT_SHAREABLE_LINK_CREATED" => ActivityType::DocumentShareableLinkCreated,
+            "DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                ActivityType::DocumentShareableLinkPermissionChanged
+            }
+            "DOCUMENT_SHAREABLE_LINK_REMOVED" => ActivityType::DocumentShareableLinkRemoved,
+            "DOCUMENT_SHARED" => ActivityType::DocumentShared,
+            "DOCUMENT_SHARE_PERMISSION_CHANGED" => ActivityType::DocumentSharePermissionChanged,
+            "DOCUMENT_UNSHARED" => ActivityType::DocumentUnshared,
+            "DOCUMENT_VERSION_DELETED" => ActivityType::DocumentVersionDeleted,
+            "DOCUMENT_VERSION_DOWNLOADED" => ActivityType::DocumentVersionDownloaded,
+            "DOCUMENT_VERSION_UPLOADED" => ActivityType::DocumentVersionUploaded,
+            "DOCUMENT_VERSION_VIEWED" => ActivityType::DocumentVersionViewed,
+            "FOLDER_CREATED" => ActivityType::FolderCreated,
+            "FOLDER_DELETED" => ActivityType::FolderDeleted,
+            "FOLDER_MOVED" => ActivityType::FolderMoved,
+            "FOLDER_RECYCLED" => ActivityType::FolderRecycled,
+            "FOLDER_RENAMED" => ActivityType::FolderRenamed,
+            "FOLDER_RESTORED" => ActivityType::FolderRestored,
+            "FOLDER_SHAREABLE_LINK_CREATED" => ActivityType::FolderShareableLinkCreated,
+            "FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                ActivityType::FolderShareableLinkPermissionChanged
+            }
+            "FOLDER_SHAREABLE_LINK_REMOVED" => ActivityType::FolderShareableLinkRemoved,
+            "FOLDER_SHARED" => ActivityType::FolderShared,
+            "FOLDER_SHARE_PERMISSION_CHANGED" => ActivityType::FolderSharePermissionChanged,
+            "FOLDER_UNSHARED" => ActivityType::FolderUnshared,
+            _ => ActivityType::UnknownVariant(UnknownActivityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActivityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOCUMENT_ANNOTATION_ADDED" => ActivityType::DocumentAnnotationAdded,
+            "DOCUMENT_ANNOTATION_DELETED" => ActivityType::DocumentAnnotationDeleted,
+            "DOCUMENT_CHECKED_IN" => ActivityType::DocumentCheckedIn,
+            "DOCUMENT_CHECKED_OUT" => ActivityType::DocumentCheckedOut,
+            "DOCUMENT_COMMENT_ADDED" => ActivityType::DocumentCommentAdded,
+            "DOCUMENT_COMMENT_DELETED" => ActivityType::DocumentCommentDeleted,
+            "DOCUMENT_MOVED" => ActivityType::DocumentMoved,
+            "DOCUMENT_RECYCLED" => ActivityType::DocumentRecycled,
+            "DOCUMENT_RENAMED" => ActivityType::DocumentRenamed,
+            "DOCUMENT_RESTORED" => ActivityType::DocumentRestored,
+            "DOCUMENT_REVERTED" => ActivityType::DocumentReverted,
+            "DOCUMENT_SHAREABLE_LINK_CREATED" => ActivityType::DocumentShareableLinkCreated,
+            "DOCUMENT_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                ActivityType::DocumentShareableLinkPermissionChanged
+            }
+            "DOCUMENT_SHAREABLE_LINK_REMOVED" => ActivityType::DocumentShareableLinkRemoved,
+            "DOCUMENT_SHARED" => ActivityType::DocumentShared,
+            "DOCUMENT_SHARE_PERMISSION_CHANGED" => ActivityType::DocumentSharePermissionChanged,
+            "DOCUMENT_UNSHARED" => ActivityType::DocumentUnshared,
+            "DOCUMENT_VERSION_DELETED" => ActivityType::DocumentVersionDeleted,
+            "DOCUMENT_VERSION_DOWNLOADED" => ActivityType::DocumentVersionDownloaded,
+            "DOCUMENT_VERSION_UPLOADED" => ActivityType::DocumentVersionUploaded,
+            "DOCUMENT_VERSION_VIEWED" => ActivityType::DocumentVersionViewed,
+            "FOLDER_CREATED" => ActivityType::FolderCreated,
+            "FOLDER_DELETED" => ActivityType::FolderDeleted,
+            "FOLDER_MOVED" => ActivityType::FolderMoved,
+            "FOLDER_RECYCLED" => ActivityType::FolderRecycled,
+            "FOLDER_RENAMED" => ActivityType::FolderRenamed,
+            "FOLDER_RESTORED" => ActivityType::FolderRestored,
+            "FOLDER_SHAREABLE_LINK_CREATED" => ActivityType::FolderShareableLinkCreated,
+            "FOLDER_SHAREABLE_LINK_PERMISSION_CHANGED" => {
+                ActivityType::FolderShareableLinkPermissionChanged
+            }
+            "FOLDER_SHAREABLE_LINK_REMOVED" => ActivityType::FolderShareableLinkRemoved,
+            "FOLDER_SHARED" => ActivityType::FolderShared,
+            "FOLDER_SHARE_PERMISSION_CHANGED" => ActivityType::FolderSharePermissionChanged,
+            "FOLDER_UNSHARED" => ActivityType::FolderUnshared,
+            _ => ActivityType::UnknownVariant(UnknownActivityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActivityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ActivityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActivityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -131,6 +411,107 @@ pub struct AddResourcePermissionsResponse {
     pub share_results: Option<Vec<ShareResult>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBooleanEnumType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BooleanEnumType {
+    False,
+    True,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBooleanEnumType),
+}
+
+impl Default for BooleanEnumType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BooleanEnumType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BooleanEnumType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BooleanEnumType {
+    fn into(self) -> String {
+        match self {
+            BooleanEnumType::False => "FALSE".to_string(),
+            BooleanEnumType::True => "TRUE".to_string(),
+            BooleanEnumType::UnknownVariant(UnknownBooleanEnumType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BooleanEnumType {
+    fn into(self) -> &'a str {
+        match self {
+            BooleanEnumType::False => &"FALSE",
+            BooleanEnumType::True => &"TRUE",
+            BooleanEnumType::UnknownVariant(UnknownBooleanEnumType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BooleanEnumType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FALSE" => BooleanEnumType::False,
+            "TRUE" => BooleanEnumType::True,
+            _ => BooleanEnumType::UnknownVariant(UnknownBooleanEnumType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BooleanEnumType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FALSE" => BooleanEnumType::False,
+            "TRUE" => BooleanEnumType::True,
+            _ => BooleanEnumType::UnknownVariant(UnknownBooleanEnumType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BooleanEnumType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BooleanEnumType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BooleanEnumType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a comment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -157,7 +538,7 @@ pub struct Comment {
     /// <p>The status of the comment.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CommentStatusType>,
     /// <p>The text of the comment.</p>
     #[serde(rename = "Text")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -169,7 +550,7 @@ pub struct Comment {
     /// <p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>
     #[serde(rename = "Visibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub visibility: Option<String>,
+    pub visibility: Option<CommentVisibilityType>,
 }
 
 /// <p>Describes the metadata of a comment.</p>
@@ -183,7 +564,7 @@ pub struct CommentMetadata {
     /// <p>The status of the comment.</p>
     #[serde(rename = "CommentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comment_status: Option<String>,
+    pub comment_status: Option<CommentStatusType>,
     /// <p>The user who made the comment.</p>
     #[serde(rename = "Contributor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -196,6 +577,220 @@ pub struct CommentMetadata {
     #[serde(rename = "RecipientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recipient_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommentStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommentStatusType {
+    Deleted,
+    Draft,
+    Published,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommentStatusType),
+}
+
+impl Default for CommentStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommentStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommentStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommentStatusType {
+    fn into(self) -> String {
+        match self {
+            CommentStatusType::Deleted => "DELETED".to_string(),
+            CommentStatusType::Draft => "DRAFT".to_string(),
+            CommentStatusType::Published => "PUBLISHED".to_string(),
+            CommentStatusType::UnknownVariant(UnknownCommentStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommentStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            CommentStatusType::Deleted => &"DELETED",
+            CommentStatusType::Draft => &"DRAFT",
+            CommentStatusType::Published => &"PUBLISHED",
+            CommentStatusType::UnknownVariant(UnknownCommentStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CommentStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => CommentStatusType::Deleted,
+            "DRAFT" => CommentStatusType::Draft,
+            "PUBLISHED" => CommentStatusType::Published,
+            _ => CommentStatusType::UnknownVariant(UnknownCommentStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommentStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => CommentStatusType::Deleted,
+            "DRAFT" => CommentStatusType::Draft,
+            "PUBLISHED" => CommentStatusType::Published,
+            _ => CommentStatusType::UnknownVariant(UnknownCommentStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CommentStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CommentStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCommentVisibilityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CommentVisibilityType {
+    Private,
+    Public,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCommentVisibilityType),
+}
+
+impl Default for CommentVisibilityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CommentVisibilityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CommentVisibilityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CommentVisibilityType {
+    fn into(self) -> String {
+        match self {
+            CommentVisibilityType::Private => "PRIVATE".to_string(),
+            CommentVisibilityType::Public => "PUBLIC".to_string(),
+            CommentVisibilityType::UnknownVariant(UnknownCommentVisibilityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CommentVisibilityType {
+    fn into(self) -> &'a str {
+        match self {
+            CommentVisibilityType::Private => &"PRIVATE",
+            CommentVisibilityType::Public => &"PUBLIC",
+            CommentVisibilityType::UnknownVariant(UnknownCommentVisibilityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CommentVisibilityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRIVATE" => CommentVisibilityType::Private,
+            "PUBLIC" => CommentVisibilityType::Public,
+            _ => CommentVisibilityType::UnknownVariant(UnknownCommentVisibilityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CommentVisibilityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRIVATE" => CommentVisibilityType::Private,
+            "PUBLIC" => CommentVisibilityType::Public,
+            _ => CommentVisibilityType::UnknownVariant(UnknownCommentVisibilityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CommentVisibilityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CommentVisibilityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CommentVisibilityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -229,7 +824,7 @@ pub struct CreateCommentRequest {
     /// <p>The visibility of the comment. Options are either PRIVATE, where the comment is visible only to the comment author and document owner and co-owners, or PUBLIC, where the comment is visible to document owners, co-owners, and contributors.</p>
     #[serde(rename = "Visibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub visibility: Option<String>,
+    pub visibility: Option<CommentVisibilityType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -319,10 +914,10 @@ pub struct CreateNotificationSubscriptionRequest {
     pub organization_id: String,
     /// <p>The protocol to use. The supported value is https, which delivers JSON-encoded messages using HTTPS POST.</p>
     #[serde(rename = "Protocol")]
-    pub protocol: String,
+    pub protocol: SubscriptionProtocolType,
     /// <p>The notification type.</p>
     #[serde(rename = "SubscriptionType")]
-    pub subscription_type: String,
+    pub subscription_type: SubscriptionType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -681,15 +1276,15 @@ pub struct DescribeFolderContentsRequest {
     /// <p>The order for the contents of the folder.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order: Option<String>,
+    pub order: Option<OrderType>,
     /// <p>The sorting criteria.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort: Option<String>,
+    pub sort: Option<ResourceSortType>,
     /// <p>The type of items.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<FolderContentType>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -855,7 +1450,7 @@ pub struct DescribeUsersRequest {
     /// <p>The state of the users. Specify "ALL" to include inactive users.</p>
     #[serde(rename = "Include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<String>,
+    pub include: Option<UserFilterType>,
     /// <p>The maximum number of items to return.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -867,7 +1462,7 @@ pub struct DescribeUsersRequest {
     /// <p>The order for the results.</p>
     #[serde(rename = "Order")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order: Option<String>,
+    pub order: Option<OrderType>,
     /// <p>The ID of the organization.</p>
     #[serde(rename = "OrganizationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -879,7 +1474,7 @@ pub struct DescribeUsersRequest {
     /// <p>The sorting criteria.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort: Option<String>,
+    pub sort: Option<UserSortType>,
     /// <p>The IDs of the users.</p>
     #[serde(rename = "UserIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -934,7 +1529,327 @@ pub struct DocumentMetadata {
     /// <p>The resource state.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_state: Option<String>,
+    pub resource_state: Option<ResourceStateType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentSourceType {
+    Original,
+    WithComments,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentSourceType),
+}
+
+impl Default for DocumentSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentSourceType {
+    fn into(self) -> String {
+        match self {
+            DocumentSourceType::Original => "ORIGINAL".to_string(),
+            DocumentSourceType::WithComments => "WITH_COMMENTS".to_string(),
+            DocumentSourceType::UnknownVariant(UnknownDocumentSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentSourceType::Original => &"ORIGINAL",
+            DocumentSourceType::WithComments => &"WITH_COMMENTS",
+            DocumentSourceType::UnknownVariant(UnknownDocumentSourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DocumentSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ORIGINAL" => DocumentSourceType::Original,
+            "WITH_COMMENTS" => DocumentSourceType::WithComments,
+            _ => DocumentSourceType::UnknownVariant(UnknownDocumentSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ORIGINAL" => DocumentSourceType::Original,
+            "WITH_COMMENTS" => DocumentSourceType::WithComments,
+            _ => DocumentSourceType::UnknownVariant(UnknownDocumentSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DocumentSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentStatusType {
+    Active,
+    Initialized,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentStatusType),
+}
+
+impl Default for DocumentStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentStatusType {
+    fn into(self) -> String {
+        match self {
+            DocumentStatusType::Active => "ACTIVE".to_string(),
+            DocumentStatusType::Initialized => "INITIALIZED".to_string(),
+            DocumentStatusType::UnknownVariant(UnknownDocumentStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentStatusType::Active => &"ACTIVE",
+            DocumentStatusType::Initialized => &"INITIALIZED",
+            DocumentStatusType::UnknownVariant(UnknownDocumentStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DocumentStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DocumentStatusType::Active,
+            "INITIALIZED" => DocumentStatusType::Initialized,
+            _ => DocumentStatusType::UnknownVariant(UnknownDocumentStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DocumentStatusType::Active,
+            "INITIALIZED" => DocumentStatusType::Initialized,
+            _ => DocumentStatusType::UnknownVariant(UnknownDocumentStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DocumentStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentThumbnailType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentThumbnailType {
+    Large,
+    Small,
+    SmallHq,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentThumbnailType),
+}
+
+impl Default for DocumentThumbnailType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentThumbnailType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentThumbnailType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentThumbnailType {
+    fn into(self) -> String {
+        match self {
+            DocumentThumbnailType::Large => "LARGE".to_string(),
+            DocumentThumbnailType::Small => "SMALL".to_string(),
+            DocumentThumbnailType::SmallHq => "SMALL_HQ".to_string(),
+            DocumentThumbnailType::UnknownVariant(UnknownDocumentThumbnailType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentThumbnailType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentThumbnailType::Large => &"LARGE",
+            DocumentThumbnailType::Small => &"SMALL",
+            DocumentThumbnailType::SmallHq => &"SMALL_HQ",
+            DocumentThumbnailType::UnknownVariant(UnknownDocumentThumbnailType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentThumbnailType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LARGE" => DocumentThumbnailType::Large,
+            "SMALL" => DocumentThumbnailType::Small,
+            "SMALL_HQ" => DocumentThumbnailType::SmallHq,
+            _ => DocumentThumbnailType::UnknownVariant(UnknownDocumentThumbnailType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentThumbnailType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LARGE" => DocumentThumbnailType::Large,
+            "SMALL" => DocumentThumbnailType::Small,
+            "SMALL_HQ" => DocumentThumbnailType::SmallHq,
+            _ => DocumentThumbnailType::UnknownVariant(UnknownDocumentThumbnailType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentThumbnailType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DocumentThumbnailType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentThumbnailType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a version of a document.</p>
@@ -984,15 +1899,225 @@ pub struct DocumentVersionMetadata {
     /// <p>The source of the document.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<::std::collections::HashMap<String, String>>,
+    pub source: Option<::std::collections::HashMap<DocumentSourceType, String>>,
     /// <p>The status of the document.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DocumentStatusType>,
     /// <p>The thumbnail of the document.</p>
     #[serde(rename = "Thumbnail")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumbnail: Option<::std::collections::HashMap<String, String>>,
+    pub thumbnail: Option<::std::collections::HashMap<DocumentThumbnailType, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentVersionStatus {
+    Active,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentVersionStatus),
+}
+
+impl Default for DocumentVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentVersionStatus {
+    fn into(self) -> String {
+        match self {
+            DocumentVersionStatus::Active => "ACTIVE".to_string(),
+            DocumentVersionStatus::UnknownVariant(UnknownDocumentVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentVersionStatus::Active => &"ACTIVE",
+            DocumentVersionStatus::UnknownVariant(UnknownDocumentVersionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DocumentVersionStatus::Active,
+            _ => DocumentVersionStatus::UnknownVariant(UnknownDocumentVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DocumentVersionStatus::Active,
+            _ => DocumentVersionStatus::UnknownVariant(UnknownDocumentVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DocumentVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFolderContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FolderContentType {
+    All,
+    Document,
+    Folder,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFolderContentType),
+}
+
+impl Default for FolderContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FolderContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FolderContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FolderContentType {
+    fn into(self) -> String {
+        match self {
+            FolderContentType::All => "ALL".to_string(),
+            FolderContentType::Document => "DOCUMENT".to_string(),
+            FolderContentType::Folder => "FOLDER".to_string(),
+            FolderContentType::UnknownVariant(UnknownFolderContentType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FolderContentType {
+    fn into(self) -> &'a str {
+        match self {
+            FolderContentType::All => &"ALL",
+            FolderContentType::Document => &"DOCUMENT",
+            FolderContentType::Folder => &"FOLDER",
+            FolderContentType::UnknownVariant(UnknownFolderContentType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FolderContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => FolderContentType::All,
+            "DOCUMENT" => FolderContentType::Document,
+            "FOLDER" => FolderContentType::Folder,
+            _ => FolderContentType::UnknownVariant(UnknownFolderContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FolderContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => FolderContentType::All,
+            "DOCUMENT" => FolderContentType::Document,
+            "FOLDER" => FolderContentType::Folder,
+            _ => FolderContentType::UnknownVariant(UnknownFolderContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FolderContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FolderContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FolderContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a folder.</p>
@@ -1034,7 +2159,7 @@ pub struct FolderMetadata {
     /// <p>The resource state of the folder.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_state: Option<String>,
+    pub resource_state: Option<ResourceStateType>,
     /// <p>The unique identifier created from the subfolders and documents of the folder.</p>
     #[serde(rename = "Signature")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,7 +2357,7 @@ pub struct GetResourcesRequest {
     /// <p>The collection type.</p>
     #[serde(rename = "CollectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub collection_type: Option<String>,
+    pub collection_type: Option<ResourceCollectionType>,
     /// <p>The maximum number of resources to return.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1327,6 +2452,151 @@ pub struct InitiateDocumentVersionUploadResponse {
     pub upload_metadata: Option<UploadMetadata>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLocaleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LocaleType {
+    De,
+    Default,
+    En,
+    Es,
+    Fr,
+    Ja,
+    Ko,
+    PtBR,
+    Ru,
+    ZhCN,
+    ZhTW,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLocaleType),
+}
+
+impl Default for LocaleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LocaleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LocaleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LocaleType {
+    fn into(self) -> String {
+        match self {
+            LocaleType::De => "de".to_string(),
+            LocaleType::Default => "default".to_string(),
+            LocaleType::En => "en".to_string(),
+            LocaleType::Es => "es".to_string(),
+            LocaleType::Fr => "fr".to_string(),
+            LocaleType::Ja => "ja".to_string(),
+            LocaleType::Ko => "ko".to_string(),
+            LocaleType::PtBR => "pt_BR".to_string(),
+            LocaleType::Ru => "ru".to_string(),
+            LocaleType::ZhCN => "zh_CN".to_string(),
+            LocaleType::ZhTW => "zh_TW".to_string(),
+            LocaleType::UnknownVariant(UnknownLocaleType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LocaleType {
+    fn into(self) -> &'a str {
+        match self {
+            LocaleType::De => &"de",
+            LocaleType::Default => &"default",
+            LocaleType::En => &"en",
+            LocaleType::Es => &"es",
+            LocaleType::Fr => &"fr",
+            LocaleType::Ja => &"ja",
+            LocaleType::Ko => &"ko",
+            LocaleType::PtBR => &"pt_BR",
+            LocaleType::Ru => &"ru",
+            LocaleType::ZhCN => &"zh_CN",
+            LocaleType::ZhTW => &"zh_TW",
+            LocaleType::UnknownVariant(UnknownLocaleType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LocaleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "de" => LocaleType::De,
+            "default" => LocaleType::Default,
+            "en" => LocaleType::En,
+            "es" => LocaleType::Es,
+            "fr" => LocaleType::Fr,
+            "ja" => LocaleType::Ja,
+            "ko" => LocaleType::Ko,
+            "pt_BR" => LocaleType::PtBR,
+            "ru" => LocaleType::Ru,
+            "zh_CN" => LocaleType::ZhCN,
+            "zh_TW" => LocaleType::ZhTW,
+            _ => LocaleType::UnknownVariant(UnknownLocaleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LocaleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "de" => LocaleType::De,
+            "default" => LocaleType::Default,
+            "en" => LocaleType::En,
+            "es" => LocaleType::Es,
+            "fr" => LocaleType::Fr,
+            "ja" => LocaleType::Ja,
+            "ko" => LocaleType::Ko,
+            "pt_BR" => LocaleType::PtBR,
+            "ru" => LocaleType::Ru,
+            "zh_CN" => LocaleType::ZhCN,
+            "zh_TW" => LocaleType::ZhTW,
+            _ => LocaleType::UnknownVariant(UnknownLocaleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LocaleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LocaleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LocaleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Set of options which defines notification preferences of given action.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1339,6 +2609,107 @@ pub struct NotificationOptions {
     #[serde(rename = "SendEmail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub send_email: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderType {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderType),
+}
+
+impl Default for OrderType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderType {
+    fn into(self) -> String {
+        match self {
+            OrderType::Ascending => "ASCENDING".to_string(),
+            OrderType::Descending => "DESCENDING".to_string(),
+            OrderType::UnknownVariant(UnknownOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderType {
+    fn into(self) -> &'a str {
+        match self {
+            OrderType::Ascending => &"ASCENDING",
+            OrderType::Descending => &"DESCENDING",
+            OrderType::UnknownVariant(UnknownOrderType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => OrderType::Ascending,
+            "DESCENDING" => OrderType::Descending,
+            _ => OrderType::UnknownVariant(UnknownOrderType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => OrderType::Ascending,
+            "DESCENDING" => OrderType::Descending,
+            _ => OrderType::UnknownVariant(UnknownOrderType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the users or user groups.</p>
@@ -1362,11 +2733,11 @@ pub struct PermissionInfo {
     /// <p>The role of the user.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoleType>,
     /// <p>The type of permissions.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<RolePermissionType>,
 }
 
 /// <p>Describes a resource.</p>
@@ -1384,7 +2755,122 @@ pub struct Principal {
     /// <p>The type of resource.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PrincipalType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPrincipalType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PrincipalType {
+    Anonymous,
+    Group,
+    Invite,
+    Organization,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPrincipalType),
+}
+
+impl Default for PrincipalType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PrincipalType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PrincipalType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PrincipalType {
+    fn into(self) -> String {
+        match self {
+            PrincipalType::Anonymous => "ANONYMOUS".to_string(),
+            PrincipalType::Group => "GROUP".to_string(),
+            PrincipalType::Invite => "INVITE".to_string(),
+            PrincipalType::Organization => "ORGANIZATION".to_string(),
+            PrincipalType::User => "USER".to_string(),
+            PrincipalType::UnknownVariant(UnknownPrincipalType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PrincipalType {
+    fn into(self) -> &'a str {
+        match self {
+            PrincipalType::Anonymous => &"ANONYMOUS",
+            PrincipalType::Group => &"GROUP",
+            PrincipalType::Invite => &"INVITE",
+            PrincipalType::Organization => &"ORGANIZATION",
+            PrincipalType::User => &"USER",
+            PrincipalType::UnknownVariant(UnknownPrincipalType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PrincipalType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANONYMOUS" => PrincipalType::Anonymous,
+            "GROUP" => PrincipalType::Group,
+            "INVITE" => PrincipalType::Invite,
+            "ORGANIZATION" => PrincipalType::Organization,
+            "USER" => PrincipalType::User,
+            _ => PrincipalType::UnknownVariant(UnknownPrincipalType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PrincipalType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANONYMOUS" => PrincipalType::Anonymous,
+            "GROUP" => PrincipalType::Group,
+            "INVITE" => PrincipalType::Invite,
+            "ORGANIZATION" => PrincipalType::Organization,
+            "USER" => PrincipalType::User,
+            _ => PrincipalType::UnknownVariant(UnknownPrincipalType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PrincipalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PrincipalType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PrincipalType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1412,10 +2898,110 @@ pub struct RemoveResourcePermissionRequest {
     /// <p>The principal type of the resource.</p>
     #[serde(rename = "PrincipalType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub principal_type: Option<String>,
+    pub principal_type: Option<PrincipalType>,
     /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceCollectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceCollectionType {
+    SharedWithMe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceCollectionType),
+}
+
+impl Default for ResourceCollectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceCollectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceCollectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceCollectionType {
+    fn into(self) -> String {
+        match self {
+            ResourceCollectionType::SharedWithMe => "SHARED_WITH_ME".to_string(),
+            ResourceCollectionType::UnknownVariant(UnknownResourceCollectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceCollectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceCollectionType::SharedWithMe => &"SHARED_WITH_ME",
+            ResourceCollectionType::UnknownVariant(UnknownResourceCollectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceCollectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHARED_WITH_ME" => ResourceCollectionType::SharedWithMe,
+            _ => ResourceCollectionType::UnknownVariant(UnknownResourceCollectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceCollectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHARED_WITH_ME" => ResourceCollectionType::SharedWithMe,
+            _ => ResourceCollectionType::UnknownVariant(UnknownResourceCollectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceCollectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceCollectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceCollectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the metadata of a resource.</p>
@@ -1445,7 +3031,7 @@ pub struct ResourceMetadata {
     /// <p>The type of resource.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ResourceType>,
     /// <p>The version ID of the resource. This is an optional field and is filled for action on document version.</p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1476,6 +3062,541 @@ pub struct ResourcePathComponent {
     pub name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceSortType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceSortType {
+    Date,
+    Name,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceSortType),
+}
+
+impl Default for ResourceSortType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceSortType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceSortType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceSortType {
+    fn into(self) -> String {
+        match self {
+            ResourceSortType::Date => "DATE".to_string(),
+            ResourceSortType::Name => "NAME".to_string(),
+            ResourceSortType::UnknownVariant(UnknownResourceSortType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceSortType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceSortType::Date => &"DATE",
+            ResourceSortType::Name => &"NAME",
+            ResourceSortType::UnknownVariant(UnknownResourceSortType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceSortType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DATE" => ResourceSortType::Date,
+            "NAME" => ResourceSortType::Name,
+            _ => ResourceSortType::UnknownVariant(UnknownResourceSortType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceSortType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DATE" => ResourceSortType::Date,
+            "NAME" => ResourceSortType::Name,
+            _ => ResourceSortType::UnknownVariant(UnknownResourceSortType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceSortType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceSortType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceSortType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceStateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceStateType {
+    Active,
+    Recycled,
+    Recycling,
+    Restoring,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceStateType),
+}
+
+impl Default for ResourceStateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceStateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceStateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceStateType {
+    fn into(self) -> String {
+        match self {
+            ResourceStateType::Active => "ACTIVE".to_string(),
+            ResourceStateType::Recycled => "RECYCLED".to_string(),
+            ResourceStateType::Recycling => "RECYCLING".to_string(),
+            ResourceStateType::Restoring => "RESTORING".to_string(),
+            ResourceStateType::UnknownVariant(UnknownResourceStateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceStateType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceStateType::Active => &"ACTIVE",
+            ResourceStateType::Recycled => &"RECYCLED",
+            ResourceStateType::Recycling => &"RECYCLING",
+            ResourceStateType::Restoring => &"RESTORING",
+            ResourceStateType::UnknownVariant(UnknownResourceStateType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResourceStateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ResourceStateType::Active,
+            "RECYCLED" => ResourceStateType::Recycled,
+            "RECYCLING" => ResourceStateType::Recycling,
+            "RESTORING" => ResourceStateType::Restoring,
+            _ => ResourceStateType::UnknownVariant(UnknownResourceStateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceStateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ResourceStateType::Active,
+            "RECYCLED" => ResourceStateType::Recycled,
+            "RECYCLING" => ResourceStateType::Recycling,
+            "RESTORING" => ResourceStateType::Restoring,
+            _ => ResourceStateType::UnknownVariant(UnknownResourceStateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceStateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceStateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceStateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Document,
+    Folder,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Document => "DOCUMENT".to_string(),
+            ResourceType::Folder => "FOLDER".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Document => &"DOCUMENT",
+            ResourceType::Folder => &"FOLDER",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOCUMENT" => ResourceType::Document,
+            "FOLDER" => ResourceType::Folder,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOCUMENT" => ResourceType::Document,
+            "FOLDER" => ResourceType::Folder,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRolePermissionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RolePermissionType {
+    Direct,
+    Inherited,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRolePermissionType),
+}
+
+impl Default for RolePermissionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RolePermissionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RolePermissionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RolePermissionType {
+    fn into(self) -> String {
+        match self {
+            RolePermissionType::Direct => "DIRECT".to_string(),
+            RolePermissionType::Inherited => "INHERITED".to_string(),
+            RolePermissionType::UnknownVariant(UnknownRolePermissionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RolePermissionType {
+    fn into(self) -> &'a str {
+        match self {
+            RolePermissionType::Direct => &"DIRECT",
+            RolePermissionType::Inherited => &"INHERITED",
+            RolePermissionType::UnknownVariant(UnknownRolePermissionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RolePermissionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DIRECT" => RolePermissionType::Direct,
+            "INHERITED" => RolePermissionType::Inherited,
+            _ => RolePermissionType::UnknownVariant(UnknownRolePermissionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RolePermissionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DIRECT" => RolePermissionType::Direct,
+            "INHERITED" => RolePermissionType::Inherited,
+            _ => RolePermissionType::UnknownVariant(UnknownRolePermissionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RolePermissionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RolePermissionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RolePermissionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRoleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RoleType {
+    Contributor,
+    Coowner,
+    Owner,
+    Viewer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRoleType),
+}
+
+impl Default for RoleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RoleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RoleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RoleType {
+    fn into(self) -> String {
+        match self {
+            RoleType::Contributor => "CONTRIBUTOR".to_string(),
+            RoleType::Coowner => "COOWNER".to_string(),
+            RoleType::Owner => "OWNER".to_string(),
+            RoleType::Viewer => "VIEWER".to_string(),
+            RoleType::UnknownVariant(UnknownRoleType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RoleType {
+    fn into(self) -> &'a str {
+        match self {
+            RoleType::Contributor => &"CONTRIBUTOR",
+            RoleType::Coowner => &"COOWNER",
+            RoleType::Owner => &"OWNER",
+            RoleType::Viewer => &"VIEWER",
+            RoleType::UnknownVariant(UnknownRoleType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RoleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTRIBUTOR" => RoleType::Contributor,
+            "COOWNER" => RoleType::Coowner,
+            "OWNER" => RoleType::Owner,
+            "VIEWER" => RoleType::Viewer,
+            _ => RoleType::UnknownVariant(UnknownRoleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RoleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTRIBUTOR" => RoleType::Contributor,
+            "COOWNER" => RoleType::Coowner,
+            "OWNER" => RoleType::Owner,
+            "VIEWER" => RoleType::Viewer,
+            _ => RoleType::UnknownVariant(UnknownRoleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RoleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RoleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the recipient type and ID, if available.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1485,10 +3606,10 @@ pub struct SharePrincipal {
     pub id: String,
     /// <p>The role of the recipient.</p>
     #[serde(rename = "Role")]
-    pub role: String,
+    pub role: RoleType,
     /// <p>The type of the recipient.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: PrincipalType,
 }
 
 /// <p>Describes the share results of a resource.</p>
@@ -1506,7 +3627,7 @@ pub struct ShareResult {
     /// <p>The role.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<String>,
+    pub role: Option<RoleType>,
     /// <p>The ID of the resource that was shared.</p>
     #[serde(rename = "ShareId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1514,11 +3635,112 @@ pub struct ShareResult {
     /// <p>The status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ShareStatusType>,
     /// <p>The status message.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShareStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShareStatusType {
+    Failure,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShareStatusType),
+}
+
+impl Default for ShareStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShareStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShareStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShareStatusType {
+    fn into(self) -> String {
+        match self {
+            ShareStatusType::Failure => "FAILURE".to_string(),
+            ShareStatusType::Success => "SUCCESS".to_string(),
+            ShareStatusType::UnknownVariant(UnknownShareStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShareStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            ShareStatusType::Failure => &"FAILURE",
+            ShareStatusType::Success => &"SUCCESS",
+            ShareStatusType::UnknownVariant(UnknownShareStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShareStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILURE" => ShareStatusType::Failure,
+            "SUCCESS" => ShareStatusType::Success,
+            _ => ShareStatusType::UnknownVariant(UnknownShareStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShareStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILURE" => ShareStatusType::Failure,
+            "SUCCESS" => ShareStatusType::Success,
+            _ => ShareStatusType::UnknownVariant(UnknownShareStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShareStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ShareStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShareStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the storage for a user.</p>
@@ -1531,7 +3753,107 @@ pub struct StorageRuleType {
     /// <p>The type of storage.</p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<StorageType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageType {
+    Quota,
+    Unlimited,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageType),
+}
+
+impl Default for StorageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageType {
+    fn into(self) -> String {
+        match self {
+            StorageType::Quota => "QUOTA".to_string(),
+            StorageType::Unlimited => "UNLIMITED".to_string(),
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageType {
+    fn into(self) -> &'a str {
+        match self {
+            StorageType::Quota => &"QUOTA",
+            StorageType::Unlimited => &"UNLIMITED",
+            StorageType::UnknownVariant(UnknownStorageType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "QUOTA" => StorageType::Quota,
+            "UNLIMITED" => StorageType::Unlimited,
+            _ => StorageType::UnknownVariant(UnknownStorageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "QUOTA" => StorageType::Quota,
+            "UNLIMITED" => StorageType::Unlimited,
+            _ => StorageType::UnknownVariant(UnknownStorageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StorageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a subscription.</p>
@@ -1545,11 +3867,210 @@ pub struct Subscription {
     /// <p>The protocol of the subscription.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<SubscriptionProtocolType>,
     /// <p>The ID of the subscription.</p>
     #[serde(rename = "SubscriptionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriptionProtocolType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriptionProtocolType {
+    Https,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriptionProtocolType),
+}
+
+impl Default for SubscriptionProtocolType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriptionProtocolType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriptionProtocolType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriptionProtocolType {
+    fn into(self) -> String {
+        match self {
+            SubscriptionProtocolType::Https => "HTTPS".to_string(),
+            SubscriptionProtocolType::UnknownVariant(UnknownSubscriptionProtocolType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriptionProtocolType {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriptionProtocolType::Https => &"HTTPS",
+            SubscriptionProtocolType::UnknownVariant(UnknownSubscriptionProtocolType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SubscriptionProtocolType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTPS" => SubscriptionProtocolType::Https,
+            _ => SubscriptionProtocolType::UnknownVariant(UnknownSubscriptionProtocolType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriptionProtocolType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTPS" => SubscriptionProtocolType::Https,
+            _ => SubscriptionProtocolType::UnknownVariant(UnknownSubscriptionProtocolType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionProtocolType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriptionProtocolType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SubscriptionProtocolType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSubscriptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SubscriptionType {
+    All,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSubscriptionType),
+}
+
+impl Default for SubscriptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SubscriptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SubscriptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SubscriptionType {
+    fn into(self) -> String {
+        match self {
+            SubscriptionType::All => "ALL".to_string(),
+            SubscriptionType::UnknownVariant(UnknownSubscriptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SubscriptionType {
+    fn into(self) -> &'a str {
+        match self {
+            SubscriptionType::All => &"ALL",
+            SubscriptionType::UnknownVariant(UnknownSubscriptionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SubscriptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => SubscriptionType::All,
+            _ => SubscriptionType::UnknownVariant(UnknownSubscriptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SubscriptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => SubscriptionType::All,
+            _ => SubscriptionType::UnknownVariant(UnknownSubscriptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SubscriptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SubscriptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SubscriptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1573,7 +4094,7 @@ pub struct UpdateDocumentRequest {
     /// <p>The resource state of the document. Only ACTIVE and RECYCLED are supported.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_state: Option<String>,
+    pub resource_state: Option<ResourceStateType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1592,7 +4113,7 @@ pub struct UpdateDocumentVersionRequest {
     /// <p>The status of the version.</p>
     #[serde(rename = "VersionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub version_status: Option<String>,
+    pub version_status: Option<DocumentVersionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1616,7 +4137,7 @@ pub struct UpdateFolderRequest {
     /// <p>The resource state of the folder. Only ACTIVE and RECYCLED are accepted values from the API.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_state: Option<String>,
+    pub resource_state: Option<ResourceStateType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1633,11 +4154,11 @@ pub struct UpdateUserRequest {
     /// <p>Boolean value to determine whether the user is granted Poweruser privileges.</p>
     #[serde(rename = "GrantPoweruserPrivileges")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub grant_poweruser_privileges: Option<String>,
+    pub grant_poweruser_privileges: Option<BooleanEnumType>,
     /// <p>The locale of the user.</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<LocaleType>,
     /// <p>The amount of storage for the user.</p>
     #[serde(rename = "StorageRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1653,7 +4174,7 @@ pub struct UpdateUserRequest {
     /// <p>The type of the user.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<UserType>,
     /// <p>The ID of the user.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
@@ -1705,7 +4226,7 @@ pub struct User {
     /// <p>The locale of the user.</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<LocaleType>,
     /// <p>The time when the user was modified.</p>
     #[serde(rename = "ModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1725,7 +4246,7 @@ pub struct User {
     /// <p>The status of the user.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UserStatusType>,
     /// <p>The storage for the user.</p>
     #[serde(rename = "Storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1741,11 +4262,112 @@ pub struct User {
     /// <p>The type of user.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<UserType>,
     /// <p>The login name of the user.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserFilterType {
+    ActivePending,
+    All,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserFilterType),
+}
+
+impl Default for UserFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserFilterType {
+    fn into(self) -> String {
+        match self {
+            UserFilterType::ActivePending => "ACTIVE_PENDING".to_string(),
+            UserFilterType::All => "ALL".to_string(),
+            UserFilterType::UnknownVariant(UnknownUserFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            UserFilterType::ActivePending => &"ACTIVE_PENDING",
+            UserFilterType::All => &"ALL",
+            UserFilterType::UnknownVariant(UnknownUserFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE_PENDING" => UserFilterType::ActivePending,
+            "ALL" => UserFilterType::All,
+            _ => UserFilterType::UnknownVariant(UnknownUserFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE_PENDING" => UserFilterType::ActivePending,
+            "ALL" => UserFilterType::All,
+            _ => UserFilterType::UnknownVariant(UnknownUserFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UserFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the metadata of the user.</p>
@@ -1774,6 +4396,228 @@ pub struct UserMetadata {
     pub username: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserSortType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserSortType {
+    FullName,
+    StorageLimit,
+    StorageUsed,
+    UserName,
+    UserStatus,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserSortType),
+}
+
+impl Default for UserSortType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserSortType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserSortType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserSortType {
+    fn into(self) -> String {
+        match self {
+            UserSortType::FullName => "FULL_NAME".to_string(),
+            UserSortType::StorageLimit => "STORAGE_LIMIT".to_string(),
+            UserSortType::StorageUsed => "STORAGE_USED".to_string(),
+            UserSortType::UserName => "USER_NAME".to_string(),
+            UserSortType::UserStatus => "USER_STATUS".to_string(),
+            UserSortType::UnknownVariant(UnknownUserSortType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserSortType {
+    fn into(self) -> &'a str {
+        match self {
+            UserSortType::FullName => &"FULL_NAME",
+            UserSortType::StorageLimit => &"STORAGE_LIMIT",
+            UserSortType::StorageUsed => &"STORAGE_USED",
+            UserSortType::UserName => &"USER_NAME",
+            UserSortType::UserStatus => &"USER_STATUS",
+            UserSortType::UnknownVariant(UnknownUserSortType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserSortType {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_NAME" => UserSortType::FullName,
+            "STORAGE_LIMIT" => UserSortType::StorageLimit,
+            "STORAGE_USED" => UserSortType::StorageUsed,
+            "USER_NAME" => UserSortType::UserName,
+            "USER_STATUS" => UserSortType::UserStatus,
+            _ => UserSortType::UnknownVariant(UnknownUserSortType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserSortType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_NAME" => UserSortType::FullName,
+            "STORAGE_LIMIT" => UserSortType::StorageLimit,
+            "STORAGE_USED" => UserSortType::StorageUsed,
+            "USER_NAME" => UserSortType::UserName,
+            "USER_STATUS" => UserSortType::UserStatus,
+            _ => UserSortType::UnknownVariant(UnknownUserSortType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserSortType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserSortType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UserSortType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserStatusType {
+    Active,
+    Inactive,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserStatusType),
+}
+
+impl Default for UserStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserStatusType {
+    fn into(self) -> String {
+        match self {
+            UserStatusType::Active => "ACTIVE".to_string(),
+            UserStatusType::Inactive => "INACTIVE".to_string(),
+            UserStatusType::Pending => "PENDING".to_string(),
+            UserStatusType::UnknownVariant(UnknownUserStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            UserStatusType::Active => &"ACTIVE",
+            UserStatusType::Inactive => &"INACTIVE",
+            UserStatusType::Pending => &"PENDING",
+            UserStatusType::UnknownVariant(UnknownUserStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => UserStatusType::Active,
+            "INACTIVE" => UserStatusType::Inactive,
+            "PENDING" => UserStatusType::Pending,
+            _ => UserStatusType::UnknownVariant(UnknownUserStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => UserStatusType::Active,
+            "INACTIVE" => UserStatusType::Inactive,
+            "PENDING" => UserStatusType::Pending,
+            _ => UserStatusType::UnknownVariant(UnknownUserStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UserStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the storage for a user.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1786,6 +4630,121 @@ pub struct UserStorageMetadata {
     #[serde(rename = "StorageUtilizedInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_utilized_in_bytes: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserType {
+    Admin,
+    Minimaluser,
+    Poweruser,
+    User,
+    Workspacesuser,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserType),
+}
+
+impl Default for UserType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserType {
+    fn into(self) -> String {
+        match self {
+            UserType::Admin => "ADMIN".to_string(),
+            UserType::Minimaluser => "MINIMALUSER".to_string(),
+            UserType::Poweruser => "POWERUSER".to_string(),
+            UserType::User => "USER".to_string(),
+            UserType::Workspacesuser => "WORKSPACESUSER".to_string(),
+            UserType::UnknownVariant(UnknownUserType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserType {
+    fn into(self) -> &'a str {
+        match self {
+            UserType::Admin => &"ADMIN",
+            UserType::Minimaluser => &"MINIMALUSER",
+            UserType::Poweruser => &"POWERUSER",
+            UserType::User => &"USER",
+            UserType::Workspacesuser => &"WORKSPACESUSER",
+            UserType::UnknownVariant(UnknownUserType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UserType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADMIN" => UserType::Admin,
+            "MINIMALUSER" => UserType::Minimaluser,
+            "POWERUSER" => UserType::Poweruser,
+            "USER" => UserType::User,
+            "WORKSPACESUSER" => UserType::Workspacesuser,
+            _ => UserType::UnknownVariant(UnknownUserType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADMIN" => UserType::Admin,
+            "MINIMALUSER" => UserType::Minimaluser,
+            "POWERUSER" => UserType::Poweruser,
+            "USER" => UserType::User,
+            "WORKSPACESUSER" => UserType::Workspacesuser,
+            _ => UserType::UnknownVariant(UnknownUserType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AbortDocumentVersionUpload

@@ -83,7 +83,112 @@ pub struct ConnectionState {
     /// <p>The connection status of the tunnel. Valid values are <code>CONNECTED</code> and <code>DISCONNECTED</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ConnectionStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionStatus {
+    Connected,
+    Disconnected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionStatus),
+}
+
+impl Default for ConnectionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionStatus {
+    fn into(self) -> String {
+        match self {
+            ConnectionStatus::Connected => "CONNECTED".to_string(),
+            ConnectionStatus::Disconnected => "DISCONNECTED".to_string(),
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionStatus::Connected => &"CONNECTED",
+            ConnectionStatus::Disconnected => &"DISCONNECTED",
+            ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConnectionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECTED" => ConnectionStatus::Connected,
+            "DISCONNECTED" => ConnectionStatus::Disconnected,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECTED" => ConnectionStatus::Connected,
+            "DISCONNECTED" => ConnectionStatus::Disconnected,
+            _ => ConnectionStatus::UnknownVariant(UnknownConnectionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConnectionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -270,7 +375,7 @@ pub struct Tunnel {
     /// <p>The status of a tunnel. Valid values are: Open and Closed.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TunnelStatus>,
     /// <p>A list of tag metadata associated with the secure tunnel.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -287,6 +392,107 @@ pub struct Tunnel {
     #[serde(rename = "tunnelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tunnel_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTunnelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TunnelStatus {
+    Closed,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTunnelStatus),
+}
+
+impl Default for TunnelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TunnelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TunnelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TunnelStatus {
+    fn into(self) -> String {
+        match self {
+            TunnelStatus::Closed => "CLOSED".to_string(),
+            TunnelStatus::Open => "OPEN".to_string(),
+            TunnelStatus::UnknownVariant(UnknownTunnelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TunnelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TunnelStatus::Closed => &"CLOSED",
+            TunnelStatus::Open => &"OPEN",
+            TunnelStatus::UnknownVariant(UnknownTunnelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TunnelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOSED" => TunnelStatus::Closed,
+            "OPEN" => TunnelStatus::Open,
+            _ => TunnelStatus::UnknownVariant(UnknownTunnelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TunnelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOSED" => TunnelStatus::Closed,
+            "OPEN" => TunnelStatus::Open,
+            _ => TunnelStatus::UnknownVariant(UnknownTunnelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TunnelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TunnelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TunnelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the tunnel.</p>
@@ -308,7 +514,7 @@ pub struct TunnelSummary {
     /// <p>The status of a tunnel. Valid values are: Open and Closed.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TunnelStatus>,
     /// <p>The Amazon Resource Name of the tunnel. The tunnel ARN format is <code>arn:aws:tunnel:&lt;region&gt;:&lt;account-id&gt;:tunnel/&lt;tunnel-id&gt;</code> </p>
     #[serde(rename = "tunnelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]

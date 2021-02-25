@@ -25,6 +25,242 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdMarkers {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdMarkers {
+    Daterange,
+    None,
+    Passthrough,
+    Scte35Enhanced,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdMarkers),
+}
+
+impl Default for AdMarkers {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdMarkers {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdMarkers {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdMarkers {
+    fn into(self) -> String {
+        match self {
+            AdMarkers::Daterange => "DATERANGE".to_string(),
+            AdMarkers::None => "NONE".to_string(),
+            AdMarkers::Passthrough => "PASSTHROUGH".to_string(),
+            AdMarkers::Scte35Enhanced => "SCTE35_ENHANCED".to_string(),
+            AdMarkers::UnknownVariant(UnknownAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdMarkers {
+    fn into(self) -> &'a str {
+        match self {
+            AdMarkers::Daterange => &"DATERANGE",
+            AdMarkers::None => &"NONE",
+            AdMarkers::Passthrough => &"PASSTHROUGH",
+            AdMarkers::Scte35Enhanced => &"SCTE35_ENHANCED",
+            AdMarkers::UnknownVariant(UnknownAdMarkers { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdMarkers {
+    fn from(name: &str) -> Self {
+        match name {
+            "DATERANGE" => AdMarkers::Daterange,
+            "NONE" => AdMarkers::None,
+            "PASSTHROUGH" => AdMarkers::Passthrough,
+            "SCTE35_ENHANCED" => AdMarkers::Scte35Enhanced,
+            _ => AdMarkers::UnknownVariant(UnknownAdMarkers {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdMarkers {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DATERANGE" => AdMarkers::Daterange,
+            "NONE" => AdMarkers::None,
+            "PASSTHROUGH" => AdMarkers::Passthrough,
+            "SCTE35_ENHANCED" => AdMarkers::Scte35Enhanced,
+            _ => AdMarkers::UnknownVariant(UnknownAdMarkers { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdMarkers {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdMarkers {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdMarkers {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>This setting allows the delivery restriction flags on SCTE-35 segmentation descriptors to
+/// determine whether a message signals an ad.  Choosing &quot;NONE&quot; means no SCTE-35 messages become
+/// ads.  Choosing &quot;RESTRICTED&quot; means SCTE-35 messages of the types specified in AdTriggers that
+/// contain delivery restrictions will be treated as ads.  Choosing &quot;UNRESTRICTED&quot; means SCTE-35
+/// messages of the types specified in AdTriggers that do not contain delivery restrictions will
+/// be treated as ads.  Choosing &quot;BOTH&quot; means all SCTE-35 messages of the types specified in
+/// AdTriggers will be treated as ads.  Note that Splice Insert messages do not have these flags
+/// and are always treated as ads if specified in AdTriggers.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdsOnDeliveryRestrictions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdsOnDeliveryRestrictions {
+    Both,
+    None,
+    Restricted,
+    Unrestricted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdsOnDeliveryRestrictions),
+}
+
+impl Default for AdsOnDeliveryRestrictions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdsOnDeliveryRestrictions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdsOnDeliveryRestrictions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdsOnDeliveryRestrictions {
+    fn into(self) -> String {
+        match self {
+            AdsOnDeliveryRestrictions::Both => "BOTH".to_string(),
+            AdsOnDeliveryRestrictions::None => "NONE".to_string(),
+            AdsOnDeliveryRestrictions::Restricted => "RESTRICTED".to_string(),
+            AdsOnDeliveryRestrictions::Unrestricted => "UNRESTRICTED".to_string(),
+            AdsOnDeliveryRestrictions::UnknownVariant(UnknownAdsOnDeliveryRestrictions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdsOnDeliveryRestrictions {
+    fn into(self) -> &'a str {
+        match self {
+            AdsOnDeliveryRestrictions::Both => &"BOTH",
+            AdsOnDeliveryRestrictions::None => &"NONE",
+            AdsOnDeliveryRestrictions::Restricted => &"RESTRICTED",
+            AdsOnDeliveryRestrictions::Unrestricted => &"UNRESTRICTED",
+            AdsOnDeliveryRestrictions::UnknownVariant(UnknownAdsOnDeliveryRestrictions {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AdsOnDeliveryRestrictions {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOTH" => AdsOnDeliveryRestrictions::Both,
+            "NONE" => AdsOnDeliveryRestrictions::None,
+            "RESTRICTED" => AdsOnDeliveryRestrictions::Restricted,
+            "UNRESTRICTED" => AdsOnDeliveryRestrictions::Unrestricted,
+            _ => AdsOnDeliveryRestrictions::UnknownVariant(UnknownAdsOnDeliveryRestrictions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdsOnDeliveryRestrictions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOTH" => AdsOnDeliveryRestrictions::Both,
+            "NONE" => AdsOnDeliveryRestrictions::None,
+            "RESTRICTED" => AdsOnDeliveryRestrictions::Restricted,
+            "UNRESTRICTED" => AdsOnDeliveryRestrictions::Unrestricted,
+            _ => {
+                AdsOnDeliveryRestrictions::UnknownVariant(UnknownAdsOnDeliveryRestrictions { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdsOnDeliveryRestrictions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdsOnDeliveryRestrictions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdsOnDeliveryRestrictions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>CDN Authorization credentials</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Authorization {
@@ -280,7 +516,7 @@ pub struct CreateHarvestJobResponse {
     /// include an explanation of why the HarvestJob failed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
@@ -323,7 +559,7 @@ pub struct CreateOriginEndpointRequest {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -386,7 +622,7 @@ pub struct CreateOriginEndpointResponse {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -426,17 +662,17 @@ pub struct DashEncryption {
 pub struct DashPackage {
     #[serde(rename = "AdTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_triggers: Option<Vec<String>>,
+    pub ad_triggers: Option<Vec<AdTriggersElement>>,
     #[serde(rename = "AdsOnDeliveryRestrictions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ads_on_delivery_restrictions: Option<String>,
+    pub ads_on_delivery_restrictions: Option<AdsOnDeliveryRestrictions>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
     /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
     #[serde(rename = "ManifestLayout")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub manifest_layout: Option<String>,
+    pub manifest_layout: Option<ManifestLayout>,
     /// <p>Time window (in seconds) contained in each manifest.</p>
     #[serde(rename = "ManifestWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -455,11 +691,11 @@ pub struct DashPackage {
     /// the Channel source contains SCTE-35 ad markers.</p>
     #[serde(rename = "PeriodTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub period_triggers: Option<Vec<String>>,
+    pub period_triggers: Option<Vec<PeriodTriggersElement>>,
     /// <p>The Dynamic Adaptive Streaming over HTTP (DASH) profile type.  When set to &quot;HBBTV<em>1</em>5&quot;, HbbTV 1.5 compliant output is enabled.</p>
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub profile: Option<String>,
+    pub profile: Option<Profile>,
     /// <p>Duration (in seconds) of each segment. Actual segments will be
     /// rounded to the nearest multiple of the source segment duration.</p>
     #[serde(rename = "SegmentDurationSeconds")]
@@ -468,7 +704,7 @@ pub struct DashPackage {
     /// <p>Determines the type of SegmentTemplate included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs. When set to NUMBER<em>WITH</em>DURATION, only a duration is included in each SegmentTemplate, with $Number$ media URLs.</p>
     #[serde(rename = "SegmentTemplateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub segment_template_format: Option<String>,
+    pub segment_template_format: Option<SegmentTemplateFormat>,
     #[serde(rename = "StreamSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_selection: Option<StreamSelection>,
@@ -479,7 +715,7 @@ pub struct DashPackage {
     /// <p>Determines the type of UTCTiming included in the Media Presentation Description (MPD)</p>
     #[serde(rename = "UtcTiming")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub utc_timing: Option<String>,
+    pub utc_timing: Option<UtcTiming>,
     /// <p>Specifies the value attribute of the UTCTiming field when utcTiming is set to HTTP-ISO or HTTP-HEAD</p>
     #[serde(rename = "UtcTimingUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -596,7 +832,7 @@ pub struct DescribeHarvestJobResponse {
     /// include an explanation of why the HarvestJob failed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -650,7 +886,7 @@ pub struct DescribeOriginEndpointResponse {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -681,6 +917,110 @@ pub struct EgressAccessLogs {
     #[serde(rename = "LogGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionMethod {
+    Aes128,
+    SampleAes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionMethod),
+}
+
+impl Default for EncryptionMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionMethod {
+    fn into(self) -> String {
+        match self {
+            EncryptionMethod::Aes128 => "AES_128".to_string(),
+            EncryptionMethod::SampleAes => "SAMPLE_AES".to_string(),
+            EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionMethod {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionMethod::Aes128 => &"AES_128",
+            EncryptionMethod::SampleAes => &"SAMPLE_AES",
+            EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES_128" => EncryptionMethod::Aes128,
+            "SAMPLE_AES" => EncryptionMethod::SampleAes,
+            _ => EncryptionMethod::UnknownVariant(UnknownEncryptionMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES_128" => EncryptionMethod::Aes128,
+            "SAMPLE_AES" => EncryptionMethod::SampleAes,
+            _ => EncryptionMethod::UnknownVariant(UnknownEncryptionMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A HarvestJob resource configuration</p>
@@ -725,7 +1065,7 @@ pub struct HarvestJob {
     /// include an explanation of why the HarvestJob failed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
@@ -739,7 +1079,7 @@ pub struct HlsEncryption {
     /// <p>The encryption method to use.</p>
     #[serde(rename = "EncryptionMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_method: Option<String>,
+    pub encryption_method: Option<EncryptionMethod>,
     /// <p>Interval (in seconds) between each encryption key rotation.</p>
     #[serde(rename = "KeyRotationIntervalSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -777,7 +1117,7 @@ pub struct HlsManifest {
     /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<String>,
+    pub ad_markers: Option<AdMarkers>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -794,7 +1134,7 @@ pub struct HlsManifest {
     /// entry will be included in the media playlist.</p>
     #[serde(rename = "PlaylistType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub playlist_type: Option<String>,
+    pub playlist_type: Option<PlaylistType>,
     /// <p>Time window (in seconds) contained in each parent manifest.</p>
     #[serde(rename = "PlaylistWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -832,13 +1172,13 @@ pub struct HlsManifestCreateOrUpdateParameters {
     /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<String>,
+    pub ad_markers: Option<AdMarkers>,
     #[serde(rename = "AdTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_triggers: Option<Vec<String>>,
+    pub ad_triggers: Option<Vec<AdTriggersElement>>,
     #[serde(rename = "AdsOnDeliveryRestrictions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ads_on_delivery_restrictions: Option<String>,
+    pub ads_on_delivery_restrictions: Option<AdsOnDeliveryRestrictions>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -855,7 +1195,7 @@ pub struct HlsManifestCreateOrUpdateParameters {
     /// entry will be included in the media playlist.</p>
     #[serde(rename = "PlaylistType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub playlist_type: Option<String>,
+    pub playlist_type: Option<PlaylistType>,
     /// <p>Time window (in seconds) contained in each parent manifest.</p>
     #[serde(rename = "PlaylistWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -888,13 +1228,13 @@ pub struct HlsPackage {
     /// that is greater than 0.</p>
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_markers: Option<String>,
+    pub ad_markers: Option<AdMarkers>,
     #[serde(rename = "AdTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ad_triggers: Option<Vec<String>>,
+    pub ad_triggers: Option<Vec<AdTriggersElement>>,
     #[serde(rename = "AdsOnDeliveryRestrictions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ads_on_delivery_restrictions: Option<String>,
+    pub ads_on_delivery_restrictions: Option<AdsOnDeliveryRestrictions>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryption>,
@@ -907,7 +1247,7 @@ pub struct HlsPackage {
     /// entry will be included in the media playlist.</p>
     #[serde(rename = "PlaylistType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub playlist_type: Option<String>,
+    pub playlist_type: Option<PlaylistType>,
     /// <p>Time window (in seconds) contained in each parent manifest.</p>
     #[serde(rename = "PlaylistWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1074,6 +1414,106 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownManifestLayout {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ManifestLayout {
+    Compact,
+    Full,
+    #[doc(hidden)]
+    UnknownVariant(UnknownManifestLayout),
+}
+
+impl Default for ManifestLayout {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ManifestLayout {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ManifestLayout {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ManifestLayout {
+    fn into(self) -> String {
+        match self {
+            ManifestLayout::Compact => "COMPACT".to_string(),
+            ManifestLayout::Full => "FULL".to_string(),
+            ManifestLayout::UnknownVariant(UnknownManifestLayout { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ManifestLayout {
+    fn into(self) -> &'a str {
+        match self {
+            ManifestLayout::Compact => &"COMPACT",
+            ManifestLayout::Full => &"FULL",
+            ManifestLayout::UnknownVariant(UnknownManifestLayout { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ManifestLayout {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPACT" => ManifestLayout::Compact,
+            "FULL" => ManifestLayout::Full,
+            _ => ManifestLayout::UnknownVariant(UnknownManifestLayout {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ManifestLayout {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPACT" => ManifestLayout::Compact,
+            "FULL" => ManifestLayout::Full,
+            _ => ManifestLayout::UnknownVariant(UnknownManifestLayout { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ManifestLayout {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ManifestLayout {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ManifestLayout {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssEncryption {
@@ -1144,7 +1584,7 @@ pub struct OriginEndpoint {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1166,6 +1606,311 @@ pub struct OriginEndpoint {
     #[serde(rename = "Whitelist")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrigination {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Origination {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrigination),
+}
+
+impl Default for Origination {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Origination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Origination {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Origination {
+    fn into(self) -> String {
+        match self {
+            Origination::Allow => "ALLOW".to_string(),
+            Origination::Deny => "DENY".to_string(),
+            Origination::UnknownVariant(UnknownOrigination { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Origination {
+    fn into(self) -> &'a str {
+        match self {
+            Origination::Allow => &"ALLOW",
+            Origination::Deny => &"DENY",
+            Origination::UnknownVariant(UnknownOrigination { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Origination {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => Origination::Allow,
+            "DENY" => Origination::Deny,
+            _ => Origination::UnknownVariant(UnknownOrigination {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Origination {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => Origination::Allow,
+            "DENY" => Origination::Deny,
+            _ => Origination::UnknownVariant(UnknownOrigination { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Origination {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Origination {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Origination {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlaylistType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlaylistType {
+    Event,
+    None,
+    Vod,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlaylistType),
+}
+
+impl Default for PlaylistType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlaylistType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlaylistType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlaylistType {
+    fn into(self) -> String {
+        match self {
+            PlaylistType::Event => "EVENT".to_string(),
+            PlaylistType::None => "NONE".to_string(),
+            PlaylistType::Vod => "VOD".to_string(),
+            PlaylistType::UnknownVariant(UnknownPlaylistType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlaylistType {
+    fn into(self) -> &'a str {
+        match self {
+            PlaylistType::Event => &"EVENT",
+            PlaylistType::None => &"NONE",
+            PlaylistType::Vod => &"VOD",
+            PlaylistType::UnknownVariant(UnknownPlaylistType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlaylistType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EVENT" => PlaylistType::Event,
+            "NONE" => PlaylistType::None,
+            "VOD" => PlaylistType::Vod,
+            _ => PlaylistType::UnknownVariant(UnknownPlaylistType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlaylistType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EVENT" => PlaylistType::Event,
+            "NONE" => PlaylistType::None,
+            "VOD" => PlaylistType::Vod,
+            _ => PlaylistType::UnknownVariant(UnknownPlaylistType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlaylistType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlaylistType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlaylistType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProfile {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Profile {
+    Hbbtv15,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProfile),
+}
+
+impl Default for Profile {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Profile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Profile {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Profile {
+    fn into(self) -> String {
+        match self {
+            Profile::Hbbtv15 => "HBBTV_1_5".to_string(),
+            Profile::None => "NONE".to_string(),
+            Profile::UnknownVariant(UnknownProfile { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Profile {
+    fn into(self) -> &'a str {
+        match self {
+            Profile::Hbbtv15 => &"HBBTV_1_5",
+            Profile::None => &"NONE",
+            Profile::UnknownVariant(UnknownProfile { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Profile {
+    fn from(name: &str) -> Self {
+        match name {
+            "HBBTV_1_5" => Profile::Hbbtv15,
+            "NONE" => Profile::None,
+            _ => Profile::UnknownVariant(UnknownProfile {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Profile {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HBBTV_1_5" => Profile::Hbbtv15,
+            "NONE" => Profile::None,
+            _ => Profile::UnknownVariant(UnknownProfile { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Profile {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Profile {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Profile {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1259,6 +2004,115 @@ pub struct S3Destination {
     pub role_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSegmentTemplateFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SegmentTemplateFormat {
+    NumberWithDuration,
+    NumberWithTimeline,
+    TimeWithTimeline,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSegmentTemplateFormat),
+}
+
+impl Default for SegmentTemplateFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SegmentTemplateFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SegmentTemplateFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SegmentTemplateFormat {
+    fn into(self) -> String {
+        match self {
+            SegmentTemplateFormat::NumberWithDuration => "NUMBER_WITH_DURATION".to_string(),
+            SegmentTemplateFormat::NumberWithTimeline => "NUMBER_WITH_TIMELINE".to_string(),
+            SegmentTemplateFormat::TimeWithTimeline => "TIME_WITH_TIMELINE".to_string(),
+            SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SegmentTemplateFormat {
+    fn into(self) -> &'a str {
+        match self {
+            SegmentTemplateFormat::NumberWithDuration => &"NUMBER_WITH_DURATION",
+            SegmentTemplateFormat::NumberWithTimeline => &"NUMBER_WITH_TIMELINE",
+            SegmentTemplateFormat::TimeWithTimeline => &"TIME_WITH_TIMELINE",
+            SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SegmentTemplateFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "NUMBER_WITH_DURATION" => SegmentTemplateFormat::NumberWithDuration,
+            "NUMBER_WITH_TIMELINE" => SegmentTemplateFormat::NumberWithTimeline,
+            "TIME_WITH_TIMELINE" => SegmentTemplateFormat::TimeWithTimeline,
+            _ => SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SegmentTemplateFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NUMBER_WITH_DURATION" => SegmentTemplateFormat::NumberWithDuration,
+            "NUMBER_WITH_TIMELINE" => SegmentTemplateFormat::NumberWithTimeline,
+            "TIME_WITH_TIMELINE" => SegmentTemplateFormat::TimeWithTimeline,
+            _ => SegmentTemplateFormat::UnknownVariant(UnknownSegmentTemplateFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SegmentTemplateFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SegmentTemplateFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SegmentTemplateFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpekeKeyProvider {
@@ -1283,6 +2137,217 @@ pub struct SpekeKeyProvider {
     pub url: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Failed => "FAILED".to_string(),
+            Status::InProgress => "IN_PROGRESS".to_string(),
+            Status::Succeeded => "SUCCEEDED".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Failed => &"FAILED",
+            Status::InProgress => &"IN_PROGRESS",
+            Status::Succeeded => &"SUCCEEDED",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "SUCCEEDED" => Status::Succeeded,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => Status::Failed,
+            "IN_PROGRESS" => Status::InProgress,
+            "SUCCEEDED" => Status::Succeeded,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamOrder {
+    Original,
+    VideoBitrateAscending,
+    VideoBitrateDescending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamOrder),
+}
+
+impl Default for StreamOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamOrder {
+    fn into(self) -> String {
+        match self {
+            StreamOrder::Original => "ORIGINAL".to_string(),
+            StreamOrder::VideoBitrateAscending => "VIDEO_BITRATE_ASCENDING".to_string(),
+            StreamOrder::VideoBitrateDescending => "VIDEO_BITRATE_DESCENDING".to_string(),
+            StreamOrder::UnknownVariant(UnknownStreamOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamOrder {
+    fn into(self) -> &'a str {
+        match self {
+            StreamOrder::Original => &"ORIGINAL",
+            StreamOrder::VideoBitrateAscending => &"VIDEO_BITRATE_ASCENDING",
+            StreamOrder::VideoBitrateDescending => &"VIDEO_BITRATE_DESCENDING",
+            StreamOrder::UnknownVariant(UnknownStreamOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ORIGINAL" => StreamOrder::Original,
+            "VIDEO_BITRATE_ASCENDING" => StreamOrder::VideoBitrateAscending,
+            "VIDEO_BITRATE_DESCENDING" => StreamOrder::VideoBitrateDescending,
+            _ => StreamOrder::UnknownVariant(UnknownStreamOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ORIGINAL" => StreamOrder::Original,
+            "VIDEO_BITRATE_ASCENDING" => StreamOrder::VideoBitrateAscending,
+            "VIDEO_BITRATE_DESCENDING" => StreamOrder::VideoBitrateDescending,
+            _ => StreamOrder::UnknownVariant(UnknownStreamOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StreamOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A StreamSelection configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamSelection {
@@ -1297,7 +2362,7 @@ pub struct StreamSelection {
     /// <p>A directive that determines the order of streams in the output.</p>
     #[serde(rename = "StreamOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_order: Option<String>,
+    pub stream_order: Option<StreamOrder>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1396,7 +2461,7 @@ pub struct UpdateOriginEndpointRequest {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (in seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1456,7 +2521,7 @@ pub struct UpdateOriginEndpointResponse {
     /// requested. This can be helpful for Live to VOD harvesting, or for temporarily disabling origination</p>
     #[serde(rename = "Origination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origination: Option<String>,
+    pub origination: Option<Origination>,
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     #[serde(rename = "StartoverWindowSeconds")]
@@ -1478,6 +2543,370 @@ pub struct UpdateOriginEndpointResponse {
     #[serde(rename = "Whitelist")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUtcTiming {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UtcTiming {
+    HttpHead,
+    HttpIso,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUtcTiming),
+}
+
+impl Default for UtcTiming {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UtcTiming {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UtcTiming {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UtcTiming {
+    fn into(self) -> String {
+        match self {
+            UtcTiming::HttpHead => "HTTP-HEAD".to_string(),
+            UtcTiming::HttpIso => "HTTP-ISO".to_string(),
+            UtcTiming::None => "NONE".to_string(),
+            UtcTiming::UnknownVariant(UnknownUtcTiming { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UtcTiming {
+    fn into(self) -> &'a str {
+        match self {
+            UtcTiming::HttpHead => &"HTTP-HEAD",
+            UtcTiming::HttpIso => &"HTTP-ISO",
+            UtcTiming::None => &"NONE",
+            UtcTiming::UnknownVariant(UnknownUtcTiming { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UtcTiming {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP-HEAD" => UtcTiming::HttpHead,
+            "HTTP-ISO" => UtcTiming::HttpIso,
+            "NONE" => UtcTiming::None,
+            _ => UtcTiming::UnknownVariant(UnknownUtcTiming {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UtcTiming {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP-HEAD" => UtcTiming::HttpHead,
+            "HTTP-ISO" => UtcTiming::HttpIso,
+            "NONE" => UtcTiming::None,
+            _ => UtcTiming::UnknownVariant(UnknownUtcTiming { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UtcTiming {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UtcTiming {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UtcTiming {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdTriggersElement {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdTriggersElement {
+    Break,
+    DistributorAdvertisement,
+    DistributorOverlayPlacementOpportunity,
+    DistributorPlacementOpportunity,
+    ProviderAdvertisement,
+    ProviderOverlayPlacementOpportunity,
+    ProviderPlacementOpportunity,
+    SpliceInsert,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdTriggersElement),
+}
+
+impl Default for AdTriggersElement {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdTriggersElement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdTriggersElement {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdTriggersElement {
+    fn into(self) -> String {
+        match self {
+            AdTriggersElement::Break => "BREAK".to_string(),
+            AdTriggersElement::DistributorAdvertisement => "DISTRIBUTOR_ADVERTISEMENT".to_string(),
+            AdTriggersElement::DistributorOverlayPlacementOpportunity => {
+                "DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY".to_string()
+            }
+            AdTriggersElement::DistributorPlacementOpportunity => {
+                "DISTRIBUTOR_PLACEMENT_OPPORTUNITY".to_string()
+            }
+            AdTriggersElement::ProviderAdvertisement => "PROVIDER_ADVERTISEMENT".to_string(),
+            AdTriggersElement::ProviderOverlayPlacementOpportunity => {
+                "PROVIDER_OVERLAY_PLACEMENT_OPPORTUNITY".to_string()
+            }
+            AdTriggersElement::ProviderPlacementOpportunity => {
+                "PROVIDER_PLACEMENT_OPPORTUNITY".to_string()
+            }
+            AdTriggersElement::SpliceInsert => "SPLICE_INSERT".to_string(),
+            AdTriggersElement::UnknownVariant(UnknownAdTriggersElement { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdTriggersElement {
+    fn into(self) -> &'a str {
+        match self {
+            AdTriggersElement::Break => &"BREAK",
+            AdTriggersElement::DistributorAdvertisement => &"DISTRIBUTOR_ADVERTISEMENT",
+            AdTriggersElement::DistributorOverlayPlacementOpportunity => {
+                &"DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY"
+            }
+            AdTriggersElement::DistributorPlacementOpportunity => {
+                &"DISTRIBUTOR_PLACEMENT_OPPORTUNITY"
+            }
+            AdTriggersElement::ProviderAdvertisement => &"PROVIDER_ADVERTISEMENT",
+            AdTriggersElement::ProviderOverlayPlacementOpportunity => {
+                &"PROVIDER_OVERLAY_PLACEMENT_OPPORTUNITY"
+            }
+            AdTriggersElement::ProviderPlacementOpportunity => &"PROVIDER_PLACEMENT_OPPORTUNITY",
+            AdTriggersElement::SpliceInsert => &"SPLICE_INSERT",
+            AdTriggersElement::UnknownVariant(UnknownAdTriggersElement { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AdTriggersElement {
+    fn from(name: &str) -> Self {
+        match name {
+            "BREAK" => AdTriggersElement::Break,
+            "DISTRIBUTOR_ADVERTISEMENT" => AdTriggersElement::DistributorAdvertisement,
+            "DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::DistributorOverlayPlacementOpportunity
+            }
+            "DISTRIBUTOR_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::DistributorPlacementOpportunity
+            }
+            "PROVIDER_ADVERTISEMENT" => AdTriggersElement::ProviderAdvertisement,
+            "PROVIDER_OVERLAY_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::ProviderOverlayPlacementOpportunity
+            }
+            "PROVIDER_PLACEMENT_OPPORTUNITY" => AdTriggersElement::ProviderPlacementOpportunity,
+            "SPLICE_INSERT" => AdTriggersElement::SpliceInsert,
+            _ => AdTriggersElement::UnknownVariant(UnknownAdTriggersElement {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AdTriggersElement {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BREAK" => AdTriggersElement::Break,
+            "DISTRIBUTOR_ADVERTISEMENT" => AdTriggersElement::DistributorAdvertisement,
+            "DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::DistributorOverlayPlacementOpportunity
+            }
+            "DISTRIBUTOR_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::DistributorPlacementOpportunity
+            }
+            "PROVIDER_ADVERTISEMENT" => AdTriggersElement::ProviderAdvertisement,
+            "PROVIDER_OVERLAY_PLACEMENT_OPPORTUNITY" => {
+                AdTriggersElement::ProviderOverlayPlacementOpportunity
+            }
+            "PROVIDER_PLACEMENT_OPPORTUNITY" => AdTriggersElement::ProviderPlacementOpportunity,
+            "SPLICE_INSERT" => AdTriggersElement::SpliceInsert,
+            _ => AdTriggersElement::UnknownVariant(UnknownAdTriggersElement { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdTriggersElement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AdTriggersElement {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdTriggersElement {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPeriodTriggersElement {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PeriodTriggersElement {
+    Ads,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPeriodTriggersElement),
+}
+
+impl Default for PeriodTriggersElement {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PeriodTriggersElement {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PeriodTriggersElement {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PeriodTriggersElement {
+    fn into(self) -> String {
+        match self {
+            PeriodTriggersElement::Ads => "ADS".to_string(),
+            PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PeriodTriggersElement {
+    fn into(self) -> &'a str {
+        match self {
+            PeriodTriggersElement::Ads => &"ADS",
+            PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PeriodTriggersElement {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADS" => PeriodTriggersElement::Ads,
+            _ => PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PeriodTriggersElement {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADS" => PeriodTriggersElement::Ads,
+            _ => PeriodTriggersElement::UnknownVariant(UnknownPeriodTriggersElement { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PeriodTriggersElement {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PeriodTriggersElement {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PeriodTriggersElement {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by ConfigureLogs

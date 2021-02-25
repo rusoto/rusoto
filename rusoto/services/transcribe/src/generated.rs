@@ -50,15 +50,211 @@ impl TranscribeClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBaseModelName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BaseModelName {
+    NarrowBand,
+    WideBand,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBaseModelName),
+}
+
+impl Default for BaseModelName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BaseModelName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BaseModelName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BaseModelName {
+    fn into(self) -> String {
+        match self {
+            BaseModelName::NarrowBand => "NarrowBand".to_string(),
+            BaseModelName::WideBand => "WideBand".to_string(),
+            BaseModelName::UnknownVariant(UnknownBaseModelName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BaseModelName {
+    fn into(self) -> &'a str {
+        match self {
+            BaseModelName::NarrowBand => &"NarrowBand",
+            BaseModelName::WideBand => &"WideBand",
+            BaseModelName::UnknownVariant(UnknownBaseModelName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BaseModelName {
+    fn from(name: &str) -> Self {
+        match name {
+            "NarrowBand" => BaseModelName::NarrowBand,
+            "WideBand" => BaseModelName::WideBand,
+            _ => BaseModelName::UnknownVariant(UnknownBaseModelName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BaseModelName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NarrowBand" => BaseModelName::NarrowBand,
+            "WideBand" => BaseModelName::WideBand,
+            _ => BaseModelName::UnknownVariant(UnknownBaseModelName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BaseModelName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BaseModelName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BaseModelName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCLMLanguageCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CLMLanguageCode {
+    EnUS,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCLMLanguageCode),
+}
+
+impl Default for CLMLanguageCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CLMLanguageCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CLMLanguageCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CLMLanguageCode {
+    fn into(self) -> String {
+        match self {
+            CLMLanguageCode::EnUS => "en-US".to_string(),
+            CLMLanguageCode::UnknownVariant(UnknownCLMLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CLMLanguageCode {
+    fn into(self) -> &'a str {
+        match self {
+            CLMLanguageCode::EnUS => &"en-US",
+            CLMLanguageCode::UnknownVariant(UnknownCLMLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CLMLanguageCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "en-US" => CLMLanguageCode::EnUS,
+            _ => CLMLanguageCode::UnknownVariant(UnknownCLMLanguageCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CLMLanguageCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "en-US" => CLMLanguageCode::EnUS,
+            _ => CLMLanguageCode::UnknownVariant(UnknownCLMLanguageCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CLMLanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CLMLanguageCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CLMLanguageCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings for content redaction within a transcription job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContentRedaction {
     /// <p>The output transcript file stored in either the default S3 bucket or in a bucket you specify.</p> <p>When you choose <code>redacted</code> Amazon Transcribe outputs only the redacted transcript.</p> <p>When you choose <code>redacted_and_unredacted</code> Amazon Transcribe outputs both the redacted and unredacted transcripts.</p>
     #[serde(rename = "RedactionOutput")]
-    pub redaction_output: String,
+    pub redaction_output: RedactionOutput,
     /// <p>Request parameter that defines the entities to be redacted. The only accepted value is <code>PII</code>.</p>
     #[serde(rename = "RedactionType")]
-    pub redaction_type: String,
+    pub redaction_type: RedactionType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -66,13 +262,13 @@ pub struct ContentRedaction {
 pub struct CreateLanguageModelRequest {
     /// <p>The Amazon Transcribe standard language model, or base model used to create your custom language model.</p> <p>If you want to use your custom language model to transcribe audio with a sample rate of 16 kHz or greater, choose <code>Wideband</code>.</p> <p>If you want to use your custom language model to transcribe audio with a sample rate that is less than 16 kHz, choose <code>Narrowband</code>.</p>
     #[serde(rename = "BaseModelName")]
-    pub base_model_name: String,
+    pub base_model_name: BaseModelName,
     /// <p>Contains the data access role and the Amazon S3 prefixes to read the required input files to create a custom language model.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: InputDataConfig,
     /// <p>The language of the input text you're using to train your custom language model.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: CLMLanguageCode,
     /// <p>The name you choose for your custom language model when you create it.</p>
     #[serde(rename = "ModelName")]
     pub model_name: String,
@@ -84,7 +280,7 @@ pub struct CreateLanguageModelResponse {
     /// <p>The Amazon Transcribe standard language model, or base model you've used to create a custom language model.</p>
     #[serde(rename = "BaseModelName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub base_model_name: Option<String>,
+    pub base_model_name: Option<BaseModelName>,
     /// <p>The data access role and Amazon S3 prefixes you've chosen to create your custom language model.</p>
     #[serde(rename = "InputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -92,7 +288,7 @@ pub struct CreateLanguageModelResponse {
     /// <p>The language code of the text you've used to create a custom language model.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<CLMLanguageCode>,
     /// <p>The name you've chosen for your custom language model.</p>
     #[serde(rename = "ModelName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -100,7 +296,7 @@ pub struct CreateLanguageModelResponse {
     /// <p>The status of the custom language model. When the status is <code>COMPLETED</code> the model is ready to use.</p>
     #[serde(rename = "ModelStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_status: Option<String>,
+    pub model_status: Option<ModelStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -108,7 +304,7 @@ pub struct CreateLanguageModelResponse {
 pub struct CreateMedicalVocabularyRequest {
     /// <p>The language code for the language used for the entries in your custom vocabulary. The language code of your custom vocabulary must match the language code of your transcription job. US English (en-US) is the only language code available for Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>The location in Amazon S3 of the text file you use to define your custom vocabulary. The URI must be in the same AWS Region as the resource that you're calling. Enter information about your <code>VocabularyFileUri</code> in the following format:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>The following is an example URI for a vocabulary file that is stored in Amazon S3:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about Amazon S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary-med">Medical Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     pub vocabulary_file_uri: String,
@@ -127,7 +323,7 @@ pub struct CreateMedicalVocabularyResponse {
     /// <p>The language code for the entries in your custom vocabulary. US English (en-US) is the only valid language code for Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that you created the vocabulary.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,7 +335,7 @@ pub struct CreateMedicalVocabularyResponse {
     /// <p>The processing state of your custom vocabulary in Amazon Transcribe Medical. If the state is <code>READY</code>, you can use the vocabulary in a <code>StartMedicalTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -147,7 +343,7 @@ pub struct CreateMedicalVocabularyResponse {
 pub struct CreateVocabularyFilterRequest {
     /// <p>The language code of the words in the vocabulary filter. All words in the filter must be in the same language. The vocabulary filter can only be used with transcription jobs in the specified language.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>The Amazon S3 location of a text file used as input to create the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>The specified file must be less than 50 KB of UTF-8 characters.</p> <p>If you provide the location of a list of words in the <code>VocabularyFilterFileUri</code> parameter, you can't use the <code>Words</code> parameter.</p>
     #[serde(rename = "VocabularyFilterFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,7 +363,7 @@ pub struct CreateVocabularyFilterResponse {
     /// <p>The language code of the words in the collection.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary filter was modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,7 +379,7 @@ pub struct CreateVocabularyFilterResponse {
 pub struct CreateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>An array of strings that contains the vocabulary entries. </p>
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,7 +403,7 @@ pub struct CreateVocabularyResponse {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was created.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -219,7 +415,7 @@ pub struct CreateVocabularyResponse {
     /// <p>The processing state of the vocabulary. When the <code>VocabularyState</code> field contains <code>READY</code> the vocabulary is ready to be used in a <code>StartTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -326,7 +522,7 @@ pub struct GetMedicalVocabularyResponse {
     /// <p>The valid language code for your vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was last modified with a text file different from the one that was previously used.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -338,7 +534,7 @@ pub struct GetMedicalVocabularyResponse {
     /// <p>The processing state of the vocabulary. If the <code>VocabularyState</code> is <code>READY</code> then you can use it in the <code>StartMedicalTranscriptionJob</code> operation. </p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -376,7 +572,7 @@ pub struct GetVocabularyFilterResponse {
     /// <p>The language code of the words in the vocabulary filter.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the contents of the vocabulary filter were updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -409,7 +605,7 @@ pub struct GetVocabularyResponse {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -421,7 +617,7 @@ pub struct GetVocabularyResponse {
     /// <p>The processing state of the vocabulary.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 /// <p>The object that contains the Amazon S3 object location and access role required to train and tune your custom language model.</p>
@@ -452,6 +648,276 @@ pub struct JobExecutionSettings {
     pub data_access_role_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLanguageCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LanguageCode {
+    AfZA,
+    ArAE,
+    ArSA,
+    CyGB,
+    DaDK,
+    DeCH,
+    DeDE,
+    EnAB,
+    EnAU,
+    EnGB,
+    EnIE,
+    EnIN,
+    EnUS,
+    EnWL,
+    EsES,
+    EsUS,
+    FaIR,
+    FrCA,
+    FrFR,
+    GaIE,
+    GdGB,
+    HeIL,
+    HiIN,
+    IdID,
+    ItIT,
+    JaJP,
+    KoKR,
+    MsMY,
+    NlNL,
+    PtBR,
+    PtPT,
+    RuRU,
+    TaIN,
+    TeIN,
+    TrTR,
+    ZhCN,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLanguageCode),
+}
+
+impl Default for LanguageCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LanguageCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LanguageCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LanguageCode {
+    fn into(self) -> String {
+        match self {
+            LanguageCode::AfZA => "af-ZA".to_string(),
+            LanguageCode::ArAE => "ar-AE".to_string(),
+            LanguageCode::ArSA => "ar-SA".to_string(),
+            LanguageCode::CyGB => "cy-GB".to_string(),
+            LanguageCode::DaDK => "da-DK".to_string(),
+            LanguageCode::DeCH => "de-CH".to_string(),
+            LanguageCode::DeDE => "de-DE".to_string(),
+            LanguageCode::EnAB => "en-AB".to_string(),
+            LanguageCode::EnAU => "en-AU".to_string(),
+            LanguageCode::EnGB => "en-GB".to_string(),
+            LanguageCode::EnIE => "en-IE".to_string(),
+            LanguageCode::EnIN => "en-IN".to_string(),
+            LanguageCode::EnUS => "en-US".to_string(),
+            LanguageCode::EnWL => "en-WL".to_string(),
+            LanguageCode::EsES => "es-ES".to_string(),
+            LanguageCode::EsUS => "es-US".to_string(),
+            LanguageCode::FaIR => "fa-IR".to_string(),
+            LanguageCode::FrCA => "fr-CA".to_string(),
+            LanguageCode::FrFR => "fr-FR".to_string(),
+            LanguageCode::GaIE => "ga-IE".to_string(),
+            LanguageCode::GdGB => "gd-GB".to_string(),
+            LanguageCode::HeIL => "he-IL".to_string(),
+            LanguageCode::HiIN => "hi-IN".to_string(),
+            LanguageCode::IdID => "id-ID".to_string(),
+            LanguageCode::ItIT => "it-IT".to_string(),
+            LanguageCode::JaJP => "ja-JP".to_string(),
+            LanguageCode::KoKR => "ko-KR".to_string(),
+            LanguageCode::MsMY => "ms-MY".to_string(),
+            LanguageCode::NlNL => "nl-NL".to_string(),
+            LanguageCode::PtBR => "pt-BR".to_string(),
+            LanguageCode::PtPT => "pt-PT".to_string(),
+            LanguageCode::RuRU => "ru-RU".to_string(),
+            LanguageCode::TaIN => "ta-IN".to_string(),
+            LanguageCode::TeIN => "te-IN".to_string(),
+            LanguageCode::TrTR => "tr-TR".to_string(),
+            LanguageCode::ZhCN => "zh-CN".to_string(),
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LanguageCode {
+    fn into(self) -> &'a str {
+        match self {
+            LanguageCode::AfZA => &"af-ZA",
+            LanguageCode::ArAE => &"ar-AE",
+            LanguageCode::ArSA => &"ar-SA",
+            LanguageCode::CyGB => &"cy-GB",
+            LanguageCode::DaDK => &"da-DK",
+            LanguageCode::DeCH => &"de-CH",
+            LanguageCode::DeDE => &"de-DE",
+            LanguageCode::EnAB => &"en-AB",
+            LanguageCode::EnAU => &"en-AU",
+            LanguageCode::EnGB => &"en-GB",
+            LanguageCode::EnIE => &"en-IE",
+            LanguageCode::EnIN => &"en-IN",
+            LanguageCode::EnUS => &"en-US",
+            LanguageCode::EnWL => &"en-WL",
+            LanguageCode::EsES => &"es-ES",
+            LanguageCode::EsUS => &"es-US",
+            LanguageCode::FaIR => &"fa-IR",
+            LanguageCode::FrCA => &"fr-CA",
+            LanguageCode::FrFR => &"fr-FR",
+            LanguageCode::GaIE => &"ga-IE",
+            LanguageCode::GdGB => &"gd-GB",
+            LanguageCode::HeIL => &"he-IL",
+            LanguageCode::HiIN => &"hi-IN",
+            LanguageCode::IdID => &"id-ID",
+            LanguageCode::ItIT => &"it-IT",
+            LanguageCode::JaJP => &"ja-JP",
+            LanguageCode::KoKR => &"ko-KR",
+            LanguageCode::MsMY => &"ms-MY",
+            LanguageCode::NlNL => &"nl-NL",
+            LanguageCode::PtBR => &"pt-BR",
+            LanguageCode::PtPT => &"pt-PT",
+            LanguageCode::RuRU => &"ru-RU",
+            LanguageCode::TaIN => &"ta-IN",
+            LanguageCode::TeIN => &"te-IN",
+            LanguageCode::TrTR => &"tr-TR",
+            LanguageCode::ZhCN => &"zh-CN",
+            LanguageCode::UnknownVariant(UnknownLanguageCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LanguageCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "af-ZA" => LanguageCode::AfZA,
+            "ar-AE" => LanguageCode::ArAE,
+            "ar-SA" => LanguageCode::ArSA,
+            "cy-GB" => LanguageCode::CyGB,
+            "da-DK" => LanguageCode::DaDK,
+            "de-CH" => LanguageCode::DeCH,
+            "de-DE" => LanguageCode::DeDE,
+            "en-AB" => LanguageCode::EnAB,
+            "en-AU" => LanguageCode::EnAU,
+            "en-GB" => LanguageCode::EnGB,
+            "en-IE" => LanguageCode::EnIE,
+            "en-IN" => LanguageCode::EnIN,
+            "en-US" => LanguageCode::EnUS,
+            "en-WL" => LanguageCode::EnWL,
+            "es-ES" => LanguageCode::EsES,
+            "es-US" => LanguageCode::EsUS,
+            "fa-IR" => LanguageCode::FaIR,
+            "fr-CA" => LanguageCode::FrCA,
+            "fr-FR" => LanguageCode::FrFR,
+            "ga-IE" => LanguageCode::GaIE,
+            "gd-GB" => LanguageCode::GdGB,
+            "he-IL" => LanguageCode::HeIL,
+            "hi-IN" => LanguageCode::HiIN,
+            "id-ID" => LanguageCode::IdID,
+            "it-IT" => LanguageCode::ItIT,
+            "ja-JP" => LanguageCode::JaJP,
+            "ko-KR" => LanguageCode::KoKR,
+            "ms-MY" => LanguageCode::MsMY,
+            "nl-NL" => LanguageCode::NlNL,
+            "pt-BR" => LanguageCode::PtBR,
+            "pt-PT" => LanguageCode::PtPT,
+            "ru-RU" => LanguageCode::RuRU,
+            "ta-IN" => LanguageCode::TaIN,
+            "te-IN" => LanguageCode::TeIN,
+            "tr-TR" => LanguageCode::TrTR,
+            "zh-CN" => LanguageCode::ZhCN,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LanguageCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "af-ZA" => LanguageCode::AfZA,
+            "ar-AE" => LanguageCode::ArAE,
+            "ar-SA" => LanguageCode::ArSA,
+            "cy-GB" => LanguageCode::CyGB,
+            "da-DK" => LanguageCode::DaDK,
+            "de-CH" => LanguageCode::DeCH,
+            "de-DE" => LanguageCode::DeDE,
+            "en-AB" => LanguageCode::EnAB,
+            "en-AU" => LanguageCode::EnAU,
+            "en-GB" => LanguageCode::EnGB,
+            "en-IE" => LanguageCode::EnIE,
+            "en-IN" => LanguageCode::EnIN,
+            "en-US" => LanguageCode::EnUS,
+            "en-WL" => LanguageCode::EnWL,
+            "es-ES" => LanguageCode::EsES,
+            "es-US" => LanguageCode::EsUS,
+            "fa-IR" => LanguageCode::FaIR,
+            "fr-CA" => LanguageCode::FrCA,
+            "fr-FR" => LanguageCode::FrFR,
+            "ga-IE" => LanguageCode::GaIE,
+            "gd-GB" => LanguageCode::GdGB,
+            "he-IL" => LanguageCode::HeIL,
+            "hi-IN" => LanguageCode::HiIN,
+            "id-ID" => LanguageCode::IdID,
+            "it-IT" => LanguageCode::ItIT,
+            "ja-JP" => LanguageCode::JaJP,
+            "ko-KR" => LanguageCode::KoKR,
+            "ms-MY" => LanguageCode::MsMY,
+            "nl-NL" => LanguageCode::NlNL,
+            "pt-BR" => LanguageCode::PtBR,
+            "pt-PT" => LanguageCode::PtPT,
+            "ru-RU" => LanguageCode::RuRU,
+            "ta-IN" => LanguageCode::TaIN,
+            "te-IN" => LanguageCode::TeIN,
+            "tr-TR" => LanguageCode::TrTR,
+            "zh-CN" => LanguageCode::ZhCN,
+            _ => LanguageCode::UnknownVariant(UnknownLanguageCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LanguageCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LanguageCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LanguageCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The structure used to describe a custom language model.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -459,7 +925,7 @@ pub struct LanguageModel {
     /// <p>The Amazon Transcribe standard language model, or base model used to create the custom language model.</p>
     #[serde(rename = "BaseModelName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub base_model_name: Option<String>,
+    pub base_model_name: Option<BaseModelName>,
     /// <p>The time the custom language model was created.</p>
     #[serde(rename = "CreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -475,7 +941,7 @@ pub struct LanguageModel {
     /// <p>The language code you used to create your custom language model.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<CLMLanguageCode>,
     /// <p>The most recent time the custom language model was modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -487,7 +953,7 @@ pub struct LanguageModel {
     /// <p>The creation status of a custom language model. When the status is <code>COMPLETED</code> the model is ready for use.</p>
     #[serde(rename = "ModelStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_status: Option<String>,
+    pub model_status: Option<ModelStatus>,
     /// <p>Whether the base model used for the custom language model is up to date. If this field is <code>true</code> then you are running the most up-to-date version of the base model in your custom language model.</p>
     #[serde(rename = "UpgradeAvailability")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -512,7 +978,7 @@ pub struct ListLanguageModelsRequest {
     /// <p>When specified, returns only custom language models with the specified status. Language models are ordered by creation date, with the newest models first. If you don't specify a status, Amazon Transcribe returns all custom language models ordered by date.</p>
     #[serde(rename = "StatusEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_equals: Option<String>,
+    pub status_equals: Option<ModelStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -546,7 +1012,7 @@ pub struct ListMedicalTranscriptionJobsRequest {
     /// <p>When specified, returns only medical transcription jobs with the specified status. Jobs are ordered by creation date, with the newest jobs returned first. If you don't specify a status, Amazon Transcribe Medical returns all transcription jobs ordered by creation date.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TranscriptionJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -563,7 +1029,7 @@ pub struct ListMedicalTranscriptionJobsResponse {
     /// <p>The requested status of the medical transcription jobs returned.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TranscriptionJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -584,7 +1050,7 @@ pub struct ListMedicalVocabulariesRequest {
     /// <p>When specified, returns only vocabularies with the <code>VocabularyState</code> equal to the specified vocabulary state. Use this field to see which vocabularies are ready for your medical transcription jobs.</p>
     #[serde(rename = "StateEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_equals: Option<String>,
+    pub state_equals: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -597,7 +1063,7 @@ pub struct ListMedicalVocabulariesResponse {
     /// <p>The requested vocabulary state.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<VocabularyState>,
     /// <p>A list of objects that describe the vocabularies that match your search criteria.</p>
     #[serde(rename = "Vocabularies")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -622,7 +1088,7 @@ pub struct ListTranscriptionJobsRequest {
     /// <p>When specified, returns only transcription jobs with the specified status. Jobs are ordered by creation date, with the newest jobs returned first. If you don’t specify a status, Amazon Transcribe returns all transcription jobs ordered by creation date. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TranscriptionJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -635,7 +1101,7 @@ pub struct ListTranscriptionJobsResponse {
     /// <p>The requested status of the jobs returned.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TranscriptionJobStatus>,
     /// <p>A list of objects containing summary information for a transcription job.</p>
     #[serde(rename = "TranscriptionJobSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -660,7 +1126,7 @@ pub struct ListVocabulariesRequest {
     /// <p>When specified, only returns vocabularies with the <code>VocabularyState</code> field equal to the specified state.</p>
     #[serde(rename = "StateEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state_equals: Option<String>,
+    pub state_equals: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -673,7 +1139,7 @@ pub struct ListVocabulariesResponse {
     /// <p>The requested vocabulary state.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<VocabularyState>,
     /// <p>A list of objects that describe the vocabularies that match the search criteria in the request.</p>
     #[serde(rename = "Vocabularies")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -719,6 +1185,131 @@ pub struct Media {
     pub media_file_uri: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMediaFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MediaFormat {
+    Amr,
+    Flac,
+    Mp3,
+    Mp4,
+    Ogg,
+    Wav,
+    Webm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMediaFormat),
+}
+
+impl Default for MediaFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MediaFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MediaFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MediaFormat {
+    fn into(self) -> String {
+        match self {
+            MediaFormat::Amr => "amr".to_string(),
+            MediaFormat::Flac => "flac".to_string(),
+            MediaFormat::Mp3 => "mp3".to_string(),
+            MediaFormat::Mp4 => "mp4".to_string(),
+            MediaFormat::Ogg => "ogg".to_string(),
+            MediaFormat::Wav => "wav".to_string(),
+            MediaFormat::Webm => "webm".to_string(),
+            MediaFormat::UnknownVariant(UnknownMediaFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MediaFormat {
+    fn into(self) -> &'a str {
+        match self {
+            MediaFormat::Amr => &"amr",
+            MediaFormat::Flac => &"flac",
+            MediaFormat::Mp3 => &"mp3",
+            MediaFormat::Mp4 => &"mp4",
+            MediaFormat::Ogg => &"ogg",
+            MediaFormat::Wav => &"wav",
+            MediaFormat::Webm => &"webm",
+            MediaFormat::UnknownVariant(UnknownMediaFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MediaFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "amr" => MediaFormat::Amr,
+            "flac" => MediaFormat::Flac,
+            "mp3" => MediaFormat::Mp3,
+            "mp4" => MediaFormat::Mp4,
+            "ogg" => MediaFormat::Ogg,
+            "wav" => MediaFormat::Wav,
+            "webm" => MediaFormat::Webm,
+            _ => MediaFormat::UnknownVariant(UnknownMediaFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MediaFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "amr" => MediaFormat::Amr,
+            "flac" => MediaFormat::Flac,
+            "mp3" => MediaFormat::Mp3,
+            "mp4" => MediaFormat::Mp4,
+            "ogg" => MediaFormat::Ogg,
+            "wav" => MediaFormat::Wav,
+            "webm" => MediaFormat::Webm,
+            _ => MediaFormat::UnknownVariant(UnknownMediaFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MediaFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MediaFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MediaFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Identifies the location of a medical transcript.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -748,14 +1339,14 @@ pub struct MedicalTranscriptionJob {
     /// <p>The language code for the language spoken in the source audio file. US English (en-US) is the only supported language for medical transcriptions. Any other value you enter for language code results in a <code>BadRequestException</code> error.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     #[serde(rename = "Media")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media: Option<Media>,
     /// <p>The format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub media_format: Option<String>,
+    pub media_format: Option<MediaFormat>,
     /// <p>The sample rate, in Hertz, of the source audio containing medical information.</p> <p>If you don't specify the sample rate, Amazon Transcribe Medical determines it for you. If you choose to specify the sample rate, it must match the rate detected by Amazon Transcribe Medical. In most cases, you should leave the <code>MediaSampleHertz</code> blank and let Amazon Transcribe Medical determine the sample rate.</p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -771,7 +1362,7 @@ pub struct MedicalTranscriptionJob {
     /// <p><p>The medical specialty of any clinicians providing a dictation or having a conversation. <code>PRIMARYCARE</code> is the only available setting for this object. This specialty enables you to generate transcriptions for the following medical fields:</p> <ul> <li> <p>Family Medicine</p> </li> </ul></p>
     #[serde(rename = "Specialty")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub specialty: Option<String>,
+    pub specialty: Option<Specialty>,
     /// <p>A timestamp that shows when the job started processing.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -783,11 +1374,11 @@ pub struct MedicalTranscriptionJob {
     /// <p>The completion status of a medical transcription job.</p>
     #[serde(rename = "TranscriptionJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transcription_job_status: Option<String>,
+    pub transcription_job_status: Option<TranscriptionJobStatus>,
     /// <p>The type of speech in the transcription job. <code>CONVERSATION</code> is generally used for patient-physician dialogues. <code>DICTATION</code> is the setting for physicians speaking their notes after seeing a patient. For more information, see <a>how-it-works-med</a> </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 /// <p>Provides summary information about a transcription job.</p>
@@ -809,7 +1400,7 @@ pub struct MedicalTranscriptionJobSummary {
     /// <p>The language of the transcript in the source audio file.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The name of a medical transcription job.</p>
     #[serde(rename = "MedicalTranscriptionJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -817,11 +1408,11 @@ pub struct MedicalTranscriptionJobSummary {
     /// <p>Indicates the location of the transcription job's output.</p> <p>The <code>CUSTOMER_BUCKET</code> is the S3 location provided in the <code>OutputBucketName</code> field when the </p>
     #[serde(rename = "OutputLocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_location_type: Option<String>,
+    pub output_location_type: Option<OutputLocationType>,
     /// <p>The medical specialty of the transcription job. <code>Primary care</code> is the only valid value.</p>
     #[serde(rename = "Specialty")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub specialty: Option<String>,
+    pub specialty: Option<Specialty>,
     /// <p>A timestamp that shows when the job began processing.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -829,11 +1420,11 @@ pub struct MedicalTranscriptionJobSummary {
     /// <p>The status of the medical transcription job.</p>
     #[serde(rename = "TranscriptionJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transcription_job_status: Option<String>,
+    pub transcription_job_status: Option<TranscriptionJobStatus>,
     /// <p>The speech of the clinician in the input audio.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<Type>,
 }
 
 /// <p>Optional settings for the <a>StartMedicalTranscriptionJob</a> operation.</p>
@@ -874,6 +1465,411 @@ pub struct ModelSettings {
     pub language_model_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownModelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ModelStatus {
+    Completed,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownModelStatus),
+}
+
+impl Default for ModelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ModelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ModelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ModelStatus {
+    fn into(self) -> String {
+        match self {
+            ModelStatus::Completed => "COMPLETED".to_string(),
+            ModelStatus::Failed => "FAILED".to_string(),
+            ModelStatus::InProgress => "IN_PROGRESS".to_string(),
+            ModelStatus::UnknownVariant(UnknownModelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ModelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ModelStatus::Completed => &"COMPLETED",
+            ModelStatus::Failed => &"FAILED",
+            ModelStatus::InProgress => &"IN_PROGRESS",
+            ModelStatus::UnknownVariant(UnknownModelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ModelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => ModelStatus::Completed,
+            "FAILED" => ModelStatus::Failed,
+            "IN_PROGRESS" => ModelStatus::InProgress,
+            _ => ModelStatus::UnknownVariant(UnknownModelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ModelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => ModelStatus::Completed,
+            "FAILED" => ModelStatus::Failed,
+            "IN_PROGRESS" => ModelStatus::InProgress,
+            _ => ModelStatus::UnknownVariant(UnknownModelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ModelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ModelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ModelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutputLocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutputLocationType {
+    CustomerBucket,
+    ServiceBucket,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutputLocationType),
+}
+
+impl Default for OutputLocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutputLocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutputLocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutputLocationType {
+    fn into(self) -> String {
+        match self {
+            OutputLocationType::CustomerBucket => "CUSTOMER_BUCKET".to_string(),
+            OutputLocationType::ServiceBucket => "SERVICE_BUCKET".to_string(),
+            OutputLocationType::UnknownVariant(UnknownOutputLocationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutputLocationType {
+    fn into(self) -> &'a str {
+        match self {
+            OutputLocationType::CustomerBucket => &"CUSTOMER_BUCKET",
+            OutputLocationType::ServiceBucket => &"SERVICE_BUCKET",
+            OutputLocationType::UnknownVariant(UnknownOutputLocationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OutputLocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOMER_BUCKET" => OutputLocationType::CustomerBucket,
+            "SERVICE_BUCKET" => OutputLocationType::ServiceBucket,
+            _ => OutputLocationType::UnknownVariant(UnknownOutputLocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OutputLocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOMER_BUCKET" => OutputLocationType::CustomerBucket,
+            "SERVICE_BUCKET" => OutputLocationType::ServiceBucket,
+            _ => OutputLocationType::UnknownVariant(UnknownOutputLocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutputLocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for OutputLocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OutputLocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedactionOutput {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedactionOutput {
+    Redacted,
+    RedactedAndUnredacted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedactionOutput),
+}
+
+impl Default for RedactionOutput {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedactionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedactionOutput {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedactionOutput {
+    fn into(self) -> String {
+        match self {
+            RedactionOutput::Redacted => "redacted".to_string(),
+            RedactionOutput::RedactedAndUnredacted => "redacted_and_unredacted".to_string(),
+            RedactionOutput::UnknownVariant(UnknownRedactionOutput { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedactionOutput {
+    fn into(self) -> &'a str {
+        match self {
+            RedactionOutput::Redacted => &"redacted",
+            RedactionOutput::RedactedAndUnredacted => &"redacted_and_unredacted",
+            RedactionOutput::UnknownVariant(UnknownRedactionOutput { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RedactionOutput {
+    fn from(name: &str) -> Self {
+        match name {
+            "redacted" => RedactionOutput::Redacted,
+            "redacted_and_unredacted" => RedactionOutput::RedactedAndUnredacted,
+            _ => RedactionOutput::UnknownVariant(UnknownRedactionOutput {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RedactionOutput {
+    fn from(name: String) -> Self {
+        match &*name {
+            "redacted" => RedactionOutput::Redacted,
+            "redacted_and_unredacted" => RedactionOutput::RedactedAndUnredacted,
+            _ => RedactionOutput::UnknownVariant(UnknownRedactionOutput { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedactionOutput {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RedactionOutput {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RedactionOutput {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedactionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedactionType {
+    Pii,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedactionType),
+}
+
+impl Default for RedactionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedactionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedactionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedactionType {
+    fn into(self) -> String {
+        match self {
+            RedactionType::Pii => "PII".to_string(),
+            RedactionType::UnknownVariant(UnknownRedactionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedactionType {
+    fn into(self) -> &'a str {
+        match self {
+            RedactionType::Pii => &"PII",
+            RedactionType::UnknownVariant(UnknownRedactionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RedactionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PII" => RedactionType::Pii,
+            _ => RedactionType::UnknownVariant(UnknownRedactionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RedactionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PII" => RedactionType::Pii,
+            _ => RedactionType::UnknownVariant(UnknownRedactionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedactionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RedactionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RedactionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides optional settings for the <code>StartTranscriptionJob</code> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Settings {
@@ -900,7 +1896,7 @@ pub struct Settings {
     /// <p>Set to <code>mask</code> to remove filtered text from the transcript and replace it with three asterisks ("***") as placeholder text. Set to <code>remove</code> to remove filtered text from the transcript without using placeholder text.</p>
     #[serde(rename = "VocabularyFilterMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_filter_method: Option<String>,
+    pub vocabulary_filter_method: Option<VocabularyFilterMethod>,
     /// <p>The name of the vocabulary filter to use when transcribing the audio. The filter that you specify must have the same language code as the transcription job.</p>
     #[serde(rename = "VocabularyFilterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -911,18 +1907,113 @@ pub struct Settings {
     pub vocabulary_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSpecialty {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Specialty {
+    Primarycare,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSpecialty),
+}
+
+impl Default for Specialty {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Specialty {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Specialty {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Specialty {
+    fn into(self) -> String {
+        match self {
+            Specialty::Primarycare => "PRIMARYCARE".to_string(),
+            Specialty::UnknownVariant(UnknownSpecialty { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Specialty {
+    fn into(self) -> &'a str {
+        match self {
+            Specialty::Primarycare => &"PRIMARYCARE",
+            Specialty::UnknownVariant(UnknownSpecialty { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Specialty {
+    fn from(name: &str) -> Self {
+        match name {
+            "PRIMARYCARE" => Specialty::Primarycare,
+            _ => Specialty::UnknownVariant(UnknownSpecialty {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Specialty {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PRIMARYCARE" => Specialty::Primarycare,
+            _ => Specialty::UnknownVariant(UnknownSpecialty { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Specialty {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Specialty {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Specialty {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMedicalTranscriptionJobRequest {
     /// <p>The language code for the language spoken in the input media file. US English (en-US) is the valid value for medical transcription jobs. Any other value you enter for language code results in a <code>BadRequestException</code> error.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     #[serde(rename = "Media")]
     pub media: Media,
     /// <p>The audio format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub media_format: Option<String>,
+    pub media_format: Option<MediaFormat>,
     /// <p>The sample rate, in Hertz, of the audio track in the input media file.</p> <p>If you do not specify the media sample rate, Amazon Transcribe Medical determines the sample rate. If you specify the sample rate, it must match the rate detected by Amazon Transcribe Medical. In most cases, you should leave the <code>MediaSampleRateHertz</code> field blank and let Amazon Transcribe Medical determine the sample rate.</p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -947,10 +2038,10 @@ pub struct StartMedicalTranscriptionJobRequest {
     pub settings: Option<MedicalTranscriptionSetting>,
     /// <p>The medical specialty of any clinician speaking in the input media.</p>
     #[serde(rename = "Specialty")]
-    pub specialty: String,
+    pub specialty: Specialty,
     /// <p>The type of speech in the input audio. <code>CONVERSATION</code> refers to conversations between two or more speakers, e.g., a conversations between doctors and patients. <code>DICTATION</code> refers to single-speaker dictated speech, e.g., for clinical notes.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -980,18 +2071,18 @@ pub struct StartTranscriptionJobRequest {
     /// <p>The language code for the language used in the input media file.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>An object containing a list of languages that might be present in your collection of audio files. Automatic language identification chooses a language that best matches the source audio from that list.</p>
     #[serde(rename = "LanguageOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_options: Option<Vec<String>>,
+    pub language_options: Option<Vec<LanguageCode>>,
     /// <p>An object that describes the input media for a transcription job.</p>
     #[serde(rename = "Media")]
     pub media: Media,
     /// <p>The format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub media_format: Option<String>,
+    pub media_format: Option<MediaFormat>,
     /// <p>The sample rate, in Hertz, of the audio track in the input media file. </p> <p>If you do not specify the media sample rate, Amazon Transcribe determines the sample rate. If you specify the sample rate, it must match the sample rate detected by Amazon Transcribe. In most cases, you should leave the <code>MediaSampleRateHertz</code> field blank and let Amazon Transcribe determine the sample rate.</p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1079,11 +2170,11 @@ pub struct TranscriptionJob {
     /// <p>The language code for the input speech.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>An object that shows the optional array of languages inputted for transcription jobs with automatic language identification enabled.</p>
     #[serde(rename = "LanguageOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_options: Option<Vec<String>>,
+    pub language_options: Option<Vec<LanguageCode>>,
     /// <p>An object that describes the input media for the transcription job.</p>
     #[serde(rename = "Media")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1091,7 +2182,7 @@ pub struct TranscriptionJob {
     /// <p>The format of the input media file.</p>
     #[serde(rename = "MediaFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub media_format: Option<String>,
+    pub media_format: Option<MediaFormat>,
     /// <p>The sample rate, in Hertz, of the audio track in the input media file. </p>
     #[serde(rename = "MediaSampleRateHertz")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1119,7 +2210,121 @@ pub struct TranscriptionJob {
     /// <p>The status of the transcription job.</p>
     #[serde(rename = "TranscriptionJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transcription_job_status: Option<String>,
+    pub transcription_job_status: Option<TranscriptionJobStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTranscriptionJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TranscriptionJobStatus {
+    Completed,
+    Failed,
+    InProgress,
+    Queued,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTranscriptionJobStatus),
+}
+
+impl Default for TranscriptionJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TranscriptionJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TranscriptionJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TranscriptionJobStatus {
+    fn into(self) -> String {
+        match self {
+            TranscriptionJobStatus::Completed => "COMPLETED".to_string(),
+            TranscriptionJobStatus::Failed => "FAILED".to_string(),
+            TranscriptionJobStatus::InProgress => "IN_PROGRESS".to_string(),
+            TranscriptionJobStatus::Queued => "QUEUED".to_string(),
+            TranscriptionJobStatus::UnknownVariant(UnknownTranscriptionJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TranscriptionJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TranscriptionJobStatus::Completed => &"COMPLETED",
+            TranscriptionJobStatus::Failed => &"FAILED",
+            TranscriptionJobStatus::InProgress => &"IN_PROGRESS",
+            TranscriptionJobStatus::Queued => &"QUEUED",
+            TranscriptionJobStatus::UnknownVariant(UnknownTranscriptionJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TranscriptionJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => TranscriptionJobStatus::Completed,
+            "FAILED" => TranscriptionJobStatus::Failed,
+            "IN_PROGRESS" => TranscriptionJobStatus::InProgress,
+            "QUEUED" => TranscriptionJobStatus::Queued,
+            _ => TranscriptionJobStatus::UnknownVariant(UnknownTranscriptionJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TranscriptionJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => TranscriptionJobStatus::Completed,
+            "FAILED" => TranscriptionJobStatus::Failed,
+            "IN_PROGRESS" => TranscriptionJobStatus::InProgress,
+            "QUEUED" => TranscriptionJobStatus::Queued,
+            _ => TranscriptionJobStatus::UnknownVariant(UnknownTranscriptionJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TranscriptionJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TranscriptionJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TranscriptionJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary of information about a transcription job.</p>
@@ -1153,14 +2358,14 @@ pub struct TranscriptionJobSummary {
     /// <p>The language code for the input speech.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     #[serde(rename = "ModelSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_settings: Option<ModelSettings>,
     /// <p>Indicates the location of the output of the transcription job.</p> <p>If the value is <code>CUSTOMER_BUCKET</code> then the location is the S3 bucket specified in the <code>outputBucketName</code> field when the transcription job was started with the <code>StartTranscriptionJob</code> operation.</p> <p>If the value is <code>SERVICE_BUCKET</code> then the output is stored by Amazon Transcribe and can be retrieved using the URI in the <code>GetTranscriptionJob</code> response's <code>TranscriptFileUri</code> field.</p>
     #[serde(rename = "OutputLocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_location_type: Option<String>,
+    pub output_location_type: Option<OutputLocationType>,
     /// <p>A timestamp that shows when the job started processing.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1172,7 +2377,107 @@ pub struct TranscriptionJobSummary {
     /// <p>The status of the transcription job. When the status is <code>COMPLETED</code>, use the <code>GetTranscriptionJob</code> operation to get the results of the transcription.</p>
     #[serde(rename = "TranscriptionJobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transcription_job_status: Option<String>,
+    pub transcription_job_status: Option<TranscriptionJobStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    Conversation,
+    Dictation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::Conversation => "CONVERSATION".to_string(),
+            Type::Dictation => "DICTATION".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::Conversation => &"CONVERSATION",
+            Type::Dictation => &"DICTATION",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONVERSATION" => Type::Conversation,
+            "DICTATION" => Type::Dictation,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONVERSATION" => Type::Conversation,
+            "DICTATION" => Type::Dictation,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1180,7 +2485,7 @@ pub struct TranscriptionJobSummary {
 pub struct UpdateMedicalVocabularyRequest {
     /// <p>The language code of the language used for the entries in the updated vocabulary. US English (en-US) is the only valid language code in Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>The location in Amazon S3 of the text file that contains the you use for your custom vocabulary. The URI must be in the same AWS Region as the resource that you are calling. The following is the format for a URI:</p> <p> <code> https://s3.&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3.us-east-1.amazonaws.com/AWSDOC-EXAMPLE-BUCKET/vocab.txt</code> </p> <p>For more information about Amazon S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies in Amazon Transcribe Medical, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Medical Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1196,7 +2501,7 @@ pub struct UpdateMedicalVocabularyResponse {
     /// <p>The language code for the language of the text file used to update the custom vocabulary. US English (en-US) is the only language supported in Amazon Transcribe Medical.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1208,7 +2513,7 @@ pub struct UpdateMedicalVocabularyResponse {
     /// <p>The processing state of the update to the vocabulary. When the <code>VocabularyState</code> field is <code>READY</code>, the vocabulary is ready to be used in a <code>StartMedicalTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1233,7 +2538,7 @@ pub struct UpdateVocabularyFilterResponse {
     /// <p>The language code of the words in the vocabulary filter.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary filter was updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1249,7 +2554,7 @@ pub struct UpdateVocabularyFilterResponse {
 pub struct UpdateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    pub language_code: LanguageCode,
     /// <p>An array of strings containing the vocabulary entries.</p>
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1269,7 +2574,7 @@ pub struct UpdateVocabularyResponse {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1281,7 +2586,7 @@ pub struct UpdateVocabularyResponse {
     /// <p>The processing state of the vocabulary. When the <code>VocabularyState</code> field contains <code>READY</code> the vocabulary is ready to be used in a <code>StartTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
 }
 
 /// <p>Provides information about a vocabulary filter.</p>
@@ -1291,7 +2596,7 @@ pub struct VocabularyFilterInfo {
     /// <p>The language code of the words in the vocabulary filter.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was last updated.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1302,6 +2607,110 @@ pub struct VocabularyFilterInfo {
     pub vocabulary_filter_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVocabularyFilterMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VocabularyFilterMethod {
+    Mask,
+    Remove,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVocabularyFilterMethod),
+}
+
+impl Default for VocabularyFilterMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VocabularyFilterMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VocabularyFilterMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VocabularyFilterMethod {
+    fn into(self) -> String {
+        match self {
+            VocabularyFilterMethod::Mask => "mask".to_string(),
+            VocabularyFilterMethod::Remove => "remove".to_string(),
+            VocabularyFilterMethod::UnknownVariant(UnknownVocabularyFilterMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VocabularyFilterMethod {
+    fn into(self) -> &'a str {
+        match self {
+            VocabularyFilterMethod::Mask => &"mask",
+            VocabularyFilterMethod::Remove => &"remove",
+            VocabularyFilterMethod::UnknownVariant(UnknownVocabularyFilterMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for VocabularyFilterMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "mask" => VocabularyFilterMethod::Mask,
+            "remove" => VocabularyFilterMethod::Remove,
+            _ => VocabularyFilterMethod::UnknownVariant(UnknownVocabularyFilterMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VocabularyFilterMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "mask" => VocabularyFilterMethod::Mask,
+            "remove" => VocabularyFilterMethod::Remove,
+            _ => VocabularyFilterMethod::UnknownVariant(UnknownVocabularyFilterMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VocabularyFilterMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VocabularyFilterMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VocabularyFilterMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides information about a custom vocabulary. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1309,7 +2718,7 @@ pub struct VocabularyInfo {
     /// <p>The language code of the vocabulary entries.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub language_code: Option<String>,
+    pub language_code: Option<LanguageCode>,
     /// <p>The date and time that the vocabulary was last modified.</p>
     #[serde(rename = "LastModifiedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1321,7 +2730,112 @@ pub struct VocabularyInfo {
     /// <p>The processing state of the vocabulary. If the state is <code>READY</code> you can use the vocabulary in a <code>StartTranscriptionJob</code> request.</p>
     #[serde(rename = "VocabularyState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub vocabulary_state: Option<String>,
+    pub vocabulary_state: Option<VocabularyState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVocabularyState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VocabularyState {
+    Failed,
+    Pending,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVocabularyState),
+}
+
+impl Default for VocabularyState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VocabularyState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VocabularyState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VocabularyState {
+    fn into(self) -> String {
+        match self {
+            VocabularyState::Failed => "FAILED".to_string(),
+            VocabularyState::Pending => "PENDING".to_string(),
+            VocabularyState::Ready => "READY".to_string(),
+            VocabularyState::UnknownVariant(UnknownVocabularyState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VocabularyState {
+    fn into(self) -> &'a str {
+        match self {
+            VocabularyState::Failed => &"FAILED",
+            VocabularyState::Pending => &"PENDING",
+            VocabularyState::Ready => &"READY",
+            VocabularyState::UnknownVariant(UnknownVocabularyState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VocabularyState {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => VocabularyState::Failed,
+            "PENDING" => VocabularyState::Pending,
+            "READY" => VocabularyState::Ready,
+            _ => VocabularyState::UnknownVariant(UnknownVocabularyState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VocabularyState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => VocabularyState::Failed,
+            "PENDING" => VocabularyState::Pending,
+            "READY" => VocabularyState::Ready,
+            _ => VocabularyState::UnknownVariant(UnknownVocabularyState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VocabularyState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for VocabularyState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VocabularyState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CreateLanguageModel

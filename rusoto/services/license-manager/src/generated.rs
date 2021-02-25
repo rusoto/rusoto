@@ -69,11 +69,140 @@ pub struct AcceptGrantResponse {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
     /// <p>Grant version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAllowedOperation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AllowedOperation {
+    CheckInLicense,
+    CheckoutBorrowLicense,
+    CheckoutLicense,
+    CreateGrant,
+    CreateToken,
+    ExtendConsumptionLicense,
+    ListPurchasedLicenses,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAllowedOperation),
+}
+
+impl Default for AllowedOperation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AllowedOperation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AllowedOperation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AllowedOperation {
+    fn into(self) -> String {
+        match self {
+            AllowedOperation::CheckInLicense => "CheckInLicense".to_string(),
+            AllowedOperation::CheckoutBorrowLicense => "CheckoutBorrowLicense".to_string(),
+            AllowedOperation::CheckoutLicense => "CheckoutLicense".to_string(),
+            AllowedOperation::CreateGrant => "CreateGrant".to_string(),
+            AllowedOperation::CreateToken => "CreateToken".to_string(),
+            AllowedOperation::ExtendConsumptionLicense => "ExtendConsumptionLicense".to_string(),
+            AllowedOperation::ListPurchasedLicenses => "ListPurchasedLicenses".to_string(),
+            AllowedOperation::UnknownVariant(UnknownAllowedOperation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AllowedOperation {
+    fn into(self) -> &'a str {
+        match self {
+            AllowedOperation::CheckInLicense => &"CheckInLicense",
+            AllowedOperation::CheckoutBorrowLicense => &"CheckoutBorrowLicense",
+            AllowedOperation::CheckoutLicense => &"CheckoutLicense",
+            AllowedOperation::CreateGrant => &"CreateGrant",
+            AllowedOperation::CreateToken => &"CreateToken",
+            AllowedOperation::ExtendConsumptionLicense => &"ExtendConsumptionLicense",
+            AllowedOperation::ListPurchasedLicenses => &"ListPurchasedLicenses",
+            AllowedOperation::UnknownVariant(UnknownAllowedOperation { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AllowedOperation {
+    fn from(name: &str) -> Self {
+        match name {
+            "CheckInLicense" => AllowedOperation::CheckInLicense,
+            "CheckoutBorrowLicense" => AllowedOperation::CheckoutBorrowLicense,
+            "CheckoutLicense" => AllowedOperation::CheckoutLicense,
+            "CreateGrant" => AllowedOperation::CreateGrant,
+            "CreateToken" => AllowedOperation::CreateToken,
+            "ExtendConsumptionLicense" => AllowedOperation::ExtendConsumptionLicense,
+            "ListPurchasedLicenses" => AllowedOperation::ListPurchasedLicenses,
+            _ => AllowedOperation::UnknownVariant(UnknownAllowedOperation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AllowedOperation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CheckInLicense" => AllowedOperation::CheckInLicense,
+            "CheckoutBorrowLicense" => AllowedOperation::CheckoutBorrowLicense,
+            "CheckoutLicense" => AllowedOperation::CheckoutLicense,
+            "CreateGrant" => AllowedOperation::CreateGrant,
+            "CreateToken" => AllowedOperation::CreateToken,
+            "ExtendConsumptionLicense" => AllowedOperation::ExtendConsumptionLicense,
+            "ListPurchasedLicenses" => AllowedOperation::ListPurchasedLicenses,
+            _ => AllowedOperation::UnknownVariant(UnknownAllowedOperation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AllowedOperation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AllowedOperation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AllowedOperation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes automated discovery.</p>
@@ -125,7 +254,7 @@ pub struct CheckoutBorrowLicenseRequest {
     pub client_token: String,
     /// <p>Digital signature method. The possible value is JSON Web Signature (JWS) algorithm PS384. For more information, see <a href="https://tools.ietf.org/html/rfc7518#section-3.5">RFC 7518 Digital Signature with RSASSA-PSS</a>.</p>
     #[serde(rename = "DigitalSignatureMethod")]
-    pub digital_signature_method: String,
+    pub digital_signature_method: DigitalSignatureMethod,
     /// <p>License entitlements. Partial checkouts are not supported.</p>
     #[serde(rename = "Entitlements")]
     pub entitlements: Vec<EntitlementData>,
@@ -184,7 +313,7 @@ pub struct CheckoutLicenseRequest {
     pub beneficiary: Option<String>,
     /// <p>Checkout type.</p>
     #[serde(rename = "CheckoutType")]
-    pub checkout_type: String,
+    pub checkout_type: CheckoutType,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
@@ -209,7 +338,7 @@ pub struct CheckoutLicenseResponse {
     /// <p>Checkout type.</p>
     #[serde(rename = "CheckoutType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub checkout_type: Option<String>,
+    pub checkout_type: Option<CheckoutType>,
     /// <p>Allowed license entitlements.</p>
     #[serde(rename = "EntitlementsAllowed")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -236,6 +365,101 @@ pub struct CheckoutLicenseResponse {
     pub signed_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCheckoutType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CheckoutType {
+    Provisional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCheckoutType),
+}
+
+impl Default for CheckoutType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CheckoutType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CheckoutType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CheckoutType {
+    fn into(self) -> String {
+        match self {
+            CheckoutType::Provisional => "PROVISIONAL".to_string(),
+            CheckoutType::UnknownVariant(UnknownCheckoutType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CheckoutType {
+    fn into(self) -> &'a str {
+        match self {
+            CheckoutType::Provisional => &"PROVISIONAL",
+            CheckoutType::UnknownVariant(UnknownCheckoutType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CheckoutType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PROVISIONAL" => CheckoutType::Provisional,
+            _ => CheckoutType::UnknownVariant(UnknownCheckoutType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CheckoutType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PROVISIONAL" => CheckoutType::Provisional,
+            _ => CheckoutType::UnknownVariant(UnknownCheckoutType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CheckoutType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CheckoutType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CheckoutType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details about license consumption.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -247,7 +471,7 @@ pub struct ConsumedLicenseSummary {
     /// <p>Resource type of the resource consuming a license.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Details about a consumption configuration.</p>
@@ -264,7 +488,7 @@ pub struct ConsumptionConfiguration {
     /// <p>Renewal frequency.</p>
     #[serde(rename = "RenewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub renew_type: Option<String>,
+    pub renew_type: Option<RenewType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -272,7 +496,7 @@ pub struct ConsumptionConfiguration {
 pub struct CreateGrantRequest {
     /// <p>Allowed operations for the grant.</p>
     #[serde(rename = "AllowedOperations")]
-    pub allowed_operations: Vec<String>,
+    pub allowed_operations: Vec<AllowedOperation>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
@@ -300,7 +524,7 @@ pub struct CreateGrantResponse {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
     /// <p>Grant version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -313,7 +537,7 @@ pub struct CreateGrantVersionRequest {
     /// <p>Allowed operations for the grant.</p>
     #[serde(rename = "AllowedOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_operations: Option<Vec<String>>,
+    pub allowed_operations: Option<Vec<AllowedOperation>>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
@@ -331,7 +555,7 @@ pub struct CreateGrantVersionRequest {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -344,7 +568,7 @@ pub struct CreateGrantVersionResponse {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
     /// <p>New version of the grant.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -372,7 +596,7 @@ pub struct CreateLicenseConfigurationRequest {
     pub license_count_hard_limit: Option<bool>,
     /// <p>Dimension used to track the license inventory.</p>
     #[serde(rename = "LicenseCountingType")]
-    pub license_counting_type: String,
+    pub license_counting_type: LicenseCountingType,
     /// <p>License rules. The syntax is #name=value (for example, #allowedTenancy=EC2-DedicatedHost). The available rules vary by dimension, as follows.</p> <ul> <li> <p> <code>Cores</code> dimension: <code>allowedTenancy</code> | <code>licenseAffinityToHost</code> | <code>maximumCores</code> | <code>minimumCores</code> </p> </li> <li> <p> <code>Instances</code> dimension: <code>allowedTenancy</code> | <code>maximumCores</code> | <code>minimumCores</code> | <code>maximumSockets</code> | <code>minimumSockets</code> | <code>maximumVcpus</code> | <code>minimumVcpus</code> </p> </li> <li> <p> <code>Sockets</code> dimension: <code>allowedTenancy</code> | <code>licenseAffinityToHost</code> | <code>maximumSockets</code> | <code>minimumSockets</code> </p> </li> <li> <p> <code>vCPUs</code> dimension: <code>allowedTenancy</code> | <code>honorVcpuOptimization</code> | <code>maximumVcpus</code> | <code>minimumVcpus</code> </p> </li> </ul> <p>The unit for <code>licenseAffinityToHost</code> is days and the range is 1 to 180. The possible values for <code>allowedTenancy</code> are <code>EC2-Default</code>, <code>EC2-DedicatedHost</code>, and <code>EC2-DedicatedInstance</code>. The possible values for <code>honorVcpuOptimization</code> are <code>True</code> and <code>False</code>.</p>
     #[serde(rename = "LicenseRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -448,7 +672,7 @@ pub struct CreateLicenseResponse {
     /// <p>License status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LicenseStatus>,
     /// <p>License version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -492,7 +716,7 @@ pub struct CreateLicenseVersionRequest {
     pub source_version: Option<String>,
     /// <p>License status.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: LicenseStatus,
     /// <p>Date and time range during which the license is valid, in ISO8601-UTC format.</p>
     #[serde(rename = "Validity")]
     pub validity: DatetimeRange,
@@ -508,7 +732,7 @@ pub struct CreateLicenseVersionResponse {
     /// <p>License status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LicenseStatus>,
     /// <p>New version of the license.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -552,7 +776,7 @@ pub struct CreateTokenResponse {
     /// <p>Token type.</p>
     #[serde(rename = "TokenType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub token_type: Option<String>,
+    pub token_type: Option<TokenType>,
 }
 
 /// <p>Describes a time range, in ISO8601-UTC format.</p>
@@ -588,7 +812,7 @@ pub struct DeleteGrantResponse {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
     /// <p>Grant version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -628,7 +852,7 @@ pub struct DeleteLicenseResponse {
     /// <p>License status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LicenseDeletionStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -642,6 +866,106 @@ pub struct DeleteTokenRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTokenResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDigitalSignatureMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DigitalSignatureMethod {
+    JwtPs384,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDigitalSignatureMethod),
+}
+
+impl Default for DigitalSignatureMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DigitalSignatureMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DigitalSignatureMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DigitalSignatureMethod {
+    fn into(self) -> String {
+        match self {
+            DigitalSignatureMethod::JwtPs384 => "JWT_PS384".to_string(),
+            DigitalSignatureMethod::UnknownVariant(UnknownDigitalSignatureMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DigitalSignatureMethod {
+    fn into(self) -> &'a str {
+        match self {
+            DigitalSignatureMethod::JwtPs384 => &"JWT_PS384",
+            DigitalSignatureMethod::UnknownVariant(UnknownDigitalSignatureMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DigitalSignatureMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "JWT_PS384" => DigitalSignatureMethod::JwtPs384,
+            _ => DigitalSignatureMethod::UnknownVariant(UnknownDigitalSignatureMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DigitalSignatureMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JWT_PS384" => DigitalSignatureMethod::JwtPs384,
+            _ => DigitalSignatureMethod::UnknownVariant(UnknownDigitalSignatureMethod { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DigitalSignatureMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DigitalSignatureMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DigitalSignatureMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Describes a resource entitled for use with a license.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -663,7 +987,7 @@ pub struct Entitlement {
     pub overage: Option<bool>,
     /// <p>Entitlement unit.</p>
     #[serde(rename = "Unit")]
-    pub unit: String,
+    pub unit: EntitlementUnit,
     /// <p>Entitlement resource. Use only if the unit is None.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -678,11 +1002,465 @@ pub struct EntitlementData {
     pub name: String,
     /// <p>Entitlement data unit.</p>
     #[serde(rename = "Unit")]
-    pub unit: String,
+    pub unit: EntitlementDataUnit,
     /// <p>Entitlement data value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntitlementDataUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntitlementDataUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntitlementDataUnit),
+}
+
+impl Default for EntitlementDataUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntitlementDataUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntitlementDataUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntitlementDataUnit {
+    fn into(self) -> String {
+        match self {
+            EntitlementDataUnit::Bits => "Bits".to_string(),
+            EntitlementDataUnit::BitsSecond => "Bits/Second".to_string(),
+            EntitlementDataUnit::Bytes => "Bytes".to_string(),
+            EntitlementDataUnit::BytesSecond => "Bytes/Second".to_string(),
+            EntitlementDataUnit::Count => "Count".to_string(),
+            EntitlementDataUnit::CountSecond => "Count/Second".to_string(),
+            EntitlementDataUnit::Gigabits => "Gigabits".to_string(),
+            EntitlementDataUnit::GigabitsSecond => "Gigabits/Second".to_string(),
+            EntitlementDataUnit::Gigabytes => "Gigabytes".to_string(),
+            EntitlementDataUnit::GigabytesSecond => "Gigabytes/Second".to_string(),
+            EntitlementDataUnit::Kilobits => "Kilobits".to_string(),
+            EntitlementDataUnit::KilobitsSecond => "Kilobits/Second".to_string(),
+            EntitlementDataUnit::Kilobytes => "Kilobytes".to_string(),
+            EntitlementDataUnit::KilobytesSecond => "Kilobytes/Second".to_string(),
+            EntitlementDataUnit::Megabits => "Megabits".to_string(),
+            EntitlementDataUnit::MegabitsSecond => "Megabits/Second".to_string(),
+            EntitlementDataUnit::Megabytes => "Megabytes".to_string(),
+            EntitlementDataUnit::MegabytesSecond => "Megabytes/Second".to_string(),
+            EntitlementDataUnit::Microseconds => "Microseconds".to_string(),
+            EntitlementDataUnit::Milliseconds => "Milliseconds".to_string(),
+            EntitlementDataUnit::None => "None".to_string(),
+            EntitlementDataUnit::Percent => "Percent".to_string(),
+            EntitlementDataUnit::Seconds => "Seconds".to_string(),
+            EntitlementDataUnit::Terabits => "Terabits".to_string(),
+            EntitlementDataUnit::TerabitsSecond => "Terabits/Second".to_string(),
+            EntitlementDataUnit::Terabytes => "Terabytes".to_string(),
+            EntitlementDataUnit::TerabytesSecond => "Terabytes/Second".to_string(),
+            EntitlementDataUnit::UnknownVariant(UnknownEntitlementDataUnit { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntitlementDataUnit {
+    fn into(self) -> &'a str {
+        match self {
+            EntitlementDataUnit::Bits => &"Bits",
+            EntitlementDataUnit::BitsSecond => &"Bits/Second",
+            EntitlementDataUnit::Bytes => &"Bytes",
+            EntitlementDataUnit::BytesSecond => &"Bytes/Second",
+            EntitlementDataUnit::Count => &"Count",
+            EntitlementDataUnit::CountSecond => &"Count/Second",
+            EntitlementDataUnit::Gigabits => &"Gigabits",
+            EntitlementDataUnit::GigabitsSecond => &"Gigabits/Second",
+            EntitlementDataUnit::Gigabytes => &"Gigabytes",
+            EntitlementDataUnit::GigabytesSecond => &"Gigabytes/Second",
+            EntitlementDataUnit::Kilobits => &"Kilobits",
+            EntitlementDataUnit::KilobitsSecond => &"Kilobits/Second",
+            EntitlementDataUnit::Kilobytes => &"Kilobytes",
+            EntitlementDataUnit::KilobytesSecond => &"Kilobytes/Second",
+            EntitlementDataUnit::Megabits => &"Megabits",
+            EntitlementDataUnit::MegabitsSecond => &"Megabits/Second",
+            EntitlementDataUnit::Megabytes => &"Megabytes",
+            EntitlementDataUnit::MegabytesSecond => &"Megabytes/Second",
+            EntitlementDataUnit::Microseconds => &"Microseconds",
+            EntitlementDataUnit::Milliseconds => &"Milliseconds",
+            EntitlementDataUnit::None => &"None",
+            EntitlementDataUnit::Percent => &"Percent",
+            EntitlementDataUnit::Seconds => &"Seconds",
+            EntitlementDataUnit::Terabits => &"Terabits",
+            EntitlementDataUnit::TerabitsSecond => &"Terabits/Second",
+            EntitlementDataUnit::Terabytes => &"Terabytes",
+            EntitlementDataUnit::TerabytesSecond => &"Terabytes/Second",
+            EntitlementDataUnit::UnknownVariant(UnknownEntitlementDataUnit { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EntitlementDataUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bits" => EntitlementDataUnit::Bits,
+            "Bits/Second" => EntitlementDataUnit::BitsSecond,
+            "Bytes" => EntitlementDataUnit::Bytes,
+            "Bytes/Second" => EntitlementDataUnit::BytesSecond,
+            "Count" => EntitlementDataUnit::Count,
+            "Count/Second" => EntitlementDataUnit::CountSecond,
+            "Gigabits" => EntitlementDataUnit::Gigabits,
+            "Gigabits/Second" => EntitlementDataUnit::GigabitsSecond,
+            "Gigabytes" => EntitlementDataUnit::Gigabytes,
+            "Gigabytes/Second" => EntitlementDataUnit::GigabytesSecond,
+            "Kilobits" => EntitlementDataUnit::Kilobits,
+            "Kilobits/Second" => EntitlementDataUnit::KilobitsSecond,
+            "Kilobytes" => EntitlementDataUnit::Kilobytes,
+            "Kilobytes/Second" => EntitlementDataUnit::KilobytesSecond,
+            "Megabits" => EntitlementDataUnit::Megabits,
+            "Megabits/Second" => EntitlementDataUnit::MegabitsSecond,
+            "Megabytes" => EntitlementDataUnit::Megabytes,
+            "Megabytes/Second" => EntitlementDataUnit::MegabytesSecond,
+            "Microseconds" => EntitlementDataUnit::Microseconds,
+            "Milliseconds" => EntitlementDataUnit::Milliseconds,
+            "None" => EntitlementDataUnit::None,
+            "Percent" => EntitlementDataUnit::Percent,
+            "Seconds" => EntitlementDataUnit::Seconds,
+            "Terabits" => EntitlementDataUnit::Terabits,
+            "Terabits/Second" => EntitlementDataUnit::TerabitsSecond,
+            "Terabytes" => EntitlementDataUnit::Terabytes,
+            "Terabytes/Second" => EntitlementDataUnit::TerabytesSecond,
+            _ => EntitlementDataUnit::UnknownVariant(UnknownEntitlementDataUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntitlementDataUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bits" => EntitlementDataUnit::Bits,
+            "Bits/Second" => EntitlementDataUnit::BitsSecond,
+            "Bytes" => EntitlementDataUnit::Bytes,
+            "Bytes/Second" => EntitlementDataUnit::BytesSecond,
+            "Count" => EntitlementDataUnit::Count,
+            "Count/Second" => EntitlementDataUnit::CountSecond,
+            "Gigabits" => EntitlementDataUnit::Gigabits,
+            "Gigabits/Second" => EntitlementDataUnit::GigabitsSecond,
+            "Gigabytes" => EntitlementDataUnit::Gigabytes,
+            "Gigabytes/Second" => EntitlementDataUnit::GigabytesSecond,
+            "Kilobits" => EntitlementDataUnit::Kilobits,
+            "Kilobits/Second" => EntitlementDataUnit::KilobitsSecond,
+            "Kilobytes" => EntitlementDataUnit::Kilobytes,
+            "Kilobytes/Second" => EntitlementDataUnit::KilobytesSecond,
+            "Megabits" => EntitlementDataUnit::Megabits,
+            "Megabits/Second" => EntitlementDataUnit::MegabitsSecond,
+            "Megabytes" => EntitlementDataUnit::Megabytes,
+            "Megabytes/Second" => EntitlementDataUnit::MegabytesSecond,
+            "Microseconds" => EntitlementDataUnit::Microseconds,
+            "Milliseconds" => EntitlementDataUnit::Milliseconds,
+            "None" => EntitlementDataUnit::None,
+            "Percent" => EntitlementDataUnit::Percent,
+            "Seconds" => EntitlementDataUnit::Seconds,
+            "Terabits" => EntitlementDataUnit::Terabits,
+            "Terabits/Second" => EntitlementDataUnit::TerabitsSecond,
+            "Terabytes" => EntitlementDataUnit::Terabytes,
+            "Terabytes/Second" => EntitlementDataUnit::TerabytesSecond,
+            _ => EntitlementDataUnit::UnknownVariant(UnknownEntitlementDataUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntitlementDataUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntitlementDataUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntitlementDataUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEntitlementUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EntitlementUnit {
+    Bits,
+    BitsSecond,
+    Bytes,
+    BytesSecond,
+    Count,
+    CountSecond,
+    Gigabits,
+    GigabitsSecond,
+    Gigabytes,
+    GigabytesSecond,
+    Kilobits,
+    KilobitsSecond,
+    Kilobytes,
+    KilobytesSecond,
+    Megabits,
+    MegabitsSecond,
+    Megabytes,
+    MegabytesSecond,
+    Microseconds,
+    Milliseconds,
+    None,
+    Percent,
+    Seconds,
+    Terabits,
+    TerabitsSecond,
+    Terabytes,
+    TerabytesSecond,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEntitlementUnit),
+}
+
+impl Default for EntitlementUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EntitlementUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EntitlementUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EntitlementUnit {
+    fn into(self) -> String {
+        match self {
+            EntitlementUnit::Bits => "Bits".to_string(),
+            EntitlementUnit::BitsSecond => "Bits/Second".to_string(),
+            EntitlementUnit::Bytes => "Bytes".to_string(),
+            EntitlementUnit::BytesSecond => "Bytes/Second".to_string(),
+            EntitlementUnit::Count => "Count".to_string(),
+            EntitlementUnit::CountSecond => "Count/Second".to_string(),
+            EntitlementUnit::Gigabits => "Gigabits".to_string(),
+            EntitlementUnit::GigabitsSecond => "Gigabits/Second".to_string(),
+            EntitlementUnit::Gigabytes => "Gigabytes".to_string(),
+            EntitlementUnit::GigabytesSecond => "Gigabytes/Second".to_string(),
+            EntitlementUnit::Kilobits => "Kilobits".to_string(),
+            EntitlementUnit::KilobitsSecond => "Kilobits/Second".to_string(),
+            EntitlementUnit::Kilobytes => "Kilobytes".to_string(),
+            EntitlementUnit::KilobytesSecond => "Kilobytes/Second".to_string(),
+            EntitlementUnit::Megabits => "Megabits".to_string(),
+            EntitlementUnit::MegabitsSecond => "Megabits/Second".to_string(),
+            EntitlementUnit::Megabytes => "Megabytes".to_string(),
+            EntitlementUnit::MegabytesSecond => "Megabytes/Second".to_string(),
+            EntitlementUnit::Microseconds => "Microseconds".to_string(),
+            EntitlementUnit::Milliseconds => "Milliseconds".to_string(),
+            EntitlementUnit::None => "None".to_string(),
+            EntitlementUnit::Percent => "Percent".to_string(),
+            EntitlementUnit::Seconds => "Seconds".to_string(),
+            EntitlementUnit::Terabits => "Terabits".to_string(),
+            EntitlementUnit::TerabitsSecond => "Terabits/Second".to_string(),
+            EntitlementUnit::Terabytes => "Terabytes".to_string(),
+            EntitlementUnit::TerabytesSecond => "Terabytes/Second".to_string(),
+            EntitlementUnit::UnknownVariant(UnknownEntitlementUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EntitlementUnit {
+    fn into(self) -> &'a str {
+        match self {
+            EntitlementUnit::Bits => &"Bits",
+            EntitlementUnit::BitsSecond => &"Bits/Second",
+            EntitlementUnit::Bytes => &"Bytes",
+            EntitlementUnit::BytesSecond => &"Bytes/Second",
+            EntitlementUnit::Count => &"Count",
+            EntitlementUnit::CountSecond => &"Count/Second",
+            EntitlementUnit::Gigabits => &"Gigabits",
+            EntitlementUnit::GigabitsSecond => &"Gigabits/Second",
+            EntitlementUnit::Gigabytes => &"Gigabytes",
+            EntitlementUnit::GigabytesSecond => &"Gigabytes/Second",
+            EntitlementUnit::Kilobits => &"Kilobits",
+            EntitlementUnit::KilobitsSecond => &"Kilobits/Second",
+            EntitlementUnit::Kilobytes => &"Kilobytes",
+            EntitlementUnit::KilobytesSecond => &"Kilobytes/Second",
+            EntitlementUnit::Megabits => &"Megabits",
+            EntitlementUnit::MegabitsSecond => &"Megabits/Second",
+            EntitlementUnit::Megabytes => &"Megabytes",
+            EntitlementUnit::MegabytesSecond => &"Megabytes/Second",
+            EntitlementUnit::Microseconds => &"Microseconds",
+            EntitlementUnit::Milliseconds => &"Milliseconds",
+            EntitlementUnit::None => &"None",
+            EntitlementUnit::Percent => &"Percent",
+            EntitlementUnit::Seconds => &"Seconds",
+            EntitlementUnit::Terabits => &"Terabits",
+            EntitlementUnit::TerabitsSecond => &"Terabits/Second",
+            EntitlementUnit::Terabytes => &"Terabytes",
+            EntitlementUnit::TerabytesSecond => &"Terabytes/Second",
+            EntitlementUnit::UnknownVariant(UnknownEntitlementUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EntitlementUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bits" => EntitlementUnit::Bits,
+            "Bits/Second" => EntitlementUnit::BitsSecond,
+            "Bytes" => EntitlementUnit::Bytes,
+            "Bytes/Second" => EntitlementUnit::BytesSecond,
+            "Count" => EntitlementUnit::Count,
+            "Count/Second" => EntitlementUnit::CountSecond,
+            "Gigabits" => EntitlementUnit::Gigabits,
+            "Gigabits/Second" => EntitlementUnit::GigabitsSecond,
+            "Gigabytes" => EntitlementUnit::Gigabytes,
+            "Gigabytes/Second" => EntitlementUnit::GigabytesSecond,
+            "Kilobits" => EntitlementUnit::Kilobits,
+            "Kilobits/Second" => EntitlementUnit::KilobitsSecond,
+            "Kilobytes" => EntitlementUnit::Kilobytes,
+            "Kilobytes/Second" => EntitlementUnit::KilobytesSecond,
+            "Megabits" => EntitlementUnit::Megabits,
+            "Megabits/Second" => EntitlementUnit::MegabitsSecond,
+            "Megabytes" => EntitlementUnit::Megabytes,
+            "Megabytes/Second" => EntitlementUnit::MegabytesSecond,
+            "Microseconds" => EntitlementUnit::Microseconds,
+            "Milliseconds" => EntitlementUnit::Milliseconds,
+            "None" => EntitlementUnit::None,
+            "Percent" => EntitlementUnit::Percent,
+            "Seconds" => EntitlementUnit::Seconds,
+            "Terabits" => EntitlementUnit::Terabits,
+            "Terabits/Second" => EntitlementUnit::TerabitsSecond,
+            "Terabytes" => EntitlementUnit::Terabytes,
+            "Terabytes/Second" => EntitlementUnit::TerabytesSecond,
+            _ => EntitlementUnit::UnknownVariant(UnknownEntitlementUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EntitlementUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bits" => EntitlementUnit::Bits,
+            "Bits/Second" => EntitlementUnit::BitsSecond,
+            "Bytes" => EntitlementUnit::Bytes,
+            "Bytes/Second" => EntitlementUnit::BytesSecond,
+            "Count" => EntitlementUnit::Count,
+            "Count/Second" => EntitlementUnit::CountSecond,
+            "Gigabits" => EntitlementUnit::Gigabits,
+            "Gigabits/Second" => EntitlementUnit::GigabitsSecond,
+            "Gigabytes" => EntitlementUnit::Gigabytes,
+            "Gigabytes/Second" => EntitlementUnit::GigabytesSecond,
+            "Kilobits" => EntitlementUnit::Kilobits,
+            "Kilobits/Second" => EntitlementUnit::KilobitsSecond,
+            "Kilobytes" => EntitlementUnit::Kilobytes,
+            "Kilobytes/Second" => EntitlementUnit::KilobytesSecond,
+            "Megabits" => EntitlementUnit::Megabits,
+            "Megabits/Second" => EntitlementUnit::MegabitsSecond,
+            "Megabytes" => EntitlementUnit::Megabytes,
+            "Megabytes/Second" => EntitlementUnit::MegabytesSecond,
+            "Microseconds" => EntitlementUnit::Microseconds,
+            "Milliseconds" => EntitlementUnit::Milliseconds,
+            "None" => EntitlementUnit::None,
+            "Percent" => EntitlementUnit::Percent,
+            "Seconds" => EntitlementUnit::Seconds,
+            "Terabits" => EntitlementUnit::Terabits,
+            "Terabits/Second" => EntitlementUnit::TerabitsSecond,
+            "Terabytes" => EntitlementUnit::Terabytes,
+            "Terabytes/Second" => EntitlementUnit::TerabytesSecond,
+            _ => EntitlementUnit::UnknownVariant(UnknownEntitlementUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EntitlementUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EntitlementUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EntitlementUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Usage associated with an entitlement resource.</p>
@@ -701,7 +1479,7 @@ pub struct EntitlementUsage {
     pub name: String,
     /// <p>Entitlement usage unit.</p>
     #[serde(rename = "Unit")]
-    pub unit: String,
+    pub unit: EntitlementDataUnit,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -835,7 +1613,7 @@ pub struct GetLicenseConfigurationResponse {
     /// <p>Dimension on which the licenses are counted.</p>
     #[serde(rename = "LicenseCountingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_counting_type: Option<String>,
+    pub license_counting_type: Option<LicenseCountingType>,
     /// <p>License rules.</p>
     #[serde(rename = "LicenseRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -945,10 +1723,10 @@ pub struct Grant {
     pub grant_name: String,
     /// <p>Grant status.</p>
     #[serde(rename = "GrantStatus")]
-    pub grant_status: String,
+    pub grant_status: GrantStatus,
     /// <p>Granted operations.</p>
     #[serde(rename = "GrantedOperations")]
-    pub granted_operations: Vec<String>,
+    pub granted_operations: Vec<AllowedOperation>,
     /// <p>The grantee principal ARN.</p>
     #[serde(rename = "GranteePrincipalArn")]
     pub grantee_principal_arn: String,
@@ -968,6 +1746,136 @@ pub struct Grant {
     /// <p>Grant version.</p>
     #[serde(rename = "Version")]
     pub version: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGrantStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GrantStatus {
+    Active,
+    Deleted,
+    Disabled,
+    FailedWorkflow,
+    PendingAccept,
+    PendingDelete,
+    PendingWorkflow,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGrantStatus),
+}
+
+impl Default for GrantStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GrantStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GrantStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GrantStatus {
+    fn into(self) -> String {
+        match self {
+            GrantStatus::Active => "ACTIVE".to_string(),
+            GrantStatus::Deleted => "DELETED".to_string(),
+            GrantStatus::Disabled => "DISABLED".to_string(),
+            GrantStatus::FailedWorkflow => "FAILED_WORKFLOW".to_string(),
+            GrantStatus::PendingAccept => "PENDING_ACCEPT".to_string(),
+            GrantStatus::PendingDelete => "PENDING_DELETE".to_string(),
+            GrantStatus::PendingWorkflow => "PENDING_WORKFLOW".to_string(),
+            GrantStatus::Rejected => "REJECTED".to_string(),
+            GrantStatus::UnknownVariant(UnknownGrantStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GrantStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GrantStatus::Active => &"ACTIVE",
+            GrantStatus::Deleted => &"DELETED",
+            GrantStatus::Disabled => &"DISABLED",
+            GrantStatus::FailedWorkflow => &"FAILED_WORKFLOW",
+            GrantStatus::PendingAccept => &"PENDING_ACCEPT",
+            GrantStatus::PendingDelete => &"PENDING_DELETE",
+            GrantStatus::PendingWorkflow => &"PENDING_WORKFLOW",
+            GrantStatus::Rejected => &"REJECTED",
+            GrantStatus::UnknownVariant(UnknownGrantStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for GrantStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => GrantStatus::Active,
+            "DELETED" => GrantStatus::Deleted,
+            "DISABLED" => GrantStatus::Disabled,
+            "FAILED_WORKFLOW" => GrantStatus::FailedWorkflow,
+            "PENDING_ACCEPT" => GrantStatus::PendingAccept,
+            "PENDING_DELETE" => GrantStatus::PendingDelete,
+            "PENDING_WORKFLOW" => GrantStatus::PendingWorkflow,
+            "REJECTED" => GrantStatus::Rejected,
+            _ => GrantStatus::UnknownVariant(UnknownGrantStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GrantStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => GrantStatus::Active,
+            "DELETED" => GrantStatus::Deleted,
+            "DISABLED" => GrantStatus::Disabled,
+            "FAILED_WORKFLOW" => GrantStatus::FailedWorkflow,
+            "PENDING_ACCEPT" => GrantStatus::PendingAccept,
+            "PENDING_DELETE" => GrantStatus::PendingDelete,
+            "PENDING_WORKFLOW" => GrantStatus::PendingWorkflow,
+            "REJECTED" => GrantStatus::Rejected,
+            _ => GrantStatus::UnknownVariant(UnknownGrantStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GrantStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GrantStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GrantStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a license that is granted to a grantee.</p>
@@ -1025,7 +1933,7 @@ pub struct GrantedLicense {
     /// <p>Granted license status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LicenseStatus>,
     /// <p>Date and time range during which the granted license is valid, in ISO8601-UTC format.</p>
     #[serde(rename = "Validity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1042,7 +1950,7 @@ pub struct GrantedLicense {
 pub struct InventoryFilter {
     /// <p>Condition of the filter.</p>
     #[serde(rename = "Condition")]
-    pub condition: String,
+    pub condition: InventoryFilterCondition,
     /// <p>Name of the filter.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1050,6 +1958,121 @@ pub struct InventoryFilter {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInventoryFilterCondition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InventoryFilterCondition {
+    BeginsWith,
+    Contains,
+    Equals,
+    NotEquals,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInventoryFilterCondition),
+}
+
+impl Default for InventoryFilterCondition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InventoryFilterCondition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InventoryFilterCondition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InventoryFilterCondition {
+    fn into(self) -> String {
+        match self {
+            InventoryFilterCondition::BeginsWith => "BEGINS_WITH".to_string(),
+            InventoryFilterCondition::Contains => "CONTAINS".to_string(),
+            InventoryFilterCondition::Equals => "EQUALS".to_string(),
+            InventoryFilterCondition::NotEquals => "NOT_EQUALS".to_string(),
+            InventoryFilterCondition::UnknownVariant(UnknownInventoryFilterCondition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InventoryFilterCondition {
+    fn into(self) -> &'a str {
+        match self {
+            InventoryFilterCondition::BeginsWith => &"BEGINS_WITH",
+            InventoryFilterCondition::Contains => &"CONTAINS",
+            InventoryFilterCondition::Equals => &"EQUALS",
+            InventoryFilterCondition::NotEquals => &"NOT_EQUALS",
+            InventoryFilterCondition::UnknownVariant(UnknownInventoryFilterCondition {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for InventoryFilterCondition {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEGINS_WITH" => InventoryFilterCondition::BeginsWith,
+            "CONTAINS" => InventoryFilterCondition::Contains,
+            "EQUALS" => InventoryFilterCondition::Equals,
+            "NOT_EQUALS" => InventoryFilterCondition::NotEquals,
+            _ => InventoryFilterCondition::UnknownVariant(UnknownInventoryFilterCondition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InventoryFilterCondition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEGINS_WITH" => InventoryFilterCondition::BeginsWith,
+            "CONTAINS" => InventoryFilterCondition::Contains,
+            "EQUALS" => InventoryFilterCondition::Equals,
+            "NOT_EQUALS" => InventoryFilterCondition::NotEquals,
+            _ => InventoryFilterCondition::UnknownVariant(UnknownInventoryFilterCondition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InventoryFilterCondition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for InventoryFilterCondition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for InventoryFilterCondition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about the issuer of a license.</p>
@@ -1134,7 +2157,7 @@ pub struct License {
     /// <p>License status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LicenseStatus>,
     /// <p>Date and time range during which the license is valid, in ISO8601-UTC format.</p>
     #[serde(rename = "Validity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1188,7 +2211,7 @@ pub struct LicenseConfiguration {
     /// <p>Dimension to use to track the license inventory.</p>
     #[serde(rename = "LicenseCountingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_counting_type: Option<String>,
+    pub license_counting_type: Option<LicenseCountingType>,
     /// <p>License rules.</p>
     #[serde(rename = "LicenseRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1238,7 +2261,114 @@ pub struct LicenseConfigurationAssociation {
     /// <p>Type of server resource.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicenseConfigurationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LicenseConfigurationStatus {
+    Available,
+    Disabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicenseConfigurationStatus),
+}
+
+impl Default for LicenseConfigurationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LicenseConfigurationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LicenseConfigurationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LicenseConfigurationStatus {
+    fn into(self) -> String {
+        match self {
+            LicenseConfigurationStatus::Available => "AVAILABLE".to_string(),
+            LicenseConfigurationStatus::Disabled => "DISABLED".to_string(),
+            LicenseConfigurationStatus::UnknownVariant(UnknownLicenseConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LicenseConfigurationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LicenseConfigurationStatus::Available => &"AVAILABLE",
+            LicenseConfigurationStatus::Disabled => &"DISABLED",
+            LicenseConfigurationStatus::UnknownVariant(UnknownLicenseConfigurationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LicenseConfigurationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => LicenseConfigurationStatus::Available,
+            "DISABLED" => LicenseConfigurationStatus::Disabled,
+            _ => LicenseConfigurationStatus::UnknownVariant(UnknownLicenseConfigurationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LicenseConfigurationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => LicenseConfigurationStatus::Available,
+            "DISABLED" => LicenseConfigurationStatus::Disabled,
+            _ => LicenseConfigurationStatus::UnknownVariant(UnknownLicenseConfigurationStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LicenseConfigurationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LicenseConfigurationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about the usage of a resource associated with a license configuration.</p>
@@ -1268,7 +2398,226 @@ pub struct LicenseConfigurationUsage {
     /// <p>Type of resource.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicenseCountingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LicenseCountingType {
+    Core,
+    Instance,
+    Socket,
+    Vcpu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicenseCountingType),
+}
+
+impl Default for LicenseCountingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LicenseCountingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LicenseCountingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LicenseCountingType {
+    fn into(self) -> String {
+        match self {
+            LicenseCountingType::Core => "Core".to_string(),
+            LicenseCountingType::Instance => "Instance".to_string(),
+            LicenseCountingType::Socket => "Socket".to_string(),
+            LicenseCountingType::Vcpu => "vCPU".to_string(),
+            LicenseCountingType::UnknownVariant(UnknownLicenseCountingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LicenseCountingType {
+    fn into(self) -> &'a str {
+        match self {
+            LicenseCountingType::Core => &"Core",
+            LicenseCountingType::Instance => &"Instance",
+            LicenseCountingType::Socket => &"Socket",
+            LicenseCountingType::Vcpu => &"vCPU",
+            LicenseCountingType::UnknownVariant(UnknownLicenseCountingType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LicenseCountingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Core" => LicenseCountingType::Core,
+            "Instance" => LicenseCountingType::Instance,
+            "Socket" => LicenseCountingType::Socket,
+            "vCPU" => LicenseCountingType::Vcpu,
+            _ => LicenseCountingType::UnknownVariant(UnknownLicenseCountingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LicenseCountingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Core" => LicenseCountingType::Core,
+            "Instance" => LicenseCountingType::Instance,
+            "Socket" => LicenseCountingType::Socket,
+            "vCPU" => LicenseCountingType::Vcpu,
+            _ => LicenseCountingType::UnknownVariant(UnknownLicenseCountingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseCountingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LicenseCountingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LicenseCountingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicenseDeletionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LicenseDeletionStatus {
+    Deleted,
+    PendingDelete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicenseDeletionStatus),
+}
+
+impl Default for LicenseDeletionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LicenseDeletionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LicenseDeletionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LicenseDeletionStatus {
+    fn into(self) -> String {
+        match self {
+            LicenseDeletionStatus::Deleted => "DELETED".to_string(),
+            LicenseDeletionStatus::PendingDelete => "PENDING_DELETE".to_string(),
+            LicenseDeletionStatus::UnknownVariant(UnknownLicenseDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LicenseDeletionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LicenseDeletionStatus::Deleted => &"DELETED",
+            LicenseDeletionStatus::PendingDelete => &"PENDING_DELETE",
+            LicenseDeletionStatus::UnknownVariant(UnknownLicenseDeletionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LicenseDeletionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => LicenseDeletionStatus::Deleted,
+            "PENDING_DELETE" => LicenseDeletionStatus::PendingDelete,
+            _ => LicenseDeletionStatus::UnknownVariant(UnknownLicenseDeletionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LicenseDeletionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => LicenseDeletionStatus::Deleted,
+            "PENDING_DELETE" => LicenseDeletionStatus::PendingDelete,
+            _ => LicenseDeletionStatus::UnknownVariant(UnknownLicenseDeletionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseDeletionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LicenseDeletionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LicenseDeletionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the failure of a license operation.</p>
@@ -1306,7 +2655,7 @@ pub struct LicenseOperationFailure {
     /// <p>Resource type.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Details for associating a license configuration with a resource.</p>
@@ -1319,6 +2668,131 @@ pub struct LicenseSpecification {
     /// <p>Amazon Resource Name (ARN) of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationArn")]
     pub license_configuration_arn: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLicenseStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LicenseStatus {
+    Available,
+    Deactivated,
+    Deleted,
+    Expired,
+    PendingAvailable,
+    PendingDelete,
+    Suspended,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLicenseStatus),
+}
+
+impl Default for LicenseStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LicenseStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LicenseStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LicenseStatus {
+    fn into(self) -> String {
+        match self {
+            LicenseStatus::Available => "AVAILABLE".to_string(),
+            LicenseStatus::Deactivated => "DEACTIVATED".to_string(),
+            LicenseStatus::Deleted => "DELETED".to_string(),
+            LicenseStatus::Expired => "EXPIRED".to_string(),
+            LicenseStatus::PendingAvailable => "PENDING_AVAILABLE".to_string(),
+            LicenseStatus::PendingDelete => "PENDING_DELETE".to_string(),
+            LicenseStatus::Suspended => "SUSPENDED".to_string(),
+            LicenseStatus::UnknownVariant(UnknownLicenseStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LicenseStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LicenseStatus::Available => &"AVAILABLE",
+            LicenseStatus::Deactivated => &"DEACTIVATED",
+            LicenseStatus::Deleted => &"DELETED",
+            LicenseStatus::Expired => &"EXPIRED",
+            LicenseStatus::PendingAvailable => &"PENDING_AVAILABLE",
+            LicenseStatus::PendingDelete => &"PENDING_DELETE",
+            LicenseStatus::Suspended => &"SUSPENDED",
+            LicenseStatus::UnknownVariant(UnknownLicenseStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LicenseStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => LicenseStatus::Available,
+            "DEACTIVATED" => LicenseStatus::Deactivated,
+            "DELETED" => LicenseStatus::Deleted,
+            "EXPIRED" => LicenseStatus::Expired,
+            "PENDING_AVAILABLE" => LicenseStatus::PendingAvailable,
+            "PENDING_DELETE" => LicenseStatus::PendingDelete,
+            "SUSPENDED" => LicenseStatus::Suspended,
+            _ => LicenseStatus::UnknownVariant(UnknownLicenseStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LicenseStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => LicenseStatus::Available,
+            "DEACTIVATED" => LicenseStatus::Deactivated,
+            "DELETED" => LicenseStatus::Deleted,
+            "EXPIRED" => LicenseStatus::Expired,
+            "PENDING_AVAILABLE" => LicenseStatus::PendingAvailable,
+            "PENDING_DELETE" => LicenseStatus::PendingDelete,
+            "SUSPENDED" => LicenseStatus::Suspended,
+            _ => LicenseStatus::UnknownVariant(UnknownLicenseStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LicenseStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LicenseStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LicenseStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the entitlement usage associated with a license.</p>
@@ -1742,7 +3216,7 @@ pub struct ManagedResourceSummary {
     /// <p>Type of resource associated with a license.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 /// <p>Describes key/value pairs.</p>
@@ -1806,11 +3280,137 @@ pub struct ReceivedMetadata {
     /// <p>Allowed operations.</p>
     #[serde(rename = "AllowedOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_operations: Option<Vec<String>>,
+    pub allowed_operations: Option<Vec<AllowedOperation>>,
     /// <p>Received status.</p>
     #[serde(rename = "ReceivedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub received_status: Option<String>,
+    pub received_status: Option<ReceivedStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReceivedStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReceivedStatus {
+    Active,
+    Deleted,
+    Disabled,
+    FailedWorkflow,
+    PendingAccept,
+    PendingWorkflow,
+    Rejected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReceivedStatus),
+}
+
+impl Default for ReceivedStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReceivedStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReceivedStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReceivedStatus {
+    fn into(self) -> String {
+        match self {
+            ReceivedStatus::Active => "ACTIVE".to_string(),
+            ReceivedStatus::Deleted => "DELETED".to_string(),
+            ReceivedStatus::Disabled => "DISABLED".to_string(),
+            ReceivedStatus::FailedWorkflow => "FAILED_WORKFLOW".to_string(),
+            ReceivedStatus::PendingAccept => "PENDING_ACCEPT".to_string(),
+            ReceivedStatus::PendingWorkflow => "PENDING_WORKFLOW".to_string(),
+            ReceivedStatus::Rejected => "REJECTED".to_string(),
+            ReceivedStatus::UnknownVariant(UnknownReceivedStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReceivedStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReceivedStatus::Active => &"ACTIVE",
+            ReceivedStatus::Deleted => &"DELETED",
+            ReceivedStatus::Disabled => &"DISABLED",
+            ReceivedStatus::FailedWorkflow => &"FAILED_WORKFLOW",
+            ReceivedStatus::PendingAccept => &"PENDING_ACCEPT",
+            ReceivedStatus::PendingWorkflow => &"PENDING_WORKFLOW",
+            ReceivedStatus::Rejected => &"REJECTED",
+            ReceivedStatus::UnknownVariant(UnknownReceivedStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReceivedStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReceivedStatus::Active,
+            "DELETED" => ReceivedStatus::Deleted,
+            "DISABLED" => ReceivedStatus::Disabled,
+            "FAILED_WORKFLOW" => ReceivedStatus::FailedWorkflow,
+            "PENDING_ACCEPT" => ReceivedStatus::PendingAccept,
+            "PENDING_WORKFLOW" => ReceivedStatus::PendingWorkflow,
+            "REJECTED" => ReceivedStatus::Rejected,
+            _ => ReceivedStatus::UnknownVariant(UnknownReceivedStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReceivedStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReceivedStatus::Active,
+            "DELETED" => ReceivedStatus::Deleted,
+            "DISABLED" => ReceivedStatus::Disabled,
+            "FAILED_WORKFLOW" => ReceivedStatus::FailedWorkflow,
+            "PENDING_ACCEPT" => ReceivedStatus::PendingAccept,
+            "PENDING_WORKFLOW" => ReceivedStatus::PendingWorkflow,
+            "REJECTED" => ReceivedStatus::Rejected,
+            _ => ReceivedStatus::UnknownVariant(UnknownReceivedStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReceivedStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReceivedStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReceivedStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1831,11 +3431,116 @@ pub struct RejectGrantResponse {
     /// <p>Grant status.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GrantStatus>,
     /// <p>Grant version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRenewType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RenewType {
+    Monthly,
+    None,
+    Weekly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRenewType),
+}
+
+impl Default for RenewType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RenewType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RenewType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RenewType {
+    fn into(self) -> String {
+        match self {
+            RenewType::Monthly => "Monthly".to_string(),
+            RenewType::None => "None".to_string(),
+            RenewType::Weekly => "Weekly".to_string(),
+            RenewType::UnknownVariant(UnknownRenewType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RenewType {
+    fn into(self) -> &'a str {
+        match self {
+            RenewType::Monthly => &"Monthly",
+            RenewType::None => &"None",
+            RenewType::Weekly => &"Weekly",
+            RenewType::UnknownVariant(UnknownRenewType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RenewType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Monthly" => RenewType::Monthly,
+            "None" => RenewType::None,
+            "Weekly" => RenewType::Weekly,
+            _ => RenewType::UnknownVariant(UnknownRenewType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RenewType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Monthly" => RenewType::Monthly,
+            "None" => RenewType::None,
+            "Weekly" => RenewType::Weekly,
+            _ => RenewType::UnknownVariant(UnknownRenewType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RenewType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RenewType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RenewType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about a resource.</p>
@@ -1865,7 +3570,125 @@ pub struct ResourceInventory {
     /// <p>Type of resource.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Ec2Ami,
+    Ec2Host,
+    Ec2Instance,
+    Rds,
+    SystemsManagerManagedInstance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Ec2Ami => "EC2_AMI".to_string(),
+            ResourceType::Ec2Host => "EC2_HOST".to_string(),
+            ResourceType::Ec2Instance => "EC2_INSTANCE".to_string(),
+            ResourceType::Rds => "RDS".to_string(),
+            ResourceType::SystemsManagerManagedInstance => {
+                "SYSTEMS_MANAGER_MANAGED_INSTANCE".to_string()
+            }
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Ec2Ami => &"EC2_AMI",
+            ResourceType::Ec2Host => &"EC2_HOST",
+            ResourceType::Ec2Instance => &"EC2_INSTANCE",
+            ResourceType::Rds => &"RDS",
+            ResourceType::SystemsManagerManagedInstance => &"SYSTEMS_MANAGER_MANAGED_INSTANCE",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2_AMI" => ResourceType::Ec2Ami,
+            "EC2_HOST" => ResourceType::Ec2Host,
+            "EC2_INSTANCE" => ResourceType::Ec2Instance,
+            "RDS" => ResourceType::Rds,
+            "SYSTEMS_MANAGER_MANAGED_INSTANCE" => ResourceType::SystemsManagerManagedInstance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2_AMI" => ResourceType::Ec2Ami,
+            "EC2_HOST" => ResourceType::Ec2Host,
+            "EC2_INSTANCE" => ResourceType::Ec2Instance,
+            "RDS" => ResourceType::Rds,
+            "SYSTEMS_MANAGER_MANAGED_INSTANCE" => ResourceType::SystemsManagerManagedInstance,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details about a tag for a license configuration.</p>
@@ -1930,6 +3753,102 @@ pub struct TokenData {
     pub token_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTokenType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TokenType {
+    RefreshToken,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTokenType),
+}
+
+impl Default for TokenType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TokenType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TokenType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TokenType {
+    fn into(self) -> String {
+        match self {
+            TokenType::RefreshToken => "REFRESH_TOKEN".to_string(),
+            TokenType::UnknownVariant(UnknownTokenType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TokenType {
+    fn into(self) -> &'a str {
+        match self {
+            TokenType::RefreshToken => &"REFRESH_TOKEN",
+            TokenType::UnknownVariant(UnknownTokenType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TokenType {
+    fn from(name: &str) -> Self {
+        match name {
+            "REFRESH_TOKEN" => TokenType::RefreshToken,
+            _ => TokenType::UnknownVariant(UnknownTokenType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TokenType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REFRESH_TOKEN" => TokenType::RefreshToken,
+            _ => TokenType::UnknownVariant(UnknownTokenType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TokenType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TokenType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TokenType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -1962,7 +3881,7 @@ pub struct UpdateLicenseConfigurationRequest {
     /// <p>New status of the license configuration.</p>
     #[serde(rename = "LicenseConfigurationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub license_configuration_status: Option<String>,
+    pub license_configuration_status: Option<LicenseConfigurationStatus>,
     /// <p>New number of licenses managed by the license configuration.</p>
     #[serde(rename = "LicenseCount")]
     #[serde(skip_serializing_if = "Option::is_none")]

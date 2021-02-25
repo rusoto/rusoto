@@ -80,7 +80,7 @@ pub struct Action {
     /// <p>The Amazon Resource Name (ARN) of the target group. Specify only when <code>Type</code> is <code>forward</code> and you want to route to a single target group. To route to one or more target groups, use <code>ForwardConfig</code> instead.</p>
     pub target_group_arn: Option<String>,
     /// <p>The type of action.</p>
-    pub type_: String,
+    pub type_: ActionTypeEnum,
 }
 
 #[allow(dead_code)]
@@ -190,9 +190,12 @@ impl ActionSerializer {
             );
         }
         if let Some(ref field_value) = obj.target_group_arn {
-            params.put(&format!("{}{}", prefix, "TargetGroupArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetGroupArn"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Type"), &obj.type_);
+        params.put(&format!("{}{}", prefix, "Type"), &obj.type_.to_string());
     }
 }
 
@@ -204,12 +207,133 @@ impl ActionOrderDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionTypeEnum {
+    AuthenticateCognito,
+    AuthenticateOidc,
+    FixedResponse,
+    Forward,
+    Redirect,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionTypeEnum),
+}
+
+impl Default for ActionTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ActionTypeEnum::AuthenticateCognito => "authenticate-cognito".to_string(),
+            ActionTypeEnum::AuthenticateOidc => "authenticate-oidc".to_string(),
+            ActionTypeEnum::FixedResponse => "fixed-response".to_string(),
+            ActionTypeEnum::Forward => "forward".to_string(),
+            ActionTypeEnum::Redirect => "redirect".to_string(),
+            ActionTypeEnum::UnknownVariant(UnknownActionTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ActionTypeEnum::AuthenticateCognito => &"authenticate-cognito",
+            ActionTypeEnum::AuthenticateOidc => &"authenticate-oidc",
+            ActionTypeEnum::FixedResponse => &"fixed-response",
+            ActionTypeEnum::Forward => &"forward",
+            ActionTypeEnum::Redirect => &"redirect",
+            ActionTypeEnum::UnknownVariant(UnknownActionTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "authenticate-cognito" => ActionTypeEnum::AuthenticateCognito,
+            "authenticate-oidc" => ActionTypeEnum::AuthenticateOidc,
+            "fixed-response" => ActionTypeEnum::FixedResponse,
+            "forward" => ActionTypeEnum::Forward,
+            "redirect" => ActionTypeEnum::Redirect,
+            _ => ActionTypeEnum::UnknownVariant(UnknownActionTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "authenticate-cognito" => ActionTypeEnum::AuthenticateCognito,
+            "authenticate-oidc" => ActionTypeEnum::AuthenticateOidc,
+            "fixed-response" => ActionTypeEnum::FixedResponse,
+            "forward" => ActionTypeEnum::Forward,
+            "redirect" => ActionTypeEnum::Redirect,
+            _ => ActionTypeEnum::UnknownVariant(UnknownActionTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ActionTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ActionTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ActionTypeEnumDeserializer;
 impl ActionTypeEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActionTypeEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -265,7 +389,10 @@ impl AddListenerCertificatesInputSerializer {
             &format!("{}{}", prefix, "Certificates"),
             &obj.certificates,
         );
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
     }
 }
 
@@ -382,7 +509,7 @@ impl AlpnPolicyNameSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -458,12 +585,133 @@ impl AuthenticateCognitoActionAuthenticationRequestParamValueDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticateCognitoActionConditionalBehaviorEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticateCognitoActionConditionalBehaviorEnum {
+    Allow,
+    Authenticate,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticateCognitoActionConditionalBehaviorEnum),
+}
+
+impl Default for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn into(self) -> String {
+        match self {
+            AuthenticateCognitoActionConditionalBehaviorEnum::Allow => "allow".to_string(),
+            AuthenticateCognitoActionConditionalBehaviorEnum::Authenticate => {
+                "authenticate".to_string()
+            }
+            AuthenticateCognitoActionConditionalBehaviorEnum::Deny => "deny".to_string(),
+            AuthenticateCognitoActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateCognitoActionConditionalBehaviorEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticateCognitoActionConditionalBehaviorEnum::Allow => &"allow",
+            AuthenticateCognitoActionConditionalBehaviorEnum::Authenticate => &"authenticate",
+            AuthenticateCognitoActionConditionalBehaviorEnum::Deny => &"deny",
+            AuthenticateCognitoActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateCognitoActionConditionalBehaviorEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "allow" => AuthenticateCognitoActionConditionalBehaviorEnum::Allow,
+            "authenticate" => AuthenticateCognitoActionConditionalBehaviorEnum::Authenticate,
+            "deny" => AuthenticateCognitoActionConditionalBehaviorEnum::Deny,
+            _ => AuthenticateCognitoActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateCognitoActionConditionalBehaviorEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "allow" => AuthenticateCognitoActionConditionalBehaviorEnum::Allow,
+            "authenticate" => AuthenticateCognitoActionConditionalBehaviorEnum::Authenticate,
+            "deny" => AuthenticateCognitoActionConditionalBehaviorEnum::Deny,
+            _ => AuthenticateCognitoActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateCognitoActionConditionalBehaviorEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticateCognitoActionConditionalBehaviorEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthenticateCognitoActionConditionalBehaviorEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AuthenticateCognitoActionConditionalBehaviorEnumDeserializer;
 impl AuthenticateCognitoActionConditionalBehaviorEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthenticateCognitoActionConditionalBehaviorEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Request parameters to use when integrating with Amazon Cognito to authenticate users.</p>
@@ -474,7 +722,7 @@ pub struct AuthenticateCognitoActionConfig {
     /// <p>The query parameters (up to 10) to include in the redirect request to the authorization endpoint.</p>
     pub authentication_request_extra_params: Option<::std::collections::HashMap<String, String>>,
     /// <p><p>The behavior if the user is not authenticated. The following are possible values:</p> <ul> <li> <p>deny<code/> - Return an HTTP 401 Unauthorized error.</p> </li> <li> <p>allow<code/> - Allow the request to be forwarded to the target.</p> </li> <li> <p>authenticate<code/> - Redirect the request to the IdP authorization endpoint. This is the default value.</p> </li> </ul></p>
-    pub on_unauthenticated_request: Option<String>,
+    pub on_unauthenticated_request: Option<AuthenticateCognitoActionConditionalBehaviorEnum>,
     /// <p>The set of user claims to be requested from the IdP. The default is <code>openid</code>.</p> <p>To verify which scope values your IdP supports and how to separate multiple values, see the documentation for your IdP.</p>
     pub scope: Option<String>,
     /// <p>The name of the cookie used to maintain session information. The default is AWSELBAuthSessionCookie.</p>
@@ -577,26 +825,32 @@ impl AuthenticateCognitoActionConfigSerializer {
         if let Some(ref field_value) = obj.on_unauthenticated_request {
             params.put(
                 &format!("{}{}", prefix, "OnUnauthenticatedRequest"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.scope {
-            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.session_cookie_name {
-            params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SessionCookieName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.session_timeout {
             params.put(&format!("{}{}", prefix, "SessionTimeout"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "UserPoolArn"), &obj.user_pool_arn);
+        params.put(
+            &format!("{}{}", prefix, "UserPoolArn"),
+            &obj.user_pool_arn.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "UserPoolClientId"),
-            &obj.user_pool_client_id,
+            &obj.user_pool_client_id.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "UserPoolDomain"),
-            &obj.user_pool_domain,
+            &obj.user_pool_domain.to_string(),
         );
     }
 }
@@ -736,12 +990,133 @@ impl AuthenticateOidcActionClientSecretDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticateOidcActionConditionalBehaviorEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticateOidcActionConditionalBehaviorEnum {
+    Allow,
+    Authenticate,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticateOidcActionConditionalBehaviorEnum),
+}
+
+impl Default for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn into(self) -> String {
+        match self {
+            AuthenticateOidcActionConditionalBehaviorEnum::Allow => "allow".to_string(),
+            AuthenticateOidcActionConditionalBehaviorEnum::Authenticate => {
+                "authenticate".to_string()
+            }
+            AuthenticateOidcActionConditionalBehaviorEnum::Deny => "deny".to_string(),
+            AuthenticateOidcActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateOidcActionConditionalBehaviorEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticateOidcActionConditionalBehaviorEnum {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticateOidcActionConditionalBehaviorEnum::Allow => &"allow",
+            AuthenticateOidcActionConditionalBehaviorEnum::Authenticate => &"authenticate",
+            AuthenticateOidcActionConditionalBehaviorEnum::Deny => &"deny",
+            AuthenticateOidcActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateOidcActionConditionalBehaviorEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "allow" => AuthenticateOidcActionConditionalBehaviorEnum::Allow,
+            "authenticate" => AuthenticateOidcActionConditionalBehaviorEnum::Authenticate,
+            "deny" => AuthenticateOidcActionConditionalBehaviorEnum::Deny,
+            _ => AuthenticateOidcActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateOidcActionConditionalBehaviorEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "allow" => AuthenticateOidcActionConditionalBehaviorEnum::Allow,
+            "authenticate" => AuthenticateOidcActionConditionalBehaviorEnum::Authenticate,
+            "deny" => AuthenticateOidcActionConditionalBehaviorEnum::Deny,
+            _ => AuthenticateOidcActionConditionalBehaviorEnum::UnknownVariant(
+                UnknownAuthenticateOidcActionConditionalBehaviorEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticateOidcActionConditionalBehaviorEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AuthenticateOidcActionConditionalBehaviorEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AuthenticateOidcActionConditionalBehaviorEnumDeserializer;
 impl AuthenticateOidcActionConditionalBehaviorEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AuthenticateOidcActionConditionalBehaviorEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Request parameters when using an identity provider (IdP) that is compliant with OpenID Connect (OIDC) to authenticate users.</p>
@@ -760,7 +1135,7 @@ pub struct AuthenticateOidcActionConfig {
     /// <p>The OIDC issuer identifier of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
     pub issuer: String,
     /// <p><p>The behavior if the user is not authenticated. The following are possible values:</p> <ul> <li> <p>deny<code/> - Return an HTTP 401 Unauthorized error.</p> </li> <li> <p>allow<code/> - Allow the request to be forwarded to the target.</p> </li> <li> <p>authenticate<code/> - Redirect the request to the IdP authorization endpoint. This is the default value.</p> </li> </ul></p>
-    pub on_unauthenticated_request: Option<String>,
+    pub on_unauthenticated_request: Option<AuthenticateOidcActionConditionalBehaviorEnum>,
     /// <p>The set of user claims to be requested from the IdP. The default is <code>openid</code>.</p> <p>To verify which scope values your IdP supports and how to separate multiple values, see the documentation for your IdP.</p>
     pub scope: Option<String>,
     /// <p>The name of the cookie used to maintain session information. The default is AWSELBAuthSessionCookie.</p>
@@ -891,31 +1266,40 @@ impl AuthenticateOidcActionConfigSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "AuthorizationEndpoint"),
-            &obj.authorization_endpoint,
+            &obj.authorization_endpoint.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "ClientId"), &obj.client_id);
+        params.put(
+            &format!("{}{}", prefix, "ClientId"),
+            &obj.client_id.to_string(),
+        );
         if let Some(ref field_value) = obj.client_secret {
-            params.put(&format!("{}{}", prefix, "ClientSecret"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ClientSecret"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Issuer"), &obj.issuer);
+        params.put(&format!("{}{}", prefix, "Issuer"), &obj.issuer.to_string());
         if let Some(ref field_value) = obj.on_unauthenticated_request {
             params.put(
                 &format!("{}{}", prefix, "OnUnauthenticatedRequest"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.scope {
-            params.put(&format!("{}{}", prefix, "Scope"), &field_value);
+            params.put(&format!("{}{}", prefix, "Scope"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.session_cookie_name {
-            params.put(&format!("{}{}", prefix, "SessionCookieName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SessionCookieName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.session_timeout {
             params.put(&format!("{}{}", prefix, "SessionTimeout"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TokenEndpoint"),
-            &obj.token_endpoint,
+            &obj.token_endpoint.to_string(),
         );
         if let Some(ref field_value) = obj.use_existing_client_secret {
             params.put(
@@ -925,7 +1309,7 @@ impl AuthenticateOidcActionConfigSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "UserInfoEndpoint"),
-            &obj.user_info_endpoint,
+            &obj.user_info_endpoint.to_string(),
         );
     }
 }
@@ -1106,7 +1490,10 @@ impl CertificateSerializer {
         }
 
         if let Some(ref field_value) = obj.certificate_arn {
-            params.put(&format!("{}{}", prefix, "CertificateArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "CertificateArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.is_default {
             params.put(&format!("{}{}", prefix, "IsDefault"), &field_value);
@@ -1238,7 +1625,7 @@ pub struct CreateListenerInput {
     /// <p>The port on which the load balancer is listening. You cannot specify a port for a Gateway Load Balancer.</p>
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You cannot specify a protocol for a Gateway Load Balancer.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<ProtocolEnum>,
     /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security policies</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies">Security policies</a> in the <i>Network Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
     /// <p>The tags to assign to the listener.</p>
@@ -1275,16 +1662,22 @@ impl CreateListenerInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.protocol {
-            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Protocol"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.ssl_policy {
-            params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SslPolicy"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -1326,11 +1719,11 @@ pub struct CreateLoadBalancerInput {
     /// <p>[Application Load Balancers on Outposts] The ID of the customer-owned address pool (CoIP pool).</p>
     pub customer_owned_ipv_4_pool: Option<String>,
     /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, must not begin or end with a hyphen, and must not begin with "internal-".</p>
     pub name: String,
     /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p> <p>You cannot specify a scheme for a Gateway Load Balancer.</p>
-    pub scheme: Option<String>,
+    pub scheme: Option<LoadBalancerSchemeEnum>,
     /// <p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
     /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Application Load Balancers on Outposts] You must specify one Outpost subnet.</p> <p>[Application Load Balancers on Local Zones] You can specify subnets from one or more Local Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet if you need static IP addresses for your internet-facing load balancer. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet. For internet-facing load balancer, you can specify one IPv6 address per subnet.</p> <p>[Gateway Load Balancers] You can specify subnets from one or more Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p>
@@ -1340,7 +1733,7 @@ pub struct CreateLoadBalancerInput {
     /// <p>The tags to assign to the load balancer.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of load balancer. The default is <code>application</code>.</p>
-    pub type_: Option<String>,
+    pub type_: Option<LoadBalancerTypeEnum>,
 }
 
 /// Serialize `CreateLoadBalancerInput` contents to a `SignedRequest`.
@@ -1355,15 +1748,18 @@ impl CreateLoadBalancerInputSerializer {
         if let Some(ref field_value) = obj.customer_owned_ipv_4_pool {
             params.put(
                 &format!("{}{}", prefix, "CustomerOwnedIpv4Pool"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.ip_address_type {
-            params.put(&format!("{}{}", prefix, "IpAddressType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IpAddressType"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.scheme {
-            params.put(&format!("{}{}", prefix, "Scheme"), &field_value);
+            params.put(&format!("{}{}", prefix, "Scheme"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.security_groups {
             SecurityGroupsSerializer::serialize(
@@ -1386,7 +1782,7 @@ impl CreateLoadBalancerInputSerializer {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.type_ {
-            params.put(&format!("{}{}", prefix, "Type"), &field_value);
+            params.put(&format!("{}{}", prefix, "Type"), &field_value.to_string());
         }
     }
 }
@@ -1453,7 +1849,10 @@ impl CreateRuleInputSerializer {
             &format!("{}{}", prefix, "Conditions"),
             &obj.conditions,
         );
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
         params.put(&format!("{}{}", prefix, "Priority"), &obj.priority);
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
@@ -1501,7 +1900,7 @@ pub struct CreateTargetGroupInput {
     /// <p>The port the load balancer uses when performing health checks on targets. If the protocol is HTTP, HTTPS, TCP, TLS, UDP, or TCP_UDP, the default is <code>traffic-port</code>, which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.</p>
     pub health_check_port: Option<String>,
     /// <p>The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.</p>
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<ProtocolEnum>,
     /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For target groups with a protocol of HTTP, HTTPS, or GENEVE, the default is 5 seconds. For target groups with a protocol of TCP or TLS, this value must be 6 seconds for HTTP health checks and 10 seconds for TCP and HTTPS health checks. If the target type is <code>lambda</code>, the default is 30 seconds.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For target groups with a protocol of HTTP or HTTPS, the default is 5. For target groups with a protocol of TCP, TLS, or GENEVE, the default is 3. If the target type is <code>lambda</code>, the default is 5.</p>
@@ -1513,13 +1912,13 @@ pub struct CreateTargetGroupInput {
     /// <p>The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.</p>
     pub port: Option<i64>,
     /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<ProtocolEnum>,
     /// <p>[HTTP/HTTPS protocol] The protocol version. Specify <code>GRPC</code> to send requests to targets using gRPC. Specify <code>HTTP2</code> to send requests to targets using HTTP/2. The default is <code>HTTP1</code>, which sends requests to targets using HTTP/1.1.</p>
     pub protocol_version: Option<String>,
     /// <p>The tags to assign to the target group.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p><p>The type of target that you must specify when registering targets with this target group. You can&#39;t specify targets for a target group using more than one target type.</p> <ul> <li> <p> <code>instance</code> - Register targets by instance ID. This is the default value.</p> </li> <li> <p> <code>ip</code> - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can&#39;t specify publicly routable IP addresses.</p> </li> <li> <p> <code>lambda</code> - Register a single Lambda function as a target.</p> </li> </ul></p>
-    pub target_type: Option<String>,
+    pub target_type: Option<TargetTypeEnum>,
     /// <p>The number of consecutive health check failures required before considering a target unhealthy. If the target group protocol is HTTP or HTTPS, the default is 2. If the target group protocol is TCP or TLS, this value must be the same as the healthy threshold count. If the target group protocol is GENEVE, the default is 3. If the target type is <code>lambda</code>, the default is 2.</p>
     pub unhealthy_threshold_count: Option<i64>,
     /// <p>The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply. Otherwise, this parameter is required.</p>
@@ -1545,15 +1944,21 @@ impl CreateTargetGroupInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
-            params.put(&format!("{}{}", prefix, "HealthCheckPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.health_check_port {
-            params.put(&format!("{}{}", prefix, "HealthCheckPort"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckPort"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.health_check_protocol {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckProtocol"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
@@ -1571,21 +1976,30 @@ impl CreateTargetGroupInputSerializer {
         if let Some(ref field_value) = obj.matcher {
             MatcherSerializer::serialize(params, &format!("{}{}", prefix, "Matcher"), field_value);
         }
-        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name.to_string());
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.protocol {
-            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Protocol"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.protocol_version {
-            params.put(&format!("{}{}", prefix, "ProtocolVersion"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ProtocolVersion"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         if let Some(ref field_value) = obj.target_type {
-            params.put(&format!("{}{}", prefix, "TargetType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
@@ -1594,7 +2008,7 @@ impl CreateTargetGroupInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.vpc_id {
-            params.put(&format!("{}{}", prefix, "VpcId"), &field_value);
+            params.put(&format!("{}{}", prefix, "VpcId"), &field_value.to_string());
         }
     }
 }
@@ -1679,7 +2093,10 @@ impl DeleteListenerInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
     }
 }
 
@@ -1722,7 +2139,7 @@ impl DeleteLoadBalancerInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
     }
 }
@@ -1764,7 +2181,10 @@ impl DeleteRuleInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "RuleArn"), &obj.rule_arn);
+        params.put(
+            &format!("{}{}", prefix, "RuleArn"),
+            &obj.rule_arn.to_string(),
+        );
     }
 }
 
@@ -1807,7 +2227,7 @@ impl DeleteTargetGroupInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
     }
 }
@@ -1853,7 +2273,7 @@ impl DeregisterTargetsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
         TargetDescriptionsSerializer::serialize(
             params,
@@ -1903,7 +2323,7 @@ impl DescribeAccountLimitsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
@@ -1969,9 +2389,12 @@ impl DescribeListenerCertificatesInputSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
@@ -2047,10 +2470,13 @@ impl DescribeListenersInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.load_balancer_arn {
-            params.put(&format!("{}{}", prefix, "LoadBalancerArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "LoadBalancerArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
@@ -2114,7 +2540,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
     }
 }
@@ -2181,7 +2607,7 @@ impl DescribeLoadBalancersInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.names {
             LoadBalancerNamesSerializer::serialize(
@@ -2257,10 +2683,13 @@ impl DescribeRulesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.listener_arn {
-            params.put(&format!("{}{}", prefix, "ListenerArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ListenerArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.page_size {
             params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
@@ -2329,7 +2758,7 @@ impl DescribeSSLPoliciesInputSerializer {
         }
 
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.names {
             SslPolicyNamesSerializer::serialize(
@@ -2452,7 +2881,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
     }
 }
@@ -2514,10 +2943,13 @@ impl DescribeTargetGroupsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.load_balancer_arn {
-            params.put(&format!("{}{}", prefix, "LoadBalancerArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "LoadBalancerArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.names {
             TargetGroupNamesSerializer::serialize(
@@ -2597,7 +3029,7 @@ impl DescribeTargetHealthInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
         if let Some(ref field_value) = obj.targets {
             TargetDescriptionsSerializer::serialize(
@@ -2716,12 +3148,21 @@ impl FixedResponseActionConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.content_type {
-            params.put(&format!("{}{}", prefix, "ContentType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "ContentType"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.message_body {
-            params.put(&format!("{}{}", prefix, "MessageBody"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "MessageBody"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "StatusCode"), &obj.status_code);
+        params.put(
+            &format!("{}{}", prefix, "StatusCode"),
+            &obj.status_code.to_string(),
+        );
     }
 }
 
@@ -2979,7 +3420,10 @@ impl HttpHeaderConditionConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.http_header_name {
-            params.put(&format!("{}{}", prefix, "HttpHeaderName"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HttpHeaderName"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.values {
             ListOfStringSerializer::serialize(
@@ -3069,12 +3513,118 @@ impl IpAddressDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpAddressType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpAddressType {
+    Dualstack,
+    Ipv4,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpAddressType),
+}
+
+impl Default for IpAddressType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpAddressType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpAddressType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpAddressType {
+    fn into(self) -> String {
+        match self {
+            IpAddressType::Dualstack => "dualstack".to_string(),
+            IpAddressType::Ipv4 => "ipv4".to_string(),
+            IpAddressType::UnknownVariant(UnknownIpAddressType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpAddressType {
+    fn into(self) -> &'a str {
+        match self {
+            IpAddressType::Dualstack => &"dualstack",
+            IpAddressType::Ipv4 => &"ipv4",
+            IpAddressType::UnknownVariant(UnknownIpAddressType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpAddressType {
+    fn from(name: &str) -> Self {
+        match name {
+            "dualstack" => IpAddressType::Dualstack,
+            "ipv4" => IpAddressType::Ipv4,
+            _ => IpAddressType::UnknownVariant(UnknownIpAddressType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpAddressType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "dualstack" => IpAddressType::Dualstack,
+            "ipv4" => IpAddressType::Ipv4,
+            _ => IpAddressType::UnknownVariant(UnknownIpAddressType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpAddressType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for IpAddressType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IpAddressType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct IpAddressTypeDeserializer;
 impl IpAddressTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IpAddressType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3157,7 +3707,7 @@ impl ListOfStringSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3179,7 +3729,7 @@ pub struct Listener {
     /// <p>The port on which the load balancer is listening.</p>
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<ProtocolEnum>,
     /// <p>[HTTPS or TLS listener] The security policy that defines which protocols and ciphers are supported.</p>
     pub ssl_policy: Option<String>,
 }
@@ -3250,7 +3800,7 @@ impl ListenerArnsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3288,19 +3838,19 @@ pub struct LoadBalancer {
     /// <p>The public DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
     /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses).</p>
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: Option<String>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
     /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer.</p>
-    pub scheme: Option<String>,
+    pub scheme: Option<LoadBalancerSchemeEnum>,
     /// <p>The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
     /// <p>The state of the load balancer.</p>
     pub state: Option<LoadBalancerState>,
     /// <p>The type of load balancer.</p>
-    pub type_: Option<String>,
+    pub type_: Option<LoadBalancerTypeEnum>,
     /// <p>The ID of the VPC for the load balancer.</p>
     pub vpc_id: Option<String>,
 }
@@ -3488,7 +4038,7 @@ impl LoadBalancerArnsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3541,10 +4091,10 @@ impl LoadBalancerAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -3612,8 +4162,114 @@ impl LoadBalancerNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerSchemeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerSchemeEnum {
+    Internal,
+    InternetFacing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerSchemeEnum),
+}
+
+impl Default for LoadBalancerSchemeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerSchemeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerSchemeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerSchemeEnum {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerSchemeEnum::Internal => "internal".to_string(),
+            LoadBalancerSchemeEnum::InternetFacing => "internet-facing".to_string(),
+            LoadBalancerSchemeEnum::UnknownVariant(UnknownLoadBalancerSchemeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerSchemeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerSchemeEnum::Internal => &"internal",
+            LoadBalancerSchemeEnum::InternetFacing => &"internet-facing",
+            LoadBalancerSchemeEnum::UnknownVariant(UnknownLoadBalancerSchemeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerSchemeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "internal" => LoadBalancerSchemeEnum::Internal,
+            "internet-facing" => LoadBalancerSchemeEnum::InternetFacing,
+            _ => LoadBalancerSchemeEnum::UnknownVariant(UnknownLoadBalancerSchemeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerSchemeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "internal" => LoadBalancerSchemeEnum::Internal,
+            "internet-facing" => LoadBalancerSchemeEnum::InternetFacing,
+            _ => LoadBalancerSchemeEnum::UnknownVariant(UnknownLoadBalancerSchemeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerSchemeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LoadBalancerSchemeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LoadBalancerSchemeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3621,8 +4277,11 @@ impl LoadBalancerNamesSerializer {
 struct LoadBalancerSchemeEnumDeserializer;
 impl LoadBalancerSchemeEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerSchemeEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Information about the state of the load balancer.</p>
@@ -3630,7 +4289,7 @@ impl LoadBalancerSchemeEnumDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerState {
     /// <p>The state code. The initial state of the load balancer is <code>provisioning</code>. After the load balancer is fully set up and ready to route traffic, its state is <code>active</code>. If the load balancer could not be set up, its state is <code>failed</code>.</p>
-    pub code: Option<String>,
+    pub code: Option<LoadBalancerStateEnum>,
     /// <p>A description of the state.</p>
     pub reason: Option<String>,
 }
@@ -3659,20 +4318,255 @@ impl LoadBalancerStateDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerStateEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerStateEnum {
+    Active,
+    ActiveImpaired,
+    Failed,
+    Provisioning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerStateEnum),
+}
+
+impl Default for LoadBalancerStateEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerStateEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerStateEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerStateEnum {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerStateEnum::Active => "active".to_string(),
+            LoadBalancerStateEnum::ActiveImpaired => "active_impaired".to_string(),
+            LoadBalancerStateEnum::Failed => "failed".to_string(),
+            LoadBalancerStateEnum::Provisioning => "provisioning".to_string(),
+            LoadBalancerStateEnum::UnknownVariant(UnknownLoadBalancerStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerStateEnum {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerStateEnum::Active => &"active",
+            LoadBalancerStateEnum::ActiveImpaired => &"active_impaired",
+            LoadBalancerStateEnum::Failed => &"failed",
+            LoadBalancerStateEnum::Provisioning => &"provisioning",
+            LoadBalancerStateEnum::UnknownVariant(UnknownLoadBalancerStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerStateEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "active" => LoadBalancerStateEnum::Active,
+            "active_impaired" => LoadBalancerStateEnum::ActiveImpaired,
+            "failed" => LoadBalancerStateEnum::Failed,
+            "provisioning" => LoadBalancerStateEnum::Provisioning,
+            _ => LoadBalancerStateEnum::UnknownVariant(UnknownLoadBalancerStateEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerStateEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "active" => LoadBalancerStateEnum::Active,
+            "active_impaired" => LoadBalancerStateEnum::ActiveImpaired,
+            "failed" => LoadBalancerStateEnum::Failed,
+            "provisioning" => LoadBalancerStateEnum::Provisioning,
+            _ => LoadBalancerStateEnum::UnknownVariant(UnknownLoadBalancerStateEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LoadBalancerStateEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LoadBalancerStateEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct LoadBalancerStateEnumDeserializer;
 impl LoadBalancerStateEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerStateEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadBalancerTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadBalancerTypeEnum {
+    Application,
+    Gateway,
+    Network,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadBalancerTypeEnum),
+}
+
+impl Default for LoadBalancerTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadBalancerTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadBalancerTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadBalancerTypeEnum {
+    fn into(self) -> String {
+        match self {
+            LoadBalancerTypeEnum::Application => "application".to_string(),
+            LoadBalancerTypeEnum::Gateway => "gateway".to_string(),
+            LoadBalancerTypeEnum::Network => "network".to_string(),
+            LoadBalancerTypeEnum::UnknownVariant(UnknownLoadBalancerTypeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadBalancerTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            LoadBalancerTypeEnum::Application => &"application",
+            LoadBalancerTypeEnum::Gateway => &"gateway",
+            LoadBalancerTypeEnum::Network => &"network",
+            LoadBalancerTypeEnum::UnknownVariant(UnknownLoadBalancerTypeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadBalancerTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "application" => LoadBalancerTypeEnum::Application,
+            "gateway" => LoadBalancerTypeEnum::Gateway,
+            "network" => LoadBalancerTypeEnum::Network,
+            _ => LoadBalancerTypeEnum::UnknownVariant(UnknownLoadBalancerTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadBalancerTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "application" => LoadBalancerTypeEnum::Application,
+            "gateway" => LoadBalancerTypeEnum::Gateway,
+            "network" => LoadBalancerTypeEnum::Network,
+            _ => LoadBalancerTypeEnum::UnknownVariant(UnknownLoadBalancerTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadBalancerTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for LoadBalancerTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LoadBalancerTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct LoadBalancerTypeEnumDeserializer;
 impl LoadBalancerTypeEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerTypeEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3745,10 +4639,16 @@ impl MatcherSerializer {
         }
 
         if let Some(ref field_value) = obj.grpc_code {
-            params.put(&format!("{}{}", prefix, "GrpcCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "GrpcCode"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.http_code {
-            params.put(&format!("{}{}", prefix, "HttpCode"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HttpCode"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3775,7 +4675,7 @@ pub struct ModifyListenerInput {
     /// <p>The port for connections from clients to the load balancer. You cannot specify a port for a Gateway Load Balancer.</p>
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support the HTTP and HTTPS protocols. Network Load Balancers support the TCP, TLS, UDP, and TCP_UDP protocols. You can’t change the protocol to UDP or TCP_UDP if dual-stack mode is enabled. You cannot specify a protocol for a Gateway Load Balancer.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<ProtocolEnum>,
     /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security policies</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies">Security policies</a> in the <i>Network Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
 }
@@ -3810,15 +4710,24 @@ impl ModifyListenerInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
         if let Some(ref field_value) = obj.protocol {
-            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Protocol"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.ssl_policy {
-            params.put(&format!("{}{}", prefix, "SslPolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SslPolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3876,7 +4785,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
     }
 }
@@ -3943,7 +4852,10 @@ impl ModifyRuleInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "RuleArn"), &obj.rule_arn);
+        params.put(
+            &format!("{}{}", prefix, "RuleArn"),
+            &obj.rule_arn.to_string(),
+        );
     }
 }
 
@@ -4000,7 +4912,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
     }
 }
@@ -4049,7 +4961,7 @@ pub struct ModifyTargetGroupInput {
     /// <p>The port the load balancer uses when performing health checks on targets.</p>
     pub health_check_port: Option<String>,
     /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported for health checks only if the protocol of the target group is TCP, TLS, UDP, or TCP_UDP. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<ProtocolEnum>,
     /// <p>[HTTP/HTTPS health checks] The amount of time, in seconds, during which no response means a failed health check.</p> <p>With Network Load Balancers, you can't modify this setting.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>
@@ -4081,15 +4993,21 @@ impl ModifyTargetGroupInputSerializer {
             );
         }
         if let Some(ref field_value) = obj.health_check_path {
-            params.put(&format!("{}{}", prefix, "HealthCheckPath"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckPath"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.health_check_port {
-            params.put(&format!("{}{}", prefix, "HealthCheckPort"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "HealthCheckPort"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.health_check_protocol {
             params.put(
                 &format!("{}{}", prefix, "HealthCheckProtocol"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.health_check_timeout_seconds {
@@ -4109,7 +5027,7 @@ impl ModifyTargetGroupInputSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
@@ -4246,12 +5164,143 @@ impl PrivateIPv4AddressDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtocolEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtocolEnum {
+    Geneve,
+    Http,
+    Https,
+    Tcp,
+    TcpUdp,
+    Tls,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtocolEnum),
+}
+
+impl Default for ProtocolEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtocolEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtocolEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtocolEnum {
+    fn into(self) -> String {
+        match self {
+            ProtocolEnum::Geneve => "GENEVE".to_string(),
+            ProtocolEnum::Http => "HTTP".to_string(),
+            ProtocolEnum::Https => "HTTPS".to_string(),
+            ProtocolEnum::Tcp => "TCP".to_string(),
+            ProtocolEnum::TcpUdp => "TCP_UDP".to_string(),
+            ProtocolEnum::Tls => "TLS".to_string(),
+            ProtocolEnum::Udp => "UDP".to_string(),
+            ProtocolEnum::UnknownVariant(UnknownProtocolEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtocolEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ProtocolEnum::Geneve => &"GENEVE",
+            ProtocolEnum::Http => &"HTTP",
+            ProtocolEnum::Https => &"HTTPS",
+            ProtocolEnum::Tcp => &"TCP",
+            ProtocolEnum::TcpUdp => &"TCP_UDP",
+            ProtocolEnum::Tls => &"TLS",
+            ProtocolEnum::Udp => &"UDP",
+            ProtocolEnum::UnknownVariant(UnknownProtocolEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProtocolEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "GENEVE" => ProtocolEnum::Geneve,
+            "HTTP" => ProtocolEnum::Http,
+            "HTTPS" => ProtocolEnum::Https,
+            "TCP" => ProtocolEnum::Tcp,
+            "TCP_UDP" => ProtocolEnum::TcpUdp,
+            "TLS" => ProtocolEnum::Tls,
+            "UDP" => ProtocolEnum::Udp,
+            _ => ProtocolEnum::UnknownVariant(UnknownProtocolEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtocolEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GENEVE" => ProtocolEnum::Geneve,
+            "HTTP" => ProtocolEnum::Http,
+            "HTTPS" => ProtocolEnum::Https,
+            "TCP" => ProtocolEnum::Tcp,
+            "TCP_UDP" => ProtocolEnum::TcpUdp,
+            "TLS" => ProtocolEnum::Tls,
+            "UDP" => ProtocolEnum::Udp,
+            _ => ProtocolEnum::UnknownVariant(UnknownProtocolEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtocolEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ProtocolEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProtocolEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct ProtocolEnumDeserializer;
 impl ProtocolEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ProtocolEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -4364,10 +5413,10 @@ impl QueryStringKeyValuePairSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -4420,7 +5469,7 @@ pub struct RedirectActionConfig {
     /// <p>The query parameters, URL-encoded when necessary, but not percent-encoded. Do not include the leading "?", as it is automatically added. You can specify any of the reserved keywords.</p>
     pub query: Option<String>,
     /// <p>The HTTP redirect code. The redirect is either permanent (HTTP 301) or temporary (HTTP 302).</p>
-    pub status_code: String,
+    pub status_code: RedirectActionStatusCodeEnum,
 }
 
 #[allow(dead_code)]
@@ -4473,21 +5522,27 @@ impl RedirectActionConfigSerializer {
         }
 
         if let Some(ref field_value) = obj.host {
-            params.put(&format!("{}{}", prefix, "Host"), &field_value);
+            params.put(&format!("{}{}", prefix, "Host"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.path {
-            params.put(&format!("{}{}", prefix, "Path"), &field_value);
+            params.put(&format!("{}{}", prefix, "Path"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.port {
-            params.put(&format!("{}{}", prefix, "Port"), &field_value);
+            params.put(&format!("{}{}", prefix, "Port"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.protocol {
-            params.put(&format!("{}{}", prefix, "Protocol"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Protocol"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.query {
-            params.put(&format!("{}{}", prefix, "Query"), &field_value);
+            params.put(&format!("{}{}", prefix, "Query"), &field_value.to_string());
         }
-        params.put(&format!("{}{}", prefix, "StatusCode"), &obj.status_code);
+        params.put(
+            &format!("{}{}", prefix, "StatusCode"),
+            &obj.status_code.to_string(),
+        );
     }
 }
 
@@ -4531,12 +5586,128 @@ impl RedirectActionQueryDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedirectActionStatusCodeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedirectActionStatusCodeEnum {
+    Http301,
+    Http302,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedirectActionStatusCodeEnum),
+}
+
+impl Default for RedirectActionStatusCodeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedirectActionStatusCodeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedirectActionStatusCodeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedirectActionStatusCodeEnum {
+    fn into(self) -> String {
+        match self {
+            RedirectActionStatusCodeEnum::Http301 => "HTTP_301".to_string(),
+            RedirectActionStatusCodeEnum::Http302 => "HTTP_302".to_string(),
+            RedirectActionStatusCodeEnum::UnknownVariant(UnknownRedirectActionStatusCodeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedirectActionStatusCodeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            RedirectActionStatusCodeEnum::Http301 => &"HTTP_301",
+            RedirectActionStatusCodeEnum::Http302 => &"HTTP_302",
+            RedirectActionStatusCodeEnum::UnknownVariant(UnknownRedirectActionStatusCodeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RedirectActionStatusCodeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTTP_301" => RedirectActionStatusCodeEnum::Http301,
+            "HTTP_302" => RedirectActionStatusCodeEnum::Http302,
+            _ => {
+                RedirectActionStatusCodeEnum::UnknownVariant(UnknownRedirectActionStatusCodeEnum {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for RedirectActionStatusCodeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTTP_301" => RedirectActionStatusCodeEnum::Http301,
+            "HTTP_302" => RedirectActionStatusCodeEnum::Http302,
+            _ => {
+                RedirectActionStatusCodeEnum::UnknownVariant(UnknownRedirectActionStatusCodeEnum {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedirectActionStatusCodeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RedirectActionStatusCodeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RedirectActionStatusCodeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct RedirectActionStatusCodeEnumDeserializer;
 impl RedirectActionStatusCodeEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RedirectActionStatusCodeEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -4559,7 +5730,7 @@ impl RegisterTargetsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "TargetGroupArn"),
-            &obj.target_group_arn,
+            &obj.target_group_arn.to_string(),
         );
         TargetDescriptionsSerializer::serialize(
             params,
@@ -4613,7 +5784,10 @@ impl RemoveListenerCertificatesInputSerializer {
             &format!("{}{}", prefix, "Certificates"),
             &obj.certificates,
         );
-        params.put(&format!("{}{}", prefix, "ListenerArn"), &obj.listener_arn);
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.to_string(),
+        );
     }
 }
 
@@ -4701,7 +5875,7 @@ impl ResourceArnsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4769,7 +5943,7 @@ impl RuleArnsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -4873,7 +6047,7 @@ impl RuleConditionSerializer {
         }
 
         if let Some(ref field_value) = obj.field {
-            params.put(&format!("{}{}", prefix, "Field"), &field_value);
+            params.put(&format!("{}{}", prefix, "Field"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.host_header_config {
             HostHeaderConditionConfigSerializer::serialize(
@@ -4991,7 +6165,10 @@ impl RulePriorityPairSerializer {
             params.put(&format!("{}{}", prefix, "Priority"), &field_value);
         }
         if let Some(ref field_value) = obj.rule_arn {
-            params.put(&format!("{}{}", prefix, "RuleArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "RuleArn"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5047,7 +6224,7 @@ impl SecurityGroupsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5056,7 +6233,7 @@ impl SecurityGroupsSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetIpAddressTypeInput {
     /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>. You can’t specify <code>dualstack</code> for a load balancer with a UDP or TCP_UDP listener.</p>
-    pub ip_address_type: String,
+    pub ip_address_type: IpAddressType,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
 }
@@ -5072,11 +6249,11 @@ impl SetIpAddressTypeInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "IpAddressType"),
-            &obj.ip_address_type,
+            &obj.ip_address_type.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
     }
 }
@@ -5085,7 +6262,7 @@ impl SetIpAddressTypeInputSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SetIpAddressTypeOutput {
     /// <p>The IP address type.</p>
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
 }
 
 #[allow(dead_code)]
@@ -5186,7 +6363,7 @@ impl SetSecurityGroupsInputSerializer {
 
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
         SecurityGroupsSerializer::serialize(
             params,
@@ -5232,7 +6409,7 @@ impl SetSecurityGroupsOutputDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubnetsInput {
     /// <p>[Network Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). You can’t specify <code>dualstack</code> for a load balancer with a UDP or TCP_UDP listener. Internal load balancers must use <code>ipv4</code>.</p>
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
     /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Application Load Balancers on Outposts] You must specify one Outpost subnet.</p> <p>[Application Load Balancers on Local Zones] You can specify subnets from one or more Local Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet if you need static IP addresses for your internet-facing load balancer. For internal load balancers, you can specify one private IP address per subnet from the IPv4 range of the subnet. For internet-facing load balancer, you can specify one IPv6 address per subnet.</p>
@@ -5251,11 +6428,14 @@ impl SetSubnetsInputSerializer {
         }
 
         if let Some(ref field_value) = obj.ip_address_type {
-            params.put(&format!("{}{}", prefix, "IpAddressType"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IpAddressType"),
+                &field_value.to_string(),
+            );
         }
         params.put(
             &format!("{}{}", prefix, "LoadBalancerArn"),
-            &obj.load_balancer_arn,
+            &obj.load_balancer_arn.to_string(),
         );
         if let Some(ref field_value) = obj.subnet_mappings {
             SubnetMappingsSerializer::serialize(
@@ -5276,7 +6456,7 @@ pub struct SetSubnetsOutput {
     /// <p>Information about the subnets.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
     /// <p>[Network Load Balancers] The IP address type.</p>
-    pub ip_address_type: Option<String>,
+    pub ip_address_type: Option<IpAddressType>,
 }
 
 #[allow(dead_code)]
@@ -5434,7 +6614,7 @@ impl SslPolicyNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5521,16 +6701,28 @@ impl SubnetMappingSerializer {
         }
 
         if let Some(ref field_value) = obj.allocation_id {
-            params.put(&format!("{}{}", prefix, "AllocationId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AllocationId"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.i_pv_6_address {
-            params.put(&format!("{}{}", prefix, "IPv6Address"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "IPv6Address"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.private_i_pv_4_address {
-            params.put(&format!("{}{}", prefix, "PrivateIPv4Address"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "PrivateIPv4Address"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.subnet_id {
-            params.put(&format!("{}{}", prefix, "SubnetId"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SubnetId"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -5552,7 +6744,7 @@ impl SubnetsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5597,9 +6789,9 @@ impl TagSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key.to_string());
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -5672,7 +6864,7 @@ impl TagKeysSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -5767,9 +6959,12 @@ impl TargetDescriptionSerializer {
         }
 
         if let Some(ref field_value) = obj.availability_zone {
-            params.put(&format!("{}{}", prefix, "AvailabilityZone"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "Id"), &obj.id);
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.to_string());
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
@@ -5800,7 +6995,7 @@ pub struct TargetGroup {
     /// <p>The port to use to connect with the target.</p>
     pub health_check_port: Option<String>,
     /// <p>The protocol to use to connect with the target. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.</p>
-    pub health_check_protocol: Option<String>,
+    pub health_check_protocol: Option<ProtocolEnum>,
     /// <p>The amount of time, in seconds, during which no response means a failed health check.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>
@@ -5812,7 +7007,7 @@ pub struct TargetGroup {
     /// <p>The port on which the targets are listening. Not used if the target is a Lambda function.</p>
     pub port: Option<i64>,
     /// <p>The protocol to use for routing traffic to the targets.</p>
-    pub protocol: Option<String>,
+    pub protocol: Option<ProtocolEnum>,
     /// <p>[HTTP/HTTPS protocol] The protocol version. The possible values are <code>GRPC</code>, <code>HTTP1</code>, and <code>HTTP2</code>.</p>
     pub protocol_version: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
@@ -5820,7 +7015,7 @@ pub struct TargetGroup {
     /// <p>The name of the target group.</p>
     pub target_group_name: Option<String>,
     /// <p>The type of target that you must specify when registering targets with this target group. The possible values are <code>instance</code> (register targets by instance ID), <code>ip</code> (register targets by IP address), or <code>lambda</code> (register a single Lambda function as a target).</p>
-    pub target_type: Option<String>,
+    pub target_type: Option<TargetTypeEnum>,
     /// <p>The number of consecutive health check failures required before considering the target unhealthy.</p>
     pub unhealthy_threshold_count: Option<i64>,
     /// <p>The ID of the VPC for the targets.</p>
@@ -5949,7 +7144,7 @@ impl TargetGroupArnsSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6002,10 +7197,10 @@ impl TargetGroupAttributeSerializer {
         }
 
         if let Some(ref field_value) = obj.key {
-            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+            params.put(&format!("{}{}", prefix, "Key"), &field_value.to_string());
         }
         if let Some(ref field_value) = obj.value {
-            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+            params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
     }
 }
@@ -6103,7 +7298,7 @@ impl TargetGroupNamesSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -6234,7 +7429,10 @@ impl TargetGroupTupleSerializer {
         }
 
         if let Some(ref field_value) = obj.target_group_arn {
-            params.put(&format!("{}{}", prefix, "TargetGroupArn"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TargetGroupArn"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.weight {
             params.put(&format!("{}{}", prefix, "Weight"), &field_value);
@@ -6275,9 +7473,9 @@ pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
     /// <p><p>The reason code.</p> <p>If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code. Applies only to Application Load Balancers and Gateway Load Balancers.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out. Applies only to Application Load Balancers and Gateway Load Balancers.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The load balancer received an error while establishing a connection to the target or the target response was malformed.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error. Applies only to Application Load Balancers.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> <li> <p> <code>Target.IpUnusable</code> - The target IP address is reserved for use by a load balancer.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul> <p>If the target state is <code>unavailable</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.HealthCheckDisabled</code> - Health checks are disabled for the target group. Applies only to Application Load Balancers.</p> </li> <li> <p> <code>Elb.InternalError</code> - Target health is unavailable due to an internal error. Applies only to Network Load Balancers.</p> </li> </ul></p>
-    pub reason: Option<String>,
+    pub reason: Option<TargetHealthReasonEnum>,
     /// <p>The state of the target.</p>
-    pub state: Option<String>,
+    pub state: Option<TargetHealthStateEnum>,
 }
 
 #[allow(dead_code)]
@@ -6378,20 +7576,328 @@ impl TargetHealthDescriptionsDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetHealthReasonEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetHealthReasonEnum {
+    ElbInitialHealthChecking,
+    ElbInternalError,
+    ElbRegistrationInProgress,
+    TargetDeregistrationInProgress,
+    TargetFailedHealthChecks,
+    TargetHealthCheckDisabled,
+    TargetInvalidState,
+    TargetIpUnusable,
+    TargetNotInUse,
+    TargetNotRegistered,
+    TargetResponseCodeMismatch,
+    TargetTimeout,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetHealthReasonEnum),
+}
+
+impl Default for TargetHealthReasonEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetHealthReasonEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetHealthReasonEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetHealthReasonEnum {
+    fn into(self) -> String {
+        match self {
+            TargetHealthReasonEnum::ElbInitialHealthChecking => {
+                "Elb.InitialHealthChecking".to_string()
+            }
+            TargetHealthReasonEnum::ElbInternalError => "Elb.InternalError".to_string(),
+            TargetHealthReasonEnum::ElbRegistrationInProgress => {
+                "Elb.RegistrationInProgress".to_string()
+            }
+            TargetHealthReasonEnum::TargetDeregistrationInProgress => {
+                "Target.DeregistrationInProgress".to_string()
+            }
+            TargetHealthReasonEnum::TargetFailedHealthChecks => {
+                "Target.FailedHealthChecks".to_string()
+            }
+            TargetHealthReasonEnum::TargetHealthCheckDisabled => {
+                "Target.HealthCheckDisabled".to_string()
+            }
+            TargetHealthReasonEnum::TargetInvalidState => "Target.InvalidState".to_string(),
+            TargetHealthReasonEnum::TargetIpUnusable => "Target.IpUnusable".to_string(),
+            TargetHealthReasonEnum::TargetNotInUse => "Target.NotInUse".to_string(),
+            TargetHealthReasonEnum::TargetNotRegistered => "Target.NotRegistered".to_string(),
+            TargetHealthReasonEnum::TargetResponseCodeMismatch => {
+                "Target.ResponseCodeMismatch".to_string()
+            }
+            TargetHealthReasonEnum::TargetTimeout => "Target.Timeout".to_string(),
+            TargetHealthReasonEnum::UnknownVariant(UnknownTargetHealthReasonEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetHealthReasonEnum {
+    fn into(self) -> &'a str {
+        match self {
+            TargetHealthReasonEnum::ElbInitialHealthChecking => &"Elb.InitialHealthChecking",
+            TargetHealthReasonEnum::ElbInternalError => &"Elb.InternalError",
+            TargetHealthReasonEnum::ElbRegistrationInProgress => &"Elb.RegistrationInProgress",
+            TargetHealthReasonEnum::TargetDeregistrationInProgress => {
+                &"Target.DeregistrationInProgress"
+            }
+            TargetHealthReasonEnum::TargetFailedHealthChecks => &"Target.FailedHealthChecks",
+            TargetHealthReasonEnum::TargetHealthCheckDisabled => &"Target.HealthCheckDisabled",
+            TargetHealthReasonEnum::TargetInvalidState => &"Target.InvalidState",
+            TargetHealthReasonEnum::TargetIpUnusable => &"Target.IpUnusable",
+            TargetHealthReasonEnum::TargetNotInUse => &"Target.NotInUse",
+            TargetHealthReasonEnum::TargetNotRegistered => &"Target.NotRegistered",
+            TargetHealthReasonEnum::TargetResponseCodeMismatch => &"Target.ResponseCodeMismatch",
+            TargetHealthReasonEnum::TargetTimeout => &"Target.Timeout",
+            TargetHealthReasonEnum::UnknownVariant(UnknownTargetHealthReasonEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetHealthReasonEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "Elb.InitialHealthChecking" => TargetHealthReasonEnum::ElbInitialHealthChecking,
+            "Elb.InternalError" => TargetHealthReasonEnum::ElbInternalError,
+            "Elb.RegistrationInProgress" => TargetHealthReasonEnum::ElbRegistrationInProgress,
+            "Target.DeregistrationInProgress" => {
+                TargetHealthReasonEnum::TargetDeregistrationInProgress
+            }
+            "Target.FailedHealthChecks" => TargetHealthReasonEnum::TargetFailedHealthChecks,
+            "Target.HealthCheckDisabled" => TargetHealthReasonEnum::TargetHealthCheckDisabled,
+            "Target.InvalidState" => TargetHealthReasonEnum::TargetInvalidState,
+            "Target.IpUnusable" => TargetHealthReasonEnum::TargetIpUnusable,
+            "Target.NotInUse" => TargetHealthReasonEnum::TargetNotInUse,
+            "Target.NotRegistered" => TargetHealthReasonEnum::TargetNotRegistered,
+            "Target.ResponseCodeMismatch" => TargetHealthReasonEnum::TargetResponseCodeMismatch,
+            "Target.Timeout" => TargetHealthReasonEnum::TargetTimeout,
+            _ => TargetHealthReasonEnum::UnknownVariant(UnknownTargetHealthReasonEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetHealthReasonEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Elb.InitialHealthChecking" => TargetHealthReasonEnum::ElbInitialHealthChecking,
+            "Elb.InternalError" => TargetHealthReasonEnum::ElbInternalError,
+            "Elb.RegistrationInProgress" => TargetHealthReasonEnum::ElbRegistrationInProgress,
+            "Target.DeregistrationInProgress" => {
+                TargetHealthReasonEnum::TargetDeregistrationInProgress
+            }
+            "Target.FailedHealthChecks" => TargetHealthReasonEnum::TargetFailedHealthChecks,
+            "Target.HealthCheckDisabled" => TargetHealthReasonEnum::TargetHealthCheckDisabled,
+            "Target.InvalidState" => TargetHealthReasonEnum::TargetInvalidState,
+            "Target.IpUnusable" => TargetHealthReasonEnum::TargetIpUnusable,
+            "Target.NotInUse" => TargetHealthReasonEnum::TargetNotInUse,
+            "Target.NotRegistered" => TargetHealthReasonEnum::TargetNotRegistered,
+            "Target.ResponseCodeMismatch" => TargetHealthReasonEnum::TargetResponseCodeMismatch,
+            "Target.Timeout" => TargetHealthReasonEnum::TargetTimeout,
+            _ => TargetHealthReasonEnum::UnknownVariant(UnknownTargetHealthReasonEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetHealthReasonEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TargetHealthReasonEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetHealthReasonEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TargetHealthReasonEnumDeserializer;
 impl TargetHealthReasonEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TargetHealthReasonEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetHealthStateEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetHealthStateEnum {
+    Draining,
+    Healthy,
+    Initial,
+    Unavailable,
+    Unhealthy,
+    Unused,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetHealthStateEnum),
+}
+
+impl Default for TargetHealthStateEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetHealthStateEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetHealthStateEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetHealthStateEnum {
+    fn into(self) -> String {
+        match self {
+            TargetHealthStateEnum::Draining => "draining".to_string(),
+            TargetHealthStateEnum::Healthy => "healthy".to_string(),
+            TargetHealthStateEnum::Initial => "initial".to_string(),
+            TargetHealthStateEnum::Unavailable => "unavailable".to_string(),
+            TargetHealthStateEnum::Unhealthy => "unhealthy".to_string(),
+            TargetHealthStateEnum::Unused => "unused".to_string(),
+            TargetHealthStateEnum::UnknownVariant(UnknownTargetHealthStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetHealthStateEnum {
+    fn into(self) -> &'a str {
+        match self {
+            TargetHealthStateEnum::Draining => &"draining",
+            TargetHealthStateEnum::Healthy => &"healthy",
+            TargetHealthStateEnum::Initial => &"initial",
+            TargetHealthStateEnum::Unavailable => &"unavailable",
+            TargetHealthStateEnum::Unhealthy => &"unhealthy",
+            TargetHealthStateEnum::Unused => &"unused",
+            TargetHealthStateEnum::UnknownVariant(UnknownTargetHealthStateEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetHealthStateEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "draining" => TargetHealthStateEnum::Draining,
+            "healthy" => TargetHealthStateEnum::Healthy,
+            "initial" => TargetHealthStateEnum::Initial,
+            "unavailable" => TargetHealthStateEnum::Unavailable,
+            "unhealthy" => TargetHealthStateEnum::Unhealthy,
+            "unused" => TargetHealthStateEnum::Unused,
+            _ => TargetHealthStateEnum::UnknownVariant(UnknownTargetHealthStateEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetHealthStateEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "draining" => TargetHealthStateEnum::Draining,
+            "healthy" => TargetHealthStateEnum::Healthy,
+            "initial" => TargetHealthStateEnum::Initial,
+            "unavailable" => TargetHealthStateEnum::Unavailable,
+            "unhealthy" => TargetHealthStateEnum::Unhealthy,
+            "unused" => TargetHealthStateEnum::Unused,
+            _ => TargetHealthStateEnum::UnknownVariant(UnknownTargetHealthStateEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetHealthStateEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TargetHealthStateEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetHealthStateEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TargetHealthStateEnumDeserializer;
 impl TargetHealthStateEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TargetHealthStateEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -6402,12 +7908,123 @@ impl TargetIdDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetTypeEnum {
+    Instance,
+    Ip,
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetTypeEnum),
+}
+
+impl Default for TargetTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetTypeEnum {
+    fn into(self) -> String {
+        match self {
+            TargetTypeEnum::Instance => "instance".to_string(),
+            TargetTypeEnum::Ip => "ip".to_string(),
+            TargetTypeEnum::Lambda => "lambda".to_string(),
+            TargetTypeEnum::UnknownVariant(UnknownTargetTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            TargetTypeEnum::Instance => &"instance",
+            TargetTypeEnum::Ip => &"ip",
+            TargetTypeEnum::Lambda => &"lambda",
+            TargetTypeEnum::UnknownVariant(UnknownTargetTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "instance" => TargetTypeEnum::Instance,
+            "ip" => TargetTypeEnum::Ip,
+            "lambda" => TargetTypeEnum::Lambda,
+            _ => TargetTypeEnum::UnknownVariant(UnknownTargetTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "instance" => TargetTypeEnum::Instance,
+            "ip" => TargetTypeEnum::Ip,
+            "lambda" => TargetTypeEnum::Lambda,
+            _ => TargetTypeEnum::UnknownVariant(UnknownTargetTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TargetTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TargetTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TargetTypeEnumDeserializer;
 impl TargetTypeEnumDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TargetTypeEnum, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]

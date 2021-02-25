@@ -220,11 +220,121 @@ pub struct UsageRecordResult {
     /// <p><p>The UsageRecordResult Status indicates the status of an individual UsageRecord processed by BatchMeterUsage.</p> <ul> <li> <p> <i>Success</i>- The UsageRecord was accepted and honored by BatchMeterUsage.</p> </li> <li> <p> <i>CustomerNotSubscribed</i>- The CustomerIdentifier specified is not subscribed to your product. The UsageRecord was not honored. Future UsageRecords for this customer will fail until the customer subscribes to your product.</p> </li> <li> <p> <i>DuplicateRecord</i>- Indicates that the UsageRecord was invalid and not honored. A previously metered UsageRecord had the same customer, dimension, and time, but a different quantity.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<UsageRecordResultStatus>,
     /// <p>The UsageRecord that was part of the BatchMeterUsage request.</p>
     #[serde(rename = "UsageRecord")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_record: Option<UsageRecord>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUsageRecordResultStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UsageRecordResultStatus {
+    CustomerNotSubscribed,
+    DuplicateRecord,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUsageRecordResultStatus),
+}
+
+impl Default for UsageRecordResultStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UsageRecordResultStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UsageRecordResultStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UsageRecordResultStatus {
+    fn into(self) -> String {
+        match self {
+            UsageRecordResultStatus::CustomerNotSubscribed => "CustomerNotSubscribed".to_string(),
+            UsageRecordResultStatus::DuplicateRecord => "DuplicateRecord".to_string(),
+            UsageRecordResultStatus::Success => "Success".to_string(),
+            UsageRecordResultStatus::UnknownVariant(UnknownUsageRecordResultStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UsageRecordResultStatus {
+    fn into(self) -> &'a str {
+        match self {
+            UsageRecordResultStatus::CustomerNotSubscribed => &"CustomerNotSubscribed",
+            UsageRecordResultStatus::DuplicateRecord => &"DuplicateRecord",
+            UsageRecordResultStatus::Success => &"Success",
+            UsageRecordResultStatus::UnknownVariant(UnknownUsageRecordResultStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UsageRecordResultStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CustomerNotSubscribed" => UsageRecordResultStatus::CustomerNotSubscribed,
+            "DuplicateRecord" => UsageRecordResultStatus::DuplicateRecord,
+            "Success" => UsageRecordResultStatus::Success,
+            _ => UsageRecordResultStatus::UnknownVariant(UnknownUsageRecordResultStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UsageRecordResultStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CustomerNotSubscribed" => UsageRecordResultStatus::CustomerNotSubscribed,
+            "DuplicateRecord" => UsageRecordResultStatus::DuplicateRecord,
+            "Success" => UsageRecordResultStatus::Success,
+            _ => UsageRecordResultStatus::UnknownVariant(UnknownUsageRecordResultStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UsageRecordResultStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UsageRecordResultStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UsageRecordResultStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by BatchMeterUsage

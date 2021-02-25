@@ -85,6 +85,109 @@ pub struct BatchDisassociateScramSecretResponse {
     pub unprocessed_scram_secrets: Option<Vec<UnprocessedScramSecret>>,
 }
 
+/// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones. This is an optional parameter. If you don&#39;t specify it, Amazon MSK gives it the value DEFAULT. You can also explicitly set this parameter to the value DEFAULT. No other values are currently allowed.&lt;/p&gt;
+/// &lt;p&gt;Amazon MSK distributes the broker nodes evenly across the Availability Zones that correspond to the subnets you provide when you create the cluster.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBrokerAZDistribution {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BrokerAZDistribution {
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBrokerAZDistribution),
+}
+
+impl Default for BrokerAZDistribution {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BrokerAZDistribution {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BrokerAZDistribution {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BrokerAZDistribution {
+    fn into(self) -> String {
+        match self {
+            BrokerAZDistribution::Default => "DEFAULT".to_string(),
+            BrokerAZDistribution::UnknownVariant(UnknownBrokerAZDistribution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BrokerAZDistribution {
+    fn into(self) -> &'a str {
+        match self {
+            BrokerAZDistribution::Default => &"DEFAULT",
+            BrokerAZDistribution::UnknownVariant(UnknownBrokerAZDistribution {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BrokerAZDistribution {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => BrokerAZDistribution::Default,
+            _ => BrokerAZDistribution::UnknownVariant(UnknownBrokerAZDistribution {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BrokerAZDistribution {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => BrokerAZDistribution::Default,
+            _ => BrokerAZDistribution::UnknownVariant(UnknownBrokerAZDistribution { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BrokerAZDistribution {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BrokerAZDistribution {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BrokerAZDistribution {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <pre><code>        &lt;p&gt;Specifies the EBS volume upgrade information. The broker identifier must be set to the keyword ALL. This means the changes apply to all the brokers in the cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -121,7 +224,7 @@ pub struct BrokerNodeGroupInfo {
     /// </code></pre>
     #[serde(rename = "BrokerAZDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub broker_az_distribution: Option<String>,
+    pub broker_az_distribution: Option<BrokerAZDistribution>,
     /// <pre><code>        &lt;p&gt;The list of subnets to connect to in the client virtual private cloud (VPC). AWS creates elastic network interfaces inside these subnets. Client applications use elastic network interfaces to produce and consume data. Client subnets can&#39;t be in Availability Zone us-east-1e.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "ClientSubnets")]
@@ -219,6 +322,114 @@ pub struct ClientAuthentication {
     pub tls: Option<Tls>,
 }
 
+/// <pre><code>        &lt;p&gt;Client-broker encryption in transit setting.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClientBroker {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClientBroker {
+    Plaintext,
+    Tls,
+    TlsPlaintext,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClientBroker),
+}
+
+impl Default for ClientBroker {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClientBroker {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClientBroker {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClientBroker {
+    fn into(self) -> String {
+        match self {
+            ClientBroker::Plaintext => "PLAINTEXT".to_string(),
+            ClientBroker::Tls => "TLS".to_string(),
+            ClientBroker::TlsPlaintext => "TLS_PLAINTEXT".to_string(),
+            ClientBroker::UnknownVariant(UnknownClientBroker { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClientBroker {
+    fn into(self) -> &'a str {
+        match self {
+            ClientBroker::Plaintext => &"PLAINTEXT",
+            ClientBroker::Tls => &"TLS",
+            ClientBroker::TlsPlaintext => &"TLS_PLAINTEXT",
+            ClientBroker::UnknownVariant(UnknownClientBroker { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClientBroker {
+    fn from(name: &str) -> Self {
+        match name {
+            "PLAINTEXT" => ClientBroker::Plaintext,
+            "TLS" => ClientBroker::Tls,
+            "TLS_PLAINTEXT" => ClientBroker::TlsPlaintext,
+            _ => ClientBroker::UnknownVariant(UnknownClientBroker {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClientBroker {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PLAINTEXT" => ClientBroker::Plaintext,
+            "TLS" => ClientBroker::Tls,
+            "TLS_PLAINTEXT" => ClientBroker::TlsPlaintext,
+            _ => ClientBroker::UnknownVariant(UnknownClientBroker { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClientBroker {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClientBroker {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClientBroker {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogs {
     #[serde(rename = "Enabled")]
@@ -282,7 +493,7 @@ pub struct ClusterInfo {
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enhanced_monitoring: Option<String>,
+    pub enhanced_monitoring: Option<EnhancedMonitoring>,
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -300,7 +511,7 @@ pub struct ClusterInfo {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
     #[serde(rename = "StateInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_info: Option<StateInfo>,
@@ -412,6 +623,140 @@ pub struct ClusterOperationStepInfo {
     pub step_status: Option<String>,
 }
 
+/// <pre><code>        &lt;p&gt;The state of a Kafka cluster.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterState {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Healing,
+    Maintenance,
+    RebootingBroker,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterState),
+}
+
+impl Default for ClusterState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterState {
+    fn into(self) -> String {
+        match self {
+            ClusterState::Active => "ACTIVE".to_string(),
+            ClusterState::Creating => "CREATING".to_string(),
+            ClusterState::Deleting => "DELETING".to_string(),
+            ClusterState::Failed => "FAILED".to_string(),
+            ClusterState::Healing => "HEALING".to_string(),
+            ClusterState::Maintenance => "MAINTENANCE".to_string(),
+            ClusterState::RebootingBroker => "REBOOTING_BROKER".to_string(),
+            ClusterState::Updating => "UPDATING".to_string(),
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterState {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterState::Active => &"ACTIVE",
+            ClusterState::Creating => &"CREATING",
+            ClusterState::Deleting => &"DELETING",
+            ClusterState::Failed => &"FAILED",
+            ClusterState::Healing => &"HEALING",
+            ClusterState::Maintenance => &"MAINTENANCE",
+            ClusterState::RebootingBroker => &"REBOOTING_BROKER",
+            ClusterState::Updating => &"UPDATING",
+            ClusterState::UnknownVariant(UnknownClusterState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ClusterState::Active,
+            "CREATING" => ClusterState::Creating,
+            "DELETING" => ClusterState::Deleting,
+            "FAILED" => ClusterState::Failed,
+            "HEALING" => ClusterState::Healing,
+            "MAINTENANCE" => ClusterState::Maintenance,
+            "REBOOTING_BROKER" => ClusterState::RebootingBroker,
+            "UPDATING" => ClusterState::Updating,
+            _ => ClusterState::UnknownVariant(UnknownClusterState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ClusterState::Active,
+            "CREATING" => ClusterState::Creating,
+            "DELETING" => ClusterState::Deleting,
+            "FAILED" => ClusterState::Failed,
+            "HEALING" => ClusterState::Healing,
+            "MAINTENANCE" => ClusterState::Maintenance,
+            "REBOOTING_BROKER" => ClusterState::RebootingBroker,
+            "UPDATING" => ClusterState::Updating,
+            _ => ClusterState::UnknownVariant(UnknownClusterState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ClusterState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <pre><code>        &lt;p&gt;Contains source Kafka versions and compatible target Kafka versions.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -461,7 +806,7 @@ pub struct Configuration {
     /// <pre><code>        &lt;p&gt;The state of the configuration. The possible states are ACTIVE, DELETING, and DELETE_FAILED. &lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "State")]
-    pub state: String,
+    pub state: ConfigurationState,
 }
 
 /// <pre><code>        &lt;p&gt;Specifies the configuration to use for the brokers.&lt;/p&gt;
@@ -498,6 +843,119 @@ pub struct ConfigurationRevision {
     pub revision: i64,
 }
 
+/// <pre><code>        &lt;p&gt;The state of a configuration.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationState {
+    Active,
+    DeleteFailed,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationState),
+}
+
+impl Default for ConfigurationState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationState {
+    fn into(self) -> String {
+        match self {
+            ConfigurationState::Active => "ACTIVE".to_string(),
+            ConfigurationState::DeleteFailed => "DELETE_FAILED".to_string(),
+            ConfigurationState::Deleting => "DELETING".to_string(),
+            ConfigurationState::UnknownVariant(UnknownConfigurationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationState {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationState::Active => &"ACTIVE",
+            ConfigurationState::DeleteFailed => &"DELETE_FAILED",
+            ConfigurationState::Deleting => &"DELETING",
+            ConfigurationState::UnknownVariant(UnknownConfigurationState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConfigurationState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ConfigurationState::Active,
+            "DELETE_FAILED" => ConfigurationState::DeleteFailed,
+            "DELETING" => ConfigurationState::Deleting,
+            _ => ConfigurationState::UnknownVariant(UnknownConfigurationState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ConfigurationState::Active,
+            "DELETE_FAILED" => ConfigurationState::DeleteFailed,
+            "DELETING" => ConfigurationState::Deleting,
+            _ => ConfigurationState::UnknownVariant(UnknownConfigurationState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConfigurationState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -528,7 +986,7 @@ pub struct CreateClusterRequest {
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enhanced_monitoring: Option<String>,
+    pub enhanced_monitoring: Option<EnhancedMonitoring>,
     /// <pre><code>        &lt;p&gt;The version of Apache Kafka.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "KafkaVersion")]
@@ -569,7 +1027,7 @@ pub struct CreateClusterResponse {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -628,7 +1086,7 @@ pub struct CreateConfigurationResponse {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ConfigurationState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -657,7 +1115,7 @@ pub struct DeleteClusterResponse {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ClusterState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -681,7 +1139,7 @@ pub struct DeleteConfigurationResponse {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ConfigurationState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -768,7 +1226,7 @@ pub struct DescribeConfigurationResponse {
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<ConfigurationState>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -856,7 +1314,7 @@ pub struct EncryptionInTransit {
     /// </code></pre>
     #[serde(rename = "ClientBroker")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub client_broker: Option<String>,
+    pub client_broker: Option<ClientBroker>,
     /// <pre><code>        &lt;p&gt;When set to true, it indicates that data communication among the broker nodes of the cluster is encrypted. When set to false, the communication happens in plaintext.&lt;/p&gt;
     /// &lt;p&gt;The default value is true.&lt;/p&gt;
     /// </code></pre>
@@ -879,6 +1337,123 @@ pub struct EncryptionInfo {
     #[serde(rename = "EncryptionInTransit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_in_transit: Option<EncryptionInTransit>,
+}
+
+/// <pre><code>        &lt;p&gt;Specifies which metrics are gathered for the MSK cluster. This property has the following possible values: DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER, and PER_TOPIC_PER_PARTITION. For a list of the metrics associated with each of these levels of monitoring, see &lt;a href=&quot;https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html&quot;&gt;Monitoring&lt;/a&gt;.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnhancedMonitoring {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnhancedMonitoring {
+    Default,
+    PerBroker,
+    PerTopicPerBroker,
+    PerTopicPerPartition,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnhancedMonitoring),
+}
+
+impl Default for EnhancedMonitoring {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnhancedMonitoring {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnhancedMonitoring {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnhancedMonitoring {
+    fn into(self) -> String {
+        match self {
+            EnhancedMonitoring::Default => "DEFAULT".to_string(),
+            EnhancedMonitoring::PerBroker => "PER_BROKER".to_string(),
+            EnhancedMonitoring::PerTopicPerBroker => "PER_TOPIC_PER_BROKER".to_string(),
+            EnhancedMonitoring::PerTopicPerPartition => "PER_TOPIC_PER_PARTITION".to_string(),
+            EnhancedMonitoring::UnknownVariant(UnknownEnhancedMonitoring { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnhancedMonitoring {
+    fn into(self) -> &'a str {
+        match self {
+            EnhancedMonitoring::Default => &"DEFAULT",
+            EnhancedMonitoring::PerBroker => &"PER_BROKER",
+            EnhancedMonitoring::PerTopicPerBroker => &"PER_TOPIC_PER_BROKER",
+            EnhancedMonitoring::PerTopicPerPartition => &"PER_TOPIC_PER_PARTITION",
+            EnhancedMonitoring::UnknownVariant(UnknownEnhancedMonitoring { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnhancedMonitoring {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT" => EnhancedMonitoring::Default,
+            "PER_BROKER" => EnhancedMonitoring::PerBroker,
+            "PER_TOPIC_PER_BROKER" => EnhancedMonitoring::PerTopicPerBroker,
+            "PER_TOPIC_PER_PARTITION" => EnhancedMonitoring::PerTopicPerPartition,
+            _ => EnhancedMonitoring::UnknownVariant(UnknownEnhancedMonitoring {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnhancedMonitoring {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT" => EnhancedMonitoring::Default,
+            "PER_BROKER" => EnhancedMonitoring::PerBroker,
+            "PER_TOPIC_PER_BROKER" => EnhancedMonitoring::PerTopicPerBroker,
+            "PER_TOPIC_PER_PARTITION" => EnhancedMonitoring::PerTopicPerPartition,
+            _ => EnhancedMonitoring::UnknownVariant(UnknownEnhancedMonitoring { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnhancedMonitoring {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EnhancedMonitoring {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnhancedMonitoring {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <pre><code>        &lt;p&gt;Returns information about an error state of the cluster.&lt;/p&gt;
@@ -983,10 +1558,115 @@ pub struct JmxExporterInfo {
 pub struct KafkaVersion {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<KafkaVersionStatus>,
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKafkaVersionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KafkaVersionStatus {
+    Active,
+    Deprecated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKafkaVersionStatus),
+}
+
+impl Default for KafkaVersionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KafkaVersionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KafkaVersionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KafkaVersionStatus {
+    fn into(self) -> String {
+        match self {
+            KafkaVersionStatus::Active => "ACTIVE".to_string(),
+            KafkaVersionStatus::Deprecated => "DEPRECATED".to_string(),
+            KafkaVersionStatus::UnknownVariant(UnknownKafkaVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KafkaVersionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            KafkaVersionStatus::Active => &"ACTIVE",
+            KafkaVersionStatus::Deprecated => &"DEPRECATED",
+            KafkaVersionStatus::UnknownVariant(UnknownKafkaVersionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for KafkaVersionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => KafkaVersionStatus::Active,
+            "DEPRECATED" => KafkaVersionStatus::Deprecated,
+            _ => KafkaVersionStatus::UnknownVariant(UnknownKafkaVersionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KafkaVersionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => KafkaVersionStatus::Active,
+            "DEPRECATED" => KafkaVersionStatus::Deprecated,
+            _ => KafkaVersionStatus::UnknownVariant(UnknownKafkaVersionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KafkaVersionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for KafkaVersionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KafkaVersionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1268,7 +1948,7 @@ pub struct MutableClusterInfo {
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enhanced_monitoring: Option<String>,
+    pub enhanced_monitoring: Option<EnhancedMonitoring>,
     /// <pre><code>        &lt;p&gt;The Kafka version.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "KafkaVersion")]
@@ -1340,12 +2020,111 @@ pub struct NodeInfo {
     /// </code></pre>
     #[serde(rename = "NodeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_type: Option<String>,
+    pub node_type: Option<NodeType>,
     /// <pre><code>        &lt;p&gt;The ZookeeperNodeInfo.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "ZookeeperNodeInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zookeeper_node_info: Option<ZookeeperNodeInfo>,
+}
+
+/// <pre><code>        &lt;p&gt;The broker or Zookeeper node.&lt;/p&gt;
+/// </code></pre>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeType {
+    Broker,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeType),
+}
+
+impl Default for NodeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeType {
+    fn into(self) -> String {
+        match self {
+            NodeType::Broker => "BROKER".to_string(),
+            NodeType::UnknownVariant(UnknownNodeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeType {
+    fn into(self) -> &'a str {
+        match self {
+            NodeType::Broker => &"BROKER",
+            NodeType::UnknownVariant(UnknownNodeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NodeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BROKER" => NodeType::Broker,
+            _ => NodeType::UnknownVariant(UnknownNodeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BROKER" => NodeType::Broker,
+            _ => NodeType::UnknownVariant(UnknownNodeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NodeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NodeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <pre><code>        &lt;p&gt;JMX and Node monitoring for the MSK cluster.&lt;/p&gt;
@@ -1755,7 +2534,7 @@ pub struct UpdateMonitoringRequest {
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enhanced_monitoring: Option<String>,
+    pub enhanced_monitoring: Option<EnhancedMonitoring>,
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,

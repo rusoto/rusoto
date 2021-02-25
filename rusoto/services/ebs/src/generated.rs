@@ -25,6 +25,117 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccessDeniedExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccessDeniedExceptionReason {
+    DependencyAccessDenied,
+    UnauthorizedAccount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccessDeniedExceptionReason),
+}
+
+impl Default for AccessDeniedExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccessDeniedExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccessDeniedExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccessDeniedExceptionReason {
+    fn into(self) -> String {
+        match self {
+            AccessDeniedExceptionReason::DependencyAccessDenied => {
+                "DEPENDENCY_ACCESS_DENIED".to_string()
+            }
+            AccessDeniedExceptionReason::UnauthorizedAccount => "UNAUTHORIZED_ACCOUNT".to_string(),
+            AccessDeniedExceptionReason::UnknownVariant(UnknownAccessDeniedExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccessDeniedExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            AccessDeniedExceptionReason::DependencyAccessDenied => &"DEPENDENCY_ACCESS_DENIED",
+            AccessDeniedExceptionReason::UnauthorizedAccount => &"UNAUTHORIZED_ACCOUNT",
+            AccessDeniedExceptionReason::UnknownVariant(UnknownAccessDeniedExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AccessDeniedExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPENDENCY_ACCESS_DENIED" => AccessDeniedExceptionReason::DependencyAccessDenied,
+            "UNAUTHORIZED_ACCOUNT" => AccessDeniedExceptionReason::UnauthorizedAccount,
+            _ => AccessDeniedExceptionReason::UnknownVariant(UnknownAccessDeniedExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccessDeniedExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPENDENCY_ACCESS_DENIED" => AccessDeniedExceptionReason::DependencyAccessDenied,
+            "UNAUTHORIZED_ACCOUNT" => AccessDeniedExceptionReason::UnauthorizedAccount,
+            _ => AccessDeniedExceptionReason::UnknownVariant(UnknownAccessDeniedExceptionReason {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccessDeniedExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AccessDeniedExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AccessDeniedExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A block of data in an Amazon Elastic Block Store snapshot.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -57,6 +168,207 @@ pub struct ChangedBlock {
     pub second_block_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChecksumAggregationMethod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChecksumAggregationMethod {
+    Linear,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChecksumAggregationMethod),
+}
+
+impl Default for ChecksumAggregationMethod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChecksumAggregationMethod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChecksumAggregationMethod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChecksumAggregationMethod {
+    fn into(self) -> String {
+        match self {
+            ChecksumAggregationMethod::Linear => "LINEAR".to_string(),
+            ChecksumAggregationMethod::UnknownVariant(UnknownChecksumAggregationMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChecksumAggregationMethod {
+    fn into(self) -> &'a str {
+        match self {
+            ChecksumAggregationMethod::Linear => &"LINEAR",
+            ChecksumAggregationMethod::UnknownVariant(UnknownChecksumAggregationMethod {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChecksumAggregationMethod {
+    fn from(name: &str) -> Self {
+        match name {
+            "LINEAR" => ChecksumAggregationMethod::Linear,
+            _ => ChecksumAggregationMethod::UnknownVariant(UnknownChecksumAggregationMethod {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChecksumAggregationMethod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LINEAR" => ChecksumAggregationMethod::Linear,
+            _ => {
+                ChecksumAggregationMethod::UnknownVariant(UnknownChecksumAggregationMethod { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChecksumAggregationMethod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChecksumAggregationMethod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ChecksumAggregationMethod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChecksumAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChecksumAlgorithm {
+    Sha256,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChecksumAlgorithm),
+}
+
+impl Default for ChecksumAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChecksumAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChecksumAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChecksumAlgorithm {
+    fn into(self) -> String {
+        match self {
+            ChecksumAlgorithm::Sha256 => "SHA256".to_string(),
+            ChecksumAlgorithm::UnknownVariant(UnknownChecksumAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChecksumAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            ChecksumAlgorithm::Sha256 => &"SHA256",
+            ChecksumAlgorithm::UnknownVariant(UnknownChecksumAlgorithm { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ChecksumAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHA256" => ChecksumAlgorithm::Sha256,
+            _ => ChecksumAlgorithm::UnknownVariant(UnknownChecksumAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChecksumAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHA256" => ChecksumAlgorithm::Sha256,
+            _ => ChecksumAlgorithm::UnknownVariant(UnknownChecksumAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChecksumAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ChecksumAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChecksumAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteSnapshotRequest {
@@ -70,11 +382,11 @@ pub struct CompleteSnapshotRequest {
     /// <p>The aggregation method used to generate the checksum. Currently, the only supported aggregation method is <code>LINEAR</code>.</p>
     #[serde(rename = "ChecksumAggregationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub checksum_aggregation_method: Option<String>,
+    pub checksum_aggregation_method: Option<ChecksumAggregationMethod>,
     /// <p>The algorithm used to generate the checksum. Currently, the only supported algorithm is <code>SHA256</code>.</p>
     #[serde(rename = "ChecksumAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub checksum_algorithm: Option<String>,
+    pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>The ID of the snapshot.</p>
     #[serde(rename = "SnapshotId")]
     pub snapshot_id: String,
@@ -86,7 +398,7 @@ pub struct CompleteSnapshotResponse {
     /// <p>The status of the snapshot.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -110,7 +422,7 @@ pub struct GetSnapshotBlockResponse {
     /// <p>The checksum generated for the block, which is Base64 encoded.</p>
     pub checksum: Option<String>,
     /// <p>The algorithm used to generate the checksum for the block, such as SHA256.</p>
-    pub checksum_algorithm: Option<String>,
+    pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>The size of the data in the block.</p>
     pub data_length: Option<i64>,
 }
@@ -228,7 +540,7 @@ pub struct PutSnapshotBlockRequest {
     pub checksum: String,
     /// <p>The algorithm used to generate the checksum. Currently, the only supported algorithm is <code>SHA256</code>.</p>
     #[serde(rename = "ChecksumAlgorithm")]
-    pub checksum_algorithm: String,
+    pub checksum_algorithm: ChecksumAlgorithm,
     /// <p>The size of the data to write to the block, in bytes. Currently, the only supported size is <code>524288</code>.</p> <p>Valid values: <code>524288</code> </p>
     #[serde(rename = "DataLength")]
     pub data_length: i64,
@@ -251,7 +563,356 @@ pub struct PutSnapshotBlockResponse {
     /// <p>The algorithm used by Amazon EBS to generate the checksum.</p>
     #[serde(rename = "ChecksumAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub checksum_algorithm: Option<String>,
+    pub checksum_algorithm: Option<ChecksumAlgorithm>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestThrottledExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestThrottledExceptionReason {
+    AccountThrottled,
+    DependencyRequestThrottled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestThrottledExceptionReason),
+}
+
+impl Default for RequestThrottledExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestThrottledExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestThrottledExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestThrottledExceptionReason {
+    fn into(self) -> String {
+        match self {
+            RequestThrottledExceptionReason::AccountThrottled => "ACCOUNT_THROTTLED".to_string(),
+            RequestThrottledExceptionReason::DependencyRequestThrottled => {
+                "DEPENDENCY_REQUEST_THROTTLED".to_string()
+            }
+            RequestThrottledExceptionReason::UnknownVariant(
+                UnknownRequestThrottledExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestThrottledExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            RequestThrottledExceptionReason::AccountThrottled => &"ACCOUNT_THROTTLED",
+            RequestThrottledExceptionReason::DependencyRequestThrottled => {
+                &"DEPENDENCY_REQUEST_THROTTLED"
+            }
+            RequestThrottledExceptionReason::UnknownVariant(
+                UnknownRequestThrottledExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RequestThrottledExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT_THROTTLED" => RequestThrottledExceptionReason::AccountThrottled,
+            "DEPENDENCY_REQUEST_THROTTLED" => {
+                RequestThrottledExceptionReason::DependencyRequestThrottled
+            }
+            _ => RequestThrottledExceptionReason::UnknownVariant(
+                UnknownRequestThrottledExceptionReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RequestThrottledExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT_THROTTLED" => RequestThrottledExceptionReason::AccountThrottled,
+            "DEPENDENCY_REQUEST_THROTTLED" => {
+                RequestThrottledExceptionReason::DependencyRequestThrottled
+            }
+            _ => RequestThrottledExceptionReason::UnknownVariant(
+                UnknownRequestThrottledExceptionReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestThrottledExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for RequestThrottledExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RequestThrottledExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceNotFoundExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceNotFoundExceptionReason {
+    DependencyResourceNotFound,
+    SnapshotNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceNotFoundExceptionReason),
+}
+
+impl Default for ResourceNotFoundExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceNotFoundExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceNotFoundExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceNotFoundExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ResourceNotFoundExceptionReason::DependencyResourceNotFound => {
+                "DEPENDENCY_RESOURCE_NOT_FOUND".to_string()
+            }
+            ResourceNotFoundExceptionReason::SnapshotNotFound => "SNAPSHOT_NOT_FOUND".to_string(),
+            ResourceNotFoundExceptionReason::UnknownVariant(
+                UnknownResourceNotFoundExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceNotFoundExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceNotFoundExceptionReason::DependencyResourceNotFound => {
+                &"DEPENDENCY_RESOURCE_NOT_FOUND"
+            }
+            ResourceNotFoundExceptionReason::SnapshotNotFound => &"SNAPSHOT_NOT_FOUND",
+            ResourceNotFoundExceptionReason::UnknownVariant(
+                UnknownResourceNotFoundExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceNotFoundExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPENDENCY_RESOURCE_NOT_FOUND" => {
+                ResourceNotFoundExceptionReason::DependencyResourceNotFound
+            }
+            "SNAPSHOT_NOT_FOUND" => ResourceNotFoundExceptionReason::SnapshotNotFound,
+            _ => ResourceNotFoundExceptionReason::UnknownVariant(
+                UnknownResourceNotFoundExceptionReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResourceNotFoundExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPENDENCY_RESOURCE_NOT_FOUND" => {
+                ResourceNotFoundExceptionReason::DependencyResourceNotFound
+            }
+            "SNAPSHOT_NOT_FOUND" => ResourceNotFoundExceptionReason::SnapshotNotFound,
+            _ => ResourceNotFoundExceptionReason::UnknownVariant(
+                UnknownResourceNotFoundExceptionReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceNotFoundExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ResourceNotFoundExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ResourceNotFoundExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceQuotaExceededExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceQuotaExceededExceptionReason {
+    DependencyServiceQuotaExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceQuotaExceededExceptionReason),
+}
+
+impl Default for ServiceQuotaExceededExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceQuotaExceededExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceQuotaExceededExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceQuotaExceededExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ServiceQuotaExceededExceptionReason::DependencyServiceQuotaExceeded => {
+                "DEPENDENCY_SERVICE_QUOTA_EXCEEDED".to_string()
+            }
+            ServiceQuotaExceededExceptionReason::UnknownVariant(
+                UnknownServiceQuotaExceededExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceQuotaExceededExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceQuotaExceededExceptionReason::DependencyServiceQuotaExceeded => {
+                &"DEPENDENCY_SERVICE_QUOTA_EXCEEDED"
+            }
+            ServiceQuotaExceededExceptionReason::UnknownVariant(
+                UnknownServiceQuotaExceededExceptionReason { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceQuotaExceededExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPENDENCY_SERVICE_QUOTA_EXCEEDED" => {
+                ServiceQuotaExceededExceptionReason::DependencyServiceQuotaExceeded
+            }
+            _ => ServiceQuotaExceededExceptionReason::UnknownVariant(
+                UnknownServiceQuotaExceededExceptionReason {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ServiceQuotaExceededExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPENDENCY_SERVICE_QUOTA_EXCEEDED" => {
+                ServiceQuotaExceededExceptionReason::DependencyServiceQuotaExceeded
+            }
+            _ => ServiceQuotaExceededExceptionReason::UnknownVariant(
+                UnknownServiceQuotaExceededExceptionReason { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceQuotaExceededExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ServiceQuotaExceededExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceQuotaExceededExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -324,7 +985,7 @@ pub struct StartSnapshotResponse {
     /// <p>The status of the snapshot.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The tags applied to the snapshot. You can specify up to 50 tags per snapshot. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html"> Tagging your Amazon EC2 resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,6 +994,112 @@ pub struct StartSnapshotResponse {
     #[serde(rename = "VolumeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_size: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Completed,
+    Error,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Completed => "completed".to_string(),
+            Status::Error => "error".to_string(),
+            Status::Pending => "pending".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Completed => &"completed",
+            Status::Error => &"error",
+            Status::Pending => &"pending",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "completed" => Status::Completed,
+            "error" => Status::Error,
+            "pending" => Status::Pending,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "completed" => Status::Completed,
+            "error" => Status::Error,
+            "pending" => Status::Pending,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a tag.</p>
@@ -346,6 +1113,165 @@ pub struct Tag {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidationExceptionReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ValidationExceptionReason {
+    InvalidBlock,
+    InvalidBlockToken,
+    InvalidContentEncoding,
+    InvalidCustomerKey,
+    InvalidDependencyRequest,
+    InvalidPageToken,
+    InvalidParameterValue,
+    InvalidSnapshotId,
+    InvalidTag,
+    InvalidVolumeSize,
+    UnrelatedSnapshots,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidationExceptionReason),
+}
+
+impl Default for ValidationExceptionReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ValidationExceptionReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ValidationExceptionReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ValidationExceptionReason {
+    fn into(self) -> String {
+        match self {
+            ValidationExceptionReason::InvalidBlock => "INVALID_BLOCK".to_string(),
+            ValidationExceptionReason::InvalidBlockToken => "INVALID_BLOCK_TOKEN".to_string(),
+            ValidationExceptionReason::InvalidContentEncoding => {
+                "INVALID_CONTENT_ENCODING".to_string()
+            }
+            ValidationExceptionReason::InvalidCustomerKey => "INVALID_CUSTOMER_KEY".to_string(),
+            ValidationExceptionReason::InvalidDependencyRequest => {
+                "INVALID_DEPENDENCY_REQUEST".to_string()
+            }
+            ValidationExceptionReason::InvalidPageToken => "INVALID_PAGE_TOKEN".to_string(),
+            ValidationExceptionReason::InvalidParameterValue => {
+                "INVALID_PARAMETER_VALUE".to_string()
+            }
+            ValidationExceptionReason::InvalidSnapshotId => "INVALID_SNAPSHOT_ID".to_string(),
+            ValidationExceptionReason::InvalidTag => "INVALID_TAG".to_string(),
+            ValidationExceptionReason::InvalidVolumeSize => "INVALID_VOLUME_SIZE".to_string(),
+            ValidationExceptionReason::UnrelatedSnapshots => "UNRELATED_SNAPSHOTS".to_string(),
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ValidationExceptionReason {
+    fn into(self) -> &'a str {
+        match self {
+            ValidationExceptionReason::InvalidBlock => &"INVALID_BLOCK",
+            ValidationExceptionReason::InvalidBlockToken => &"INVALID_BLOCK_TOKEN",
+            ValidationExceptionReason::InvalidContentEncoding => &"INVALID_CONTENT_ENCODING",
+            ValidationExceptionReason::InvalidCustomerKey => &"INVALID_CUSTOMER_KEY",
+            ValidationExceptionReason::InvalidDependencyRequest => &"INVALID_DEPENDENCY_REQUEST",
+            ValidationExceptionReason::InvalidPageToken => &"INVALID_PAGE_TOKEN",
+            ValidationExceptionReason::InvalidParameterValue => &"INVALID_PARAMETER_VALUE",
+            ValidationExceptionReason::InvalidSnapshotId => &"INVALID_SNAPSHOT_ID",
+            ValidationExceptionReason::InvalidTag => &"INVALID_TAG",
+            ValidationExceptionReason::InvalidVolumeSize => &"INVALID_VOLUME_SIZE",
+            ValidationExceptionReason::UnrelatedSnapshots => &"UNRELATED_SNAPSHOTS",
+            ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ValidationExceptionReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "INVALID_BLOCK" => ValidationExceptionReason::InvalidBlock,
+            "INVALID_BLOCK_TOKEN" => ValidationExceptionReason::InvalidBlockToken,
+            "INVALID_CONTENT_ENCODING" => ValidationExceptionReason::InvalidContentEncoding,
+            "INVALID_CUSTOMER_KEY" => ValidationExceptionReason::InvalidCustomerKey,
+            "INVALID_DEPENDENCY_REQUEST" => ValidationExceptionReason::InvalidDependencyRequest,
+            "INVALID_PAGE_TOKEN" => ValidationExceptionReason::InvalidPageToken,
+            "INVALID_PARAMETER_VALUE" => ValidationExceptionReason::InvalidParameterValue,
+            "INVALID_SNAPSHOT_ID" => ValidationExceptionReason::InvalidSnapshotId,
+            "INVALID_TAG" => ValidationExceptionReason::InvalidTag,
+            "INVALID_VOLUME_SIZE" => ValidationExceptionReason::InvalidVolumeSize,
+            "UNRELATED_SNAPSHOTS" => ValidationExceptionReason::UnrelatedSnapshots,
+            _ => ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ValidationExceptionReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INVALID_BLOCK" => ValidationExceptionReason::InvalidBlock,
+            "INVALID_BLOCK_TOKEN" => ValidationExceptionReason::InvalidBlockToken,
+            "INVALID_CONTENT_ENCODING" => ValidationExceptionReason::InvalidContentEncoding,
+            "INVALID_CUSTOMER_KEY" => ValidationExceptionReason::InvalidCustomerKey,
+            "INVALID_DEPENDENCY_REQUEST" => ValidationExceptionReason::InvalidDependencyRequest,
+            "INVALID_PAGE_TOKEN" => ValidationExceptionReason::InvalidPageToken,
+            "INVALID_PARAMETER_VALUE" => ValidationExceptionReason::InvalidParameterValue,
+            "INVALID_SNAPSHOT_ID" => ValidationExceptionReason::InvalidSnapshotId,
+            "INVALID_TAG" => ValidationExceptionReason::InvalidTag,
+            "INVALID_VOLUME_SIZE" => ValidationExceptionReason::InvalidVolumeSize,
+            "UNRELATED_SNAPSHOTS" => ValidationExceptionReason::UnrelatedSnapshots,
+            _ => {
+                ValidationExceptionReason::UnknownVariant(UnknownValidationExceptionReason { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ValidationExceptionReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ValidationExceptionReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ValidationExceptionReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by CompleteSnapshot
@@ -851,7 +1777,10 @@ impl Ebs for EbsClient {
             result.block_data = Some(response.body);
 
             result.checksum = response.headers.remove("x-amz-Checksum");
-            result.checksum_algorithm = response.headers.remove("x-amz-Checksum-Algorithm");
+            result.checksum_algorithm = response
+                .headers
+                .remove("x-amz-Checksum-Algorithm")
+                .map(|value| value.into());
             result.data_length = response
                 .headers
                 .remove("x-amz-Data-Length")
@@ -988,7 +1917,10 @@ impl Ebs for EbsClient {
             let mut result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutSnapshotBlockResponse, _>()?;
             result.checksum = response.headers.remove("x-amz-Checksum");
-            result.checksum_algorithm = response.headers.remove("x-amz-Checksum-Algorithm");
+            result.checksum_algorithm = response
+                .headers
+                .remove("x-amz-Checksum-Algorithm")
+                .map(|value| value.into());
 
             Ok(result)
         } else {

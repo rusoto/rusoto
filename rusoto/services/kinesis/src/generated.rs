@@ -89,7 +89,7 @@ pub struct Consumer {
     pub consumer_name: String,
     /// <p>A consumer can't read data while in the <code>CREATING</code> or <code>DELETING</code> states.</p>
     #[serde(rename = "ConsumerStatus")]
-    pub consumer_status: String,
+    pub consumer_status: ConsumerStatus,
 }
 
 /// <p>An object that represents the details of a registered consumer. This type of object is returned by <a>DescribeStreamConsumer</a>.</p>
@@ -107,10 +107,116 @@ pub struct ConsumerDescription {
     pub consumer_name: String,
     /// <p>A consumer can't read data while in the <code>CREATING</code> or <code>DELETING</code> states.</p>
     #[serde(rename = "ConsumerStatus")]
-    pub consumer_status: String,
+    pub consumer_status: ConsumerStatus,
     /// <p>The ARN of the stream with which you registered the consumer.</p>
     #[serde(rename = "StreamARN")]
     pub stream_arn: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConsumerStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConsumerStatus {
+    Active,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConsumerStatus),
+}
+
+impl Default for ConsumerStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConsumerStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConsumerStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConsumerStatus {
+    fn into(self) -> String {
+        match self {
+            ConsumerStatus::Active => "ACTIVE".to_string(),
+            ConsumerStatus::Creating => "CREATING".to_string(),
+            ConsumerStatus::Deleting => "DELETING".to_string(),
+            ConsumerStatus::UnknownVariant(UnknownConsumerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConsumerStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConsumerStatus::Active => &"ACTIVE",
+            ConsumerStatus::Creating => &"CREATING",
+            ConsumerStatus::Deleting => &"DELETING",
+            ConsumerStatus::UnknownVariant(UnknownConsumerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConsumerStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ConsumerStatus::Active,
+            "CREATING" => ConsumerStatus::Creating,
+            "DELETING" => ConsumerStatus::Deleting,
+            _ => ConsumerStatus::UnknownVariant(UnknownConsumerStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConsumerStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ConsumerStatus::Active,
+            "CREATING" => ConsumerStatus::Creating,
+            "DELETING" => ConsumerStatus::Deleting,
+            _ => ConsumerStatus::UnknownVariant(UnknownConsumerStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConsumerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConsumerStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConsumerStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input for <code>CreateStream</code>.</p>
@@ -255,7 +361,7 @@ pub struct DescribeStreamSummaryOutput {
 pub struct DisableEnhancedMonitoringInput {
     /// <p>List of shard-level metrics to disable.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" disables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "ShardLevelMetrics")]
-    pub shard_level_metrics: Vec<String>,
+    pub shard_level_metrics: Vec<MetricsName>,
     /// <p>The name of the Kinesis data stream for which to disable enhanced monitoring.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
@@ -267,10 +373,110 @@ pub struct DisableEnhancedMonitoringInput {
 pub struct EnableEnhancedMonitoringInput {
     /// <p>List of shard-level metrics to enable.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" enables every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "ShardLevelMetrics")]
-    pub shard_level_metrics: Vec<String>,
+    pub shard_level_metrics: Vec<MetricsName>,
     /// <p>The name of the stream for which to enable enhanced monitoring.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionType {
+    Kms,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionType),
+}
+
+impl Default for EncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionType {
+    fn into(self) -> String {
+        match self {
+            EncryptionType::Kms => "KMS".to_string(),
+            EncryptionType::None => "NONE".to_string(),
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionType::Kms => &"KMS",
+            EncryptionType::None => &"NONE",
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KMS" => EncryptionType::Kms,
+            "NONE" => EncryptionType::None,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KMS" => EncryptionType::Kms,
+            "NONE" => EncryptionType::None,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents enhanced metrics types.</p>
@@ -280,7 +486,7 @@ pub struct EnhancedMetrics {
     /// <p>List of shard-level metrics.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" enhances every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "ShardLevelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub shard_level_metrics: Option<Vec<String>>,
+    pub shard_level_metrics: Option<Vec<MetricsName>>,
 }
 
 /// <p>Represents the output for <a>EnableEnhancedMonitoring</a> and <a>DisableEnhancedMonitoring</a>.</p>
@@ -290,11 +496,11 @@ pub struct EnhancedMonitoringOutput {
     /// <p>Represents the current state of the metrics that are in the enhanced state before the operation.</p>
     #[serde(rename = "CurrentShardLevelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub current_shard_level_metrics: Option<Vec<String>>,
+    pub current_shard_level_metrics: Option<Vec<MetricsName>>,
     /// <p>Represents the list of all the metrics that would be in the enhanced state after the operation.</p>
     #[serde(rename = "DesiredShardLevelMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub desired_shard_level_metrics: Option<Vec<String>>,
+    pub desired_shard_level_metrics: Option<Vec<MetricsName>>,
     /// <p>The name of the Kinesis data stream.</p>
     #[serde(rename = "StreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -356,7 +562,7 @@ pub struct GetShardIteratorInput {
     pub shard_id: String,
     /// <p><p>Determines how the shard iterator is used to start reading data records from the shard.</p> <p>The following are the valid Amazon Kinesis shard iterator types:</p> <ul> <li> <p>AT<em>SEQUENCE</em>NUMBER - Start reading from the position denoted by a specific sequence number, provided in the value <code>StartingSequenceNumber</code>.</p> </li> <li> <p>AFTER<em>SEQUENCE</em>NUMBER - Start reading right after the position denoted by a specific sequence number, provided in the value <code>StartingSequenceNumber</code>.</p> </li> <li> <p>AT<em>TIMESTAMP - Start reading from the position denoted by a specific time stamp, provided in the value <code>Timestamp</code>.</p> </li> <li> <p>TRIM</em>HORIZON - Start reading at the last untrimmed record in the shard in the system, which is the oldest data record in the shard.</p> </li> <li> <p>LATEST - Start reading just after the most recent record in the shard, so that you always read the most recent data in the shard.</p> </li> </ul></p>
     #[serde(rename = "ShardIteratorType")]
-    pub shard_iterator_type: String,
+    pub shard_iterator_type: ShardIteratorType,
     /// <p>The sequence number of the data record in the shard from which to start reading. Used with shard iterator type AT_SEQUENCE_NUMBER and AFTER_SEQUENCE_NUMBER.</p>
     #[serde(rename = "StartingSequenceNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -631,6 +837,142 @@ pub struct MergeShardsInput {
     pub stream_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricsName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricsName {
+    All,
+    IncomingBytes,
+    IncomingRecords,
+    IteratorAgeMilliseconds,
+    OutgoingBytes,
+    OutgoingRecords,
+    ReadProvisionedThroughputExceeded,
+    WriteProvisionedThroughputExceeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricsName),
+}
+
+impl Default for MetricsName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricsName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricsName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricsName {
+    fn into(self) -> String {
+        match self {
+            MetricsName::All => "ALL".to_string(),
+            MetricsName::IncomingBytes => "IncomingBytes".to_string(),
+            MetricsName::IncomingRecords => "IncomingRecords".to_string(),
+            MetricsName::IteratorAgeMilliseconds => "IteratorAgeMilliseconds".to_string(),
+            MetricsName::OutgoingBytes => "OutgoingBytes".to_string(),
+            MetricsName::OutgoingRecords => "OutgoingRecords".to_string(),
+            MetricsName::ReadProvisionedThroughputExceeded => {
+                "ReadProvisionedThroughputExceeded".to_string()
+            }
+            MetricsName::WriteProvisionedThroughputExceeded => {
+                "WriteProvisionedThroughputExceeded".to_string()
+            }
+            MetricsName::UnknownVariant(UnknownMetricsName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricsName {
+    fn into(self) -> &'a str {
+        match self {
+            MetricsName::All => &"ALL",
+            MetricsName::IncomingBytes => &"IncomingBytes",
+            MetricsName::IncomingRecords => &"IncomingRecords",
+            MetricsName::IteratorAgeMilliseconds => &"IteratorAgeMilliseconds",
+            MetricsName::OutgoingBytes => &"OutgoingBytes",
+            MetricsName::OutgoingRecords => &"OutgoingRecords",
+            MetricsName::ReadProvisionedThroughputExceeded => &"ReadProvisionedThroughputExceeded",
+            MetricsName::WriteProvisionedThroughputExceeded => {
+                &"WriteProvisionedThroughputExceeded"
+            }
+            MetricsName::UnknownVariant(UnknownMetricsName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricsName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => MetricsName::All,
+            "IncomingBytes" => MetricsName::IncomingBytes,
+            "IncomingRecords" => MetricsName::IncomingRecords,
+            "IteratorAgeMilliseconds" => MetricsName::IteratorAgeMilliseconds,
+            "OutgoingBytes" => MetricsName::OutgoingBytes,
+            "OutgoingRecords" => MetricsName::OutgoingRecords,
+            "ReadProvisionedThroughputExceeded" => MetricsName::ReadProvisionedThroughputExceeded,
+            "WriteProvisionedThroughputExceeded" => MetricsName::WriteProvisionedThroughputExceeded,
+            _ => MetricsName::UnknownVariant(UnknownMetricsName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricsName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => MetricsName::All,
+            "IncomingBytes" => MetricsName::IncomingBytes,
+            "IncomingRecords" => MetricsName::IncomingRecords,
+            "IteratorAgeMilliseconds" => MetricsName::IteratorAgeMilliseconds,
+            "OutgoingBytes" => MetricsName::OutgoingBytes,
+            "OutgoingRecords" => MetricsName::OutgoingRecords,
+            "ReadProvisionedThroughputExceeded" => MetricsName::ReadProvisionedThroughputExceeded,
+            "WriteProvisionedThroughputExceeded" => MetricsName::WriteProvisionedThroughputExceeded,
+            _ => MetricsName::UnknownVariant(UnknownMetricsName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricsName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricsName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricsName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="https://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>, and <a href="https://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct ProvisionedThroughputExceededException {
@@ -673,7 +1015,7 @@ pub struct PutRecordOutput {
     /// <p><p>The encryption type to use on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>The sequence number identifier that was assigned to the put data record. The sequence number for the record is unique across all records in the stream. A sequence number is the identifier associated with every record put into the stream.</p>
     #[serde(rename = "SequenceNumber")]
     pub sequence_number: String,
@@ -701,7 +1043,7 @@ pub struct PutRecordsOutput {
     /// <p><p>The encryption type used on the records. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>The number of unsuccessfully processed records in a <code>PutRecords</code> request.</p>
     #[serde(rename = "FailedRecordCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -773,7 +1115,7 @@ pub struct Record {
     /// <p><p>The encryption type used on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>Identifies which shard in the stream the data record is assigned to.</p>
     #[serde(rename = "PartitionKey")]
     pub partition_key: String,
@@ -833,6 +1175,102 @@ pub struct ResourceNotFoundException {
     pub message: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingType {
+    UniformScaling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingType),
+}
+
+impl Default for ScalingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingType {
+    fn into(self) -> String {
+        match self {
+            ScalingType::UniformScaling => "UNIFORM_SCALING".to_string(),
+            ScalingType::UnknownVariant(UnknownScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingType::UniformScaling => &"UNIFORM_SCALING",
+            ScalingType::UnknownVariant(UnknownScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "UNIFORM_SCALING" => ScalingType::UniformScaling,
+            _ => ScalingType::UnknownVariant(UnknownScalingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "UNIFORM_SCALING" => ScalingType::UniformScaling,
+            _ => ScalingType::UnknownVariant(UnknownScalingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ScalingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The range of possible sequence numbers for the shard.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -879,7 +1317,248 @@ pub struct ShardFilter {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ShardFilterType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShardFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShardFilterType {
+    AfterShardId,
+    AtLatest,
+    AtTimestamp,
+    AtTrimHorizon,
+    FromTimestamp,
+    FromTrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShardFilterType),
+}
+
+impl Default for ShardFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShardFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShardFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShardFilterType {
+    fn into(self) -> String {
+        match self {
+            ShardFilterType::AfterShardId => "AFTER_SHARD_ID".to_string(),
+            ShardFilterType::AtLatest => "AT_LATEST".to_string(),
+            ShardFilterType::AtTimestamp => "AT_TIMESTAMP".to_string(),
+            ShardFilterType::AtTrimHorizon => "AT_TRIM_HORIZON".to_string(),
+            ShardFilterType::FromTimestamp => "FROM_TIMESTAMP".to_string(),
+            ShardFilterType::FromTrimHorizon => "FROM_TRIM_HORIZON".to_string(),
+            ShardFilterType::UnknownVariant(UnknownShardFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShardFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            ShardFilterType::AfterShardId => &"AFTER_SHARD_ID",
+            ShardFilterType::AtLatest => &"AT_LATEST",
+            ShardFilterType::AtTimestamp => &"AT_TIMESTAMP",
+            ShardFilterType::AtTrimHorizon => &"AT_TRIM_HORIZON",
+            ShardFilterType::FromTimestamp => &"FROM_TIMESTAMP",
+            ShardFilterType::FromTrimHorizon => &"FROM_TRIM_HORIZON",
+            ShardFilterType::UnknownVariant(UnknownShardFilterType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShardFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFTER_SHARD_ID" => ShardFilterType::AfterShardId,
+            "AT_LATEST" => ShardFilterType::AtLatest,
+            "AT_TIMESTAMP" => ShardFilterType::AtTimestamp,
+            "AT_TRIM_HORIZON" => ShardFilterType::AtTrimHorizon,
+            "FROM_TIMESTAMP" => ShardFilterType::FromTimestamp,
+            "FROM_TRIM_HORIZON" => ShardFilterType::FromTrimHorizon,
+            _ => ShardFilterType::UnknownVariant(UnknownShardFilterType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShardFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFTER_SHARD_ID" => ShardFilterType::AfterShardId,
+            "AT_LATEST" => ShardFilterType::AtLatest,
+            "AT_TIMESTAMP" => ShardFilterType::AtTimestamp,
+            "AT_TRIM_HORIZON" => ShardFilterType::AtTrimHorizon,
+            "FROM_TIMESTAMP" => ShardFilterType::FromTimestamp,
+            "FROM_TRIM_HORIZON" => ShardFilterType::FromTrimHorizon,
+            _ => ShardFilterType::UnknownVariant(UnknownShardFilterType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShardFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShardFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ShardFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShardIteratorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShardIteratorType {
+    AfterSequenceNumber,
+    AtSequenceNumber,
+    AtTimestamp,
+    Latest,
+    TrimHorizon,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShardIteratorType),
+}
+
+impl Default for ShardIteratorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShardIteratorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShardIteratorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShardIteratorType {
+    fn into(self) -> String {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => "AFTER_SEQUENCE_NUMBER".to_string(),
+            ShardIteratorType::AtSequenceNumber => "AT_SEQUENCE_NUMBER".to_string(),
+            ShardIteratorType::AtTimestamp => "AT_TIMESTAMP".to_string(),
+            ShardIteratorType::Latest => "LATEST".to_string(),
+            ShardIteratorType::TrimHorizon => "TRIM_HORIZON".to_string(),
+            ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShardIteratorType {
+    fn into(self) -> &'a str {
+        match self {
+            ShardIteratorType::AfterSequenceNumber => &"AFTER_SEQUENCE_NUMBER",
+            ShardIteratorType::AtSequenceNumber => &"AT_SEQUENCE_NUMBER",
+            ShardIteratorType::AtTimestamp => &"AT_TIMESTAMP",
+            ShardIteratorType::Latest => &"LATEST",
+            ShardIteratorType::TrimHorizon => &"TRIM_HORIZON",
+            ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ShardIteratorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFTER_SEQUENCE_NUMBER" => ShardIteratorType::AfterSequenceNumber,
+            "AT_SEQUENCE_NUMBER" => ShardIteratorType::AtSequenceNumber,
+            "AT_TIMESTAMP" => ShardIteratorType::AtTimestamp,
+            "LATEST" => ShardIteratorType::Latest,
+            "TRIM_HORIZON" => ShardIteratorType::TrimHorizon,
+            _ => ShardIteratorType::UnknownVariant(UnknownShardIteratorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShardIteratorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFTER_SEQUENCE_NUMBER" => ShardIteratorType::AfterSequenceNumber,
+            "AT_SEQUENCE_NUMBER" => ShardIteratorType::AtSequenceNumber,
+            "AT_TIMESTAMP" => ShardIteratorType::AtTimestamp,
+            "LATEST" => ShardIteratorType::Latest,
+            "TRIM_HORIZON" => ShardIteratorType::TrimHorizon,
+            _ => ShardIteratorType::UnknownVariant(UnknownShardIteratorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShardIteratorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ShardIteratorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ShardIteratorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input for <code>SplitShard</code>.</p>
@@ -902,7 +1581,7 @@ pub struct SplitShardInput {
 pub struct StartStreamEncryptionInput {
     /// <p>The encryption type to use. The only valid value is <code>KMS</code>.</p>
     #[serde(rename = "EncryptionType")]
-    pub encryption_type: String,
+    pub encryption_type: EncryptionType,
     /// <p><p>The GUID for the customer-managed AWS KMS key to use for encryption. This value can be a globally unique identifier, a fully specified Amazon Resource Name (ARN) to either an alias or a key, or an alias name prefixed by &quot;alias/&quot;.You can also use a master key owned by Kinesis Data Streams by specifying the alias <code>aws/kinesis</code>.</p> <ul> <li> <p>Key ARN example: <code>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p> </li> <li> <p>Alias ARN example: <code>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</code> </p> </li> <li> <p>Globally unique key ID example: <code>12345678-1234-1234-1234-123456789012</code> </p> </li> <li> <p>Alias name example: <code>alias/MyAliasName</code> </p> </li> <li> <p>Master key owned by Kinesis Data Streams: <code>alias/aws/kinesis</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
@@ -925,7 +1604,7 @@ pub struct StartingPosition {
     pub timestamp: Option<f64>,
     /// <p>You can set the starting position to one of the following values:</p> <p> <code>AT_SEQUENCE_NUMBER</code>: Start streaming from the position denoted by the sequence number specified in the <code>SequenceNumber</code> field.</p> <p> <code>AFTER_SEQUENCE_NUMBER</code>: Start streaming right after the position denoted by the sequence number specified in the <code>SequenceNumber</code> field.</p> <p> <code>AT_TIMESTAMP</code>: Start streaming from the position denoted by the time stamp specified in the <code>Timestamp</code> field.</p> <p> <code>TRIM_HORIZON</code>: Start streaming at the last untrimmed record in the shard, which is the oldest data record in the shard.</p> <p> <code>LATEST</code>: Start streaming just after the most recent record in the shard, so that you always read the most recent data in the shard.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ShardIteratorType,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -933,7 +1612,7 @@ pub struct StartingPosition {
 pub struct StopStreamEncryptionInput {
     /// <p>The encryption type. The only valid value is <code>KMS</code>.</p>
     #[serde(rename = "EncryptionType")]
-    pub encryption_type: String,
+    pub encryption_type: EncryptionType,
     /// <p><p>The GUID for the customer-managed AWS KMS key to use for encryption. This value can be a globally unique identifier, a fully specified Amazon Resource Name (ARN) to either an alias or a key, or an alias name prefixed by &quot;alias/&quot;.You can also use a master key owned by Kinesis Data Streams by specifying the alias <code>aws/kinesis</code>.</p> <ul> <li> <p>Key ARN example: <code>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p> </li> <li> <p>Alias ARN example: <code>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</code> </p> </li> <li> <p>Globally unique key ID example: <code>12345678-1234-1234-1234-123456789012</code> </p> </li> <li> <p>Alias name example: <code>alias/MyAliasName</code> </p> </li> <li> <p>Master key owned by Kinesis Data Streams: <code>alias/aws/kinesis</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
@@ -949,7 +1628,7 @@ pub struct StreamDescription {
     /// <p><p>The server-side encryption type used on the stream. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>Represents the current enhanced monitoring settings of the stream.</p>
     #[serde(rename = "EnhancedMonitoring")]
     pub enhanced_monitoring: Vec<EnhancedMetrics>,
@@ -977,7 +1656,7 @@ pub struct StreamDescription {
     pub stream_name: String,
     /// <p><p>The current status of the stream being described. The stream status is one of the following states:</p> <ul> <li> <p> <code>CREATING</code> - The stream is being created. Kinesis Data Streams immediately returns and sets <code>StreamStatus</code> to <code>CREATING</code>.</p> </li> <li> <p> <code>DELETING</code> - The stream is being deleted. The specified stream is in the <code>DELETING</code> state until Kinesis Data Streams completes the deletion.</p> </li> <li> <p> <code>ACTIVE</code> - The stream exists and is ready for read and write operations or deletion. You should perform read and write operations only on an <code>ACTIVE</code> stream.</p> </li> <li> <p> <code>UPDATING</code> - Shards in the stream are being merged or split. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state.</p> </li> </ul></p>
     #[serde(rename = "StreamStatus")]
-    pub stream_status: String,
+    pub stream_status: StreamStatus,
 }
 
 /// <p>Represents the output for <a>DescribeStreamSummary</a> </p>
@@ -991,7 +1670,7 @@ pub struct StreamDescriptionSummary {
     /// <p><p>The encryption type used. This value is one of the following:</p> <ul> <li> <p> <code>KMS</code> </p> </li> <li> <p> <code>NONE</code> </p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>Represents the current enhanced monitoring settings of the stream.</p>
     #[serde(rename = "EnhancedMonitoring")]
     pub enhanced_monitoring: Vec<EnhancedMetrics>,
@@ -1016,7 +1695,118 @@ pub struct StreamDescriptionSummary {
     pub stream_name: String,
     /// <p><p>The current status of the stream being described. The stream status is one of the following states:</p> <ul> <li> <p> <code>CREATING</code> - The stream is being created. Kinesis Data Streams immediately returns and sets <code>StreamStatus</code> to <code>CREATING</code>.</p> </li> <li> <p> <code>DELETING</code> - The stream is being deleted. The specified stream is in the <code>DELETING</code> state until Kinesis Data Streams completes the deletion.</p> </li> <li> <p> <code>ACTIVE</code> - The stream exists and is ready for read and write operations or deletion. You should perform read and write operations only on an <code>ACTIVE</code> stream.</p> </li> <li> <p> <code>UPDATING</code> - Shards in the stream are being merged or split. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state.</p> </li> </ul></p>
     #[serde(rename = "StreamStatus")]
-    pub stream_status: String,
+    pub stream_status: StreamStatus,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamStatus),
+}
+
+impl Default for StreamStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamStatus {
+    fn into(self) -> String {
+        match self {
+            StreamStatus::Active => "ACTIVE".to_string(),
+            StreamStatus::Creating => "CREATING".to_string(),
+            StreamStatus::Deleting => "DELETING".to_string(),
+            StreamStatus::Updating => "UPDATING".to_string(),
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StreamStatus::Active => &"ACTIVE",
+            StreamStatus::Creating => &"CREATING",
+            StreamStatus::Deleting => &"DELETING",
+            StreamStatus::Updating => &"UPDATING",
+            StreamStatus::UnknownVariant(UnknownStreamStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => StreamStatus::Active,
+            "CREATING" => StreamStatus::Creating,
+            "DELETING" => StreamStatus::Deleting,
+            "UPDATING" => StreamStatus::Updating,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => StreamStatus::Active,
+            "CREATING" => StreamStatus::Creating,
+            "DELETING" => StreamStatus::Deleting,
+            "UPDATING" => StreamStatus::Updating,
+            _ => StreamStatus::UnknownVariant(UnknownStreamStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StreamStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>After you call <a>SubscribeToShard</a>, Kinesis Data Streams sends events of this type over an HTTP/2 connection to your consumer.</p>
@@ -1144,7 +1934,7 @@ pub struct Tag {
 pub struct UpdateShardCountInput {
     /// <p>The scaling type. Uniform scaling creates shards of equal size.</p>
     #[serde(rename = "ScalingType")]
-    pub scaling_type: String,
+    pub scaling_type: ScalingType,
     /// <p>The name of the stream.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,

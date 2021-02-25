@@ -110,6 +110,215 @@ pub struct ApplyPendingMaintenanceActionResponse {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthMechanismValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthMechanismValue {
+    Default,
+    MongodbCr,
+    ScramSha1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthMechanismValue),
+}
+
+impl Default for AuthMechanismValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthMechanismValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthMechanismValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthMechanismValue {
+    fn into(self) -> String {
+        match self {
+            AuthMechanismValue::Default => "default".to_string(),
+            AuthMechanismValue::MongodbCr => "mongodb_cr".to_string(),
+            AuthMechanismValue::ScramSha1 => "scram_sha_1".to_string(),
+            AuthMechanismValue::UnknownVariant(UnknownAuthMechanismValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthMechanismValue {
+    fn into(self) -> &'a str {
+        match self {
+            AuthMechanismValue::Default => &"default",
+            AuthMechanismValue::MongodbCr => &"mongodb_cr",
+            AuthMechanismValue::ScramSha1 => &"scram_sha_1",
+            AuthMechanismValue::UnknownVariant(UnknownAuthMechanismValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuthMechanismValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "default" => AuthMechanismValue::Default,
+            "mongodb_cr" => AuthMechanismValue::MongodbCr,
+            "scram_sha_1" => AuthMechanismValue::ScramSha1,
+            _ => AuthMechanismValue::UnknownVariant(UnknownAuthMechanismValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthMechanismValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "default" => AuthMechanismValue::Default,
+            "mongodb_cr" => AuthMechanismValue::MongodbCr,
+            "scram_sha_1" => AuthMechanismValue::ScramSha1,
+            _ => AuthMechanismValue::UnknownVariant(UnknownAuthMechanismValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthMechanismValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthMechanismValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthMechanismValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthTypeValue {
+    No,
+    Password,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthTypeValue),
+}
+
+impl Default for AuthTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthTypeValue {
+    fn into(self) -> String {
+        match self {
+            AuthTypeValue::No => "no".to_string(),
+            AuthTypeValue::Password => "password".to_string(),
+            AuthTypeValue::UnknownVariant(UnknownAuthTypeValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            AuthTypeValue::No => &"no",
+            AuthTypeValue::Password => &"password",
+            AuthTypeValue::UnknownVariant(UnknownAuthTypeValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "no" => AuthTypeValue::No,
+            "password" => AuthTypeValue::Password,
+            _ => AuthTypeValue::UnknownVariant(UnknownAuthTypeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "no" => AuthTypeValue::No,
+            "password" => AuthTypeValue::Password,
+            _ => AuthTypeValue::UnknownVariant(UnknownAuthTypeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The name of an Availability Zone for use during database migration. <code>AvailabilityZone</code> is an optional parameter to the <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_CreateReplicationInstance.html"> <code>CreateReplicationInstance</code> </a> operation, and it’s value relates to the AWS Region of an endpoint. For example, the availability zone of an endpoint in the us-east-1 region might be us-east-1a, us-east-1b, us-east-1c, or us-east-1d.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -190,6 +399,219 @@ pub struct Certificate {
     pub valid_to_date: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCharLengthSemantics {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CharLengthSemantics {
+    Byte,
+    Char,
+    Default,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCharLengthSemantics),
+}
+
+impl Default for CharLengthSemantics {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CharLengthSemantics {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CharLengthSemantics {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CharLengthSemantics {
+    fn into(self) -> String {
+        match self {
+            CharLengthSemantics::Byte => "byte".to_string(),
+            CharLengthSemantics::Char => "char".to_string(),
+            CharLengthSemantics::Default => "default".to_string(),
+            CharLengthSemantics::UnknownVariant(UnknownCharLengthSemantics { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CharLengthSemantics {
+    fn into(self) -> &'a str {
+        match self {
+            CharLengthSemantics::Byte => &"byte",
+            CharLengthSemantics::Char => &"char",
+            CharLengthSemantics::Default => &"default",
+            CharLengthSemantics::UnknownVariant(UnknownCharLengthSemantics { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CharLengthSemantics {
+    fn from(name: &str) -> Self {
+        match name {
+            "byte" => CharLengthSemantics::Byte,
+            "char" => CharLengthSemantics::Char,
+            "default" => CharLengthSemantics::Default,
+            _ => CharLengthSemantics::UnknownVariant(UnknownCharLengthSemantics {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CharLengthSemantics {
+    fn from(name: String) -> Self {
+        match &*name {
+            "byte" => CharLengthSemantics::Byte,
+            "char" => CharLengthSemantics::Char,
+            "default" => CharLengthSemantics::Default,
+            _ => CharLengthSemantics::UnknownVariant(UnknownCharLengthSemantics { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CharLengthSemantics {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CharLengthSemantics {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CharLengthSemantics {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompressionTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompressionTypeValue {
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompressionTypeValue),
+}
+
+impl Default for CompressionTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompressionTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompressionTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompressionTypeValue {
+    fn into(self) -> String {
+        match self {
+            CompressionTypeValue::Gzip => "gzip".to_string(),
+            CompressionTypeValue::None => "none".to_string(),
+            CompressionTypeValue::UnknownVariant(UnknownCompressionTypeValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompressionTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            CompressionTypeValue::Gzip => &"gzip",
+            CompressionTypeValue::None => &"none",
+            CompressionTypeValue::UnknownVariant(UnknownCompressionTypeValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CompressionTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "gzip" => CompressionTypeValue::Gzip,
+            "none" => CompressionTypeValue::None,
+            _ => CompressionTypeValue::UnknownVariant(UnknownCompressionTypeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CompressionTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "gzip" => CompressionTypeValue::Gzip,
+            "none" => CompressionTypeValue::None,
+            _ => CompressionTypeValue::UnknownVariant(UnknownCompressionTypeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CompressionTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompressionTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Status of the connection between an endpoint and a replication instance, including Amazon Resource Names (ARNs) and the last error message issued.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -252,7 +674,7 @@ pub struct CreateEndpointMessage {
     pub endpoint_identifier: String,
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
-    pub endpoint_type: String,
+    pub endpoint_type: ReplicationEndpointTypeValue,
     /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndpointType</code> value, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"docdb"</code>, <code>"sqlserver"</code>, and <code>"neptune"</code>.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
@@ -334,7 +756,7 @@ pub struct CreateEndpointMessage {
     /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The default is <code>none</code> </p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ssl_mode: Option<String>,
+    pub ssl_mode: Option<DmsSslModeValue>,
     /// <p>Settings in JSON format for the source and target SAP ASE endpoint. For information about other available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SAP.html">Extra connection attributes when using SAP ASE as a source for AWS DMS</a> and <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SAP.html">Extra connection attributes when using SAP ASE as a target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "SybaseSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -522,7 +944,7 @@ pub struct CreateReplicationTaskMessage {
     pub cdc_stop_position: Option<String>,
     /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
     #[serde(rename = "MigrationType")]
-    pub migration_type: String,
+    pub migration_type: MigrationTypeValue,
     /// <p>The Amazon Resource Name (ARN) of a replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
@@ -564,6 +986,343 @@ pub struct CreateReplicationTaskResponse {
     #[serde(rename = "ReplicationTask")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataFormatValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataFormatValue {
+    Csv,
+    Parquet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataFormatValue),
+}
+
+impl Default for DataFormatValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataFormatValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataFormatValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataFormatValue {
+    fn into(self) -> String {
+        match self {
+            DataFormatValue::Csv => "csv".to_string(),
+            DataFormatValue::Parquet => "parquet".to_string(),
+            DataFormatValue::UnknownVariant(UnknownDataFormatValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataFormatValue {
+    fn into(self) -> &'a str {
+        match self {
+            DataFormatValue::Csv => &"csv",
+            DataFormatValue::Parquet => &"parquet",
+            DataFormatValue::UnknownVariant(UnknownDataFormatValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataFormatValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "csv" => DataFormatValue::Csv,
+            "parquet" => DataFormatValue::Parquet,
+            _ => DataFormatValue::UnknownVariant(UnknownDataFormatValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataFormatValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "csv" => DataFormatValue::Csv,
+            "parquet" => DataFormatValue::Parquet,
+            _ => DataFormatValue::UnknownVariant(UnknownDataFormatValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataFormatValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataFormatValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataFormatValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatePartitionDelimiterValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatePartitionDelimiterValue {
+    Dash,
+    None,
+    Slash,
+    Underscore,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatePartitionDelimiterValue),
+}
+
+impl Default for DatePartitionDelimiterValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatePartitionDelimiterValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatePartitionDelimiterValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatePartitionDelimiterValue {
+    fn into(self) -> String {
+        match self {
+            DatePartitionDelimiterValue::Dash => "DASH".to_string(),
+            DatePartitionDelimiterValue::None => "NONE".to_string(),
+            DatePartitionDelimiterValue::Slash => "SLASH".to_string(),
+            DatePartitionDelimiterValue::Underscore => "UNDERSCORE".to_string(),
+            DatePartitionDelimiterValue::UnknownVariant(UnknownDatePartitionDelimiterValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatePartitionDelimiterValue {
+    fn into(self) -> &'a str {
+        match self {
+            DatePartitionDelimiterValue::Dash => &"DASH",
+            DatePartitionDelimiterValue::None => &"NONE",
+            DatePartitionDelimiterValue::Slash => &"SLASH",
+            DatePartitionDelimiterValue::Underscore => &"UNDERSCORE",
+            DatePartitionDelimiterValue::UnknownVariant(UnknownDatePartitionDelimiterValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DatePartitionDelimiterValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "DASH" => DatePartitionDelimiterValue::Dash,
+            "NONE" => DatePartitionDelimiterValue::None,
+            "SLASH" => DatePartitionDelimiterValue::Slash,
+            "UNDERSCORE" => DatePartitionDelimiterValue::Underscore,
+            _ => DatePartitionDelimiterValue::UnknownVariant(UnknownDatePartitionDelimiterValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatePartitionDelimiterValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DASH" => DatePartitionDelimiterValue::Dash,
+            "NONE" => DatePartitionDelimiterValue::None,
+            "SLASH" => DatePartitionDelimiterValue::Slash,
+            "UNDERSCORE" => DatePartitionDelimiterValue::Underscore,
+            _ => DatePartitionDelimiterValue::UnknownVariant(UnknownDatePartitionDelimiterValue {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatePartitionDelimiterValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DatePartitionDelimiterValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatePartitionDelimiterValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatePartitionSequenceValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatePartitionSequenceValue {
+    Ddmmyyyy,
+    Mmyyyydd,
+    Yyyymm,
+    Yyyymmdd,
+    Yyyymmddhh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatePartitionSequenceValue),
+}
+
+impl Default for DatePartitionSequenceValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatePartitionSequenceValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatePartitionSequenceValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatePartitionSequenceValue {
+    fn into(self) -> String {
+        match self {
+            DatePartitionSequenceValue::Ddmmyyyy => "DDMMYYYY".to_string(),
+            DatePartitionSequenceValue::Mmyyyydd => "MMYYYYDD".to_string(),
+            DatePartitionSequenceValue::Yyyymm => "YYYYMM".to_string(),
+            DatePartitionSequenceValue::Yyyymmdd => "YYYYMMDD".to_string(),
+            DatePartitionSequenceValue::Yyyymmddhh => "YYYYMMDDHH".to_string(),
+            DatePartitionSequenceValue::UnknownVariant(UnknownDatePartitionSequenceValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatePartitionSequenceValue {
+    fn into(self) -> &'a str {
+        match self {
+            DatePartitionSequenceValue::Ddmmyyyy => &"DDMMYYYY",
+            DatePartitionSequenceValue::Mmyyyydd => &"MMYYYYDD",
+            DatePartitionSequenceValue::Yyyymm => &"YYYYMM",
+            DatePartitionSequenceValue::Yyyymmdd => &"YYYYMMDD",
+            DatePartitionSequenceValue::Yyyymmddhh => &"YYYYMMDDHH",
+            DatePartitionSequenceValue::UnknownVariant(UnknownDatePartitionSequenceValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DatePartitionSequenceValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "DDMMYYYY" => DatePartitionSequenceValue::Ddmmyyyy,
+            "MMYYYYDD" => DatePartitionSequenceValue::Mmyyyydd,
+            "YYYYMM" => DatePartitionSequenceValue::Yyyymm,
+            "YYYYMMDD" => DatePartitionSequenceValue::Yyyymmdd,
+            "YYYYMMDDHH" => DatePartitionSequenceValue::Yyyymmddhh,
+            _ => DatePartitionSequenceValue::UnknownVariant(UnknownDatePartitionSequenceValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatePartitionSequenceValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DDMMYYYY" => DatePartitionSequenceValue::Ddmmyyyy,
+            "MMYYYYDD" => DatePartitionSequenceValue::Mmyyyydd,
+            "YYYYMM" => DatePartitionSequenceValue::Yyyymm,
+            "YYYYMMDD" => DatePartitionSequenceValue::Yyyymmdd,
+            "YYYYMMDDHH" => DatePartitionSequenceValue::Yyyymmddhh,
+            _ => DatePartitionSequenceValue::UnknownVariant(UnknownDatePartitionSequenceValue {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatePartitionSequenceValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DatePartitionSequenceValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatePartitionSequenceValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -748,7 +1507,7 @@ pub struct DescribeApplicableIndividualAssessmentsMessage {
     /// <p>Name of the migration type that each provided individual assessment must support.</p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub migration_type: Option<String>,
+    pub migration_type: Option<MigrationTypeValue>,
     /// <p>ARN of a replication instance on which you want to base the default list of individual assessments.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1002,7 +1761,7 @@ pub struct DescribeEventsMessage {
     /// <p>The type of AWS DMS resource that generates events.</p> <p>Valid values: replication-instance | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
     /// <p>The start time for the events to be listed.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1409,6 +2168,116 @@ pub struct DescribeTableStatisticsResponse {
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDmsSslModeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DmsSslModeValue {
+    None,
+    Require,
+    VerifyCa,
+    VerifyFull,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDmsSslModeValue),
+}
+
+impl Default for DmsSslModeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DmsSslModeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DmsSslModeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DmsSslModeValue {
+    fn into(self) -> String {
+        match self {
+            DmsSslModeValue::None => "none".to_string(),
+            DmsSslModeValue::Require => "require".to_string(),
+            DmsSslModeValue::VerifyCa => "verify-ca".to_string(),
+            DmsSslModeValue::VerifyFull => "verify-full".to_string(),
+            DmsSslModeValue::UnknownVariant(UnknownDmsSslModeValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DmsSslModeValue {
+    fn into(self) -> &'a str {
+        match self {
+            DmsSslModeValue::None => &"none",
+            DmsSslModeValue::Require => &"require",
+            DmsSslModeValue::VerifyCa => &"verify-ca",
+            DmsSslModeValue::VerifyFull => &"verify-full",
+            DmsSslModeValue::UnknownVariant(UnknownDmsSslModeValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DmsSslModeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "none" => DmsSslModeValue::None,
+            "require" => DmsSslModeValue::Require,
+            "verify-ca" => DmsSslModeValue::VerifyCa,
+            "verify-full" => DmsSslModeValue::VerifyFull,
+            _ => DmsSslModeValue::UnknownVariant(UnknownDmsSslModeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DmsSslModeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "none" => DmsSslModeValue::None,
+            "require" => DmsSslModeValue::Require,
+            "verify-ca" => DmsSslModeValue::VerifyCa,
+            "verify-full" => DmsSslModeValue::VerifyFull,
+            _ => DmsSslModeValue::UnknownVariant(UnknownDmsSslModeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DmsSslModeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DmsSslModeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DmsSslModeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DmsTransferSettings {
@@ -1444,7 +2313,7 @@ pub struct DocDbSettings {
     /// <p> Specifies either document or table mode. </p> <p>Default value is <code>"none"</code>. Specify <code>"none"</code> to use document mode. Specify <code>"one"</code> to use table mode.</p>
     #[serde(rename = "NestingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nesting_level: Option<String>,
+    pub nesting_level: Option<NestingLevelValue>,
     /// <p> The password for the user account you use to access the DocumentDB source endpoint. </p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1498,6 +2367,219 @@ pub struct ElasticsearchSettings {
     pub service_access_role_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncodingTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncodingTypeValue {
+    Plain,
+    PlainDictionary,
+    RleDictionary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncodingTypeValue),
+}
+
+impl Default for EncodingTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncodingTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncodingTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncodingTypeValue {
+    fn into(self) -> String {
+        match self {
+            EncodingTypeValue::Plain => "plain".to_string(),
+            EncodingTypeValue::PlainDictionary => "plain-dictionary".to_string(),
+            EncodingTypeValue::RleDictionary => "rle-dictionary".to_string(),
+            EncodingTypeValue::UnknownVariant(UnknownEncodingTypeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncodingTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            EncodingTypeValue::Plain => &"plain",
+            EncodingTypeValue::PlainDictionary => &"plain-dictionary",
+            EncodingTypeValue::RleDictionary => &"rle-dictionary",
+            EncodingTypeValue::UnknownVariant(UnknownEncodingTypeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncodingTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "plain" => EncodingTypeValue::Plain,
+            "plain-dictionary" => EncodingTypeValue::PlainDictionary,
+            "rle-dictionary" => EncodingTypeValue::RleDictionary,
+            _ => EncodingTypeValue::UnknownVariant(UnknownEncodingTypeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncodingTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "plain" => EncodingTypeValue::Plain,
+            "plain-dictionary" => EncodingTypeValue::PlainDictionary,
+            "rle-dictionary" => EncodingTypeValue::RleDictionary,
+            _ => EncodingTypeValue::UnknownVariant(UnknownEncodingTypeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncodingTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncodingTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionModeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionModeValue {
+    SseKms,
+    SseS3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionModeValue),
+}
+
+impl Default for EncryptionModeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionModeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionModeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionModeValue {
+    fn into(self) -> String {
+        match self {
+            EncryptionModeValue::SseKms => "sse-kms".to_string(),
+            EncryptionModeValue::SseS3 => "sse-s3".to_string(),
+            EncryptionModeValue::UnknownVariant(UnknownEncryptionModeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionModeValue {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionModeValue::SseKms => &"sse-kms",
+            EncryptionModeValue::SseS3 => &"sse-s3",
+            EncryptionModeValue::UnknownVariant(UnknownEncryptionModeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EncryptionModeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "sse-kms" => EncryptionModeValue::SseKms,
+            "sse-s3" => EncryptionModeValue::SseS3,
+            _ => EncryptionModeValue::UnknownVariant(UnknownEncryptionModeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionModeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "sse-kms" => EncryptionModeValue::SseKms,
+            "sse-s3" => EncryptionModeValue::SseS3,
+            _ => EncryptionModeValue::UnknownVariant(UnknownEncryptionModeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionModeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionModeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionModeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Describes an endpoint of a database instance in response to operations such as the following:</p> <ul> <li> <p> <code>CreateEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpoint</code> </p> </li> <li> <p> <code>DescribeEndpointTypes</code> </p> </li> <li> <p> <code>ModifyEndpoint</code> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1536,7 +2618,7 @@ pub struct Endpoint {
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoint_type: Option<String>,
+    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
     /// <p>The expanded name for the engine name. For example, if the <code>EngineName</code> parameter is "aurora," this value would be "Amazon Aurora MySQL."</p>
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1620,7 +2702,7 @@ pub struct Endpoint {
     /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ssl_mode: Option<String>,
+    pub ssl_mode: Option<DmsSslModeValue>,
     /// <p>The status of the endpoint.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1658,7 +2740,7 @@ pub struct Event {
     /// <p> The type of AWS DMS resource that generates events. </p> <p>Valid values: replication-instance | endpoint | replication-task</p>
     #[serde(rename = "SourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_type: Option<String>,
+    pub source_type: Option<SourceType>,
 }
 
 /// <p>Lists categories of events subscribed to, and generated by, the applicable AWS DMS resource type. This data type appears in response to the <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_EventCategoryGroup.html"> <code>DescribeEventCategories</code> </a> action.</p>
@@ -1838,7 +2920,7 @@ pub struct KafkaSettings {
     /// <p>The output format for the records created on the endpoint. The message format is <code>JSON</code> (default) or <code>JSON_UNFORMATTED</code> (a single line with no tab).</p>
     #[serde(rename = "MessageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatValue>,
     /// <p>The maximum size in bytes for records created on the endpoint The default is 1,000,000.</p>
     #[serde(rename = "MessageMaxBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1879,7 +2961,7 @@ pub struct KinesisSettings {
     /// <p>The output format for the records created on the endpoint. The message format is <code>JSON</code> (default) or <code>JSON_UNFORMATTED</code> (a single line with no tab).</p>
     #[serde(rename = "MessageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub message_format: Option<String>,
+    pub message_format: Option<MessageFormatValue>,
     /// <p>Prefixes schema and table names to partition values, when the partition type is <code>primary-key-type</code>. Doing this increases data distribution among Kinesis shards. For example, suppose that a SysBench schema has thousands of tables and each table has only limited range for a primary key. In this case, the same primary key is sent from thousands of tables to the same shard, which causes throttling. The default is <code>false</code>.</p>
     #[serde(rename = "PartitionIncludeSchemaTable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1913,6 +2995,110 @@ pub struct ListTagsForResourceResponse {
     pub tag_list: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMessageFormatValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MessageFormatValue {
+    Json,
+    JsonUnformatted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMessageFormatValue),
+}
+
+impl Default for MessageFormatValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MessageFormatValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MessageFormatValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MessageFormatValue {
+    fn into(self) -> String {
+        match self {
+            MessageFormatValue::Json => "json".to_string(),
+            MessageFormatValue::JsonUnformatted => "json-unformatted".to_string(),
+            MessageFormatValue::UnknownVariant(UnknownMessageFormatValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MessageFormatValue {
+    fn into(self) -> &'a str {
+        match self {
+            MessageFormatValue::Json => &"json",
+            MessageFormatValue::JsonUnformatted => &"json-unformatted",
+            MessageFormatValue::UnknownVariant(UnknownMessageFormatValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MessageFormatValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "json" => MessageFormatValue::Json,
+            "json-unformatted" => MessageFormatValue::JsonUnformatted,
+            _ => MessageFormatValue::UnknownVariant(UnknownMessageFormatValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MessageFormatValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "json" => MessageFormatValue::Json,
+            "json-unformatted" => MessageFormatValue::JsonUnformatted,
+            _ => MessageFormatValue::UnknownVariant(UnknownMessageFormatValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MessageFormatValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MessageFormatValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MessageFormatValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides information that defines a Microsoft SQL Server endpoint.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MicrosoftSQLServerSettings {
@@ -1943,7 +3129,7 @@ pub struct MicrosoftSQLServerSettings {
     /// <p>Use this attribute to minimize the need to access the backup log and enable AWS DMS to prevent truncation using one of the following two methods.</p> <p> <i>Start transactions in the database:</i> This is the default method. When this method is used, AWS DMS prevents TLOG truncation by mimicking a transaction in the database. As long as such a transaction is open, changes that appear after the transaction started aren't truncated. If you need Microsoft Replication to be enabled in your database, then you must choose this method.</p> <p> <i>Exclusively use sp_repldone within a single task</i>: When this method is used, AWS DMS reads the changes and then uses sp_repldone to mark the TLOG transactions as ready for truncation. Although this method doesn't involve any transactional activities, it can only be used when Microsoft Replication isn't running. Also, when using this method, only one AWS DMS task can access the database at any given time. Therefore, if you need to run parallel AWS DMS tasks against the same database, use the default method.</p>
     #[serde(rename = "SafeguardPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub safeguard_policy: Option<String>,
+    pub safeguard_policy: Option<SafeguardPolicy>,
     /// <p><p>The full Amazon Resource Name (ARN) of the IAM role that specifies AWS DMS as the trusted entity and grants the required permissions to access the value in <code>SecretsManagerSecret</code>. <code>SecretsManagerSecret</code> has the value of the AWS Secrets Manager secret that allows access to the SQL Server endpoint.</p> <note> <p>You can specify one of two sets of values for these permissions. You can specify the values for this setting and <code>SecretsManagerSecretId</code>. Or you can specify clear-text values for <code>UserName</code>, <code>Password</code>, <code>ServerName</code>, and <code>Port</code>. You can&#39;t specify both. For more information on creating this <code>SecretsManagerSecret</code> and the <code>SecretsManagerAccessRoleArn</code> and <code>SecretsManagerSecretId</code> required to access it, see <a href="https://docs.aws.amazon.com/https:/docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#security-iam-secretsmanager">Using secrets to access AWS Database Migration Service resources</a> in the <i>AWS Database Migration Service User Guide</i>.</p> </note></p>
     #[serde(rename = "SecretsManagerAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1964,6 +3150,115 @@ pub struct MicrosoftSQLServerSettings {
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMigrationTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MigrationTypeValue {
+    Cdc,
+    FullLoad,
+    FullLoadAndCdc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMigrationTypeValue),
+}
+
+impl Default for MigrationTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MigrationTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MigrationTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MigrationTypeValue {
+    fn into(self) -> String {
+        match self {
+            MigrationTypeValue::Cdc => "cdc".to_string(),
+            MigrationTypeValue::FullLoad => "full-load".to_string(),
+            MigrationTypeValue::FullLoadAndCdc => "full-load-and-cdc".to_string(),
+            MigrationTypeValue::UnknownVariant(UnknownMigrationTypeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MigrationTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            MigrationTypeValue::Cdc => &"cdc",
+            MigrationTypeValue::FullLoad => &"full-load",
+            MigrationTypeValue::FullLoadAndCdc => &"full-load-and-cdc",
+            MigrationTypeValue::UnknownVariant(UnknownMigrationTypeValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MigrationTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "cdc" => MigrationTypeValue::Cdc,
+            "full-load" => MigrationTypeValue::FullLoad,
+            "full-load-and-cdc" => MigrationTypeValue::FullLoadAndCdc,
+            _ => MigrationTypeValue::UnknownVariant(UnknownMigrationTypeValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MigrationTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "cdc" => MigrationTypeValue::Cdc,
+            "full-load" => MigrationTypeValue::FullLoad,
+            "full-load-and-cdc" => MigrationTypeValue::FullLoadAndCdc,
+            _ => MigrationTypeValue::UnknownVariant(UnknownMigrationTypeValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MigrationTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MigrationTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MigrationTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -2004,7 +3299,7 @@ pub struct ModifyEndpointMessage {
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoint_type: Option<String>,
+    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
     /// <p>The type of engine for the endpoint. Valid values, depending on the EndpointType, include <code>"mysql"</code>, <code>"oracle"</code>, <code>"postgres"</code>, <code>"mariadb"</code>, <code>"aurora"</code>, <code>"aurora-postgresql"</code>, <code>"redshift"</code>, <code>"s3"</code>, <code>"db2"</code>, <code>"azuredb"</code>, <code>"sybase"</code>, <code>"dynamodb"</code>, <code>"mongodb"</code>, <code>"kinesis"</code>, <code>"kafka"</code>, <code>"elasticsearch"</code>, <code>"documentdb"</code>, <code>"sqlserver"</code>, and <code>"neptune"</code>.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2079,7 +3374,7 @@ pub struct ModifyEndpointMessage {
     /// <p>The SSL mode used to connect to the endpoint. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ssl_mode: Option<String>,
+    pub ssl_mode: Option<DmsSslModeValue>,
     /// <p>Settings in JSON format for the source and target SAP ASE endpoint. For information about other available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SAP.ConnectionAttrib">Extra connection attributes when using SAP ASE as a source for AWS DMS</a> and <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SAP.ConnectionAttrib">Extra connection attributes when using SAP ASE as a target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "SybaseSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2239,7 +3534,7 @@ pub struct ModifyReplicationTaskMessage {
     /// <p>The migration type. Valid values: <code>full-load</code> | <code>cdc</code> | <code>full-load-and-cdc</code> </p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub migration_type: Option<String>,
+    pub migration_type: Option<MigrationTypeValue>,
     /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -2277,7 +3572,7 @@ pub struct MongoDbSettings {
     /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>For the default value, in MongoDB version 2.x, <code>"default"</code> is <code>"mongodb_cr"</code>. For MongoDB version 3.x or later, <code>"default"</code> is <code>"scram_sha_1"</code>. This setting isn't used when <code>AuthType</code> is set to <code>"no"</code>.</p>
     #[serde(rename = "AuthMechanism")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth_mechanism: Option<String>,
+    pub auth_mechanism: Option<AuthMechanismValue>,
     /// <p> The MongoDB database name. This setting isn't used when <code>AuthType</code> is set to <code>"no"</code>. </p> <p>The default is <code>"admin"</code>.</p>
     #[serde(rename = "AuthSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2285,7 +3580,7 @@ pub struct MongoDbSettings {
     /// <p> The authentication type you use to access the MongoDB source endpoint.</p> <p>When when set to <code>"no"</code>, user name and password parameters are not used and can be empty. </p>
     #[serde(rename = "AuthType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub auth_type: Option<String>,
+    pub auth_type: Option<AuthTypeValue>,
     /// <p> The database name on the MongoDB source endpoint. </p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2305,7 +3600,7 @@ pub struct MongoDbSettings {
     /// <p> Specifies either document or table mode. </p> <p>Default value is <code>"none"</code>. Specify <code>"none"</code> to use document mode. Specify <code>"one"</code> to use table mode.</p>
     #[serde(rename = "NestingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub nesting_level: Option<String>,
+    pub nesting_level: Option<NestingLevelValue>,
     /// <p> The password for the user account you use to access the MongoDB source endpoint. </p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2404,7 +3699,7 @@ pub struct MySQLSettings {
     /// <p>Specifies where to migrate source tables on the target, either to a single database or multiple databases.</p> <p>Example: <code>targetDbType=MULTIPLE_DATABASES</code> </p>
     #[serde(rename = "TargetDbType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_db_type: Option<String>,
+    pub target_db_type: Option<TargetDbType>,
     /// <p>Endpoint connection user name.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2440,6 +3735,110 @@ pub struct NeptuneSettings {
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNestingLevelValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NestingLevelValue {
+    None,
+    One,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNestingLevelValue),
+}
+
+impl Default for NestingLevelValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NestingLevelValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NestingLevelValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NestingLevelValue {
+    fn into(self) -> String {
+        match self {
+            NestingLevelValue::None => "none".to_string(),
+            NestingLevelValue::One => "one".to_string(),
+            NestingLevelValue::UnknownVariant(UnknownNestingLevelValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NestingLevelValue {
+    fn into(self) -> &'a str {
+        match self {
+            NestingLevelValue::None => &"none",
+            NestingLevelValue::One => &"one",
+            NestingLevelValue::UnknownVariant(UnknownNestingLevelValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NestingLevelValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "none" => NestingLevelValue::None,
+            "one" => NestingLevelValue::One,
+            _ => NestingLevelValue::UnknownVariant(UnknownNestingLevelValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NestingLevelValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "none" => NestingLevelValue::None,
+            "one" => NestingLevelValue::One,
+            _ => NestingLevelValue::UnknownVariant(UnknownNestingLevelValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NestingLevelValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NestingLevelValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NestingLevelValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information that defines an Oracle endpoint.</p>
@@ -2484,7 +3883,7 @@ pub struct OracleSettings {
     /// <p>Specifies whether the length of a character column is in bytes or in characters. To indicate that the character column length is in characters, set this attribute to <code>CHAR</code>. Otherwise, the character column length is in bytes.</p> <p>Example: <code>charLengthSemantics=CHAR;</code> </p>
     #[serde(rename = "CharLengthSemantics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub char_length_semantics: Option<String>,
+    pub char_length_semantics: Option<CharLengthSemantics>,
     /// <p>Database name for the endpoint.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2606,7 +4005,7 @@ pub struct OrderableReplicationInstance {
     /// <p><p>The value returned when the specified <code>EngineVersion</code> of the replication instance is in Beta or test mode. This indicates some features might not work as expected.</p> <note> <p>AWS DMS supports the <code>ReleaseStatus</code> parameter in versions 3.1.4 and later.</p> </note></p>
     #[serde(rename = "ReleaseStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub release_status: Option<String>,
+    pub release_status: Option<ReleaseStatusValues>,
     /// <p>The compute and memory capacity of the replication instance as defined for the specified replication instance class. For example to specify the instance class dms.c4.large, set this parameter to <code>"dms.c4.large"</code>.</p> <p>For more information on the settings and capacities for the available replication instance classes, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_ReplicationInstance.html#CHAP_ReplicationInstance.InDepth"> Selecting the right AWS DMS replication instance for your migration</a>. </p>
     #[serde(rename = "ReplicationInstanceClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2615,6 +4014,110 @@ pub struct OrderableReplicationInstance {
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParquetVersionValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParquetVersionValue {
+    Parquet10,
+    Parquet20,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParquetVersionValue),
+}
+
+impl Default for ParquetVersionValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParquetVersionValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParquetVersionValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParquetVersionValue {
+    fn into(self) -> String {
+        match self {
+            ParquetVersionValue::Parquet10 => "parquet-1-0".to_string(),
+            ParquetVersionValue::Parquet20 => "parquet-2-0".to_string(),
+            ParquetVersionValue::UnknownVariant(UnknownParquetVersionValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParquetVersionValue {
+    fn into(self) -> &'a str {
+        match self {
+            ParquetVersionValue::Parquet10 => &"parquet-1-0",
+            ParquetVersionValue::Parquet20 => &"parquet-2-0",
+            ParquetVersionValue::UnknownVariant(UnknownParquetVersionValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParquetVersionValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "parquet-1-0" => ParquetVersionValue::Parquet10,
+            "parquet-2-0" => ParquetVersionValue::Parquet20,
+            _ => ParquetVersionValue::UnknownVariant(UnknownParquetVersionValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParquetVersionValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "parquet-1-0" => ParquetVersionValue::Parquet10,
+            "parquet-2-0" => ParquetVersionValue::Parquet20,
+            _ => ParquetVersionValue::UnknownVariant(UnknownParquetVersionValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParquetVersionValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParquetVersionValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParquetVersionValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a maintenance action pending for an AWS DMS resource, including when and how it will be applied. This data type is a response element to the <code>DescribePendingMaintenanceActions</code> operation.</p>
@@ -2775,7 +4278,7 @@ pub struct RedshiftSettings {
     /// <p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE_S3</code> (the default) or <code>SSE_KMS</code>. </p> <note> <p>For the <code>ModifyEndpoint</code> operation, you can change the existing value of the <code>EncryptionMode</code> parameter from <code>SSE_KMS</code> to <code>SSE_S3</code>. But you can’t change the existing value from <code>SSE_S3</code> to <code>SSE_KMS</code>.</p> </note> <p>To use <code>SSE_S3</code>, create an AWS Identity and Access Management (IAM) role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code> </p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_mode: Option<String>,
+    pub encryption_mode: Option<EncryptionModeValue>,
     /// <p>This setting is only valid for a full-load migration task. Set <code>ExplicitIds</code> to <code>true</code> to have tables with <code>IDENTITY</code> columns override their auto-generated values with explicit values loaded from the source data files used to populate the tables. The default is <code>false</code>.</p>
     #[serde(rename = "ExplicitIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2899,7 +4402,326 @@ pub struct RefreshSchemasStatus {
     /// <p>The status of the schema.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RefreshSchemasStatusTypeValue>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRefreshSchemasStatusTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RefreshSchemasStatusTypeValue {
+    Failed,
+    Refreshing,
+    Successful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRefreshSchemasStatusTypeValue),
+}
+
+impl Default for RefreshSchemasStatusTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RefreshSchemasStatusTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RefreshSchemasStatusTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RefreshSchemasStatusTypeValue {
+    fn into(self) -> String {
+        match self {
+            RefreshSchemasStatusTypeValue::Failed => "failed".to_string(),
+            RefreshSchemasStatusTypeValue::Refreshing => "refreshing".to_string(),
+            RefreshSchemasStatusTypeValue::Successful => "successful".to_string(),
+            RefreshSchemasStatusTypeValue::UnknownVariant(
+                UnknownRefreshSchemasStatusTypeValue { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RefreshSchemasStatusTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            RefreshSchemasStatusTypeValue::Failed => &"failed",
+            RefreshSchemasStatusTypeValue::Refreshing => &"refreshing",
+            RefreshSchemasStatusTypeValue::Successful => &"successful",
+            RefreshSchemasStatusTypeValue::UnknownVariant(
+                UnknownRefreshSchemasStatusTypeValue { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RefreshSchemasStatusTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "failed" => RefreshSchemasStatusTypeValue::Failed,
+            "refreshing" => RefreshSchemasStatusTypeValue::Refreshing,
+            "successful" => RefreshSchemasStatusTypeValue::Successful,
+            _ => RefreshSchemasStatusTypeValue::UnknownVariant(
+                UnknownRefreshSchemasStatusTypeValue {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RefreshSchemasStatusTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "failed" => RefreshSchemasStatusTypeValue::Failed,
+            "refreshing" => RefreshSchemasStatusTypeValue::Refreshing,
+            "successful" => RefreshSchemasStatusTypeValue::Successful,
+            _ => RefreshSchemasStatusTypeValue::UnknownVariant(
+                UnknownRefreshSchemasStatusTypeValue { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RefreshSchemasStatusTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RefreshSchemasStatusTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RefreshSchemasStatusTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReleaseStatusValues {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReleaseStatusValues {
+    Beta,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReleaseStatusValues),
+}
+
+impl Default for ReleaseStatusValues {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReleaseStatusValues {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReleaseStatusValues {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReleaseStatusValues {
+    fn into(self) -> String {
+        match self {
+            ReleaseStatusValues::Beta => "beta".to_string(),
+            ReleaseStatusValues::UnknownVariant(UnknownReleaseStatusValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReleaseStatusValues {
+    fn into(self) -> &'a str {
+        match self {
+            ReleaseStatusValues::Beta => &"beta",
+            ReleaseStatusValues::UnknownVariant(UnknownReleaseStatusValues { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReleaseStatusValues {
+    fn from(name: &str) -> Self {
+        match name {
+            "beta" => ReleaseStatusValues::Beta,
+            _ => ReleaseStatusValues::UnknownVariant(UnknownReleaseStatusValues {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReleaseStatusValues {
+    fn from(name: String) -> Self {
+        match &*name {
+            "beta" => ReleaseStatusValues::Beta,
+            _ => ReleaseStatusValues::UnknownVariant(UnknownReleaseStatusValues { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReleaseStatusValues {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReleaseStatusValues {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReleaseStatusValues {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReloadOptionValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReloadOptionValue {
+    DataReload,
+    ValidateOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReloadOptionValue),
+}
+
+impl Default for ReloadOptionValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReloadOptionValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReloadOptionValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReloadOptionValue {
+    fn into(self) -> String {
+        match self {
+            ReloadOptionValue::DataReload => "data-reload".to_string(),
+            ReloadOptionValue::ValidateOnly => "validate-only".to_string(),
+            ReloadOptionValue::UnknownVariant(UnknownReloadOptionValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReloadOptionValue {
+    fn into(self) -> &'a str {
+        match self {
+            ReloadOptionValue::DataReload => &"data-reload",
+            ReloadOptionValue::ValidateOnly => &"validate-only",
+            ReloadOptionValue::UnknownVariant(UnknownReloadOptionValue { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReloadOptionValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "data-reload" => ReloadOptionValue::DataReload,
+            "validate-only" => ReloadOptionValue::ValidateOnly,
+            _ => ReloadOptionValue::UnknownVariant(UnknownReloadOptionValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReloadOptionValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "data-reload" => ReloadOptionValue::DataReload,
+            "validate-only" => ReloadOptionValue::ValidateOnly,
+            _ => ReloadOptionValue::UnknownVariant(UnknownReloadOptionValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReloadOptionValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReloadOptionValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReloadOptionValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2908,7 +4730,7 @@ pub struct ReloadTablesMessage {
     /// <p>Options for reload. Specify <code>data-reload</code> to reload the data and re-validate it if validation is enabled. Specify <code>validate-only</code> to re-validate the table. This option applies only when validation is enabled for the task. </p> <p>Valid values: data-reload, validate-only</p> <p>Default value is data-reload.</p>
     #[serde(rename = "ReloadOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reload_option: Option<String>,
+    pub reload_option: Option<ReloadOptionValue>,
     /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -2942,6 +4764,116 @@ pub struct RemoveTagsFromResourceMessage {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsFromResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicationEndpointTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicationEndpointTypeValue {
+    Source,
+    Target,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicationEndpointTypeValue),
+}
+
+impl Default for ReplicationEndpointTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicationEndpointTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicationEndpointTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicationEndpointTypeValue {
+    fn into(self) -> String {
+        match self {
+            ReplicationEndpointTypeValue::Source => "source".to_string(),
+            ReplicationEndpointTypeValue::Target => "target".to_string(),
+            ReplicationEndpointTypeValue::UnknownVariant(UnknownReplicationEndpointTypeValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicationEndpointTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicationEndpointTypeValue::Source => &"source",
+            ReplicationEndpointTypeValue::Target => &"target",
+            ReplicationEndpointTypeValue::UnknownVariant(UnknownReplicationEndpointTypeValue {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicationEndpointTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "source" => ReplicationEndpointTypeValue::Source,
+            "target" => ReplicationEndpointTypeValue::Target,
+            _ => {
+                ReplicationEndpointTypeValue::UnknownVariant(UnknownReplicationEndpointTypeValue {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ReplicationEndpointTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "source" => ReplicationEndpointTypeValue::Source,
+            "target" => ReplicationEndpointTypeValue::Target,
+            _ => {
+                ReplicationEndpointTypeValue::UnknownVariant(UnknownReplicationEndpointTypeValue {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicationEndpointTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReplicationEndpointTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicationEndpointTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p>Provides information that defines a replication instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3118,7 +5050,7 @@ pub struct ReplicationTask {
     /// <p>The type of migration.</p>
     #[serde(rename = "MigrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub migration_type: Option<String>,
+    pub migration_type: Option<MigrationTypeValue>,
     /// <p>Indicates the last checkpoint that occurred during a change data capture (CDC) operation. You can provide this value to the <code>CdcStartPosition</code> parameter to start a CDC operation that begins at that checkpoint.</p>
     #[serde(rename = "RecoveryCheckpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3399,7 +5331,7 @@ pub struct S3Settings {
     /// <p>An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Either set this parameter to NONE (the default) or don't use it to leave the files uncompressed. This parameter applies to both .csv and .parquet file formats. </p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_type: Option<String>,
+    pub compression_type: Option<CompressionTypeValue>,
     /// <p> The delimiter used to separate columns in the .csv file for both source and target. The default is a comma. </p>
     #[serde(rename = "CsvDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3415,7 +5347,7 @@ pub struct S3Settings {
     /// <p><p>The format of the data that you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>csv</code> : This is a row-based file format with comma-separated values (.csv). </p> </li> <li> <p> <code>parquet</code> : Apache Parquet (.parquet) is a columnar storage file format that features efficient compression and provides faster query response. </p> </li> </ul></p>
     #[serde(rename = "DataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_format: Option<String>,
+    pub data_format: Option<DataFormatValue>,
     /// <p>The size of one data page in bytes. This parameter defaults to 1024 * 1024 bytes (1 MiB). This number is used for .parquet file format only. </p>
     #[serde(rename = "DataPageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3423,7 +5355,7 @@ pub struct S3Settings {
     /// <p>Specifies a date separating delimiter to use during folder partitioning. The default value is <code>SLASH</code>. Use this parameter when <code>DatePartitionedEnabled</code> is set to <code>true</code>.</p>
     #[serde(rename = "DatePartitionDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub date_partition_delimiter: Option<String>,
+    pub date_partition_delimiter: Option<DatePartitionDelimiterValue>,
     /// <p>When set to <code>true</code>, this parameter partitions S3 bucket folders based on transaction commit dates. The default value is <code>false</code>. For more information about date-based folder partitoning, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.DatePartitioning">Using date-based folder partitioning</a>.</p>
     #[serde(rename = "DatePartitionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3431,7 +5363,7 @@ pub struct S3Settings {
     /// <p>Identifies the sequence of the date format to use during folder partitioning. The default value is <code>YYYYMMDD</code>. Use this parameter when <code>DatePartitionedEnabled</code> is set to <code>true</code>.</p>
     #[serde(rename = "DatePartitionSequence")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub date_partition_sequence: Option<String>,
+    pub date_partition_sequence: Option<DatePartitionSequenceValue>,
     /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. This parameter defaults to 1024 * 1024 bytes (1 MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. This size is used for .parquet file format only. </p>
     #[serde(rename = "DictPageSizeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3443,11 +5375,11 @@ pub struct S3Settings {
     /// <p><p>The type of encoding you are using: </p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently. This is the default.</p> </li> <li> <p> <code>PLAIN</code> doesn&#39;t use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
     #[serde(rename = "EncodingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingTypeValue>,
     /// <p><p>The type of server-side encryption that you want to use for your data. This encryption type is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (the default) or <code>SSE</em>KMS</code>. </p> <note> <p>For the <code>ModifyEndpoint</code> operation, you can change the existing value of the <code>EncryptionMode</code> parameter from <code>SSE<em>KMS</code> to <code>SSE</em>S3</code>. But you can’t change the existing value from <code>SSE<em>S3</code> to <code>SSE</em>KMS</code>.</p> </note> <p>To use <code>SSE_S3</code>, you need an AWS Identity and Access Management (IAM) role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p> <code>s3:CreateBucket</code> </p> </li> <li> <p> <code>s3:ListBucket</code> </p> </li> <li> <p> <code>s3:DeleteBucket</code> </p> </li> <li> <p> <code>s3:GetBucketLocation</code> </p> </li> <li> <p> <code>s3:GetObject</code> </p> </li> <li> <p> <code>s3:PutObject</code> </p> </li> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:GetObjectVersion</code> </p> </li> <li> <p> <code>s3:GetBucketPolicy</code> </p> </li> <li> <p> <code>s3:PutBucketPolicy</code> </p> </li> <li> <p> <code>s3:DeleteBucketPolicy</code> </p> </li> </ul></p>
     #[serde(rename = "EncryptionMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_mode: Option<String>,
+    pub encryption_mode: Option<EncryptionModeValue>,
     /// <p> Specifies how tables are defined in the S3 source files only. </p>
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3463,7 +5395,7 @@ pub struct S3Settings {
     /// <p>The version of the Apache Parquet format that you want to use: <code>parquet_1_0</code> (the default) or <code>parquet_2_0</code>.</p>
     #[serde(rename = "ParquetVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub parquet_version: Option<String>,
+    pub parquet_version: Option<ParquetVersionValue>,
     /// <p><p>If set to <code>true</code>, AWS DMS saves the transaction order for a change data capture (CDC) load on the Amazon S3 target specified by <a href="https://docs.aws.amazon.com/dms/latest/APIReference/API_S3Settings.html#DMS-Type-S3Settings-CdcPath"> <code>CdcPath</code> </a>. For more information, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.EndpointSettings.CdcPath">Capturing data changes (CDC) including transaction order on the S3 target</a>.</p> <note> <p>This setting is supported in AWS DMS versions 3.4.2 and later.</p> </note></p>
     #[serde(rename = "PreserveTransactions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3488,6 +5420,216 @@ pub struct S3Settings {
     #[serde(rename = "UseCsvNoSupValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_csv_no_sup_value: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSafeguardPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SafeguardPolicy {
+    ExclusiveAutomaticTruncation,
+    RelyOnSqlServerReplicationAgent,
+    SharedAutomaticTruncation,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSafeguardPolicy),
+}
+
+impl Default for SafeguardPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SafeguardPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SafeguardPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SafeguardPolicy {
+    fn into(self) -> String {
+        match self {
+            SafeguardPolicy::ExclusiveAutomaticTruncation => {
+                "exclusive-automatic-truncation".to_string()
+            }
+            SafeguardPolicy::RelyOnSqlServerReplicationAgent => {
+                "rely-on-sql-server-replication-agent".to_string()
+            }
+            SafeguardPolicy::SharedAutomaticTruncation => "shared-automatic-truncation".to_string(),
+            SafeguardPolicy::UnknownVariant(UnknownSafeguardPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SafeguardPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            SafeguardPolicy::ExclusiveAutomaticTruncation => &"exclusive-automatic-truncation",
+            SafeguardPolicy::RelyOnSqlServerReplicationAgent => {
+                &"rely-on-sql-server-replication-agent"
+            }
+            SafeguardPolicy::SharedAutomaticTruncation => &"shared-automatic-truncation",
+            SafeguardPolicy::UnknownVariant(UnknownSafeguardPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SafeguardPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "exclusive-automatic-truncation" => SafeguardPolicy::ExclusiveAutomaticTruncation,
+            "rely-on-sql-server-replication-agent" => {
+                SafeguardPolicy::RelyOnSqlServerReplicationAgent
+            }
+            "shared-automatic-truncation" => SafeguardPolicy::SharedAutomaticTruncation,
+            _ => SafeguardPolicy::UnknownVariant(UnknownSafeguardPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SafeguardPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "exclusive-automatic-truncation" => SafeguardPolicy::ExclusiveAutomaticTruncation,
+            "rely-on-sql-server-replication-agent" => {
+                SafeguardPolicy::RelyOnSqlServerReplicationAgent
+            }
+            "shared-automatic-truncation" => SafeguardPolicy::SharedAutomaticTruncation,
+            _ => SafeguardPolicy::UnknownVariant(UnknownSafeguardPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SafeguardPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SafeguardPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SafeguardPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SourceType {
+    ReplicationInstance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSourceType),
+}
+
+impl Default for SourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SourceType {
+    fn into(self) -> String {
+        match self {
+            SourceType::ReplicationInstance => "replication-instance".to_string(),
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SourceType {
+    fn into(self) -> &'a str {
+        match self {
+            SourceType::ReplicationInstance => &"replication-instance",
+            SourceType::UnknownVariant(UnknownSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "replication-instance" => SourceType::ReplicationInstance,
+            _ => SourceType::UnknownVariant(UnknownSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "replication-instance" => SourceType::ReplicationInstance,
+            _ => SourceType::UnknownVariant(UnknownSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -3578,7 +5720,7 @@ pub struct StartReplicationTaskMessage {
     pub replication_task_arn: String,
     /// <p>A type of replication task.</p>
     #[serde(rename = "StartReplicationTaskType")]
-    pub start_replication_task_type: String,
+    pub start_replication_task_type: StartReplicationTaskTypeValue,
 }
 
 /// <p><p/></p>
@@ -3589,6 +5731,120 @@ pub struct StartReplicationTaskResponse {
     #[serde(rename = "ReplicationTask")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task: Option<ReplicationTask>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStartReplicationTaskTypeValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StartReplicationTaskTypeValue {
+    ReloadTarget,
+    ResumeProcessing,
+    StartReplication,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStartReplicationTaskTypeValue),
+}
+
+impl Default for StartReplicationTaskTypeValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StartReplicationTaskTypeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StartReplicationTaskTypeValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StartReplicationTaskTypeValue {
+    fn into(self) -> String {
+        match self {
+            StartReplicationTaskTypeValue::ReloadTarget => "reload-target".to_string(),
+            StartReplicationTaskTypeValue::ResumeProcessing => "resume-processing".to_string(),
+            StartReplicationTaskTypeValue::StartReplication => "start-replication".to_string(),
+            StartReplicationTaskTypeValue::UnknownVariant(
+                UnknownStartReplicationTaskTypeValue { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StartReplicationTaskTypeValue {
+    fn into(self) -> &'a str {
+        match self {
+            StartReplicationTaskTypeValue::ReloadTarget => &"reload-target",
+            StartReplicationTaskTypeValue::ResumeProcessing => &"resume-processing",
+            StartReplicationTaskTypeValue::StartReplication => &"start-replication",
+            StartReplicationTaskTypeValue::UnknownVariant(
+                UnknownStartReplicationTaskTypeValue { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for StartReplicationTaskTypeValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "reload-target" => StartReplicationTaskTypeValue::ReloadTarget,
+            "resume-processing" => StartReplicationTaskTypeValue::ResumeProcessing,
+            "start-replication" => StartReplicationTaskTypeValue::StartReplication,
+            _ => StartReplicationTaskTypeValue::UnknownVariant(
+                UnknownStartReplicationTaskTypeValue {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for StartReplicationTaskTypeValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "reload-target" => StartReplicationTaskTypeValue::ReloadTarget,
+            "resume-processing" => StartReplicationTaskTypeValue::ResumeProcessing,
+            "start-replication" => StartReplicationTaskTypeValue::StartReplication,
+            _ => StartReplicationTaskTypeValue::UnknownVariant(
+                UnknownStartReplicationTaskTypeValue { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StartReplicationTaskTypeValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StartReplicationTaskTypeValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StartReplicationTaskTypeValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>
@@ -3635,7 +5891,7 @@ pub struct SupportedEndpointType {
     /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub endpoint_type: Option<String>,
+    pub endpoint_type: Option<ReplicationEndpointTypeValue>,
     /// <p>The expanded name for the engine name. For example, if the <code>EngineName</code> parameter is "aurora," this value would be "Amazon Aurora MySQL."</p>
     #[serde(rename = "EngineDisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3792,6 +6048,106 @@ pub struct Tag {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetDbType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetDbType {
+    MultipleDatabases,
+    SpecificDatabase,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetDbType),
+}
+
+impl Default for TargetDbType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetDbType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetDbType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetDbType {
+    fn into(self) -> String {
+        match self {
+            TargetDbType::MultipleDatabases => "multiple-databases".to_string(),
+            TargetDbType::SpecificDatabase => "specific-database".to_string(),
+            TargetDbType::UnknownVariant(UnknownTargetDbType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetDbType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetDbType::MultipleDatabases => &"multiple-databases",
+            TargetDbType::SpecificDatabase => &"specific-database",
+            TargetDbType::UnknownVariant(UnknownTargetDbType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetDbType {
+    fn from(name: &str) -> Self {
+        match name {
+            "multiple-databases" => TargetDbType::MultipleDatabases,
+            "specific-database" => TargetDbType::SpecificDatabase,
+            _ => TargetDbType::UnknownVariant(UnknownTargetDbType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetDbType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "multiple-databases" => TargetDbType::MultipleDatabases,
+            "specific-database" => TargetDbType::SpecificDatabase,
+            _ => TargetDbType::UnknownVariant(UnknownTargetDbType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetDbType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetDbType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetDbType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p/></p>

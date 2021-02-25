@@ -79,7 +79,7 @@ pub struct AdditionalResultAttribute {
     pub value: AdditionalResultAttributeValue,
     /// <p>The data type of the <code>Value</code> property.</p>
     #[serde(rename = "ValueType")]
-    pub value_type: String,
+    pub value_type: AdditionalResultAttributeValueType,
 }
 
 /// <p>An attribute returned with a document from a search.</p>
@@ -90,6 +90,118 @@ pub struct AdditionalResultAttributeValue {
     #[serde(rename = "TextWithHighlightsValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_with_highlights_value: Option<TextWithHighlights>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAdditionalResultAttributeValueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AdditionalResultAttributeValueType {
+    TextWithHighlightsValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAdditionalResultAttributeValueType),
+}
+
+impl Default for AdditionalResultAttributeValueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AdditionalResultAttributeValueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AdditionalResultAttributeValueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AdditionalResultAttributeValueType {
+    fn into(self) -> String {
+        match self {
+            AdditionalResultAttributeValueType::TextWithHighlightsValue => {
+                "TEXT_WITH_HIGHLIGHTS_VALUE".to_string()
+            }
+            AdditionalResultAttributeValueType::UnknownVariant(
+                UnknownAdditionalResultAttributeValueType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AdditionalResultAttributeValueType {
+    fn into(self) -> &'a str {
+        match self {
+            AdditionalResultAttributeValueType::TextWithHighlightsValue => {
+                &"TEXT_WITH_HIGHLIGHTS_VALUE"
+            }
+            AdditionalResultAttributeValueType::UnknownVariant(
+                UnknownAdditionalResultAttributeValueType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AdditionalResultAttributeValueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "TEXT_WITH_HIGHLIGHTS_VALUE" => {
+                AdditionalResultAttributeValueType::TextWithHighlightsValue
+            }
+            _ => AdditionalResultAttributeValueType::UnknownVariant(
+                UnknownAdditionalResultAttributeValueType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AdditionalResultAttributeValueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TEXT_WITH_HIGHLIGHTS_VALUE" => {
+                AdditionalResultAttributeValueType::TextWithHighlightsValue
+            }
+            _ => AdditionalResultAttributeValueType::UnknownVariant(
+                UnknownAdditionalResultAttributeValueType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AdditionalResultAttributeValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AdditionalResultAttributeValueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AdditionalResultAttributeValueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides filtering the query results based on document attributes.</p> <p>When you use the <code>AndAllFilters</code> or <code>OrAllFilters</code>, filters you can use 2 layers under the first attribute filter. For example, you can use:</p> <p> <code>&lt;AndAllFilters&gt;</code> </p> <ol> <li> <p> <code> &lt;OrAllFilters&gt;</code> </p> </li> <li> <p> <code> &lt;EqualTo&gt;</code> </p> </li> </ol> <p>If you use more than 2 layers, you receive a <code>ValidationException</code> exception with the message "<code>AttributeFilter</code> cannot have a depth of more than 2."</p>
@@ -168,7 +280,7 @@ pub struct BatchDeleteDocumentResponseFailedDocument {
     /// <p>The error code for why the document couldn't be removed from the index.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>An explanation for why the document couldn't be removed from the index.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -210,7 +322,7 @@ pub struct BatchPutDocumentResponseFailedDocument {
     /// <p>The type of error that caused the document to fail to be indexed.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>A description of the reason why the document could not be indexed.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,13 +391,166 @@ pub struct ConfluenceAttachmentConfiguration {
     pub crawl_attachments: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfluenceAttachmentFieldName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfluenceAttachmentFieldName {
+    Author,
+    ContentType,
+    CreatedDate,
+    DisplayUrl,
+    FileSize,
+    ItemType,
+    ParentId,
+    SpaceKey,
+    SpaceName,
+    Url,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfluenceAttachmentFieldName),
+}
+
+impl Default for ConfluenceAttachmentFieldName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfluenceAttachmentFieldName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfluenceAttachmentFieldName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfluenceAttachmentFieldName {
+    fn into(self) -> String {
+        match self {
+            ConfluenceAttachmentFieldName::Author => "AUTHOR".to_string(),
+            ConfluenceAttachmentFieldName::ContentType => "CONTENT_TYPE".to_string(),
+            ConfluenceAttachmentFieldName::CreatedDate => "CREATED_DATE".to_string(),
+            ConfluenceAttachmentFieldName::DisplayUrl => "DISPLAY_URL".to_string(),
+            ConfluenceAttachmentFieldName::FileSize => "FILE_SIZE".to_string(),
+            ConfluenceAttachmentFieldName::ItemType => "ITEM_TYPE".to_string(),
+            ConfluenceAttachmentFieldName::ParentId => "PARENT_ID".to_string(),
+            ConfluenceAttachmentFieldName::SpaceKey => "SPACE_KEY".to_string(),
+            ConfluenceAttachmentFieldName::SpaceName => "SPACE_NAME".to_string(),
+            ConfluenceAttachmentFieldName::Url => "URL".to_string(),
+            ConfluenceAttachmentFieldName::Version => "VERSION".to_string(),
+            ConfluenceAttachmentFieldName::UnknownVariant(
+                UnknownConfluenceAttachmentFieldName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfluenceAttachmentFieldName {
+    fn into(self) -> &'a str {
+        match self {
+            ConfluenceAttachmentFieldName::Author => &"AUTHOR",
+            ConfluenceAttachmentFieldName::ContentType => &"CONTENT_TYPE",
+            ConfluenceAttachmentFieldName::CreatedDate => &"CREATED_DATE",
+            ConfluenceAttachmentFieldName::DisplayUrl => &"DISPLAY_URL",
+            ConfluenceAttachmentFieldName::FileSize => &"FILE_SIZE",
+            ConfluenceAttachmentFieldName::ItemType => &"ITEM_TYPE",
+            ConfluenceAttachmentFieldName::ParentId => &"PARENT_ID",
+            ConfluenceAttachmentFieldName::SpaceKey => &"SPACE_KEY",
+            ConfluenceAttachmentFieldName::SpaceName => &"SPACE_NAME",
+            ConfluenceAttachmentFieldName::Url => &"URL",
+            ConfluenceAttachmentFieldName::Version => &"VERSION",
+            ConfluenceAttachmentFieldName::UnknownVariant(
+                UnknownConfluenceAttachmentFieldName { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfluenceAttachmentFieldName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTHOR" => ConfluenceAttachmentFieldName::Author,
+            "CONTENT_TYPE" => ConfluenceAttachmentFieldName::ContentType,
+            "CREATED_DATE" => ConfluenceAttachmentFieldName::CreatedDate,
+            "DISPLAY_URL" => ConfluenceAttachmentFieldName::DisplayUrl,
+            "FILE_SIZE" => ConfluenceAttachmentFieldName::FileSize,
+            "ITEM_TYPE" => ConfluenceAttachmentFieldName::ItemType,
+            "PARENT_ID" => ConfluenceAttachmentFieldName::ParentId,
+            "SPACE_KEY" => ConfluenceAttachmentFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluenceAttachmentFieldName::SpaceName,
+            "URL" => ConfluenceAttachmentFieldName::Url,
+            "VERSION" => ConfluenceAttachmentFieldName::Version,
+            _ => ConfluenceAttachmentFieldName::UnknownVariant(
+                UnknownConfluenceAttachmentFieldName {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConfluenceAttachmentFieldName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTHOR" => ConfluenceAttachmentFieldName::Author,
+            "CONTENT_TYPE" => ConfluenceAttachmentFieldName::ContentType,
+            "CREATED_DATE" => ConfluenceAttachmentFieldName::CreatedDate,
+            "DISPLAY_URL" => ConfluenceAttachmentFieldName::DisplayUrl,
+            "FILE_SIZE" => ConfluenceAttachmentFieldName::FileSize,
+            "ITEM_TYPE" => ConfluenceAttachmentFieldName::ItemType,
+            "PARENT_ID" => ConfluenceAttachmentFieldName::ParentId,
+            "SPACE_KEY" => ConfluenceAttachmentFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluenceAttachmentFieldName::SpaceName,
+            "URL" => ConfluenceAttachmentFieldName::Url,
+            "VERSION" => ConfluenceAttachmentFieldName::Version,
+            _ => ConfluenceAttachmentFieldName::UnknownVariant(
+                UnknownConfluenceAttachmentFieldName { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfluenceAttachmentFieldName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfluenceAttachmentFieldName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfluenceAttachmentFieldName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceAttachmentToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p> <p>You must first create the index field using the operation. </p>
     #[serde(rename = "DataSourceFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source_field_name: Option<String>,
+    pub data_source_field_name: Option<ConfluenceAttachmentFieldName>,
     /// <p>The format for date fields in the data source. If the field specified in <code>DataSourceFieldName</code> is a date field you must specify the date format. If the field is not a date field, an exception is thrown.</p>
     #[serde(rename = "DateFieldFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -305,13 +570,152 @@ pub struct ConfluenceBlogConfiguration {
     pub blog_field_mappings: Option<Vec<ConfluenceBlogToIndexFieldMapping>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfluenceBlogFieldName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfluenceBlogFieldName {
+    Author,
+    DisplayUrl,
+    ItemType,
+    Labels,
+    PublishDate,
+    SpaceKey,
+    SpaceName,
+    Url,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfluenceBlogFieldName),
+}
+
+impl Default for ConfluenceBlogFieldName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfluenceBlogFieldName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfluenceBlogFieldName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfluenceBlogFieldName {
+    fn into(self) -> String {
+        match self {
+            ConfluenceBlogFieldName::Author => "AUTHOR".to_string(),
+            ConfluenceBlogFieldName::DisplayUrl => "DISPLAY_URL".to_string(),
+            ConfluenceBlogFieldName::ItemType => "ITEM_TYPE".to_string(),
+            ConfluenceBlogFieldName::Labels => "LABELS".to_string(),
+            ConfluenceBlogFieldName::PublishDate => "PUBLISH_DATE".to_string(),
+            ConfluenceBlogFieldName::SpaceKey => "SPACE_KEY".to_string(),
+            ConfluenceBlogFieldName::SpaceName => "SPACE_NAME".to_string(),
+            ConfluenceBlogFieldName::Url => "URL".to_string(),
+            ConfluenceBlogFieldName::Version => "VERSION".to_string(),
+            ConfluenceBlogFieldName::UnknownVariant(UnknownConfluenceBlogFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfluenceBlogFieldName {
+    fn into(self) -> &'a str {
+        match self {
+            ConfluenceBlogFieldName::Author => &"AUTHOR",
+            ConfluenceBlogFieldName::DisplayUrl => &"DISPLAY_URL",
+            ConfluenceBlogFieldName::ItemType => &"ITEM_TYPE",
+            ConfluenceBlogFieldName::Labels => &"LABELS",
+            ConfluenceBlogFieldName::PublishDate => &"PUBLISH_DATE",
+            ConfluenceBlogFieldName::SpaceKey => &"SPACE_KEY",
+            ConfluenceBlogFieldName::SpaceName => &"SPACE_NAME",
+            ConfluenceBlogFieldName::Url => &"URL",
+            ConfluenceBlogFieldName::Version => &"VERSION",
+            ConfluenceBlogFieldName::UnknownVariant(UnknownConfluenceBlogFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfluenceBlogFieldName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTHOR" => ConfluenceBlogFieldName::Author,
+            "DISPLAY_URL" => ConfluenceBlogFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluenceBlogFieldName::ItemType,
+            "LABELS" => ConfluenceBlogFieldName::Labels,
+            "PUBLISH_DATE" => ConfluenceBlogFieldName::PublishDate,
+            "SPACE_KEY" => ConfluenceBlogFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluenceBlogFieldName::SpaceName,
+            "URL" => ConfluenceBlogFieldName::Url,
+            "VERSION" => ConfluenceBlogFieldName::Version,
+            _ => ConfluenceBlogFieldName::UnknownVariant(UnknownConfluenceBlogFieldName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfluenceBlogFieldName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTHOR" => ConfluenceBlogFieldName::Author,
+            "DISPLAY_URL" => ConfluenceBlogFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluenceBlogFieldName::ItemType,
+            "LABELS" => ConfluenceBlogFieldName::Labels,
+            "PUBLISH_DATE" => ConfluenceBlogFieldName::PublishDate,
+            "SPACE_KEY" => ConfluenceBlogFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluenceBlogFieldName::SpaceName,
+            "URL" => ConfluenceBlogFieldName::Url,
+            "VERSION" => ConfluenceBlogFieldName::Version,
+            _ => ConfluenceBlogFieldName::UnknownVariant(UnknownConfluenceBlogFieldName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfluenceBlogFieldName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfluenceBlogFieldName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfluenceBlogFieldName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the mapping between a blog field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceBlogToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
     #[serde(rename = "DataSourceFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source_field_name: Option<String>,
+    pub data_source_field_name: Option<ConfluenceBlogFieldName>,
     /// <p>The format for date fields in the data source. If the field specified in <code>DataSourceFieldName</code> is a date field you must specify the date format. If the field is not a date field, an exception is thrown.</p>
     #[serde(rename = "DateFieldFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -357,7 +761,7 @@ pub struct ConfluenceConfiguration {
     pub space_configuration: Option<ConfluenceSpaceConfiguration>,
     /// <p>Specifies the version of the Confluence installation that you are connecting to.</p>
     #[serde(rename = "Version")]
-    pub version: String,
+    pub version: ConfluenceVersion,
     /// <p>Specifies the information for connecting to an Amazon VPC.</p>
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -373,13 +777,167 @@ pub struct ConfluencePageConfiguration {
     pub page_field_mappings: Option<Vec<ConfluencePageToIndexFieldMapping>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfluencePageFieldName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfluencePageFieldName {
+    Author,
+    ContentStatus,
+    CreatedDate,
+    DisplayUrl,
+    ItemType,
+    Labels,
+    ModifiedDate,
+    ParentId,
+    SpaceKey,
+    SpaceName,
+    Url,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfluencePageFieldName),
+}
+
+impl Default for ConfluencePageFieldName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfluencePageFieldName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfluencePageFieldName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfluencePageFieldName {
+    fn into(self) -> String {
+        match self {
+            ConfluencePageFieldName::Author => "AUTHOR".to_string(),
+            ConfluencePageFieldName::ContentStatus => "CONTENT_STATUS".to_string(),
+            ConfluencePageFieldName::CreatedDate => "CREATED_DATE".to_string(),
+            ConfluencePageFieldName::DisplayUrl => "DISPLAY_URL".to_string(),
+            ConfluencePageFieldName::ItemType => "ITEM_TYPE".to_string(),
+            ConfluencePageFieldName::Labels => "LABELS".to_string(),
+            ConfluencePageFieldName::ModifiedDate => "MODIFIED_DATE".to_string(),
+            ConfluencePageFieldName::ParentId => "PARENT_ID".to_string(),
+            ConfluencePageFieldName::SpaceKey => "SPACE_KEY".to_string(),
+            ConfluencePageFieldName::SpaceName => "SPACE_NAME".to_string(),
+            ConfluencePageFieldName::Url => "URL".to_string(),
+            ConfluencePageFieldName::Version => "VERSION".to_string(),
+            ConfluencePageFieldName::UnknownVariant(UnknownConfluencePageFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfluencePageFieldName {
+    fn into(self) -> &'a str {
+        match self {
+            ConfluencePageFieldName::Author => &"AUTHOR",
+            ConfluencePageFieldName::ContentStatus => &"CONTENT_STATUS",
+            ConfluencePageFieldName::CreatedDate => &"CREATED_DATE",
+            ConfluencePageFieldName::DisplayUrl => &"DISPLAY_URL",
+            ConfluencePageFieldName::ItemType => &"ITEM_TYPE",
+            ConfluencePageFieldName::Labels => &"LABELS",
+            ConfluencePageFieldName::ModifiedDate => &"MODIFIED_DATE",
+            ConfluencePageFieldName::ParentId => &"PARENT_ID",
+            ConfluencePageFieldName::SpaceKey => &"SPACE_KEY",
+            ConfluencePageFieldName::SpaceName => &"SPACE_NAME",
+            ConfluencePageFieldName::Url => &"URL",
+            ConfluencePageFieldName::Version => &"VERSION",
+            ConfluencePageFieldName::UnknownVariant(UnknownConfluencePageFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfluencePageFieldName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTHOR" => ConfluencePageFieldName::Author,
+            "CONTENT_STATUS" => ConfluencePageFieldName::ContentStatus,
+            "CREATED_DATE" => ConfluencePageFieldName::CreatedDate,
+            "DISPLAY_URL" => ConfluencePageFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluencePageFieldName::ItemType,
+            "LABELS" => ConfluencePageFieldName::Labels,
+            "MODIFIED_DATE" => ConfluencePageFieldName::ModifiedDate,
+            "PARENT_ID" => ConfluencePageFieldName::ParentId,
+            "SPACE_KEY" => ConfluencePageFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluencePageFieldName::SpaceName,
+            "URL" => ConfluencePageFieldName::Url,
+            "VERSION" => ConfluencePageFieldName::Version,
+            _ => ConfluencePageFieldName::UnknownVariant(UnknownConfluencePageFieldName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfluencePageFieldName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTHOR" => ConfluencePageFieldName::Author,
+            "CONTENT_STATUS" => ConfluencePageFieldName::ContentStatus,
+            "CREATED_DATE" => ConfluencePageFieldName::CreatedDate,
+            "DISPLAY_URL" => ConfluencePageFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluencePageFieldName::ItemType,
+            "LABELS" => ConfluencePageFieldName::Labels,
+            "MODIFIED_DATE" => ConfluencePageFieldName::ModifiedDate,
+            "PARENT_ID" => ConfluencePageFieldName::ParentId,
+            "SPACE_KEY" => ConfluencePageFieldName::SpaceKey,
+            "SPACE_NAME" => ConfluencePageFieldName::SpaceName,
+            "URL" => ConfluencePageFieldName::Url,
+            "VERSION" => ConfluencePageFieldName::Version,
+            _ => ConfluencePageFieldName::UnknownVariant(UnknownConfluencePageFieldName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfluencePageFieldName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfluencePageFieldName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfluencePageFieldName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluencePageToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
     #[serde(rename = "DataSourceFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source_field_name: Option<String>,
+    pub data_source_field_name: Option<ConfluencePageFieldName>,
     /// <p>The format for date fields in the data source. If the field specified in <code>DataSourceFieldName</code> is a date field you must specify the date format. If the field is not a date field, an exception is thrown.</p>
     #[serde(rename = "DateFieldFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -415,13 +973,127 @@ pub struct ConfluenceSpaceConfiguration {
     pub space_field_mappings: Option<Vec<ConfluenceSpaceToIndexFieldMapping>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfluenceSpaceFieldName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfluenceSpaceFieldName {
+    DisplayUrl,
+    ItemType,
+    SpaceKey,
+    Url,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfluenceSpaceFieldName),
+}
+
+impl Default for ConfluenceSpaceFieldName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfluenceSpaceFieldName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfluenceSpaceFieldName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfluenceSpaceFieldName {
+    fn into(self) -> String {
+        match self {
+            ConfluenceSpaceFieldName::DisplayUrl => "DISPLAY_URL".to_string(),
+            ConfluenceSpaceFieldName::ItemType => "ITEM_TYPE".to_string(),
+            ConfluenceSpaceFieldName::SpaceKey => "SPACE_KEY".to_string(),
+            ConfluenceSpaceFieldName::Url => "URL".to_string(),
+            ConfluenceSpaceFieldName::UnknownVariant(UnknownConfluenceSpaceFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfluenceSpaceFieldName {
+    fn into(self) -> &'a str {
+        match self {
+            ConfluenceSpaceFieldName::DisplayUrl => &"DISPLAY_URL",
+            ConfluenceSpaceFieldName::ItemType => &"ITEM_TYPE",
+            ConfluenceSpaceFieldName::SpaceKey => &"SPACE_KEY",
+            ConfluenceSpaceFieldName::Url => &"URL",
+            ConfluenceSpaceFieldName::UnknownVariant(UnknownConfluenceSpaceFieldName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfluenceSpaceFieldName {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISPLAY_URL" => ConfluenceSpaceFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluenceSpaceFieldName::ItemType,
+            "SPACE_KEY" => ConfluenceSpaceFieldName::SpaceKey,
+            "URL" => ConfluenceSpaceFieldName::Url,
+            _ => ConfluenceSpaceFieldName::UnknownVariant(UnknownConfluenceSpaceFieldName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfluenceSpaceFieldName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISPLAY_URL" => ConfluenceSpaceFieldName::DisplayUrl,
+            "ITEM_TYPE" => ConfluenceSpaceFieldName::ItemType,
+            "SPACE_KEY" => ConfluenceSpaceFieldName::SpaceKey,
+            "URL" => ConfluenceSpaceFieldName::Url,
+            _ => ConfluenceSpaceFieldName::UnknownVariant(UnknownConfluenceSpaceFieldName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfluenceSpaceFieldName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfluenceSpaceFieldName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfluenceSpaceFieldName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceSpaceToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
     #[serde(rename = "DataSourceFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source_field_name: Option<String>,
+    pub data_source_field_name: Option<ConfluenceSpaceFieldName>,
     /// <p>The format for date fields in the data source. If the field specified in <code>DataSourceFieldName</code> is a date field you must specify the date format. If the field is not a date field, an exception is thrown.</p>
     #[serde(rename = "DateFieldFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -430,6 +1102,110 @@ pub struct ConfluenceSpaceToIndexFieldMapping {
     #[serde(rename = "IndexFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_field_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfluenceVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfluenceVersion {
+    Cloud,
+    Server,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfluenceVersion),
+}
+
+impl Default for ConfluenceVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfluenceVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfluenceVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfluenceVersion {
+    fn into(self) -> String {
+        match self {
+            ConfluenceVersion::Cloud => "CLOUD".to_string(),
+            ConfluenceVersion::Server => "SERVER".to_string(),
+            ConfluenceVersion::UnknownVariant(UnknownConfluenceVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfluenceVersion {
+    fn into(self) -> &'a str {
+        match self {
+            ConfluenceVersion::Cloud => &"CLOUD",
+            ConfluenceVersion::Server => &"SERVER",
+            ConfluenceVersion::UnknownVariant(UnknownConfluenceVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConfluenceVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUD" => ConfluenceVersion::Cloud,
+            "SERVER" => ConfluenceVersion::Server,
+            _ => ConfluenceVersion::UnknownVariant(UnknownConfluenceVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfluenceVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUD" => ConfluenceVersion::Cloud,
+            "SERVER" => ConfluenceVersion::Server,
+            _ => ConfluenceVersion::UnknownVariant(UnknownConfluenceVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfluenceVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfluenceVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfluenceVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides the information necessary to connect to a database.</p>
@@ -450,6 +1226,122 @@ pub struct ConnectionConfiguration {
     /// <p>The name of the table that contains the document data.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentType {
+    Html,
+    MsWord,
+    Pdf,
+    PlainText,
+    Ppt,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentType),
+}
+
+impl Default for ContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        match self {
+            ContentType::Html => "HTML".to_string(),
+            ContentType::MsWord => "MS_WORD".to_string(),
+            ContentType::Pdf => "PDF".to_string(),
+            ContentType::PlainText => "PLAIN_TEXT".to_string(),
+            ContentType::Ppt => "PPT".to_string(),
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentType {
+    fn into(self) -> &'a str {
+        match self {
+            ContentType::Html => &"HTML",
+            ContentType::MsWord => &"MS_WORD",
+            ContentType::Pdf => &"PDF",
+            ContentType::PlainText => &"PLAIN_TEXT",
+            ContentType::Ppt => &"PPT",
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HTML" => ContentType::Html,
+            "MS_WORD" => ContentType::MsWord,
+            "PDF" => ContentType::Pdf,
+            "PLAIN_TEXT" => ContentType::PlainText,
+            "PPT" => ContentType::Ppt,
+            _ => ContentType::UnknownVariant(UnknownContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HTML" => ContentType::Html,
+            "MS_WORD" => ContentType::MsWord,
+            "PDF" => ContentType::Pdf,
+            "PLAIN_TEXT" => ContentType::PlainText,
+            "PPT" => ContentType::Ppt,
+            _ => ContentType::UnknownVariant(UnknownContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -487,7 +1379,7 @@ pub struct CreateDataSourceRequest {
     pub tags: Option<Vec<Tag>>,
     /// <p>The type of repository that contains the data source.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DataSourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -512,7 +1404,7 @@ pub struct CreateFaqRequest {
     /// <p>The format of the input file. You can choose between a basic CSV format, a CSV format that includes customs attributes in a header, and a JSON format that includes custom attributes.</p> <p>The format must match the format of the file stored in the S3 bucket identified in the <code>S3Path</code> parameter.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/in-creating-faq.html">Adding questions and answers</a>.</p>
     #[serde(rename = "FileFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<String>,
+    pub file_format: Option<FaqFileFormat>,
     /// <p>The identifier of the index that contains the FAQ.</p>
     #[serde(rename = "IndexId")]
     pub index_id: String,
@@ -554,7 +1446,7 @@ pub struct CreateIndexRequest {
     /// <p>The Amazon Kendra edition to use for the index. Choose <code>DEVELOPER_EDITION</code> for indexes intended for development, testing, or proof of concept. Use <code>ENTERPRISE_EDITION</code> for your production databases. Once you set the edition for an index, it can't be changed. </p> <p>The <code>Edition</code> parameter is optional. If you don't supply a value, the default is <code>ENTERPRISE_EDITION</code>.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<IndexEdition>,
     /// <p>The name for the new index.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -572,7 +1464,7 @@ pub struct CreateIndexRequest {
     /// <p><p>The user context policy.</p> <dl> <dt>ATTRIBUTE<em>FILTER</dt> <dd> <p>All indexed content is searchable and displayable for all users. If there is an access control list, it is ignored. You can filter on user and group attributes. </p> </dd> <dt>USER</em>TOKEN</dt> <dd> <p>Enables SSO and token-based user access control. All documents with no access control and all documents accessible to the user will be searchable and displayable. </p> </dd> </dl></p>
     #[serde(rename = "UserContextPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_context_policy: Option<String>,
+    pub user_context_policy: Option<UserContextPolicy>,
     /// <p>The user token configuration.</p>
     #[serde(rename = "UserTokenConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -663,6 +1555,126 @@ pub struct DataSourceConfiguration {
     pub share_point_configuration: Option<SharePointConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceStatus),
+}
+
+impl Default for DataSourceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceStatus {
+    fn into(self) -> String {
+        match self {
+            DataSourceStatus::Active => "ACTIVE".to_string(),
+            DataSourceStatus::Creating => "CREATING".to_string(),
+            DataSourceStatus::Deleting => "DELETING".to_string(),
+            DataSourceStatus::Failed => "FAILED".to_string(),
+            DataSourceStatus::Updating => "UPDATING".to_string(),
+            DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceStatus::Active => &"ACTIVE",
+            DataSourceStatus::Creating => &"CREATING",
+            DataSourceStatus::Deleting => &"DELETING",
+            DataSourceStatus::Failed => &"FAILED",
+            DataSourceStatus::Updating => &"UPDATING",
+            DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DataSourceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DataSourceStatus::Active,
+            "CREATING" => DataSourceStatus::Creating,
+            "DELETING" => DataSourceStatus::Deleting,
+            "FAILED" => DataSourceStatus::Failed,
+            "UPDATING" => DataSourceStatus::Updating,
+            _ => DataSourceStatus::UnknownVariant(UnknownDataSourceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DataSourceStatus::Active,
+            "CREATING" => DataSourceStatus::Creating,
+            "DELETING" => DataSourceStatus::Deleting,
+            "FAILED" => DataSourceStatus::Failed,
+            "UPDATING" => DataSourceStatus::Updating,
+            _ => DataSourceStatus::UnknownVariant(UnknownDataSourceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataSourceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Summary information for a Amazon Kendra data source. Returned in a call to .</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -682,11 +1694,11 @@ pub struct DataSourceSummary {
     /// <p>The status of the data source. When the status is <code>ATIVE</code> the data source is ready to use.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DataSourceStatus>,
     /// <p>The type of the data source.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataSourceType>,
     /// <p>The UNIX datetime that the data source was lasted updated. </p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -708,7 +1720,7 @@ pub struct DataSourceSyncJob {
     /// <p>If the <code>Status</code> field is set to <code>FAILED</code>, the <code>ErrorCode</code> field contains a the reason that the synchronization failed.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>If the <code>Status</code> field is set to <code>ERROR</code>, the <code>ErrorMessage</code> field contains a description of the error that caused the synchronization to fail.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -728,7 +1740,7 @@ pub struct DataSourceSyncJob {
     /// <p>The execution status of the synchronization job. When the <code>Status</code> field is set to <code>SUCCEEDED</code>, the synchronization job is done. If the status code is set to <code>FAILED</code>, the <code>ErrorCode</code> and <code>ErrorMessage</code> fields give you the reason for the failure.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DataSourceSyncJobStatus>,
 }
 
 /// <p>Maps a particular data source sync job to a particular data source.</p>
@@ -769,6 +1781,135 @@ pub struct DataSourceSyncJobMetrics {
     pub documents_scanned: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceSyncJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceSyncJobStatus {
+    Aborted,
+    Failed,
+    Incomplete,
+    Stopping,
+    Succeeded,
+    Syncing,
+    SyncingIndexing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceSyncJobStatus),
+}
+
+impl Default for DataSourceSyncJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceSyncJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceSyncJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceSyncJobStatus {
+    fn into(self) -> String {
+        match self {
+            DataSourceSyncJobStatus::Aborted => "ABORTED".to_string(),
+            DataSourceSyncJobStatus::Failed => "FAILED".to_string(),
+            DataSourceSyncJobStatus::Incomplete => "INCOMPLETE".to_string(),
+            DataSourceSyncJobStatus::Stopping => "STOPPING".to_string(),
+            DataSourceSyncJobStatus::Succeeded => "SUCCEEDED".to_string(),
+            DataSourceSyncJobStatus::Syncing => "SYNCING".to_string(),
+            DataSourceSyncJobStatus::SyncingIndexing => "SYNCING_INDEXING".to_string(),
+            DataSourceSyncJobStatus::UnknownVariant(UnknownDataSourceSyncJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceSyncJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceSyncJobStatus::Aborted => &"ABORTED",
+            DataSourceSyncJobStatus::Failed => &"FAILED",
+            DataSourceSyncJobStatus::Incomplete => &"INCOMPLETE",
+            DataSourceSyncJobStatus::Stopping => &"STOPPING",
+            DataSourceSyncJobStatus::Succeeded => &"SUCCEEDED",
+            DataSourceSyncJobStatus::Syncing => &"SYNCING",
+            DataSourceSyncJobStatus::SyncingIndexing => &"SYNCING_INDEXING",
+            DataSourceSyncJobStatus::UnknownVariant(UnknownDataSourceSyncJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceSyncJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABORTED" => DataSourceSyncJobStatus::Aborted,
+            "FAILED" => DataSourceSyncJobStatus::Failed,
+            "INCOMPLETE" => DataSourceSyncJobStatus::Incomplete,
+            "STOPPING" => DataSourceSyncJobStatus::Stopping,
+            "SUCCEEDED" => DataSourceSyncJobStatus::Succeeded,
+            "SYNCING" => DataSourceSyncJobStatus::Syncing,
+            "SYNCING_INDEXING" => DataSourceSyncJobStatus::SyncingIndexing,
+            _ => DataSourceSyncJobStatus::UnknownVariant(UnknownDataSourceSyncJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceSyncJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABORTED" => DataSourceSyncJobStatus::Aborted,
+            "FAILED" => DataSourceSyncJobStatus::Failed,
+            "INCOMPLETE" => DataSourceSyncJobStatus::Incomplete,
+            "STOPPING" => DataSourceSyncJobStatus::Stopping,
+            "SUCCEEDED" => DataSourceSyncJobStatus::Succeeded,
+            "SYNCING" => DataSourceSyncJobStatus::Syncing,
+            "SYNCING_INDEXING" => DataSourceSyncJobStatus::SyncingIndexing,
+            _ => DataSourceSyncJobStatus::UnknownVariant(UnknownDataSourceSyncJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceSyncJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSourceSyncJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceSyncJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Maps a column or attribute in the data source to an index field. You must first create the fields in the index using the <a>UpdateIndex</a> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceToIndexFieldMapping {
@@ -782,6 +1923,141 @@ pub struct DataSourceToIndexFieldMapping {
     /// <p>The name of the field in the index.</p>
     #[serde(rename = "IndexFieldName")]
     pub index_field_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceType {
+    Confluence,
+    Custom,
+    Database,
+    Googledrive,
+    Onedrive,
+    S3,
+    Salesforce,
+    Servicenow,
+    Sharepoint,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceType),
+}
+
+impl Default for DataSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceType {
+    fn into(self) -> String {
+        match self {
+            DataSourceType::Confluence => "CONFLUENCE".to_string(),
+            DataSourceType::Custom => "CUSTOM".to_string(),
+            DataSourceType::Database => "DATABASE".to_string(),
+            DataSourceType::Googledrive => "GOOGLEDRIVE".to_string(),
+            DataSourceType::Onedrive => "ONEDRIVE".to_string(),
+            DataSourceType::S3 => "S3".to_string(),
+            DataSourceType::Salesforce => "SALESFORCE".to_string(),
+            DataSourceType::Servicenow => "SERVICENOW".to_string(),
+            DataSourceType::Sharepoint => "SHAREPOINT".to_string(),
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceType::Confluence => &"CONFLUENCE",
+            DataSourceType::Custom => &"CUSTOM",
+            DataSourceType::Database => &"DATABASE",
+            DataSourceType::Googledrive => &"GOOGLEDRIVE",
+            DataSourceType::Onedrive => &"ONEDRIVE",
+            DataSourceType::S3 => &"S3",
+            DataSourceType::Salesforce => &"SALESFORCE",
+            DataSourceType::Servicenow => &"SERVICENOW",
+            DataSourceType::Sharepoint => &"SHAREPOINT",
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONFLUENCE" => DataSourceType::Confluence,
+            "CUSTOM" => DataSourceType::Custom,
+            "DATABASE" => DataSourceType::Database,
+            "GOOGLEDRIVE" => DataSourceType::Googledrive,
+            "ONEDRIVE" => DataSourceType::Onedrive,
+            "S3" => DataSourceType::S3,
+            "SALESFORCE" => DataSourceType::Salesforce,
+            "SERVICENOW" => DataSourceType::Servicenow,
+            "SHAREPOINT" => DataSourceType::Sharepoint,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONFLUENCE" => DataSourceType::Confluence,
+            "CUSTOM" => DataSourceType::Custom,
+            "DATABASE" => DataSourceType::Database,
+            "GOOGLEDRIVE" => DataSourceType::Googledrive,
+            "ONEDRIVE" => DataSourceType::Onedrive,
+            "S3" => DataSourceType::S3,
+            "SALESFORCE" => DataSourceType::Salesforce,
+            "SERVICENOW" => DataSourceType::Servicenow,
+            "SHAREPOINT" => DataSourceType::Sharepoint,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information for connecting to an Amazon VPC.</p>
@@ -810,7 +2086,7 @@ pub struct DatabaseConfiguration {
     pub connection_configuration: ConnectionConfiguration,
     /// <p>The type of database engine that runs the database.</p>
     #[serde(rename = "DatabaseEngineType")]
-    pub database_engine_type: String,
+    pub database_engine_type: DatabaseEngineType,
     /// <p>Provides information about how Amazon Kendra uses quote marks around SQL identifiers when querying a database data source.</p>
     #[serde(rename = "SqlConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -818,6 +2094,120 @@ pub struct DatabaseConfiguration {
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatabaseEngineType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatabaseEngineType {
+    RdsAuroraMysql,
+    RdsAuroraPostgresql,
+    RdsMysql,
+    RdsPostgresql,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatabaseEngineType),
+}
+
+impl Default for DatabaseEngineType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatabaseEngineType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatabaseEngineType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatabaseEngineType {
+    fn into(self) -> String {
+        match self {
+            DatabaseEngineType::RdsAuroraMysql => "RDS_AURORA_MYSQL".to_string(),
+            DatabaseEngineType::RdsAuroraPostgresql => "RDS_AURORA_POSTGRESQL".to_string(),
+            DatabaseEngineType::RdsMysql => "RDS_MYSQL".to_string(),
+            DatabaseEngineType::RdsPostgresql => "RDS_POSTGRESQL".to_string(),
+            DatabaseEngineType::UnknownVariant(UnknownDatabaseEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatabaseEngineType {
+    fn into(self) -> &'a str {
+        match self {
+            DatabaseEngineType::RdsAuroraMysql => &"RDS_AURORA_MYSQL",
+            DatabaseEngineType::RdsAuroraPostgresql => &"RDS_AURORA_POSTGRESQL",
+            DatabaseEngineType::RdsMysql => &"RDS_MYSQL",
+            DatabaseEngineType::RdsPostgresql => &"RDS_POSTGRESQL",
+            DatabaseEngineType::UnknownVariant(UnknownDatabaseEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DatabaseEngineType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RDS_AURORA_MYSQL" => DatabaseEngineType::RdsAuroraMysql,
+            "RDS_AURORA_POSTGRESQL" => DatabaseEngineType::RdsAuroraPostgresql,
+            "RDS_MYSQL" => DatabaseEngineType::RdsMysql,
+            "RDS_POSTGRESQL" => DatabaseEngineType::RdsPostgresql,
+            _ => DatabaseEngineType::UnknownVariant(UnknownDatabaseEngineType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatabaseEngineType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RDS_AURORA_MYSQL" => DatabaseEngineType::RdsAuroraMysql,
+            "RDS_AURORA_POSTGRESQL" => DatabaseEngineType::RdsAuroraPostgresql,
+            "RDS_MYSQL" => DatabaseEngineType::RdsMysql,
+            "RDS_POSTGRESQL" => DatabaseEngineType::RdsPostgresql,
+            _ => DatabaseEngineType::UnknownVariant(UnknownDatabaseEngineType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatabaseEngineType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DatabaseEngineType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatabaseEngineType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -914,11 +2304,11 @@ pub struct DescribeDataSourceResponse {
     /// <p>The current status of the data source. When the status is <code>ACTIVE</code> the data source is ready to use. When the status is <code>FAILED</code>, the <code>ErrorMessage</code> field contains the reason that the data source failed.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DataSourceStatus>,
     /// <p>The type of the data source.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataSourceType>,
     /// <p>The Unix timestamp of when the data source was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -954,7 +2344,7 @@ pub struct DescribeFaqResponse {
     /// <p>The file format used by the input files for the FAQ.</p>
     #[serde(rename = "FileFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<String>,
+    pub file_format: Option<FaqFileFormat>,
     /// <p>The identifier of the FAQ.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -977,7 +2367,7 @@ pub struct DescribeFaqResponse {
     /// <p>The status of the FAQ. It is ready to use when the status is <code>ACTIVE</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FaqStatus>,
     /// <p>The date and time that the FAQ was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1014,7 +2404,7 @@ pub struct DescribeIndexResponse {
     /// <p>The Amazon Kendra edition used for the index. You decide the edition when you create the index.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<IndexEdition>,
     /// <p>When th e<code>Status</code> field value is <code>FAILED</code>, the <code>ErrorMessage</code> field contains a message that explains why.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1042,7 +2432,7 @@ pub struct DescribeIndexResponse {
     /// <p>The current status of the index. When the value is <code>ACTIVE</code>, the index is ready for use. If the <code>Status</code> field value is <code>FAILED</code>, the <code>ErrorMessage</code> field contains a message that explains why.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<IndexStatus>,
     /// <p>The Unix datetime that the index was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1050,7 +2440,7 @@ pub struct DescribeIndexResponse {
     /// <p>The user context policy for the Amazon Kendra index.</p>
     #[serde(rename = "UserContextPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_context_policy: Option<String>,
+    pub user_context_policy: Option<UserContextPolicy>,
     /// <p>The user token configuration for the Amazon Kendra index.</p>
     #[serde(rename = "UserTokenConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1109,7 +2499,7 @@ pub struct DescribeThesaurusResponse {
     /// <p>The current status of the thesaurus. When the value is <code>ACTIVE</code>, queries are able to use the thesaurus. If the <code>Status</code> field value is <code>FAILED</code>, the <code>ErrorMessage</code> field provides more information. </p> <p>If the status is <code>ACTIVE_BUT_UPDATE_FAILED</code>, it means that Amazon Kendra could not ingest the new thesaurus file. The old thesaurus file is still active. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ThesaurusStatus>,
     /// <p>The number of synonym rules in the thesaurus file.</p>
     #[serde(rename = "SynonymRuleCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1148,7 +2538,7 @@ pub struct Document {
     /// <p>The file type of the document in the <code>Blob</code> field.</p>
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<String>,
+    pub content_type: Option<ContentType>,
     /// <p>A unique identifier of the document in the index.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -1207,6 +2597,122 @@ pub struct DocumentAttributeValueCountPair {
     pub document_attribute_value: Option<DocumentAttributeValue>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentAttributeValueType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentAttributeValueType {
+    DateValue,
+    LongValue,
+    StringListValue,
+    StringValue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentAttributeValueType),
+}
+
+impl Default for DocumentAttributeValueType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentAttributeValueType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentAttributeValueType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentAttributeValueType {
+    fn into(self) -> String {
+        match self {
+            DocumentAttributeValueType::DateValue => "DATE_VALUE".to_string(),
+            DocumentAttributeValueType::LongValue => "LONG_VALUE".to_string(),
+            DocumentAttributeValueType::StringListValue => "STRING_LIST_VALUE".to_string(),
+            DocumentAttributeValueType::StringValue => "STRING_VALUE".to_string(),
+            DocumentAttributeValueType::UnknownVariant(UnknownDocumentAttributeValueType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentAttributeValueType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentAttributeValueType::DateValue => &"DATE_VALUE",
+            DocumentAttributeValueType::LongValue => &"LONG_VALUE",
+            DocumentAttributeValueType::StringListValue => &"STRING_LIST_VALUE",
+            DocumentAttributeValueType::StringValue => &"STRING_VALUE",
+            DocumentAttributeValueType::UnknownVariant(UnknownDocumentAttributeValueType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentAttributeValueType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DATE_VALUE" => DocumentAttributeValueType::DateValue,
+            "LONG_VALUE" => DocumentAttributeValueType::LongValue,
+            "STRING_LIST_VALUE" => DocumentAttributeValueType::StringListValue,
+            "STRING_VALUE" => DocumentAttributeValueType::StringValue,
+            _ => DocumentAttributeValueType::UnknownVariant(UnknownDocumentAttributeValueType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentAttributeValueType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DATE_VALUE" => DocumentAttributeValueType::DateValue,
+            "LONG_VALUE" => DocumentAttributeValueType::LongValue,
+            "STRING_LIST_VALUE" => DocumentAttributeValueType::StringListValue,
+            "STRING_VALUE" => DocumentAttributeValueType::StringValue,
+            _ => DocumentAttributeValueType::UnknownVariant(UnknownDocumentAttributeValueType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentAttributeValueType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentAttributeValueType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentAttributeValueType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies the properties of a custom index field.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentMetadataConfiguration {
@@ -1223,7 +2729,7 @@ pub struct DocumentMetadataConfiguration {
     pub search: Option<Search>,
     /// <p>The data type of the index field. </p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DocumentAttributeValueType,
 }
 
 /// <p>Document metadata files that contain information such as the document access control information, source URI, document author, and custom attributes. Each metadata file contains metadata about a single document.</p>
@@ -1233,6 +2739,107 @@ pub struct DocumentsMetadataConfiguration {
     #[serde(rename = "S3Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_prefix: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    InternalError,
+    InvalidRequest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::InternalError => "InternalError".to_string(),
+            ErrorCode::InvalidRequest => "InvalidRequest".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::InternalError => &"InternalError",
+            ErrorCode::InvalidRequest => &"InvalidRequest",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "InternalError" => ErrorCode::InternalError,
+            "InvalidRequest" => ErrorCode::InvalidRequest,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InternalError" => ErrorCode::InternalError,
+            "InvalidRequest" => ErrorCode::InvalidRequest,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a document attribute</p>
@@ -1260,7 +2867,112 @@ pub struct FacetResult {
     /// <p>The data type of the facet value. This is the same as the type defined for the index field when it was created.</p>
     #[serde(rename = "DocumentAttributeValueType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub document_attribute_value_type: Option<String>,
+    pub document_attribute_value_type: Option<DocumentAttributeValueType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFaqFileFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FaqFileFormat {
+    Csv,
+    CsvWithHeader,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFaqFileFormat),
+}
+
+impl Default for FaqFileFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FaqFileFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FaqFileFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FaqFileFormat {
+    fn into(self) -> String {
+        match self {
+            FaqFileFormat::Csv => "CSV".to_string(),
+            FaqFileFormat::CsvWithHeader => "CSV_WITH_HEADER".to_string(),
+            FaqFileFormat::Json => "JSON".to_string(),
+            FaqFileFormat::UnknownVariant(UnknownFaqFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FaqFileFormat {
+    fn into(self) -> &'a str {
+        match self {
+            FaqFileFormat::Csv => &"CSV",
+            FaqFileFormat::CsvWithHeader => &"CSV_WITH_HEADER",
+            FaqFileFormat::Json => &"JSON",
+            FaqFileFormat::UnknownVariant(UnknownFaqFileFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FaqFileFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => FaqFileFormat::Csv,
+            "CSV_WITH_HEADER" => FaqFileFormat::CsvWithHeader,
+            "JSON" => FaqFileFormat::Json,
+            _ => FaqFileFormat::UnknownVariant(UnknownFaqFileFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FaqFileFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => FaqFileFormat::Csv,
+            "CSV_WITH_HEADER" => FaqFileFormat::CsvWithHeader,
+            "JSON" => FaqFileFormat::Json,
+            _ => FaqFileFormat::UnknownVariant(UnknownFaqFileFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FaqFileFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FaqFileFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FaqFileFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides statistical information about the FAQ questions and answers contained in an index.</p>
@@ -1270,6 +2982,122 @@ pub struct FaqStatistics {
     /// <p>The total number of FAQ questions and answers contained in the index.</p>
     #[serde(rename = "IndexedQuestionAnswersCount")]
     pub indexed_question_answers_count: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFaqStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FaqStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFaqStatus),
+}
+
+impl Default for FaqStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FaqStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FaqStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FaqStatus {
+    fn into(self) -> String {
+        match self {
+            FaqStatus::Active => "ACTIVE".to_string(),
+            FaqStatus::Creating => "CREATING".to_string(),
+            FaqStatus::Deleting => "DELETING".to_string(),
+            FaqStatus::Failed => "FAILED".to_string(),
+            FaqStatus::Updating => "UPDATING".to_string(),
+            FaqStatus::UnknownVariant(UnknownFaqStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FaqStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FaqStatus::Active => &"ACTIVE",
+            FaqStatus::Creating => &"CREATING",
+            FaqStatus::Deleting => &"DELETING",
+            FaqStatus::Failed => &"FAILED",
+            FaqStatus::Updating => &"UPDATING",
+            FaqStatus::UnknownVariant(UnknownFaqStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FaqStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => FaqStatus::Active,
+            "CREATING" => FaqStatus::Creating,
+            "DELETING" => FaqStatus::Deleting,
+            "FAILED" => FaqStatus::Failed,
+            "UPDATING" => FaqStatus::Updating,
+            _ => FaqStatus::UnknownVariant(UnknownFaqStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FaqStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => FaqStatus::Active,
+            "CREATING" => FaqStatus::Creating,
+            "DELETING" => FaqStatus::Deleting,
+            "FAILED" => FaqStatus::Failed,
+            "UPDATING" => FaqStatus::Updating,
+            _ => FaqStatus::UnknownVariant(UnknownFaqStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FaqStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FaqStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FaqStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about a frequently asked questions and answer contained in an index.</p>
@@ -1283,7 +3111,7 @@ pub struct FaqSummary {
     /// <p>The file type used to create the FAQ. </p>
     #[serde(rename = "FileFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format: Option<String>,
+    pub file_format: Option<FaqFileFormat>,
     /// <p>The unique identifier of the FAQ.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1295,7 +3123,7 @@ pub struct FaqSummary {
     /// <p>The current status of the FAQ. When the status is <code>ACTIVE</code> the FAQ is ready for use.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FaqStatus>,
     /// <p>The UNIX datetime that the FAQ was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1351,7 +3179,108 @@ pub struct Highlight {
     /// <p>The highlight type. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<HighlightType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHighlightType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HighlightType {
+    Standard,
+    ThesaurusSynonym,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHighlightType),
+}
+
+impl Default for HighlightType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HighlightType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HighlightType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HighlightType {
+    fn into(self) -> String {
+        match self {
+            HighlightType::Standard => "STANDARD".to_string(),
+            HighlightType::ThesaurusSynonym => "THESAURUS_SYNONYM".to_string(),
+            HighlightType::UnknownVariant(UnknownHighlightType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HighlightType {
+    fn into(self) -> &'a str {
+        match self {
+            HighlightType::Standard => &"STANDARD",
+            HighlightType::ThesaurusSynonym => &"THESAURUS_SYNONYM",
+            HighlightType::UnknownVariant(UnknownHighlightType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HighlightType {
+    fn from(name: &str) -> Self {
+        match name {
+            "STANDARD" => HighlightType::Standard,
+            "THESAURUS_SYNONYM" => HighlightType::ThesaurusSynonym,
+            _ => HighlightType::UnknownVariant(UnknownHighlightType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HighlightType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STANDARD" => HighlightType::Standard,
+            "THESAURUS_SYNONYM" => HighlightType::ThesaurusSynonym,
+            _ => HighlightType::UnknownVariant(UnknownHighlightType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HighlightType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HighlightType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HighlightType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A summary of information about an index.</p>
@@ -1364,7 +3293,7 @@ pub struct IndexConfigurationSummary {
     /// <p>Indicates whether the index is a enterprise edition index or a developer edition index. </p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub edition: Option<String>,
+    pub edition: Option<IndexEdition>,
     /// <p>A unique identifier for the index. Use this to identify the index when you are using operations such as <code>Query</code>, <code>DescribeIndex</code>, <code>UpdateIndex</code>, and <code>DeleteIndex</code>.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1375,10 +3304,110 @@ pub struct IndexConfigurationSummary {
     pub name: Option<String>,
     /// <p>The current status of the index. When the status is <code>ACTIVE</code>, the index is ready to search.</p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: IndexStatus,
     /// <p>The Unix timestamp when the index was last updated by the <code>UpdateIndex</code> operation.</p>
     #[serde(rename = "UpdatedAt")]
     pub updated_at: f64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIndexEdition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IndexEdition {
+    DeveloperEdition,
+    EnterpriseEdition,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIndexEdition),
+}
+
+impl Default for IndexEdition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IndexEdition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IndexEdition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IndexEdition {
+    fn into(self) -> String {
+        match self {
+            IndexEdition::DeveloperEdition => "DEVELOPER_EDITION".to_string(),
+            IndexEdition::EnterpriseEdition => "ENTERPRISE_EDITION".to_string(),
+            IndexEdition::UnknownVariant(UnknownIndexEdition { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IndexEdition {
+    fn into(self) -> &'a str {
+        match self {
+            IndexEdition::DeveloperEdition => &"DEVELOPER_EDITION",
+            IndexEdition::EnterpriseEdition => &"ENTERPRISE_EDITION",
+            IndexEdition::UnknownVariant(UnknownIndexEdition { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IndexEdition {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEVELOPER_EDITION" => IndexEdition::DeveloperEdition,
+            "ENTERPRISE_EDITION" => IndexEdition::EnterpriseEdition,
+            _ => IndexEdition::UnknownVariant(UnknownIndexEdition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IndexEdition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEVELOPER_EDITION" => IndexEdition::DeveloperEdition,
+            "ENTERPRISE_EDITION" => IndexEdition::EnterpriseEdition,
+            _ => IndexEdition::UnknownVariant(UnknownIndexEdition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexEdition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IndexEdition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IndexEdition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about the number of documents and the number of questions and answers in an index.</p>
@@ -1391,6 +3420,127 @@ pub struct IndexStatistics {
     /// <p>The number of text documents indexed.</p>
     #[serde(rename = "TextDocumentStatistics")]
     pub text_document_statistics: TextDocumentStatistics,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIndexStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IndexStatus {
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    SystemUpdating,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIndexStatus),
+}
+
+impl Default for IndexStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IndexStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IndexStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IndexStatus {
+    fn into(self) -> String {
+        match self {
+            IndexStatus::Active => "ACTIVE".to_string(),
+            IndexStatus::Creating => "CREATING".to_string(),
+            IndexStatus::Deleting => "DELETING".to_string(),
+            IndexStatus::Failed => "FAILED".to_string(),
+            IndexStatus::SystemUpdating => "SYSTEM_UPDATING".to_string(),
+            IndexStatus::Updating => "UPDATING".to_string(),
+            IndexStatus::UnknownVariant(UnknownIndexStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IndexStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IndexStatus::Active => &"ACTIVE",
+            IndexStatus::Creating => &"CREATING",
+            IndexStatus::Deleting => &"DELETING",
+            IndexStatus::Failed => &"FAILED",
+            IndexStatus::SystemUpdating => &"SYSTEM_UPDATING",
+            IndexStatus::Updating => &"UPDATING",
+            IndexStatus::UnknownVariant(UnknownIndexStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IndexStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => IndexStatus::Active,
+            "CREATING" => IndexStatus::Creating,
+            "DELETING" => IndexStatus::Deleting,
+            "FAILED" => IndexStatus::Failed,
+            "SYSTEM_UPDATING" => IndexStatus::SystemUpdating,
+            "UPDATING" => IndexStatus::Updating,
+            _ => IndexStatus::UnknownVariant(UnknownIndexStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IndexStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => IndexStatus::Active,
+            "CREATING" => IndexStatus::Creating,
+            "DELETING" => IndexStatus::Deleting,
+            "FAILED" => IndexStatus::Failed,
+            "SYSTEM_UPDATING" => IndexStatus::SystemUpdating,
+            "UPDATING" => IndexStatus::Updating,
+            _ => IndexStatus::UnknownVariant(UnknownIndexStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IndexStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IndexStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration information for the JSON token type.</p>
@@ -1421,7 +3571,7 @@ pub struct JwtTokenTypeConfiguration {
     pub issuer: Option<String>,
     /// <p>The location of the key.</p>
     #[serde(rename = "KeyLocation")]
-    pub key_location: String,
+    pub key_location: KeyLocation,
     /// <p>The Amazon Resource Name (arn) of the secret.</p>
     #[serde(rename = "SecretManagerArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1434,6 +3584,106 @@ pub struct JwtTokenTypeConfiguration {
     #[serde(rename = "UserNameAttributeField")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name_attribute_field: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyLocation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyLocation {
+    SecretManager,
+    Url,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyLocation),
+}
+
+impl Default for KeyLocation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyLocation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyLocation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyLocation {
+    fn into(self) -> String {
+        match self {
+            KeyLocation::SecretManager => "SECRET_MANAGER".to_string(),
+            KeyLocation::Url => "URL".to_string(),
+            KeyLocation::UnknownVariant(UnknownKeyLocation { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyLocation {
+    fn into(self) -> &'a str {
+        match self {
+            KeyLocation::SecretManager => &"SECRET_MANAGER",
+            KeyLocation::Url => &"URL",
+            KeyLocation::UnknownVariant(UnknownKeyLocation { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyLocation {
+    fn from(name: &str) -> Self {
+        match name {
+            "SECRET_MANAGER" => KeyLocation::SecretManager,
+            "URL" => KeyLocation::Url,
+            _ => KeyLocation::UnknownVariant(UnknownKeyLocation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyLocation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SECRET_MANAGER" => KeyLocation::SecretManager,
+            "URL" => KeyLocation::Url,
+            _ => KeyLocation::UnknownVariant(UnknownKeyLocation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyLocation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyLocation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyLocation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1460,7 +3710,7 @@ pub struct ListDataSourceSyncJobsRequest {
     /// <p>When specified, only returns synchronization jobs with the <code>Status</code> field equal to the specified status.</p>
     #[serde(rename = "StatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_filter: Option<String>,
+    pub status_filter: Option<DataSourceSyncJobStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1649,19 +3899,328 @@ pub struct OneDriveUsers {
     pub one_drive_user_s3_path: Option<S3Path>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Order {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrder),
+}
+
+impl Default for Order {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Order {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Order {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Order {
+    fn into(self) -> String {
+        match self {
+            Order::Ascending => "ASCENDING".to_string(),
+            Order::Descending => "DESCENDING".to_string(),
+            Order::UnknownVariant(UnknownOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Order {
+    fn into(self) -> &'a str {
+        match self {
+            Order::Ascending => &"ASCENDING",
+            Order::Descending => &"DESCENDING",
+            Order::UnknownVariant(UnknownOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Order {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => Order::Ascending,
+            "DESCENDING" => Order::Descending,
+            _ => Order::UnknownVariant(UnknownOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Order {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => Order::Ascending,
+            "DESCENDING" => Order::Descending,
+            _ => Order::UnknownVariant(UnknownOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Order {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Order {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Order {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides user and group information for document access filtering.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Principal {
     /// <p>Whether to allow or deny access to the principal.</p>
     #[serde(rename = "Access")]
-    pub access: String,
+    pub access: ReadAccessType,
     /// <p>The name of the user or group.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The type of principal.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: PrincipalType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPrincipalType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PrincipalType {
+    Group,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPrincipalType),
+}
+
+impl Default for PrincipalType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PrincipalType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PrincipalType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PrincipalType {
+    fn into(self) -> String {
+        match self {
+            PrincipalType::Group => "GROUP".to_string(),
+            PrincipalType::User => "USER".to_string(),
+            PrincipalType::UnknownVariant(UnknownPrincipalType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PrincipalType {
+    fn into(self) -> &'a str {
+        match self {
+            PrincipalType::Group => &"GROUP",
+            PrincipalType::User => &"USER",
+            PrincipalType::UnknownVariant(UnknownPrincipalType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PrincipalType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GROUP" => PrincipalType::Group,
+            "USER" => PrincipalType::User,
+            _ => PrincipalType::UnknownVariant(UnknownPrincipalType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PrincipalType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GROUP" => PrincipalType::Group,
+            "USER" => PrincipalType::User,
+            _ => PrincipalType::UnknownVariant(UnknownPrincipalType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PrincipalType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PrincipalType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PrincipalType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryIdentifiersEnclosingOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryIdentifiersEnclosingOption {
+    DoubleQuotes,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryIdentifiersEnclosingOption),
+}
+
+impl Default for QueryIdentifiersEnclosingOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryIdentifiersEnclosingOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryIdentifiersEnclosingOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryIdentifiersEnclosingOption {
+    fn into(self) -> String {
+        match self {
+            QueryIdentifiersEnclosingOption::DoubleQuotes => "DOUBLE_QUOTES".to_string(),
+            QueryIdentifiersEnclosingOption::None => "NONE".to_string(),
+            QueryIdentifiersEnclosingOption::UnknownVariant(
+                UnknownQueryIdentifiersEnclosingOption { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryIdentifiersEnclosingOption {
+    fn into(self) -> &'a str {
+        match self {
+            QueryIdentifiersEnclosingOption::DoubleQuotes => &"DOUBLE_QUOTES",
+            QueryIdentifiersEnclosingOption::None => &"NONE",
+            QueryIdentifiersEnclosingOption::UnknownVariant(
+                UnknownQueryIdentifiersEnclosingOption { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryIdentifiersEnclosingOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOUBLE_QUOTES" => QueryIdentifiersEnclosingOption::DoubleQuotes,
+            "NONE" => QueryIdentifiersEnclosingOption::None,
+            _ => QueryIdentifiersEnclosingOption::UnknownVariant(
+                UnknownQueryIdentifiersEnclosingOption {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for QueryIdentifiersEnclosingOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOUBLE_QUOTES" => QueryIdentifiersEnclosingOption::DoubleQuotes,
+            "NONE" => QueryIdentifiersEnclosingOption::None,
+            _ => QueryIdentifiersEnclosingOption::UnknownVariant(
+                UnknownQueryIdentifiersEnclosingOption { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryIdentifiersEnclosingOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueryIdentifiersEnclosingOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryIdentifiersEnclosingOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1689,7 +4248,7 @@ pub struct QueryRequest {
     /// <p>Sets the type of query. Only results for the specified query type are returned.</p>
     #[serde(rename = "QueryResultTypeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_result_type_filter: Option<String>,
+    pub query_result_type_filter: Option<QueryResultType>,
     /// <p>The text to search for.</p>
     #[serde(rename = "QueryText")]
     pub query_text: String,
@@ -1775,7 +4334,213 @@ pub struct QueryResultItem {
     /// <p>The type of document. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<QueryResultType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQueryResultType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QueryResultType {
+    Answer,
+    Document,
+    QuestionAnswer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQueryResultType),
+}
+
+impl Default for QueryResultType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QueryResultType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QueryResultType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QueryResultType {
+    fn into(self) -> String {
+        match self {
+            QueryResultType::Answer => "ANSWER".to_string(),
+            QueryResultType::Document => "DOCUMENT".to_string(),
+            QueryResultType::QuestionAnswer => "QUESTION_ANSWER".to_string(),
+            QueryResultType::UnknownVariant(UnknownQueryResultType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QueryResultType {
+    fn into(self) -> &'a str {
+        match self {
+            QueryResultType::Answer => &"ANSWER",
+            QueryResultType::Document => &"DOCUMENT",
+            QueryResultType::QuestionAnswer => &"QUESTION_ANSWER",
+            QueryResultType::UnknownVariant(UnknownQueryResultType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QueryResultType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANSWER" => QueryResultType::Answer,
+            "DOCUMENT" => QueryResultType::Document,
+            "QUESTION_ANSWER" => QueryResultType::QuestionAnswer,
+            _ => QueryResultType::UnknownVariant(UnknownQueryResultType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QueryResultType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANSWER" => QueryResultType::Answer,
+            "DOCUMENT" => QueryResultType::Document,
+            "QUESTION_ANSWER" => QueryResultType::QuestionAnswer,
+            _ => QueryResultType::UnknownVariant(UnknownQueryResultType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QueryResultType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QueryResultType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QueryResultType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReadAccessType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReadAccessType {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReadAccessType),
+}
+
+impl Default for ReadAccessType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReadAccessType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReadAccessType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReadAccessType {
+    fn into(self) -> String {
+        match self {
+            ReadAccessType::Allow => "ALLOW".to_string(),
+            ReadAccessType::Deny => "DENY".to_string(),
+            ReadAccessType::UnknownVariant(UnknownReadAccessType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReadAccessType {
+    fn into(self) -> &'a str {
+        match self {
+            ReadAccessType::Allow => &"ALLOW",
+            ReadAccessType::Deny => &"DENY",
+            ReadAccessType::UnknownVariant(UnknownReadAccessType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReadAccessType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => ReadAccessType::Allow,
+            "DENY" => ReadAccessType::Deny,
+            _ => ReadAccessType::UnknownVariant(UnknownReadAccessType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReadAccessType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => ReadAccessType::Allow,
+            "DENY" => ReadAccessType::Deny,
+            _ => ReadAccessType::UnknownVariant(UnknownReadAccessType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReadAccessType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReadAccessType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReadAccessType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information for manually tuning the relevance of a field in a search. When a query includes terms that match the field, the results are given a boost in the response based on these tuning parameters.</p>
@@ -1796,7 +4561,7 @@ pub struct Relevance {
     /// <p>Determines how values should be interpreted.</p> <p>When the <code>RankOrder</code> field is <code>ASCENDING</code>, higher numbers are better. For example, a document with a rating score of 10 is higher ranking than a document with a rating score of 1.</p> <p>When the <code>RankOrder</code> field is <code>DESCENDING</code>, lower numbers are better. For example, in a task tracking application, a priority 1 task is more important than a priority 5 task.</p> <p>Only applies to <code>LONG</code> and <code>DOUBLE</code> fields.</p>
     #[serde(rename = "RankOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rank_order: Option<String>,
+    pub rank_order: Option<Order>,
     /// <p>A list of values that should be given a different boost when they appear in the result list. For example, if you are boosting a field called "department," query terms that match the department field are boosted in the result. However, you can add entries from the department field to boost documents with those values higher. </p> <p>For example, you can add entries to the map with names of departments. If you add "HR",5 and "Legal",3 those departments are given special attention when they appear in the metadata of a document. When those terms appear they are given the specified importance instead of the regular importance for the boost.</p>
     #[serde(rename = "ValueImportanceMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1809,10 +4574,111 @@ pub struct Relevance {
 pub struct RelevanceFeedback {
     /// <p>Whether to document was relevant or not relevant to the search.</p>
     #[serde(rename = "RelevanceValue")]
-    pub relevance_value: String,
+    pub relevance_value: RelevanceType,
     /// <p>The unique identifier of the search result that the user provided relevance feedback for.</p>
     #[serde(rename = "ResultId")]
     pub result_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelevanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelevanceType {
+    NotRelevant,
+    Relevant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelevanceType),
+}
+
+impl Default for RelevanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelevanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelevanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelevanceType {
+    fn into(self) -> String {
+        match self {
+            RelevanceType::NotRelevant => "NOT_RELEVANT".to_string(),
+            RelevanceType::Relevant => "RELEVANT".to_string(),
+            RelevanceType::UnknownVariant(UnknownRelevanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelevanceType {
+    fn into(self) -> &'a str {
+        match self {
+            RelevanceType::NotRelevant => &"NOT_RELEVANT",
+            RelevanceType::Relevant => &"RELEVANT",
+            RelevanceType::UnknownVariant(UnknownRelevanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RelevanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_RELEVANT" => RelevanceType::NotRelevant,
+            "RELEVANT" => RelevanceType::Relevant,
+            _ => RelevanceType::UnknownVariant(UnknownRelevanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RelevanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_RELEVANT" => RelevanceType::NotRelevant,
+            "RELEVANT" => RelevanceType::Relevant,
+            _ => RelevanceType::UnknownVariant(UnknownRelevanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelevanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RelevanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RelevanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides configuration information for a data source to index documents in an Amazon S3 bucket.</p>
@@ -1870,7 +4736,115 @@ pub struct SalesforceChatterFeedConfiguration {
     /// <p>Filters the documents in the feed based on status of the user. When you specify <code>ACTIVE_USERS</code> only documents from users who have an active account are indexed. When you specify <code>STANDARD_USER</code> only documents for Salesforce standard users are documented. You can specify both.</p>
     #[serde(rename = "IncludeFilterTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_filter_types: Option<Vec<String>>,
+    pub include_filter_types: Option<Vec<SalesforceChatterFeedIncludeFilterType>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSalesforceChatterFeedIncludeFilterType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SalesforceChatterFeedIncludeFilterType {
+    ActiveUser,
+    StandardUser,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSalesforceChatterFeedIncludeFilterType),
+}
+
+impl Default for SalesforceChatterFeedIncludeFilterType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SalesforceChatterFeedIncludeFilterType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SalesforceChatterFeedIncludeFilterType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SalesforceChatterFeedIncludeFilterType {
+    fn into(self) -> String {
+        match self {
+            SalesforceChatterFeedIncludeFilterType::ActiveUser => "ACTIVE_USER".to_string(),
+            SalesforceChatterFeedIncludeFilterType::StandardUser => "STANDARD_USER".to_string(),
+            SalesforceChatterFeedIncludeFilterType::UnknownVariant(
+                UnknownSalesforceChatterFeedIncludeFilterType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SalesforceChatterFeedIncludeFilterType {
+    fn into(self) -> &'a str {
+        match self {
+            SalesforceChatterFeedIncludeFilterType::ActiveUser => &"ACTIVE_USER",
+            SalesforceChatterFeedIncludeFilterType::StandardUser => &"STANDARD_USER",
+            SalesforceChatterFeedIncludeFilterType::UnknownVariant(
+                UnknownSalesforceChatterFeedIncludeFilterType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SalesforceChatterFeedIncludeFilterType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE_USER" => SalesforceChatterFeedIncludeFilterType::ActiveUser,
+            "STANDARD_USER" => SalesforceChatterFeedIncludeFilterType::StandardUser,
+            _ => SalesforceChatterFeedIncludeFilterType::UnknownVariant(
+                UnknownSalesforceChatterFeedIncludeFilterType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SalesforceChatterFeedIncludeFilterType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE_USER" => SalesforceChatterFeedIncludeFilterType::ActiveUser,
+            "STANDARD_USER" => SalesforceChatterFeedIncludeFilterType::StandardUser,
+            _ => SalesforceChatterFeedIncludeFilterType::UnknownVariant(
+                UnknownSalesforceChatterFeedIncludeFilterType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SalesforceChatterFeedIncludeFilterType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SalesforceChatterFeedIncludeFilterType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SalesforceChatterFeedIncludeFilterType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides configuration information for connecting to a Salesforce data source.</p>
@@ -1942,12 +4916,125 @@ pub struct SalesforceKnowledgeArticleConfiguration {
         Option<Vec<SalesforceCustomKnowledgeArticleTypeConfiguration>>,
     /// <p>Specifies the document states that should be included when Amazon Kendra indexes knowledge articles. You must specify at least one state.</p>
     #[serde(rename = "IncludedStates")]
-    pub included_states: Vec<String>,
+    pub included_states: Vec<SalesforceKnowledgeArticleState>,
     /// <p>Provides configuration information for standard Salesforce knowledge articles.</p>
     #[serde(rename = "StandardKnowledgeArticleTypeConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_knowledge_article_type_configuration:
         Option<SalesforceStandardKnowledgeArticleTypeConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSalesforceKnowledgeArticleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SalesforceKnowledgeArticleState {
+    Archived,
+    Draft,
+    Published,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSalesforceKnowledgeArticleState),
+}
+
+impl Default for SalesforceKnowledgeArticleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SalesforceKnowledgeArticleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SalesforceKnowledgeArticleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SalesforceKnowledgeArticleState {
+    fn into(self) -> String {
+        match self {
+            SalesforceKnowledgeArticleState::Archived => "ARCHIVED".to_string(),
+            SalesforceKnowledgeArticleState::Draft => "DRAFT".to_string(),
+            SalesforceKnowledgeArticleState::Published => "PUBLISHED".to_string(),
+            SalesforceKnowledgeArticleState::UnknownVariant(
+                UnknownSalesforceKnowledgeArticleState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SalesforceKnowledgeArticleState {
+    fn into(self) -> &'a str {
+        match self {
+            SalesforceKnowledgeArticleState::Archived => &"ARCHIVED",
+            SalesforceKnowledgeArticleState::Draft => &"DRAFT",
+            SalesforceKnowledgeArticleState::Published => &"PUBLISHED",
+            SalesforceKnowledgeArticleState::UnknownVariant(
+                UnknownSalesforceKnowledgeArticleState { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for SalesforceKnowledgeArticleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARCHIVED" => SalesforceKnowledgeArticleState::Archived,
+            "DRAFT" => SalesforceKnowledgeArticleState::Draft,
+            "PUBLISHED" => SalesforceKnowledgeArticleState::Published,
+            _ => SalesforceKnowledgeArticleState::UnknownVariant(
+                UnknownSalesforceKnowledgeArticleState {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for SalesforceKnowledgeArticleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARCHIVED" => SalesforceKnowledgeArticleState::Archived,
+            "DRAFT" => SalesforceKnowledgeArticleState::Draft,
+            "PUBLISHED" => SalesforceKnowledgeArticleState::Published,
+            _ => SalesforceKnowledgeArticleState::UnknownVariant(
+                UnknownSalesforceKnowledgeArticleState { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SalesforceKnowledgeArticleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SalesforceKnowledgeArticleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SalesforceKnowledgeArticleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides configuration information for standard Salesforce knowledge articles.</p>
@@ -1995,7 +5082,192 @@ pub struct SalesforceStandardObjectConfiguration {
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
     /// <p>The name of the standard object.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    pub name: SalesforceStandardObjectName,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSalesforceStandardObjectName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SalesforceStandardObjectName {
+    Account,
+    Campaign,
+    Case,
+    Contact,
+    Contract,
+    Document,
+    Group,
+    Idea,
+    Lead,
+    Opportunity,
+    Partner,
+    Pricebook,
+    Product,
+    Profile,
+    Solution,
+    Task,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSalesforceStandardObjectName),
+}
+
+impl Default for SalesforceStandardObjectName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SalesforceStandardObjectName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SalesforceStandardObjectName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SalesforceStandardObjectName {
+    fn into(self) -> String {
+        match self {
+            SalesforceStandardObjectName::Account => "ACCOUNT".to_string(),
+            SalesforceStandardObjectName::Campaign => "CAMPAIGN".to_string(),
+            SalesforceStandardObjectName::Case => "CASE".to_string(),
+            SalesforceStandardObjectName::Contact => "CONTACT".to_string(),
+            SalesforceStandardObjectName::Contract => "CONTRACT".to_string(),
+            SalesforceStandardObjectName::Document => "DOCUMENT".to_string(),
+            SalesforceStandardObjectName::Group => "GROUP".to_string(),
+            SalesforceStandardObjectName::Idea => "IDEA".to_string(),
+            SalesforceStandardObjectName::Lead => "LEAD".to_string(),
+            SalesforceStandardObjectName::Opportunity => "OPPORTUNITY".to_string(),
+            SalesforceStandardObjectName::Partner => "PARTNER".to_string(),
+            SalesforceStandardObjectName::Pricebook => "PRICEBOOK".to_string(),
+            SalesforceStandardObjectName::Product => "PRODUCT".to_string(),
+            SalesforceStandardObjectName::Profile => "PROFILE".to_string(),
+            SalesforceStandardObjectName::Solution => "SOLUTION".to_string(),
+            SalesforceStandardObjectName::Task => "TASK".to_string(),
+            SalesforceStandardObjectName::User => "USER".to_string(),
+            SalesforceStandardObjectName::UnknownVariant(UnknownSalesforceStandardObjectName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SalesforceStandardObjectName {
+    fn into(self) -> &'a str {
+        match self {
+            SalesforceStandardObjectName::Account => &"ACCOUNT",
+            SalesforceStandardObjectName::Campaign => &"CAMPAIGN",
+            SalesforceStandardObjectName::Case => &"CASE",
+            SalesforceStandardObjectName::Contact => &"CONTACT",
+            SalesforceStandardObjectName::Contract => &"CONTRACT",
+            SalesforceStandardObjectName::Document => &"DOCUMENT",
+            SalesforceStandardObjectName::Group => &"GROUP",
+            SalesforceStandardObjectName::Idea => &"IDEA",
+            SalesforceStandardObjectName::Lead => &"LEAD",
+            SalesforceStandardObjectName::Opportunity => &"OPPORTUNITY",
+            SalesforceStandardObjectName::Partner => &"PARTNER",
+            SalesforceStandardObjectName::Pricebook => &"PRICEBOOK",
+            SalesforceStandardObjectName::Product => &"PRODUCT",
+            SalesforceStandardObjectName::Profile => &"PROFILE",
+            SalesforceStandardObjectName::Solution => &"SOLUTION",
+            SalesforceStandardObjectName::Task => &"TASK",
+            SalesforceStandardObjectName::User => &"USER",
+            SalesforceStandardObjectName::UnknownVariant(UnknownSalesforceStandardObjectName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SalesforceStandardObjectName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => SalesforceStandardObjectName::Account,
+            "CAMPAIGN" => SalesforceStandardObjectName::Campaign,
+            "CASE" => SalesforceStandardObjectName::Case,
+            "CONTACT" => SalesforceStandardObjectName::Contact,
+            "CONTRACT" => SalesforceStandardObjectName::Contract,
+            "DOCUMENT" => SalesforceStandardObjectName::Document,
+            "GROUP" => SalesforceStandardObjectName::Group,
+            "IDEA" => SalesforceStandardObjectName::Idea,
+            "LEAD" => SalesforceStandardObjectName::Lead,
+            "OPPORTUNITY" => SalesforceStandardObjectName::Opportunity,
+            "PARTNER" => SalesforceStandardObjectName::Partner,
+            "PRICEBOOK" => SalesforceStandardObjectName::Pricebook,
+            "PRODUCT" => SalesforceStandardObjectName::Product,
+            "PROFILE" => SalesforceStandardObjectName::Profile,
+            "SOLUTION" => SalesforceStandardObjectName::Solution,
+            "TASK" => SalesforceStandardObjectName::Task,
+            "USER" => SalesforceStandardObjectName::User,
+            _ => {
+                SalesforceStandardObjectName::UnknownVariant(UnknownSalesforceStandardObjectName {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for SalesforceStandardObjectName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => SalesforceStandardObjectName::Account,
+            "CAMPAIGN" => SalesforceStandardObjectName::Campaign,
+            "CASE" => SalesforceStandardObjectName::Case,
+            "CONTACT" => SalesforceStandardObjectName::Contact,
+            "CONTRACT" => SalesforceStandardObjectName::Contract,
+            "DOCUMENT" => SalesforceStandardObjectName::Document,
+            "GROUP" => SalesforceStandardObjectName::Group,
+            "IDEA" => SalesforceStandardObjectName::Idea,
+            "LEAD" => SalesforceStandardObjectName::Lead,
+            "OPPORTUNITY" => SalesforceStandardObjectName::Opportunity,
+            "PARTNER" => SalesforceStandardObjectName::Partner,
+            "PRICEBOOK" => SalesforceStandardObjectName::Pricebook,
+            "PRODUCT" => SalesforceStandardObjectName::Product,
+            "PROFILE" => SalesforceStandardObjectName::Profile,
+            "SOLUTION" => SalesforceStandardObjectName::Solution,
+            "TASK" => SalesforceStandardObjectName::Task,
+            "USER" => SalesforceStandardObjectName::User,
+            _ => {
+                SalesforceStandardObjectName::UnknownVariant(UnknownSalesforceStandardObjectName {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SalesforceStandardObjectName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SalesforceStandardObjectName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SalesforceStandardObjectName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a relative ranking that indicates how confident Amazon Kendra is that the response matches the query.</p>
@@ -2005,7 +5277,120 @@ pub struct ScoreAttributes {
     /// <p>A relative ranking for how well the response matches the query.</p>
     #[serde(rename = "ScoreConfidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub score_confidence: Option<String>,
+    pub score_confidence: Option<ScoreConfidence>,
+}
+
+/// <p>Enumeration for query score confidence.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScoreConfidence {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScoreConfidence {
+    High,
+    Low,
+    Medium,
+    VeryHigh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScoreConfidence),
+}
+
+impl Default for ScoreConfidence {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScoreConfidence {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScoreConfidence {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScoreConfidence {
+    fn into(self) -> String {
+        match self {
+            ScoreConfidence::High => "HIGH".to_string(),
+            ScoreConfidence::Low => "LOW".to_string(),
+            ScoreConfidence::Medium => "MEDIUM".to_string(),
+            ScoreConfidence::VeryHigh => "VERY_HIGH".to_string(),
+            ScoreConfidence::UnknownVariant(UnknownScoreConfidence { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScoreConfidence {
+    fn into(self) -> &'a str {
+        match self {
+            ScoreConfidence::High => &"HIGH",
+            ScoreConfidence::Low => &"LOW",
+            ScoreConfidence::Medium => &"MEDIUM",
+            ScoreConfidence::VeryHigh => &"VERY_HIGH",
+            ScoreConfidence::UnknownVariant(UnknownScoreConfidence { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScoreConfidence {
+    fn from(name: &str) -> Self {
+        match name {
+            "HIGH" => ScoreConfidence::High,
+            "LOW" => ScoreConfidence::Low,
+            "MEDIUM" => ScoreConfidence::Medium,
+            "VERY_HIGH" => ScoreConfidence::VeryHigh,
+            _ => ScoreConfidence::UnknownVariant(UnknownScoreConfidence {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScoreConfidence {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HIGH" => ScoreConfidence::High,
+            "LOW" => ScoreConfidence::Low,
+            "MEDIUM" => ScoreConfidence::Medium,
+            "VERY_HIGH" => ScoreConfidence::VeryHigh,
+            _ => ScoreConfidence::UnknownVariant(UnknownScoreConfidence { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScoreConfidence {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScoreConfidence {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScoreConfidence {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides information about how a custom index field is used during a search.</p>
@@ -2038,6 +5423,112 @@ pub struct ServerSideEncryptionConfiguration {
     pub kms_key_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceNowBuildVersionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceNowBuildVersionType {
+    London,
+    Others,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceNowBuildVersionType),
+}
+
+impl Default for ServiceNowBuildVersionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceNowBuildVersionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceNowBuildVersionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceNowBuildVersionType {
+    fn into(self) -> String {
+        match self {
+            ServiceNowBuildVersionType::London => "LONDON".to_string(),
+            ServiceNowBuildVersionType::Others => "OTHERS".to_string(),
+            ServiceNowBuildVersionType::UnknownVariant(UnknownServiceNowBuildVersionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceNowBuildVersionType {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceNowBuildVersionType::London => &"LONDON",
+            ServiceNowBuildVersionType::Others => &"OTHERS",
+            ServiceNowBuildVersionType::UnknownVariant(UnknownServiceNowBuildVersionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceNowBuildVersionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LONDON" => ServiceNowBuildVersionType::London,
+            "OTHERS" => ServiceNowBuildVersionType::Others,
+            _ => ServiceNowBuildVersionType::UnknownVariant(UnknownServiceNowBuildVersionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceNowBuildVersionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LONDON" => ServiceNowBuildVersionType::London,
+            "OTHERS" => ServiceNowBuildVersionType::Others,
+            _ => ServiceNowBuildVersionType::UnknownVariant(UnknownServiceNowBuildVersionType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceNowBuildVersionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServiceNowBuildVersionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServiceNowBuildVersionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides configuration information required to connect to a ServiceNow data source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowConfiguration {
@@ -2057,7 +5548,7 @@ pub struct ServiceNowConfiguration {
     pub service_catalog_configuration: Option<ServiceNowServiceCatalogConfiguration>,
     /// <p>The identifier of the release that the ServiceNow host is running. If the host is not running the <code>LONDON</code> release, use <code>OTHERS</code>.</p>
     #[serde(rename = "ServiceNowBuildVersion")]
-    pub service_now_build_version: String,
+    pub service_now_build_version: ServiceNowBuildVersionType,
 }
 
 /// <p>Provides configuration information for crawling knowledge articles in the ServiceNow site.</p>
@@ -2148,7 +5639,7 @@ pub struct SharePointConfiguration {
     pub secret_arn: String,
     /// <p>The version of Microsoft SharePoint that you are using as a data source.</p>
     #[serde(rename = "SharePointVersion")]
-    pub share_point_version: String,
+    pub share_point_version: SharePointVersion,
     /// <p>The URLs of the Microsoft SharePoint site that contains the documents that should be indexed.</p>
     #[serde(rename = "Urls")]
     pub urls: Vec<String>,
@@ -2161,6 +5652,206 @@ pub struct SharePointConfiguration {
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSharePointVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SharePointVersion {
+    SharepointOnline,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSharePointVersion),
+}
+
+impl Default for SharePointVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SharePointVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SharePointVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SharePointVersion {
+    fn into(self) -> String {
+        match self {
+            SharePointVersion::SharepointOnline => "SHAREPOINT_ONLINE".to_string(),
+            SharePointVersion::UnknownVariant(UnknownSharePointVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SharePointVersion {
+    fn into(self) -> &'a str {
+        match self {
+            SharePointVersion::SharepointOnline => &"SHAREPOINT_ONLINE",
+            SharePointVersion::UnknownVariant(UnknownSharePointVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SharePointVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "SHAREPOINT_ONLINE" => SharePointVersion::SharepointOnline,
+            _ => SharePointVersion::UnknownVariant(UnknownSharePointVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SharePointVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SHAREPOINT_ONLINE" => SharePointVersion::SharepointOnline,
+            _ => SharePointVersion::UnknownVariant(UnknownSharePointVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SharePointVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SharePointVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SharePointVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Asc => "ASC".to_string(),
+            SortOrder::Desc => "DESC".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Asc => &"ASC",
+            SortOrder::Desc => &"DESC",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => SortOrder::Asc,
+            "DESC" => SortOrder::Desc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => SortOrder::Asc,
+            "DESC" => SortOrder::Desc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Specifies the document attribute to use to sort the response to a Amazon Kendra query. You can specify a single attribute for sorting. The attribute must have the <code>Sortable</code> flag set to <code>true</code>, otherwise Amazon Kendra returns an exception.</p> <p>You can sort attributes of the following types.</p> <ul> <li> <p>Date value</p> </li> <li> <p>Long value</p> </li> <li> <p>String value</p> </li> </ul> <p>You can&#39;t sort attributes of the following type.</p> <ul> <li> <p>String list value</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2170,7 +5861,7 @@ pub struct SortingConfiguration {
     pub document_attribute_key: String,
     /// <p>The order that the results should be returned in. In case of ties, the relevance assigned to the result by Amazon Kendra is used as the tie-breaker.</p>
     #[serde(rename = "SortOrder")]
-    pub sort_order: String,
+    pub sort_order: SortOrder,
 }
 
 /// <p>Provides information that configures Amazon Kendra to use a SQL database.</p>
@@ -2179,7 +5870,7 @@ pub struct SqlConfiguration {
     /// <p>Determines whether Amazon Kendra encloses SQL identifiers for tables and column names in double quotes (") when making a database query.</p> <p>By default, Amazon Kendra passes SQL identifiers the way that they are entered into the data source configuration. It does not change the case of identifiers or enclose them in quotes.</p> <p>PostgreSQL internally converts uppercase characters to lower case characters in identifiers unless they are quoted. Choosing this option encloses identifiers in quotes so that PostgreSQL does not convert the character's case.</p> <p>For MySQL databases, you must enable the <code>ansi_quotes</code> option when you set this field to <code>DOUBLE_QUOTES</code>.</p>
     #[serde(rename = "QueryIdentifiersEnclosingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub query_identifiers_enclosing_option: Option<String>,
+    pub query_identifiers_enclosing_option: Option<QueryIdentifiersEnclosingOption>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2284,6 +5975,127 @@ pub struct TextWithHighlights {
     pub text: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThesaurusStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThesaurusStatus {
+    Active,
+    ActiveButUpdateFailed,
+    Creating,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThesaurusStatus),
+}
+
+impl Default for ThesaurusStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThesaurusStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThesaurusStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThesaurusStatus {
+    fn into(self) -> String {
+        match self {
+            ThesaurusStatus::Active => "ACTIVE".to_string(),
+            ThesaurusStatus::ActiveButUpdateFailed => "ACTIVE_BUT_UPDATE_FAILED".to_string(),
+            ThesaurusStatus::Creating => "CREATING".to_string(),
+            ThesaurusStatus::Deleting => "DELETING".to_string(),
+            ThesaurusStatus::Failed => "FAILED".to_string(),
+            ThesaurusStatus::Updating => "UPDATING".to_string(),
+            ThesaurusStatus::UnknownVariant(UnknownThesaurusStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThesaurusStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ThesaurusStatus::Active => &"ACTIVE",
+            ThesaurusStatus::ActiveButUpdateFailed => &"ACTIVE_BUT_UPDATE_FAILED",
+            ThesaurusStatus::Creating => &"CREATING",
+            ThesaurusStatus::Deleting => &"DELETING",
+            ThesaurusStatus::Failed => &"FAILED",
+            ThesaurusStatus::Updating => &"UPDATING",
+            ThesaurusStatus::UnknownVariant(UnknownThesaurusStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThesaurusStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ThesaurusStatus::Active,
+            "ACTIVE_BUT_UPDATE_FAILED" => ThesaurusStatus::ActiveButUpdateFailed,
+            "CREATING" => ThesaurusStatus::Creating,
+            "DELETING" => ThesaurusStatus::Deleting,
+            "FAILED" => ThesaurusStatus::Failed,
+            "UPDATING" => ThesaurusStatus::Updating,
+            _ => ThesaurusStatus::UnknownVariant(UnknownThesaurusStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThesaurusStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ThesaurusStatus::Active,
+            "ACTIVE_BUT_UPDATE_FAILED" => ThesaurusStatus::ActiveButUpdateFailed,
+            "CREATING" => ThesaurusStatus::Creating,
+            "DELETING" => ThesaurusStatus::Deleting,
+            "FAILED" => ThesaurusStatus::Failed,
+            "UPDATING" => ThesaurusStatus::Updating,
+            _ => ThesaurusStatus::UnknownVariant(UnknownThesaurusStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThesaurusStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ThesaurusStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThesaurusStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An array of summary information for one or more thesauruses.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2303,7 +6115,7 @@ pub struct ThesaurusSummary {
     /// <p>The status of the thesaurus.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ThesaurusStatus>,
     /// <p>The Unix datetime that the thesaurus was last updated.</p>
     #[serde(rename = "UpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2398,7 +6210,7 @@ pub struct UpdateIndexRequest {
     /// <p>The user user token context policy.</p>
     #[serde(rename = "UserContextPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_context_policy: Option<String>,
+    pub user_context_policy: Option<UserContextPolicy>,
     /// <p>The user token configuration.</p>
     #[serde(rename = "UserTokenConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2439,6 +6251,110 @@ pub struct UserContext {
     #[serde(rename = "Token")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUserContextPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UserContextPolicy {
+    AttributeFilter,
+    UserToken,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUserContextPolicy),
+}
+
+impl Default for UserContextPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UserContextPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UserContextPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UserContextPolicy {
+    fn into(self) -> String {
+        match self {
+            UserContextPolicy::AttributeFilter => "ATTRIBUTE_FILTER".to_string(),
+            UserContextPolicy::UserToken => "USER_TOKEN".to_string(),
+            UserContextPolicy::UnknownVariant(UnknownUserContextPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UserContextPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            UserContextPolicy::AttributeFilter => &"ATTRIBUTE_FILTER",
+            UserContextPolicy::UserToken => &"USER_TOKEN",
+            UserContextPolicy::UnknownVariant(UnknownUserContextPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UserContextPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTRIBUTE_FILTER" => UserContextPolicy::AttributeFilter,
+            "USER_TOKEN" => UserContextPolicy::UserToken,
+            _ => UserContextPolicy::UnknownVariant(UnknownUserContextPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UserContextPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTRIBUTE_FILTER" => UserContextPolicy::AttributeFilter,
+            "USER_TOKEN" => UserContextPolicy::UserToken,
+            _ => UserContextPolicy::UnknownVariant(UnknownUserContextPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UserContextPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UserContextPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UserContextPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides configuration information for a token configuration.</p>

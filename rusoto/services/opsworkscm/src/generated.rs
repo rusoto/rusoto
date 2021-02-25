@@ -106,7 +106,7 @@ pub struct Backup {
     /// <p> The backup type. Valid values are <code>automated</code> or <code>manual</code>. </p>
     #[serde(rename = "BackupType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_type: Option<String>,
+    pub backup_type: Option<BackupType>,
     /// <p> The time stamp when the backup was created in the database. Example: <code>2016-07-29T13:38:47.520Z</code> </p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,7 +166,7 @@ pub struct Backup {
     /// <p>The status of a backup while in progress. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<BackupStatus>,
     /// <p> An informational message about backup status. </p>
     #[serde(rename = "StatusDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,6 +183,218 @@ pub struct Backup {
     #[serde(rename = "UserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupStatus {
+    Deleting,
+    Failed,
+    InProgress,
+    Ok,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupStatus),
+}
+
+impl Default for BackupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupStatus {
+    fn into(self) -> String {
+        match self {
+            BackupStatus::Deleting => "DELETING".to_string(),
+            BackupStatus::Failed => "FAILED".to_string(),
+            BackupStatus::InProgress => "IN_PROGRESS".to_string(),
+            BackupStatus::Ok => "OK".to_string(),
+            BackupStatus::UnknownVariant(UnknownBackupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BackupStatus::Deleting => &"DELETING",
+            BackupStatus::Failed => &"FAILED",
+            BackupStatus::InProgress => &"IN_PROGRESS",
+            BackupStatus::Ok => &"OK",
+            BackupStatus::UnknownVariant(UnknownBackupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETING" => BackupStatus::Deleting,
+            "FAILED" => BackupStatus::Failed,
+            "IN_PROGRESS" => BackupStatus::InProgress,
+            "OK" => BackupStatus::Ok,
+            _ => BackupStatus::UnknownVariant(UnknownBackupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETING" => BackupStatus::Deleting,
+            "FAILED" => BackupStatus::Failed,
+            "IN_PROGRESS" => BackupStatus::InProgress,
+            "OK" => BackupStatus::Ok,
+            _ => BackupStatus::UnknownVariant(UnknownBackupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupType {
+    Automated,
+    Manual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupType),
+}
+
+impl Default for BackupType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupType {
+    fn into(self) -> String {
+        match self {
+            BackupType::Automated => "AUTOMATED".to_string(),
+            BackupType::Manual => "MANUAL".to_string(),
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupType {
+    fn into(self) -> &'a str {
+        match self {
+            BackupType::Automated => &"AUTOMATED",
+            BackupType::Manual => &"MANUAL",
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMATED" => BackupType::Automated,
+            "MANUAL" => BackupType::Manual,
+            _ => BackupType::UnknownVariant(UnknownBackupType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMATED" => BackupType::Automated,
+            "MANUAL" => BackupType::Manual,
+            _ => BackupType::UnknownVariant(UnknownBackupType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -424,7 +636,7 @@ pub struct DescribeNodeAssociationStatusResponse {
     /// <p><p>The status of the association or disassociation request. </p> <p class="title"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul></p>
     #[serde(rename = "NodeAssociationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_association_status: Option<String>,
+    pub node_association_status: Option<NodeAssociationStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -551,6 +763,223 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMaintenanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MaintenanceStatus {
+    Failed,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMaintenanceStatus),
+}
+
+impl Default for MaintenanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MaintenanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MaintenanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MaintenanceStatus {
+    fn into(self) -> String {
+        match self {
+            MaintenanceStatus::Failed => "FAILED".to_string(),
+            MaintenanceStatus::Success => "SUCCESS".to_string(),
+            MaintenanceStatus::UnknownVariant(UnknownMaintenanceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MaintenanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MaintenanceStatus::Failed => &"FAILED",
+            MaintenanceStatus::Success => &"SUCCESS",
+            MaintenanceStatus::UnknownVariant(UnknownMaintenanceStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MaintenanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => MaintenanceStatus::Failed,
+            "SUCCESS" => MaintenanceStatus::Success,
+            _ => MaintenanceStatus::UnknownVariant(UnknownMaintenanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MaintenanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => MaintenanceStatus::Failed,
+            "SUCCESS" => MaintenanceStatus::Success,
+            _ => MaintenanceStatus::UnknownVariant(UnknownMaintenanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MaintenanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MaintenanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MaintenanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p><p>The status of the association or disassociation request. </p> <p class="title"> <b>Possible values:</b> </p> <ul> <li> <p> <code>SUCCESS</code>: The association or disassociation succeeded. </p> </li> <li> <p> <code>FAILED</code>: The association or disassociation failed. </p> </li> <li> <p> <code>IN_PROGRESS</code>: The association or disassociation is still in progress. </p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNodeAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NodeAssociationStatus {
+    Failed,
+    InProgress,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNodeAssociationStatus),
+}
+
+impl Default for NodeAssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NodeAssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NodeAssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NodeAssociationStatus {
+    fn into(self) -> String {
+        match self {
+            NodeAssociationStatus::Failed => "FAILED".to_string(),
+            NodeAssociationStatus::InProgress => "IN_PROGRESS".to_string(),
+            NodeAssociationStatus::Success => "SUCCESS".to_string(),
+            NodeAssociationStatus::UnknownVariant(UnknownNodeAssociationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NodeAssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            NodeAssociationStatus::Failed => &"FAILED",
+            NodeAssociationStatus::InProgress => &"IN_PROGRESS",
+            NodeAssociationStatus::Success => &"SUCCESS",
+            NodeAssociationStatus::UnknownVariant(UnknownNodeAssociationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NodeAssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => NodeAssociationStatus::Failed,
+            "IN_PROGRESS" => NodeAssociationStatus::InProgress,
+            "SUCCESS" => NodeAssociationStatus::Success,
+            _ => NodeAssociationStatus::UnknownVariant(UnknownNodeAssociationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NodeAssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => NodeAssociationStatus::Failed,
+            "IN_PROGRESS" => NodeAssociationStatus::InProgress,
+            "SUCCESS" => NodeAssociationStatus::Success,
+            _ => NodeAssociationStatus::UnknownVariant(UnknownNodeAssociationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NodeAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NodeAssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NodeAssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreServerRequest {
@@ -637,7 +1066,7 @@ pub struct Server {
     /// <p>The status of the most recent server maintenance run. Shows <code>SUCCESS</code> or <code>FAILED</code>. </p>
     #[serde(rename = "MaintenanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maintenance_status: Option<String>,
+    pub maintenance_status: Option<MaintenanceStatus>,
     /// <p>The preferred backup period specified for the server. </p>
     #[serde(rename = "PreferredBackupWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -665,7 +1094,7 @@ pub struct Server {
     /// <p> The server's status. This field displays the states of actions in progress, such as creating, running, or backing up the server, as well as the server's health state. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ServerStatus>,
     /// <p> Depending on the server status, this field has either a human-readable message (such as a create or backup error), or an escaped block of JSON (used for health check results). </p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -696,6 +1125,162 @@ pub struct ServerEvent {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServerStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServerStatus {
+    BackingUp,
+    ConnectionLost,
+    Creating,
+    Deleting,
+    Failed,
+    Healthy,
+    Modifying,
+    Restoring,
+    Running,
+    Setup,
+    Terminated,
+    UnderMaintenance,
+    Unhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServerStatus),
+}
+
+impl Default for ServerStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServerStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServerStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServerStatus {
+    fn into(self) -> String {
+        match self {
+            ServerStatus::BackingUp => "BACKING_UP".to_string(),
+            ServerStatus::ConnectionLost => "CONNECTION_LOST".to_string(),
+            ServerStatus::Creating => "CREATING".to_string(),
+            ServerStatus::Deleting => "DELETING".to_string(),
+            ServerStatus::Failed => "FAILED".to_string(),
+            ServerStatus::Healthy => "HEALTHY".to_string(),
+            ServerStatus::Modifying => "MODIFYING".to_string(),
+            ServerStatus::Restoring => "RESTORING".to_string(),
+            ServerStatus::Running => "RUNNING".to_string(),
+            ServerStatus::Setup => "SETUP".to_string(),
+            ServerStatus::Terminated => "TERMINATED".to_string(),
+            ServerStatus::UnderMaintenance => "UNDER_MAINTENANCE".to_string(),
+            ServerStatus::Unhealthy => "UNHEALTHY".to_string(),
+            ServerStatus::UnknownVariant(UnknownServerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServerStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ServerStatus::BackingUp => &"BACKING_UP",
+            ServerStatus::ConnectionLost => &"CONNECTION_LOST",
+            ServerStatus::Creating => &"CREATING",
+            ServerStatus::Deleting => &"DELETING",
+            ServerStatus::Failed => &"FAILED",
+            ServerStatus::Healthy => &"HEALTHY",
+            ServerStatus::Modifying => &"MODIFYING",
+            ServerStatus::Restoring => &"RESTORING",
+            ServerStatus::Running => &"RUNNING",
+            ServerStatus::Setup => &"SETUP",
+            ServerStatus::Terminated => &"TERMINATED",
+            ServerStatus::UnderMaintenance => &"UNDER_MAINTENANCE",
+            ServerStatus::Unhealthy => &"UNHEALTHY",
+            ServerStatus::UnknownVariant(UnknownServerStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServerStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "BACKING_UP" => ServerStatus::BackingUp,
+            "CONNECTION_LOST" => ServerStatus::ConnectionLost,
+            "CREATING" => ServerStatus::Creating,
+            "DELETING" => ServerStatus::Deleting,
+            "FAILED" => ServerStatus::Failed,
+            "HEALTHY" => ServerStatus::Healthy,
+            "MODIFYING" => ServerStatus::Modifying,
+            "RESTORING" => ServerStatus::Restoring,
+            "RUNNING" => ServerStatus::Running,
+            "SETUP" => ServerStatus::Setup,
+            "TERMINATED" => ServerStatus::Terminated,
+            "UNDER_MAINTENANCE" => ServerStatus::UnderMaintenance,
+            "UNHEALTHY" => ServerStatus::Unhealthy,
+            _ => ServerStatus::UnknownVariant(UnknownServerStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServerStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BACKING_UP" => ServerStatus::BackingUp,
+            "CONNECTION_LOST" => ServerStatus::ConnectionLost,
+            "CREATING" => ServerStatus::Creating,
+            "DELETING" => ServerStatus::Deleting,
+            "FAILED" => ServerStatus::Failed,
+            "HEALTHY" => ServerStatus::Healthy,
+            "MODIFYING" => ServerStatus::Modifying,
+            "RESTORING" => ServerStatus::Restoring,
+            "RUNNING" => ServerStatus::Running,
+            "SETUP" => ServerStatus::Setup,
+            "TERMINATED" => ServerStatus::Terminated,
+            "UNDER_MAINTENANCE" => ServerStatus::UnderMaintenance,
+            "UNHEALTHY" => ServerStatus::Unhealthy,
+            _ => ServerStatus::UnknownVariant(UnknownServerStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServerStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ServerStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServerStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

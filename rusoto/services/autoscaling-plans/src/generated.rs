@@ -101,7 +101,7 @@ pub struct CustomizedLoadMetricSpecification {
     pub namespace: String,
     /// <p>The statistic of the metric. Currently, the value must always be <code>Sum</code>. </p>
     #[serde(rename = "Statistic")]
-    pub statistic: String,
+    pub statistic: MetricStatistic,
     /// <p>The unit of the metric.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,7 +123,7 @@ pub struct CustomizedScalingMetricSpecification {
     pub namespace: String,
     /// <p>The statistic of the metric.</p>
     #[serde(rename = "Statistic")]
-    pub statistic: String,
+    pub statistic: MetricStatistic,
     /// <p>The unit of the metric. </p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,6 +229,125 @@ pub struct DescribeScalingPlansResponse {
     pub scaling_plans: Option<Vec<ScalingPlan>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownForecastDataType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ForecastDataType {
+    CapacityForecast,
+    LoadForecast,
+    ScheduledActionMaxCapacity,
+    ScheduledActionMinCapacity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownForecastDataType),
+}
+
+impl Default for ForecastDataType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ForecastDataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ForecastDataType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ForecastDataType {
+    fn into(self) -> String {
+        match self {
+            ForecastDataType::CapacityForecast => "CapacityForecast".to_string(),
+            ForecastDataType::LoadForecast => "LoadForecast".to_string(),
+            ForecastDataType::ScheduledActionMaxCapacity => {
+                "ScheduledActionMaxCapacity".to_string()
+            }
+            ForecastDataType::ScheduledActionMinCapacity => {
+                "ScheduledActionMinCapacity".to_string()
+            }
+            ForecastDataType::UnknownVariant(UnknownForecastDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ForecastDataType {
+    fn into(self) -> &'a str {
+        match self {
+            ForecastDataType::CapacityForecast => &"CapacityForecast",
+            ForecastDataType::LoadForecast => &"LoadForecast",
+            ForecastDataType::ScheduledActionMaxCapacity => &"ScheduledActionMaxCapacity",
+            ForecastDataType::ScheduledActionMinCapacity => &"ScheduledActionMinCapacity",
+            ForecastDataType::UnknownVariant(UnknownForecastDataType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ForecastDataType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CapacityForecast" => ForecastDataType::CapacityForecast,
+            "LoadForecast" => ForecastDataType::LoadForecast,
+            "ScheduledActionMaxCapacity" => ForecastDataType::ScheduledActionMaxCapacity,
+            "ScheduledActionMinCapacity" => ForecastDataType::ScheduledActionMinCapacity,
+            _ => ForecastDataType::UnknownVariant(UnknownForecastDataType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ForecastDataType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CapacityForecast" => ForecastDataType::CapacityForecast,
+            "LoadForecast" => ForecastDataType::LoadForecast,
+            "ScheduledActionMaxCapacity" => ForecastDataType::ScheduledActionMaxCapacity,
+            "ScheduledActionMinCapacity" => ForecastDataType::ScheduledActionMinCapacity,
+            _ => ForecastDataType::UnknownVariant(UnknownForecastDataType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ForecastDataType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ForecastDataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ForecastDataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetScalingPlanResourceForecastDataRequest {
@@ -237,13 +356,13 @@ pub struct GetScalingPlanResourceForecastDataRequest {
     pub end_time: f64,
     /// <p><p>The type of forecast data to get.</p> <ul> <li> <p> <code>LoadForecast</code>: The load metric forecast. </p> </li> <li> <p> <code>CapacityForecast</code>: The capacity forecast. </p> </li> <li> <p> <code>ScheduledActionMinCapacity</code>: The minimum capacity for each scheduled scaling action. This data is calculated as the larger of two values: the capacity forecast or the minimum capacity in the scaling instruction.</p> </li> <li> <p> <code>ScheduledActionMaxCapacity</code>: The maximum capacity for each scheduled scaling action. The calculation used is determined by the predictive scaling maximum capacity behavior setting in the scaling instruction.</p> </li> </ul></p>
     #[serde(rename = "ForecastDataType")]
-    pub forecast_data_type: String,
+    pub forecast_data_type: ForecastDataType,
     /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier. </p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The scalable dimension for the resource.</p>
     #[serde(rename = "ScalableDimension")]
-    pub scalable_dimension: String,
+    pub scalable_dimension: ScalableDimension,
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
@@ -252,7 +371,7 @@ pub struct GetScalingPlanResourceForecastDataRequest {
     pub scaling_plan_version: i64,
     /// <p>The namespace of the AWS service.</p>
     #[serde(rename = "ServiceNamespace")]
-    pub service_namespace: String,
+    pub service_namespace: ServiceNamespace,
     /// <p>The inclusive start time of the time range for the forecast data to get. The date and time can be at most 56 days before the current date and time. </p>
     #[serde(rename = "StartTime")]
     pub start_time: f64,
@@ -266,6 +385,116 @@ pub struct GetScalingPlanResourceForecastDataResponse {
     pub datapoints: Vec<Datapoint>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoadMetricType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoadMetricType {
+    AlbtargetGroupRequestCount,
+    AsgtotalCPUUtilization,
+    AsgtotalNetworkIn,
+    AsgtotalNetworkOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoadMetricType),
+}
+
+impl Default for LoadMetricType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoadMetricType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoadMetricType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoadMetricType {
+    fn into(self) -> String {
+        match self {
+            LoadMetricType::AlbtargetGroupRequestCount => "ALBTargetGroupRequestCount".to_string(),
+            LoadMetricType::AsgtotalCPUUtilization => "ASGTotalCPUUtilization".to_string(),
+            LoadMetricType::AsgtotalNetworkIn => "ASGTotalNetworkIn".to_string(),
+            LoadMetricType::AsgtotalNetworkOut => "ASGTotalNetworkOut".to_string(),
+            LoadMetricType::UnknownVariant(UnknownLoadMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoadMetricType {
+    fn into(self) -> &'a str {
+        match self {
+            LoadMetricType::AlbtargetGroupRequestCount => &"ALBTargetGroupRequestCount",
+            LoadMetricType::AsgtotalCPUUtilization => &"ASGTotalCPUUtilization",
+            LoadMetricType::AsgtotalNetworkIn => &"ASGTotalNetworkIn",
+            LoadMetricType::AsgtotalNetworkOut => &"ASGTotalNetworkOut",
+            LoadMetricType::UnknownVariant(UnknownLoadMetricType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoadMetricType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALBTargetGroupRequestCount" => LoadMetricType::AlbtargetGroupRequestCount,
+            "ASGTotalCPUUtilization" => LoadMetricType::AsgtotalCPUUtilization,
+            "ASGTotalNetworkIn" => LoadMetricType::AsgtotalNetworkIn,
+            "ASGTotalNetworkOut" => LoadMetricType::AsgtotalNetworkOut,
+            _ => LoadMetricType::UnknownVariant(UnknownLoadMetricType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoadMetricType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALBTargetGroupRequestCount" => LoadMetricType::AlbtargetGroupRequestCount,
+            "ASGTotalCPUUtilization" => LoadMetricType::AsgtotalCPUUtilization,
+            "ASGTotalNetworkIn" => LoadMetricType::AsgtotalNetworkIn,
+            "ASGTotalNetworkOut" => LoadMetricType::AsgtotalNetworkOut,
+            _ => LoadMetricType::UnknownVariant(UnknownLoadMetricType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoadMetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoadMetricType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoadMetricType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents a dimension for a customized metric.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricDimension {
@@ -277,12 +506,223 @@ pub struct MetricDimension {
     pub value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricStatistic {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricStatistic {
+    Average,
+    Maximum,
+    Minimum,
+    SampleCount,
+    Sum,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricStatistic),
+}
+
+impl Default for MetricStatistic {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricStatistic {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricStatistic {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricStatistic {
+    fn into(self) -> String {
+        match self {
+            MetricStatistic::Average => "Average".to_string(),
+            MetricStatistic::Maximum => "Maximum".to_string(),
+            MetricStatistic::Minimum => "Minimum".to_string(),
+            MetricStatistic::SampleCount => "SampleCount".to_string(),
+            MetricStatistic::Sum => "Sum".to_string(),
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricStatistic {
+    fn into(self) -> &'a str {
+        match self {
+            MetricStatistic::Average => &"Average",
+            MetricStatistic::Maximum => &"Maximum",
+            MetricStatistic::Minimum => &"Minimum",
+            MetricStatistic::SampleCount => &"SampleCount",
+            MetricStatistic::Sum => &"Sum",
+            MetricStatistic::UnknownVariant(UnknownMetricStatistic { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricStatistic {
+    fn from(name: &str) -> Self {
+        match name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricStatistic {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Average" => MetricStatistic::Average,
+            "Maximum" => MetricStatistic::Maximum,
+            "Minimum" => MetricStatistic::Minimum,
+            "SampleCount" => MetricStatistic::SampleCount,
+            "Sum" => MetricStatistic::Sum,
+            _ => MetricStatistic::UnknownVariant(UnknownMetricStatistic { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricStatistic {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricStatistic {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricStatistic {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyType {
+    TargetTrackingScaling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyType),
+}
+
+impl Default for PolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        match self {
+            PolicyType::TargetTrackingScaling => "TargetTrackingScaling".to_string(),
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyType::TargetTrackingScaling => &"TargetTrackingScaling",
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "TargetTrackingScaling" => PolicyType::TargetTrackingScaling,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TargetTrackingScaling" => PolicyType::TargetTrackingScaling,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents a predefined metric that can be used for predictive scaling. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PredefinedLoadMetricSpecification {
     /// <p>The metric type.</p>
     #[serde(rename = "PredefinedLoadMetricType")]
-    pub predefined_load_metric_type: String,
+    pub predefined_load_metric_type: LoadMetricType,
     /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group for an Application Load Balancer attached to the Auto Scaling group.</p> <p>The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN.</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul></p>
     #[serde(rename = "ResourceLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -294,11 +734,428 @@ pub struct PredefinedLoadMetricSpecification {
 pub struct PredefinedScalingMetricSpecification {
     /// <p>The metric type. The <code>ALBRequestCountPerTarget</code> metric type applies only to Auto Scaling groups, Spot Fleet requests, and ECS services.</p>
     #[serde(rename = "PredefinedScalingMetricType")]
-    pub predefined_scaling_metric_type: String,
+    pub predefined_scaling_metric_type: ScalingMetricType,
     /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group for an Application Load Balancer attached to the Auto Scaling group, Spot Fleet request, or ECS service.</p> <p>The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN.</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul></p>
     #[serde(rename = "ResourceLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_label: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPredictiveScalingMaxCapacityBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PredictiveScalingMaxCapacityBehavior {
+    SetForecastCapacityToMaxCapacity,
+    SetMaxCapacityAboveForecastCapacity,
+    SetMaxCapacityToForecastCapacity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPredictiveScalingMaxCapacityBehavior),
+}
+
+impl Default for PredictiveScalingMaxCapacityBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PredictiveScalingMaxCapacityBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PredictiveScalingMaxCapacityBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PredictiveScalingMaxCapacityBehavior {
+    fn into(self) -> String {
+        match self {
+            PredictiveScalingMaxCapacityBehavior::SetForecastCapacityToMaxCapacity => {
+                "SetForecastCapacityToMaxCapacity".to_string()
+            }
+            PredictiveScalingMaxCapacityBehavior::SetMaxCapacityAboveForecastCapacity => {
+                "SetMaxCapacityAboveForecastCapacity".to_string()
+            }
+            PredictiveScalingMaxCapacityBehavior::SetMaxCapacityToForecastCapacity => {
+                "SetMaxCapacityToForecastCapacity".to_string()
+            }
+            PredictiveScalingMaxCapacityBehavior::UnknownVariant(
+                UnknownPredictiveScalingMaxCapacityBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PredictiveScalingMaxCapacityBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            PredictiveScalingMaxCapacityBehavior::SetForecastCapacityToMaxCapacity => {
+                &"SetForecastCapacityToMaxCapacity"
+            }
+            PredictiveScalingMaxCapacityBehavior::SetMaxCapacityAboveForecastCapacity => {
+                &"SetMaxCapacityAboveForecastCapacity"
+            }
+            PredictiveScalingMaxCapacityBehavior::SetMaxCapacityToForecastCapacity => {
+                &"SetMaxCapacityToForecastCapacity"
+            }
+            PredictiveScalingMaxCapacityBehavior::UnknownVariant(
+                UnknownPredictiveScalingMaxCapacityBehavior { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for PredictiveScalingMaxCapacityBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "SetForecastCapacityToMaxCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetForecastCapacityToMaxCapacity
+            }
+            "SetMaxCapacityAboveForecastCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetMaxCapacityAboveForecastCapacity
+            }
+            "SetMaxCapacityToForecastCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetMaxCapacityToForecastCapacity
+            }
+            _ => PredictiveScalingMaxCapacityBehavior::UnknownVariant(
+                UnknownPredictiveScalingMaxCapacityBehavior {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for PredictiveScalingMaxCapacityBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SetForecastCapacityToMaxCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetForecastCapacityToMaxCapacity
+            }
+            "SetMaxCapacityAboveForecastCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetMaxCapacityAboveForecastCapacity
+            }
+            "SetMaxCapacityToForecastCapacity" => {
+                PredictiveScalingMaxCapacityBehavior::SetMaxCapacityToForecastCapacity
+            }
+            _ => PredictiveScalingMaxCapacityBehavior::UnknownVariant(
+                UnknownPredictiveScalingMaxCapacityBehavior { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PredictiveScalingMaxCapacityBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PredictiveScalingMaxCapacityBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PredictiveScalingMaxCapacityBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPredictiveScalingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PredictiveScalingMode {
+    ForecastAndScale,
+    ForecastOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPredictiveScalingMode),
+}
+
+impl Default for PredictiveScalingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PredictiveScalingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PredictiveScalingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PredictiveScalingMode {
+    fn into(self) -> String {
+        match self {
+            PredictiveScalingMode::ForecastAndScale => "ForecastAndScale".to_string(),
+            PredictiveScalingMode::ForecastOnly => "ForecastOnly".to_string(),
+            PredictiveScalingMode::UnknownVariant(UnknownPredictiveScalingMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PredictiveScalingMode {
+    fn into(self) -> &'a str {
+        match self {
+            PredictiveScalingMode::ForecastAndScale => &"ForecastAndScale",
+            PredictiveScalingMode::ForecastOnly => &"ForecastOnly",
+            PredictiveScalingMode::UnknownVariant(UnknownPredictiveScalingMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PredictiveScalingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ForecastAndScale" => PredictiveScalingMode::ForecastAndScale,
+            "ForecastOnly" => PredictiveScalingMode::ForecastOnly,
+            _ => PredictiveScalingMode::UnknownVariant(UnknownPredictiveScalingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PredictiveScalingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ForecastAndScale" => PredictiveScalingMode::ForecastAndScale,
+            "ForecastOnly" => PredictiveScalingMode::ForecastOnly,
+            _ => PredictiveScalingMode::UnknownVariant(UnknownPredictiveScalingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PredictiveScalingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PredictiveScalingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PredictiveScalingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalableDimension {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalableDimension {
+    AutoscalingAutoScalingGroupDesiredCapacity,
+    DynamodbIndexReadCapacityUnits,
+    DynamodbIndexWriteCapacityUnits,
+    DynamodbTableReadCapacityUnits,
+    DynamodbTableWriteCapacityUnits,
+    Ec2SpotFleetRequestTargetCapacity,
+    EcsServiceDesiredCount,
+    RdsClusterReadReplicaCount,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalableDimension),
+}
+
+impl Default for ScalableDimension {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalableDimension {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalableDimension {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalableDimension {
+    fn into(self) -> String {
+        match self {
+            ScalableDimension::AutoscalingAutoScalingGroupDesiredCapacity => {
+                "autoscaling:autoScalingGroup:DesiredCapacity".to_string()
+            }
+            ScalableDimension::DynamodbIndexReadCapacityUnits => {
+                "dynamodb:index:ReadCapacityUnits".to_string()
+            }
+            ScalableDimension::DynamodbIndexWriteCapacityUnits => {
+                "dynamodb:index:WriteCapacityUnits".to_string()
+            }
+            ScalableDimension::DynamodbTableReadCapacityUnits => {
+                "dynamodb:table:ReadCapacityUnits".to_string()
+            }
+            ScalableDimension::DynamodbTableWriteCapacityUnits => {
+                "dynamodb:table:WriteCapacityUnits".to_string()
+            }
+            ScalableDimension::Ec2SpotFleetRequestTargetCapacity => {
+                "ec2:spot-fleet-request:TargetCapacity".to_string()
+            }
+            ScalableDimension::EcsServiceDesiredCount => "ecs:service:DesiredCount".to_string(),
+            ScalableDimension::RdsClusterReadReplicaCount => {
+                "rds:cluster:ReadReplicaCount".to_string()
+            }
+            ScalableDimension::UnknownVariant(UnknownScalableDimension { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalableDimension {
+    fn into(self) -> &'a str {
+        match self {
+            ScalableDimension::AutoscalingAutoScalingGroupDesiredCapacity => {
+                &"autoscaling:autoScalingGroup:DesiredCapacity"
+            }
+            ScalableDimension::DynamodbIndexReadCapacityUnits => {
+                &"dynamodb:index:ReadCapacityUnits"
+            }
+            ScalableDimension::DynamodbIndexWriteCapacityUnits => {
+                &"dynamodb:index:WriteCapacityUnits"
+            }
+            ScalableDimension::DynamodbTableReadCapacityUnits => {
+                &"dynamodb:table:ReadCapacityUnits"
+            }
+            ScalableDimension::DynamodbTableWriteCapacityUnits => {
+                &"dynamodb:table:WriteCapacityUnits"
+            }
+            ScalableDimension::Ec2SpotFleetRequestTargetCapacity => {
+                &"ec2:spot-fleet-request:TargetCapacity"
+            }
+            ScalableDimension::EcsServiceDesiredCount => &"ecs:service:DesiredCount",
+            ScalableDimension::RdsClusterReadReplicaCount => &"rds:cluster:ReadReplicaCount",
+            ScalableDimension::UnknownVariant(UnknownScalableDimension { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScalableDimension {
+    fn from(name: &str) -> Self {
+        match name {
+            "autoscaling:autoScalingGroup:DesiredCapacity" => {
+                ScalableDimension::AutoscalingAutoScalingGroupDesiredCapacity
+            }
+            "dynamodb:index:ReadCapacityUnits" => ScalableDimension::DynamodbIndexReadCapacityUnits,
+            "dynamodb:index:WriteCapacityUnits" => {
+                ScalableDimension::DynamodbIndexWriteCapacityUnits
+            }
+            "dynamodb:table:ReadCapacityUnits" => ScalableDimension::DynamodbTableReadCapacityUnits,
+            "dynamodb:table:WriteCapacityUnits" => {
+                ScalableDimension::DynamodbTableWriteCapacityUnits
+            }
+            "ec2:spot-fleet-request:TargetCapacity" => {
+                ScalableDimension::Ec2SpotFleetRequestTargetCapacity
+            }
+            "ecs:service:DesiredCount" => ScalableDimension::EcsServiceDesiredCount,
+            "rds:cluster:ReadReplicaCount" => ScalableDimension::RdsClusterReadReplicaCount,
+            _ => ScalableDimension::UnknownVariant(UnknownScalableDimension {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalableDimension {
+    fn from(name: String) -> Self {
+        match &*name {
+            "autoscaling:autoScalingGroup:DesiredCapacity" => {
+                ScalableDimension::AutoscalingAutoScalingGroupDesiredCapacity
+            }
+            "dynamodb:index:ReadCapacityUnits" => ScalableDimension::DynamodbIndexReadCapacityUnits,
+            "dynamodb:index:WriteCapacityUnits" => {
+                ScalableDimension::DynamodbIndexWriteCapacityUnits
+            }
+            "dynamodb:table:ReadCapacityUnits" => ScalableDimension::DynamodbTableReadCapacityUnits,
+            "dynamodb:table:WriteCapacityUnits" => {
+                ScalableDimension::DynamodbTableWriteCapacityUnits
+            }
+            "ec2:spot-fleet-request:TargetCapacity" => {
+                ScalableDimension::Ec2SpotFleetRequestTargetCapacity
+            }
+            "ecs:service:DesiredCount" => ScalableDimension::EcsServiceDesiredCount,
+            "rds:cluster:ReadReplicaCount" => ScalableDimension::RdsClusterReadReplicaCount,
+            _ => ScalableDimension::UnknownVariant(UnknownScalableDimension { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalableDimension {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalableDimension {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalableDimension {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a scaling instruction for a scalable resource.</p> <p>The scaling instruction is used in combination with a scaling plan, which is a set of instructions for configuring dynamic scaling and predictive scaling for the scalable resources in your application. Each scaling instruction applies to one resource.</p> <p>AWS Auto Scaling creates target tracking scaling policies based on the scaling instructions. Target tracking scaling policies adjust the capacity of your scalable resource as required to maintain resource utilization at the target value that you specified. </p> <p>AWS Auto Scaling also configures predictive scaling for your Amazon EC2 Auto Scaling groups using a subset of parameters, including the load metric, the scaling metric, the target value for the scaling metric, the predictive scaling mode (forecast and scale or forecast only), and the desired behavior when the forecast capacity exceeds the maximum capacity of the resource. With predictive scaling, AWS Auto Scaling generates forecasts with traffic predictions for the two days ahead and schedules scaling actions that proactively add and remove resource capacity to match the forecast. </p> <p>We recommend waiting a minimum of 24 hours after creating an Auto Scaling group to configure predictive scaling. At minimum, there must be 24 hours of historical data to generate a forecast.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/plans/userguide/auto-scaling-getting-started.html">Getting Started with AWS Auto Scaling</a>.</p>
@@ -325,7 +1182,7 @@ pub struct ScalingInstruction {
     /// <p>Defines the behavior that should be applied if the forecast capacity approaches or exceeds the maximum capacity specified for the resource. The default value is <code>SetForecastCapacityToMaxCapacity</code>.</p> <p>The following are possible values:</p> <ul> <li> <p> <code>SetForecastCapacityToMaxCapacity</code> - AWS Auto Scaling cannot scale resource capacity higher than the maximum capacity. The maximum capacity is enforced as a hard limit. </p> </li> <li> <p> <code>SetMaxCapacityToForecastCapacity</code> - AWS Auto Scaling may scale resource capacity higher than the maximum capacity to equal but not exceed forecast capacity.</p> </li> <li> <p> <code>SetMaxCapacityAboveForecastCapacity</code> - AWS Auto Scaling may scale resource capacity higher than the maximum capacity by a specified buffer value. The intention is to give the target tracking scaling policy extra capacity if unexpected traffic occurs. </p> </li> </ul> <p>Only valid when configuring predictive scaling.</p>
     #[serde(rename = "PredictiveScalingMaxCapacityBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub predictive_scaling_max_capacity_behavior: Option<String>,
+    pub predictive_scaling_max_capacity_behavior: Option<PredictiveScalingMaxCapacityBehavior>,
     /// <p>The size of the capacity buffer to use when the forecast capacity is close to or exceeds the maximum capacity. The value is specified as a percentage relative to the forecast capacity. For example, if the buffer is 10, this means a 10 percent buffer, such that if the forecast capacity is 50, and the maximum capacity is 40, then the effective maximum capacity is 55.</p> <p>Only valid when configuring predictive scaling. Required if the <b>PredictiveScalingMaxCapacityBehavior</b> is set to <code>SetMaxCapacityAboveForecastCapacity</code>, and cannot be used otherwise.</p> <p>The range is 1-100.</p>
     #[serde(rename = "PredictiveScalingMaxCapacityBuffer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,27 +1190,244 @@ pub struct ScalingInstruction {
     /// <p>The predictive scaling mode. The default value is <code>ForecastAndScale</code>. Otherwise, AWS Auto Scaling forecasts capacity but does not create any scheduled scaling actions based on the capacity forecast. </p>
     #[serde(rename = "PredictiveScalingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub predictive_scaling_mode: Option<String>,
+    pub predictive_scaling_mode: Option<PredictiveScalingMode>,
     /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p><p>The scalable dimension associated with the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot Fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition and Aurora PostgreSQL-compatible edition.</p> </li> </ul></p>
     #[serde(rename = "ScalableDimension")]
-    pub scalable_dimension: String,
+    pub scalable_dimension: ScalableDimension,
     /// <p>Controls whether a resource's externally created scaling policies are kept or replaced. </p> <p>The default value is <code>KeepExternalPolicies</code>. If the parameter is set to <code>ReplaceExternalPolicies</code>, any scaling policies that are external to AWS Auto Scaling are deleted and new target tracking scaling policies created. </p> <p>Only valid when configuring dynamic scaling. </p> <p>Condition: The number of existing policies to be replaced must be less than or equal to 50. If there are more than 50 policies to be replaced, AWS Auto Scaling keeps all existing policies and does not create new ones.</p>
     #[serde(rename = "ScalingPolicyUpdateBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_policy_update_behavior: Option<String>,
+    pub scaling_policy_update_behavior: Option<ScalingPolicyUpdateBehavior>,
     /// <p>The amount of time, in seconds, to buffer the run time of scheduled scaling actions when scaling out. For example, if the forecast says to add capacity at 10:00 AM, and the buffer time is 5 minutes, then the run time of the corresponding scheduled scaling action will be 9:55 AM. The intention is to give resources time to be provisioned. For example, it can take a few minutes to launch an EC2 instance. The actual amount of time required depends on several factors, such as the size of the instance and whether there are startup scripts to complete. </p> <p>The value must be less than the forecast interval duration of 3600 seconds (60 minutes). The default is 300 seconds. </p> <p>Only valid when configuring predictive scaling. </p>
     #[serde(rename = "ScheduledActionBufferTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_action_buffer_time: Option<i64>,
     /// <p>The namespace of the AWS service.</p>
     #[serde(rename = "ServiceNamespace")]
-    pub service_namespace: String,
+    pub service_namespace: ServiceNamespace,
     /// <p>The structure that defines new target tracking configurations (up to 10). Each of these structures includes a specific scaling metric and a target value for the metric, along with various parameters to use with dynamic scaling. </p> <p>With predictive scaling and dynamic scaling, the resource scales based on the target tracking configuration that provides the largest capacity for both scale in and scale out. </p> <p>Condition: The scaling metric must be unique across target tracking configurations.</p>
     #[serde(rename = "TargetTrackingConfigurations")]
     pub target_tracking_configurations: Vec<TargetTrackingConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingMetricType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingMetricType {
+    AlbrequestCountPerTarget,
+    AsgaverageCPUUtilization,
+    AsgaverageNetworkIn,
+    AsgaverageNetworkOut,
+    DynamoDBReadCapacityUtilization,
+    DynamoDBWriteCapacityUtilization,
+    Ec2SpotFleetRequestAverageCPUUtilization,
+    Ec2SpotFleetRequestAverageNetworkIn,
+    Ec2SpotFleetRequestAverageNetworkOut,
+    EcsserviceAverageCPUUtilization,
+    EcsserviceAverageMemoryUtilization,
+    RdsreaderAverageCPUUtilization,
+    RdsreaderAverageDatabaseConnections,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingMetricType),
+}
+
+impl Default for ScalingMetricType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingMetricType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingMetricType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingMetricType {
+    fn into(self) -> String {
+        match self {
+            ScalingMetricType::AlbrequestCountPerTarget => "ALBRequestCountPerTarget".to_string(),
+            ScalingMetricType::AsgaverageCPUUtilization => "ASGAverageCPUUtilization".to_string(),
+            ScalingMetricType::AsgaverageNetworkIn => "ASGAverageNetworkIn".to_string(),
+            ScalingMetricType::AsgaverageNetworkOut => "ASGAverageNetworkOut".to_string(),
+            ScalingMetricType::DynamoDBReadCapacityUtilization => {
+                "DynamoDBReadCapacityUtilization".to_string()
+            }
+            ScalingMetricType::DynamoDBWriteCapacityUtilization => {
+                "DynamoDBWriteCapacityUtilization".to_string()
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageCPUUtilization => {
+                "EC2SpotFleetRequestAverageCPUUtilization".to_string()
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageNetworkIn => {
+                "EC2SpotFleetRequestAverageNetworkIn".to_string()
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageNetworkOut => {
+                "EC2SpotFleetRequestAverageNetworkOut".to_string()
+            }
+            ScalingMetricType::EcsserviceAverageCPUUtilization => {
+                "ECSServiceAverageCPUUtilization".to_string()
+            }
+            ScalingMetricType::EcsserviceAverageMemoryUtilization => {
+                "ECSServiceAverageMemoryUtilization".to_string()
+            }
+            ScalingMetricType::RdsreaderAverageCPUUtilization => {
+                "RDSReaderAverageCPUUtilization".to_string()
+            }
+            ScalingMetricType::RdsreaderAverageDatabaseConnections => {
+                "RDSReaderAverageDatabaseConnections".to_string()
+            }
+            ScalingMetricType::UnknownVariant(UnknownScalingMetricType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingMetricType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingMetricType::AlbrequestCountPerTarget => &"ALBRequestCountPerTarget",
+            ScalingMetricType::AsgaverageCPUUtilization => &"ASGAverageCPUUtilization",
+            ScalingMetricType::AsgaverageNetworkIn => &"ASGAverageNetworkIn",
+            ScalingMetricType::AsgaverageNetworkOut => &"ASGAverageNetworkOut",
+            ScalingMetricType::DynamoDBReadCapacityUtilization => {
+                &"DynamoDBReadCapacityUtilization"
+            }
+            ScalingMetricType::DynamoDBWriteCapacityUtilization => {
+                &"DynamoDBWriteCapacityUtilization"
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageCPUUtilization => {
+                &"EC2SpotFleetRequestAverageCPUUtilization"
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageNetworkIn => {
+                &"EC2SpotFleetRequestAverageNetworkIn"
+            }
+            ScalingMetricType::Ec2SpotFleetRequestAverageNetworkOut => {
+                &"EC2SpotFleetRequestAverageNetworkOut"
+            }
+            ScalingMetricType::EcsserviceAverageCPUUtilization => {
+                &"ECSServiceAverageCPUUtilization"
+            }
+            ScalingMetricType::EcsserviceAverageMemoryUtilization => {
+                &"ECSServiceAverageMemoryUtilization"
+            }
+            ScalingMetricType::RdsreaderAverageCPUUtilization => &"RDSReaderAverageCPUUtilization",
+            ScalingMetricType::RdsreaderAverageDatabaseConnections => {
+                &"RDSReaderAverageDatabaseConnections"
+            }
+            ScalingMetricType::UnknownVariant(UnknownScalingMetricType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScalingMetricType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALBRequestCountPerTarget" => ScalingMetricType::AlbrequestCountPerTarget,
+            "ASGAverageCPUUtilization" => ScalingMetricType::AsgaverageCPUUtilization,
+            "ASGAverageNetworkIn" => ScalingMetricType::AsgaverageNetworkIn,
+            "ASGAverageNetworkOut" => ScalingMetricType::AsgaverageNetworkOut,
+            "DynamoDBReadCapacityUtilization" => ScalingMetricType::DynamoDBReadCapacityUtilization,
+            "DynamoDBWriteCapacityUtilization" => {
+                ScalingMetricType::DynamoDBWriteCapacityUtilization
+            }
+            "EC2SpotFleetRequestAverageCPUUtilization" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageCPUUtilization
+            }
+            "EC2SpotFleetRequestAverageNetworkIn" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageNetworkIn
+            }
+            "EC2SpotFleetRequestAverageNetworkOut" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageNetworkOut
+            }
+            "ECSServiceAverageCPUUtilization" => ScalingMetricType::EcsserviceAverageCPUUtilization,
+            "ECSServiceAverageMemoryUtilization" => {
+                ScalingMetricType::EcsserviceAverageMemoryUtilization
+            }
+            "RDSReaderAverageCPUUtilization" => ScalingMetricType::RdsreaderAverageCPUUtilization,
+            "RDSReaderAverageDatabaseConnections" => {
+                ScalingMetricType::RdsreaderAverageDatabaseConnections
+            }
+            _ => ScalingMetricType::UnknownVariant(UnknownScalingMetricType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingMetricType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALBRequestCountPerTarget" => ScalingMetricType::AlbrequestCountPerTarget,
+            "ASGAverageCPUUtilization" => ScalingMetricType::AsgaverageCPUUtilization,
+            "ASGAverageNetworkIn" => ScalingMetricType::AsgaverageNetworkIn,
+            "ASGAverageNetworkOut" => ScalingMetricType::AsgaverageNetworkOut,
+            "DynamoDBReadCapacityUtilization" => ScalingMetricType::DynamoDBReadCapacityUtilization,
+            "DynamoDBWriteCapacityUtilization" => {
+                ScalingMetricType::DynamoDBWriteCapacityUtilization
+            }
+            "EC2SpotFleetRequestAverageCPUUtilization" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageCPUUtilization
+            }
+            "EC2SpotFleetRequestAverageNetworkIn" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageNetworkIn
+            }
+            "EC2SpotFleetRequestAverageNetworkOut" => {
+                ScalingMetricType::Ec2SpotFleetRequestAverageNetworkOut
+            }
+            "ECSServiceAverageCPUUtilization" => ScalingMetricType::EcsserviceAverageCPUUtilization,
+            "ECSServiceAverageMemoryUtilization" => {
+                ScalingMetricType::EcsserviceAverageMemoryUtilization
+            }
+            "RDSReaderAverageCPUUtilization" => ScalingMetricType::RdsreaderAverageCPUUtilization,
+            "RDSReaderAverageDatabaseConnections" => {
+                ScalingMetricType::RdsreaderAverageDatabaseConnections
+            }
+            _ => ScalingMetricType::UnknownVariant(UnknownScalingMetricType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingMetricType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingMetricType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingMetricType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a scaling plan.</p>
@@ -378,7 +1452,7 @@ pub struct ScalingPlan {
     pub scaling_plan_version: i64,
     /// <p><p>The status of the scaling plan.</p> <ul> <li> <p> <code>Active</code> - The scaling plan is active.</p> </li> <li> <p> <code>ActiveWithProblems</code> - The scaling plan is active, but the scaling configuration for one or more resources could not be applied.</p> </li> <li> <p> <code>CreationInProgress</code> - The scaling plan is being created.</p> </li> <li> <p> <code>CreationFailed</code> - The scaling plan could not be created.</p> </li> <li> <p> <code>DeletionInProgress</code> - The scaling plan is being deleted.</p> </li> <li> <p> <code>DeletionFailed</code> - The scaling plan could not be deleted.</p> </li> <li> <p> <code>UpdateInProgress</code> - The scaling plan is being updated.</p> </li> <li> <p> <code>UpdateFailed</code> - The scaling plan could not be updated.</p> </li> </ul></p>
     #[serde(rename = "StatusCode")]
-    pub status_code: String,
+    pub status_code: ScalingPlanStatusCode,
     /// <p>A simple message about the current status of the scaling plan.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -398,7 +1472,7 @@ pub struct ScalingPlanResource {
     pub resource_id: String,
     /// <p><p>The scalable dimension for the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot Fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition and Aurora PostgreSQL-compatible edition.</p> </li> </ul></p>
     #[serde(rename = "ScalableDimension")]
-    pub scalable_dimension: String,
+    pub scalable_dimension: ScalableDimension,
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
@@ -411,14 +1485,149 @@ pub struct ScalingPlanResource {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
     /// <p><p>The scaling status of the resource.</p> <ul> <li> <p> <code>Active</code> - The scaling configuration is active.</p> </li> <li> <p> <code>Inactive</code> - The scaling configuration is not active because the scaling plan is being created or the scaling configuration could not be applied. Check the status message for more information.</p> </li> <li> <p> <code>PartiallyActive</code> - The scaling configuration is partially active because the scaling plan is being created or deleted or the scaling configuration could not be fully applied. Check the status message for more information.</p> </li> </ul></p>
     #[serde(rename = "ScalingStatusCode")]
-    pub scaling_status_code: String,
+    pub scaling_status_code: ScalingStatusCode,
     /// <p>A simple message about the current scaling status of the resource.</p>
     #[serde(rename = "ScalingStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_status_message: Option<String>,
     /// <p>The namespace of the AWS service.</p>
     #[serde(rename = "ServiceNamespace")]
-    pub service_namespace: String,
+    pub service_namespace: ServiceNamespace,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingPlanStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingPlanStatusCode {
+    Active,
+    ActiveWithProblems,
+    CreationFailed,
+    CreationInProgress,
+    DeletionFailed,
+    DeletionInProgress,
+    UpdateFailed,
+    UpdateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingPlanStatusCode),
+}
+
+impl Default for ScalingPlanStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingPlanStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingPlanStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingPlanStatusCode {
+    fn into(self) -> String {
+        match self {
+            ScalingPlanStatusCode::Active => "Active".to_string(),
+            ScalingPlanStatusCode::ActiveWithProblems => "ActiveWithProblems".to_string(),
+            ScalingPlanStatusCode::CreationFailed => "CreationFailed".to_string(),
+            ScalingPlanStatusCode::CreationInProgress => "CreationInProgress".to_string(),
+            ScalingPlanStatusCode::DeletionFailed => "DeletionFailed".to_string(),
+            ScalingPlanStatusCode::DeletionInProgress => "DeletionInProgress".to_string(),
+            ScalingPlanStatusCode::UpdateFailed => "UpdateFailed".to_string(),
+            ScalingPlanStatusCode::UpdateInProgress => "UpdateInProgress".to_string(),
+            ScalingPlanStatusCode::UnknownVariant(UnknownScalingPlanStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingPlanStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingPlanStatusCode::Active => &"Active",
+            ScalingPlanStatusCode::ActiveWithProblems => &"ActiveWithProblems",
+            ScalingPlanStatusCode::CreationFailed => &"CreationFailed",
+            ScalingPlanStatusCode::CreationInProgress => &"CreationInProgress",
+            ScalingPlanStatusCode::DeletionFailed => &"DeletionFailed",
+            ScalingPlanStatusCode::DeletionInProgress => &"DeletionInProgress",
+            ScalingPlanStatusCode::UpdateFailed => &"UpdateFailed",
+            ScalingPlanStatusCode::UpdateInProgress => &"UpdateInProgress",
+            ScalingPlanStatusCode::UnknownVariant(UnknownScalingPlanStatusCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingPlanStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => ScalingPlanStatusCode::Active,
+            "ActiveWithProblems" => ScalingPlanStatusCode::ActiveWithProblems,
+            "CreationFailed" => ScalingPlanStatusCode::CreationFailed,
+            "CreationInProgress" => ScalingPlanStatusCode::CreationInProgress,
+            "DeletionFailed" => ScalingPlanStatusCode::DeletionFailed,
+            "DeletionInProgress" => ScalingPlanStatusCode::DeletionInProgress,
+            "UpdateFailed" => ScalingPlanStatusCode::UpdateFailed,
+            "UpdateInProgress" => ScalingPlanStatusCode::UpdateInProgress,
+            _ => ScalingPlanStatusCode::UnknownVariant(UnknownScalingPlanStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingPlanStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => ScalingPlanStatusCode::Active,
+            "ActiveWithProblems" => ScalingPlanStatusCode::ActiveWithProblems,
+            "CreationFailed" => ScalingPlanStatusCode::CreationFailed,
+            "CreationInProgress" => ScalingPlanStatusCode::CreationInProgress,
+            "DeletionFailed" => ScalingPlanStatusCode::DeletionFailed,
+            "DeletionInProgress" => ScalingPlanStatusCode::DeletionInProgress,
+            "UpdateFailed" => ScalingPlanStatusCode::UpdateFailed,
+            "UpdateInProgress" => ScalingPlanStatusCode::UpdateInProgress,
+            _ => ScalingPlanStatusCode::UnknownVariant(UnknownScalingPlanStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingPlanStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScalingPlanStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingPlanStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a scaling policy.</p>
@@ -430,11 +1639,348 @@ pub struct ScalingPolicy {
     pub policy_name: String,
     /// <p>The type of scaling policy.</p>
     #[serde(rename = "PolicyType")]
-    pub policy_type: String,
+    pub policy_type: PolicyType,
     /// <p>The target tracking scaling policy. Includes support for predefined or customized metrics.</p>
     #[serde(rename = "TargetTrackingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingPolicyUpdateBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingPolicyUpdateBehavior {
+    KeepExternalPolicies,
+    ReplaceExternalPolicies,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingPolicyUpdateBehavior),
+}
+
+impl Default for ScalingPolicyUpdateBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingPolicyUpdateBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingPolicyUpdateBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingPolicyUpdateBehavior {
+    fn into(self) -> String {
+        match self {
+            ScalingPolicyUpdateBehavior::KeepExternalPolicies => "KeepExternalPolicies".to_string(),
+            ScalingPolicyUpdateBehavior::ReplaceExternalPolicies => {
+                "ReplaceExternalPolicies".to_string()
+            }
+            ScalingPolicyUpdateBehavior::UnknownVariant(UnknownScalingPolicyUpdateBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingPolicyUpdateBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingPolicyUpdateBehavior::KeepExternalPolicies => &"KeepExternalPolicies",
+            ScalingPolicyUpdateBehavior::ReplaceExternalPolicies => &"ReplaceExternalPolicies",
+            ScalingPolicyUpdateBehavior::UnknownVariant(UnknownScalingPolicyUpdateBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingPolicyUpdateBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "KeepExternalPolicies" => ScalingPolicyUpdateBehavior::KeepExternalPolicies,
+            "ReplaceExternalPolicies" => ScalingPolicyUpdateBehavior::ReplaceExternalPolicies,
+            _ => ScalingPolicyUpdateBehavior::UnknownVariant(UnknownScalingPolicyUpdateBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingPolicyUpdateBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KeepExternalPolicies" => ScalingPolicyUpdateBehavior::KeepExternalPolicies,
+            "ReplaceExternalPolicies" => ScalingPolicyUpdateBehavior::ReplaceExternalPolicies,
+            _ => ScalingPolicyUpdateBehavior::UnknownVariant(UnknownScalingPolicyUpdateBehavior {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingPolicyUpdateBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingPolicyUpdateBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingPolicyUpdateBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingStatusCode {
+    Active,
+    Inactive,
+    PartiallyActive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingStatusCode),
+}
+
+impl Default for ScalingStatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingStatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingStatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingStatusCode {
+    fn into(self) -> String {
+        match self {
+            ScalingStatusCode::Active => "Active".to_string(),
+            ScalingStatusCode::Inactive => "Inactive".to_string(),
+            ScalingStatusCode::PartiallyActive => "PartiallyActive".to_string(),
+            ScalingStatusCode::UnknownVariant(UnknownScalingStatusCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingStatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingStatusCode::Active => &"Active",
+            ScalingStatusCode::Inactive => &"Inactive",
+            ScalingStatusCode::PartiallyActive => &"PartiallyActive",
+            ScalingStatusCode::UnknownVariant(UnknownScalingStatusCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScalingStatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => ScalingStatusCode::Active,
+            "Inactive" => ScalingStatusCode::Inactive,
+            "PartiallyActive" => ScalingStatusCode::PartiallyActive,
+            _ => ScalingStatusCode::UnknownVariant(UnknownScalingStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingStatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => ScalingStatusCode::Active,
+            "Inactive" => ScalingStatusCode::Inactive,
+            "PartiallyActive" => ScalingStatusCode::PartiallyActive,
+            _ => ScalingStatusCode::UnknownVariant(UnknownScalingStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingStatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScalingStatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingStatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceNamespace {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceNamespace {
+    Autoscaling,
+    Dynamodb,
+    Ec2,
+    Ecs,
+    Rds,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceNamespace),
+}
+
+impl Default for ServiceNamespace {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceNamespace {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceNamespace {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceNamespace {
+    fn into(self) -> String {
+        match self {
+            ServiceNamespace::Autoscaling => "autoscaling".to_string(),
+            ServiceNamespace::Dynamodb => "dynamodb".to_string(),
+            ServiceNamespace::Ec2 => "ec2".to_string(),
+            ServiceNamespace::Ecs => "ecs".to_string(),
+            ServiceNamespace::Rds => "rds".to_string(),
+            ServiceNamespace::UnknownVariant(UnknownServiceNamespace { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceNamespace {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceNamespace::Autoscaling => &"autoscaling",
+            ServiceNamespace::Dynamodb => &"dynamodb",
+            ServiceNamespace::Ec2 => &"ec2",
+            ServiceNamespace::Ecs => &"ecs",
+            ServiceNamespace::Rds => &"rds",
+            ServiceNamespace::UnknownVariant(UnknownServiceNamespace { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ServiceNamespace {
+    fn from(name: &str) -> Self {
+        match name {
+            "autoscaling" => ServiceNamespace::Autoscaling,
+            "dynamodb" => ServiceNamespace::Dynamodb,
+            "ec2" => ServiceNamespace::Ec2,
+            "ecs" => ServiceNamespace::Ecs,
+            "rds" => ServiceNamespace::Rds,
+            _ => ServiceNamespace::UnknownVariant(UnknownServiceNamespace {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceNamespace {
+    fn from(name: String) -> Self {
+        match &*name {
+            "autoscaling" => ServiceNamespace::Autoscaling,
+            "dynamodb" => ServiceNamespace::Dynamodb,
+            "ec2" => ServiceNamespace::Ec2,
+            "ecs" => ServiceNamespace::Ecs,
+            "rds" => ServiceNamespace::Rds,
+            _ => ServiceNamespace::UnknownVariant(UnknownServiceNamespace { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceNamespace {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServiceNamespace {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServiceNamespace {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a tag.</p>

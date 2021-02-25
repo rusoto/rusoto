@@ -110,7 +110,7 @@ pub struct Assignment {
     /// <p> The status of the assignment.</p>
     #[serde(rename = "AssignmentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_status: Option<String>,
+    pub assignment_status: Option<AssignmentStatus>,
     /// <p> If results have been submitted, AutoApprovalTime is the date and time the results of the assignment results are considered Approved automatically if they have not already been explicitly approved or rejected by the Requester. This value is derived from the auto-approval delay specified by the Requester in the HIT. This value is omitted from the assignment if the Worker has not yet submitted results.</p>
     #[serde(rename = "AutoApprovalTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,6 +139,115 @@ pub struct Assignment {
     #[serde(rename = "WorkerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignmentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignmentStatus {
+    Approved,
+    Rejected,
+    Submitted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignmentStatus),
+}
+
+impl Default for AssignmentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignmentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignmentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignmentStatus {
+    fn into(self) -> String {
+        match self {
+            AssignmentStatus::Approved => "Approved".to_string(),
+            AssignmentStatus::Rejected => "Rejected".to_string(),
+            AssignmentStatus::Submitted => "Submitted".to_string(),
+            AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignmentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AssignmentStatus::Approved => &"Approved",
+            AssignmentStatus::Rejected => &"Rejected",
+            AssignmentStatus::Submitted => &"Submitted",
+            AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AssignmentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Approved" => AssignmentStatus::Approved,
+            "Rejected" => AssignmentStatus::Rejected,
+            "Submitted" => AssignmentStatus::Submitted,
+            _ => AssignmentStatus::UnknownVariant(UnknownAssignmentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignmentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Approved" => AssignmentStatus::Approved,
+            "Rejected" => AssignmentStatus::Rejected,
+            "Submitted" => AssignmentStatus::Submitted,
+            _ => AssignmentStatus::UnknownVariant(UnknownAssignmentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignmentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssignmentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssignmentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -187,6 +296,146 @@ pub struct BonusPayment {
     #[serde(rename = "WorkerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Comparator {
+    DoesNotExist,
+    EqualTo,
+    Exists,
+    GreaterThan,
+    GreaterThanOrEqualTo,
+    In,
+    LessThan,
+    LessThanOrEqualTo,
+    NotEqualTo,
+    NotIn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparator),
+}
+
+impl Default for Comparator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Comparator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Comparator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Comparator {
+    fn into(self) -> String {
+        match self {
+            Comparator::DoesNotExist => "DoesNotExist".to_string(),
+            Comparator::EqualTo => "EqualTo".to_string(),
+            Comparator::Exists => "Exists".to_string(),
+            Comparator::GreaterThan => "GreaterThan".to_string(),
+            Comparator::GreaterThanOrEqualTo => "GreaterThanOrEqualTo".to_string(),
+            Comparator::In => "In".to_string(),
+            Comparator::LessThan => "LessThan".to_string(),
+            Comparator::LessThanOrEqualTo => "LessThanOrEqualTo".to_string(),
+            Comparator::NotEqualTo => "NotEqualTo".to_string(),
+            Comparator::NotIn => "NotIn".to_string(),
+            Comparator::UnknownVariant(UnknownComparator { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Comparator {
+    fn into(self) -> &'a str {
+        match self {
+            Comparator::DoesNotExist => &"DoesNotExist",
+            Comparator::EqualTo => &"EqualTo",
+            Comparator::Exists => &"Exists",
+            Comparator::GreaterThan => &"GreaterThan",
+            Comparator::GreaterThanOrEqualTo => &"GreaterThanOrEqualTo",
+            Comparator::In => &"In",
+            Comparator::LessThan => &"LessThan",
+            Comparator::LessThanOrEqualTo => &"LessThanOrEqualTo",
+            Comparator::NotEqualTo => &"NotEqualTo",
+            Comparator::NotIn => &"NotIn",
+            Comparator::UnknownVariant(UnknownComparator { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Comparator {
+    fn from(name: &str) -> Self {
+        match name {
+            "DoesNotExist" => Comparator::DoesNotExist,
+            "EqualTo" => Comparator::EqualTo,
+            "Exists" => Comparator::Exists,
+            "GreaterThan" => Comparator::GreaterThan,
+            "GreaterThanOrEqualTo" => Comparator::GreaterThanOrEqualTo,
+            "In" => Comparator::In,
+            "LessThan" => Comparator::LessThan,
+            "LessThanOrEqualTo" => Comparator::LessThanOrEqualTo,
+            "NotEqualTo" => Comparator::NotEqualTo,
+            "NotIn" => Comparator::NotIn,
+            _ => Comparator::UnknownVariant(UnknownComparator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Comparator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DoesNotExist" => Comparator::DoesNotExist,
+            "EqualTo" => Comparator::EqualTo,
+            "Exists" => Comparator::Exists,
+            "GreaterThan" => Comparator::GreaterThan,
+            "GreaterThanOrEqualTo" => Comparator::GreaterThanOrEqualTo,
+            "In" => Comparator::In,
+            "LessThan" => Comparator::LessThan,
+            "LessThanOrEqualTo" => Comparator::LessThanOrEqualTo,
+            "NotEqualTo" => Comparator::NotEqualTo,
+            "NotIn" => Comparator::NotIn,
+            _ => Comparator::UnknownVariant(UnknownComparator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Comparator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Comparator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Comparator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -398,7 +647,7 @@ pub struct CreateQualificationTypeRequest {
     pub name: String,
     /// <p>The initial status of the Qualification type.</p> <p>Constraints: Valid values are: Active | Inactive</p>
     #[serde(rename = "QualificationTypeStatus")]
-    pub qualification_type_status: String,
+    pub qualification_type_status: QualificationTypeStatus,
     /// <p>The number of seconds that a Worker must wait after requesting a Qualification of the Qualification type before the worker can retry the Qualification request.</p> <p>Constraints: None. If not specified, retries are disabled and Workers can request a Qualification of this type only once, even if the Worker has not been granted the Qualification. It is not possible to disable retries for a Qualification type after it has been created with retries enabled. If you want to disable retries, you must delete existing retry-enabled Qualification type and then create a new Qualification type with retries disabled.</p>
     #[serde(rename = "RetryDelayInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -495,6 +744,157 @@ pub struct DisassociateQualificationFromWorkerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateQualificationFromWorkerResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventType {
+    AssignmentAbandoned,
+    AssignmentAccepted,
+    AssignmentApproved,
+    AssignmentRejected,
+    AssignmentReturned,
+    AssignmentSubmitted,
+    Hitcreated,
+    Hitdisposed,
+    Hitexpired,
+    Hitextended,
+    Hitreviewable,
+    Ping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventType),
+}
+
+impl Default for EventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventType {
+    fn into(self) -> String {
+        match self {
+            EventType::AssignmentAbandoned => "AssignmentAbandoned".to_string(),
+            EventType::AssignmentAccepted => "AssignmentAccepted".to_string(),
+            EventType::AssignmentApproved => "AssignmentApproved".to_string(),
+            EventType::AssignmentRejected => "AssignmentRejected".to_string(),
+            EventType::AssignmentReturned => "AssignmentReturned".to_string(),
+            EventType::AssignmentSubmitted => "AssignmentSubmitted".to_string(),
+            EventType::Hitcreated => "HITCreated".to_string(),
+            EventType::Hitdisposed => "HITDisposed".to_string(),
+            EventType::Hitexpired => "HITExpired".to_string(),
+            EventType::Hitextended => "HITExtended".to_string(),
+            EventType::Hitreviewable => "HITReviewable".to_string(),
+            EventType::Ping => "Ping".to_string(),
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventType {
+    fn into(self) -> &'a str {
+        match self {
+            EventType::AssignmentAbandoned => &"AssignmentAbandoned",
+            EventType::AssignmentAccepted => &"AssignmentAccepted",
+            EventType::AssignmentApproved => &"AssignmentApproved",
+            EventType::AssignmentRejected => &"AssignmentRejected",
+            EventType::AssignmentReturned => &"AssignmentReturned",
+            EventType::AssignmentSubmitted => &"AssignmentSubmitted",
+            EventType::Hitcreated => &"HITCreated",
+            EventType::Hitdisposed => &"HITDisposed",
+            EventType::Hitexpired => &"HITExpired",
+            EventType::Hitextended => &"HITExtended",
+            EventType::Hitreviewable => &"HITReviewable",
+            EventType::Ping => &"Ping",
+            EventType::UnknownVariant(UnknownEventType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AssignmentAbandoned" => EventType::AssignmentAbandoned,
+            "AssignmentAccepted" => EventType::AssignmentAccepted,
+            "AssignmentApproved" => EventType::AssignmentApproved,
+            "AssignmentRejected" => EventType::AssignmentRejected,
+            "AssignmentReturned" => EventType::AssignmentReturned,
+            "AssignmentSubmitted" => EventType::AssignmentSubmitted,
+            "HITCreated" => EventType::Hitcreated,
+            "HITDisposed" => EventType::Hitdisposed,
+            "HITExpired" => EventType::Hitexpired,
+            "HITExtended" => EventType::Hitextended,
+            "HITReviewable" => EventType::Hitreviewable,
+            "Ping" => EventType::Ping,
+            _ => EventType::UnknownVariant(UnknownEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AssignmentAbandoned" => EventType::AssignmentAbandoned,
+            "AssignmentAccepted" => EventType::AssignmentAccepted,
+            "AssignmentApproved" => EventType::AssignmentApproved,
+            "AssignmentRejected" => EventType::AssignmentRejected,
+            "AssignmentReturned" => EventType::AssignmentReturned,
+            "AssignmentSubmitted" => EventType::AssignmentSubmitted,
+            "HITCreated" => EventType::Hitcreated,
+            "HITDisposed" => EventType::Hitdisposed,
+            "HITExpired" => EventType::Hitexpired,
+            "HITExtended" => EventType::Hitextended,
+            "HITReviewable" => EventType::Hitreviewable,
+            "Ping" => EventType::Ping,
+            _ => EventType::UnknownVariant(UnknownEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for EventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -645,11 +1045,11 @@ pub struct HIT {
     /// <p> Indicates the review status of the HIT. Valid Values are NotReviewed | MarkedForReview | ReviewedAppropriate | ReviewedInappropriate.</p>
     #[serde(rename = "HITReviewStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hit_review_status: Option<String>,
+    pub hit_review_status: Option<HITReviewStatus>,
     /// <p>The status of the HIT and its assignments. Valid Values are Assignable | Unassignable | Reviewable | Reviewing | Disposed. </p>
     #[serde(rename = "HITStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hit_status: Option<String>,
+    pub hit_status: Option<HITStatus>,
     /// <p>The ID of the HIT type of this HIT</p>
     #[serde(rename = "HITTypeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -695,6 +1095,115 @@ pub struct HIT {
     pub title: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHITAccessActions {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HITAccessActions {
+    Accept,
+    DiscoverPreviewAndAccept,
+    PreviewAndAccept,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHITAccessActions),
+}
+
+impl Default for HITAccessActions {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HITAccessActions {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HITAccessActions {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HITAccessActions {
+    fn into(self) -> String {
+        match self {
+            HITAccessActions::Accept => "Accept".to_string(),
+            HITAccessActions::DiscoverPreviewAndAccept => "DiscoverPreviewAndAccept".to_string(),
+            HITAccessActions::PreviewAndAccept => "PreviewAndAccept".to_string(),
+            HITAccessActions::UnknownVariant(UnknownHITAccessActions { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HITAccessActions {
+    fn into(self) -> &'a str {
+        match self {
+            HITAccessActions::Accept => &"Accept",
+            HITAccessActions::DiscoverPreviewAndAccept => &"DiscoverPreviewAndAccept",
+            HITAccessActions::PreviewAndAccept => &"PreviewAndAccept",
+            HITAccessActions::UnknownVariant(UnknownHITAccessActions { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for HITAccessActions {
+    fn from(name: &str) -> Self {
+        match name {
+            "Accept" => HITAccessActions::Accept,
+            "DiscoverPreviewAndAccept" => HITAccessActions::DiscoverPreviewAndAccept,
+            "PreviewAndAccept" => HITAccessActions::PreviewAndAccept,
+            _ => HITAccessActions::UnknownVariant(UnknownHITAccessActions {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HITAccessActions {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Accept" => HITAccessActions::Accept,
+            "DiscoverPreviewAndAccept" => HITAccessActions::DiscoverPreviewAndAccept,
+            "PreviewAndAccept" => HITAccessActions::PreviewAndAccept,
+            _ => HITAccessActions::UnknownVariant(UnknownHITAccessActions { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HITAccessActions {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HITAccessActions {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HITAccessActions {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> The HITLayoutParameter data structure defines parameter values used with a HITLayout. A HITLayout is a reusable Amazon Mechanical Turk project template used to provide Human Intelligence Task (HIT) question data for CreateHIT. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -707,13 +1216,240 @@ pub struct HITLayoutParameter {
     pub value: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHITReviewStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HITReviewStatus {
+    MarkedForReview,
+    NotReviewed,
+    ReviewedAppropriate,
+    ReviewedInappropriate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHITReviewStatus),
+}
+
+impl Default for HITReviewStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HITReviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HITReviewStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HITReviewStatus {
+    fn into(self) -> String {
+        match self {
+            HITReviewStatus::MarkedForReview => "MarkedForReview".to_string(),
+            HITReviewStatus::NotReviewed => "NotReviewed".to_string(),
+            HITReviewStatus::ReviewedAppropriate => "ReviewedAppropriate".to_string(),
+            HITReviewStatus::ReviewedInappropriate => "ReviewedInappropriate".to_string(),
+            HITReviewStatus::UnknownVariant(UnknownHITReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HITReviewStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HITReviewStatus::MarkedForReview => &"MarkedForReview",
+            HITReviewStatus::NotReviewed => &"NotReviewed",
+            HITReviewStatus::ReviewedAppropriate => &"ReviewedAppropriate",
+            HITReviewStatus::ReviewedInappropriate => &"ReviewedInappropriate",
+            HITReviewStatus::UnknownVariant(UnknownHITReviewStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HITReviewStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "MarkedForReview" => HITReviewStatus::MarkedForReview,
+            "NotReviewed" => HITReviewStatus::NotReviewed,
+            "ReviewedAppropriate" => HITReviewStatus::ReviewedAppropriate,
+            "ReviewedInappropriate" => HITReviewStatus::ReviewedInappropriate,
+            _ => HITReviewStatus::UnknownVariant(UnknownHITReviewStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HITReviewStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MarkedForReview" => HITReviewStatus::MarkedForReview,
+            "NotReviewed" => HITReviewStatus::NotReviewed,
+            "ReviewedAppropriate" => HITReviewStatus::ReviewedAppropriate,
+            "ReviewedInappropriate" => HITReviewStatus::ReviewedInappropriate,
+            _ => HITReviewStatus::UnknownVariant(UnknownHITReviewStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HITReviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HITReviewStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HITReviewStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHITStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HITStatus {
+    Assignable,
+    Disposed,
+    Reviewable,
+    Reviewing,
+    Unassignable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHITStatus),
+}
+
+impl Default for HITStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HITStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HITStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HITStatus {
+    fn into(self) -> String {
+        match self {
+            HITStatus::Assignable => "Assignable".to_string(),
+            HITStatus::Disposed => "Disposed".to_string(),
+            HITStatus::Reviewable => "Reviewable".to_string(),
+            HITStatus::Reviewing => "Reviewing".to_string(),
+            HITStatus::Unassignable => "Unassignable".to_string(),
+            HITStatus::UnknownVariant(UnknownHITStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HITStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HITStatus::Assignable => &"Assignable",
+            HITStatus::Disposed => &"Disposed",
+            HITStatus::Reviewable => &"Reviewable",
+            HITStatus::Reviewing => &"Reviewing",
+            HITStatus::Unassignable => &"Unassignable",
+            HITStatus::UnknownVariant(UnknownHITStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HITStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Assignable" => HITStatus::Assignable,
+            "Disposed" => HITStatus::Disposed,
+            "Reviewable" => HITStatus::Reviewable,
+            "Reviewing" => HITStatus::Reviewing,
+            "Unassignable" => HITStatus::Unassignable,
+            _ => HITStatus::UnknownVariant(UnknownHITStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HITStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Assignable" => HITStatus::Assignable,
+            "Disposed" => HITStatus::Disposed,
+            "Reviewable" => HITStatus::Reviewable,
+            "Reviewing" => HITStatus::Reviewing,
+            "Unassignable" => HITStatus::Unassignable,
+            _ => HITStatus::UnknownVariant(UnknownHITStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HITStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HITStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HITStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssignmentsForHITRequest {
     /// <p>The status of the assignments to return: Submitted | Approved | Rejected</p>
     #[serde(rename = "AssignmentStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assignment_statuses: Option<Vec<String>>,
+    pub assignment_statuses: Option<Vec<AssignmentStatus>>,
     /// <p>The ID of the HIT.</p>
     #[serde(rename = "HITId")]
     pub hit_id: String,
@@ -926,7 +1662,7 @@ pub struct ListReviewPolicyResultsForHITRequest {
     /// <p> The Policy Level(s) to retrieve review results for - HIT or Assignment. If omitted, the default behavior is to retrieve all data for both policy levels. For a list of all the described policies, see Review Policies. </p>
     #[serde(rename = "PolicyLevels")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_levels: Option<Vec<String>>,
+    pub policy_levels: Option<Vec<ReviewPolicyLevel>>,
     /// <p> Specify if the operation should retrieve a list of the actions taken executing the Review Policies and their outcomes. </p>
     #[serde(rename = "RetrieveActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -983,7 +1719,7 @@ pub struct ListReviewableHITsRequest {
     /// <p> Can be either <code>Reviewable</code> or <code>Reviewing</code>. Reviewable is the default value. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReviewableHITStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1047,7 +1783,7 @@ pub struct ListWorkersWithQualificationTypeRequest {
     /// <p> The status of the Qualifications to return. Can be <code>Granted | Revoked</code>. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<QualificationStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1087,13 +1823,228 @@ pub struct NotificationSpecification {
     pub destination: String,
     /// <p> The list of events that should cause notifications to be sent. Valid Values: AssignmentAccepted | AssignmentAbandoned | AssignmentReturned | AssignmentSubmitted | AssignmentRejected | AssignmentApproved | HITCreated | HITExtended | HITDisposed | HITReviewable | HITExpired | Ping. The Ping event is only valid for the SendTestEventNotification operation. </p>
     #[serde(rename = "EventTypes")]
-    pub event_types: Vec<String>,
+    pub event_types: Vec<EventType>,
     /// <p> The method Amazon Mechanical Turk uses to send the notification. Valid Values: Email | SQS | SNS. </p>
     #[serde(rename = "Transport")]
-    pub transport: String,
+    pub transport: NotificationTransport,
     /// <p>The version of the Notification API to use. Valid value is 2006-05-05.</p>
     #[serde(rename = "Version")]
     pub version: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotificationTransport {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotificationTransport {
+    Email,
+    Sns,
+    Sqs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotificationTransport),
+}
+
+impl Default for NotificationTransport {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotificationTransport {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotificationTransport {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotificationTransport {
+    fn into(self) -> String {
+        match self {
+            NotificationTransport::Email => "Email".to_string(),
+            NotificationTransport::Sns => "SNS".to_string(),
+            NotificationTransport::Sqs => "SQS".to_string(),
+            NotificationTransport::UnknownVariant(UnknownNotificationTransport {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotificationTransport {
+    fn into(self) -> &'a str {
+        match self {
+            NotificationTransport::Email => &"Email",
+            NotificationTransport::Sns => &"SNS",
+            NotificationTransport::Sqs => &"SQS",
+            NotificationTransport::UnknownVariant(UnknownNotificationTransport {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotificationTransport {
+    fn from(name: &str) -> Self {
+        match name {
+            "Email" => NotificationTransport::Email,
+            "SNS" => NotificationTransport::Sns,
+            "SQS" => NotificationTransport::Sqs,
+            _ => NotificationTransport::UnknownVariant(UnknownNotificationTransport {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotificationTransport {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Email" => NotificationTransport::Email,
+            "SNS" => NotificationTransport::Sns,
+            "SQS" => NotificationTransport::Sqs,
+            _ => NotificationTransport::UnknownVariant(UnknownNotificationTransport { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotificationTransport {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NotificationTransport {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for NotificationTransport {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNotifyWorkersFailureCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NotifyWorkersFailureCode {
+    HardFailure,
+    SoftFailure,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNotifyWorkersFailureCode),
+}
+
+impl Default for NotifyWorkersFailureCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NotifyWorkersFailureCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NotifyWorkersFailureCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NotifyWorkersFailureCode {
+    fn into(self) -> String {
+        match self {
+            NotifyWorkersFailureCode::HardFailure => "HardFailure".to_string(),
+            NotifyWorkersFailureCode::SoftFailure => "SoftFailure".to_string(),
+            NotifyWorkersFailureCode::UnknownVariant(UnknownNotifyWorkersFailureCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NotifyWorkersFailureCode {
+    fn into(self) -> &'a str {
+        match self {
+            NotifyWorkersFailureCode::HardFailure => &"HardFailure",
+            NotifyWorkersFailureCode::SoftFailure => &"SoftFailure",
+            NotifyWorkersFailureCode::UnknownVariant(UnknownNotifyWorkersFailureCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for NotifyWorkersFailureCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "HardFailure" => NotifyWorkersFailureCode::HardFailure,
+            "SoftFailure" => NotifyWorkersFailureCode::SoftFailure,
+            _ => NotifyWorkersFailureCode::UnknownVariant(UnknownNotifyWorkersFailureCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NotifyWorkersFailureCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HardFailure" => NotifyWorkersFailureCode::HardFailure,
+            "SoftFailure" => NotifyWorkersFailureCode::SoftFailure,
+            _ => NotifyWorkersFailureCode::UnknownVariant(UnknownNotifyWorkersFailureCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NotifyWorkersFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for NotifyWorkersFailureCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NotifyWorkersFailureCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>
@@ -1103,7 +2054,7 @@ pub struct NotifyWorkersFailureStatus {
     /// <p> Encoded value for the failure type. </p>
     #[serde(rename = "NotifyWorkersFailureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub notify_workers_failure_code: Option<String>,
+    pub notify_workers_failure_code: Option<NotifyWorkersFailureCode>,
     /// <p> A message detailing the reason the Worker could not be notified. </p>
     #[serde(rename = "NotifyWorkersFailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1189,7 +2140,7 @@ pub struct Qualification {
     /// <p> The status of the Qualification. Valid values are Granted | Revoked.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<QualificationStatus>,
     /// <p> The ID of the Worker who possesses the Qualification. </p>
     #[serde(rename = "WorkerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,10 +2183,10 @@ pub struct QualificationRequirement {
     /// <p> Setting this attribute prevents Workers whose Qualifications do not meet this QualificationRequirement from taking the specified action. Valid arguments include "Accept" (Worker cannot accept the HIT, but can preview the HIT and see it in their search results), "PreviewAndAccept" (Worker cannot accept or preview the HIT, but can see the HIT in their search results), and "DiscoverPreviewAndAccept" (Worker cannot accept, preview, or see the HIT in their search results). It's possible for you to create a HIT with multiple QualificationRequirements (which can have different values for the ActionGuarded attribute). In this case, the Worker is only permitted to perform an action when they have met all QualificationRequirements guarding the action. The actions in the order of least restrictive to most restrictive are Discover, Preview and Accept. For example, if a Worker meets all QualificationRequirements that are set to DiscoverPreviewAndAccept, but do not meet all requirements that are set with PreviewAndAccept, then the Worker will be able to Discover, i.e. see the HIT in their search result, but will not be able to Preview or Accept the HIT. ActionsGuarded should not be used in combination with the <code>RequiredToPreview</code> field. </p>
     #[serde(rename = "ActionsGuarded")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions_guarded: Option<String>,
+    pub actions_guarded: Option<HITAccessActions>,
     /// <p>The kind of comparison to make against a Qualification's value. You can compare a Qualification's value to an IntegerValue to see if it is LessThan, LessThanOrEqualTo, GreaterThan, GreaterThanOrEqualTo, EqualTo, or NotEqualTo the IntegerValue. You can compare it to a LocaleValue to see if it is EqualTo, or NotEqualTo the LocaleValue. You can check to see if the value is In or NotIn a set of IntegerValue or LocaleValue values. Lastly, a Qualification requirement can also test if a Qualification Exists or DoesNotExist in the user's profile, regardless of its value. </p>
     #[serde(rename = "Comparator")]
-    pub comparator: String,
+    pub comparator: Comparator,
     /// <p> The integer value to compare against the Qualification's value. IntegerValue must not be present if Comparator is Exists or DoesNotExist. IntegerValue can only be used if the Qualification type has an integer value; it cannot be used with the Worker_Locale QualificationType ID. When performing a set comparison by using the In or the NotIn comparator, you can use up to 15 IntegerValue elements in a QualificationRequirement data structure. </p>
     #[serde(rename = "IntegerValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1247,6 +2198,110 @@ pub struct QualificationRequirement {
     /// <p> The ID of the Qualification type for the requirement.</p>
     #[serde(rename = "QualificationTypeId")]
     pub qualification_type_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQualificationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QualificationStatus {
+    Granted,
+    Revoked,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQualificationStatus),
+}
+
+impl Default for QualificationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QualificationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QualificationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QualificationStatus {
+    fn into(self) -> String {
+        match self {
+            QualificationStatus::Granted => "Granted".to_string(),
+            QualificationStatus::Revoked => "Revoked".to_string(),
+            QualificationStatus::UnknownVariant(UnknownQualificationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QualificationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            QualificationStatus::Granted => &"Granted",
+            QualificationStatus::Revoked => &"Revoked",
+            QualificationStatus::UnknownVariant(UnknownQualificationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for QualificationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Granted" => QualificationStatus::Granted,
+            "Revoked" => QualificationStatus::Revoked,
+            _ => QualificationStatus::UnknownVariant(UnknownQualificationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QualificationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Granted" => QualificationStatus::Granted,
+            "Revoked" => QualificationStatus::Revoked,
+            _ => QualificationStatus::UnknownVariant(UnknownQualificationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QualificationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QualificationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QualificationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>
@@ -1292,7 +2347,7 @@ pub struct QualificationType {
     /// <p> The status of the Qualification type. A Qualification type's status determines if users can apply to receive a Qualification of this type, and if HITs can be created with requirements based on this type. Valid values are Active | Inactive. </p>
     #[serde(rename = "QualificationTypeStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub qualification_type_status: Option<String>,
+    pub qualification_type_status: Option<QualificationTypeStatus>,
     /// <p> The amount of time, in seconds, Workers must wait after taking the Qualification test before they can take it again. Workers can take a Qualification test multiple times if they were not granted the Qualification from a previous attempt, or if the test offers a gradient score and they want a better score. If not specified, retries are disabled and Workers can request a Qualification only once. </p>
     #[serde(rename = "RetryDelayInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1305,6 +2360,110 @@ pub struct QualificationType {
     #[serde(rename = "TestDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_duration_in_seconds: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQualificationTypeStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QualificationTypeStatus {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQualificationTypeStatus),
+}
+
+impl Default for QualificationTypeStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QualificationTypeStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QualificationTypeStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QualificationTypeStatus {
+    fn into(self) -> String {
+        match self {
+            QualificationTypeStatus::Active => "Active".to_string(),
+            QualificationTypeStatus::Inactive => "Inactive".to_string(),
+            QualificationTypeStatus::UnknownVariant(UnknownQualificationTypeStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QualificationTypeStatus {
+    fn into(self) -> &'a str {
+        match self {
+            QualificationTypeStatus::Active => &"Active",
+            QualificationTypeStatus::Inactive => &"Inactive",
+            QualificationTypeStatus::UnknownVariant(UnknownQualificationTypeStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for QualificationTypeStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => QualificationTypeStatus::Active,
+            "Inactive" => QualificationTypeStatus::Inactive,
+            _ => QualificationTypeStatus::UnknownVariant(UnknownQualificationTypeStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QualificationTypeStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => QualificationTypeStatus::Active,
+            "Inactive" => QualificationTypeStatus::Inactive,
+            _ => QualificationTypeStatus::UnknownVariant(UnknownQualificationTypeStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QualificationTypeStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QualificationTypeStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QualificationTypeStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1365,7 +2524,7 @@ pub struct ReviewActionDetail {
     /// <p> The current disposition of the action: INTENDED, SUCCEEDED, FAILED, or CANCELLED. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReviewActionStatus>,
     /// <p> The specific HITId or AssignmentID targeted by the action.</p>
     #[serde(rename = "TargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1374,6 +2533,121 @@ pub struct ReviewActionDetail {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReviewActionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReviewActionStatus {
+    Cancelled,
+    Failed,
+    Intended,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReviewActionStatus),
+}
+
+impl Default for ReviewActionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReviewActionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReviewActionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReviewActionStatus {
+    fn into(self) -> String {
+        match self {
+            ReviewActionStatus::Cancelled => "Cancelled".to_string(),
+            ReviewActionStatus::Failed => "Failed".to_string(),
+            ReviewActionStatus::Intended => "Intended".to_string(),
+            ReviewActionStatus::Succeeded => "Succeeded".to_string(),
+            ReviewActionStatus::UnknownVariant(UnknownReviewActionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReviewActionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReviewActionStatus::Cancelled => &"Cancelled",
+            ReviewActionStatus::Failed => &"Failed",
+            ReviewActionStatus::Intended => &"Intended",
+            ReviewActionStatus::Succeeded => &"Succeeded",
+            ReviewActionStatus::UnknownVariant(UnknownReviewActionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReviewActionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Cancelled" => ReviewActionStatus::Cancelled,
+            "Failed" => ReviewActionStatus::Failed,
+            "Intended" => ReviewActionStatus::Intended,
+            "Succeeded" => ReviewActionStatus::Succeeded,
+            _ => ReviewActionStatus::UnknownVariant(UnknownReviewActionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReviewActionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Cancelled" => ReviewActionStatus::Cancelled,
+            "Failed" => ReviewActionStatus::Failed,
+            "Intended" => ReviewActionStatus::Intended,
+            "Succeeded" => ReviewActionStatus::Succeeded,
+            _ => ReviewActionStatus::UnknownVariant(UnknownReviewActionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewActionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReviewActionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReviewActionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> HIT Review Policy data structures represent HIT review policies, which you specify when you create a HIT. </p>
@@ -1386,6 +2660,111 @@ pub struct ReviewPolicy {
     /// <p> Name of a Review Policy: SimplePlurality/2011-09-01 or ScoreMyKnownAnswers/2011-09-01 </p>
     #[serde(rename = "PolicyName")]
     pub policy_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReviewPolicyLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReviewPolicyLevel {
+    Assignment,
+    Hit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReviewPolicyLevel),
+}
+
+impl Default for ReviewPolicyLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReviewPolicyLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReviewPolicyLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReviewPolicyLevel {
+    fn into(self) -> String {
+        match self {
+            ReviewPolicyLevel::Assignment => "Assignment".to_string(),
+            ReviewPolicyLevel::Hit => "HIT".to_string(),
+            ReviewPolicyLevel::UnknownVariant(UnknownReviewPolicyLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReviewPolicyLevel {
+    fn into(self) -> &'a str {
+        match self {
+            ReviewPolicyLevel::Assignment => &"Assignment",
+            ReviewPolicyLevel::Hit => &"HIT",
+            ReviewPolicyLevel::UnknownVariant(UnknownReviewPolicyLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReviewPolicyLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "Assignment" => ReviewPolicyLevel::Assignment,
+            "HIT" => ReviewPolicyLevel::Hit,
+            _ => ReviewPolicyLevel::UnknownVariant(UnknownReviewPolicyLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReviewPolicyLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Assignment" => ReviewPolicyLevel::Assignment,
+            "HIT" => ReviewPolicyLevel::Hit,
+            _ => ReviewPolicyLevel::UnknownVariant(UnknownReviewPolicyLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewPolicyLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReviewPolicyLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReviewPolicyLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>
@@ -1432,6 +2811,111 @@ pub struct ReviewResultDetail {
     pub value: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReviewableHITStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReviewableHITStatus {
+    Reviewable,
+    Reviewing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReviewableHITStatus),
+}
+
+impl Default for ReviewableHITStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReviewableHITStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReviewableHITStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReviewableHITStatus {
+    fn into(self) -> String {
+        match self {
+            ReviewableHITStatus::Reviewable => "Reviewable".to_string(),
+            ReviewableHITStatus::Reviewing => "Reviewing".to_string(),
+            ReviewableHITStatus::UnknownVariant(UnknownReviewableHITStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReviewableHITStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReviewableHITStatus::Reviewable => &"Reviewable",
+            ReviewableHITStatus::Reviewing => &"Reviewing",
+            ReviewableHITStatus::UnknownVariant(UnknownReviewableHITStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReviewableHITStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Reviewable" => ReviewableHITStatus::Reviewable,
+            "Reviewing" => ReviewableHITStatus::Reviewing,
+            _ => ReviewableHITStatus::UnknownVariant(UnknownReviewableHITStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReviewableHITStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Reviewable" => ReviewableHITStatus::Reviewable,
+            "Reviewing" => ReviewableHITStatus::Reviewing,
+            _ => ReviewableHITStatus::UnknownVariant(UnknownReviewableHITStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReviewableHITStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReviewableHITStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReviewableHITStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBonusRequest {
@@ -1465,7 +2949,7 @@ pub struct SendTestEventNotificationRequest {
     pub notification: NotificationSpecification,
     /// <p> The event to simulate to test the notification specification. This event is included in the test message even if the notification specification does not include the event type. The notification specification does not filter out the test event. </p>
     #[serde(rename = "TestEventType")]
-    pub test_event_type: String,
+    pub test_event_type: EventType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1563,7 +3047,7 @@ pub struct UpdateQualificationTypeRequest {
     /// <p>The new status of the Qualification type - Active | Inactive</p>
     #[serde(rename = "QualificationTypeStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub qualification_type_status: Option<String>,
+    pub qualification_type_status: Option<QualificationTypeStatus>,
     /// <p>The amount of time, in seconds, that Workers must wait after requesting a Qualification of the specified Qualification type before they can retry the Qualification request. It is not possible to disable retries for a Qualification type after it has been created with retries enabled. If you want to disable retries, you must dispose of the existing retry-enabled Qualification type using DisposeQualificationType and then create a new Qualification type with retries disabled using CreateQualificationType.</p>
     #[serde(rename = "RetryDelayInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]

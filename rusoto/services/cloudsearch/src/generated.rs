@@ -106,12 +106,132 @@ impl AccessPoliciesStatusDeserializer {
         })
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAlgorithmicStemming {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AlgorithmicStemming {
+    Full,
+    Light,
+    Minimal,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAlgorithmicStemming),
+}
+
+impl Default for AlgorithmicStemming {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AlgorithmicStemming {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AlgorithmicStemming {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AlgorithmicStemming {
+    fn into(self) -> String {
+        match self {
+            AlgorithmicStemming::Full => "full".to_string(),
+            AlgorithmicStemming::Light => "light".to_string(),
+            AlgorithmicStemming::Minimal => "minimal".to_string(),
+            AlgorithmicStemming::None => "none".to_string(),
+            AlgorithmicStemming::UnknownVariant(UnknownAlgorithmicStemming { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AlgorithmicStemming {
+    fn into(self) -> &'a str {
+        match self {
+            AlgorithmicStemming::Full => &"full",
+            AlgorithmicStemming::Light => &"light",
+            AlgorithmicStemming::Minimal => &"minimal",
+            AlgorithmicStemming::None => &"none",
+            AlgorithmicStemming::UnknownVariant(UnknownAlgorithmicStemming { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AlgorithmicStemming {
+    fn from(name: &str) -> Self {
+        match name {
+            "full" => AlgorithmicStemming::Full,
+            "light" => AlgorithmicStemming::Light,
+            "minimal" => AlgorithmicStemming::Minimal,
+            "none" => AlgorithmicStemming::None,
+            _ => AlgorithmicStemming::UnknownVariant(UnknownAlgorithmicStemming {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AlgorithmicStemming {
+    fn from(name: String) -> Self {
+        match &*name {
+            "full" => AlgorithmicStemming::Full,
+            "light" => AlgorithmicStemming::Light,
+            "minimal" => AlgorithmicStemming::Minimal,
+            "none" => AlgorithmicStemming::None,
+            _ => AlgorithmicStemming::UnknownVariant(UnknownAlgorithmicStemming { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AlgorithmicStemming {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AlgorithmicStemming {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AlgorithmicStemming {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AlgorithmicStemming, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Synonyms, stopwords, and stemming options for an analysis scheme. Includes tokenization dictionary for Japanese.</p>
@@ -120,7 +240,7 @@ impl AlgorithmicStemmingDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalysisOptions {
     /// <p>The level of algorithmic stemming to perform: <code>none</code>, <code>minimal</code>, <code>light</code>, or <code>full</code>. The available levels vary depending on the language. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/text-processing.html#text-processing-settings" target="_blank">Language Specific Text Processing Settings</a> in the <i>Amazon CloudSearch Developer Guide</i> </p>
-    pub algorithmic_stemming: Option<String>,
+    pub algorithmic_stemming: Option<AlgorithmicStemming>,
     /// <p>A JSON array that contains a collection of terms, tokens, readings and part of speech for Japanese Tokenizaiton. The Japanese tokenization dictionary enables you to override the default tokenization for selected terms. This is only valid for Japanese language fields.</p>
     pub japanese_tokenization_dictionary: Option<String>,
     /// <p>A JSON object that contains a collection of string:value pairs that each map a term to its stem. For example, <code>{"term1": "stem1", "term2": "stem2", "term3": "stem3"}</code>. The stemming dictionary is applied in addition to any algorithmic stemming. This enables you to override the results of the algorithmic stemming to correct specific cases of overstemming or understemming. The maximum size of a stemming dictionary is 500 KB.</p>
@@ -184,23 +304,32 @@ impl AnalysisOptionsSerializer {
         if let Some(ref field_value) = obj.algorithmic_stemming {
             params.put(
                 &format!("{}{}", prefix, "AlgorithmicStemming"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.japanese_tokenization_dictionary {
             params.put(
                 &format!("{}{}", prefix, "JapaneseTokenizationDictionary"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.stemming_dictionary {
-            params.put(&format!("{}{}", prefix, "StemmingDictionary"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "StemmingDictionary"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.stopwords {
-            params.put(&format!("{}{}", prefix, "Stopwords"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Stopwords"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.synonyms {
-            params.put(&format!("{}{}", prefix, "Synonyms"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "Synonyms"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -211,7 +340,7 @@ impl AnalysisOptionsSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalysisScheme {
     pub analysis_options: Option<AnalysisOptions>,
-    pub analysis_scheme_language: String,
+    pub analysis_scheme_language: AnalysisSchemeLanguage,
     pub analysis_scheme_name: String,
 }
 
@@ -266,12 +395,285 @@ impl AnalysisSchemeSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeLanguage"),
-            &obj.analysis_scheme_language,
+            &obj.analysis_scheme_language.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeName"),
-            &obj.analysis_scheme_name,
+            &obj.analysis_scheme_name.to_string(),
         );
+    }
+}
+
+/// <p>An <a href="http://tools.ietf.org/html/rfc4646" target="_blank">IETF RFC 4646</a> language code or <code>mul</code> for multiple languages.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAnalysisSchemeLanguage {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AnalysisSchemeLanguage {
+    Ar,
+    Bg,
+    Ca,
+    Cs,
+    Da,
+    De,
+    El,
+    En,
+    Es,
+    Eu,
+    Fa,
+    Fi,
+    Fr,
+    Ga,
+    Gl,
+    He,
+    Hi,
+    Hu,
+    Hy,
+    Id,
+    It,
+    Ja,
+    Ko,
+    Lv,
+    Mul,
+    Nl,
+    No,
+    Pt,
+    Ro,
+    Ru,
+    Sv,
+    Th,
+    Tr,
+    ZhHans,
+    ZhHant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAnalysisSchemeLanguage),
+}
+
+impl Default for AnalysisSchemeLanguage {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AnalysisSchemeLanguage {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AnalysisSchemeLanguage {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AnalysisSchemeLanguage {
+    fn into(self) -> String {
+        match self {
+            AnalysisSchemeLanguage::Ar => "ar".to_string(),
+            AnalysisSchemeLanguage::Bg => "bg".to_string(),
+            AnalysisSchemeLanguage::Ca => "ca".to_string(),
+            AnalysisSchemeLanguage::Cs => "cs".to_string(),
+            AnalysisSchemeLanguage::Da => "da".to_string(),
+            AnalysisSchemeLanguage::De => "de".to_string(),
+            AnalysisSchemeLanguage::El => "el".to_string(),
+            AnalysisSchemeLanguage::En => "en".to_string(),
+            AnalysisSchemeLanguage::Es => "es".to_string(),
+            AnalysisSchemeLanguage::Eu => "eu".to_string(),
+            AnalysisSchemeLanguage::Fa => "fa".to_string(),
+            AnalysisSchemeLanguage::Fi => "fi".to_string(),
+            AnalysisSchemeLanguage::Fr => "fr".to_string(),
+            AnalysisSchemeLanguage::Ga => "ga".to_string(),
+            AnalysisSchemeLanguage::Gl => "gl".to_string(),
+            AnalysisSchemeLanguage::He => "he".to_string(),
+            AnalysisSchemeLanguage::Hi => "hi".to_string(),
+            AnalysisSchemeLanguage::Hu => "hu".to_string(),
+            AnalysisSchemeLanguage::Hy => "hy".to_string(),
+            AnalysisSchemeLanguage::Id => "id".to_string(),
+            AnalysisSchemeLanguage::It => "it".to_string(),
+            AnalysisSchemeLanguage::Ja => "ja".to_string(),
+            AnalysisSchemeLanguage::Ko => "ko".to_string(),
+            AnalysisSchemeLanguage::Lv => "lv".to_string(),
+            AnalysisSchemeLanguage::Mul => "mul".to_string(),
+            AnalysisSchemeLanguage::Nl => "nl".to_string(),
+            AnalysisSchemeLanguage::No => "no".to_string(),
+            AnalysisSchemeLanguage::Pt => "pt".to_string(),
+            AnalysisSchemeLanguage::Ro => "ro".to_string(),
+            AnalysisSchemeLanguage::Ru => "ru".to_string(),
+            AnalysisSchemeLanguage::Sv => "sv".to_string(),
+            AnalysisSchemeLanguage::Th => "th".to_string(),
+            AnalysisSchemeLanguage::Tr => "tr".to_string(),
+            AnalysisSchemeLanguage::ZhHans => "zh-Hans".to_string(),
+            AnalysisSchemeLanguage::ZhHant => "zh-Hant".to_string(),
+            AnalysisSchemeLanguage::UnknownVariant(UnknownAnalysisSchemeLanguage {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AnalysisSchemeLanguage {
+    fn into(self) -> &'a str {
+        match self {
+            AnalysisSchemeLanguage::Ar => &"ar",
+            AnalysisSchemeLanguage::Bg => &"bg",
+            AnalysisSchemeLanguage::Ca => &"ca",
+            AnalysisSchemeLanguage::Cs => &"cs",
+            AnalysisSchemeLanguage::Da => &"da",
+            AnalysisSchemeLanguage::De => &"de",
+            AnalysisSchemeLanguage::El => &"el",
+            AnalysisSchemeLanguage::En => &"en",
+            AnalysisSchemeLanguage::Es => &"es",
+            AnalysisSchemeLanguage::Eu => &"eu",
+            AnalysisSchemeLanguage::Fa => &"fa",
+            AnalysisSchemeLanguage::Fi => &"fi",
+            AnalysisSchemeLanguage::Fr => &"fr",
+            AnalysisSchemeLanguage::Ga => &"ga",
+            AnalysisSchemeLanguage::Gl => &"gl",
+            AnalysisSchemeLanguage::He => &"he",
+            AnalysisSchemeLanguage::Hi => &"hi",
+            AnalysisSchemeLanguage::Hu => &"hu",
+            AnalysisSchemeLanguage::Hy => &"hy",
+            AnalysisSchemeLanguage::Id => &"id",
+            AnalysisSchemeLanguage::It => &"it",
+            AnalysisSchemeLanguage::Ja => &"ja",
+            AnalysisSchemeLanguage::Ko => &"ko",
+            AnalysisSchemeLanguage::Lv => &"lv",
+            AnalysisSchemeLanguage::Mul => &"mul",
+            AnalysisSchemeLanguage::Nl => &"nl",
+            AnalysisSchemeLanguage::No => &"no",
+            AnalysisSchemeLanguage::Pt => &"pt",
+            AnalysisSchemeLanguage::Ro => &"ro",
+            AnalysisSchemeLanguage::Ru => &"ru",
+            AnalysisSchemeLanguage::Sv => &"sv",
+            AnalysisSchemeLanguage::Th => &"th",
+            AnalysisSchemeLanguage::Tr => &"tr",
+            AnalysisSchemeLanguage::ZhHans => &"zh-Hans",
+            AnalysisSchemeLanguage::ZhHant => &"zh-Hant",
+            AnalysisSchemeLanguage::UnknownVariant(UnknownAnalysisSchemeLanguage {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AnalysisSchemeLanguage {
+    fn from(name: &str) -> Self {
+        match name {
+            "ar" => AnalysisSchemeLanguage::Ar,
+            "bg" => AnalysisSchemeLanguage::Bg,
+            "ca" => AnalysisSchemeLanguage::Ca,
+            "cs" => AnalysisSchemeLanguage::Cs,
+            "da" => AnalysisSchemeLanguage::Da,
+            "de" => AnalysisSchemeLanguage::De,
+            "el" => AnalysisSchemeLanguage::El,
+            "en" => AnalysisSchemeLanguage::En,
+            "es" => AnalysisSchemeLanguage::Es,
+            "eu" => AnalysisSchemeLanguage::Eu,
+            "fa" => AnalysisSchemeLanguage::Fa,
+            "fi" => AnalysisSchemeLanguage::Fi,
+            "fr" => AnalysisSchemeLanguage::Fr,
+            "ga" => AnalysisSchemeLanguage::Ga,
+            "gl" => AnalysisSchemeLanguage::Gl,
+            "he" => AnalysisSchemeLanguage::He,
+            "hi" => AnalysisSchemeLanguage::Hi,
+            "hu" => AnalysisSchemeLanguage::Hu,
+            "hy" => AnalysisSchemeLanguage::Hy,
+            "id" => AnalysisSchemeLanguage::Id,
+            "it" => AnalysisSchemeLanguage::It,
+            "ja" => AnalysisSchemeLanguage::Ja,
+            "ko" => AnalysisSchemeLanguage::Ko,
+            "lv" => AnalysisSchemeLanguage::Lv,
+            "mul" => AnalysisSchemeLanguage::Mul,
+            "nl" => AnalysisSchemeLanguage::Nl,
+            "no" => AnalysisSchemeLanguage::No,
+            "pt" => AnalysisSchemeLanguage::Pt,
+            "ro" => AnalysisSchemeLanguage::Ro,
+            "ru" => AnalysisSchemeLanguage::Ru,
+            "sv" => AnalysisSchemeLanguage::Sv,
+            "th" => AnalysisSchemeLanguage::Th,
+            "tr" => AnalysisSchemeLanguage::Tr,
+            "zh-Hans" => AnalysisSchemeLanguage::ZhHans,
+            "zh-Hant" => AnalysisSchemeLanguage::ZhHant,
+            _ => AnalysisSchemeLanguage::UnknownVariant(UnknownAnalysisSchemeLanguage {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AnalysisSchemeLanguage {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ar" => AnalysisSchemeLanguage::Ar,
+            "bg" => AnalysisSchemeLanguage::Bg,
+            "ca" => AnalysisSchemeLanguage::Ca,
+            "cs" => AnalysisSchemeLanguage::Cs,
+            "da" => AnalysisSchemeLanguage::Da,
+            "de" => AnalysisSchemeLanguage::De,
+            "el" => AnalysisSchemeLanguage::El,
+            "en" => AnalysisSchemeLanguage::En,
+            "es" => AnalysisSchemeLanguage::Es,
+            "eu" => AnalysisSchemeLanguage::Eu,
+            "fa" => AnalysisSchemeLanguage::Fa,
+            "fi" => AnalysisSchemeLanguage::Fi,
+            "fr" => AnalysisSchemeLanguage::Fr,
+            "ga" => AnalysisSchemeLanguage::Ga,
+            "gl" => AnalysisSchemeLanguage::Gl,
+            "he" => AnalysisSchemeLanguage::He,
+            "hi" => AnalysisSchemeLanguage::Hi,
+            "hu" => AnalysisSchemeLanguage::Hu,
+            "hy" => AnalysisSchemeLanguage::Hy,
+            "id" => AnalysisSchemeLanguage::Id,
+            "it" => AnalysisSchemeLanguage::It,
+            "ja" => AnalysisSchemeLanguage::Ja,
+            "ko" => AnalysisSchemeLanguage::Ko,
+            "lv" => AnalysisSchemeLanguage::Lv,
+            "mul" => AnalysisSchemeLanguage::Mul,
+            "nl" => AnalysisSchemeLanguage::Nl,
+            "no" => AnalysisSchemeLanguage::No,
+            "pt" => AnalysisSchemeLanguage::Pt,
+            "ro" => AnalysisSchemeLanguage::Ro,
+            "ru" => AnalysisSchemeLanguage::Ru,
+            "sv" => AnalysisSchemeLanguage::Sv,
+            "th" => AnalysisSchemeLanguage::Th,
+            "tr" => AnalysisSchemeLanguage::Tr,
+            "zh-Hans" => AnalysisSchemeLanguage::ZhHans,
+            "zh-Hant" => AnalysisSchemeLanguage::ZhHant,
+            _ => AnalysisSchemeLanguage::UnknownVariant(UnknownAnalysisSchemeLanguage { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AnalysisSchemeLanguage {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for AnalysisSchemeLanguage {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AnalysisSchemeLanguage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -279,8 +681,11 @@ impl AnalysisSchemeSerializer {
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AnalysisSchemeLanguage, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The status and configuration of an <code>AnalysisScheme</code>.</p>
@@ -392,7 +797,10 @@ impl BuildSuggestersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -445,7 +853,10 @@ impl CreateDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -544,7 +955,10 @@ impl DateArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
@@ -556,7 +970,10 @@ impl DateArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -630,7 +1047,10 @@ impl DateOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
@@ -645,7 +1065,10 @@ impl DateOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -672,7 +1095,10 @@ impl DefineAnalysisSchemeRequestSerializer {
             &format!("{}{}", prefix, "AnalysisScheme"),
             &obj.analysis_scheme,
         );
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -724,7 +1150,10 @@ impl DefineExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         ExpressionSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Expression"),
@@ -782,7 +1211,10 @@ impl DefineIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         IndexFieldSerializer::serialize(
             params,
             &format!("{}{}", prefix, "IndexField"),
@@ -839,7 +1271,10 @@ impl DefineSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         SuggesterSerializer::serialize(
             params,
             &format!("{}{}", prefix, "Suggester"),
@@ -899,9 +1334,12 @@ impl DeleteAnalysisSchemeRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AnalysisSchemeName"),
-            &obj.analysis_scheme_name,
+            &obj.analysis_scheme_name.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -954,7 +1392,10 @@ impl DeleteDomainRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1005,10 +1446,13 @@ impl DeleteExpressionRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "ExpressionName"),
-            &obj.expression_name,
+            &obj.expression_name.to_string(),
         );
     }
 }
@@ -1063,10 +1507,13 @@ impl DeleteIndexFieldRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "IndexFieldName"),
-            &obj.index_field_name,
+            &obj.index_field_name.to_string(),
         );
     }
 }
@@ -1121,10 +1568,13 @@ impl DeleteSuggesterRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         params.put(
             &format!("{}{}", prefix, "SuggesterName"),
-            &obj.suggester_name,
+            &obj.suggester_name.to_string(),
         );
     }
 }
@@ -1192,7 +1642,10 @@ impl DescribeAnalysisSchemesRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1254,7 +1707,10 @@ impl DescribeAvailabilityOptionsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1315,7 +1771,10 @@ impl DescribeDomainEndpointOptionsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1439,7 +1898,10 @@ impl DescribeExpressionsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         if let Some(ref field_value) = obj.expression_names {
             StandardNameListSerializer::serialize(
                 params,
@@ -1509,7 +1971,10 @@ impl DescribeIndexFieldsRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         if let Some(ref field_value) = obj.field_names {
             DynamicFieldNameListSerializer::serialize(
                 params,
@@ -1571,7 +2036,10 @@ impl DescribeScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1630,7 +2098,10 @@ impl DescribeServiceAccessPoliciesRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -1690,7 +2161,10 @@ impl DescribeSuggestersRequestSerializer {
         if let Some(ref field_value) = obj.deployed {
             params.put(&format!("{}{}", prefix, "Deployed"), &field_value);
         }
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         if let Some(ref field_value) = obj.suggester_names {
             StandardNameListSerializer::serialize(
                 params,
@@ -1742,7 +2216,7 @@ impl DescribeSuggestersResponseDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentSuggesterOptions {
     /// <p>The level of fuzziness allowed when suggesting matches for a string: <code>none</code>, <code>low</code>, or <code>high</code>. With none, the specified string is treated as an exact prefix. With low, suggestions must differ from the specified string by no more than one character. With high, suggestions can differ by up to two characters. The default is none. </p>
-    pub fuzzy_matching: Option<String>,
+    pub fuzzy_matching: Option<SuggesterFuzzyMatching>,
     /// <p>An expression that computes a score for each suggestion to control how they are sorted. The scores are rounded to the nearest integer, with a floor of 0 and a ceiling of 2^31-1. A document's relevance score is not computed for suggestions, so sort expressions cannot reference the <code>_score</code> value. To sort suggestions using a numeric field or existing expression, simply specify the name of the field or expression. If no expression is configured for the suggester, the suggestions are sorted with the closest matches listed first.</p>
     pub sort_expression: Option<String>,
     /// <p>The name of the index field you want to use for suggestions. </p>
@@ -1794,12 +2268,21 @@ impl DocumentSuggesterOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.fuzzy_matching {
-            params.put(&format!("{}{}", prefix, "FuzzyMatching"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "FuzzyMatching"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.sort_expression {
-            params.put(&format!("{}{}", prefix, "SortExpression"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SortExpression"),
+                &field_value.to_string(),
+            );
         }
-        params.put(&format!("{}{}", prefix, "SourceField"), &obj.source_field);
+        params.put(
+            &format!("{}{}", prefix, "SourceField"),
+            &obj.source_field.to_string(),
+        );
     }
 }
 
@@ -1811,7 +2294,7 @@ pub struct DomainEndpointOptions {
     /// <p>Whether the domain is HTTPS only enabled.</p>
     pub enforce_https: Option<bool>,
     /// <p>The minimum required TLS version</p>
-    pub tls_security_policy: Option<String>,
+    pub tls_security_policy: Option<TLSSecurityPolicy>,
 }
 
 #[allow(dead_code)]
@@ -1854,7 +2337,10 @@ impl DomainEndpointOptionsSerializer {
             params.put(&format!("{}{}", prefix, "EnforceHTTPS"), &field_value);
         }
         if let Some(ref field_value) = obj.tls_security_policy {
-            params.put(&format!("{}{}", prefix, "TLSSecurityPolicy"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "TLSSecurityPolicy"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -1919,7 +2405,7 @@ impl DomainNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2151,7 +2637,10 @@ impl DoubleArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2241,7 +2730,10 @@ impl DoubleOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2261,7 +2753,7 @@ impl DynamicFieldNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -2311,11 +2803,11 @@ impl ExpressionSerializer {
 
         params.put(
             &format!("{}{}", prefix, "ExpressionName"),
-            &obj.expression_name,
+            &obj.expression_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "ExpressionValue"),
-            &obj.expression_value,
+            &obj.expression_value.to_string(),
         );
     }
 }
@@ -2435,7 +2927,10 @@ impl IndexDocumentsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -2479,7 +2974,7 @@ pub struct IndexField {
     pub double_options: Option<DoubleOptions>,
     /// <p>A string that represents the name of an index field. CloudSearch supports regular index fields as well as dynamic fields. A dynamic field's name defines a pattern that begins or ends with a wildcard. Any document fields that don't map to a regular index field but do match a dynamic field's pattern are configured with the dynamic field's indexing options. </p> <p>Regular field names begin with a letter and can contain the following characters: a-z (lowercase), 0-9, and _ (underscore). Dynamic field names must begin or end with a wildcard (*). The wildcard can also be the only character in a dynamic field name. Multiple wildcards, and wildcards embedded within a string are not supported. </p> <p>The name <code>score</code> is reserved and cannot be used as a field name. To reference a document's ID, you can use the name <code>_id</code>. </p>
     pub index_field_name: String,
-    pub index_field_type: String,
+    pub index_field_type: IndexFieldType,
     pub int_array_options: Option<IntArrayOptions>,
     pub int_options: Option<IntOptions>,
     pub lat_lon_options: Option<LatLonOptions>,
@@ -2613,11 +3108,11 @@ impl IndexFieldSerializer {
         }
         params.put(
             &format!("{}{}", prefix, "IndexFieldName"),
-            &obj.index_field_name,
+            &obj.index_field_name.to_string(),
         );
         params.put(
             &format!("{}{}", prefix, "IndexFieldType"),
-            &obj.index_field_type,
+            &obj.index_field_type.to_string(),
         );
         if let Some(ref field_value) = obj.int_array_options {
             IntArrayOptionsSerializer::serialize(
@@ -2719,12 +3214,164 @@ impl IndexFieldStatusListDeserializer {
         })
     }
 }
+/// <p>The type of field. The valid options for a field depend on the field type. For more information about the supported field types, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIndexFieldType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IndexFieldType {
+    Date,
+    DateArray,
+    Double,
+    DoubleArray,
+    Int,
+    IntArray,
+    Latlon,
+    Literal,
+    LiteralArray,
+    Text,
+    TextArray,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIndexFieldType),
+}
+
+impl Default for IndexFieldType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IndexFieldType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IndexFieldType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IndexFieldType {
+    fn into(self) -> String {
+        match self {
+            IndexFieldType::Date => "date".to_string(),
+            IndexFieldType::DateArray => "date-array".to_string(),
+            IndexFieldType::Double => "double".to_string(),
+            IndexFieldType::DoubleArray => "double-array".to_string(),
+            IndexFieldType::Int => "int".to_string(),
+            IndexFieldType::IntArray => "int-array".to_string(),
+            IndexFieldType::Latlon => "latlon".to_string(),
+            IndexFieldType::Literal => "literal".to_string(),
+            IndexFieldType::LiteralArray => "literal-array".to_string(),
+            IndexFieldType::Text => "text".to_string(),
+            IndexFieldType::TextArray => "text-array".to_string(),
+            IndexFieldType::UnknownVariant(UnknownIndexFieldType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IndexFieldType {
+    fn into(self) -> &'a str {
+        match self {
+            IndexFieldType::Date => &"date",
+            IndexFieldType::DateArray => &"date-array",
+            IndexFieldType::Double => &"double",
+            IndexFieldType::DoubleArray => &"double-array",
+            IndexFieldType::Int => &"int",
+            IndexFieldType::IntArray => &"int-array",
+            IndexFieldType::Latlon => &"latlon",
+            IndexFieldType::Literal => &"literal",
+            IndexFieldType::LiteralArray => &"literal-array",
+            IndexFieldType::Text => &"text",
+            IndexFieldType::TextArray => &"text-array",
+            IndexFieldType::UnknownVariant(UnknownIndexFieldType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IndexFieldType {
+    fn from(name: &str) -> Self {
+        match name {
+            "date" => IndexFieldType::Date,
+            "date-array" => IndexFieldType::DateArray,
+            "double" => IndexFieldType::Double,
+            "double-array" => IndexFieldType::DoubleArray,
+            "int" => IndexFieldType::Int,
+            "int-array" => IndexFieldType::IntArray,
+            "latlon" => IndexFieldType::Latlon,
+            "literal" => IndexFieldType::Literal,
+            "literal-array" => IndexFieldType::LiteralArray,
+            "text" => IndexFieldType::Text,
+            "text-array" => IndexFieldType::TextArray,
+            _ => IndexFieldType::UnknownVariant(UnknownIndexFieldType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IndexFieldType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "date" => IndexFieldType::Date,
+            "date-array" => IndexFieldType::DateArray,
+            "double" => IndexFieldType::Double,
+            "double-array" => IndexFieldType::DoubleArray,
+            "int" => IndexFieldType::Int,
+            "int-array" => IndexFieldType::IntArray,
+            "latlon" => IndexFieldType::Latlon,
+            "literal" => IndexFieldType::Literal,
+            "literal-array" => IndexFieldType::LiteralArray,
+            "text" => IndexFieldType::Text,
+            "text-array" => IndexFieldType::TextArray,
+            _ => IndexFieldType::UnknownVariant(UnknownIndexFieldType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexFieldType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for IndexFieldType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for IndexFieldType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<IndexFieldType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -2812,7 +3459,10 @@ impl IntArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2901,7 +3551,10 @@ impl IntOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -2975,7 +3628,10 @@ impl LatLonOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
@@ -2990,7 +3646,10 @@ impl LatLonOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3128,7 +3787,10 @@ impl LiteralArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
@@ -3140,7 +3802,10 @@ impl LiteralArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SearchEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3214,7 +3879,10 @@ impl LiteralOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.facet_enabled {
             params.put(&format!("{}{}", prefix, "FacetEnabled"), &field_value);
@@ -3229,7 +3897,10 @@ impl LiteralOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3266,12 +3937,129 @@ impl MultiAZDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+/// <p><p>The state of processing a change to an option. One of:</p> <ul> <li>RequiresIndexDocuments: The option&#39;s latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li>Processing: The option&#39;s latest value is in the process of being activated.</li> <li>Active: The option&#39;s latest value is fully deployed. </li> <li>FailedToValidate: The option value is not compatible with the domain&#39;s data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOptionState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OptionState {
+    Active,
+    FailedToValidate,
+    Processing,
+    RequiresIndexDocuments,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOptionState),
+}
+
+impl Default for OptionState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OptionState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OptionState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OptionState {
+    fn into(self) -> String {
+        match self {
+            OptionState::Active => "Active".to_string(),
+            OptionState::FailedToValidate => "FailedToValidate".to_string(),
+            OptionState::Processing => "Processing".to_string(),
+            OptionState::RequiresIndexDocuments => "RequiresIndexDocuments".to_string(),
+            OptionState::UnknownVariant(UnknownOptionState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OptionState {
+    fn into(self) -> &'a str {
+        match self {
+            OptionState::Active => &"Active",
+            OptionState::FailedToValidate => &"FailedToValidate",
+            OptionState::Processing => &"Processing",
+            OptionState::RequiresIndexDocuments => &"RequiresIndexDocuments",
+            OptionState::UnknownVariant(UnknownOptionState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OptionState {
+    fn from(name: &str) -> Self {
+        match name {
+            "Active" => OptionState::Active,
+            "FailedToValidate" => OptionState::FailedToValidate,
+            "Processing" => OptionState::Processing,
+            "RequiresIndexDocuments" => OptionState::RequiresIndexDocuments,
+            _ => OptionState::UnknownVariant(UnknownOptionState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OptionState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Active" => OptionState::Active,
+            "FailedToValidate" => OptionState::FailedToValidate,
+            "Processing" => OptionState::Processing,
+            "RequiresIndexDocuments" => OptionState::RequiresIndexDocuments,
+            _ => OptionState::UnknownVariant(UnknownOptionState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OptionState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for OptionState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OptionState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OptionState, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The status of domain configuration option.</p>
@@ -3283,7 +4071,7 @@ pub struct OptionStatus {
     /// <p>Indicates that the option will be deleted once processing is complete.</p>
     pub pending_deletion: Option<bool>,
     /// <p><p>The state of processing a change to an option. Possible values:</p><ul> <li><code>RequiresIndexDocuments</code>: the option&#39;s latest value will not be deployed until <a>IndexDocuments</a> has been called and indexing is complete.</li> <li><code>Processing</code>: the option&#39;s latest value is in the process of being activated. </li> <li><code>Active</code>: the option&#39;s latest value is completely deployed.</li> <li><code>FailedToValidate</code>: the option value is not compatible with the domain&#39;s data and cannot be used to index the data. You must either modify the option value or update or remove the incompatible documents.</li> </ul></p>
-    pub state: String,
+    pub state: OptionState,
     /// <p>A timestamp for when this option was last updated.</p>
     pub update_date: String,
     /// <p>A unique integer that indicates when this option was last updated.</p>
@@ -3333,12 +4121,153 @@ impl PartitionCountDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
+/// <p>The instance type (such as <code>search.m1.small</code>) on which an index partition is hosted.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPartitionInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PartitionInstanceType {
+    SearchM1Large,
+    SearchM1Small,
+    SearchM22Xlarge,
+    SearchM2Xlarge,
+    SearchM32Xlarge,
+    SearchM3Large,
+    SearchM3Medium,
+    SearchM3Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPartitionInstanceType),
+}
+
+impl Default for PartitionInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PartitionInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PartitionInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PartitionInstanceType {
+    fn into(self) -> String {
+        match self {
+            PartitionInstanceType::SearchM1Large => "search.m1.large".to_string(),
+            PartitionInstanceType::SearchM1Small => "search.m1.small".to_string(),
+            PartitionInstanceType::SearchM22Xlarge => "search.m2.2xlarge".to_string(),
+            PartitionInstanceType::SearchM2Xlarge => "search.m2.xlarge".to_string(),
+            PartitionInstanceType::SearchM32Xlarge => "search.m3.2xlarge".to_string(),
+            PartitionInstanceType::SearchM3Large => "search.m3.large".to_string(),
+            PartitionInstanceType::SearchM3Medium => "search.m3.medium".to_string(),
+            PartitionInstanceType::SearchM3Xlarge => "search.m3.xlarge".to_string(),
+            PartitionInstanceType::UnknownVariant(UnknownPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PartitionInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            PartitionInstanceType::SearchM1Large => &"search.m1.large",
+            PartitionInstanceType::SearchM1Small => &"search.m1.small",
+            PartitionInstanceType::SearchM22Xlarge => &"search.m2.2xlarge",
+            PartitionInstanceType::SearchM2Xlarge => &"search.m2.xlarge",
+            PartitionInstanceType::SearchM32Xlarge => &"search.m3.2xlarge",
+            PartitionInstanceType::SearchM3Large => &"search.m3.large",
+            PartitionInstanceType::SearchM3Medium => &"search.m3.medium",
+            PartitionInstanceType::SearchM3Xlarge => &"search.m3.xlarge",
+            PartitionInstanceType::UnknownVariant(UnknownPartitionInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PartitionInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "search.m1.large" => PartitionInstanceType::SearchM1Large,
+            "search.m1.small" => PartitionInstanceType::SearchM1Small,
+            "search.m2.2xlarge" => PartitionInstanceType::SearchM22Xlarge,
+            "search.m2.xlarge" => PartitionInstanceType::SearchM2Xlarge,
+            "search.m3.2xlarge" => PartitionInstanceType::SearchM32Xlarge,
+            "search.m3.large" => PartitionInstanceType::SearchM3Large,
+            "search.m3.medium" => PartitionInstanceType::SearchM3Medium,
+            "search.m3.xlarge" => PartitionInstanceType::SearchM3Xlarge,
+            _ => PartitionInstanceType::UnknownVariant(UnknownPartitionInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PartitionInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "search.m1.large" => PartitionInstanceType::SearchM1Large,
+            "search.m1.small" => PartitionInstanceType::SearchM1Small,
+            "search.m2.2xlarge" => PartitionInstanceType::SearchM22Xlarge,
+            "search.m2.xlarge" => PartitionInstanceType::SearchM2Xlarge,
+            "search.m3.2xlarge" => PartitionInstanceType::SearchM32Xlarge,
+            "search.m3.large" => PartitionInstanceType::SearchM3Large,
+            "search.m3.medium" => PartitionInstanceType::SearchM3Medium,
+            "search.m3.xlarge" => PartitionInstanceType::SearchM3Xlarge,
+            _ => PartitionInstanceType::UnknownVariant(UnknownPartitionInstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PartitionInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for PartitionInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PartitionInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PartitionInstanceType, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 #[allow(dead_code)]
@@ -3355,7 +4284,7 @@ impl PolicyDocumentDeserializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScalingParameters {
     /// <p>The instance type that you want to preconfigure for your domain. For example, <code>search.m1.small</code>.</p>
-    pub desired_instance_type: Option<String>,
+    pub desired_instance_type: Option<PartitionInstanceType>,
     /// <p>The number of partitions you want to preconfigure for your domain. Only valid when you select <code>m2.2xlarge</code> as the desired instance type.</p>
     pub desired_partition_count: Option<i64>,
     /// <p>The number of replicas you want to preconfigure for each index partition.</p>
@@ -3410,7 +4339,7 @@ impl ScalingParametersSerializer {
         if let Some(ref field_value) = obj.desired_instance_type {
             params.put(
                 &format!("{}{}", prefix, "DesiredInstanceType"),
-                &field_value,
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.desired_partition_count {
@@ -3519,7 +4448,7 @@ impl StandardNameListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
-            params.put(&key, &obj);
+            params.put(&key, &obj.to_string());
         }
     }
 }
@@ -3585,8 +4514,119 @@ impl SuggesterSerializer {
         );
         params.put(
             &format!("{}{}", prefix, "SuggesterName"),
-            &obj.suggester_name,
+            &obj.suggester_name.to_string(),
         );
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSuggesterFuzzyMatching {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SuggesterFuzzyMatching {
+    High,
+    Low,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSuggesterFuzzyMatching),
+}
+
+impl Default for SuggesterFuzzyMatching {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SuggesterFuzzyMatching {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SuggesterFuzzyMatching {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SuggesterFuzzyMatching {
+    fn into(self) -> String {
+        match self {
+            SuggesterFuzzyMatching::High => "high".to_string(),
+            SuggesterFuzzyMatching::Low => "low".to_string(),
+            SuggesterFuzzyMatching::None => "none".to_string(),
+            SuggesterFuzzyMatching::UnknownVariant(UnknownSuggesterFuzzyMatching {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SuggesterFuzzyMatching {
+    fn into(self) -> &'a str {
+        match self {
+            SuggesterFuzzyMatching::High => &"high",
+            SuggesterFuzzyMatching::Low => &"low",
+            SuggesterFuzzyMatching::None => &"none",
+            SuggesterFuzzyMatching::UnknownVariant(UnknownSuggesterFuzzyMatching {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SuggesterFuzzyMatching {
+    fn from(name: &str) -> Self {
+        match name {
+            "high" => SuggesterFuzzyMatching::High,
+            "low" => SuggesterFuzzyMatching::Low,
+            "none" => SuggesterFuzzyMatching::None,
+            _ => SuggesterFuzzyMatching::UnknownVariant(UnknownSuggesterFuzzyMatching {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SuggesterFuzzyMatching {
+    fn from(name: String) -> Self {
+        match &*name {
+            "high" => SuggesterFuzzyMatching::High,
+            "low" => SuggesterFuzzyMatching::Low,
+            "none" => SuggesterFuzzyMatching::None,
+            _ => SuggesterFuzzyMatching::UnknownVariant(UnknownSuggesterFuzzyMatching { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SuggesterFuzzyMatching {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for SuggesterFuzzyMatching {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SuggesterFuzzyMatching {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
     }
 }
 
@@ -3594,8 +4634,11 @@ impl SuggesterSerializer {
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SuggesterFuzzyMatching, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>The value of a <code>Suggester</code> and its current status.</p>
@@ -3646,12 +4689,123 @@ impl SuggesterStatusListDeserializer {
         })
     }
 }
+/// <p>The minimum required TLS version.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTLSSecurityPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TLSSecurityPolicy {
+    PolicyMinTLS10201907,
+    PolicyMinTLS12201907,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTLSSecurityPolicy),
+}
+
+impl Default for TLSSecurityPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TLSSecurityPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TLSSecurityPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TLSSecurityPolicy {
+    fn into(self) -> String {
+        match self {
+            TLSSecurityPolicy::PolicyMinTLS10201907 => "Policy-Min-TLS-1-0-2019-07".to_string(),
+            TLSSecurityPolicy::PolicyMinTLS12201907 => "Policy-Min-TLS-1-2-2019-07".to_string(),
+            TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TLSSecurityPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            TLSSecurityPolicy::PolicyMinTLS10201907 => &"Policy-Min-TLS-1-0-2019-07",
+            TLSSecurityPolicy::PolicyMinTLS12201907 => &"Policy-Min-TLS-1-2-2019-07",
+            TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TLSSecurityPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "Policy-Min-TLS-1-0-2019-07" => TLSSecurityPolicy::PolicyMinTLS10201907,
+            "Policy-Min-TLS-1-2-2019-07" => TLSSecurityPolicy::PolicyMinTLS12201907,
+            _ => TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TLSSecurityPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Policy-Min-TLS-1-0-2019-07" => TLSSecurityPolicy::PolicyMinTLS10201907,
+            "Policy-Min-TLS-1-2-2019-07" => TLSSecurityPolicy::PolicyMinTLS12201907,
+            _ => TLSSecurityPolicy::UnknownVariant(UnknownTLSSecurityPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TLSSecurityPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for TLSSecurityPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TLSSecurityPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[allow(dead_code)]
 struct TLSSecurityPolicyDeserializer;
 impl TLSSecurityPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TLSSecurityPolicy, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 /// <p>Options for a field that contains an array of text strings. Present if <code>IndexFieldType</code> specifies the field is of type <code>text-array</code>. A <code>text-array</code> field is always searchable. All options are enabled by default.</p>
@@ -3720,10 +4874,16 @@ impl TextArrayOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(&format!("{}{}", prefix, "AnalysisScheme"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AnalysisScheme"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.highlight_enabled {
             params.put(&format!("{}{}", prefix, "HighlightEnabled"), &field_value);
@@ -3732,7 +4892,10 @@ impl TextArrayOptionsSerializer {
             params.put(&format!("{}{}", prefix, "ReturnEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_fields {
-            params.put(&format!("{}{}", prefix, "SourceFields"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceFields"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3806,10 +4969,16 @@ impl TextOptionsSerializer {
         }
 
         if let Some(ref field_value) = obj.analysis_scheme {
-            params.put(&format!("{}{}", prefix, "AnalysisScheme"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "AnalysisScheme"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.default_value {
-            params.put(&format!("{}{}", prefix, "DefaultValue"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "DefaultValue"),
+                &field_value.to_string(),
+            );
         }
         if let Some(ref field_value) = obj.highlight_enabled {
             params.put(&format!("{}{}", prefix, "HighlightEnabled"), &field_value);
@@ -3821,7 +4990,10 @@ impl TextOptionsSerializer {
             params.put(&format!("{}{}", prefix, "SortEnabled"), &field_value);
         }
         if let Some(ref field_value) = obj.source_field {
-            params.put(&format!("{}{}", prefix, "SourceField"), &field_value);
+            params.put(
+                &format!("{}{}", prefix, "SourceField"),
+                &field_value.to_string(),
+            );
         }
     }
 }
@@ -3852,7 +5024,10 @@ impl UpdateAvailabilityOptionsRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         params.put(&format!("{}{}", prefix, "MultiAZ"), &obj.multi_az);
     }
 }
@@ -3916,7 +5091,10 @@ impl UpdateDomainEndpointOptionsRequestSerializer {
             &format!("{}{}", prefix, "DomainEndpointOptions"),
             &obj.domain_endpoint_options,
         );
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 
@@ -3972,7 +5150,10 @@ impl UpdateScalingParametersRequestSerializer {
             prefix.push_str(".");
         }
 
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
         ScalingParametersSerializer::serialize(
             params,
             &format!("{}{}", prefix, "ScalingParameters"),
@@ -4034,9 +5215,12 @@ impl UpdateServiceAccessPoliciesRequestSerializer {
 
         params.put(
             &format!("{}{}", prefix, "AccessPolicies"),
-            &obj.access_policies,
+            &obj.access_policies.to_string(),
         );
-        params.put(&format!("{}{}", prefix, "DomainName"), &obj.domain_name);
+        params.put(
+            &format!("{}{}", prefix, "DomainName"),
+            &obj.domain_name.to_string(),
+        );
     }
 }
 

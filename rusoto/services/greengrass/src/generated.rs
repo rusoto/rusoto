@@ -121,7 +121,7 @@ pub struct BulkDeploymentResult {
     /// <p>The type of the deployment.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<DeploymentType>,
     /// <p>Details about the error.</p>
     #[serde(rename = "ErrorDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -134,6 +134,238 @@ pub struct BulkDeploymentResult {
     #[serde(rename = "GroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
+}
+
+/// <p>The current status of the bulk deployment.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBulkDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BulkDeploymentStatus {
+    Completed,
+    Failed,
+    Initializing,
+    Running,
+    Stopped,
+    Stopping,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBulkDeploymentStatus),
+}
+
+impl Default for BulkDeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BulkDeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BulkDeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BulkDeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            BulkDeploymentStatus::Completed => "Completed".to_string(),
+            BulkDeploymentStatus::Failed => "Failed".to_string(),
+            BulkDeploymentStatus::Initializing => "Initializing".to_string(),
+            BulkDeploymentStatus::Running => "Running".to_string(),
+            BulkDeploymentStatus::Stopped => "Stopped".to_string(),
+            BulkDeploymentStatus::Stopping => "Stopping".to_string(),
+            BulkDeploymentStatus::UnknownVariant(UnknownBulkDeploymentStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BulkDeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BulkDeploymentStatus::Completed => &"Completed",
+            BulkDeploymentStatus::Failed => &"Failed",
+            BulkDeploymentStatus::Initializing => &"Initializing",
+            BulkDeploymentStatus::Running => &"Running",
+            BulkDeploymentStatus::Stopped => &"Stopped",
+            BulkDeploymentStatus::Stopping => &"Stopping",
+            BulkDeploymentStatus::UnknownVariant(UnknownBulkDeploymentStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BulkDeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Completed" => BulkDeploymentStatus::Completed,
+            "Failed" => BulkDeploymentStatus::Failed,
+            "Initializing" => BulkDeploymentStatus::Initializing,
+            "Running" => BulkDeploymentStatus::Running,
+            "Stopped" => BulkDeploymentStatus::Stopped,
+            "Stopping" => BulkDeploymentStatus::Stopping,
+            _ => BulkDeploymentStatus::UnknownVariant(UnknownBulkDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BulkDeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Completed" => BulkDeploymentStatus::Completed,
+            "Failed" => BulkDeploymentStatus::Failed,
+            "Initializing" => BulkDeploymentStatus::Initializing,
+            "Running" => BulkDeploymentStatus::Running,
+            "Stopped" => BulkDeploymentStatus::Stopped,
+            "Stopping" => BulkDeploymentStatus::Stopping,
+            _ => BulkDeploymentStatus::UnknownVariant(UnknownBulkDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BulkDeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BulkDeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BulkDeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationSyncStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationSyncStatus {
+    InSync,
+    OutOfSync,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationSyncStatus),
+}
+
+impl Default for ConfigurationSyncStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationSyncStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationSyncStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationSyncStatus {
+    fn into(self) -> String {
+        match self {
+            ConfigurationSyncStatus::InSync => "InSync".to_string(),
+            ConfigurationSyncStatus::OutOfSync => "OutOfSync".to_string(),
+            ConfigurationSyncStatus::UnknownVariant(UnknownConfigurationSyncStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationSyncStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationSyncStatus::InSync => &"InSync",
+            ConfigurationSyncStatus::OutOfSync => &"OutOfSync",
+            ConfigurationSyncStatus::UnknownVariant(UnknownConfigurationSyncStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationSyncStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "InSync" => ConfigurationSyncStatus::InSync,
+            "OutOfSync" => ConfigurationSyncStatus::OutOfSync,
+            _ => ConfigurationSyncStatus::UnknownVariant(UnknownConfigurationSyncStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationSyncStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InSync" => ConfigurationSyncStatus::InSync,
+            "OutOfSync" => ConfigurationSyncStatus::OutOfSync,
+            _ => ConfigurationSyncStatus::UnknownVariant(UnknownConfigurationSyncStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationSyncStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ConfigurationSyncStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationSyncStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a Greengrass core&#39;s connectivity.</p>
@@ -404,7 +636,7 @@ pub struct CreateDeploymentRequest {
     pub deployment_id: Option<String>,
     /// <p>The type of deployment. When used for &#39;&#39;CreateDeployment&#39;&#39;, only &#39;&#39;NewDeployment&#39;&#39; and &#39;&#39;Redeployment&#39;&#39; are valid.</p>
     #[serde(rename = "DeploymentType")]
-    pub deployment_type: String,
+    pub deployment_type: DeploymentType,
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
@@ -942,16 +1174,16 @@ pub struct CreateSoftwareUpdateJobRequest {
     #[serde(rename = "S3UrlSignerRole")]
     pub s3_url_signer_role: String,
     #[serde(rename = "SoftwareToUpdate")]
-    pub software_to_update: String,
+    pub software_to_update: SoftwareToUpdate,
     #[serde(rename = "UpdateAgentLogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_agent_log_level: Option<String>,
+    pub update_agent_log_level: Option<UpdateAgentLogLevel>,
     #[serde(rename = "UpdateTargets")]
     pub update_targets: Vec<String>,
     #[serde(rename = "UpdateTargetsArchitecture")]
-    pub update_targets_architecture: String,
+    pub update_targets_architecture: UpdateTargetsArchitecture,
     #[serde(rename = "UpdateTargetsOperatingSystem")]
-    pub update_targets_operating_system: String,
+    pub update_targets_operating_system: UpdateTargetsOperatingSystem,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1215,11 +1447,123 @@ pub struct Deployment {
     /// <p>The type of the deployment.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<DeploymentType>,
     /// <p>The ARN of the group for this deployment.</p>
     #[serde(rename = "GroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_arn: Option<String>,
+}
+
+/// <p>The type of deployment. When used for &#39;&#39;CreateDeployment&#39;&#39;, only &#39;&#39;NewDeployment&#39;&#39; and &#39;&#39;Redeployment&#39;&#39; are valid.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentType {
+    ForceResetDeployment,
+    NewDeployment,
+    Redeployment,
+    ResetDeployment,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentType),
+}
+
+impl Default for DeploymentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentType {
+    fn into(self) -> String {
+        match self {
+            DeploymentType::ForceResetDeployment => "ForceResetDeployment".to_string(),
+            DeploymentType::NewDeployment => "NewDeployment".to_string(),
+            DeploymentType::Redeployment => "Redeployment".to_string(),
+            DeploymentType::ResetDeployment => "ResetDeployment".to_string(),
+            DeploymentType::UnknownVariant(UnknownDeploymentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentType::ForceResetDeployment => &"ForceResetDeployment",
+            DeploymentType::NewDeployment => &"NewDeployment",
+            DeploymentType::Redeployment => &"Redeployment",
+            DeploymentType::ResetDeployment => &"ResetDeployment",
+            DeploymentType::UnknownVariant(UnknownDeploymentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ForceResetDeployment" => DeploymentType::ForceResetDeployment,
+            "NewDeployment" => DeploymentType::NewDeployment,
+            "Redeployment" => DeploymentType::Redeployment,
+            "ResetDeployment" => DeploymentType::ResetDeployment,
+            _ => DeploymentType::UnknownVariant(UnknownDeploymentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ForceResetDeployment" => DeploymentType::ForceResetDeployment,
+            "NewDeployment" => DeploymentType::NewDeployment,
+            "Redeployment" => DeploymentType::Redeployment,
+            "ResetDeployment" => DeploymentType::ResetDeployment,
+            _ => DeploymentType::UnknownVariant(UnknownDeploymentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a device.</p>
@@ -1279,6 +1623,106 @@ pub struct DisassociateServiceRoleFromAccountResponse {
     pub disassociated_at: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncodingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncodingType {
+    Binary,
+    Json,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncodingType),
+}
+
+impl Default for EncodingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncodingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncodingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncodingType {
+    fn into(self) -> String {
+        match self {
+            EncodingType::Binary => "binary".to_string(),
+            EncodingType::Json => "json".to_string(),
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncodingType {
+    fn into(self) -> &'a str {
+        match self {
+            EncodingType::Binary => &"binary",
+            EncodingType::Json => &"json",
+            EncodingType::UnknownVariant(UnknownEncodingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncodingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "binary" => EncodingType::Binary,
+            "json" => EncodingType::Json,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncodingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "binary" => EncodingType::Binary,
+            "json" => EncodingType::Json,
+            _ => EncodingType::UnknownVariant(UnknownEncodingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncodingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncodingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncodingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details about the error.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1315,7 +1759,7 @@ pub struct FunctionConfiguration {
     /// <p>The expected encoding type of the input payload for the function. The default is &#39;&#39;json&#39;&#39;.</p>
     #[serde(rename = "EncodingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encoding_type: Option<String>,
+    pub encoding_type: Option<EncodingType>,
     /// <p>The environment configuration of the function.</p>
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1376,7 +1820,7 @@ pub struct FunctionDefaultConfig {
 pub struct FunctionDefaultExecutionConfig {
     #[serde(rename = "IsolationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub isolation_mode: Option<String>,
+    pub isolation_mode: Option<FunctionIsolationMode>,
     #[serde(rename = "RunAs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_as: Option<FunctionRunAsConfig>,
@@ -1400,10 +1844,116 @@ pub struct FunctionDefinitionVersion {
 pub struct FunctionExecutionConfig {
     #[serde(rename = "IsolationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub isolation_mode: Option<String>,
+    pub isolation_mode: Option<FunctionIsolationMode>,
     #[serde(rename = "RunAs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_as: Option<FunctionRunAsConfig>,
+}
+
+/// <p>Specifies whether the Lambda function runs in a Greengrass container (default) or without containerization. Unless your scenario requires that you run without containerization, we recommend that you run in a Greengrass container. Omit this value to run the Lambda function with the default containerization for the group.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFunctionIsolationMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FunctionIsolationMode {
+    GreengrassContainer,
+    NoContainer,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFunctionIsolationMode),
+}
+
+impl Default for FunctionIsolationMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FunctionIsolationMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FunctionIsolationMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FunctionIsolationMode {
+    fn into(self) -> String {
+        match self {
+            FunctionIsolationMode::GreengrassContainer => "GreengrassContainer".to_string(),
+            FunctionIsolationMode::NoContainer => "NoContainer".to_string(),
+            FunctionIsolationMode::UnknownVariant(UnknownFunctionIsolationMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FunctionIsolationMode {
+    fn into(self) -> &'a str {
+        match self {
+            FunctionIsolationMode::GreengrassContainer => &"GreengrassContainer",
+            FunctionIsolationMode::NoContainer => &"NoContainer",
+            FunctionIsolationMode::UnknownVariant(UnknownFunctionIsolationMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FunctionIsolationMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreengrassContainer" => FunctionIsolationMode::GreengrassContainer,
+            "NoContainer" => FunctionIsolationMode::NoContainer,
+            _ => FunctionIsolationMode::UnknownVariant(UnknownFunctionIsolationMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FunctionIsolationMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreengrassContainer" => FunctionIsolationMode::GreengrassContainer,
+            "NoContainer" => FunctionIsolationMode::NoContainer,
+            _ => FunctionIsolationMode::UnknownVariant(UnknownFunctionIsolationMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FunctionIsolationMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FunctionIsolationMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FunctionIsolationMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the user and group whose permissions are used when running the Lambda function. You can specify one or both values to override the default values. We recommend that you avoid running as root unless absolutely necessary to minimize the risk of unintended changes or malicious attacks. To run as root, you must set &#39;&#39;IsolationMode&#39;&#39; to &#39;&#39;NoContainer&#39;&#39; and update config.json in &#39;&#39;greengrass-root/config&#39;&#39; to set &#39;&#39;allowFunctionsToRunAsRoot&#39;&#39; to &#39;&#39;yes&#39;&#39;.</p>
@@ -1458,7 +2008,7 @@ pub struct GetBulkDeploymentStatusResponse {
     /// <p>The status of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub bulk_deployment_status: Option<String>,
+    pub bulk_deployment_status: Option<BulkDeploymentStatus>,
     /// <p>The time, in ISO format, when the deployment was created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1693,7 +2243,7 @@ pub struct GetDeploymentStatusResponse {
     /// <p>The type of the deployment.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: Option<DeploymentType>,
     /// <p>Error details</p>
     #[serde(rename = "ErrorDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2995,20 +3545,120 @@ pub struct LocalVolumeResourceData {
 pub struct Logger {
     /// <p>The component that will be subject to logging.</p>
     #[serde(rename = "Component")]
-    pub component: String,
+    pub component: LoggerComponent,
     /// <p>A descriptive or arbitrary ID for the logger. This value must be unique within the logger definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     pub id: String,
     /// <p>The level of the logs.</p>
     #[serde(rename = "Level")]
-    pub level: String,
+    pub level: LoggerLevel,
     /// <p>The amount of file space, in KB, to use if the local file system is used for logging purposes.</p>
     #[serde(rename = "Space")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub space: Option<i64>,
     /// <p>The type of log output which will be used.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: LoggerType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggerComponent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggerComponent {
+    GreengrassSystem,
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggerComponent),
+}
+
+impl Default for LoggerComponent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggerComponent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggerComponent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggerComponent {
+    fn into(self) -> String {
+        match self {
+            LoggerComponent::GreengrassSystem => "GreengrassSystem".to_string(),
+            LoggerComponent::Lambda => "Lambda".to_string(),
+            LoggerComponent::UnknownVariant(UnknownLoggerComponent { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggerComponent {
+    fn into(self) -> &'a str {
+        match self {
+            LoggerComponent::GreengrassSystem => &"GreengrassSystem",
+            LoggerComponent::Lambda => &"Lambda",
+            LoggerComponent::UnknownVariant(UnknownLoggerComponent { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggerComponent {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreengrassSystem" => LoggerComponent::GreengrassSystem,
+            "Lambda" => LoggerComponent::Lambda,
+            _ => LoggerComponent::UnknownVariant(UnknownLoggerComponent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggerComponent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreengrassSystem" => LoggerComponent::GreengrassSystem,
+            "Lambda" => LoggerComponent::Lambda,
+            _ => LoggerComponent::UnknownVariant(UnknownLoggerComponent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerComponent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggerComponent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggerComponent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a logger definition version.</p>
@@ -3018,6 +3668,323 @@ pub struct LoggerDefinitionVersion {
     #[serde(rename = "Loggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loggers: Option<Vec<Logger>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggerLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggerLevel {
+    Debug,
+    Error,
+    Fatal,
+    Info,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggerLevel),
+}
+
+impl Default for LoggerLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggerLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggerLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggerLevel {
+    fn into(self) -> String {
+        match self {
+            LoggerLevel::Debug => "DEBUG".to_string(),
+            LoggerLevel::Error => "ERROR".to_string(),
+            LoggerLevel::Fatal => "FATAL".to_string(),
+            LoggerLevel::Info => "INFO".to_string(),
+            LoggerLevel::Warn => "WARN".to_string(),
+            LoggerLevel::UnknownVariant(UnknownLoggerLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggerLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LoggerLevel::Debug => &"DEBUG",
+            LoggerLevel::Error => &"ERROR",
+            LoggerLevel::Fatal => &"FATAL",
+            LoggerLevel::Info => &"INFO",
+            LoggerLevel::Warn => &"WARN",
+            LoggerLevel::UnknownVariant(UnknownLoggerLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggerLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => LoggerLevel::Debug,
+            "ERROR" => LoggerLevel::Error,
+            "FATAL" => LoggerLevel::Fatal,
+            "INFO" => LoggerLevel::Info,
+            "WARN" => LoggerLevel::Warn,
+            _ => LoggerLevel::UnknownVariant(UnknownLoggerLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggerLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => LoggerLevel::Debug,
+            "ERROR" => LoggerLevel::Error,
+            "FATAL" => LoggerLevel::Fatal,
+            "INFO" => LoggerLevel::Info,
+            "WARN" => LoggerLevel::Warn,
+            _ => LoggerLevel::UnknownVariant(UnknownLoggerLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggerLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggerLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggerType {
+    AwscloudWatch,
+    FileSystem,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggerType),
+}
+
+impl Default for LoggerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggerType {
+    fn into(self) -> String {
+        match self {
+            LoggerType::AwscloudWatch => "AWSCloudWatch".to_string(),
+            LoggerType::FileSystem => "FileSystem".to_string(),
+            LoggerType::UnknownVariant(UnknownLoggerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggerType {
+    fn into(self) -> &'a str {
+        match self {
+            LoggerType::AwscloudWatch => &"AWSCloudWatch",
+            LoggerType::FileSystem => &"FileSystem",
+            LoggerType::UnknownVariant(UnknownLoggerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSCloudWatch" => LoggerType::AwscloudWatch,
+            "FileSystem" => LoggerType::FileSystem,
+            _ => LoggerType::UnknownVariant(UnknownLoggerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSCloudWatch" => LoggerType::AwscloudWatch,
+            "FileSystem" => LoggerType::FileSystem,
+            _ => LoggerType::UnknownVariant(UnknownLoggerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The type of permission a function has to access a resource.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Permission {
+    Ro,
+    Rw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermission),
+}
+
+impl Default for Permission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Permission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Permission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Permission {
+    fn into(self) -> String {
+        match self {
+            Permission::Ro => "ro".to_string(),
+            Permission::Rw => "rw".to_string(),
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Permission {
+    fn into(self) -> &'a str {
+        match self {
+            Permission::Ro => &"ro",
+            Permission::Rw => &"rw",
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Permission {
+    fn from(name: &str) -> Self {
+        match name {
+            "ro" => Permission::Ro,
+            "rw" => Permission::Rw,
+            _ => Permission::UnknownVariant(UnknownPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Permission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ro" => Permission::Ro,
+            "rw" => Permission::Rw,
+            _ => Permission::UnknownVariant(UnknownPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Permission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Permission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information needed to reset deployments.</p>
@@ -3070,7 +4037,7 @@ pub struct ResourceAccessPolicy {
     /// <p>The permissions that the Lambda function has to the resource. Can be one of &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
     #[serde(rename = "Permission")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permission: Option<String>,
+    pub permission: Option<Permission>,
     /// <p>The ID of the resource. (This ID is assigned to the resource when you create the resource definiton.)</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -3119,7 +4086,7 @@ pub struct ResourceDownloadOwnerSetting {
     pub group_owner: String,
     /// <p>The permissions that the group owner has to the resource. Valid values are &#39;&#39;rw&#39;&#39; (read/write) or &#39;&#39;ro&#39;&#39; (read-only).</p>
     #[serde(rename = "GroupPermission")]
-    pub group_permission: String,
+    pub group_permission: Permission,
 }
 
 /// <p>Runtime configuration for a thing.</p>
@@ -3175,6 +4142,113 @@ pub struct SecretsManagerSecretResourceData {
     #[serde(rename = "AdditionalStagingLabelsToDownload")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_staging_labels_to_download: Option<Vec<String>>,
+}
+
+/// <p>The piece of software on the Greengrass core that will be updated.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSoftwareToUpdate {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SoftwareToUpdate {
+    Core,
+    OtaAgent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSoftwareToUpdate),
+}
+
+impl Default for SoftwareToUpdate {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SoftwareToUpdate {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SoftwareToUpdate {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SoftwareToUpdate {
+    fn into(self) -> String {
+        match self {
+            SoftwareToUpdate::Core => "core".to_string(),
+            SoftwareToUpdate::OtaAgent => "ota_agent".to_string(),
+            SoftwareToUpdate::UnknownVariant(UnknownSoftwareToUpdate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SoftwareToUpdate {
+    fn into(self) -> &'a str {
+        match self {
+            SoftwareToUpdate::Core => &"core",
+            SoftwareToUpdate::OtaAgent => &"ota_agent",
+            SoftwareToUpdate::UnknownVariant(UnknownSoftwareToUpdate { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SoftwareToUpdate {
+    fn from(name: &str) -> Self {
+        match name {
+            "core" => SoftwareToUpdate::Core,
+            "ota_agent" => SoftwareToUpdate::OtaAgent,
+            _ => SoftwareToUpdate::UnknownVariant(UnknownSoftwareToUpdate {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SoftwareToUpdate {
+    fn from(name: String) -> Self {
+        match &*name {
+            "core" => SoftwareToUpdate::Core,
+            "ota_agent" => SoftwareToUpdate::OtaAgent,
+            _ => SoftwareToUpdate::UnknownVariant(UnknownSoftwareToUpdate { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SoftwareToUpdate {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SoftwareToUpdate {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SoftwareToUpdate {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3259,6 +4333,106 @@ pub struct TagResourceRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTelemetry {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Telemetry {
+    Off,
+    On,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTelemetry),
+}
+
+impl Default for Telemetry {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Telemetry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Telemetry {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Telemetry {
+    fn into(self) -> String {
+        match self {
+            Telemetry::Off => "Off".to_string(),
+            Telemetry::On => "On".to_string(),
+            Telemetry::UnknownVariant(UnknownTelemetry { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Telemetry {
+    fn into(self) -> &'a str {
+        match self {
+            Telemetry::Off => &"Off",
+            Telemetry::On => &"On",
+            Telemetry::UnknownVariant(UnknownTelemetry { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Telemetry {
+    fn from(name: &str) -> Self {
+        match name {
+            "Off" => Telemetry::Off,
+            "On" => Telemetry::On,
+            _ => Telemetry::UnknownVariant(UnknownTelemetry {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Telemetry {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Off" => Telemetry::Off,
+            "On" => Telemetry::On,
+            _ => Telemetry::UnknownVariant(UnknownTelemetry { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Telemetry {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Telemetry {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Telemetry {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configuration settings for running telemetry.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3266,10 +4440,10 @@ pub struct TelemetryConfiguration {
     /// <p>Synchronization status of the device reported configuration with the desired configuration.</p>
     #[serde(rename = "ConfigurationSyncStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_sync_status: Option<String>,
+    pub configuration_sync_status: Option<ConfigurationSyncStatus>,
     /// <p>Configure telemetry to be on or off.</p>
     #[serde(rename = "Telemetry")]
-    pub telemetry: String,
+    pub telemetry: Telemetry,
 }
 
 /// <p>Configuration settings for running telemetry.</p>
@@ -3278,7 +4452,7 @@ pub struct TelemetryConfiguration {
 pub struct TelemetryConfigurationUpdate {
     /// <p>Configure telemetry to be on or off.</p>
     #[serde(rename = "Telemetry")]
-    pub telemetry: String,
+    pub telemetry: Telemetry,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3290,6 +4464,143 @@ pub struct UntagResourceRequest {
     /// <p>An array of tag keys to delete</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+/// <p>The minimum level of log statements that should be logged by the OTA Agent during an update.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateAgentLogLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateAgentLogLevel {
+    Debug,
+    Error,
+    Fatal,
+    Info,
+    None,
+    Trace,
+    Verbose,
+    Warn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateAgentLogLevel),
+}
+
+impl Default for UpdateAgentLogLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateAgentLogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateAgentLogLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateAgentLogLevel {
+    fn into(self) -> String {
+        match self {
+            UpdateAgentLogLevel::Debug => "DEBUG".to_string(),
+            UpdateAgentLogLevel::Error => "ERROR".to_string(),
+            UpdateAgentLogLevel::Fatal => "FATAL".to_string(),
+            UpdateAgentLogLevel::Info => "INFO".to_string(),
+            UpdateAgentLogLevel::None => "NONE".to_string(),
+            UpdateAgentLogLevel::Trace => "TRACE".to_string(),
+            UpdateAgentLogLevel::Verbose => "VERBOSE".to_string(),
+            UpdateAgentLogLevel::Warn => "WARN".to_string(),
+            UpdateAgentLogLevel::UnknownVariant(UnknownUpdateAgentLogLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateAgentLogLevel {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateAgentLogLevel::Debug => &"DEBUG",
+            UpdateAgentLogLevel::Error => &"ERROR",
+            UpdateAgentLogLevel::Fatal => &"FATAL",
+            UpdateAgentLogLevel::Info => &"INFO",
+            UpdateAgentLogLevel::None => &"NONE",
+            UpdateAgentLogLevel::Trace => &"TRACE",
+            UpdateAgentLogLevel::Verbose => &"VERBOSE",
+            UpdateAgentLogLevel::Warn => &"WARN",
+            UpdateAgentLogLevel::UnknownVariant(UnknownUpdateAgentLogLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UpdateAgentLogLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEBUG" => UpdateAgentLogLevel::Debug,
+            "ERROR" => UpdateAgentLogLevel::Error,
+            "FATAL" => UpdateAgentLogLevel::Fatal,
+            "INFO" => UpdateAgentLogLevel::Info,
+            "NONE" => UpdateAgentLogLevel::None,
+            "TRACE" => UpdateAgentLogLevel::Trace,
+            "VERBOSE" => UpdateAgentLogLevel::Verbose,
+            "WARN" => UpdateAgentLogLevel::Warn,
+            _ => UpdateAgentLogLevel::UnknownVariant(UnknownUpdateAgentLogLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateAgentLogLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEBUG" => UpdateAgentLogLevel::Debug,
+            "ERROR" => UpdateAgentLogLevel::Error,
+            "FATAL" => UpdateAgentLogLevel::Fatal,
+            "INFO" => UpdateAgentLogLevel::Info,
+            "NONE" => UpdateAgentLogLevel::None,
+            "TRACE" => UpdateAgentLogLevel::Trace,
+            "VERBOSE" => UpdateAgentLogLevel::Verbose,
+            "WARN" => UpdateAgentLogLevel::Warn,
+            _ => UpdateAgentLogLevel::UnknownVariant(UnknownUpdateAgentLogLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateAgentLogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UpdateAgentLogLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateAgentLogLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Connectivity information.</p>
@@ -3474,6 +4785,248 @@ pub struct UpdateSubscriptionDefinitionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
+
+/// <p>The architecture of the cores which are the targets of an update.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateTargetsArchitecture {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateTargetsArchitecture {
+    Aarch64,
+    Armv6L,
+    Armv7L,
+    X8664,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateTargetsArchitecture),
+}
+
+impl Default for UpdateTargetsArchitecture {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateTargetsArchitecture {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateTargetsArchitecture {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateTargetsArchitecture {
+    fn into(self) -> String {
+        match self {
+            UpdateTargetsArchitecture::Aarch64 => "aarch64".to_string(),
+            UpdateTargetsArchitecture::Armv6L => "armv6l".to_string(),
+            UpdateTargetsArchitecture::Armv7L => "armv7l".to_string(),
+            UpdateTargetsArchitecture::X8664 => "x86_64".to_string(),
+            UpdateTargetsArchitecture::UnknownVariant(UnknownUpdateTargetsArchitecture {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateTargetsArchitecture {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateTargetsArchitecture::Aarch64 => &"aarch64",
+            UpdateTargetsArchitecture::Armv6L => &"armv6l",
+            UpdateTargetsArchitecture::Armv7L => &"armv7l",
+            UpdateTargetsArchitecture::X8664 => &"x86_64",
+            UpdateTargetsArchitecture::UnknownVariant(UnknownUpdateTargetsArchitecture {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateTargetsArchitecture {
+    fn from(name: &str) -> Self {
+        match name {
+            "aarch64" => UpdateTargetsArchitecture::Aarch64,
+            "armv6l" => UpdateTargetsArchitecture::Armv6L,
+            "armv7l" => UpdateTargetsArchitecture::Armv7L,
+            "x86_64" => UpdateTargetsArchitecture::X8664,
+            _ => UpdateTargetsArchitecture::UnknownVariant(UnknownUpdateTargetsArchitecture {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateTargetsArchitecture {
+    fn from(name: String) -> Self {
+        match &*name {
+            "aarch64" => UpdateTargetsArchitecture::Aarch64,
+            "armv6l" => UpdateTargetsArchitecture::Armv6L,
+            "armv7l" => UpdateTargetsArchitecture::Armv7L,
+            "x86_64" => UpdateTargetsArchitecture::X8664,
+            _ => {
+                UpdateTargetsArchitecture::UnknownVariant(UnknownUpdateTargetsArchitecture { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateTargetsArchitecture {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UpdateTargetsArchitecture {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateTargetsArchitecture {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The operating system of the cores which are the targets of an update.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateTargetsOperatingSystem {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateTargetsOperatingSystem {
+    AmazonLinux,
+    Openwrt,
+    Raspbian,
+    Ubuntu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateTargetsOperatingSystem),
+}
+
+impl Default for UpdateTargetsOperatingSystem {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateTargetsOperatingSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateTargetsOperatingSystem {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateTargetsOperatingSystem {
+    fn into(self) -> String {
+        match self {
+            UpdateTargetsOperatingSystem::AmazonLinux => "amazon_linux".to_string(),
+            UpdateTargetsOperatingSystem::Openwrt => "openwrt".to_string(),
+            UpdateTargetsOperatingSystem::Raspbian => "raspbian".to_string(),
+            UpdateTargetsOperatingSystem::Ubuntu => "ubuntu".to_string(),
+            UpdateTargetsOperatingSystem::UnknownVariant(UnknownUpdateTargetsOperatingSystem {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateTargetsOperatingSystem {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateTargetsOperatingSystem::AmazonLinux => &"amazon_linux",
+            UpdateTargetsOperatingSystem::Openwrt => &"openwrt",
+            UpdateTargetsOperatingSystem::Raspbian => &"raspbian",
+            UpdateTargetsOperatingSystem::Ubuntu => &"ubuntu",
+            UpdateTargetsOperatingSystem::UnknownVariant(UnknownUpdateTargetsOperatingSystem {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for UpdateTargetsOperatingSystem {
+    fn from(name: &str) -> Self {
+        match name {
+            "amazon_linux" => UpdateTargetsOperatingSystem::AmazonLinux,
+            "openwrt" => UpdateTargetsOperatingSystem::Openwrt,
+            "raspbian" => UpdateTargetsOperatingSystem::Raspbian,
+            "ubuntu" => UpdateTargetsOperatingSystem::Ubuntu,
+            _ => {
+                UpdateTargetsOperatingSystem::UnknownVariant(UnknownUpdateTargetsOperatingSystem {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for UpdateTargetsOperatingSystem {
+    fn from(name: String) -> Self {
+        match &*name {
+            "amazon_linux" => UpdateTargetsOperatingSystem::AmazonLinux,
+            "openwrt" => UpdateTargetsOperatingSystem::Openwrt,
+            "raspbian" => UpdateTargetsOperatingSystem::Raspbian,
+            "ubuntu" => UpdateTargetsOperatingSystem::Ubuntu,
+            _ => {
+                UpdateTargetsOperatingSystem::UnknownVariant(UnknownUpdateTargetsOperatingSystem {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateTargetsOperatingSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UpdateTargetsOperatingSystem {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateTargetsOperatingSystem {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

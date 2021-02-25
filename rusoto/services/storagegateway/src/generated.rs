@@ -94,6 +94,136 @@ pub struct ActivateGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActiveDirectoryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActiveDirectoryStatus {
+    AccessDenied,
+    Detached,
+    Joined,
+    Joining,
+    NetworkError,
+    Timeout,
+    UnknownError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActiveDirectoryStatus),
+}
+
+impl Default for ActiveDirectoryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActiveDirectoryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActiveDirectoryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActiveDirectoryStatus {
+    fn into(self) -> String {
+        match self {
+            ActiveDirectoryStatus::AccessDenied => "ACCESS_DENIED".to_string(),
+            ActiveDirectoryStatus::Detached => "DETACHED".to_string(),
+            ActiveDirectoryStatus::Joined => "JOINED".to_string(),
+            ActiveDirectoryStatus::Joining => "JOINING".to_string(),
+            ActiveDirectoryStatus::NetworkError => "NETWORK_ERROR".to_string(),
+            ActiveDirectoryStatus::Timeout => "TIMEOUT".to_string(),
+            ActiveDirectoryStatus::UnknownError => "UNKNOWN_ERROR".to_string(),
+            ActiveDirectoryStatus::UnknownVariant(UnknownActiveDirectoryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActiveDirectoryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ActiveDirectoryStatus::AccessDenied => &"ACCESS_DENIED",
+            ActiveDirectoryStatus::Detached => &"DETACHED",
+            ActiveDirectoryStatus::Joined => &"JOINED",
+            ActiveDirectoryStatus::Joining => &"JOINING",
+            ActiveDirectoryStatus::NetworkError => &"NETWORK_ERROR",
+            ActiveDirectoryStatus::Timeout => &"TIMEOUT",
+            ActiveDirectoryStatus::UnknownError => &"UNKNOWN_ERROR",
+            ActiveDirectoryStatus::UnknownVariant(UnknownActiveDirectoryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActiveDirectoryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => ActiveDirectoryStatus::AccessDenied,
+            "DETACHED" => ActiveDirectoryStatus::Detached,
+            "JOINED" => ActiveDirectoryStatus::Joined,
+            "JOINING" => ActiveDirectoryStatus::Joining,
+            "NETWORK_ERROR" => ActiveDirectoryStatus::NetworkError,
+            "TIMEOUT" => ActiveDirectoryStatus::Timeout,
+            "UNKNOWN_ERROR" => ActiveDirectoryStatus::UnknownError,
+            _ => ActiveDirectoryStatus::UnknownVariant(UnknownActiveDirectoryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActiveDirectoryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => ActiveDirectoryStatus::AccessDenied,
+            "DETACHED" => ActiveDirectoryStatus::Detached,
+            "JOINED" => ActiveDirectoryStatus::Joined,
+            "JOINING" => ActiveDirectoryStatus::Joining,
+            "NETWORK_ERROR" => ActiveDirectoryStatus::NetworkError,
+            "TIMEOUT" => ActiveDirectoryStatus::Timeout,
+            "UNKNOWN_ERROR" => ActiveDirectoryStatus::UnknownError,
+            _ => ActiveDirectoryStatus::UnknownVariant(UnknownActiveDirectoryStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActiveDirectoryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ActiveDirectoryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActiveDirectoryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddCacheInput {
@@ -267,6 +397,120 @@ pub struct AutomaticTapeCreationRule {
     pub worm: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAvailabilityMonitorTestStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AvailabilityMonitorTestStatus {
+    Complete,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAvailabilityMonitorTestStatus),
+}
+
+impl Default for AvailabilityMonitorTestStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AvailabilityMonitorTestStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AvailabilityMonitorTestStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AvailabilityMonitorTestStatus {
+    fn into(self) -> String {
+        match self {
+            AvailabilityMonitorTestStatus::Complete => "COMPLETE".to_string(),
+            AvailabilityMonitorTestStatus::Failed => "FAILED".to_string(),
+            AvailabilityMonitorTestStatus::Pending => "PENDING".to_string(),
+            AvailabilityMonitorTestStatus::UnknownVariant(
+                UnknownAvailabilityMonitorTestStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AvailabilityMonitorTestStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AvailabilityMonitorTestStatus::Complete => &"COMPLETE",
+            AvailabilityMonitorTestStatus::Failed => &"FAILED",
+            AvailabilityMonitorTestStatus::Pending => &"PENDING",
+            AvailabilityMonitorTestStatus::UnknownVariant(
+                UnknownAvailabilityMonitorTestStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for AvailabilityMonitorTestStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => AvailabilityMonitorTestStatus::Complete,
+            "FAILED" => AvailabilityMonitorTestStatus::Failed,
+            "PENDING" => AvailabilityMonitorTestStatus::Pending,
+            _ => AvailabilityMonitorTestStatus::UnknownVariant(
+                UnknownAvailabilityMonitorTestStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for AvailabilityMonitorTestStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => AvailabilityMonitorTestStatus::Complete,
+            "FAILED" => AvailabilityMonitorTestStatus::Failed,
+            "PENDING" => AvailabilityMonitorTestStatus::Pending,
+            _ => AvailabilityMonitorTestStatus::UnknownVariant(
+                UnknownAvailabilityMonitorTestStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AvailabilityMonitorTestStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AvailabilityMonitorTestStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AvailabilityMonitorTestStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p> Describes a bandwidth rate limit interval for a gateway. A bandwidth rate limit schedule consists of one or more bandwidth rate limit intervals. A bandwidth rate limit interval defines a period of time on one or more days of the week, during which bandwidth rate limits are specified for uploading, downloading, or both. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BandwidthRateLimitInterval {
@@ -403,6 +647,106 @@ pub struct CancelRetrievalOutput {
     pub tape_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCaseSensitivity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CaseSensitivity {
+    CaseSensitive,
+    ClientSpecified,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCaseSensitivity),
+}
+
+impl Default for CaseSensitivity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CaseSensitivity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CaseSensitivity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CaseSensitivity {
+    fn into(self) -> String {
+        match self {
+            CaseSensitivity::CaseSensitive => "CaseSensitive".to_string(),
+            CaseSensitivity::ClientSpecified => "ClientSpecified".to_string(),
+            CaseSensitivity::UnknownVariant(UnknownCaseSensitivity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CaseSensitivity {
+    fn into(self) -> &'a str {
+        match self {
+            CaseSensitivity::CaseSensitive => &"CaseSensitive",
+            CaseSensitivity::ClientSpecified => &"ClientSpecified",
+            CaseSensitivity::UnknownVariant(UnknownCaseSensitivity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CaseSensitivity {
+    fn from(name: &str) -> Self {
+        match name {
+            "CaseSensitive" => CaseSensitivity::CaseSensitive,
+            "ClientSpecified" => CaseSensitivity::ClientSpecified,
+            _ => CaseSensitivity::UnknownVariant(UnknownCaseSensitivity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CaseSensitivity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CaseSensitive" => CaseSensitivity::CaseSensitive,
+            "ClientSpecified" => CaseSensitivity::ClientSpecified,
+            _ => CaseSensitivity::UnknownVariant(UnknownCaseSensitivity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CaseSensitivity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CaseSensitivity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CaseSensitivity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes Challenge-Handshake Authentication Protocol (CHAP) information that supports authentication between your gateway and iSCSI initiators.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -529,7 +873,7 @@ pub struct CreateNFSFileShareInput {
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     /// <p>A value that sets the write status of a file share. Set this value to <code>true</code> to set the write status to read-only, otherwise set to <code>false</code>.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -588,7 +932,7 @@ pub struct CreateSMBFileShareInput {
     /// <p>The case of an object name in an Amazon S3 bucket. For <code>ClientSpecified</code>, the client determines the case sensitivity. For <code>CaseSensitive</code>, the gateway determines the case sensitivity. The default value is <code>ClientSpecified</code>.</p>
     #[serde(rename = "CaseSensitivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub case_sensitivity: Option<String>,
+    pub case_sensitivity: Option<CaseSensitivity>,
     /// <p>A unique string value that you supply that is used by file gateway to ensure idempotent file share creation.</p>
     #[serde(rename = "ClientToken")]
     pub client_token: String,
@@ -629,7 +973,7 @@ pub struct CreateSMBFileShareInput {
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     /// <p>A value that sets the write status of a file share. Set this value to <code>true</code> to set the write status to read-only, otherwise set to <code>false</code>.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -794,10 +1138,10 @@ pub struct CreateTapePoolInput {
     /// <p>Tape retention lock can be configured in two modes. When configured in governance mode, AWS accounts with specific IAM permissions are authorized to remove the tape retention lock from archived virtual tapes. When configured in compliance mode, the tape retention lock cannot be removed by any user, including the root AWS account.</p>
     #[serde(rename = "RetentionLockType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub retention_lock_type: Option<String>,
+    pub retention_lock_type: Option<RetentionLockType>,
     /// <p>The storage class that is associated with the new custom pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p>
     #[serde(rename = "StorageClass")]
-    pub storage_class: String,
+    pub storage_class: TapeStorageClass,
     /// <p><p>A list of up to 50 tags that can be assigned to tape pool. Each tag is a key-value pair.</p> <note> <p>Valid characters for key and value are letters, spaces, and numbers representable in UTF-8 format, and the following special characters: + - = . _ : / @. The maximum length of a tag&#39;s key is 128 characters, and the maximum length for a tag&#39;s value is 256.</p> </note></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1132,7 +1476,7 @@ pub struct DescribeAvailabilityMonitorTestOutput {
     /// <p>The status of the High Availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<AvailabilityMonitorTestStatus>,
 }
 
 /// <p>A JSON object containing the Amazon Resource Name (ARN) of the gateway.</p>
@@ -1317,7 +1661,7 @@ pub struct DescribeGatewayInformationOutput {
     /// <p>The type of hypervisor environment used by the host.</p>
     #[serde(rename = "HostEnvironment")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub host_environment: Option<String>,
+    pub host_environment: Option<HostEnvironment>,
     /// <p>The date on which the last software update was applied to the gateway. If the gateway has never been updated, this field does not return a value in the response.</p>
     #[serde(rename = "LastSoftwareUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1428,7 +1772,7 @@ pub struct DescribeSMBSettingsOutput {
     /// <p><p>Indicates the status of a gateway that is a member of the Active Directory domain.</p> <ul> <li> <p> <code>ACCESS<em>DENIED</code>: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p> <code>DETACHED</code>: Indicates that gateway is not joined to a domain.</p> </li> <li> <p> <code>JOINED</code>: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p> <code>JOINING</code>: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p> <code>NETWORK</em>ERROR</code>: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p> <code>TIMEOUT</code>: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p> <code>UNKNOWN_ERROR</code>: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
     #[serde(rename = "ActiveDirectoryStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_directory_status: Option<String>,
+    pub active_directory_status: Option<ActiveDirectoryStatus>,
     /// <p>The name of the domain that the gateway is joined to.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1447,7 +1791,7 @@ pub struct DescribeSMBSettingsOutput {
     /// <p><p>The type of security strategy that was specified for file gateway.</p> <ul> <li> <p> <code>ClientSpecified</code>: If you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment.</p> </li> <li> <p> <code>MandatorySigning</code>: If you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer.</p> </li> <li> <p> <code>MandatoryEncryption</code>: If you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer.</p> </li> </ul></p>
     #[serde(rename = "SMBSecurityStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub smb_security_strategy: Option<String>,
+    pub smb_security_strategy: Option<SMBSecurityStrategy>,
 }
 
 /// <p>A JSON object containing the <a>DescribeSnapshotScheduleInput$VolumeARN</a> of the volume.</p>
@@ -1797,6 +2141,416 @@ pub struct Disk {
     pub disk_status: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    ActivationKeyExpired,
+    ActivationKeyInvalid,
+    ActivationKeyNotFound,
+    AuthenticationFailure,
+    BandwidthThrottleScheduleNotFound,
+    Blocked,
+    CannotExportSnapshot,
+    ChapCredentialNotFound,
+    DiskAlreadyAllocated,
+    DiskDoesNotExist,
+    DiskSizeGreaterThanVolumeMaxSize,
+    DiskSizeLessThanVolumeSize,
+    DiskSizeNotGigAligned,
+    DuplicateCertificateInfo,
+    DuplicateSchedule,
+    EndpointNotFound,
+    GatewayInternalError,
+    GatewayNotConnected,
+    GatewayNotFound,
+    GatewayProxyNetworkConnectionBusy,
+    IamnotSupported,
+    InitiatorInvalid,
+    InitiatorNotFound,
+    InternalError,
+    InvalidEndpoint,
+    InvalidGateway,
+    InvalidParameters,
+    InvalidSchedule,
+    JoinDomainInProgress,
+    LocalStorageLimitExceeded,
+    LunAlreadyAllocated,
+    LunInvalid,
+    MaximumContentLengthExceeded,
+    MaximumTapeCartridgeCountExceeded,
+    MaximumVolumeCountExceeded,
+    NetworkConfigurationChanged,
+    NoDisksAvailable,
+    NotImplemented,
+    NotSupported,
+    OperationAborted,
+    OutdatedGateway,
+    ParametersNotImplemented,
+    RegionInvalid,
+    RequestTimeout,
+    ServiceUnavailable,
+    SnapshotDeleted,
+    SnapshotIdInvalid,
+    SnapshotInProgress,
+    SnapshotNotFound,
+    SnapshotScheduleNotFound,
+    StagingAreaFull,
+    StorageFailure,
+    TapeCartridgeNotFound,
+    TargetAlreadyExists,
+    TargetInvalid,
+    TargetNotFound,
+    UnauthorizedOperation,
+    VolumeAlreadyExists,
+    VolumeIdInvalid,
+    VolumeInUse,
+    VolumeNotFound,
+    VolumeNotReady,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::ActivationKeyExpired => "ActivationKeyExpired".to_string(),
+            ErrorCode::ActivationKeyInvalid => "ActivationKeyInvalid".to_string(),
+            ErrorCode::ActivationKeyNotFound => "ActivationKeyNotFound".to_string(),
+            ErrorCode::AuthenticationFailure => "AuthenticationFailure".to_string(),
+            ErrorCode::BandwidthThrottleScheduleNotFound => {
+                "BandwidthThrottleScheduleNotFound".to_string()
+            }
+            ErrorCode::Blocked => "Blocked".to_string(),
+            ErrorCode::CannotExportSnapshot => "CannotExportSnapshot".to_string(),
+            ErrorCode::ChapCredentialNotFound => "ChapCredentialNotFound".to_string(),
+            ErrorCode::DiskAlreadyAllocated => "DiskAlreadyAllocated".to_string(),
+            ErrorCode::DiskDoesNotExist => "DiskDoesNotExist".to_string(),
+            ErrorCode::DiskSizeGreaterThanVolumeMaxSize => {
+                "DiskSizeGreaterThanVolumeMaxSize".to_string()
+            }
+            ErrorCode::DiskSizeLessThanVolumeSize => "DiskSizeLessThanVolumeSize".to_string(),
+            ErrorCode::DiskSizeNotGigAligned => "DiskSizeNotGigAligned".to_string(),
+            ErrorCode::DuplicateCertificateInfo => "DuplicateCertificateInfo".to_string(),
+            ErrorCode::DuplicateSchedule => "DuplicateSchedule".to_string(),
+            ErrorCode::EndpointNotFound => "EndpointNotFound".to_string(),
+            ErrorCode::GatewayInternalError => "GatewayInternalError".to_string(),
+            ErrorCode::GatewayNotConnected => "GatewayNotConnected".to_string(),
+            ErrorCode::GatewayNotFound => "GatewayNotFound".to_string(),
+            ErrorCode::GatewayProxyNetworkConnectionBusy => {
+                "GatewayProxyNetworkConnectionBusy".to_string()
+            }
+            ErrorCode::IamnotSupported => "IAMNotSupported".to_string(),
+            ErrorCode::InitiatorInvalid => "InitiatorInvalid".to_string(),
+            ErrorCode::InitiatorNotFound => "InitiatorNotFound".to_string(),
+            ErrorCode::InternalError => "InternalError".to_string(),
+            ErrorCode::InvalidEndpoint => "InvalidEndpoint".to_string(),
+            ErrorCode::InvalidGateway => "InvalidGateway".to_string(),
+            ErrorCode::InvalidParameters => "InvalidParameters".to_string(),
+            ErrorCode::InvalidSchedule => "InvalidSchedule".to_string(),
+            ErrorCode::JoinDomainInProgress => "JoinDomainInProgress".to_string(),
+            ErrorCode::LocalStorageLimitExceeded => "LocalStorageLimitExceeded".to_string(),
+            ErrorCode::LunAlreadyAllocated => "LunAlreadyAllocated ".to_string(),
+            ErrorCode::LunInvalid => "LunInvalid".to_string(),
+            ErrorCode::MaximumContentLengthExceeded => "MaximumContentLengthExceeded".to_string(),
+            ErrorCode::MaximumTapeCartridgeCountExceeded => {
+                "MaximumTapeCartridgeCountExceeded".to_string()
+            }
+            ErrorCode::MaximumVolumeCountExceeded => "MaximumVolumeCountExceeded".to_string(),
+            ErrorCode::NetworkConfigurationChanged => "NetworkConfigurationChanged".to_string(),
+            ErrorCode::NoDisksAvailable => "NoDisksAvailable".to_string(),
+            ErrorCode::NotImplemented => "NotImplemented".to_string(),
+            ErrorCode::NotSupported => "NotSupported".to_string(),
+            ErrorCode::OperationAborted => "OperationAborted".to_string(),
+            ErrorCode::OutdatedGateway => "OutdatedGateway".to_string(),
+            ErrorCode::ParametersNotImplemented => "ParametersNotImplemented".to_string(),
+            ErrorCode::RegionInvalid => "RegionInvalid".to_string(),
+            ErrorCode::RequestTimeout => "RequestTimeout".to_string(),
+            ErrorCode::ServiceUnavailable => "ServiceUnavailable".to_string(),
+            ErrorCode::SnapshotDeleted => "SnapshotDeleted".to_string(),
+            ErrorCode::SnapshotIdInvalid => "SnapshotIdInvalid".to_string(),
+            ErrorCode::SnapshotInProgress => "SnapshotInProgress".to_string(),
+            ErrorCode::SnapshotNotFound => "SnapshotNotFound".to_string(),
+            ErrorCode::SnapshotScheduleNotFound => "SnapshotScheduleNotFound".to_string(),
+            ErrorCode::StagingAreaFull => "StagingAreaFull".to_string(),
+            ErrorCode::StorageFailure => "StorageFailure".to_string(),
+            ErrorCode::TapeCartridgeNotFound => "TapeCartridgeNotFound".to_string(),
+            ErrorCode::TargetAlreadyExists => "TargetAlreadyExists".to_string(),
+            ErrorCode::TargetInvalid => "TargetInvalid".to_string(),
+            ErrorCode::TargetNotFound => "TargetNotFound".to_string(),
+            ErrorCode::UnauthorizedOperation => "UnauthorizedOperation".to_string(),
+            ErrorCode::VolumeAlreadyExists => "VolumeAlreadyExists".to_string(),
+            ErrorCode::VolumeIdInvalid => "VolumeIdInvalid".to_string(),
+            ErrorCode::VolumeInUse => "VolumeInUse".to_string(),
+            ErrorCode::VolumeNotFound => "VolumeNotFound".to_string(),
+            ErrorCode::VolumeNotReady => "VolumeNotReady".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::ActivationKeyExpired => &"ActivationKeyExpired",
+            ErrorCode::ActivationKeyInvalid => &"ActivationKeyInvalid",
+            ErrorCode::ActivationKeyNotFound => &"ActivationKeyNotFound",
+            ErrorCode::AuthenticationFailure => &"AuthenticationFailure",
+            ErrorCode::BandwidthThrottleScheduleNotFound => &"BandwidthThrottleScheduleNotFound",
+            ErrorCode::Blocked => &"Blocked",
+            ErrorCode::CannotExportSnapshot => &"CannotExportSnapshot",
+            ErrorCode::ChapCredentialNotFound => &"ChapCredentialNotFound",
+            ErrorCode::DiskAlreadyAllocated => &"DiskAlreadyAllocated",
+            ErrorCode::DiskDoesNotExist => &"DiskDoesNotExist",
+            ErrorCode::DiskSizeGreaterThanVolumeMaxSize => &"DiskSizeGreaterThanVolumeMaxSize",
+            ErrorCode::DiskSizeLessThanVolumeSize => &"DiskSizeLessThanVolumeSize",
+            ErrorCode::DiskSizeNotGigAligned => &"DiskSizeNotGigAligned",
+            ErrorCode::DuplicateCertificateInfo => &"DuplicateCertificateInfo",
+            ErrorCode::DuplicateSchedule => &"DuplicateSchedule",
+            ErrorCode::EndpointNotFound => &"EndpointNotFound",
+            ErrorCode::GatewayInternalError => &"GatewayInternalError",
+            ErrorCode::GatewayNotConnected => &"GatewayNotConnected",
+            ErrorCode::GatewayNotFound => &"GatewayNotFound",
+            ErrorCode::GatewayProxyNetworkConnectionBusy => &"GatewayProxyNetworkConnectionBusy",
+            ErrorCode::IamnotSupported => &"IAMNotSupported",
+            ErrorCode::InitiatorInvalid => &"InitiatorInvalid",
+            ErrorCode::InitiatorNotFound => &"InitiatorNotFound",
+            ErrorCode::InternalError => &"InternalError",
+            ErrorCode::InvalidEndpoint => &"InvalidEndpoint",
+            ErrorCode::InvalidGateway => &"InvalidGateway",
+            ErrorCode::InvalidParameters => &"InvalidParameters",
+            ErrorCode::InvalidSchedule => &"InvalidSchedule",
+            ErrorCode::JoinDomainInProgress => &"JoinDomainInProgress",
+            ErrorCode::LocalStorageLimitExceeded => &"LocalStorageLimitExceeded",
+            ErrorCode::LunAlreadyAllocated => &"LunAlreadyAllocated ",
+            ErrorCode::LunInvalid => &"LunInvalid",
+            ErrorCode::MaximumContentLengthExceeded => &"MaximumContentLengthExceeded",
+            ErrorCode::MaximumTapeCartridgeCountExceeded => &"MaximumTapeCartridgeCountExceeded",
+            ErrorCode::MaximumVolumeCountExceeded => &"MaximumVolumeCountExceeded",
+            ErrorCode::NetworkConfigurationChanged => &"NetworkConfigurationChanged",
+            ErrorCode::NoDisksAvailable => &"NoDisksAvailable",
+            ErrorCode::NotImplemented => &"NotImplemented",
+            ErrorCode::NotSupported => &"NotSupported",
+            ErrorCode::OperationAborted => &"OperationAborted",
+            ErrorCode::OutdatedGateway => &"OutdatedGateway",
+            ErrorCode::ParametersNotImplemented => &"ParametersNotImplemented",
+            ErrorCode::RegionInvalid => &"RegionInvalid",
+            ErrorCode::RequestTimeout => &"RequestTimeout",
+            ErrorCode::ServiceUnavailable => &"ServiceUnavailable",
+            ErrorCode::SnapshotDeleted => &"SnapshotDeleted",
+            ErrorCode::SnapshotIdInvalid => &"SnapshotIdInvalid",
+            ErrorCode::SnapshotInProgress => &"SnapshotInProgress",
+            ErrorCode::SnapshotNotFound => &"SnapshotNotFound",
+            ErrorCode::SnapshotScheduleNotFound => &"SnapshotScheduleNotFound",
+            ErrorCode::StagingAreaFull => &"StagingAreaFull",
+            ErrorCode::StorageFailure => &"StorageFailure",
+            ErrorCode::TapeCartridgeNotFound => &"TapeCartridgeNotFound",
+            ErrorCode::TargetAlreadyExists => &"TargetAlreadyExists",
+            ErrorCode::TargetInvalid => &"TargetInvalid",
+            ErrorCode::TargetNotFound => &"TargetNotFound",
+            ErrorCode::UnauthorizedOperation => &"UnauthorizedOperation",
+            ErrorCode::VolumeAlreadyExists => &"VolumeAlreadyExists",
+            ErrorCode::VolumeIdInvalid => &"VolumeIdInvalid",
+            ErrorCode::VolumeInUse => &"VolumeInUse",
+            ErrorCode::VolumeNotFound => &"VolumeNotFound",
+            ErrorCode::VolumeNotReady => &"VolumeNotReady",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivationKeyExpired" => ErrorCode::ActivationKeyExpired,
+            "ActivationKeyInvalid" => ErrorCode::ActivationKeyInvalid,
+            "ActivationKeyNotFound" => ErrorCode::ActivationKeyNotFound,
+            "AuthenticationFailure" => ErrorCode::AuthenticationFailure,
+            "BandwidthThrottleScheduleNotFound" => ErrorCode::BandwidthThrottleScheduleNotFound,
+            "Blocked" => ErrorCode::Blocked,
+            "CannotExportSnapshot" => ErrorCode::CannotExportSnapshot,
+            "ChapCredentialNotFound" => ErrorCode::ChapCredentialNotFound,
+            "DiskAlreadyAllocated" => ErrorCode::DiskAlreadyAllocated,
+            "DiskDoesNotExist" => ErrorCode::DiskDoesNotExist,
+            "DiskSizeGreaterThanVolumeMaxSize" => ErrorCode::DiskSizeGreaterThanVolumeMaxSize,
+            "DiskSizeLessThanVolumeSize" => ErrorCode::DiskSizeLessThanVolumeSize,
+            "DiskSizeNotGigAligned" => ErrorCode::DiskSizeNotGigAligned,
+            "DuplicateCertificateInfo" => ErrorCode::DuplicateCertificateInfo,
+            "DuplicateSchedule" => ErrorCode::DuplicateSchedule,
+            "EndpointNotFound" => ErrorCode::EndpointNotFound,
+            "GatewayInternalError" => ErrorCode::GatewayInternalError,
+            "GatewayNotConnected" => ErrorCode::GatewayNotConnected,
+            "GatewayNotFound" => ErrorCode::GatewayNotFound,
+            "GatewayProxyNetworkConnectionBusy" => ErrorCode::GatewayProxyNetworkConnectionBusy,
+            "IAMNotSupported" => ErrorCode::IamnotSupported,
+            "InitiatorInvalid" => ErrorCode::InitiatorInvalid,
+            "InitiatorNotFound" => ErrorCode::InitiatorNotFound,
+            "InternalError" => ErrorCode::InternalError,
+            "InvalidEndpoint" => ErrorCode::InvalidEndpoint,
+            "InvalidGateway" => ErrorCode::InvalidGateway,
+            "InvalidParameters" => ErrorCode::InvalidParameters,
+            "InvalidSchedule" => ErrorCode::InvalidSchedule,
+            "JoinDomainInProgress" => ErrorCode::JoinDomainInProgress,
+            "LocalStorageLimitExceeded" => ErrorCode::LocalStorageLimitExceeded,
+            "LunAlreadyAllocated " => ErrorCode::LunAlreadyAllocated,
+            "LunInvalid" => ErrorCode::LunInvalid,
+            "MaximumContentLengthExceeded" => ErrorCode::MaximumContentLengthExceeded,
+            "MaximumTapeCartridgeCountExceeded" => ErrorCode::MaximumTapeCartridgeCountExceeded,
+            "MaximumVolumeCountExceeded" => ErrorCode::MaximumVolumeCountExceeded,
+            "NetworkConfigurationChanged" => ErrorCode::NetworkConfigurationChanged,
+            "NoDisksAvailable" => ErrorCode::NoDisksAvailable,
+            "NotImplemented" => ErrorCode::NotImplemented,
+            "NotSupported" => ErrorCode::NotSupported,
+            "OperationAborted" => ErrorCode::OperationAborted,
+            "OutdatedGateway" => ErrorCode::OutdatedGateway,
+            "ParametersNotImplemented" => ErrorCode::ParametersNotImplemented,
+            "RegionInvalid" => ErrorCode::RegionInvalid,
+            "RequestTimeout" => ErrorCode::RequestTimeout,
+            "ServiceUnavailable" => ErrorCode::ServiceUnavailable,
+            "SnapshotDeleted" => ErrorCode::SnapshotDeleted,
+            "SnapshotIdInvalid" => ErrorCode::SnapshotIdInvalid,
+            "SnapshotInProgress" => ErrorCode::SnapshotInProgress,
+            "SnapshotNotFound" => ErrorCode::SnapshotNotFound,
+            "SnapshotScheduleNotFound" => ErrorCode::SnapshotScheduleNotFound,
+            "StagingAreaFull" => ErrorCode::StagingAreaFull,
+            "StorageFailure" => ErrorCode::StorageFailure,
+            "TapeCartridgeNotFound" => ErrorCode::TapeCartridgeNotFound,
+            "TargetAlreadyExists" => ErrorCode::TargetAlreadyExists,
+            "TargetInvalid" => ErrorCode::TargetInvalid,
+            "TargetNotFound" => ErrorCode::TargetNotFound,
+            "UnauthorizedOperation" => ErrorCode::UnauthorizedOperation,
+            "VolumeAlreadyExists" => ErrorCode::VolumeAlreadyExists,
+            "VolumeIdInvalid" => ErrorCode::VolumeIdInvalid,
+            "VolumeInUse" => ErrorCode::VolumeInUse,
+            "VolumeNotFound" => ErrorCode::VolumeNotFound,
+            "VolumeNotReady" => ErrorCode::VolumeNotReady,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivationKeyExpired" => ErrorCode::ActivationKeyExpired,
+            "ActivationKeyInvalid" => ErrorCode::ActivationKeyInvalid,
+            "ActivationKeyNotFound" => ErrorCode::ActivationKeyNotFound,
+            "AuthenticationFailure" => ErrorCode::AuthenticationFailure,
+            "BandwidthThrottleScheduleNotFound" => ErrorCode::BandwidthThrottleScheduleNotFound,
+            "Blocked" => ErrorCode::Blocked,
+            "CannotExportSnapshot" => ErrorCode::CannotExportSnapshot,
+            "ChapCredentialNotFound" => ErrorCode::ChapCredentialNotFound,
+            "DiskAlreadyAllocated" => ErrorCode::DiskAlreadyAllocated,
+            "DiskDoesNotExist" => ErrorCode::DiskDoesNotExist,
+            "DiskSizeGreaterThanVolumeMaxSize" => ErrorCode::DiskSizeGreaterThanVolumeMaxSize,
+            "DiskSizeLessThanVolumeSize" => ErrorCode::DiskSizeLessThanVolumeSize,
+            "DiskSizeNotGigAligned" => ErrorCode::DiskSizeNotGigAligned,
+            "DuplicateCertificateInfo" => ErrorCode::DuplicateCertificateInfo,
+            "DuplicateSchedule" => ErrorCode::DuplicateSchedule,
+            "EndpointNotFound" => ErrorCode::EndpointNotFound,
+            "GatewayInternalError" => ErrorCode::GatewayInternalError,
+            "GatewayNotConnected" => ErrorCode::GatewayNotConnected,
+            "GatewayNotFound" => ErrorCode::GatewayNotFound,
+            "GatewayProxyNetworkConnectionBusy" => ErrorCode::GatewayProxyNetworkConnectionBusy,
+            "IAMNotSupported" => ErrorCode::IamnotSupported,
+            "InitiatorInvalid" => ErrorCode::InitiatorInvalid,
+            "InitiatorNotFound" => ErrorCode::InitiatorNotFound,
+            "InternalError" => ErrorCode::InternalError,
+            "InvalidEndpoint" => ErrorCode::InvalidEndpoint,
+            "InvalidGateway" => ErrorCode::InvalidGateway,
+            "InvalidParameters" => ErrorCode::InvalidParameters,
+            "InvalidSchedule" => ErrorCode::InvalidSchedule,
+            "JoinDomainInProgress" => ErrorCode::JoinDomainInProgress,
+            "LocalStorageLimitExceeded" => ErrorCode::LocalStorageLimitExceeded,
+            "LunAlreadyAllocated " => ErrorCode::LunAlreadyAllocated,
+            "LunInvalid" => ErrorCode::LunInvalid,
+            "MaximumContentLengthExceeded" => ErrorCode::MaximumContentLengthExceeded,
+            "MaximumTapeCartridgeCountExceeded" => ErrorCode::MaximumTapeCartridgeCountExceeded,
+            "MaximumVolumeCountExceeded" => ErrorCode::MaximumVolumeCountExceeded,
+            "NetworkConfigurationChanged" => ErrorCode::NetworkConfigurationChanged,
+            "NoDisksAvailable" => ErrorCode::NoDisksAvailable,
+            "NotImplemented" => ErrorCode::NotImplemented,
+            "NotSupported" => ErrorCode::NotSupported,
+            "OperationAborted" => ErrorCode::OperationAborted,
+            "OutdatedGateway" => ErrorCode::OutdatedGateway,
+            "ParametersNotImplemented" => ErrorCode::ParametersNotImplemented,
+            "RegionInvalid" => ErrorCode::RegionInvalid,
+            "RequestTimeout" => ErrorCode::RequestTimeout,
+            "ServiceUnavailable" => ErrorCode::ServiceUnavailable,
+            "SnapshotDeleted" => ErrorCode::SnapshotDeleted,
+            "SnapshotIdInvalid" => ErrorCode::SnapshotIdInvalid,
+            "SnapshotInProgress" => ErrorCode::SnapshotInProgress,
+            "SnapshotNotFound" => ErrorCode::SnapshotNotFound,
+            "SnapshotScheduleNotFound" => ErrorCode::SnapshotScheduleNotFound,
+            "StagingAreaFull" => ErrorCode::StagingAreaFull,
+            "StorageFailure" => ErrorCode::StorageFailure,
+            "TapeCartridgeNotFound" => ErrorCode::TapeCartridgeNotFound,
+            "TargetAlreadyExists" => ErrorCode::TargetAlreadyExists,
+            "TargetInvalid" => ErrorCode::TargetInvalid,
+            "TargetNotFound" => ErrorCode::TargetNotFound,
+            "UnauthorizedOperation" => ErrorCode::UnauthorizedOperation,
+            "VolumeAlreadyExists" => ErrorCode::VolumeAlreadyExists,
+            "VolumeIdInvalid" => ErrorCode::VolumeIdInvalid,
+            "VolumeInUse" => ErrorCode::VolumeInUse,
+            "VolumeNotFound" => ErrorCode::VolumeNotFound,
+            "VolumeNotReady" => ErrorCode::VolumeNotReady,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a file share.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1812,10 +2566,113 @@ pub struct FileShareInfo {
     pub file_share_status: Option<String>,
     #[serde(rename = "FileShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_share_type: Option<String>,
+    pub file_share_type: Option<FileShareType>,
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
+}
+
+/// <p>The type of the file share.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileShareType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileShareType {
+    Nfs,
+    Smb,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileShareType),
+}
+
+impl Default for FileShareType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileShareType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileShareType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileShareType {
+    fn into(self) -> String {
+        match self {
+            FileShareType::Nfs => "NFS".to_string(),
+            FileShareType::Smb => "SMB".to_string(),
+            FileShareType::UnknownVariant(UnknownFileShareType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileShareType {
+    fn into(self) -> &'a str {
+        match self {
+            FileShareType::Nfs => &"NFS",
+            FileShareType::Smb => &"SMB",
+            FileShareType::UnknownVariant(UnknownFileShareType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileShareType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NFS" => FileShareType::Nfs,
+            "SMB" => FileShareType::Smb,
+            _ => FileShareType::UnknownVariant(UnknownFileShareType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileShareType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NFS" => FileShareType::Nfs,
+            "SMB" => FileShareType::Smb,
+            _ => FileShareType::UnknownVariant(UnknownFileShareType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileShareType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FileShareType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileShareType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a gateway object.</p>
@@ -1850,6 +2707,122 @@ pub struct GatewayInfo {
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHostEnvironment {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HostEnvironment {
+    Ec2,
+    HyperV,
+    Kvm,
+    Other,
+    Vmware,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHostEnvironment),
+}
+
+impl Default for HostEnvironment {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HostEnvironment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HostEnvironment {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HostEnvironment {
+    fn into(self) -> String {
+        match self {
+            HostEnvironment::Ec2 => "EC2".to_string(),
+            HostEnvironment::HyperV => "HYPER-V".to_string(),
+            HostEnvironment::Kvm => "KVM".to_string(),
+            HostEnvironment::Other => "OTHER".to_string(),
+            HostEnvironment::Vmware => "VMWARE".to_string(),
+            HostEnvironment::UnknownVariant(UnknownHostEnvironment { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HostEnvironment {
+    fn into(self) -> &'a str {
+        match self {
+            HostEnvironment::Ec2 => &"EC2",
+            HostEnvironment::HyperV => &"HYPER-V",
+            HostEnvironment::Kvm => &"KVM",
+            HostEnvironment::Other => &"OTHER",
+            HostEnvironment::Vmware => &"VMWARE",
+            HostEnvironment::UnknownVariant(UnknownHostEnvironment { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HostEnvironment {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => HostEnvironment::Ec2,
+            "HYPER-V" => HostEnvironment::HyperV,
+            "KVM" => HostEnvironment::Kvm,
+            "OTHER" => HostEnvironment::Other,
+            "VMWARE" => HostEnvironment::Vmware,
+            _ => HostEnvironment::UnknownVariant(UnknownHostEnvironment {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HostEnvironment {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => HostEnvironment::Ec2,
+            "HYPER-V" => HostEnvironment::HyperV,
+            "KVM" => HostEnvironment::Kvm,
+            "OTHER" => HostEnvironment::Other,
+            "VMWARE" => HostEnvironment::Vmware,
+            _ => HostEnvironment::UnknownVariant(UnknownHostEnvironment { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HostEnvironment {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HostEnvironment {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HostEnvironment {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>JoinDomainInput</p>
@@ -1889,7 +2862,7 @@ pub struct JoinDomainOutput {
     /// <p><p>Indicates the status of the gateway as a member of the Active Directory domain.</p> <ul> <li> <p> <code>ACCESS<em>DENIED</code>: Indicates that the <code>JoinDomain</code> operation failed due to an authentication error.</p> </li> <li> <p> <code>DETACHED</code>: Indicates that gateway is not joined to a domain.</p> </li> <li> <p> <code>JOINED</code>: Indicates that the gateway has successfully joined a domain.</p> </li> <li> <p> <code>JOINING</code>: Indicates that a <code>JoinDomain</code> operation is in progress.</p> </li> <li> <p> <code>NETWORK</em>ERROR</code>: Indicates that <code>JoinDomain</code> operation failed due to a network or connectivity error.</p> </li> <li> <p> <code>TIMEOUT</code>: Indicates that the <code>JoinDomain</code> operation failed because the operation didn&#39;t complete within the allotted time.</p> </li> <li> <p> <code>UNKNOWN_ERROR</code>: Indicates that the <code>JoinDomain</code> operation failed due to another type of error.</p> </li> </ul></p>
     #[serde(rename = "ActiveDirectoryStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub active_directory_status: Option<String>,
+    pub active_directory_status: Option<ActiveDirectoryStatus>,
     /// <p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2238,7 +3211,7 @@ pub struct NFSFileShareInfo {
     pub notification_policy: Option<String>,
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
@@ -2298,6 +3271,133 @@ pub struct NotifyWhenUploadedOutput {
     pub notification_id: Option<String>,
 }
 
+/// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectACL {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectACL {
+    AuthenticatedRead,
+    AwsExecRead,
+    BucketOwnerFullControl,
+    BucketOwnerRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectACL),
+}
+
+impl Default for ObjectACL {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectACL {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectACL {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectACL {
+    fn into(self) -> String {
+        match self {
+            ObjectACL::AuthenticatedRead => "authenticated-read".to_string(),
+            ObjectACL::AwsExecRead => "aws-exec-read".to_string(),
+            ObjectACL::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
+            ObjectACL::BucketOwnerRead => "bucket-owner-read".to_string(),
+            ObjectACL::Private => "private".to_string(),
+            ObjectACL::PublicRead => "public-read".to_string(),
+            ObjectACL::PublicReadWrite => "public-read-write".to_string(),
+            ObjectACL::UnknownVariant(UnknownObjectACL { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectACL {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectACL::AuthenticatedRead => &"authenticated-read",
+            ObjectACL::AwsExecRead => &"aws-exec-read",
+            ObjectACL::BucketOwnerFullControl => &"bucket-owner-full-control",
+            ObjectACL::BucketOwnerRead => &"bucket-owner-read",
+            ObjectACL::Private => &"private",
+            ObjectACL::PublicRead => &"public-read",
+            ObjectACL::PublicReadWrite => &"public-read-write",
+            ObjectACL::UnknownVariant(UnknownObjectACL { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectACL {
+    fn from(name: &str) -> Self {
+        match name {
+            "authenticated-read" => ObjectACL::AuthenticatedRead,
+            "aws-exec-read" => ObjectACL::AwsExecRead,
+            "bucket-owner-full-control" => ObjectACL::BucketOwnerFullControl,
+            "bucket-owner-read" => ObjectACL::BucketOwnerRead,
+            "private" => ObjectACL::Private,
+            "public-read" => ObjectACL::PublicRead,
+            "public-read-write" => ObjectACL::PublicReadWrite,
+            _ => ObjectACL::UnknownVariant(UnknownObjectACL {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectACL {
+    fn from(name: String) -> Self {
+        match &*name {
+            "authenticated-read" => ObjectACL::AuthenticatedRead,
+            "aws-exec-read" => ObjectACL::AwsExecRead,
+            "bucket-owner-full-control" => ObjectACL::BucketOwnerFullControl,
+            "bucket-owner-read" => ObjectACL::BucketOwnerRead,
+            "private" => ObjectACL::Private,
+            "public-read" => ObjectACL::PublicRead,
+            "public-read-write" => ObjectACL::PublicReadWrite,
+            _ => ObjectACL::UnknownVariant(UnknownObjectACL { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ObjectACL {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ObjectACL {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a custom tape pool.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2313,7 +3413,7 @@ pub struct PoolInfo {
     /// <p>Status of the custom tape pool. Pool can be <code>ACTIVE</code> or <code>DELETED</code>.</p>
     #[serde(rename = "PoolStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pool_status: Option<String>,
+    pub pool_status: Option<PoolStatus>,
     /// <p>Tape retention lock time is set in days. Tape retention lock can be enabled for up to 100 years (36,500 days).</p>
     #[serde(rename = "RetentionLockTimeInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2321,11 +3421,112 @@ pub struct PoolInfo {
     /// <p>Tape retention lock type, which can be configured in two modes. When configured in governance mode, AWS accounts with specific IAM permissions are authorized to remove the tape retention lock from archived virtual tapes. When configured in compliance mode, the tape retention lock cannot be removed by any user, including the root AWS account.</p>
     #[serde(rename = "RetentionLockType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub retention_lock_type: Option<String>,
+    pub retention_lock_type: Option<RetentionLockType>,
     /// <p>The storage class that is associated with the custom pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (S3 Glacier or S3 Glacier Deep Archive) that corresponds to the pool.</p>
     #[serde(rename = "StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_class: Option<String>,
+    pub storage_class: Option<TapeStorageClass>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPoolStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PoolStatus {
+    Active,
+    Deleted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPoolStatus),
+}
+
+impl Default for PoolStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PoolStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PoolStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PoolStatus {
+    fn into(self) -> String {
+        match self {
+            PoolStatus::Active => "ACTIVE".to_string(),
+            PoolStatus::Deleted => "DELETED".to_string(),
+            PoolStatus::UnknownVariant(UnknownPoolStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PoolStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PoolStatus::Active => &"ACTIVE",
+            PoolStatus::Deleted => &"DELETED",
+            PoolStatus::UnknownVariant(UnknownPoolStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PoolStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => PoolStatus::Active,
+            "DELETED" => PoolStatus::Deleted,
+            _ => PoolStatus::UnknownVariant(UnknownPoolStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PoolStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => PoolStatus::Active,
+            "DELETED" => PoolStatus::Deleted,
+            _ => PoolStatus::UnknownVariant(UnknownPoolStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PoolStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PoolStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PoolStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>RefreshCacheInput</p>
@@ -2392,6 +3593,115 @@ pub struct ResetCacheOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRetentionLockType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RetentionLockType {
+    Compliance,
+    Governance,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRetentionLockType),
+}
+
+impl Default for RetentionLockType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RetentionLockType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RetentionLockType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RetentionLockType {
+    fn into(self) -> String {
+        match self {
+            RetentionLockType::Compliance => "COMPLIANCE".to_string(),
+            RetentionLockType::Governance => "GOVERNANCE".to_string(),
+            RetentionLockType::None => "NONE".to_string(),
+            RetentionLockType::UnknownVariant(UnknownRetentionLockType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RetentionLockType {
+    fn into(self) -> &'a str {
+        match self {
+            RetentionLockType::Compliance => &"COMPLIANCE",
+            RetentionLockType::Governance => &"GOVERNANCE",
+            RetentionLockType::None => &"NONE",
+            RetentionLockType::UnknownVariant(UnknownRetentionLockType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RetentionLockType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANCE" => RetentionLockType::Compliance,
+            "GOVERNANCE" => RetentionLockType::Governance,
+            "NONE" => RetentionLockType::None,
+            _ => RetentionLockType::UnknownVariant(UnknownRetentionLockType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RetentionLockType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANCE" => RetentionLockType::Compliance,
+            "GOVERNANCE" => RetentionLockType::Governance,
+            "NONE" => RetentionLockType::None,
+            _ => RetentionLockType::UnknownVariant(UnknownRetentionLockType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RetentionLockType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RetentionLockType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RetentionLockType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>RetrieveTapeArchiveInput</p>
@@ -2463,7 +3773,7 @@ pub struct SMBFileShareInfo {
     /// <p>The case of an object name in an Amazon S3 bucket. For <code>ClientSpecified</code>, the client determines the case sensitivity. For <code>CaseSensitive</code>, the gateway determines the case sensitivity. The default value is <code>ClientSpecified</code>.</p>
     #[serde(rename = "CaseSensitivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub case_sensitivity: Option<String>,
+    pub case_sensitivity: Option<CaseSensitivity>,
     /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. The default value is <code>S3_INTELLIGENT_TIERING</code>. Optional.</p> <p>Valid Values: <code>S3_STANDARD</code> | <code>S3_INTELLIGENT_TIERING</code> | <code>S3_STANDARD_IA</code> | <code>S3_ONEZONE_IA</code> </p>
     #[serde(rename = "DefaultStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2508,7 +3818,7 @@ pub struct SMBFileShareInfo {
     pub notification_policy: Option<String>,
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     /// <p>The file share path used by the SMB client to identify the mount point.</p>
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2536,6 +3846,115 @@ pub struct SMBFileShareInfo {
     #[serde(rename = "ValidUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub valid_user_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSMBSecurityStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SMBSecurityStrategy {
+    ClientSpecified,
+    MandatoryEncryption,
+    MandatorySigning,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSMBSecurityStrategy),
+}
+
+impl Default for SMBSecurityStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SMBSecurityStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SMBSecurityStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SMBSecurityStrategy {
+    fn into(self) -> String {
+        match self {
+            SMBSecurityStrategy::ClientSpecified => "ClientSpecified".to_string(),
+            SMBSecurityStrategy::MandatoryEncryption => "MandatoryEncryption".to_string(),
+            SMBSecurityStrategy::MandatorySigning => "MandatorySigning".to_string(),
+            SMBSecurityStrategy::UnknownVariant(UnknownSMBSecurityStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SMBSecurityStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            SMBSecurityStrategy::ClientSpecified => &"ClientSpecified",
+            SMBSecurityStrategy::MandatoryEncryption => &"MandatoryEncryption",
+            SMBSecurityStrategy::MandatorySigning => &"MandatorySigning",
+            SMBSecurityStrategy::UnknownVariant(UnknownSMBSecurityStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SMBSecurityStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ClientSpecified" => SMBSecurityStrategy::ClientSpecified,
+            "MandatoryEncryption" => SMBSecurityStrategy::MandatoryEncryption,
+            "MandatorySigning" => SMBSecurityStrategy::MandatorySigning,
+            _ => SMBSecurityStrategy::UnknownVariant(UnknownSMBSecurityStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SMBSecurityStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ClientSpecified" => SMBSecurityStrategy::ClientSpecified,
+            "MandatoryEncryption" => SMBSecurityStrategy::MandatoryEncryption,
+            "MandatorySigning" => SMBSecurityStrategy::MandatorySigning,
+            _ => SMBSecurityStrategy::UnknownVariant(UnknownSMBSecurityStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SMBSecurityStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SMBSecurityStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SMBSecurityStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>SetLocalConsolePasswordInput</p>
@@ -2630,7 +4049,7 @@ pub struct StartGatewayOutput {
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct StorageGatewayError {
     /// <p>Additional information about the error.</p>
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>Human-readable text that provides detail about the error that occurred.</p>
     pub error_details: Option<::std::collections::HashMap<String, String>>,
 }
@@ -2885,6 +4304,110 @@ pub struct TapeRecoveryPointInfo {
     pub tape_status: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTapeStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TapeStorageClass {
+    DeepArchive,
+    Glacier,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTapeStorageClass),
+}
+
+impl Default for TapeStorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TapeStorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TapeStorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TapeStorageClass {
+    fn into(self) -> String {
+        match self {
+            TapeStorageClass::DeepArchive => "DEEP_ARCHIVE".to_string(),
+            TapeStorageClass::Glacier => "GLACIER".to_string(),
+            TapeStorageClass::UnknownVariant(UnknownTapeStorageClass { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TapeStorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            TapeStorageClass::DeepArchive => &"DEEP_ARCHIVE",
+            TapeStorageClass::Glacier => &"GLACIER",
+            TapeStorageClass::UnknownVariant(UnknownTapeStorageClass { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TapeStorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEEP_ARCHIVE" => TapeStorageClass::DeepArchive,
+            "GLACIER" => TapeStorageClass::Glacier,
+            _ => TapeStorageClass::UnknownVariant(UnknownTapeStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TapeStorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEEP_ARCHIVE" => TapeStorageClass::DeepArchive,
+            "GLACIER" => TapeStorageClass::Glacier,
+            _ => TapeStorageClass::UnknownVariant(UnknownTapeStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TapeStorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TapeStorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TapeStorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAutomaticTapeCreationPolicyInput {
@@ -3104,7 +4627,7 @@ pub struct UpdateNFSFileShareInput {
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     /// <p>A value that sets the write status of a file share. Set this value to <code>true</code> to set the write status to read-only, otherwise set to <code>false</code>.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3152,7 +4675,7 @@ pub struct UpdateSMBFileShareInput {
     /// <p>The case of an object name in an Amazon S3 bucket. For <code>ClientSpecified</code>, the client determines the case sensitivity. For <code>CaseSensitive</code>, the gateway determines the case sensitivity. The default value is <code>ClientSpecified</code>.</p>
     #[serde(rename = "CaseSensitivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub case_sensitivity: Option<String>,
+    pub case_sensitivity: Option<CaseSensitivity>,
     /// <p>The default storage class for objects put into an Amazon S3 bucket by the file gateway. The default value is <code>S3_INTELLIGENT_TIERING</code>. Optional.</p> <p>Valid Values: <code>S3_STANDARD</code> | <code>S3_INTELLIGENT_TIERING</code> | <code>S3_STANDARD_IA</code> | <code>S3_ONEZONE_IA</code> </p>
     #[serde(rename = "DefaultStorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3187,7 +4710,7 @@ pub struct UpdateSMBFileShareInput {
     /// <p>A value that sets the access control list (ACL) permission for objects in the S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>
     #[serde(rename = "ObjectACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_acl: Option<String>,
+    pub object_acl: Option<ObjectACL>,
     /// <p>A value that sets the write status of a file share. Set this value to <code>true</code> to set write status to read-only, otherwise set to <code>false</code>.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
     #[serde(rename = "ReadOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3241,7 +4764,7 @@ pub struct UpdateSMBSecurityStrategyInput {
     pub gateway_arn: String,
     /// <p>Specifies the type of security strategy.</p> <p>ClientSpecified: if you use this option, requests are established based on what is negotiated by the client. This option is recommended when you want to maximize compatibility across different clients in your environment.</p> <p>MandatorySigning: if you use this option, file gateway only allows connections from SMBv2 or SMBv3 clients that have signing enabled. This option works with SMB clients on Microsoft Windows Vista, Windows Server 2008 or newer.</p> <p>MandatoryEncryption: if you use this option, file gateway only allows connections from SMBv3 clients that have encryption enabled. This option is highly recommended for environments that handle sensitive data. This option works with SMB clients on Microsoft Windows 8, Windows Server 2012 or newer.</p>
     #[serde(rename = "SMBSecurityStrategy")]
-    pub smb_security_strategy: String,
+    pub smb_security_strategy: SMBSecurityStrategy,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

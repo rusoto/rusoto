@@ -89,6 +89,107 @@ pub struct DescribeReportCreationOutput {
     pub status: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    InternalServiceException,
+    InvalidParameterException,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::InternalServiceException => "InternalServiceException".to_string(),
+            ErrorCode::InvalidParameterException => "InvalidParameterException".to_string(),
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::InternalServiceException => &"InternalServiceException",
+            ErrorCode::InvalidParameterException => &"InvalidParameterException",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "InternalServiceException" => ErrorCode::InternalServiceException,
+            "InvalidParameterException" => ErrorCode::InvalidParameterException,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InternalServiceException" => ErrorCode::InternalServiceException,
+            "InvalidParameterException" => ErrorCode::InvalidParameterException,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the errors that are returned for each failed resource. This information can include <code>InternalServiceException</code> and <code>InvalidParameterException</code> errors. It can also include any valid error code returned by the AWS service that hosts the resource that the ARN key represents.</p> <p>The following are common error codes that you might receive from other AWS services:</p> <ul> <li> <p> <b>InternalServiceException</b> – This can mean that the Resource Groups Tagging API didn't receive a response from another AWS service. It can also mean the the resource type in the request is not supported by the Resource Groups Tagging API. In these cases, it's safe to retry the request and then call <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html">GetResources</a> to verify the changes.</p> </li> <li> <p> <b>AccessDeniedException</b> – This can mean that you need permission to calling tagging operations in the AWS service that contains the resource. For example, to use the Resource Groups Tagging API to tag a CloudWatch alarm resource, you need permission to call <a href="http://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_TagResources.html"> <code>TagResources</code> </a> <i>and</i> <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_TagResource.html"> <code>TagResource</code> </a> in the CloudWatch API. </p> </li> </ul> <p>For more information on errors that are generated from other AWS services, see the documentation for that service. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -96,7 +197,7 @@ pub struct FailureInfo {
     /// <p>The code of the common error. Valid values include <code>InternalServiceException</code>, <code>InvalidParameterException</code>, and any valid error code returned by the AWS service that hosts the resource that you want to tag.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>The message of the common error.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -113,7 +214,7 @@ pub struct GetComplianceSummaryInput {
     /// <p>A list of attributes to group the counts of noncompliant resources by. If supplied, the counts are sorted by those attributes.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub group_by: Option<Vec<String>>,
+    pub group_by: Option<Vec<GroupByAttribute>>,
     /// <p>A limit that restricts the number of results that are returned per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -246,6 +347,116 @@ pub struct GetTagValuesOutput {
     pub tag_values: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGroupByAttribute {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GroupByAttribute {
+    Region,
+    ResourceType,
+    TargetId,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGroupByAttribute),
+}
+
+impl Default for GroupByAttribute {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GroupByAttribute {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GroupByAttribute {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GroupByAttribute {
+    fn into(self) -> String {
+        match self {
+            GroupByAttribute::Region => "REGION".to_string(),
+            GroupByAttribute::ResourceType => "RESOURCE_TYPE".to_string(),
+            GroupByAttribute::TargetId => "TARGET_ID".to_string(),
+            GroupByAttribute::UnknownVariant(UnknownGroupByAttribute { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GroupByAttribute {
+    fn into(self) -> &'a str {
+        match self {
+            GroupByAttribute::Region => &"REGION",
+            GroupByAttribute::ResourceType => &"RESOURCE_TYPE",
+            GroupByAttribute::TargetId => &"TARGET_ID",
+            GroupByAttribute::UnknownVariant(UnknownGroupByAttribute { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GroupByAttribute {
+    fn from(name: &str) -> Self {
+        match name {
+            "REGION" => GroupByAttribute::Region,
+            "RESOURCE_TYPE" => GroupByAttribute::ResourceType,
+            "TARGET_ID" => GroupByAttribute::TargetId,
+            _ => GroupByAttribute::UnknownVariant(UnknownGroupByAttribute {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GroupByAttribute {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REGION" => GroupByAttribute::Region,
+            "RESOURCE_TYPE" => GroupByAttribute::ResourceType,
+            "TARGET_ID" => GroupByAttribute::TargetId,
+            _ => GroupByAttribute::UnknownVariant(UnknownGroupByAttribute { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GroupByAttribute {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GroupByAttribute {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GroupByAttribute {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -303,7 +514,7 @@ pub struct Summary {
     /// <p>Whether the target is an account, an OU, or the organization root.</p>
     #[serde(rename = "TargetIdType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_id_type: Option<String>,
+    pub target_id_type: Option<TargetIdType>,
 }
 
 /// <p>The metadata that you apply to AWS resources to help you categorize and organize them. Each tag consists of a key and a value, both of which you define. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a> in the <i>AWS General Reference</i>.</p>
@@ -350,6 +561,112 @@ pub struct TagResourcesOutput {
     #[serde(rename = "FailedResourcesMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetIdType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetIdType {
+    Account,
+    Ou,
+    Root,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetIdType),
+}
+
+impl Default for TargetIdType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetIdType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetIdType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetIdType {
+    fn into(self) -> String {
+        match self {
+            TargetIdType::Account => "ACCOUNT".to_string(),
+            TargetIdType::Ou => "OU".to_string(),
+            TargetIdType::Root => "ROOT".to_string(),
+            TargetIdType::UnknownVariant(UnknownTargetIdType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetIdType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetIdType::Account => &"ACCOUNT",
+            TargetIdType::Ou => &"OU",
+            TargetIdType::Root => &"ROOT",
+            TargetIdType::UnknownVariant(UnknownTargetIdType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetIdType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => TargetIdType::Account,
+            "OU" => TargetIdType::Ou,
+            "ROOT" => TargetIdType::Root,
+            _ => TargetIdType::UnknownVariant(UnknownTargetIdType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetIdType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => TargetIdType::Account,
+            "OU" => TargetIdType::Ou,
+            "ROOT" => TargetIdType::Root,
+            _ => TargetIdType::UnknownVariant(UnknownTargetIdType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetIdType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TargetIdType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetIdType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

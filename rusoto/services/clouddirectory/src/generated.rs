@@ -914,7 +914,185 @@ pub struct BatchReadException {
     /// <p>A type of exception, such as <code>InvalidArnException</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<BatchReadExceptionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchReadExceptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchReadExceptionType {
+    AccessDeniedException,
+    CannotListParentOfRootException,
+    DirectoryNotEnabledException,
+    FacetValidationException,
+    InternalServiceException,
+    InvalidArnException,
+    InvalidNextTokenException,
+    LimitExceededException,
+    NotIndexException,
+    NotNodeException,
+    NotPolicyException,
+    ResourceNotFoundException,
+    ValidationException,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchReadExceptionType),
+}
+
+impl Default for BatchReadExceptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchReadExceptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchReadExceptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchReadExceptionType {
+    fn into(self) -> String {
+        match self {
+            BatchReadExceptionType::AccessDeniedException => "AccessDeniedException".to_string(),
+            BatchReadExceptionType::CannotListParentOfRootException => {
+                "CannotListParentOfRootException".to_string()
+            }
+            BatchReadExceptionType::DirectoryNotEnabledException => {
+                "DirectoryNotEnabledException".to_string()
+            }
+            BatchReadExceptionType::FacetValidationException => {
+                "FacetValidationException".to_string()
+            }
+            BatchReadExceptionType::InternalServiceException => {
+                "InternalServiceException".to_string()
+            }
+            BatchReadExceptionType::InvalidArnException => "InvalidArnException".to_string(),
+            BatchReadExceptionType::InvalidNextTokenException => {
+                "InvalidNextTokenException".to_string()
+            }
+            BatchReadExceptionType::LimitExceededException => "LimitExceededException".to_string(),
+            BatchReadExceptionType::NotIndexException => "NotIndexException".to_string(),
+            BatchReadExceptionType::NotNodeException => "NotNodeException".to_string(),
+            BatchReadExceptionType::NotPolicyException => "NotPolicyException".to_string(),
+            BatchReadExceptionType::ResourceNotFoundException => {
+                "ResourceNotFoundException".to_string()
+            }
+            BatchReadExceptionType::ValidationException => "ValidationException".to_string(),
+            BatchReadExceptionType::UnknownVariant(UnknownBatchReadExceptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchReadExceptionType {
+    fn into(self) -> &'a str {
+        match self {
+            BatchReadExceptionType::AccessDeniedException => &"AccessDeniedException",
+            BatchReadExceptionType::CannotListParentOfRootException => {
+                &"CannotListParentOfRootException"
+            }
+            BatchReadExceptionType::DirectoryNotEnabledException => &"DirectoryNotEnabledException",
+            BatchReadExceptionType::FacetValidationException => &"FacetValidationException",
+            BatchReadExceptionType::InternalServiceException => &"InternalServiceException",
+            BatchReadExceptionType::InvalidArnException => &"InvalidArnException",
+            BatchReadExceptionType::InvalidNextTokenException => &"InvalidNextTokenException",
+            BatchReadExceptionType::LimitExceededException => &"LimitExceededException",
+            BatchReadExceptionType::NotIndexException => &"NotIndexException",
+            BatchReadExceptionType::NotNodeException => &"NotNodeException",
+            BatchReadExceptionType::NotPolicyException => &"NotPolicyException",
+            BatchReadExceptionType::ResourceNotFoundException => &"ResourceNotFoundException",
+            BatchReadExceptionType::ValidationException => &"ValidationException",
+            BatchReadExceptionType::UnknownVariant(UnknownBatchReadExceptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchReadExceptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDeniedException" => BatchReadExceptionType::AccessDeniedException,
+            "CannotListParentOfRootException" => {
+                BatchReadExceptionType::CannotListParentOfRootException
+            }
+            "DirectoryNotEnabledException" => BatchReadExceptionType::DirectoryNotEnabledException,
+            "FacetValidationException" => BatchReadExceptionType::FacetValidationException,
+            "InternalServiceException" => BatchReadExceptionType::InternalServiceException,
+            "InvalidArnException" => BatchReadExceptionType::InvalidArnException,
+            "InvalidNextTokenException" => BatchReadExceptionType::InvalidNextTokenException,
+            "LimitExceededException" => BatchReadExceptionType::LimitExceededException,
+            "NotIndexException" => BatchReadExceptionType::NotIndexException,
+            "NotNodeException" => BatchReadExceptionType::NotNodeException,
+            "NotPolicyException" => BatchReadExceptionType::NotPolicyException,
+            "ResourceNotFoundException" => BatchReadExceptionType::ResourceNotFoundException,
+            "ValidationException" => BatchReadExceptionType::ValidationException,
+            _ => BatchReadExceptionType::UnknownVariant(UnknownBatchReadExceptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BatchReadExceptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDeniedException" => BatchReadExceptionType::AccessDeniedException,
+            "CannotListParentOfRootException" => {
+                BatchReadExceptionType::CannotListParentOfRootException
+            }
+            "DirectoryNotEnabledException" => BatchReadExceptionType::DirectoryNotEnabledException,
+            "FacetValidationException" => BatchReadExceptionType::FacetValidationException,
+            "InternalServiceException" => BatchReadExceptionType::InternalServiceException,
+            "InvalidArnException" => BatchReadExceptionType::InvalidArnException,
+            "InvalidNextTokenException" => BatchReadExceptionType::InvalidNextTokenException,
+            "LimitExceededException" => BatchReadExceptionType::LimitExceededException,
+            "NotIndexException" => BatchReadExceptionType::NotIndexException,
+            "NotNodeException" => BatchReadExceptionType::NotNodeException,
+            "NotPolicyException" => BatchReadExceptionType::NotPolicyException,
+            "ResourceNotFoundException" => BatchReadExceptionType::ResourceNotFoundException,
+            "ValidationException" => BatchReadExceptionType::ValidationException,
+            _ => BatchReadExceptionType::UnknownVariant(UnknownBatchReadExceptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchReadExceptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BatchReadExceptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BatchReadExceptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the output of a <code>BatchRead</code> operation.</p>
@@ -998,7 +1176,7 @@ pub struct BatchReadRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a>. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -1131,6 +1309,240 @@ pub struct BatchUpdateObjectAttributesResponse {
     #[serde(rename = "ObjectIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_identifier: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchWriteExceptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchWriteExceptionType {
+    AccessDeniedException,
+    DirectoryNotEnabledException,
+    FacetValidationException,
+    IndexedAttributeMissingException,
+    InternalServiceException,
+    InvalidArnException,
+    InvalidAttachmentException,
+    LimitExceededException,
+    LinkNameAlreadyInUseException,
+    NotIndexException,
+    NotNodeException,
+    NotPolicyException,
+    ObjectAlreadyDetachedException,
+    ObjectNotDetachedException,
+    ResourceNotFoundException,
+    StillContainsLinksException,
+    UnsupportedIndexTypeException,
+    ValidationException,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchWriteExceptionType),
+}
+
+impl Default for BatchWriteExceptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchWriteExceptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchWriteExceptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchWriteExceptionType {
+    fn into(self) -> String {
+        match self {
+            BatchWriteExceptionType::AccessDeniedException => "AccessDeniedException".to_string(),
+            BatchWriteExceptionType::DirectoryNotEnabledException => {
+                "DirectoryNotEnabledException".to_string()
+            }
+            BatchWriteExceptionType::FacetValidationException => {
+                "FacetValidationException".to_string()
+            }
+            BatchWriteExceptionType::IndexedAttributeMissingException => {
+                "IndexedAttributeMissingException".to_string()
+            }
+            BatchWriteExceptionType::InternalServiceException => {
+                "InternalServiceException".to_string()
+            }
+            BatchWriteExceptionType::InvalidArnException => "InvalidArnException".to_string(),
+            BatchWriteExceptionType::InvalidAttachmentException => {
+                "InvalidAttachmentException".to_string()
+            }
+            BatchWriteExceptionType::LimitExceededException => "LimitExceededException".to_string(),
+            BatchWriteExceptionType::LinkNameAlreadyInUseException => {
+                "LinkNameAlreadyInUseException".to_string()
+            }
+            BatchWriteExceptionType::NotIndexException => "NotIndexException".to_string(),
+            BatchWriteExceptionType::NotNodeException => "NotNodeException".to_string(),
+            BatchWriteExceptionType::NotPolicyException => "NotPolicyException".to_string(),
+            BatchWriteExceptionType::ObjectAlreadyDetachedException => {
+                "ObjectAlreadyDetachedException".to_string()
+            }
+            BatchWriteExceptionType::ObjectNotDetachedException => {
+                "ObjectNotDetachedException".to_string()
+            }
+            BatchWriteExceptionType::ResourceNotFoundException => {
+                "ResourceNotFoundException".to_string()
+            }
+            BatchWriteExceptionType::StillContainsLinksException => {
+                "StillContainsLinksException".to_string()
+            }
+            BatchWriteExceptionType::UnsupportedIndexTypeException => {
+                "UnsupportedIndexTypeException".to_string()
+            }
+            BatchWriteExceptionType::ValidationException => "ValidationException".to_string(),
+            BatchWriteExceptionType::UnknownVariant(UnknownBatchWriteExceptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchWriteExceptionType {
+    fn into(self) -> &'a str {
+        match self {
+            BatchWriteExceptionType::AccessDeniedException => &"AccessDeniedException",
+            BatchWriteExceptionType::DirectoryNotEnabledException => {
+                &"DirectoryNotEnabledException"
+            }
+            BatchWriteExceptionType::FacetValidationException => &"FacetValidationException",
+            BatchWriteExceptionType::IndexedAttributeMissingException => {
+                &"IndexedAttributeMissingException"
+            }
+            BatchWriteExceptionType::InternalServiceException => &"InternalServiceException",
+            BatchWriteExceptionType::InvalidArnException => &"InvalidArnException",
+            BatchWriteExceptionType::InvalidAttachmentException => &"InvalidAttachmentException",
+            BatchWriteExceptionType::LimitExceededException => &"LimitExceededException",
+            BatchWriteExceptionType::LinkNameAlreadyInUseException => {
+                &"LinkNameAlreadyInUseException"
+            }
+            BatchWriteExceptionType::NotIndexException => &"NotIndexException",
+            BatchWriteExceptionType::NotNodeException => &"NotNodeException",
+            BatchWriteExceptionType::NotPolicyException => &"NotPolicyException",
+            BatchWriteExceptionType::ObjectAlreadyDetachedException => {
+                &"ObjectAlreadyDetachedException"
+            }
+            BatchWriteExceptionType::ObjectNotDetachedException => &"ObjectNotDetachedException",
+            BatchWriteExceptionType::ResourceNotFoundException => &"ResourceNotFoundException",
+            BatchWriteExceptionType::StillContainsLinksException => &"StillContainsLinksException",
+            BatchWriteExceptionType::UnsupportedIndexTypeException => {
+                &"UnsupportedIndexTypeException"
+            }
+            BatchWriteExceptionType::ValidationException => &"ValidationException",
+            BatchWriteExceptionType::UnknownVariant(UnknownBatchWriteExceptionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchWriteExceptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDeniedException" => BatchWriteExceptionType::AccessDeniedException,
+            "DirectoryNotEnabledException" => BatchWriteExceptionType::DirectoryNotEnabledException,
+            "FacetValidationException" => BatchWriteExceptionType::FacetValidationException,
+            "IndexedAttributeMissingException" => {
+                BatchWriteExceptionType::IndexedAttributeMissingException
+            }
+            "InternalServiceException" => BatchWriteExceptionType::InternalServiceException,
+            "InvalidArnException" => BatchWriteExceptionType::InvalidArnException,
+            "InvalidAttachmentException" => BatchWriteExceptionType::InvalidAttachmentException,
+            "LimitExceededException" => BatchWriteExceptionType::LimitExceededException,
+            "LinkNameAlreadyInUseException" => {
+                BatchWriteExceptionType::LinkNameAlreadyInUseException
+            }
+            "NotIndexException" => BatchWriteExceptionType::NotIndexException,
+            "NotNodeException" => BatchWriteExceptionType::NotNodeException,
+            "NotPolicyException" => BatchWriteExceptionType::NotPolicyException,
+            "ObjectAlreadyDetachedException" => {
+                BatchWriteExceptionType::ObjectAlreadyDetachedException
+            }
+            "ObjectNotDetachedException" => BatchWriteExceptionType::ObjectNotDetachedException,
+            "ResourceNotFoundException" => BatchWriteExceptionType::ResourceNotFoundException,
+            "StillContainsLinksException" => BatchWriteExceptionType::StillContainsLinksException,
+            "UnsupportedIndexTypeException" => {
+                BatchWriteExceptionType::UnsupportedIndexTypeException
+            }
+            "ValidationException" => BatchWriteExceptionType::ValidationException,
+            _ => BatchWriteExceptionType::UnknownVariant(UnknownBatchWriteExceptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BatchWriteExceptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDeniedException" => BatchWriteExceptionType::AccessDeniedException,
+            "DirectoryNotEnabledException" => BatchWriteExceptionType::DirectoryNotEnabledException,
+            "FacetValidationException" => BatchWriteExceptionType::FacetValidationException,
+            "IndexedAttributeMissingException" => {
+                BatchWriteExceptionType::IndexedAttributeMissingException
+            }
+            "InternalServiceException" => BatchWriteExceptionType::InternalServiceException,
+            "InvalidArnException" => BatchWriteExceptionType::InvalidArnException,
+            "InvalidAttachmentException" => BatchWriteExceptionType::InvalidAttachmentException,
+            "LimitExceededException" => BatchWriteExceptionType::LimitExceededException,
+            "LinkNameAlreadyInUseException" => {
+                BatchWriteExceptionType::LinkNameAlreadyInUseException
+            }
+            "NotIndexException" => BatchWriteExceptionType::NotIndexException,
+            "NotNodeException" => BatchWriteExceptionType::NotNodeException,
+            "NotPolicyException" => BatchWriteExceptionType::NotPolicyException,
+            "ObjectAlreadyDetachedException" => {
+                BatchWriteExceptionType::ObjectAlreadyDetachedException
+            }
+            "ObjectNotDetachedException" => BatchWriteExceptionType::ObjectNotDetachedException,
+            "ResourceNotFoundException" => BatchWriteExceptionType::ResourceNotFoundException,
+            "StillContainsLinksException" => BatchWriteExceptionType::StillContainsLinksException,
+            "UnsupportedIndexTypeException" => {
+                BatchWriteExceptionType::UnsupportedIndexTypeException
+            }
+            "ValidationException" => BatchWriteExceptionType::ValidationException,
+            _ => BatchWriteExceptionType::UnknownVariant(UnknownBatchWriteExceptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchWriteExceptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for BatchWriteExceptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BatchWriteExceptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the output of a <code>BatchWrite</code> operation. </p>
@@ -1285,6 +1697,111 @@ pub struct BatchWriteResponse {
     pub responses: Option<Vec<BatchWriteOperationResponse>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConsistencyLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConsistencyLevel {
+    Eventual,
+    Serializable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConsistencyLevel),
+}
+
+impl Default for ConsistencyLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConsistencyLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConsistencyLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConsistencyLevel {
+    fn into(self) -> String {
+        match self {
+            ConsistencyLevel::Eventual => "EVENTUAL".to_string(),
+            ConsistencyLevel::Serializable => "SERIALIZABLE".to_string(),
+            ConsistencyLevel::UnknownVariant(UnknownConsistencyLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConsistencyLevel {
+    fn into(self) -> &'a str {
+        match self {
+            ConsistencyLevel::Eventual => &"EVENTUAL",
+            ConsistencyLevel::Serializable => &"SERIALIZABLE",
+            ConsistencyLevel::UnknownVariant(UnknownConsistencyLevel { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConsistencyLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "EVENTUAL" => ConsistencyLevel::Eventual,
+            "SERIALIZABLE" => ConsistencyLevel::Serializable,
+            _ => ConsistencyLevel::UnknownVariant(UnknownConsistencyLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConsistencyLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EVENTUAL" => ConsistencyLevel::Eventual,
+            "SERIALIZABLE" => ConsistencyLevel::Serializable,
+            _ => ConsistencyLevel::UnknownVariant(UnknownConsistencyLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConsistencyLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConsistencyLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConsistencyLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDirectoryRequest {
@@ -1323,14 +1840,14 @@ pub struct CreateFacetRequest {
     /// <p>There are two different styles that you can define on any given facet, <code>Static</code> and <code>Dynamic</code>. For static facets, all attributes must be defined in the schema. For dynamic facets, attributes can be defined during data plane operations.</p>
     #[serde(rename = "FacetStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub facet_style: Option<String>,
+    pub facet_style: Option<FacetStyle>,
     /// <p>The name of the <a>Facet</a>, which is unique for a given schema.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p><p>Specifies whether a given object created from this facet is of type node, leaf node, policy or index.</p> <ul> <li> <p>Node: Can have multiple children but one parent.</p> </li> </ul> <ul> <li> <p>Leaf node: Cannot have children but can have multiple parents.</p> </li> </ul> <ul> <li> <p>Policy: Allows you to store a policy document and policy type. For more information, see <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/key_concepts_directory.html#key_concepts_policies">Policies</a>.</p> </li> </ul> <ul> <li> <p>Index: Can be created with the Index API.</p> </li> </ul></p>
     #[serde(rename = "ObjectType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_type: Option<String>,
+    pub object_type: Option<ObjectType>,
     /// <p>The schema ARN in which the new <a>Facet</a> will be created. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
     pub schema_arn: String,
@@ -1607,7 +2124,112 @@ pub struct Directory {
     /// <p>The state of the directory. Can be either <code>Enabled</code>, <code>Disabled</code>, or <code>Deleted</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DirectoryState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDirectoryState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DirectoryState {
+    Deleted,
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDirectoryState),
+}
+
+impl Default for DirectoryState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DirectoryState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DirectoryState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DirectoryState {
+    fn into(self) -> String {
+        match self {
+            DirectoryState::Deleted => "DELETED".to_string(),
+            DirectoryState::Disabled => "DISABLED".to_string(),
+            DirectoryState::Enabled => "ENABLED".to_string(),
+            DirectoryState::UnknownVariant(UnknownDirectoryState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DirectoryState {
+    fn into(self) -> &'a str {
+        match self {
+            DirectoryState::Deleted => &"DELETED",
+            DirectoryState::Disabled => &"DISABLED",
+            DirectoryState::Enabled => &"ENABLED",
+            DirectoryState::UnknownVariant(UnknownDirectoryState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DirectoryState {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETED" => DirectoryState::Deleted,
+            "DISABLED" => DirectoryState::Disabled,
+            "ENABLED" => DirectoryState::Enabled,
+            _ => DirectoryState::UnknownVariant(UnknownDirectoryState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DirectoryState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETED" => DirectoryState::Deleted,
+            "DISABLED" => DirectoryState::Disabled,
+            "ENABLED" => DirectoryState::Enabled,
+            _ => DirectoryState::UnknownVariant(UnknownDirectoryState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DirectoryState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DirectoryState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DirectoryState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1649,7 +2271,7 @@ pub struct Facet {
     /// <p>There are two different styles that you can define on any given facet, <code>Static</code> and <code>Dynamic</code>. For static facets, all attributes must be defined in the schema. For dynamic facets, attributes can be defined during data plane operations.</p>
     #[serde(rename = "FacetStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub facet_style: Option<String>,
+    pub facet_style: Option<FacetStyle>,
     /// <p>The name of the <a>Facet</a>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1657,7 +2279,7 @@ pub struct Facet {
     /// <p>The object type that is associated with the facet. See <a>CreateFacetRequest$ObjectType</a> for more details.</p>
     #[serde(rename = "ObjectType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_type: Option<String>,
+    pub object_type: Option<ObjectType>,
 }
 
 /// <p>An attribute that is associated with the <a>Facet</a>.</p>
@@ -1677,7 +2299,7 @@ pub struct FacetAttribute {
     /// <p>The required behavior of the <code>FacetAttribute</code>.</p>
     #[serde(rename = "RequiredBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub required_behavior: Option<String>,
+    pub required_behavior: Option<RequiredAttributeBehavior>,
 }
 
 /// <p>A facet attribute definition. See <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/schemas_attributereferences.html">Attribute References</a> for more information.</p>
@@ -1697,7 +2319,7 @@ pub struct FacetAttributeDefinition {
     pub rules: Option<::std::collections::HashMap<String, Rule>>,
     /// <p>The type of the attribute.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: FacetAttributeType,
 }
 
 /// <p>The facet attribute reference that specifies the attribute definition that contains the attribute facet name and attribute name.</p>
@@ -1711,6 +2333,130 @@ pub struct FacetAttributeReference {
     pub target_facet_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFacetAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FacetAttributeType {
+    Binary,
+    Boolean,
+    Datetime,
+    Number,
+    String,
+    Variant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFacetAttributeType),
+}
+
+impl Default for FacetAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FacetAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FacetAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FacetAttributeType {
+    fn into(self) -> String {
+        match self {
+            FacetAttributeType::Binary => "BINARY".to_string(),
+            FacetAttributeType::Boolean => "BOOLEAN".to_string(),
+            FacetAttributeType::Datetime => "DATETIME".to_string(),
+            FacetAttributeType::Number => "NUMBER".to_string(),
+            FacetAttributeType::String => "STRING".to_string(),
+            FacetAttributeType::Variant => "VARIANT".to_string(),
+            FacetAttributeType::UnknownVariant(UnknownFacetAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FacetAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            FacetAttributeType::Binary => &"BINARY",
+            FacetAttributeType::Boolean => &"BOOLEAN",
+            FacetAttributeType::Datetime => &"DATETIME",
+            FacetAttributeType::Number => &"NUMBER",
+            FacetAttributeType::String => &"STRING",
+            FacetAttributeType::Variant => &"VARIANT",
+            FacetAttributeType::UnknownVariant(UnknownFacetAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FacetAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BINARY" => FacetAttributeType::Binary,
+            "BOOLEAN" => FacetAttributeType::Boolean,
+            "DATETIME" => FacetAttributeType::Datetime,
+            "NUMBER" => FacetAttributeType::Number,
+            "STRING" => FacetAttributeType::String,
+            "VARIANT" => FacetAttributeType::Variant,
+            _ => FacetAttributeType::UnknownVariant(UnknownFacetAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FacetAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BINARY" => FacetAttributeType::Binary,
+            "BOOLEAN" => FacetAttributeType::Boolean,
+            "DATETIME" => FacetAttributeType::Datetime,
+            "NUMBER" => FacetAttributeType::Number,
+            "STRING" => FacetAttributeType::String,
+            "VARIANT" => FacetAttributeType::Variant,
+            _ => FacetAttributeType::UnknownVariant(UnknownFacetAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FacetAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FacetAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FacetAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A structure that contains information used to update an attribute.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1718,11 +2464,111 @@ pub struct FacetAttributeUpdate {
     /// <p>The action to perform when updating the attribute.</p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<UpdateActionType>,
     /// <p>The attribute to update.</p>
     #[serde(rename = "Attribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute: Option<FacetAttribute>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFacetStyle {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FacetStyle {
+    Dynamic,
+    Static,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFacetStyle),
+}
+
+impl Default for FacetStyle {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FacetStyle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FacetStyle {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FacetStyle {
+    fn into(self) -> String {
+        match self {
+            FacetStyle::Dynamic => "DYNAMIC".to_string(),
+            FacetStyle::Static => "STATIC".to_string(),
+            FacetStyle::UnknownVariant(UnknownFacetStyle { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FacetStyle {
+    fn into(self) -> &'a str {
+        match self {
+            FacetStyle::Dynamic => &"DYNAMIC",
+            FacetStyle::Static => &"STATIC",
+            FacetStyle::UnknownVariant(UnknownFacetStyle { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FacetStyle {
+    fn from(name: &str) -> Self {
+        match name {
+            "DYNAMIC" => FacetStyle::Dynamic,
+            "STATIC" => FacetStyle::Static,
+            _ => FacetStyle::UnknownVariant(UnknownFacetStyle {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FacetStyle {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DYNAMIC" => FacetStyle::Dynamic,
+            "STATIC" => FacetStyle::Static,
+            _ => FacetStyle::UnknownVariant(UnknownFacetStyle { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FacetStyle {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FacetStyle {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FacetStyle {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1787,7 +2633,7 @@ pub struct GetLinkAttributesRequest {
     /// <p>The consistency level at which to retrieve the attributes on a typed link.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the Directory where the typed link resides. For more information, see <a>arns</a> or <a href="https://docs.aws.amazon.com/clouddirectory/latest/developerguide/directory_objects_links.html#directory_objects_links_typedlink">Typed Links</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -1814,7 +2660,7 @@ pub struct GetObjectAttributesRequest {
     /// <p>The consistency level at which to retrieve the attributes on an object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -1841,7 +2687,7 @@ pub struct GetObjectInformationRequest {
     /// <p>The consistency level at which to retrieve the object information.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The ARN of the directory being retrieved.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -1925,7 +2771,7 @@ pub struct LinkAttributeAction {
     /// <p>A type that can be either <code>UPDATE_OR_CREATE</code> or <code>DELETE</code>.</p>
     #[serde(rename = "AttributeActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attribute_action_type: Option<String>,
+    pub attribute_action_type: Option<UpdateActionType>,
     /// <p>The value that you want to update to.</p>
     #[serde(rename = "AttributeUpdateValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1985,7 +2831,7 @@ pub struct ListAttachedIndicesRequest {
     /// <p>The consistency level to use for this operation.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The ARN of the directory.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2055,7 +2901,7 @@ pub struct ListDirectoriesRequest {
     /// <p>The state of the directories in the list. Can be either Enabled, Disabled, or Deleted.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DirectoryState>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2137,7 +2983,7 @@ pub struct ListIncomingTypedLinksRequest {
     /// <p>The consistency level to execute the request at.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) of the directory where you want to list the typed links.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2181,7 +3027,7 @@ pub struct ListIndexRequest {
     /// <p>The consistency level to execute the request at.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The ARN of the directory that the index exists in.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2251,7 +3097,7 @@ pub struct ListObjectAttributesRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2291,7 +3137,7 @@ pub struct ListObjectChildrenRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2359,7 +3205,7 @@ pub struct ListObjectParentsRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where the object resides. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2403,7 +3249,7 @@ pub struct ListObjectPoliciesRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2439,7 +3285,7 @@ pub struct ListOutgoingTypedLinksRequest {
     /// <p>The consistency level to execute the request at.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) of the directory where you want to list the typed links.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2483,7 +3329,7 @@ pub struct ListPolicyAttachmentsRequest {
     /// <p>Represents the manner and timing in which the successful write or update of an object is reflected in a subsequent read operation of that same object.</p>
     #[serde(rename = "ConsistencyLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub consistency_level: Option<String>,
+    pub consistency_level: Option<ConsistencyLevel>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Directory</a> where objects reside. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DirectoryArn")]
     pub directory_arn: String,
@@ -2672,7 +3518,7 @@ pub struct ObjectAttributeAction {
     /// <p>A type that can be either <code>Update</code> or <code>Delete</code>.</p>
     #[serde(rename = "ObjectAttributeActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_attribute_action_type: Option<String>,
+    pub object_attribute_action_type: Option<UpdateActionType>,
     /// <p>The value that you want to update to.</p>
     #[serde(rename = "ObjectAttributeUpdateValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2728,6 +3574,116 @@ pub struct ObjectReference {
     #[serde(rename = "Selector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selector: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectType {
+    Index,
+    LeafNode,
+    Node,
+    Policy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectType),
+}
+
+impl Default for ObjectType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectType {
+    fn into(self) -> String {
+        match self {
+            ObjectType::Index => "INDEX".to_string(),
+            ObjectType::LeafNode => "LEAF_NODE".to_string(),
+            ObjectType::Node => "NODE".to_string(),
+            ObjectType::Policy => "POLICY".to_string(),
+            ObjectType::UnknownVariant(UnknownObjectType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectType {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectType::Index => &"INDEX",
+            ObjectType::LeafNode => &"LEAF_NODE",
+            ObjectType::Node => &"NODE",
+            ObjectType::Policy => &"POLICY",
+            ObjectType::UnknownVariant(UnknownObjectType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INDEX" => ObjectType::Index,
+            "LEAF_NODE" => ObjectType::LeafNode,
+            "NODE" => ObjectType::Node,
+            "POLICY" => ObjectType::Policy,
+            _ => ObjectType::UnknownVariant(UnknownObjectType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INDEX" => ObjectType::Index,
+            "LEAF_NODE" => ObjectType::LeafNode,
+            "NODE" => ObjectType::Node,
+            "POLICY" => ObjectType::Policy,
+            _ => ObjectType::UnknownVariant(UnknownObjectType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ObjectType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ObjectType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns the path to the <code>ObjectIdentifiers</code> that is associated with the directory.</p>
@@ -2824,6 +3780,122 @@ pub struct PutSchemaFromJsonResponse {
     pub arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRangeMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RangeMode {
+    Exclusive,
+    First,
+    Inclusive,
+    Last,
+    LastBeforeMissingValues,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRangeMode),
+}
+
+impl Default for RangeMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RangeMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RangeMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RangeMode {
+    fn into(self) -> String {
+        match self {
+            RangeMode::Exclusive => "EXCLUSIVE".to_string(),
+            RangeMode::First => "FIRST".to_string(),
+            RangeMode::Inclusive => "INCLUSIVE".to_string(),
+            RangeMode::Last => "LAST".to_string(),
+            RangeMode::LastBeforeMissingValues => "LAST_BEFORE_MISSING_VALUES".to_string(),
+            RangeMode::UnknownVariant(UnknownRangeMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RangeMode {
+    fn into(self) -> &'a str {
+        match self {
+            RangeMode::Exclusive => &"EXCLUSIVE",
+            RangeMode::First => &"FIRST",
+            RangeMode::Inclusive => &"INCLUSIVE",
+            RangeMode::Last => &"LAST",
+            RangeMode::LastBeforeMissingValues => &"LAST_BEFORE_MISSING_VALUES",
+            RangeMode::UnknownVariant(UnknownRangeMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RangeMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXCLUSIVE" => RangeMode::Exclusive,
+            "FIRST" => RangeMode::First,
+            "INCLUSIVE" => RangeMode::Inclusive,
+            "LAST" => RangeMode::Last,
+            "LAST_BEFORE_MISSING_VALUES" => RangeMode::LastBeforeMissingValues,
+            _ => RangeMode::UnknownVariant(UnknownRangeMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RangeMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXCLUSIVE" => RangeMode::Exclusive,
+            "FIRST" => RangeMode::First,
+            "INCLUSIVE" => RangeMode::Inclusive,
+            "LAST" => RangeMode::Last,
+            "LAST_BEFORE_MISSING_VALUES" => RangeMode::LastBeforeMissingValues,
+            _ => RangeMode::UnknownVariant(UnknownRangeMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RangeMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RangeMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for RangeMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveFacetFromObjectRequest {
@@ -2842,6 +3914,112 @@ pub struct RemoveFacetFromObjectRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveFacetFromObjectResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequiredAttributeBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequiredAttributeBehavior {
+    NotRequired,
+    RequiredAlways,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequiredAttributeBehavior),
+}
+
+impl Default for RequiredAttributeBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequiredAttributeBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequiredAttributeBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequiredAttributeBehavior {
+    fn into(self) -> String {
+        match self {
+            RequiredAttributeBehavior::NotRequired => "NOT_REQUIRED".to_string(),
+            RequiredAttributeBehavior::RequiredAlways => "REQUIRED_ALWAYS".to_string(),
+            RequiredAttributeBehavior::UnknownVariant(UnknownRequiredAttributeBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequiredAttributeBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            RequiredAttributeBehavior::NotRequired => &"NOT_REQUIRED",
+            RequiredAttributeBehavior::RequiredAlways => &"REQUIRED_ALWAYS",
+            RequiredAttributeBehavior::UnknownVariant(UnknownRequiredAttributeBehavior {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RequiredAttributeBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_REQUIRED" => RequiredAttributeBehavior::NotRequired,
+            "REQUIRED_ALWAYS" => RequiredAttributeBehavior::RequiredAlways,
+            _ => RequiredAttributeBehavior::UnknownVariant(UnknownRequiredAttributeBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RequiredAttributeBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_REQUIRED" => RequiredAttributeBehavior::NotRequired,
+            "REQUIRED_ALWAYS" => RequiredAttributeBehavior::RequiredAlways,
+            _ => {
+                RequiredAttributeBehavior::UnknownVariant(UnknownRequiredAttributeBehavior { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequiredAttributeBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RequiredAttributeBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RequiredAttributeBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
@@ -2852,7 +4030,117 @@ pub struct Rule {
     /// <p>The type of attribute validation rule.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<RuleType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuleType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuleType {
+    BinaryLength,
+    NumberComparison,
+    StringFromSet,
+    StringLength,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuleType),
+}
+
+impl Default for RuleType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuleType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuleType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuleType {
+    fn into(self) -> String {
+        match self {
+            RuleType::BinaryLength => "BINARY_LENGTH".to_string(),
+            RuleType::NumberComparison => "NUMBER_COMPARISON".to_string(),
+            RuleType::StringFromSet => "STRING_FROM_SET".to_string(),
+            RuleType::StringLength => "STRING_LENGTH".to_string(),
+            RuleType::UnknownVariant(UnknownRuleType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuleType {
+    fn into(self) -> &'a str {
+        match self {
+            RuleType::BinaryLength => &"BINARY_LENGTH",
+            RuleType::NumberComparison => &"NUMBER_COMPARISON",
+            RuleType::StringFromSet => &"STRING_FROM_SET",
+            RuleType::StringLength => &"STRING_LENGTH",
+            RuleType::UnknownVariant(UnknownRuleType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RuleType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BINARY_LENGTH" => RuleType::BinaryLength,
+            "NUMBER_COMPARISON" => RuleType::NumberComparison,
+            "STRING_FROM_SET" => RuleType::StringFromSet,
+            "STRING_LENGTH" => RuleType::StringLength,
+            _ => RuleType::UnknownVariant(UnknownRuleType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuleType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BINARY_LENGTH" => RuleType::BinaryLength,
+            "NUMBER_COMPARISON" => RuleType::NumberComparison,
+            "STRING_FROM_SET" => RuleType::StringFromSet,
+            "STRING_LENGTH" => RuleType::StringLength,
+            _ => RuleType::UnknownVariant(UnknownRuleType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RuleType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A facet.</p>
@@ -2932,14 +4220,14 @@ pub struct TypedAttributeValue {
 pub struct TypedAttributeValueRange {
     /// <p>The inclusive or exclusive range end.</p>
     #[serde(rename = "EndMode")]
-    pub end_mode: String,
+    pub end_mode: RangeMode,
     /// <p>The attribute value to terminate the range at.</p>
     #[serde(rename = "EndValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_value: Option<TypedAttributeValue>,
     /// <p>The inclusive or exclusive range start.</p>
     #[serde(rename = "StartMode")]
-    pub start_mode: String,
+    pub start_mode: RangeMode,
     /// <p>The value to start the range at.</p>
     #[serde(rename = "StartValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2962,14 +4250,14 @@ pub struct TypedLinkAttributeDefinition {
     pub name: String,
     /// <p>The required behavior of the <code>TypedLinkAttributeDefinition</code>.</p>
     #[serde(rename = "RequiredBehavior")]
-    pub required_behavior: String,
+    pub required_behavior: RequiredAttributeBehavior,
     /// <p>Validation rules that are attached to the attribute definition.</p>
     #[serde(rename = "Rules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<::std::collections::HashMap<String, Rule>>,
     /// <p>The type of the attribute.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: FacetAttributeType,
 }
 
 /// <p>Identifies the range of attributes that are used by a specified filter.</p>
@@ -3006,7 +4294,7 @@ pub struct TypedLinkFacet {
 pub struct TypedLinkFacetAttributeUpdate {
     /// <p>The action to perform when updating the attribute.</p>
     #[serde(rename = "Action")]
-    pub action: String,
+    pub action: UpdateActionType,
     /// <p>The attribute to update.</p>
     #[serde(rename = "Attribute")]
     pub attribute: TypedLinkAttributeDefinition,
@@ -3055,6 +4343,111 @@ pub struct UntagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUpdateActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UpdateActionType {
+    CreateOrUpdate,
+    Delete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUpdateActionType),
+}
+
+impl Default for UpdateActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UpdateActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UpdateActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UpdateActionType {
+    fn into(self) -> String {
+        match self {
+            UpdateActionType::CreateOrUpdate => "CREATE_OR_UPDATE".to_string(),
+            UpdateActionType::Delete => "DELETE".to_string(),
+            UpdateActionType::UnknownVariant(UnknownUpdateActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UpdateActionType {
+    fn into(self) -> &'a str {
+        match self {
+            UpdateActionType::CreateOrUpdate => &"CREATE_OR_UPDATE",
+            UpdateActionType::Delete => &"DELETE",
+            UpdateActionType::UnknownVariant(UnknownUpdateActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for UpdateActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_OR_UPDATE" => UpdateActionType::CreateOrUpdate,
+            "DELETE" => UpdateActionType::Delete,
+            _ => UpdateActionType::UnknownVariant(UnknownUpdateActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UpdateActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_OR_UPDATE" => UpdateActionType::CreateOrUpdate,
+            "DELETE" => UpdateActionType::Delete,
+            _ => UpdateActionType::UnknownVariant(UnknownUpdateActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UpdateActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UpdateActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for UpdateActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFacetRequest {
@@ -3068,7 +4461,7 @@ pub struct UpdateFacetRequest {
     /// <p>The object type that is associated with the facet. See <a>CreateFacetRequest$ObjectType</a> for more details.</p>
     #[serde(rename = "ObjectType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub object_type: Option<String>,
+    pub object_type: Option<ObjectType>,
     /// <p>The Amazon Resource Name (ARN) that is associated with the <a>Facet</a>. For more information, see <a>arns</a>.</p>
     #[serde(rename = "SchemaArn")]
     pub schema_arn: String,

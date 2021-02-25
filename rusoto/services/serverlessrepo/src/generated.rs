@@ -91,6 +91,119 @@ pub struct ApplicationSummary {
     pub spdx_license_id: Option<String>,
 }
 
+/// <p>Values that must be specified in order to deploy some applications.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Capability {
+    CapabilityAutoExpand,
+    CapabilityIam,
+    CapabilityNamedIam,
+    CapabilityResourcePolicy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapability),
+}
+
+impl Default for Capability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Capability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Capability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Capability {
+    fn into(self) -> String {
+        match self {
+            Capability::CapabilityAutoExpand => "CAPABILITY_AUTO_EXPAND".to_string(),
+            Capability::CapabilityIam => "CAPABILITY_IAM".to_string(),
+            Capability::CapabilityNamedIam => "CAPABILITY_NAMED_IAM".to_string(),
+            Capability::CapabilityResourcePolicy => "CAPABILITY_RESOURCE_POLICY".to_string(),
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Capability {
+    fn into(self) -> &'a str {
+        match self {
+            Capability::CapabilityAutoExpand => &"CAPABILITY_AUTO_EXPAND",
+            Capability::CapabilityIam => &"CAPABILITY_IAM",
+            Capability::CapabilityNamedIam => &"CAPABILITY_NAMED_IAM",
+            Capability::CapabilityResourcePolicy => &"CAPABILITY_RESOURCE_POLICY",
+            Capability::UnknownVariant(UnknownCapability { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Capability {
+    fn from(name: &str) -> Self {
+        match name {
+            "CAPABILITY_AUTO_EXPAND" => Capability::CapabilityAutoExpand,
+            "CAPABILITY_IAM" => Capability::CapabilityIam,
+            "CAPABILITY_NAMED_IAM" => Capability::CapabilityNamedIam,
+            "CAPABILITY_RESOURCE_POLICY" => Capability::CapabilityResourcePolicy,
+            _ => Capability::UnknownVariant(UnknownCapability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Capability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CAPABILITY_AUTO_EXPAND" => Capability::CapabilityAutoExpand,
+            "CAPABILITY_IAM" => Capability::CapabilityIam,
+            "CAPABILITY_NAMED_IAM" => Capability::CapabilityNamedIam,
+            "CAPABILITY_RESOURCE_POLICY" => Capability::CapabilityResourcePolicy,
+            _ => Capability::UnknownVariant(UnknownCapability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Capability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Capability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Capability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
@@ -282,7 +395,7 @@ pub struct CreateApplicationVersionResponse {
     /// this parameter for an application that requires capabilities, the call will fail.</p>
     #[serde(rename = "RequiredCapabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub required_capabilities: Option<Vec<String>>,
+    pub required_capabilities: Option<Vec<Capability>>,
     /// <p>Whether all of the AWS resources contained in this application are supported in the region
     /// in which it is being retrieved.</p>
     #[serde(rename = "ResourcesSupported")]
@@ -458,7 +571,7 @@ pub struct CreateCloudFormationTemplateResponse {
     /// </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
     #[serde(rename = "TemplateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -601,7 +714,7 @@ pub struct GetCloudFormationTemplateResponse {
     /// </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
     #[serde(rename = "TemplateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -839,6 +952,112 @@ pub struct RollbackTrigger {
     pub type_: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Active,
+    Expired,
+    Preparing,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Active => "ACTIVE".to_string(),
+            Status::Expired => "EXPIRED".to_string(),
+            Status::Preparing => "PREPARING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Active => &"ACTIVE",
+            Status::Expired => &"EXPIRED",
+            Status::Preparing => &"PREPARING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => Status::Active,
+            "EXPIRED" => Status::Expired,
+            "PREPARING" => Status::Preparing,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => Status::Active,
+            "EXPIRED" => Status::Expired,
+            "PREPARING" => Status::Preparing,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
 /// </i> Data Type.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -993,7 +1212,7 @@ pub struct Version {
     /// all permissions associated with the application before deploying. If you don't specify
     /// this parameter for an application that requires capabilities, the call will fail.</p>
     #[serde(rename = "RequiredCapabilities")]
-    pub required_capabilities: Vec<String>,
+    pub required_capabilities: Vec<Capability>,
     /// <p>Whether all of the AWS resources contained in this application are supported in the region
     /// in which it is being retrieved.</p>
     #[serde(rename = "ResourcesSupported")]

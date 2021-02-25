@@ -50,6 +50,122 @@ impl ForecastClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttributeType {
+    Float,
+    Geolocation,
+    Integer,
+    String,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttributeType),
+}
+
+impl Default for AttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttributeType {
+    fn into(self) -> String {
+        match self {
+            AttributeType::Float => "float".to_string(),
+            AttributeType::Geolocation => "geolocation".to_string(),
+            AttributeType::Integer => "integer".to_string(),
+            AttributeType::String => "string".to_string(),
+            AttributeType::Timestamp => "timestamp".to_string(),
+            AttributeType::UnknownVariant(UnknownAttributeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            AttributeType::Float => &"float",
+            AttributeType::Geolocation => &"geolocation",
+            AttributeType::Integer => &"integer",
+            AttributeType::String => &"string",
+            AttributeType::Timestamp => &"timestamp",
+            AttributeType::UnknownVariant(UnknownAttributeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "float" => AttributeType::Float,
+            "geolocation" => AttributeType::Geolocation,
+            "integer" => AttributeType::Integer,
+            "string" => AttributeType::String,
+            "timestamp" => AttributeType::Timestamp,
+            _ => AttributeType::UnknownVariant(UnknownAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "float" => AttributeType::Float,
+            "geolocation" => AttributeType::Geolocation,
+            "integer" => AttributeType::Integer,
+            "string" => AttributeType::String,
+            "timestamp" => AttributeType::Timestamp,
+            _ => AttributeType::UnknownVariant(UnknownAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Specifies a categorical hyperparameter and it's range of tunable values. This object is part of the <a>ParameterRanges</a> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CategoricalParameterRange {
@@ -76,7 +192,7 @@ pub struct ContinuousParameterRange {
     /// <p>The scale that hyperparameter tuning uses to search the hyperparameter range. Valid values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon Forecast hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have values greater than 0.</p> </dd> <dt>ReverseLogarithmic</dt> <dd> <p>hyperparameter tuning searches the values in the hyperparameter range by using a reverse logarithmic scale.</p> <p>Reverse logarithmic scaling works only for ranges that are entirely within the range 0 &lt;= x &lt; 1.0.</p> </dd> </dl> <p>For information about choosing a hyperparameter scale, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_type: Option<String>,
+    pub scaling_type: Option<ScalingType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -91,7 +207,7 @@ pub struct CreateDatasetGroupRequest {
     pub dataset_group_name: String,
     /// <p>The domain associated with the dataset group. When you add a dataset to a dataset group, this value and the value specified for the <code>Domain</code> parameter of the <a>CreateDataset</a> operation must match.</p> <p>The <code>Domain</code> and <code>DatasetType</code> that you choose determine the fields that must be present in training data that you import to a dataset. For example, if you choose the <code>RETAIL</code> domain and <code>TARGET_TIME_SERIES</code> as the <code>DatasetType</code>, Amazon Forecast requires that <code>item_id</code>, <code>timestamp</code>, and <code>demand</code> fields are present in your data. For more information, see <a>howitworks-datasets-groups</a>.</p>
     #[serde(rename = "Domain")]
-    pub domain: String,
+    pub domain: Domain,
     /// <p><p>The optional metadata that you apply to the dataset group to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50.</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8.</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8.</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for keys as it is reserved for AWS use. You cannot edit or delete tag keys with this prefix. Values can have this prefix. If a tag value has <code>aws</code> as its prefix but the key does not, then Forecast considers it to be a user tag and will count against the limit of 50 tags. Tags with only the key prefix of <code>aws</code> do not count against your tags per resource limit.</p> </li> </ul></p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,10 +278,10 @@ pub struct CreateDatasetRequest {
     pub dataset_name: String,
     /// <p>The dataset type. Valid values depend on the chosen <code>Domain</code>.</p>
     #[serde(rename = "DatasetType")]
-    pub dataset_type: String,
+    pub dataset_type: DatasetType,
     /// <p>The domain associated with the dataset. When you add a dataset to a dataset group, this value and the value specified for the <code>Domain</code> parameter of the <a>CreateDatasetGroup</a> operation must match.</p> <p>The <code>Domain</code> and <code>DatasetType</code> that you choose determine the fields that must be present in the training data that you import to the dataset. For example, if you choose the <code>RETAIL</code> domain and <code>TARGET_TIME_SERIES</code> as the <code>DatasetType</code>, Amazon Forecast requires <code>item_id</code>, <code>timestamp</code>, and <code>demand</code> fields to be present in your data. For more information, see <a>howitworks-datasets-groups</a>.</p>
     #[serde(rename = "Domain")]
-    pub domain: String,
+    pub domain: Domain,
     /// <p>An AWS Key Management Service (KMS) key and the AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the key.</p>
     #[serde(rename = "EncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -422,15 +538,120 @@ pub struct DatasetSummary {
     /// <p>The dataset type.</p>
     #[serde(rename = "DatasetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dataset_type: Option<String>,
+    pub dataset_type: Option<DatasetType>,
     /// <p>The domain associated with the dataset.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain: Option<String>,
+    pub domain: Option<Domain>,
     /// <p>When you create a dataset, <code>LastModificationTime</code> is the same as <code>CreationTime</code>. While data is being imported to the dataset, <code>LastModificationTime</code> is the current time of the <code>ListDatasets</code> call. After a <a>CreateDatasetImportJob</a> operation has finished, <code>LastModificationTime</code> is when the import job completed or failed.</p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatasetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatasetType {
+    ItemMetadata,
+    RelatedTimeSeries,
+    TargetTimeSeries,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatasetType),
+}
+
+impl Default for DatasetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatasetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatasetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatasetType {
+    fn into(self) -> String {
+        match self {
+            DatasetType::ItemMetadata => "ITEM_METADATA".to_string(),
+            DatasetType::RelatedTimeSeries => "RELATED_TIME_SERIES".to_string(),
+            DatasetType::TargetTimeSeries => "TARGET_TIME_SERIES".to_string(),
+            DatasetType::UnknownVariant(UnknownDatasetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatasetType {
+    fn into(self) -> &'a str {
+        match self {
+            DatasetType::ItemMetadata => &"ITEM_METADATA",
+            DatasetType::RelatedTimeSeries => &"RELATED_TIME_SERIES",
+            DatasetType::TargetTimeSeries => &"TARGET_TIME_SERIES",
+            DatasetType::UnknownVariant(UnknownDatasetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DatasetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ITEM_METADATA" => DatasetType::ItemMetadata,
+            "RELATED_TIME_SERIES" => DatasetType::RelatedTimeSeries,
+            "TARGET_TIME_SERIES" => DatasetType::TargetTimeSeries,
+            _ => DatasetType::UnknownVariant(UnknownDatasetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatasetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ITEM_METADATA" => DatasetType::ItemMetadata,
+            "RELATED_TIME_SERIES" => DatasetType::RelatedTimeSeries,
+            "TARGET_TIME_SERIES" => DatasetType::TargetTimeSeries,
+            _ => DatasetType::UnknownVariant(UnknownDatasetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatasetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DatasetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatasetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -519,7 +740,7 @@ pub struct DescribeDatasetGroupResponse {
     /// <p>The domain associated with the dataset group.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain: Option<String>,
+    pub domain: Option<Domain>,
     /// <p>When the dataset group was created or last updated from a call to the <a>UpdateDatasetGroup</a> operation. While the dataset group is being updated, <code>LastModificationTime</code> is the current time of the <code>DescribeDatasetGroup</code> call.</p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -629,11 +850,11 @@ pub struct DescribeDatasetResponse {
     /// <p>The dataset type.</p>
     #[serde(rename = "DatasetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub dataset_type: Option<String>,
+    pub dataset_type: Option<DatasetType>,
     /// <p>The domain associated with the dataset.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain: Option<String>,
+    pub domain: Option<Domain>,
     /// <p>The AWS Key Management Service (KMS) key and the AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the key.</p>
     #[serde(rename = "EncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -883,6 +1104,131 @@ pub struct DescribePredictorResponse {
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomain {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Domain {
+    Custom,
+    Ec2Capacity,
+    InventoryPlanning,
+    Metrics,
+    Retail,
+    WebTraffic,
+    WorkForce,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomain),
+}
+
+impl Default for Domain {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Domain {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Domain {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Domain {
+    fn into(self) -> String {
+        match self {
+            Domain::Custom => "CUSTOM".to_string(),
+            Domain::Ec2Capacity => "EC2_CAPACITY".to_string(),
+            Domain::InventoryPlanning => "INVENTORY_PLANNING".to_string(),
+            Domain::Metrics => "METRICS".to_string(),
+            Domain::Retail => "RETAIL".to_string(),
+            Domain::WebTraffic => "WEB_TRAFFIC".to_string(),
+            Domain::WorkForce => "WORK_FORCE".to_string(),
+            Domain::UnknownVariant(UnknownDomain { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Domain {
+    fn into(self) -> &'a str {
+        match self {
+            Domain::Custom => &"CUSTOM",
+            Domain::Ec2Capacity => &"EC2_CAPACITY",
+            Domain::InventoryPlanning => &"INVENTORY_PLANNING",
+            Domain::Metrics => &"METRICS",
+            Domain::Retail => &"RETAIL",
+            Domain::WebTraffic => &"WEB_TRAFFIC",
+            Domain::WorkForce => &"WORK_FORCE",
+            Domain::UnknownVariant(UnknownDomain { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Domain {
+    fn from(name: &str) -> Self {
+        match name {
+            "CUSTOM" => Domain::Custom,
+            "EC2_CAPACITY" => Domain::Ec2Capacity,
+            "INVENTORY_PLANNING" => Domain::InventoryPlanning,
+            "METRICS" => Domain::Metrics,
+            "RETAIL" => Domain::Retail,
+            "WEB_TRAFFIC" => Domain::WebTraffic,
+            "WORK_FORCE" => Domain::WorkForce,
+            _ => Domain::UnknownVariant(UnknownDomain {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Domain {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CUSTOM" => Domain::Custom,
+            "EC2_CAPACITY" => Domain::Ec2Capacity,
+            "INVENTORY_PLANNING" => Domain::InventoryPlanning,
+            "METRICS" => Domain::Metrics,
+            "RETAIL" => Domain::Retail,
+            "WEB_TRAFFIC" => Domain::WebTraffic,
+            "WORK_FORCE" => Domain::WorkForce,
+            _ => Domain::UnknownVariant(UnknownDomain { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Domain {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Domain {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Domain {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An AWS Key Management Service (KMS) key and an AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the key. You can specify this optional object in the <a>CreateDataset</a> and <a>CreatePredictor</a> requests.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionConfig {
@@ -939,6 +1285,107 @@ pub struct EvaluationResult {
     pub test_windows: Option<Vec<WindowSummary>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEvaluationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EvaluationType {
+    Computed,
+    Summary,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEvaluationType),
+}
+
+impl Default for EvaluationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EvaluationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EvaluationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EvaluationType {
+    fn into(self) -> String {
+        match self {
+            EvaluationType::Computed => "COMPUTED".to_string(),
+            EvaluationType::Summary => "SUMMARY".to_string(),
+            EvaluationType::UnknownVariant(UnknownEvaluationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EvaluationType {
+    fn into(self) -> &'a str {
+        match self {
+            EvaluationType::Computed => &"COMPUTED",
+            EvaluationType::Summary => &"SUMMARY",
+            EvaluationType::UnknownVariant(UnknownEvaluationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EvaluationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPUTED" => EvaluationType::Computed,
+            "SUMMARY" => EvaluationType::Summary,
+            _ => EvaluationType::UnknownVariant(UnknownEvaluationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EvaluationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPUTED" => EvaluationType::Computed,
+            "SUMMARY" => EvaluationType::Summary,
+            _ => EvaluationType::UnknownVariant(UnknownEvaluationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EvaluationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EvaluationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EvaluationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Provides featurization (transformation) information for a dataset field. This object is part of the <a>FeaturizationConfig</a> object.</p> <p>For example:</p> <p> <code>{</code> </p> <p> <code>"AttributeName": "demand",</code> </p> <p> <code>FeaturizationPipeline [ {</code> </p> <p> <code>"FeaturizationMethodName": "filling",</code> </p> <p> <code>"FeaturizationMethodParameters": {"aggregation": "avg", "backfill": "nan"}</code> </p> <p> <code>} ]</code> </p> <p> <code>}</code> </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Featurization {
@@ -972,11 +1419,110 @@ pub struct FeaturizationConfig {
 pub struct FeaturizationMethod {
     /// <p>The name of the method. The "filling" method is the only supported method.</p>
     #[serde(rename = "FeaturizationMethodName")]
-    pub featurization_method_name: String,
+    pub featurization_method_name: FeaturizationMethodName,
     /// <p>The method parameters (key-value pairs), which are a map of override parameters. Specify these parameters to override the default values. Related Time Series attributes do not accept aggregation parameters.</p> <p>The following list shows the parameters and their valid values for the "filling" featurization method for a <b>Target Time Series</b> dataset. Bold signifies the default value.</p> <ul> <li> <p> <code>aggregation</code>: <b>sum</b>, <code>avg</code>, <code>first</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>frontfill</code>: <b>none</b> </p> </li> <li> <p> <code>middlefill</code>: <b>zero</b>, <code>nan</code> (not a number), <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <b>zero</b>, <code>nan</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul> <p>The following list shows the parameters and their valid values for a <b>Related Time Series</b> featurization method (there are no defaults):</p> <ul> <li> <p> <code>middlefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>backfill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> <li> <p> <code>futurefill</code>: <code>zero</code>, <code>value</code>, <code>median</code>, <code>mean</code>, <code>min</code>, <code>max</code> </p> </li> </ul> <p>To set a filling method to a specific value, set the fill parameter to <code>value</code> and define the value in a corresponding <code>_value</code> parameter. For example, to set backfilling to a value of 2, include the following: <code>"backfill": "value"</code> and <code>"backfill_value":"2"</code>. </p>
     #[serde(rename = "FeaturizationMethodParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub featurization_method_parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFeaturizationMethodName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FeaturizationMethodName {
+    Filling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFeaturizationMethodName),
+}
+
+impl Default for FeaturizationMethodName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FeaturizationMethodName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FeaturizationMethodName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FeaturizationMethodName {
+    fn into(self) -> String {
+        match self {
+            FeaturizationMethodName::Filling => "filling".to_string(),
+            FeaturizationMethodName::UnknownVariant(UnknownFeaturizationMethodName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FeaturizationMethodName {
+    fn into(self) -> &'a str {
+        match self {
+            FeaturizationMethodName::Filling => &"filling",
+            FeaturizationMethodName::UnknownVariant(UnknownFeaturizationMethodName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FeaturizationMethodName {
+    fn from(name: &str) -> Self {
+        match name {
+            "filling" => FeaturizationMethodName::Filling,
+            _ => FeaturizationMethodName::UnknownVariant(UnknownFeaturizationMethodName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FeaturizationMethodName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "filling" => FeaturizationMethodName::Filling,
+            _ => FeaturizationMethodName::UnknownVariant(UnknownFeaturizationMethodName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FeaturizationMethodName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FeaturizationMethodName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FeaturizationMethodName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a filter for choosing a subset of objects. Each filter consists of a condition and a match statement. The condition is either <code>IS</code> or <code>IS_NOT</code>, which specifies whether to include or exclude the objects that match the statement, respectively. The match statement consists of a key and a value.</p>
@@ -985,13 +1531,118 @@ pub struct FeaturizationMethod {
 pub struct Filter {
     /// <p>The condition to apply. To include the objects that match the statement, specify <code>IS</code>. To exclude matching objects, specify <code>IS_NOT</code>.</p>
     #[serde(rename = "Condition")]
-    pub condition: String,
+    pub condition: FilterConditionString,
     /// <p>The name of the parameter to filter on.</p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>The value to match.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFilterConditionString {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FilterConditionString {
+    Is,
+    IsNot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFilterConditionString),
+}
+
+impl Default for FilterConditionString {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FilterConditionString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FilterConditionString {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FilterConditionString {
+    fn into(self) -> String {
+        match self {
+            FilterConditionString::Is => "IS".to_string(),
+            FilterConditionString::IsNot => "IS_NOT".to_string(),
+            FilterConditionString::UnknownVariant(UnknownFilterConditionString {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FilterConditionString {
+    fn into(self) -> &'a str {
+        match self {
+            FilterConditionString::Is => &"IS",
+            FilterConditionString::IsNot => &"IS_NOT",
+            FilterConditionString::UnknownVariant(UnknownFilterConditionString {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FilterConditionString {
+    fn from(name: &str) -> Self {
+        match name {
+            "IS" => FilterConditionString::Is,
+            "IS_NOT" => FilterConditionString::IsNot,
+            _ => FilterConditionString::UnknownVariant(UnknownFilterConditionString {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FilterConditionString {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IS" => FilterConditionString::Is,
+            "IS_NOT" => FilterConditionString::IsNot,
+            _ => FilterConditionString::UnknownVariant(UnknownFilterConditionString { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FilterConditionString {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FilterConditionString {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for FilterConditionString {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides a summary of the forecast export job properties used in the <a>ListForecastExportJobs</a> operation. To get the complete set of properties, call the <a>DescribeForecastExportJob</a> operation, and provide the listed <code>ForecastExportJobArn</code>.</p>
@@ -1119,7 +1770,7 @@ pub struct IntegerParameterRange {
     /// <p>The scale that hyperparameter tuning uses to search the hyperparameter range. Valid values:</p> <dl> <dt>Auto</dt> <dd> <p>Amazon Forecast hyperparameter tuning chooses the best scale for the hyperparameter.</p> </dd> <dt>Linear</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a linear scale.</p> </dd> <dt>Logarithmic</dt> <dd> <p>Hyperparameter tuning searches the values in the hyperparameter range by using a logarithmic scale.</p> <p>Logarithmic scaling works only for ranges that have values greater than 0.</p> </dd> <dt>ReverseLogarithmic</dt> <dd> <p>Not supported for <code>IntegerParameterRange</code>.</p> <p>Reverse logarithmic scaling works only for ranges that are entirely within the range 0 &lt;= x &lt; 1.0.</p> </dd> </dl> <p>For information about choosing a hyperparameter scale, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html#scaling-type">Hyperparameter Scaling</a>. One of the following values:</p>
     #[serde(rename = "ScalingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_type: Option<String>,
+    pub scaling_type: Option<ScalingType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1478,6 +2129,116 @@ pub struct S3Config {
     pub role_arn: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingType {
+    Auto,
+    Linear,
+    Logarithmic,
+    ReverseLogarithmic,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingType),
+}
+
+impl Default for ScalingType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingType {
+    fn into(self) -> String {
+        match self {
+            ScalingType::Auto => "Auto".to_string(),
+            ScalingType::Linear => "Linear".to_string(),
+            ScalingType::Logarithmic => "Logarithmic".to_string(),
+            ScalingType::ReverseLogarithmic => "ReverseLogarithmic".to_string(),
+            ScalingType::UnknownVariant(UnknownScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingType::Auto => &"Auto",
+            ScalingType::Linear => &"Linear",
+            ScalingType::Logarithmic => &"Logarithmic",
+            ScalingType::ReverseLogarithmic => &"ReverseLogarithmic",
+            ScalingType::UnknownVariant(UnknownScalingType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Auto" => ScalingType::Auto,
+            "Linear" => ScalingType::Linear,
+            "Logarithmic" => ScalingType::Logarithmic,
+            "ReverseLogarithmic" => ScalingType::ReverseLogarithmic,
+            _ => ScalingType::UnknownVariant(UnknownScalingType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Auto" => ScalingType::Auto,
+            "Linear" => ScalingType::Linear,
+            "Logarithmic" => ScalingType::Logarithmic,
+            "ReverseLogarithmic" => ScalingType::ReverseLogarithmic,
+            _ => ScalingType::UnknownVariant(UnknownScalingType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Defines the fields of a dataset. You specify this object in the <a>CreateDataset</a> request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schema {
@@ -1497,7 +2258,7 @@ pub struct SchemaAttribute {
     /// <p>The data type of the field.</p>
     #[serde(rename = "AttributeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attribute_type: Option<String>,
+    pub attribute_type: Option<AttributeType>,
 }
 
 /// <p>Provides statistics for each data field imported into to an Amazon Forecast dataset with the <a>CreateDatasetImportJob</a> operation.</p>
@@ -1648,7 +2409,7 @@ pub struct WindowSummary {
     /// <p><p>The type of evaluation.</p> <ul> <li> <p> <code>SUMMARY</code> - The average metrics across all windows.</p> </li> <li> <p> <code>COMPUTED</code> - The metrics for the specified window.</p> </li> </ul></p>
     #[serde(rename = "EvaluationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_type: Option<String>,
+    pub evaluation_type: Option<EvaluationType>,
     /// <p>The number of data points within the window.</p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]

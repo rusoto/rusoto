@@ -117,11 +117,141 @@ pub struct BackupJob {
     /// <p>The current state of a resource recovery point.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<BackupJobState>,
     /// <p>A detailed message explaining the status of the job to back up a resource.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupJobState {
+    Aborted,
+    Aborting,
+    Completed,
+    Created,
+    Expired,
+    Failed,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupJobState),
+}
+
+impl Default for BackupJobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupJobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupJobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupJobState {
+    fn into(self) -> String {
+        match self {
+            BackupJobState::Aborted => "ABORTED".to_string(),
+            BackupJobState::Aborting => "ABORTING".to_string(),
+            BackupJobState::Completed => "COMPLETED".to_string(),
+            BackupJobState::Created => "CREATED".to_string(),
+            BackupJobState::Expired => "EXPIRED".to_string(),
+            BackupJobState::Failed => "FAILED".to_string(),
+            BackupJobState::Pending => "PENDING".to_string(),
+            BackupJobState::Running => "RUNNING".to_string(),
+            BackupJobState::UnknownVariant(UnknownBackupJobState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupJobState {
+    fn into(self) -> &'a str {
+        match self {
+            BackupJobState::Aborted => &"ABORTED",
+            BackupJobState::Aborting => &"ABORTING",
+            BackupJobState::Completed => &"COMPLETED",
+            BackupJobState::Created => &"CREATED",
+            BackupJobState::Expired => &"EXPIRED",
+            BackupJobState::Failed => &"FAILED",
+            BackupJobState::Pending => &"PENDING",
+            BackupJobState::Running => &"RUNNING",
+            BackupJobState::UnknownVariant(UnknownBackupJobState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupJobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABORTED" => BackupJobState::Aborted,
+            "ABORTING" => BackupJobState::Aborting,
+            "COMPLETED" => BackupJobState::Completed,
+            "CREATED" => BackupJobState::Created,
+            "EXPIRED" => BackupJobState::Expired,
+            "FAILED" => BackupJobState::Failed,
+            "PENDING" => BackupJobState::Pending,
+            "RUNNING" => BackupJobState::Running,
+            _ => BackupJobState::UnknownVariant(UnknownBackupJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupJobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABORTED" => BackupJobState::Aborted,
+            "ABORTING" => BackupJobState::Aborting,
+            "COMPLETED" => BackupJobState::Completed,
+            "CREATED" => BackupJobState::Created,
+            "EXPIRED" => BackupJobState::Expired,
+            "FAILED" => BackupJobState::Failed,
+            "PENDING" => BackupJobState::Pending,
+            "RUNNING" => BackupJobState::Running,
+            _ => BackupJobState::UnknownVariant(UnknownBackupJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupJobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BackupJobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupJobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains an optional backup plan display name and an array of <code>BackupRule</code> objects, each of which specifies a backup rule. Each rule in a backup plan is a separate scheduled task and can back up a different selection of AWS resources.</p>
@@ -337,6 +467,175 @@ pub struct BackupSelectionsListMember {
     pub selection_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupVaultEvent {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupVaultEvent {
+    BackupJobCompleted,
+    BackupJobExpired,
+    BackupJobFailed,
+    BackupJobStarted,
+    BackupJobSuccessful,
+    BackupPlanCreated,
+    BackupPlanModified,
+    CopyJobFailed,
+    CopyJobStarted,
+    CopyJobSuccessful,
+    RecoveryPointModified,
+    RestoreJobCompleted,
+    RestoreJobFailed,
+    RestoreJobStarted,
+    RestoreJobSuccessful,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupVaultEvent),
+}
+
+impl Default for BackupVaultEvent {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupVaultEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupVaultEvent {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupVaultEvent {
+    fn into(self) -> String {
+        match self {
+            BackupVaultEvent::BackupJobCompleted => "BACKUP_JOB_COMPLETED".to_string(),
+            BackupVaultEvent::BackupJobExpired => "BACKUP_JOB_EXPIRED".to_string(),
+            BackupVaultEvent::BackupJobFailed => "BACKUP_JOB_FAILED".to_string(),
+            BackupVaultEvent::BackupJobStarted => "BACKUP_JOB_STARTED".to_string(),
+            BackupVaultEvent::BackupJobSuccessful => "BACKUP_JOB_SUCCESSFUL".to_string(),
+            BackupVaultEvent::BackupPlanCreated => "BACKUP_PLAN_CREATED".to_string(),
+            BackupVaultEvent::BackupPlanModified => "BACKUP_PLAN_MODIFIED".to_string(),
+            BackupVaultEvent::CopyJobFailed => "COPY_JOB_FAILED".to_string(),
+            BackupVaultEvent::CopyJobStarted => "COPY_JOB_STARTED".to_string(),
+            BackupVaultEvent::CopyJobSuccessful => "COPY_JOB_SUCCESSFUL".to_string(),
+            BackupVaultEvent::RecoveryPointModified => "RECOVERY_POINT_MODIFIED".to_string(),
+            BackupVaultEvent::RestoreJobCompleted => "RESTORE_JOB_COMPLETED".to_string(),
+            BackupVaultEvent::RestoreJobFailed => "RESTORE_JOB_FAILED".to_string(),
+            BackupVaultEvent::RestoreJobStarted => "RESTORE_JOB_STARTED".to_string(),
+            BackupVaultEvent::RestoreJobSuccessful => "RESTORE_JOB_SUCCESSFUL".to_string(),
+            BackupVaultEvent::UnknownVariant(UnknownBackupVaultEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupVaultEvent {
+    fn into(self) -> &'a str {
+        match self {
+            BackupVaultEvent::BackupJobCompleted => &"BACKUP_JOB_COMPLETED",
+            BackupVaultEvent::BackupJobExpired => &"BACKUP_JOB_EXPIRED",
+            BackupVaultEvent::BackupJobFailed => &"BACKUP_JOB_FAILED",
+            BackupVaultEvent::BackupJobStarted => &"BACKUP_JOB_STARTED",
+            BackupVaultEvent::BackupJobSuccessful => &"BACKUP_JOB_SUCCESSFUL",
+            BackupVaultEvent::BackupPlanCreated => &"BACKUP_PLAN_CREATED",
+            BackupVaultEvent::BackupPlanModified => &"BACKUP_PLAN_MODIFIED",
+            BackupVaultEvent::CopyJobFailed => &"COPY_JOB_FAILED",
+            BackupVaultEvent::CopyJobStarted => &"COPY_JOB_STARTED",
+            BackupVaultEvent::CopyJobSuccessful => &"COPY_JOB_SUCCESSFUL",
+            BackupVaultEvent::RecoveryPointModified => &"RECOVERY_POINT_MODIFIED",
+            BackupVaultEvent::RestoreJobCompleted => &"RESTORE_JOB_COMPLETED",
+            BackupVaultEvent::RestoreJobFailed => &"RESTORE_JOB_FAILED",
+            BackupVaultEvent::RestoreJobStarted => &"RESTORE_JOB_STARTED",
+            BackupVaultEvent::RestoreJobSuccessful => &"RESTORE_JOB_SUCCESSFUL",
+            BackupVaultEvent::UnknownVariant(UnknownBackupVaultEvent { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BackupVaultEvent {
+    fn from(name: &str) -> Self {
+        match name {
+            "BACKUP_JOB_COMPLETED" => BackupVaultEvent::BackupJobCompleted,
+            "BACKUP_JOB_EXPIRED" => BackupVaultEvent::BackupJobExpired,
+            "BACKUP_JOB_FAILED" => BackupVaultEvent::BackupJobFailed,
+            "BACKUP_JOB_STARTED" => BackupVaultEvent::BackupJobStarted,
+            "BACKUP_JOB_SUCCESSFUL" => BackupVaultEvent::BackupJobSuccessful,
+            "BACKUP_PLAN_CREATED" => BackupVaultEvent::BackupPlanCreated,
+            "BACKUP_PLAN_MODIFIED" => BackupVaultEvent::BackupPlanModified,
+            "COPY_JOB_FAILED" => BackupVaultEvent::CopyJobFailed,
+            "COPY_JOB_STARTED" => BackupVaultEvent::CopyJobStarted,
+            "COPY_JOB_SUCCESSFUL" => BackupVaultEvent::CopyJobSuccessful,
+            "RECOVERY_POINT_MODIFIED" => BackupVaultEvent::RecoveryPointModified,
+            "RESTORE_JOB_COMPLETED" => BackupVaultEvent::RestoreJobCompleted,
+            "RESTORE_JOB_FAILED" => BackupVaultEvent::RestoreJobFailed,
+            "RESTORE_JOB_STARTED" => BackupVaultEvent::RestoreJobStarted,
+            "RESTORE_JOB_SUCCESSFUL" => BackupVaultEvent::RestoreJobSuccessful,
+            _ => BackupVaultEvent::UnknownVariant(UnknownBackupVaultEvent {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupVaultEvent {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BACKUP_JOB_COMPLETED" => BackupVaultEvent::BackupJobCompleted,
+            "BACKUP_JOB_EXPIRED" => BackupVaultEvent::BackupJobExpired,
+            "BACKUP_JOB_FAILED" => BackupVaultEvent::BackupJobFailed,
+            "BACKUP_JOB_STARTED" => BackupVaultEvent::BackupJobStarted,
+            "BACKUP_JOB_SUCCESSFUL" => BackupVaultEvent::BackupJobSuccessful,
+            "BACKUP_PLAN_CREATED" => BackupVaultEvent::BackupPlanCreated,
+            "BACKUP_PLAN_MODIFIED" => BackupVaultEvent::BackupPlanModified,
+            "COPY_JOB_FAILED" => BackupVaultEvent::CopyJobFailed,
+            "COPY_JOB_STARTED" => BackupVaultEvent::CopyJobStarted,
+            "COPY_JOB_SUCCESSFUL" => BackupVaultEvent::CopyJobSuccessful,
+            "RECOVERY_POINT_MODIFIED" => BackupVaultEvent::RecoveryPointModified,
+            "RESTORE_JOB_COMPLETED" => BackupVaultEvent::RestoreJobCompleted,
+            "RESTORE_JOB_FAILED" => BackupVaultEvent::RestoreJobFailed,
+            "RESTORE_JOB_STARTED" => BackupVaultEvent::RestoreJobStarted,
+            "RESTORE_JOB_SUCCESSFUL" => BackupVaultEvent::RestoreJobSuccessful,
+            _ => BackupVaultEvent::UnknownVariant(UnknownBackupVaultEvent { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupVaultEvent {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BackupVaultEvent {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupVaultEvent {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains metadata about a backup vault.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -389,10 +688,105 @@ pub struct Condition {
     pub condition_key: String,
     /// <p>An operation, such as <code>StringEquals</code>, that is applied to a key-value pair used to filter resources in a selection.</p>
     #[serde(rename = "ConditionType")]
-    pub condition_type: String,
+    pub condition_type: ConditionType,
     /// <p>The value in a key-value pair. For example, in <code>"ec2:ResourceTag/Department": "accounting"</code>, <code>"accounting"</code> is the value.</p>
     #[serde(rename = "ConditionValue")]
     pub condition_value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConditionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConditionType {
+    Stringequals,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConditionType),
+}
+
+impl Default for ConditionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConditionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConditionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConditionType {
+    fn into(self) -> String {
+        match self {
+            ConditionType::Stringequals => "STRINGEQUALS".to_string(),
+            ConditionType::UnknownVariant(UnknownConditionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConditionType {
+    fn into(self) -> &'a str {
+        match self {
+            ConditionType::Stringequals => &"STRINGEQUALS",
+            ConditionType::UnknownVariant(UnknownConditionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConditionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "STRINGEQUALS" => ConditionType::Stringequals,
+            _ => ConditionType::UnknownVariant(UnknownConditionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConditionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STRINGEQUALS" => ConditionType::Stringequals,
+            _ => ConditionType::UnknownVariant(UnknownConditionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConditionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConditionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConditionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The details of the copy operation.</p>
@@ -464,11 +858,121 @@ pub struct CopyJob {
     /// <p>The current state of a copy job.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<CopyJobState>,
     /// <p>A detailed message explaining the status of the job to copy a resource.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCopyJobState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CopyJobState {
+    Completed,
+    Created,
+    Failed,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCopyJobState),
+}
+
+impl Default for CopyJobState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CopyJobState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CopyJobState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CopyJobState {
+    fn into(self) -> String {
+        match self {
+            CopyJobState::Completed => "COMPLETED".to_string(),
+            CopyJobState::Created => "CREATED".to_string(),
+            CopyJobState::Failed => "FAILED".to_string(),
+            CopyJobState::Running => "RUNNING".to_string(),
+            CopyJobState::UnknownVariant(UnknownCopyJobState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CopyJobState {
+    fn into(self) -> &'a str {
+        match self {
+            CopyJobState::Completed => &"COMPLETED",
+            CopyJobState::Created => &"CREATED",
+            CopyJobState::Failed => &"FAILED",
+            CopyJobState::Running => &"RUNNING",
+            CopyJobState::UnknownVariant(UnknownCopyJobState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CopyJobState {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => CopyJobState::Completed,
+            "CREATED" => CopyJobState::Created,
+            "FAILED" => CopyJobState::Failed,
+            "RUNNING" => CopyJobState::Running,
+            _ => CopyJobState::UnknownVariant(UnknownCopyJobState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CopyJobState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => CopyJobState::Completed,
+            "CREATED" => CopyJobState::Created,
+            "FAILED" => CopyJobState::Failed,
+            "RUNNING" => CopyJobState::Running,
+            _ => CopyJobState::UnknownVariant(UnknownCopyJobState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CopyJobState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CopyJobState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CopyJobState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -742,7 +1246,7 @@ pub struct DescribeBackupJobOutput {
     /// <p>The current state of a resource recovery point.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<BackupJobState>,
     /// <p>A detailed message explaining the status of the job to back up a resource.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -926,11 +1430,11 @@ pub struct DescribeRecoveryPointOutput {
     /// <p><p>A status code specifying the state of the recovery point.</p> <note> <p>A partial status indicates that the recovery point was not successfully re-created and must be retried.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RecoveryPointStatus>,
     /// <p>Specifies the storage class of the recovery point. Valid values are <code>WARM</code> or <code>COLD</code>.</p>
     #[serde(rename = "StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1004,7 +1508,7 @@ pub struct DescribeRestoreJobOutput {
     /// <p>Status code specifying the state of the job that is initiated by AWS Backup to restore a recovery point.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RestoreJobStatus>,
     /// <p>A message showing the status of a job to restore a recovery point.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1194,7 +1698,7 @@ pub struct GetBackupVaultNotificationsOutput {
     /// <p>An array of events that indicate the status of jobs to back up resources to the backup vault.</p>
     #[serde(rename = "BackupVaultEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_vault_events: Option<Vec<String>>,
+    pub backup_vault_events: Option<Vec<BackupVaultEvent>>,
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "BackupVaultName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1285,7 +1789,7 @@ pub struct ListBackupJobsInput {
     /// <p>Returns only backup jobs that are in the specified state.</p>
     #[serde(rename = "ByState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub by_state: Option<String>,
+    pub by_state: Option<BackupJobState>,
     /// <p>The maximum number of items to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1479,7 +1983,7 @@ pub struct ListCopyJobsInput {
     /// <p>Returns only copy jobs that are in the specified state.</p>
     #[serde(rename = "ByState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub by_state: Option<String>,
+    pub by_state: Option<CopyJobState>,
     /// <p>The maximum number of items to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1625,7 +2129,7 @@ pub struct ListRestoreJobsInput {
     /// <p>Returns only restore jobs associated with the specified job status.</p>
     #[serde(rename = "ByStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub by_status: Option<String>,
+    pub by_status: Option<RestoreJobStatus>,
     /// <p>The maximum number of items to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1713,7 +2217,7 @@ pub struct PutBackupVaultAccessPolicyInput {
 pub struct PutBackupVaultNotificationsInput {
     /// <p>An array of events that indicate the status of jobs to back up resources to the backup vault.</p>
     #[serde(rename = "BackupVaultEvents")]
-    pub backup_vault_events: Vec<String>,
+    pub backup_vault_events: Vec<BackupVaultEvent>,
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "BackupVaultName")]
     pub backup_vault_name: String,
@@ -1793,7 +2297,7 @@ pub struct RecoveryPointByBackupVault {
     /// <p>A status code specifying the state of the recovery point.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RecoveryPointStatus>,
 }
 
 /// <p>Contains detailed information about a saved recovery point.</p>
@@ -1823,7 +2327,7 @@ pub struct RecoveryPointByResource {
     /// <p>A status code specifying the state of the recovery point.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RecoveryPointStatus>,
 }
 
 /// <p>Contains information about the backup plan and rule that AWS Backup used to initiate the recovery point backup.</p>
@@ -1846,6 +2350,240 @@ pub struct RecoveryPointCreator {
     #[serde(rename = "BackupRuleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_rule_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRecoveryPointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RecoveryPointStatus {
+    Completed,
+    Deleting,
+    Expired,
+    Partial,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRecoveryPointStatus),
+}
+
+impl Default for RecoveryPointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RecoveryPointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RecoveryPointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RecoveryPointStatus {
+    fn into(self) -> String {
+        match self {
+            RecoveryPointStatus::Completed => "COMPLETED".to_string(),
+            RecoveryPointStatus::Deleting => "DELETING".to_string(),
+            RecoveryPointStatus::Expired => "EXPIRED".to_string(),
+            RecoveryPointStatus::Partial => "PARTIAL".to_string(),
+            RecoveryPointStatus::UnknownVariant(UnknownRecoveryPointStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RecoveryPointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RecoveryPointStatus::Completed => &"COMPLETED",
+            RecoveryPointStatus::Deleting => &"DELETING",
+            RecoveryPointStatus::Expired => &"EXPIRED",
+            RecoveryPointStatus::Partial => &"PARTIAL",
+            RecoveryPointStatus::UnknownVariant(UnknownRecoveryPointStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RecoveryPointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => RecoveryPointStatus::Completed,
+            "DELETING" => RecoveryPointStatus::Deleting,
+            "EXPIRED" => RecoveryPointStatus::Expired,
+            "PARTIAL" => RecoveryPointStatus::Partial,
+            _ => RecoveryPointStatus::UnknownVariant(UnknownRecoveryPointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RecoveryPointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => RecoveryPointStatus::Completed,
+            "DELETING" => RecoveryPointStatus::Deleting,
+            "EXPIRED" => RecoveryPointStatus::Expired,
+            "PARTIAL" => RecoveryPointStatus::Partial,
+            _ => RecoveryPointStatus::UnknownVariant(UnknownRecoveryPointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RecoveryPointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RecoveryPointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RecoveryPointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRestoreJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RestoreJobStatus {
+    Aborted,
+    Completed,
+    Failed,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRestoreJobStatus),
+}
+
+impl Default for RestoreJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RestoreJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RestoreJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RestoreJobStatus {
+    fn into(self) -> String {
+        match self {
+            RestoreJobStatus::Aborted => "ABORTED".to_string(),
+            RestoreJobStatus::Completed => "COMPLETED".to_string(),
+            RestoreJobStatus::Failed => "FAILED".to_string(),
+            RestoreJobStatus::Pending => "PENDING".to_string(),
+            RestoreJobStatus::Running => "RUNNING".to_string(),
+            RestoreJobStatus::UnknownVariant(UnknownRestoreJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RestoreJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RestoreJobStatus::Aborted => &"ABORTED",
+            RestoreJobStatus::Completed => &"COMPLETED",
+            RestoreJobStatus::Failed => &"FAILED",
+            RestoreJobStatus::Pending => &"PENDING",
+            RestoreJobStatus::Running => &"RUNNING",
+            RestoreJobStatus::UnknownVariant(UnknownRestoreJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RestoreJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ABORTED" => RestoreJobStatus::Aborted,
+            "COMPLETED" => RestoreJobStatus::Completed,
+            "FAILED" => RestoreJobStatus::Failed,
+            "PENDING" => RestoreJobStatus::Pending,
+            "RUNNING" => RestoreJobStatus::Running,
+            _ => RestoreJobStatus::UnknownVariant(UnknownRestoreJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RestoreJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ABORTED" => RestoreJobStatus::Aborted,
+            "COMPLETED" => RestoreJobStatus::Completed,
+            "FAILED" => RestoreJobStatus::Failed,
+            "PENDING" => RestoreJobStatus::Pending,
+            "RUNNING" => RestoreJobStatus::Running,
+            _ => RestoreJobStatus::UnknownVariant(UnknownRestoreJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RestoreJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RestoreJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RestoreJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains metadata about a restore job.</p>
@@ -1899,7 +2637,7 @@ pub struct RestoreJobsListMember {
     /// <p>A status code specifying the state of the job initiated by AWS Backup to restore a recovery point.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RestoreJobStatus>,
     /// <p>A detailed message explaining the status of the job to restore a recovery point.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2035,6 +2773,112 @@ pub struct StopBackupJobInput {
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
     #[serde(rename = "BackupJobId")]
     pub backup_job_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageClass {
+    Cold,
+    Deleted,
+    Warm,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageClass),
+}
+
+impl Default for StorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageClass {
+    fn into(self) -> String {
+        match self {
+            StorageClass::Cold => "COLD".to_string(),
+            StorageClass::Deleted => "DELETED".to_string(),
+            StorageClass::Warm => "WARM".to_string(),
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            StorageClass::Cold => &"COLD",
+            StorageClass::Deleted => &"DELETED",
+            StorageClass::Warm => &"WARM",
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "COLD" => StorageClass::Cold,
+            "DELETED" => StorageClass::Deleted,
+            "WARM" => StorageClass::Warm,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COLD" => StorageClass::Cold,
+            "DELETED" => StorageClass::Deleted,
+            "WARM" => StorageClass::Warm,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

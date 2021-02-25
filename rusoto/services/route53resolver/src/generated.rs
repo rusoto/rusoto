@@ -123,7 +123,7 @@ pub struct CreateResolverEndpointRequest {
     pub creator_request_id: String,
     /// <p><p>Specify the applicable value:</p> <ul> <li> <p> <code>INBOUND</code>: Resolver forwards DNS queries to the DNS service for a VPC from your network</p> </li> <li> <p> <code>OUTBOUND</code>: Resolver forwards DNS queries from the DNS service for a VPC to your network</p> </li> </ul></p>
     #[serde(rename = "Direction")]
-    pub direction: String,
+    pub direction: ResolverEndpointDirection,
     /// <p>The subnets and IP addresses in your VPC that DNS queries originate from (for outbound endpoints) or that you forward DNS queries to (for inbound endpoints). The subnet ID uniquely identifies a VPC. </p>
     #[serde(rename = "IpAddresses")]
     pub ip_addresses: Vec<IpAddressRequest>,
@@ -195,7 +195,7 @@ pub struct CreateResolverRuleRequest {
     pub resolver_endpoint_id: Option<String>,
     /// <p>When you want to forward DNS queries for specified domain name to resolvers on your network, specify <code>FORWARD</code>.</p> <p>When you have a forwarding rule to forward DNS queries for a domain to your network and you want Resolver to process queries for a subdomain of that domain, specify <code>SYSTEM</code>.</p> <p>For example, to forward DNS queries for example.com to resolvers on your network, you create a rule and specify <code>FORWARD</code> for <code>RuleType</code>. To then have Resolver process queries for apex.example.com, you create a rule and specify <code>SYSTEM</code> for <code>RuleType</code>.</p> <p>Currently, only Resolver can create rules that have a value of <code>RECURSIVE</code> for <code>RuleType</code>.</p>
     #[serde(rename = "RuleType")]
-    pub rule_type: String,
+    pub rule_type: RuleTypeOption,
     /// <p>A list of the tag keys and values that you want to associate with the endpoint.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -512,7 +512,7 @@ pub struct IpAddressResponse {
     /// <p>A status code that gives the current status of the request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<IpAddressStatus>,
     /// <p>A message that provides additional information about the status of the request.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -521,6 +521,147 @@ pub struct IpAddressResponse {
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpAddressStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpAddressStatus {
+    Attached,
+    Attaching,
+    Creating,
+    DeleteFailedFasExpired,
+    Deleting,
+    Detaching,
+    FailedCreation,
+    FailedResourceGone,
+    RemapAttaching,
+    RemapDetaching,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpAddressStatus),
+}
+
+impl Default for IpAddressStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpAddressStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpAddressStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpAddressStatus {
+    fn into(self) -> String {
+        match self {
+            IpAddressStatus::Attached => "ATTACHED".to_string(),
+            IpAddressStatus::Attaching => "ATTACHING".to_string(),
+            IpAddressStatus::Creating => "CREATING".to_string(),
+            IpAddressStatus::DeleteFailedFasExpired => "DELETE_FAILED_FAS_EXPIRED".to_string(),
+            IpAddressStatus::Deleting => "DELETING".to_string(),
+            IpAddressStatus::Detaching => "DETACHING".to_string(),
+            IpAddressStatus::FailedCreation => "FAILED_CREATION".to_string(),
+            IpAddressStatus::FailedResourceGone => "FAILED_RESOURCE_GONE".to_string(),
+            IpAddressStatus::RemapAttaching => "REMAP_ATTACHING".to_string(),
+            IpAddressStatus::RemapDetaching => "REMAP_DETACHING".to_string(),
+            IpAddressStatus::UnknownVariant(UnknownIpAddressStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpAddressStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IpAddressStatus::Attached => &"ATTACHED",
+            IpAddressStatus::Attaching => &"ATTACHING",
+            IpAddressStatus::Creating => &"CREATING",
+            IpAddressStatus::DeleteFailedFasExpired => &"DELETE_FAILED_FAS_EXPIRED",
+            IpAddressStatus::Deleting => &"DELETING",
+            IpAddressStatus::Detaching => &"DETACHING",
+            IpAddressStatus::FailedCreation => &"FAILED_CREATION",
+            IpAddressStatus::FailedResourceGone => &"FAILED_RESOURCE_GONE",
+            IpAddressStatus::RemapAttaching => &"REMAP_ATTACHING",
+            IpAddressStatus::RemapDetaching => &"REMAP_DETACHING",
+            IpAddressStatus::UnknownVariant(UnknownIpAddressStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpAddressStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTACHED" => IpAddressStatus::Attached,
+            "ATTACHING" => IpAddressStatus::Attaching,
+            "CREATING" => IpAddressStatus::Creating,
+            "DELETE_FAILED_FAS_EXPIRED" => IpAddressStatus::DeleteFailedFasExpired,
+            "DELETING" => IpAddressStatus::Deleting,
+            "DETACHING" => IpAddressStatus::Detaching,
+            "FAILED_CREATION" => IpAddressStatus::FailedCreation,
+            "FAILED_RESOURCE_GONE" => IpAddressStatus::FailedResourceGone,
+            "REMAP_ATTACHING" => IpAddressStatus::RemapAttaching,
+            "REMAP_DETACHING" => IpAddressStatus::RemapDetaching,
+            _ => IpAddressStatus::UnknownVariant(UnknownIpAddressStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpAddressStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTACHED" => IpAddressStatus::Attached,
+            "ATTACHING" => IpAddressStatus::Attaching,
+            "CREATING" => IpAddressStatus::Creating,
+            "DELETE_FAILED_FAS_EXPIRED" => IpAddressStatus::DeleteFailedFasExpired,
+            "DELETING" => IpAddressStatus::Deleting,
+            "DETACHING" => IpAddressStatus::Detaching,
+            "FAILED_CREATION" => IpAddressStatus::FailedCreation,
+            "FAILED_RESOURCE_GONE" => IpAddressStatus::FailedResourceGone,
+            "REMAP_ATTACHING" => IpAddressStatus::RemapAttaching,
+            "REMAP_DETACHING" => IpAddressStatus::RemapDetaching,
+            _ => IpAddressStatus::UnknownVariant(UnknownIpAddressStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpAddressStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IpAddressStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpAddressStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>In an <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_UpdateResolverEndpoint.html">UpdateResolverEndpoint</a> request, information about an IP address to update.</p>
@@ -660,7 +801,7 @@ pub struct ListResolverQueryLogConfigAssociationsRequest {
     /// <p><p>If you specified a value for <code>SortBy</code>, the order that you want query logging associations to be listed in, <code>ASCENDING</code> or <code>DESCENDING</code>.</p> <note> <p>If you submit a second or subsequent <code>ListResolverQueryLogConfigAssociations</code> request and specify the <code>NextToken</code> parameter, you must use the same value for <code>SortOrder</code>, if any, as in the previous request.</p> </note></p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -706,7 +847,7 @@ pub struct ListResolverQueryLogConfigsRequest {
     /// <p><p>If you specified a value for <code>SortBy</code>, the order that you want query logging configurations to be listed in, <code>ASCENDING</code> or <code>DESCENDING</code>.</p> <note> <p>If you submit a second or subsequent <code>ListResolverQueryLogConfigs</code> request and specify the <code>NextToken</code> parameter, you must use the same value for <code>SortOrder</code>, if any, as in the previous request.</p> </note></p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -869,6 +1010,125 @@ pub struct PutResolverRulePolicyResponse {
     pub return_value: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverDNSSECValidationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverDNSSECValidationStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverDNSSECValidationStatus),
+}
+
+impl Default for ResolverDNSSECValidationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverDNSSECValidationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverDNSSECValidationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverDNSSECValidationStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverDNSSECValidationStatus::Disabled => "DISABLED".to_string(),
+            ResolverDNSSECValidationStatus::Disabling => "DISABLING".to_string(),
+            ResolverDNSSECValidationStatus::Enabled => "ENABLED".to_string(),
+            ResolverDNSSECValidationStatus::Enabling => "ENABLING".to_string(),
+            ResolverDNSSECValidationStatus::UnknownVariant(
+                UnknownResolverDNSSECValidationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverDNSSECValidationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverDNSSECValidationStatus::Disabled => &"DISABLED",
+            ResolverDNSSECValidationStatus::Disabling => &"DISABLING",
+            ResolverDNSSECValidationStatus::Enabled => &"ENABLED",
+            ResolverDNSSECValidationStatus::Enabling => &"ENABLING",
+            ResolverDNSSECValidationStatus::UnknownVariant(
+                UnknownResolverDNSSECValidationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverDNSSECValidationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ResolverDNSSECValidationStatus::Disabled,
+            "DISABLING" => ResolverDNSSECValidationStatus::Disabling,
+            "ENABLED" => ResolverDNSSECValidationStatus::Enabled,
+            "ENABLING" => ResolverDNSSECValidationStatus::Enabling,
+            _ => ResolverDNSSECValidationStatus::UnknownVariant(
+                UnknownResolverDNSSECValidationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResolverDNSSECValidationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ResolverDNSSECValidationStatus::Disabled,
+            "DISABLING" => ResolverDNSSECValidationStatus::Disabling,
+            "ENABLED" => ResolverDNSSECValidationStatus::Enabled,
+            "ENABLING" => ResolverDNSSECValidationStatus::Enabling,
+            _ => ResolverDNSSECValidationStatus::UnknownVariant(
+                UnknownResolverDNSSECValidationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverDNSSECValidationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverDNSSECValidationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverDNSSECValidationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A complex type that contains information about a configuration for DNSSEC validation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -888,7 +1148,7 @@ pub struct ResolverDnssecConfig {
     /// <p><p>The validation status for a DNSSEC configuration. The status can be one of the following:</p> <ul> <li> <p> <b>ENABLING:</b> DNSSEC validation is being enabled but is not complete.</p> </li> <li> <p> <b>ENABLED:</b> DNSSEC validation is enabled.</p> </li> <li> <p> <b>DISABLING:</b> DNSSEC validation is being disabled but is not complete.</p> </li> <li> <p> <b>DISABLED</b> DNSSEC validation is disabled.</p> </li> </ul></p>
     #[serde(rename = "ValidationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_status: Option<String>,
+    pub validation_status: Option<ResolverDNSSECValidationStatus>,
 }
 
 /// <p>In the response to a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_CreateResolverEndpoint.html">CreateResolverEndpoint</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DeleteResolverEndpoint.html">DeleteResolverEndpoint</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_GetResolverEndpoint.html">GetResolverEndpoint</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_ListResolverEndpoints.html">ListResolverEndpoints</a>, or <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_UpdateResolverEndpoint.html">UpdateResolverEndpoint</a> request, a complex type that contains settings for an existing inbound or outbound Resolver endpoint.</p>
@@ -910,7 +1170,7 @@ pub struct ResolverEndpoint {
     /// <p><p>Indicates whether the Resolver endpoint allows inbound or outbound DNS queries:</p> <ul> <li> <p> <code>INBOUND</code>: allows DNS queries to your VPC from your network</p> </li> <li> <p> <code>OUTBOUND</code>: allows DNS queries from your VPC to your network</p> </li> </ul></p>
     #[serde(rename = "Direction")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direction: Option<String>,
+    pub direction: Option<ResolverEndpointDirection>,
     /// <p>The ID of the VPC that you want to create the Resolver endpoint in.</p>
     #[serde(rename = "HostVPCId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -938,11 +1198,242 @@ pub struct ResolverEndpoint {
     /// <p><p>A code that specifies the current status of the Resolver endpoint. Valid values include the following:</p> <ul> <li> <p> <code>CREATING</code>: Resolver is creating and configuring one or more Amazon VPC network interfaces for this endpoint.</p> </li> <li> <p> <code>OPERATIONAL</code>: The Amazon VPC network interfaces for this endpoint are correctly configured and able to pass inbound or outbound DNS queries between your network and Resolver.</p> </li> <li> <p> <code>UPDATING</code>: Resolver is associating or disassociating one or more network interfaces with this endpoint.</p> </li> <li> <p> <code>AUTO<em>RECOVERING</code>: Resolver is trying to recover one or more of the network interfaces that are associated with this endpoint. During the recovery process, the endpoint functions with limited capacity because of the limit on the number of DNS queries per IP address (per network interface). For the current limit, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html#limits-api-entities-resolver">Limits on Route 53 Resolver</a>.</p> </li> <li> <p> <code>ACTION</em>NEEDED</code>: This endpoint is unhealthy, and Resolver can&#39;t automatically recover it. To resolve the problem, we recommend that you check each IP address that you associated with the endpoint. For each IP address that isn&#39;t available, add another IP address and then delete the IP address that isn&#39;t available. (An endpoint must always include at least two IP addresses.) A status of <code>ACTION_NEEDED</code> can have a variety of causes. Here are two common causes:</p> <ul> <li> <p>One or more of the network interfaces that are associated with the endpoint were deleted using Amazon VPC.</p> </li> <li> <p>The network interface couldn&#39;t be created for some reason that&#39;s outside the control of Resolver.</p> </li> </ul> </li> <li> <p> <code>DELETING</code>: Resolver is deleting this endpoint and the associated network interfaces.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResolverEndpointStatus>,
     /// <p>A detailed description of the status of the Resolver endpoint.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverEndpointDirection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverEndpointDirection {
+    Inbound,
+    Outbound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverEndpointDirection),
+}
+
+impl Default for ResolverEndpointDirection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverEndpointDirection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverEndpointDirection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverEndpointDirection {
+    fn into(self) -> String {
+        match self {
+            ResolverEndpointDirection::Inbound => "INBOUND".to_string(),
+            ResolverEndpointDirection::Outbound => "OUTBOUND".to_string(),
+            ResolverEndpointDirection::UnknownVariant(UnknownResolverEndpointDirection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverEndpointDirection {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverEndpointDirection::Inbound => &"INBOUND",
+            ResolverEndpointDirection::Outbound => &"OUTBOUND",
+            ResolverEndpointDirection::UnknownVariant(UnknownResolverEndpointDirection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverEndpointDirection {
+    fn from(name: &str) -> Self {
+        match name {
+            "INBOUND" => ResolverEndpointDirection::Inbound,
+            "OUTBOUND" => ResolverEndpointDirection::Outbound,
+            _ => ResolverEndpointDirection::UnknownVariant(UnknownResolverEndpointDirection {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResolverEndpointDirection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INBOUND" => ResolverEndpointDirection::Inbound,
+            "OUTBOUND" => ResolverEndpointDirection::Outbound,
+            _ => {
+                ResolverEndpointDirection::UnknownVariant(UnknownResolverEndpointDirection { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverEndpointDirection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResolverEndpointDirection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverEndpointDirection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverEndpointStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverEndpointStatus {
+    ActionNeeded,
+    AutoRecovering,
+    Creating,
+    Deleting,
+    Operational,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverEndpointStatus),
+}
+
+impl Default for ResolverEndpointStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverEndpointStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverEndpointStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverEndpointStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverEndpointStatus::ActionNeeded => "ACTION_NEEDED".to_string(),
+            ResolverEndpointStatus::AutoRecovering => "AUTO_RECOVERING".to_string(),
+            ResolverEndpointStatus::Creating => "CREATING".to_string(),
+            ResolverEndpointStatus::Deleting => "DELETING".to_string(),
+            ResolverEndpointStatus::Operational => "OPERATIONAL".to_string(),
+            ResolverEndpointStatus::Updating => "UPDATING".to_string(),
+            ResolverEndpointStatus::UnknownVariant(UnknownResolverEndpointStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverEndpointStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverEndpointStatus::ActionNeeded => &"ACTION_NEEDED",
+            ResolverEndpointStatus::AutoRecovering => &"AUTO_RECOVERING",
+            ResolverEndpointStatus::Creating => &"CREATING",
+            ResolverEndpointStatus::Deleting => &"DELETING",
+            ResolverEndpointStatus::Operational => &"OPERATIONAL",
+            ResolverEndpointStatus::Updating => &"UPDATING",
+            ResolverEndpointStatus::UnknownVariant(UnknownResolverEndpointStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverEndpointStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTION_NEEDED" => ResolverEndpointStatus::ActionNeeded,
+            "AUTO_RECOVERING" => ResolverEndpointStatus::AutoRecovering,
+            "CREATING" => ResolverEndpointStatus::Creating,
+            "DELETING" => ResolverEndpointStatus::Deleting,
+            "OPERATIONAL" => ResolverEndpointStatus::Operational,
+            "UPDATING" => ResolverEndpointStatus::Updating,
+            _ => ResolverEndpointStatus::UnknownVariant(UnknownResolverEndpointStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResolverEndpointStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTION_NEEDED" => ResolverEndpointStatus::ActionNeeded,
+            "AUTO_RECOVERING" => ResolverEndpointStatus::AutoRecovering,
+            "CREATING" => ResolverEndpointStatus::Creating,
+            "DELETING" => ResolverEndpointStatus::Deleting,
+            "OPERATIONAL" => ResolverEndpointStatus::Operational,
+            "UPDATING" => ResolverEndpointStatus::Updating,
+            _ => ResolverEndpointStatus::UnknownVariant(UnknownResolverEndpointStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverEndpointStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverEndpointStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverEndpointStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>In the response to a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_CreateResolverQueryLogConfig.html">CreateResolverQueryLogConfig</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DeleteResolverQueryLogConfig.html">DeleteResolverQueryLogConfig</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_GetResolverQueryLogConfig.html">GetResolverQueryLogConfig</a>, or <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_ListResolverQueryLogConfigs.html">ListResolverQueryLogConfigs</a> request, a complex type that contains settings for one query logging configuration.</p>
@@ -984,11 +1475,11 @@ pub struct ResolverQueryLogConfig {
     /// <p>An indication of whether the query logging configuration is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM).</p>
     #[serde(rename = "ShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_status: Option<String>,
+    pub share_status: Option<ShareStatus>,
     /// <p><p>The status of the specified query logging configuration. Valid values include the following:</p> <ul> <li> <p> <code>CREATING</code>: Resolver is creating the query logging configuration.</p> </li> <li> <p> <code>CREATED</code>: The query logging configuration was successfully created. Resolver is logging queries that originate in the specified VPC.</p> </li> <li> <p> <code>DELETING</code>: Resolver is deleting this query logging configuration.</p> </li> <li> <p> <code>FAILED</code>: Resolver can&#39;t deliver logs to the location that is specified in the query logging configuration. Here are two common causes:</p> <ul> <li> <p>The specified destination (for example, an Amazon S3 bucket) was deleted.</p> </li> <li> <p>Permissions don&#39;t allow sending logs to the destination.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResolverQueryLogConfigStatus>,
 }
 
 /// <p>In the response to an <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_AssociateResolverQueryLogConfig.html">AssociateResolverQueryLogConfig</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DisassociateResolverQueryLogConfig.html">DisassociateResolverQueryLogConfig</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_GetResolverQueryLogConfigAssociation.html">GetResolverQueryLogConfigAssociation</a>, or <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_ListResolverQueryLogConfigAssociations.html">ListResolverQueryLogConfigAssociations</a>, request, a complex type that contains settings for a specified association between an Amazon VPC and a query logging configuration.</p>
@@ -1002,7 +1493,7 @@ pub struct ResolverQueryLogConfigAssociation {
     /// <p>If the value of <code>Status</code> is <code>FAILED</code>, the value of <code>Error</code> indicates the cause:</p> <ul> <li> <p> <code>DESTINATION_NOT_FOUND</code>: The specified destination (for example, an Amazon S3 bucket) was deleted.</p> </li> <li> <p> <code>ACCESS_DENIED</code>: Permissions don't allow sending logs to the destination.</p> </li> </ul> <p>If the value of <code>Status</code> is a value other than <code>FAILED</code>, <code>Error</code> is null. </p>
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error: Option<String>,
+    pub error: Option<ResolverQueryLogConfigAssociationError>,
     /// <p>Contains additional information about the error. If the value or <code>Error</code> is null, the value of <code>ErrorMessage</code> also is null.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1022,7 +1513,381 @@ pub struct ResolverQueryLogConfigAssociation {
     /// <p><p>The status of the specified query logging association. Valid values include the following:</p> <ul> <li> <p> <code>CREATING</code>: Resolver is creating an association between an Amazon VPC and a query logging configuration.</p> </li> <li> <p> <code>CREATED</code>: The association between an Amazon VPC and a query logging configuration was successfully created. Resolver is logging queries that originate in the specified VPC.</p> </li> <li> <p> <code>DELETING</code>: Resolver is deleting this query logging association.</p> </li> <li> <p> <code>FAILED</code>: Resolver either couldn&#39;t create or couldn&#39;t delete the query logging association.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResolverQueryLogConfigAssociationStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverQueryLogConfigAssociationError {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverQueryLogConfigAssociationError {
+    AccessDenied,
+    DestinationNotFound,
+    InternalServiceError,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverQueryLogConfigAssociationError),
+}
+
+impl Default for ResolverQueryLogConfigAssociationError {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverQueryLogConfigAssociationError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverQueryLogConfigAssociationError {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverQueryLogConfigAssociationError {
+    fn into(self) -> String {
+        match self {
+            ResolverQueryLogConfigAssociationError::AccessDenied => "ACCESS_DENIED".to_string(),
+            ResolverQueryLogConfigAssociationError::DestinationNotFound => {
+                "DESTINATION_NOT_FOUND".to_string()
+            }
+            ResolverQueryLogConfigAssociationError::InternalServiceError => {
+                "INTERNAL_SERVICE_ERROR".to_string()
+            }
+            ResolverQueryLogConfigAssociationError::None => "NONE".to_string(),
+            ResolverQueryLogConfigAssociationError::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationError { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverQueryLogConfigAssociationError {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverQueryLogConfigAssociationError::AccessDenied => &"ACCESS_DENIED",
+            ResolverQueryLogConfigAssociationError::DestinationNotFound => &"DESTINATION_NOT_FOUND",
+            ResolverQueryLogConfigAssociationError::InternalServiceError => {
+                &"INTERNAL_SERVICE_ERROR"
+            }
+            ResolverQueryLogConfigAssociationError::None => &"NONE",
+            ResolverQueryLogConfigAssociationError::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationError { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverQueryLogConfigAssociationError {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => ResolverQueryLogConfigAssociationError::AccessDenied,
+            "DESTINATION_NOT_FOUND" => ResolverQueryLogConfigAssociationError::DestinationNotFound,
+            "INTERNAL_SERVICE_ERROR" => {
+                ResolverQueryLogConfigAssociationError::InternalServiceError
+            }
+            "NONE" => ResolverQueryLogConfigAssociationError::None,
+            _ => ResolverQueryLogConfigAssociationError::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationError {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResolverQueryLogConfigAssociationError {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => ResolverQueryLogConfigAssociationError::AccessDenied,
+            "DESTINATION_NOT_FOUND" => ResolverQueryLogConfigAssociationError::DestinationNotFound,
+            "INTERNAL_SERVICE_ERROR" => {
+                ResolverQueryLogConfigAssociationError::InternalServiceError
+            }
+            "NONE" => ResolverQueryLogConfigAssociationError::None,
+            _ => ResolverQueryLogConfigAssociationError::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationError { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverQueryLogConfigAssociationError {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverQueryLogConfigAssociationError {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverQueryLogConfigAssociationError {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverQueryLogConfigAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverQueryLogConfigAssociationStatus {
+    ActionNeeded,
+    Active,
+    Creating,
+    Deleting,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverQueryLogConfigAssociationStatus),
+}
+
+impl Default for ResolverQueryLogConfigAssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverQueryLogConfigAssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverQueryLogConfigAssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverQueryLogConfigAssociationStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverQueryLogConfigAssociationStatus::ActionNeeded => "ACTION_NEEDED".to_string(),
+            ResolverQueryLogConfigAssociationStatus::Active => "ACTIVE".to_string(),
+            ResolverQueryLogConfigAssociationStatus::Creating => "CREATING".to_string(),
+            ResolverQueryLogConfigAssociationStatus::Deleting => "DELETING".to_string(),
+            ResolverQueryLogConfigAssociationStatus::Failed => "FAILED".to_string(),
+            ResolverQueryLogConfigAssociationStatus::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverQueryLogConfigAssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverQueryLogConfigAssociationStatus::ActionNeeded => &"ACTION_NEEDED",
+            ResolverQueryLogConfigAssociationStatus::Active => &"ACTIVE",
+            ResolverQueryLogConfigAssociationStatus::Creating => &"CREATING",
+            ResolverQueryLogConfigAssociationStatus::Deleting => &"DELETING",
+            ResolverQueryLogConfigAssociationStatus::Failed => &"FAILED",
+            ResolverQueryLogConfigAssociationStatus::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverQueryLogConfigAssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTION_NEEDED" => ResolverQueryLogConfigAssociationStatus::ActionNeeded,
+            "ACTIVE" => ResolverQueryLogConfigAssociationStatus::Active,
+            "CREATING" => ResolverQueryLogConfigAssociationStatus::Creating,
+            "DELETING" => ResolverQueryLogConfigAssociationStatus::Deleting,
+            "FAILED" => ResolverQueryLogConfigAssociationStatus::Failed,
+            _ => ResolverQueryLogConfigAssociationStatus::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResolverQueryLogConfigAssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTION_NEEDED" => ResolverQueryLogConfigAssociationStatus::ActionNeeded,
+            "ACTIVE" => ResolverQueryLogConfigAssociationStatus::Active,
+            "CREATING" => ResolverQueryLogConfigAssociationStatus::Creating,
+            "DELETING" => ResolverQueryLogConfigAssociationStatus::Deleting,
+            "FAILED" => ResolverQueryLogConfigAssociationStatus::Failed,
+            _ => ResolverQueryLogConfigAssociationStatus::UnknownVariant(
+                UnknownResolverQueryLogConfigAssociationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverQueryLogConfigAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverQueryLogConfigAssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverQueryLogConfigAssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverQueryLogConfigStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverQueryLogConfigStatus {
+    Created,
+    Creating,
+    Deleting,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverQueryLogConfigStatus),
+}
+
+impl Default for ResolverQueryLogConfigStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverQueryLogConfigStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverQueryLogConfigStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverQueryLogConfigStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverQueryLogConfigStatus::Created => "CREATED".to_string(),
+            ResolverQueryLogConfigStatus::Creating => "CREATING".to_string(),
+            ResolverQueryLogConfigStatus::Deleting => "DELETING".to_string(),
+            ResolverQueryLogConfigStatus::Failed => "FAILED".to_string(),
+            ResolverQueryLogConfigStatus::UnknownVariant(UnknownResolverQueryLogConfigStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverQueryLogConfigStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverQueryLogConfigStatus::Created => &"CREATED",
+            ResolverQueryLogConfigStatus::Creating => &"CREATING",
+            ResolverQueryLogConfigStatus::Deleting => &"DELETING",
+            ResolverQueryLogConfigStatus::Failed => &"FAILED",
+            ResolverQueryLogConfigStatus::UnknownVariant(UnknownResolverQueryLogConfigStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverQueryLogConfigStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ResolverQueryLogConfigStatus::Created,
+            "CREATING" => ResolverQueryLogConfigStatus::Creating,
+            "DELETING" => ResolverQueryLogConfigStatus::Deleting,
+            "FAILED" => ResolverQueryLogConfigStatus::Failed,
+            _ => {
+                ResolverQueryLogConfigStatus::UnknownVariant(UnknownResolverQueryLogConfigStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ResolverQueryLogConfigStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ResolverQueryLogConfigStatus::Created,
+            "CREATING" => ResolverQueryLogConfigStatus::Creating,
+            "DELETING" => ResolverQueryLogConfigStatus::Deleting,
+            "FAILED" => ResolverQueryLogConfigStatus::Failed,
+            _ => {
+                ResolverQueryLogConfigStatus::UnknownVariant(UnknownResolverQueryLogConfigStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverQueryLogConfigStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverQueryLogConfigStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverQueryLogConfigStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>For queries that originate in your VPC, detailed information about a Resolver rule, which specifies how to route DNS queries out of the VPC. The <code>ResolverRule</code> parameter appears in the response to a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_CreateResolverRule.html">CreateResolverRule</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DeleteResolverRule.html">DeleteResolverRule</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_GetResolverRule.html">GetResolverRule</a>, <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_ListResolverRules.html">ListResolverRules</a>, or <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_UpdateResolverRule.html">UpdateResolverRule</a> request.</p>
@@ -1068,15 +1933,15 @@ pub struct ResolverRule {
     /// <p>When you want to forward DNS queries for specified domain name to resolvers on your network, specify <code>FORWARD</code>.</p> <p>When you have a forwarding rule to forward DNS queries for a domain to your network and you want Resolver to process queries for a subdomain of that domain, specify <code>SYSTEM</code>.</p> <p>For example, to forward DNS queries for example.com to resolvers on your network, you create a rule and specify <code>FORWARD</code> for <code>RuleType</code>. To then have Resolver process queries for apex.example.com, you create a rule and specify <code>SYSTEM</code> for <code>RuleType</code>.</p> <p>Currently, only Resolver can create rules that have a value of <code>RECURSIVE</code> for <code>RuleType</code>.</p>
     #[serde(rename = "RuleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rule_type: Option<String>,
+    pub rule_type: Option<RuleTypeOption>,
     /// <p>Whether the rules is shared and, if so, whether the current account is sharing the rule with another account, or another account is sharing the rule with the current account.</p>
     #[serde(rename = "ShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub share_status: Option<String>,
+    pub share_status: Option<ShareStatus>,
     /// <p>A code that specifies the current status of the Resolver rule.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResolverRuleStatus>,
     /// <p>A detailed description of the status of a Resolver rule.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1106,7 +1971,7 @@ pub struct ResolverRuleAssociation {
     /// <p>A code that specifies the current status of the association between a Resolver rule and a VPC.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ResolverRuleAssociationStatus>,
     /// <p>A detailed description of the status of the association between a Resolver rule and a VPC.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1115,6 +1980,130 @@ pub struct ResolverRuleAssociation {
     #[serde(rename = "VPCId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverRuleAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverRuleAssociationStatus {
+    Complete,
+    Creating,
+    Deleting,
+    Failed,
+    Overridden,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverRuleAssociationStatus),
+}
+
+impl Default for ResolverRuleAssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverRuleAssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverRuleAssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverRuleAssociationStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverRuleAssociationStatus::Complete => "COMPLETE".to_string(),
+            ResolverRuleAssociationStatus::Creating => "CREATING".to_string(),
+            ResolverRuleAssociationStatus::Deleting => "DELETING".to_string(),
+            ResolverRuleAssociationStatus::Failed => "FAILED".to_string(),
+            ResolverRuleAssociationStatus::Overridden => "OVERRIDDEN".to_string(),
+            ResolverRuleAssociationStatus::UnknownVariant(
+                UnknownResolverRuleAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverRuleAssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverRuleAssociationStatus::Complete => &"COMPLETE",
+            ResolverRuleAssociationStatus::Creating => &"CREATING",
+            ResolverRuleAssociationStatus::Deleting => &"DELETING",
+            ResolverRuleAssociationStatus::Failed => &"FAILED",
+            ResolverRuleAssociationStatus::Overridden => &"OVERRIDDEN",
+            ResolverRuleAssociationStatus::UnknownVariant(
+                UnknownResolverRuleAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverRuleAssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ResolverRuleAssociationStatus::Complete,
+            "CREATING" => ResolverRuleAssociationStatus::Creating,
+            "DELETING" => ResolverRuleAssociationStatus::Deleting,
+            "FAILED" => ResolverRuleAssociationStatus::Failed,
+            "OVERRIDDEN" => ResolverRuleAssociationStatus::Overridden,
+            _ => ResolverRuleAssociationStatus::UnknownVariant(
+                UnknownResolverRuleAssociationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ResolverRuleAssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ResolverRuleAssociationStatus::Complete,
+            "CREATING" => ResolverRuleAssociationStatus::Creating,
+            "DELETING" => ResolverRuleAssociationStatus::Deleting,
+            "FAILED" => ResolverRuleAssociationStatus::Failed,
+            "OVERRIDDEN" => ResolverRuleAssociationStatus::Overridden,
+            _ => ResolverRuleAssociationStatus::UnknownVariant(
+                UnknownResolverRuleAssociationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverRuleAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverRuleAssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverRuleAssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>In an <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_UpdateResolverRule.html">UpdateResolverRule</a> request, information about the changes that you want to make.</p>
@@ -1133,6 +2122,433 @@ pub struct ResolverRuleConfig {
     #[serde(rename = "TargetIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_ips: Option<Vec<TargetAddress>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverRuleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverRuleStatus {
+    Complete,
+    Deleting,
+    Failed,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverRuleStatus),
+}
+
+impl Default for ResolverRuleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverRuleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverRuleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverRuleStatus {
+    fn into(self) -> String {
+        match self {
+            ResolverRuleStatus::Complete => "COMPLETE".to_string(),
+            ResolverRuleStatus::Deleting => "DELETING".to_string(),
+            ResolverRuleStatus::Failed => "FAILED".to_string(),
+            ResolverRuleStatus::Updating => "UPDATING".to_string(),
+            ResolverRuleStatus::UnknownVariant(UnknownResolverRuleStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverRuleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverRuleStatus::Complete => &"COMPLETE",
+            ResolverRuleStatus::Deleting => &"DELETING",
+            ResolverRuleStatus::Failed => &"FAILED",
+            ResolverRuleStatus::Updating => &"UPDATING",
+            ResolverRuleStatus::UnknownVariant(UnknownResolverRuleStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ResolverRuleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ResolverRuleStatus::Complete,
+            "DELETING" => ResolverRuleStatus::Deleting,
+            "FAILED" => ResolverRuleStatus::Failed,
+            "UPDATING" => ResolverRuleStatus::Updating,
+            _ => ResolverRuleStatus::UnknownVariant(UnknownResolverRuleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResolverRuleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ResolverRuleStatus::Complete,
+            "DELETING" => ResolverRuleStatus::Deleting,
+            "FAILED" => ResolverRuleStatus::Failed,
+            "UPDATING" => ResolverRuleStatus::Updating,
+            _ => ResolverRuleStatus::UnknownVariant(UnknownResolverRuleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverRuleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ResolverRuleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverRuleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRuleTypeOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RuleTypeOption {
+    Forward,
+    Recursive,
+    System,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRuleTypeOption),
+}
+
+impl Default for RuleTypeOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RuleTypeOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RuleTypeOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RuleTypeOption {
+    fn into(self) -> String {
+        match self {
+            RuleTypeOption::Forward => "FORWARD".to_string(),
+            RuleTypeOption::Recursive => "RECURSIVE".to_string(),
+            RuleTypeOption::System => "SYSTEM".to_string(),
+            RuleTypeOption::UnknownVariant(UnknownRuleTypeOption { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RuleTypeOption {
+    fn into(self) -> &'a str {
+        match self {
+            RuleTypeOption::Forward => &"FORWARD",
+            RuleTypeOption::Recursive => &"RECURSIVE",
+            RuleTypeOption::System => &"SYSTEM",
+            RuleTypeOption::UnknownVariant(UnknownRuleTypeOption { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RuleTypeOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "FORWARD" => RuleTypeOption::Forward,
+            "RECURSIVE" => RuleTypeOption::Recursive,
+            "SYSTEM" => RuleTypeOption::System,
+            _ => RuleTypeOption::UnknownVariant(UnknownRuleTypeOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RuleTypeOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FORWARD" => RuleTypeOption::Forward,
+            "RECURSIVE" => RuleTypeOption::Recursive,
+            "SYSTEM" => RuleTypeOption::System,
+            _ => RuleTypeOption::UnknownVariant(UnknownRuleTypeOption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RuleTypeOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RuleTypeOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RuleTypeOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownShareStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ShareStatus {
+    NotShared,
+    SharedByMe,
+    SharedWithMe,
+    #[doc(hidden)]
+    UnknownVariant(UnknownShareStatus),
+}
+
+impl Default for ShareStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ShareStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ShareStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ShareStatus {
+    fn into(self) -> String {
+        match self {
+            ShareStatus::NotShared => "NOT_SHARED".to_string(),
+            ShareStatus::SharedByMe => "SHARED_BY_ME".to_string(),
+            ShareStatus::SharedWithMe => "SHARED_WITH_ME".to_string(),
+            ShareStatus::UnknownVariant(UnknownShareStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ShareStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ShareStatus::NotShared => &"NOT_SHARED",
+            ShareStatus::SharedByMe => &"SHARED_BY_ME",
+            ShareStatus::SharedWithMe => &"SHARED_WITH_ME",
+            ShareStatus::UnknownVariant(UnknownShareStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ShareStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "NOT_SHARED" => ShareStatus::NotShared,
+            "SHARED_BY_ME" => ShareStatus::SharedByMe,
+            "SHARED_WITH_ME" => ShareStatus::SharedWithMe,
+            _ => ShareStatus::UnknownVariant(UnknownShareStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ShareStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NOT_SHARED" => ShareStatus::NotShared,
+            "SHARED_BY_ME" => ShareStatus::SharedByMe,
+            "SHARED_WITH_ME" => ShareStatus::SharedWithMe,
+            _ => ShareStatus::UnknownVariant(UnknownShareStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ShareStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ShareStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ShareStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "ASCENDING".to_string(),
+            SortOrder::Descending => "DESCENDING".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"ASCENDING",
+            SortOrder::Descending => &"DESCENDING",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>One tag that you want to add to the specified resource. A tag consists of a <code>Key</code> (a name for the tag) and a <code>Value</code>.</p>
@@ -1196,7 +2612,7 @@ pub struct UpdateResolverDnssecConfigRequest {
     pub resource_id: String,
     /// <p>The new value that you are specifying for DNSSEC validation for the VPC. The value can be <code>ENABLE</code> or <code>DISABLE</code>. Be aware that it can take time for a validation status change to be completed.</p>
     #[serde(rename = "Validation")]
-    pub validation: String,
+    pub validation: Validation,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1247,6 +2663,107 @@ pub struct UpdateResolverRuleResponse {
     #[serde(rename = "ResolverRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolver_rule: Option<ResolverRule>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownValidation {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Validation {
+    Disable,
+    Enable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownValidation),
+}
+
+impl Default for Validation {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Validation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Validation {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Validation {
+    fn into(self) -> String {
+        match self {
+            Validation::Disable => "DISABLE".to_string(),
+            Validation::Enable => "ENABLE".to_string(),
+            Validation::UnknownVariant(UnknownValidation { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Validation {
+    fn into(self) -> &'a str {
+        match self {
+            Validation::Disable => &"DISABLE",
+            Validation::Enable => &"ENABLE",
+            Validation::UnknownVariant(UnknownValidation { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Validation {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLE" => Validation::Disable,
+            "ENABLE" => Validation::Enable,
+            _ => Validation::UnknownVariant(UnknownValidation {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Validation {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLE" => Validation::Disable,
+            "ENABLE" => Validation::Enable,
+            _ => Validation::UnknownVariant(UnknownValidation { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Validation {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Validation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Validation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateResolverEndpointIpAddress

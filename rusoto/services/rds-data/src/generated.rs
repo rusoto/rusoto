@@ -207,6 +207,111 @@ pub struct CommitTransactionResponse {
     pub transaction_status: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDecimalReturnType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DecimalReturnType {
+    DoubleOrLong,
+    String,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDecimalReturnType),
+}
+
+impl Default for DecimalReturnType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DecimalReturnType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DecimalReturnType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DecimalReturnType {
+    fn into(self) -> String {
+        match self {
+            DecimalReturnType::DoubleOrLong => "DOUBLE_OR_LONG".to_string(),
+            DecimalReturnType::String => "STRING".to_string(),
+            DecimalReturnType::UnknownVariant(UnknownDecimalReturnType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DecimalReturnType {
+    fn into(self) -> &'a str {
+        match self {
+            DecimalReturnType::DoubleOrLong => &"DOUBLE_OR_LONG",
+            DecimalReturnType::String => &"STRING",
+            DecimalReturnType::UnknownVariant(UnknownDecimalReturnType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DecimalReturnType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOUBLE_OR_LONG" => DecimalReturnType::DoubleOrLong,
+            "STRING" => DecimalReturnType::String,
+            _ => DecimalReturnType::UnknownVariant(UnknownDecimalReturnType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DecimalReturnType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOUBLE_OR_LONG" => DecimalReturnType::DoubleOrLong,
+            "STRING" => DecimalReturnType::String,
+            _ => DecimalReturnType::UnknownVariant(UnknownDecimalReturnType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DecimalReturnType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DecimalReturnType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DecimalReturnType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The request parameters represent the input of a request to run one or more SQL statements.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -388,7 +493,7 @@ pub struct ResultSetOptions {
     /// <p><p>A value that indicates how a field of <code>DECIMAL</code> type is represented in the response. The value of <code>STRING</code>, the default, specifies that it is converted to a String value. The value of <code>DOUBLE<em>OR</em>LONG</code> specifies that it is converted to a Long value if its scale is 0, or to a Double value otherwise.</p> <important> <p>Conversion to Double or Long can result in roundoff errors due to precision loss. We recommend converting to String, especially when working with currency values.</p> </important></p>
     #[serde(rename = "decimalReturnType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub decimal_return_type: Option<String>,
+    pub decimal_return_type: Option<DecimalReturnType>,
 }
 
 /// <p>The request parameters represent the input of a request to perform a rollback of a transaction.</p>
@@ -427,7 +532,7 @@ pub struct SqlParameter {
     /// <p><p>A hint that specifies the correct object type for data type mapping.</p> <p> <b>Values:</b> </p> <ul> <li> <p> <code>DECIMAL</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>DECIMAL</code> type to the database.</p> </li> <li> <p> <code>TIMESTAMP</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>TIMESTAMP</code> type to the database. The accepted format is <code>YYYY-MM-DD HH:MM:SS[.FFF]</code>.</p> </li> <li> <p> <code>TIME</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>TIME</code> type to the database. The accepted format is <code>HH:MM:SS[.FFF]</code>.</p> </li> <li> <p> <code>DATE</code> - The corresponding <code>String</code> parameter value is sent as an object of <code>DATE</code> type to the database. The accepted format is <code>YYYY-MM-DD</code>.</p> </li> </ul></p>
     #[serde(rename = "typeHint")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_hint: Option<String>,
+    pub type_hint: Option<TypeHint>,
     /// <p>The value of the parameter.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -456,6 +561,117 @@ pub struct StructValue {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<Value>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTypeHint {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TypeHint {
+    Date,
+    Decimal,
+    Time,
+    Timestamp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTypeHint),
+}
+
+impl Default for TypeHint {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TypeHint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TypeHint {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TypeHint {
+    fn into(self) -> String {
+        match self {
+            TypeHint::Date => "DATE".to_string(),
+            TypeHint::Decimal => "DECIMAL".to_string(),
+            TypeHint::Time => "TIME".to_string(),
+            TypeHint::Timestamp => "TIMESTAMP".to_string(),
+            TypeHint::UnknownVariant(UnknownTypeHint { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TypeHint {
+    fn into(self) -> &'a str {
+        match self {
+            TypeHint::Date => &"DATE",
+            TypeHint::Decimal => &"DECIMAL",
+            TypeHint::Time => &"TIME",
+            TypeHint::Timestamp => &"TIMESTAMP",
+            TypeHint::UnknownVariant(UnknownTypeHint { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TypeHint {
+    fn from(name: &str) -> Self {
+        match name {
+            "DATE" => TypeHint::Date,
+            "DECIMAL" => TypeHint::Decimal,
+            "TIME" => TypeHint::Time,
+            "TIMESTAMP" => TypeHint::Timestamp,
+            _ => TypeHint::UnknownVariant(UnknownTypeHint {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TypeHint {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DATE" => TypeHint::Date,
+            "DECIMAL" => TypeHint::Decimal,
+            "TIME" => TypeHint::Time,
+            "TIMESTAMP" => TypeHint::Timestamp,
+            _ => TypeHint::UnknownVariant(UnknownTypeHint { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TypeHint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TypeHint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TypeHint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The response elements represent the results of an update.</p>

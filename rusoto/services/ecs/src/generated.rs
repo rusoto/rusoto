@@ -50,6 +50,232 @@ impl EcsClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAgentUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AgentUpdateStatus {
+    Failed,
+    Pending,
+    Staged,
+    Staging,
+    Updated,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAgentUpdateStatus),
+}
+
+impl Default for AgentUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AgentUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AgentUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AgentUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            AgentUpdateStatus::Failed => "FAILED".to_string(),
+            AgentUpdateStatus::Pending => "PENDING".to_string(),
+            AgentUpdateStatus::Staged => "STAGED".to_string(),
+            AgentUpdateStatus::Staging => "STAGING".to_string(),
+            AgentUpdateStatus::Updated => "UPDATED".to_string(),
+            AgentUpdateStatus::Updating => "UPDATING".to_string(),
+            AgentUpdateStatus::UnknownVariant(UnknownAgentUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AgentUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AgentUpdateStatus::Failed => &"FAILED",
+            AgentUpdateStatus::Pending => &"PENDING",
+            AgentUpdateStatus::Staged => &"STAGED",
+            AgentUpdateStatus::Staging => &"STAGING",
+            AgentUpdateStatus::Updated => &"UPDATED",
+            AgentUpdateStatus::Updating => &"UPDATING",
+            AgentUpdateStatus::UnknownVariant(UnknownAgentUpdateStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AgentUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => AgentUpdateStatus::Failed,
+            "PENDING" => AgentUpdateStatus::Pending,
+            "STAGED" => AgentUpdateStatus::Staged,
+            "STAGING" => AgentUpdateStatus::Staging,
+            "UPDATED" => AgentUpdateStatus::Updated,
+            "UPDATING" => AgentUpdateStatus::Updating,
+            _ => AgentUpdateStatus::UnknownVariant(UnknownAgentUpdateStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AgentUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => AgentUpdateStatus::Failed,
+            "PENDING" => AgentUpdateStatus::Pending,
+            "STAGED" => AgentUpdateStatus::Staged,
+            "STAGING" => AgentUpdateStatus::Staging,
+            "UPDATED" => AgentUpdateStatus::Updated,
+            "UPDATING" => AgentUpdateStatus::Updating,
+            _ => AgentUpdateStatus::UnknownVariant(UnknownAgentUpdateStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AgentUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AgentUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAssignPublicIp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AssignPublicIp {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAssignPublicIp),
+}
+
+impl Default for AssignPublicIp {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AssignPublicIp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AssignPublicIp {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AssignPublicIp {
+    fn into(self) -> String {
+        match self {
+            AssignPublicIp::Disabled => "DISABLED".to_string(),
+            AssignPublicIp::Enabled => "ENABLED".to_string(),
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AssignPublicIp {
+    fn into(self) -> &'a str {
+        match self {
+            AssignPublicIp::Disabled => &"DISABLED",
+            AssignPublicIp::Enabled => &"ENABLED",
+            AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AssignPublicIp {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AssignPublicIp {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => AssignPublicIp::Disabled,
+            "ENABLED" => AssignPublicIp::Enabled,
+            _ => AssignPublicIp::UnknownVariant(UnknownAssignPublicIp { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AssignPublicIp {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AssignPublicIp {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AssignPublicIp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -97,7 +323,7 @@ pub struct Attribute {
     /// <p>The type of the target with which to attach the attribute. This parameter is required if you use the short form ID for a resource instead of the full ARN.</p>
     #[serde(rename = "targetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_type: Option<String>,
+    pub target_type: Option<TargetType>,
     /// <p>The value of the attribute. The <code>value</code> must contain between 1 and 128 characters and may contain letters (uppercase and lowercase), numbers, hyphens, underscores, periods, at signs (@), forward slashes, back slashes, colons, or spaces. The value cannot contain any leading or trailing whitespace.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +343,7 @@ pub struct AutoScalingGroupProvider {
     /// <p>The managed termination protection setting to use for the Auto Scaling group capacity provider. This determines whether the Auto Scaling group has managed termination protection.</p> <important> <p>When using managed termination protection, managed scaling must also be used otherwise managed termination protection will not work.</p> </important> <p>When managed termination protection is enabled, Amazon ECS prevents the Amazon EC2 instances in an Auto Scaling group that contain tasks from being terminated during a scale-in action. The Auto Scaling group and each instance in the Auto Scaling group must have instance protection from scale-in actions enabled as well. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>AWS Auto Scaling User Guide</i>.</p> <p>When managed termination protection is disabled, your Amazon EC2 instances are not protected from termination when the Auto Scaling group scales in.</p>
     #[serde(rename = "managedTerminationProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub managed_termination_protection: Option<String>,
+    pub managed_termination_protection: Option<ManagedTerminationProtection>,
 }
 
 /// <p>The details of the Auto Scaling group capacity provider to update.</p>
@@ -130,7 +356,7 @@ pub struct AutoScalingGroupProviderUpdate {
     /// <p>The managed termination protection setting to use for the Auto Scaling group capacity provider. This determines whether the Auto Scaling group has managed termination protection.</p> <important> <p>When using managed termination protection, managed scaling must also be used otherwise managed termination protection will not work.</p> </important> <p>When managed termination protection is enabled, Amazon ECS prevents the Amazon EC2 instances in an Auto Scaling group that contain tasks from being terminated during a scale-in action. The Auto Scaling group and each instance in the Auto Scaling group must have instance protection from scale-in actions enabled as well. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>AWS Auto Scaling User Guide</i>.</p> <p>When managed termination protection is disabled, your Amazon EC2 instances are not protected from termination when the Auto Scaling group scales in.</p>
     #[serde(rename = "managedTerminationProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub managed_termination_protection: Option<String>,
+    pub managed_termination_protection: Option<ManagedTerminationProtection>,
 }
 
 /// <p>An object representing the networking details for a task or service.</p>
@@ -139,7 +365,7 @@ pub struct AwsVpcConfiguration {
     /// <p>Whether the task's elastic network interface receives a public IP address. The default value is <code>DISABLED</code>.</p>
     #[serde(rename = "assignPublicIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub assign_public_ip: Option<String>,
+    pub assign_public_ip: Option<AssignPublicIp>,
     /// <p><p>The IDs of the security groups associated with the task or service. If you do not specify a security group, the default security group for the VPC is used. There is a limit of 5 security groups that can be specified per <code>AwsVpcConfiguration</code>.</p> <note> <p>All specified security groups must be from the same VPC.</p> </note></p>
     #[serde(rename = "securityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,7 +394,7 @@ pub struct CapacityProvider {
     /// <p>The current status of the capacity provider. Only capacity providers in an <code>ACTIVE</code> state can be used in a cluster. When a capacity provider is successfully deleted, it will have an <code>INACTIVE</code> status.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<CapacityProviderStatus>,
     /// <p><p>The metadata that you apply to the capacity provider to help you categorize and organize it. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case-sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.</p> </li> </ul></p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -176,11 +402,216 @@ pub struct CapacityProvider {
     /// <p><p>The update status of the capacity provider. The following are the possible states that will be returned.</p> <dl> <dt>DELETE<em>IN</em>PROGRESS</dt> <dd> <p>The capacity provider is in the process of being deleted.</p> </dd> <dt>DELETE<em>COMPLETE</dt> <dd> <p>The capacity provider has been successfully deleted and will have an <code>INACTIVE</code> status.</p> </dd> <dt>DELETE</em>FAILED</dt> <dd> <p>The capacity provider was unable to be deleted. The update status reason will provide further details about why the delete failed.</p> </dd> </dl></p>
     #[serde(rename = "updateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_status: Option<String>,
+    pub update_status: Option<CapacityProviderUpdateStatus>,
     /// <p>The update status reason. This provides further details about the update status for the capacity provider.</p>
     #[serde(rename = "updateStatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_status_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapacityProviderField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CapacityProviderField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapacityProviderField),
+}
+
+impl Default for CapacityProviderField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CapacityProviderField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CapacityProviderField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CapacityProviderField {
+    fn into(self) -> String {
+        match self {
+            CapacityProviderField::Tags => "TAGS".to_string(),
+            CapacityProviderField::UnknownVariant(UnknownCapacityProviderField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CapacityProviderField {
+    fn into(self) -> &'a str {
+        match self {
+            CapacityProviderField::Tags => &"TAGS",
+            CapacityProviderField::UnknownVariant(UnknownCapacityProviderField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CapacityProviderField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => CapacityProviderField::Tags,
+            _ => CapacityProviderField::UnknownVariant(UnknownCapacityProviderField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CapacityProviderField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => CapacityProviderField::Tags,
+            _ => CapacityProviderField::UnknownVariant(UnknownCapacityProviderField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CapacityProviderField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CapacityProviderField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for CapacityProviderField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapacityProviderStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CapacityProviderStatus {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapacityProviderStatus),
+}
+
+impl Default for CapacityProviderStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CapacityProviderStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CapacityProviderStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CapacityProviderStatus {
+    fn into(self) -> String {
+        match self {
+            CapacityProviderStatus::Active => "ACTIVE".to_string(),
+            CapacityProviderStatus::Inactive => "INACTIVE".to_string(),
+            CapacityProviderStatus::UnknownVariant(UnknownCapacityProviderStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CapacityProviderStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CapacityProviderStatus::Active => &"ACTIVE",
+            CapacityProviderStatus::Inactive => &"INACTIVE",
+            CapacityProviderStatus::UnknownVariant(UnknownCapacityProviderStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CapacityProviderStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => CapacityProviderStatus::Active,
+            "INACTIVE" => CapacityProviderStatus::Inactive,
+            _ => CapacityProviderStatus::UnknownVariant(UnknownCapacityProviderStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CapacityProviderStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => CapacityProviderStatus::Active,
+            "INACTIVE" => CapacityProviderStatus::Inactive,
+            _ => CapacityProviderStatus::UnknownVariant(UnknownCapacityProviderStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CapacityProviderStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CapacityProviderStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CapacityProviderStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The details of a capacity provider strategy.</p>
@@ -197,6 +628,137 @@ pub struct CapacityProviderStrategyItem {
     #[serde(rename = "weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCapacityProviderUpdateStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CapacityProviderUpdateStatus {
+    DeleteComplete,
+    DeleteFailed,
+    DeleteInProgress,
+    UpdateComplete,
+    UpdateFailed,
+    UpdateInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCapacityProviderUpdateStatus),
+}
+
+impl Default for CapacityProviderUpdateStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CapacityProviderUpdateStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CapacityProviderUpdateStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CapacityProviderUpdateStatus {
+    fn into(self) -> String {
+        match self {
+            CapacityProviderUpdateStatus::DeleteComplete => "DELETE_COMPLETE".to_string(),
+            CapacityProviderUpdateStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            CapacityProviderUpdateStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            CapacityProviderUpdateStatus::UpdateComplete => "UPDATE_COMPLETE".to_string(),
+            CapacityProviderUpdateStatus::UpdateFailed => "UPDATE_FAILED".to_string(),
+            CapacityProviderUpdateStatus::UpdateInProgress => "UPDATE_IN_PROGRESS".to_string(),
+            CapacityProviderUpdateStatus::UnknownVariant(UnknownCapacityProviderUpdateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CapacityProviderUpdateStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CapacityProviderUpdateStatus::DeleteComplete => &"DELETE_COMPLETE",
+            CapacityProviderUpdateStatus::DeleteFailed => &"DELETE_FAILED",
+            CapacityProviderUpdateStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            CapacityProviderUpdateStatus::UpdateComplete => &"UPDATE_COMPLETE",
+            CapacityProviderUpdateStatus::UpdateFailed => &"UPDATE_FAILED",
+            CapacityProviderUpdateStatus::UpdateInProgress => &"UPDATE_IN_PROGRESS",
+            CapacityProviderUpdateStatus::UnknownVariant(UnknownCapacityProviderUpdateStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CapacityProviderUpdateStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE_COMPLETE" => CapacityProviderUpdateStatus::DeleteComplete,
+            "DELETE_FAILED" => CapacityProviderUpdateStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => CapacityProviderUpdateStatus::DeleteInProgress,
+            "UPDATE_COMPLETE" => CapacityProviderUpdateStatus::UpdateComplete,
+            "UPDATE_FAILED" => CapacityProviderUpdateStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => CapacityProviderUpdateStatus::UpdateInProgress,
+            _ => {
+                CapacityProviderUpdateStatus::UnknownVariant(UnknownCapacityProviderUpdateStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for CapacityProviderUpdateStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE_COMPLETE" => CapacityProviderUpdateStatus::DeleteComplete,
+            "DELETE_FAILED" => CapacityProviderUpdateStatus::DeleteFailed,
+            "DELETE_IN_PROGRESS" => CapacityProviderUpdateStatus::DeleteInProgress,
+            "UPDATE_COMPLETE" => CapacityProviderUpdateStatus::UpdateComplete,
+            "UPDATE_FAILED" => CapacityProviderUpdateStatus::UpdateFailed,
+            "UPDATE_IN_PROGRESS" => CapacityProviderUpdateStatus::UpdateInProgress,
+            _ => {
+                CapacityProviderUpdateStatus::UnknownVariant(UnknownCapacityProviderUpdateStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for CapacityProviderUpdateStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CapacityProviderUpdateStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CapacityProviderUpdateStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A regional grouping of one or more container instances on which you can run task requests. Each account receives a default cluster the first time you use the Amazon ECS service, but you may also create other clusters. Clusters may contain more than one instance type simultaneously.</p>
@@ -261,17 +823,428 @@ pub struct Cluster {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterField {
+    Attachments,
+    Settings,
+    Statistics,
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterField),
+}
+
+impl Default for ClusterField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterField {
+    fn into(self) -> String {
+        match self {
+            ClusterField::Attachments => "ATTACHMENTS".to_string(),
+            ClusterField::Settings => "SETTINGS".to_string(),
+            ClusterField::Statistics => "STATISTICS".to_string(),
+            ClusterField::Tags => "TAGS".to_string(),
+            ClusterField::UnknownVariant(UnknownClusterField { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterField {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterField::Attachments => &"ATTACHMENTS",
+            ClusterField::Settings => &"SETTINGS",
+            ClusterField::Statistics => &"STATISTICS",
+            ClusterField::Tags => &"TAGS",
+            ClusterField::UnknownVariant(UnknownClusterField { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ClusterField {
+    fn from(name: &str) -> Self {
+        match name {
+            "ATTACHMENTS" => ClusterField::Attachments,
+            "SETTINGS" => ClusterField::Settings,
+            "STATISTICS" => ClusterField::Statistics,
+            "TAGS" => ClusterField::Tags,
+            _ => ClusterField::UnknownVariant(UnknownClusterField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ATTACHMENTS" => ClusterField::Attachments,
+            "SETTINGS" => ClusterField::Settings,
+            "STATISTICS" => ClusterField::Statistics,
+            "TAGS" => ClusterField::Tags,
+            _ => ClusterField::UnknownVariant(UnknownClusterField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClusterField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ClusterField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The settings to use when creating a cluster. This parameter is used to enable CloudWatch Container Insights for a cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClusterSetting {
     /// <p>The name of the cluster setting. The only supported value is <code>containerInsights</code>.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<ClusterSettingName>,
     /// <p>The value to set for the cluster setting. The supported values are <code>enabled</code> and <code>disabled</code>. If <code>enabled</code> is specified, CloudWatch Container Insights will be enabled for the cluster, otherwise it will be disabled unless the <code>containerInsights</code> account setting is enabled. If a cluster value is specified, it will override the <code>containerInsights</code> value set with <a>PutAccountSetting</a> or <a>PutAccountSettingDefault</a>.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownClusterSettingName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ClusterSettingName {
+    ContainerInsights,
+    #[doc(hidden)]
+    UnknownVariant(UnknownClusterSettingName),
+}
+
+impl Default for ClusterSettingName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ClusterSettingName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ClusterSettingName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ClusterSettingName {
+    fn into(self) -> String {
+        match self {
+            ClusterSettingName::ContainerInsights => "containerInsights".to_string(),
+            ClusterSettingName::UnknownVariant(UnknownClusterSettingName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ClusterSettingName {
+    fn into(self) -> &'a str {
+        match self {
+            ClusterSettingName::ContainerInsights => &"containerInsights",
+            ClusterSettingName::UnknownVariant(UnknownClusterSettingName { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ClusterSettingName {
+    fn from(name: &str) -> Self {
+        match name {
+            "containerInsights" => ClusterSettingName::ContainerInsights,
+            _ => ClusterSettingName::UnknownVariant(UnknownClusterSettingName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ClusterSettingName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "containerInsights" => ClusterSettingName::ContainerInsights,
+            _ => ClusterSettingName::UnknownVariant(UnknownClusterSettingName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ClusterSettingName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ClusterSettingName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ClusterSettingName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompatibility {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Compatibility {
+    Ec2,
+    Fargate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompatibility),
+}
+
+impl Default for Compatibility {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Compatibility {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Compatibility {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Compatibility {
+    fn into(self) -> String {
+        match self {
+            Compatibility::Ec2 => "EC2".to_string(),
+            Compatibility::Fargate => "FARGATE".to_string(),
+            Compatibility::UnknownVariant(UnknownCompatibility { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Compatibility {
+    fn into(self) -> &'a str {
+        match self {
+            Compatibility::Ec2 => &"EC2",
+            Compatibility::Fargate => &"FARGATE",
+            Compatibility::UnknownVariant(UnknownCompatibility { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Compatibility {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => Compatibility::Ec2,
+            "FARGATE" => Compatibility::Fargate,
+            _ => Compatibility::UnknownVariant(UnknownCompatibility {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Compatibility {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => Compatibility::Ec2,
+            "FARGATE" => Compatibility::Fargate,
+            _ => Compatibility::UnknownVariant(UnknownCompatibility { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Compatibility {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Compatibility {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Compatibility {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectivity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Connectivity {
+    Connected,
+    Disconnected,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectivity),
+}
+
+impl Default for Connectivity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Connectivity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Connectivity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Connectivity {
+    fn into(self) -> String {
+        match self {
+            Connectivity::Connected => "CONNECTED".to_string(),
+            Connectivity::Disconnected => "DISCONNECTED".to_string(),
+            Connectivity::UnknownVariant(UnknownConnectivity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Connectivity {
+    fn into(self) -> &'a str {
+        match self {
+            Connectivity::Connected => &"CONNECTED",
+            Connectivity::Disconnected => &"DISCONNECTED",
+            Connectivity::UnknownVariant(UnknownConnectivity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Connectivity {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONNECTED" => Connectivity::Connected,
+            "DISCONNECTED" => Connectivity::Disconnected,
+            _ => Connectivity::UnknownVariant(UnknownConnectivity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Connectivity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONNECTED" => Connectivity::Connected,
+            "DISCONNECTED" => Connectivity::Disconnected,
+            _ => Connectivity::UnknownVariant(UnknownConnectivity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Connectivity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Connectivity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Connectivity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A Docker container that is part of a task.</p>
@@ -297,7 +1270,7 @@ pub struct Container {
     /// <p>The health status of the container. If health checks are not configured for this container in its task definition, then it reports the health status as <code>UNKNOWN</code>.</p>
     #[serde(rename = "healthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_status: Option<String>,
+    pub health_status: Option<HealthStatus>,
     /// <p>The image used for the container.</p>
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -342,6 +1315,120 @@ pub struct Container {
     #[serde(rename = "taskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerCondition {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerCondition {
+    Complete,
+    Healthy,
+    Start,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerCondition),
+}
+
+impl Default for ContainerCondition {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerCondition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerCondition {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerCondition {
+    fn into(self) -> String {
+        match self {
+            ContainerCondition::Complete => "COMPLETE".to_string(),
+            ContainerCondition::Healthy => "HEALTHY".to_string(),
+            ContainerCondition::Start => "START".to_string(),
+            ContainerCondition::Success => "SUCCESS".to_string(),
+            ContainerCondition::UnknownVariant(UnknownContainerCondition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerCondition {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerCondition::Complete => &"COMPLETE",
+            ContainerCondition::Healthy => &"HEALTHY",
+            ContainerCondition::Start => &"START",
+            ContainerCondition::Success => &"SUCCESS",
+            ContainerCondition::UnknownVariant(UnknownContainerCondition { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ContainerCondition {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ContainerCondition::Complete,
+            "HEALTHY" => ContainerCondition::Healthy,
+            "START" => ContainerCondition::Start,
+            "SUCCESS" => ContainerCondition::Success,
+            _ => ContainerCondition::UnknownVariant(UnknownContainerCondition {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerCondition {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ContainerCondition::Complete,
+            "HEALTHY" => ContainerCondition::Healthy,
+            "START" => ContainerCondition::Start,
+            "SUCCESS" => ContainerCondition::Success,
+            _ => ContainerCondition::UnknownVariant(UnknownContainerCondition { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerCondition {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerCondition {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContainerCondition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Container definitions are used in task definitions to describe the different containers that are launched as part of a task.</p>
@@ -510,7 +1597,7 @@ pub struct ContainerDefinition {
 pub struct ContainerDependency {
     /// <p><p>The dependency condition of the container. The following are the available conditions and their behavior:</p> <ul> <li> <p> <code>START</code> - This condition emulates the behavior of links and volumes today. It validates that a dependent container is started before permitting other containers to start.</p> </li> <li> <p> <code>COMPLETE</code> - This condition validates that a dependent container runs to completion (exits) before permitting other containers to start. This can be useful for nonessential containers that run a script and then exit. This condition cannot be set on an essential container.</p> </li> <li> <p> <code>SUCCESS</code> - This condition is the same as <code>COMPLETE</code>, but it also requires that the container exits with a <code>zero</code> status. This condition cannot be set on an essential container.</p> </li> <li> <p> <code>HEALTHY</code> - This condition validates that the dependent container passes its Docker health check before permitting other containers to start. This requires that the dependent container has health checks configured. This condition is confirmed only at task startup.</p> </li> </ul></p>
     #[serde(rename = "condition")]
-    pub condition: String,
+    pub condition: ContainerCondition,
     /// <p>The name of a container.</p>
     #[serde(rename = "containerName")]
     pub container_name: String,
@@ -527,7 +1614,7 @@ pub struct ContainerInstance {
     /// <p>The status of the most recent agent update. If an update has never been requested, this value is <code>NULL</code>.</p>
     #[serde(rename = "agentUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub agent_update_status: Option<String>,
+    pub agent_update_status: Option<AgentUpdateStatus>,
     /// <p>The resources attached to a container instance, such as elastic network interfaces.</p>
     #[serde(rename = "attachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -588,6 +1675,226 @@ pub struct ContainerInstance {
     #[serde(rename = "versionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_info: Option<VersionInfo>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerInstanceField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerInstanceField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerInstanceField),
+}
+
+impl Default for ContainerInstanceField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerInstanceField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerInstanceField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerInstanceField {
+    fn into(self) -> String {
+        match self {
+            ContainerInstanceField::Tags => "TAGS".to_string(),
+            ContainerInstanceField::UnknownVariant(UnknownContainerInstanceField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerInstanceField {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerInstanceField::Tags => &"TAGS",
+            ContainerInstanceField::UnknownVariant(UnknownContainerInstanceField {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerInstanceField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => ContainerInstanceField::Tags,
+            _ => ContainerInstanceField::UnknownVariant(UnknownContainerInstanceField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerInstanceField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => ContainerInstanceField::Tags,
+            _ => ContainerInstanceField::UnknownVariant(UnknownContainerInstanceField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerInstanceField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerInstanceField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContainerInstanceField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContainerInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContainerInstanceStatus {
+    Active,
+    Deregistering,
+    Draining,
+    Registering,
+    RegistrationFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContainerInstanceStatus),
+}
+
+impl Default for ContainerInstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContainerInstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContainerInstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContainerInstanceStatus {
+    fn into(self) -> String {
+        match self {
+            ContainerInstanceStatus::Active => "ACTIVE".to_string(),
+            ContainerInstanceStatus::Deregistering => "DEREGISTERING".to_string(),
+            ContainerInstanceStatus::Draining => "DRAINING".to_string(),
+            ContainerInstanceStatus::Registering => "REGISTERING".to_string(),
+            ContainerInstanceStatus::RegistrationFailed => "REGISTRATION_FAILED".to_string(),
+            ContainerInstanceStatus::UnknownVariant(UnknownContainerInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContainerInstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContainerInstanceStatus::Active => &"ACTIVE",
+            ContainerInstanceStatus::Deregistering => &"DEREGISTERING",
+            ContainerInstanceStatus::Draining => &"DRAINING",
+            ContainerInstanceStatus::Registering => &"REGISTERING",
+            ContainerInstanceStatus::RegistrationFailed => &"REGISTRATION_FAILED",
+            ContainerInstanceStatus::UnknownVariant(UnknownContainerInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContainerInstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ContainerInstanceStatus::Active,
+            "DEREGISTERING" => ContainerInstanceStatus::Deregistering,
+            "DRAINING" => ContainerInstanceStatus::Draining,
+            "REGISTERING" => ContainerInstanceStatus::Registering,
+            "REGISTRATION_FAILED" => ContainerInstanceStatus::RegistrationFailed,
+            _ => ContainerInstanceStatus::UnknownVariant(UnknownContainerInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContainerInstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ContainerInstanceStatus::Active,
+            "DEREGISTERING" => ContainerInstanceStatus::Deregistering,
+            "DRAINING" => ContainerInstanceStatus::Draining,
+            "REGISTERING" => ContainerInstanceStatus::Registering,
+            "REGISTRATION_FAILED" => ContainerInstanceStatus::RegistrationFailed,
+            _ => ContainerInstanceStatus::UnknownVariant(UnknownContainerInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContainerInstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContainerInstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContainerInstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The overrides that should be sent to a container. An empty container override can be passed in. An example of an empty container override would be <code>{"containerOverrides": [ ] }</code>. If a non-empty container override is specified, the <code>name</code> parameter must be included.</p>
@@ -757,7 +2064,7 @@ pub struct CreateServiceRequest {
     /// <p>The launch type on which to run your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you must specify one or more target group ARNs to attach to the service. The service-linked role is required for services that make use of multiple target groups. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. The load balancer name parameter must be omitted. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. The target group ARN parameter must be omitted. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -781,7 +2088,7 @@ pub struct CreateServiceRequest {
     /// <p>Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. If no value is specified, the tags are not propagated. Tags can only be propagated to the tasks within the service during service creation. To add tags to a task after service creation, use the <a>TagResource</a> API action.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub propagate_tags: Option<String>,
+    pub propagate_tags: Option<PropagateTags>,
     /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode or if the service is configured to use service discovery, an external deployment controller, multiple target groups, or Elastic Inference accelerators in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
     #[serde(rename = "role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -789,7 +2096,7 @@ pub struct CreateServiceRequest {
     /// <p><p>The scheduling strategy to use for the service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html">Services</a>.</p> <p>There are two service scheduler strategies available:</p> <ul> <li> <p> <code>REPLICA</code>-The replica scheduling strategy places and maintains the desired number of tasks across your cluster. By default, the service scheduler spreads tasks across Availability Zones. You can use task placement strategies and constraints to customize task placement decisions. This scheduler strategy is required if the service is using the <code>CODE<em>DEPLOY</code> or <code>EXTERNAL</code> deployment controller types.</p> </li> <li> <p> <code>DAEMON</code>-The daemon scheduling strategy deploys exactly one task on each active container instance that meets all of the task placement constraints that you specify in your cluster. The service scheduler also evaluates the task placement constraints for running tasks and will stop tasks that do not meet the placement constraints. When you&#39;re using this strategy, you don&#39;t need to specify a desired number of tasks, a task placement strategy, or use Service Auto Scaling policies.</p> <note> <p>Tasks using the Fargate launch type or the <code>CODE</em>DEPLOY</code> or <code>EXTERNAL</code> deployment controller types don&#39;t support the <code>DAEMON</code> scheduling strategy.</p> </note> </li> </ul></p>
     #[serde(rename = "schedulingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scheduling_strategy: Option<String>,
+    pub scheduling_strategy: Option<SchedulingStrategy>,
     /// <p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a Region or across multiple Regions.</p>
     #[serde(rename = "serviceName")]
     pub service_name: String,
@@ -837,7 +2144,7 @@ pub struct CreateTaskSetRequest {
     /// <p>The launch type that new tasks in the task set will use. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>A load balancer object representing the load balancer to use with the task set. The supported load balancer types are either an Application Load Balancer or a Network Load Balancer.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -881,7 +2188,7 @@ pub struct CreateTaskSetResponse {
 pub struct DeleteAccountSettingRequest {
     /// <p>The resource name for which to disable the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the ENI limit for your Amazon ECS container instances is affected.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: SettingName,
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If you specify the root user, it disables the account setting for all IAM users, IAM roles, and the root user of the account unless an IAM user or role explicitly overrides these settings. If this field is omitted, the setting is changed only for the authenticated user.</p>
     #[serde(rename = "principalArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1029,7 +2336,7 @@ pub struct Deployment {
     /// <p>The launch type the tasks in the service are using. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>The VPC subnet and security group configuration for tasks that receive their own elastic network interface by using the <code>awsvpc</code> networking mode.</p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1045,7 +2352,7 @@ pub struct Deployment {
     /// <p><note> <p>The <code>rolloutState</code> of a service is only returned for services that use the rolling update (<code>ECS</code>) deployment type that are not behind a Classic Load Balancer.</p> </note> <p>The rollout state of the deployment. When a service deployment is started, it begins in an <code>IN_PROGRESS</code> state. When the service reaches a steady state, the deployment will transition to a <code>COMPLETED</code> state. If the service fails to reach a steady state and circuit breaker is enabled, the deployment will transition to a <code>FAILED</code> state. A deployment in <code>FAILED</code> state will launch no new tasks. For more information, see <a>DeploymentCircuitBreaker</a>.</p></p>
     #[serde(rename = "rolloutState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub rollout_state: Option<String>,
+    pub rollout_state: Option<DeploymentRolloutState>,
     /// <p>A description of the rollout state of a deployment.</p>
     #[serde(rename = "rolloutStateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1101,7 +2408,226 @@ pub struct DeploymentConfiguration {
 pub struct DeploymentController {
     /// <p><p>The deployment controller type to use.</p> <p>There are three deployment controller types available:</p> <dl> <dt>ECS</dt> <dd> <p>The rolling update (<code>ECS</code>) deployment type involves replacing the current running version of the container with the latest version. The number of containers Amazon ECS adds or removes from the service during a rolling update is controlled by adjusting the minimum and maximum number of healthy tasks allowed during a service deployment, as specified in the <a>DeploymentConfiguration</a>.</p> </dd> <dt>CODE<em>DEPLOY</dt> <dd> <p>The blue/green (<code>CODE</em>DEPLOY</code>) deployment type uses the blue/green deployment model powered by AWS CodeDeploy, which allows you to verify a new deployment of a service before sending production traffic to it.</p> </dd> <dt>EXTERNAL</dt> <dd> <p>The external (<code>EXTERNAL</code>) deployment type enables you to use any third-party deployment controller for full control over the deployment process for an Amazon ECS service.</p> </dd> </dl></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: DeploymentControllerType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentControllerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentControllerType {
+    CodeDeploy,
+    Ecs,
+    External,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentControllerType),
+}
+
+impl Default for DeploymentControllerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentControllerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentControllerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentControllerType {
+    fn into(self) -> String {
+        match self {
+            DeploymentControllerType::CodeDeploy => "CODE_DEPLOY".to_string(),
+            DeploymentControllerType::Ecs => "ECS".to_string(),
+            DeploymentControllerType::External => "EXTERNAL".to_string(),
+            DeploymentControllerType::UnknownVariant(UnknownDeploymentControllerType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentControllerType {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentControllerType::CodeDeploy => &"CODE_DEPLOY",
+            DeploymentControllerType::Ecs => &"ECS",
+            DeploymentControllerType::External => &"EXTERNAL",
+            DeploymentControllerType::UnknownVariant(UnknownDeploymentControllerType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentControllerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CODE_DEPLOY" => DeploymentControllerType::CodeDeploy,
+            "ECS" => DeploymentControllerType::Ecs,
+            "EXTERNAL" => DeploymentControllerType::External,
+            _ => DeploymentControllerType::UnknownVariant(UnknownDeploymentControllerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentControllerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CODE_DEPLOY" => DeploymentControllerType::CodeDeploy,
+            "ECS" => DeploymentControllerType::Ecs,
+            "EXTERNAL" => DeploymentControllerType::External,
+            _ => DeploymentControllerType::UnknownVariant(UnknownDeploymentControllerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentControllerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentControllerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentControllerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentRolloutState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentRolloutState {
+    Completed,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentRolloutState),
+}
+
+impl Default for DeploymentRolloutState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentRolloutState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentRolloutState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentRolloutState {
+    fn into(self) -> String {
+        match self {
+            DeploymentRolloutState::Completed => "COMPLETED".to_string(),
+            DeploymentRolloutState::Failed => "FAILED".to_string(),
+            DeploymentRolloutState::InProgress => "IN_PROGRESS".to_string(),
+            DeploymentRolloutState::UnknownVariant(UnknownDeploymentRolloutState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentRolloutState {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentRolloutState::Completed => &"COMPLETED",
+            DeploymentRolloutState::Failed => &"FAILED",
+            DeploymentRolloutState::InProgress => &"IN_PROGRESS",
+            DeploymentRolloutState::UnknownVariant(UnknownDeploymentRolloutState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentRolloutState {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => DeploymentRolloutState::Completed,
+            "FAILED" => DeploymentRolloutState::Failed,
+            "IN_PROGRESS" => DeploymentRolloutState::InProgress,
+            _ => DeploymentRolloutState::UnknownVariant(UnknownDeploymentRolloutState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentRolloutState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => DeploymentRolloutState::Completed,
+            "FAILED" => DeploymentRolloutState::Failed,
+            "IN_PROGRESS" => DeploymentRolloutState::InProgress,
+            _ => DeploymentRolloutState::UnknownVariant(UnknownDeploymentRolloutState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentRolloutState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentRolloutState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentRolloutState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1156,7 +2682,7 @@ pub struct DescribeCapacityProvidersRequest {
     /// <p>Specifies whether or not you want to see the resource tags for the capacity provider. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<CapacityProviderField>>,
     /// <p>The maximum number of account setting results returned by <code>DescribeCapacityProviders</code> in paginated output. When this parameter is used, <code>DescribeCapacityProviders</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeCapacityProviders</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 10. If this parameter is not used, then <code>DescribeCapacityProviders</code> returns up to 10 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1194,7 +2720,7 @@ pub struct DescribeClustersRequest {
     /// <p>Whether to include additional information about your clusters in the response. If this field is omitted, the attachments, statistics, and tags are not included.</p> <p>If <code>ATTACHMENTS</code> is specified, the attachments for the container instances or tasks within the cluster are included.</p> <p>If <code>SETTINGS</code> is specified, the settings for the cluster are included.</p> <p>If <code>STATISTICS</code> is specified, the following additional information, separated by launch type, is included:</p> <ul> <li> <p>runningEC2TasksCount</p> </li> <li> <p>runningFargateTasksCount</p> </li> <li> <p>pendingEC2TasksCount</p> </li> <li> <p>pendingFargateTasksCount</p> </li> <li> <p>activeEC2ServiceCount</p> </li> <li> <p>activeFargateServiceCount</p> </li> <li> <p>drainingEC2ServiceCount</p> </li> <li> <p>drainingFargateServiceCount</p> </li> </ul> <p>If <code>TAGS</code> is specified, the metadata tags associated with the cluster are included.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<ClusterField>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1223,7 +2749,7 @@ pub struct DescribeContainerInstancesRequest {
     /// <p>Specifies whether you want to see the resource tags for the container instance. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<ContainerInstanceField>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1249,7 +2775,7 @@ pub struct DescribeServicesRequest {
     /// <p>Specifies whether you want to see the resource tags for the service. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<ServiceField>>,
     /// <p>A list of services to describe. You may specify up to 10 services to describe in a single operation.</p>
     #[serde(rename = "services")]
     pub services: Vec<String>,
@@ -1274,7 +2800,7 @@ pub struct DescribeTaskDefinitionRequest {
     /// <p>Specifies whether to see the resource tags for the task definition. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<TaskDefinitionField>>,
     /// <p>The <code>family</code> for the latest <code>ACTIVE</code> revision, <code>family</code> and <code>revision</code> (<code>family:revision</code>) for a specific revision in the family, or full Amazon Resource Name (ARN) of the task definition to describe.</p>
     #[serde(rename = "taskDefinition")]
     pub task_definition: String,
@@ -1302,7 +2828,7 @@ pub struct DescribeTaskSetsRequest {
     /// <p>Specifies whether to see the resource tags for the task set. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<TaskSetField>>,
     /// <p>The short name or full Amazon Resource Name (ARN) of the service that the task sets exist in.</p>
     #[serde(rename = "service")]
     pub service: String,
@@ -1335,7 +2861,7 @@ pub struct DescribeTasksRequest {
     /// <p>Specifies whether you want to see the resource tags for the task. If <code>TAGS</code> is specified, the tags are included in the response. If this field is omitted, tags are not included in the response.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include: Option<Vec<String>>,
+    pub include: Option<Vec<TaskField>>,
     /// <p>A list of up to 100 task IDs or full ARN entries.</p>
     #[serde(rename = "tasks")]
     pub tasks: Vec<String>,
@@ -1354,6 +2880,112 @@ pub struct DescribeTasksResponse {
     pub tasks: Option<Vec<Task>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDesiredStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DesiredStatus {
+    Pending,
+    Running,
+    Stopped,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDesiredStatus),
+}
+
+impl Default for DesiredStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DesiredStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DesiredStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DesiredStatus {
+    fn into(self) -> String {
+        match self {
+            DesiredStatus::Pending => "PENDING".to_string(),
+            DesiredStatus::Running => "RUNNING".to_string(),
+            DesiredStatus::Stopped => "STOPPED".to_string(),
+            DesiredStatus::UnknownVariant(UnknownDesiredStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DesiredStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DesiredStatus::Pending => &"PENDING",
+            DesiredStatus::Running => &"RUNNING",
+            DesiredStatus::Stopped => &"STOPPED",
+            DesiredStatus::UnknownVariant(UnknownDesiredStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DesiredStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "PENDING" => DesiredStatus::Pending,
+            "RUNNING" => DesiredStatus::Running,
+            "STOPPED" => DesiredStatus::Stopped,
+            _ => DesiredStatus::UnknownVariant(UnknownDesiredStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DesiredStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PENDING" => DesiredStatus::Pending,
+            "RUNNING" => DesiredStatus::Running,
+            "STOPPED" => DesiredStatus::Stopped,
+            _ => DesiredStatus::UnknownVariant(UnknownDesiredStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DesiredStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DesiredStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for DesiredStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing a container instance host device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Device {
@@ -1367,7 +2999,116 @@ pub struct Device {
     /// <p>The explicit permissions to provide to the container for the device. By default, the container has permissions for <code>read</code>, <code>write</code>, and <code>mknod</code> for the device.</p>
     #[serde(rename = "permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<Vec<String>>,
+    pub permissions: Option<Vec<DeviceCgroupPermission>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeviceCgroupPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeviceCgroupPermission {
+    Mknod,
+    Read,
+    Write,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeviceCgroupPermission),
+}
+
+impl Default for DeviceCgroupPermission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeviceCgroupPermission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeviceCgroupPermission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeviceCgroupPermission {
+    fn into(self) -> String {
+        match self {
+            DeviceCgroupPermission::Mknod => "mknod".to_string(),
+            DeviceCgroupPermission::Read => "read".to_string(),
+            DeviceCgroupPermission::Write => "write".to_string(),
+            DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeviceCgroupPermission {
+    fn into(self) -> &'a str {
+        match self {
+            DeviceCgroupPermission::Mknod => &"mknod",
+            DeviceCgroupPermission::Read => &"read",
+            DeviceCgroupPermission::Write => &"write",
+            DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeviceCgroupPermission {
+    fn from(name: &str) -> Self {
+        match name {
+            "mknod" => DeviceCgroupPermission::Mknod,
+            "read" => DeviceCgroupPermission::Read,
+            "write" => DeviceCgroupPermission::Write,
+            _ => DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeviceCgroupPermission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "mknod" => DeviceCgroupPermission::Mknod,
+            "read" => DeviceCgroupPermission::Read,
+            "write" => DeviceCgroupPermission::Write,
+            _ => DeviceCgroupPermission::UnknownVariant(UnknownDeviceCgroupPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeviceCgroupPermission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeviceCgroupPermission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeviceCgroupPermission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1418,7 +3159,7 @@ pub struct DockerVolumeConfiguration {
     /// <p>The scope for the Docker volume that determines its lifecycle. Docker volumes that are scoped to a <code>task</code> are automatically provisioned when the task starts and destroyed when the task stops. Docker volumes that are scoped as <code>shared</code> persist after the task stops.</p>
     #[serde(rename = "scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scope: Option<String>,
+    pub scope: Option<Scope>,
 }
 
 /// <p>The authorization configuration details for the Amazon EFS file system.</p>
@@ -1431,7 +3172,217 @@ pub struct EFSAuthorizationConfig {
     /// <p>Whether or not to use the Amazon ECS task IAM role defined in a task definition when mounting the Amazon EFS file system. If enabled, transit encryption must be enabled in the <code>EFSVolumeConfiguration</code>. If this parameter is omitted, the default value of <code>DISABLED</code> is used. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/efs-volumes.html#efs-volume-accesspoints">Using Amazon EFS Access Points</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "iam")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub iam: Option<String>,
+    pub iam: Option<EFSAuthorizationConfigIAM>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEFSAuthorizationConfigIAM {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EFSAuthorizationConfigIAM {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEFSAuthorizationConfigIAM),
+}
+
+impl Default for EFSAuthorizationConfigIAM {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EFSAuthorizationConfigIAM {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EFSAuthorizationConfigIAM {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EFSAuthorizationConfigIAM {
+    fn into(self) -> String {
+        match self {
+            EFSAuthorizationConfigIAM::Disabled => "DISABLED".to_string(),
+            EFSAuthorizationConfigIAM::Enabled => "ENABLED".to_string(),
+            EFSAuthorizationConfigIAM::UnknownVariant(UnknownEFSAuthorizationConfigIAM {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EFSAuthorizationConfigIAM {
+    fn into(self) -> &'a str {
+        match self {
+            EFSAuthorizationConfigIAM::Disabled => &"DISABLED",
+            EFSAuthorizationConfigIAM::Enabled => &"ENABLED",
+            EFSAuthorizationConfigIAM::UnknownVariant(UnknownEFSAuthorizationConfigIAM {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EFSAuthorizationConfigIAM {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => EFSAuthorizationConfigIAM::Disabled,
+            "ENABLED" => EFSAuthorizationConfigIAM::Enabled,
+            _ => EFSAuthorizationConfigIAM::UnknownVariant(UnknownEFSAuthorizationConfigIAM {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EFSAuthorizationConfigIAM {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => EFSAuthorizationConfigIAM::Disabled,
+            "ENABLED" => EFSAuthorizationConfigIAM::Enabled,
+            _ => {
+                EFSAuthorizationConfigIAM::UnknownVariant(UnknownEFSAuthorizationConfigIAM { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for EFSAuthorizationConfigIAM {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EFSAuthorizationConfigIAM {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EFSAuthorizationConfigIAM {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEFSTransitEncryption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EFSTransitEncryption {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEFSTransitEncryption),
+}
+
+impl Default for EFSTransitEncryption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EFSTransitEncryption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EFSTransitEncryption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EFSTransitEncryption {
+    fn into(self) -> String {
+        match self {
+            EFSTransitEncryption::Disabled => "DISABLED".to_string(),
+            EFSTransitEncryption::Enabled => "ENABLED".to_string(),
+            EFSTransitEncryption::UnknownVariant(UnknownEFSTransitEncryption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EFSTransitEncryption {
+    fn into(self) -> &'a str {
+        match self {
+            EFSTransitEncryption::Disabled => &"DISABLED",
+            EFSTransitEncryption::Enabled => &"ENABLED",
+            EFSTransitEncryption::UnknownVariant(UnknownEFSTransitEncryption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for EFSTransitEncryption {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => EFSTransitEncryption::Disabled,
+            "ENABLED" => EFSTransitEncryption::Enabled,
+            _ => EFSTransitEncryption::UnknownVariant(UnknownEFSTransitEncryption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EFSTransitEncryption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => EFSTransitEncryption::Disabled,
+            "ENABLED" => EFSTransitEncryption::Enabled,
+            _ => EFSTransitEncryption::UnknownVariant(UnknownEFSTransitEncryption { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EFSTransitEncryption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EFSTransitEncryption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EFSTransitEncryption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>This parameter is specified when you are using an Amazon Elastic File System file system for task storage. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/efs-volumes.html">Amazon EFS Volumes</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -1451,7 +3402,7 @@ pub struct EFSVolumeConfiguration {
     /// <p>Whether or not to enable encryption for Amazon EFS data in transit between the Amazon ECS host and the Amazon EFS server. Transit encryption must be enabled if Amazon EFS IAM authorization is used. If this parameter is omitted, the default value of <code>DISABLED</code> is used. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/encryption-in-transit.html">Encrypting Data in Transit</a> in the <i>Amazon Elastic File System User Guide</i>.</p>
     #[serde(rename = "transitEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transit_encryption: Option<String>,
+    pub transit_encryption: Option<EFSTransitEncryption>,
     /// <p>The port to use when sending encrypted data between the Amazon ECS host and the Amazon EFS server. If you do not specify a transit encryption port, it will use the port selection strategy that the Amazon EFS mount helper uses. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/efs-mount-helper.html">EFS Mount Helper</a> in the <i>Amazon Elastic File System User Guide</i>.</p>
     #[serde(rename = "transitEncryptionPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1463,10 +3414,109 @@ pub struct EFSVolumeConfiguration {
 pub struct EnvironmentFile {
     /// <p>The file type to use. The only supported value is <code>s3</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: EnvironmentFileType,
     /// <p>The Amazon Resource Name (ARN) of the Amazon S3 object containing the environment variable file.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEnvironmentFileType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EnvironmentFileType {
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEnvironmentFileType),
+}
+
+impl Default for EnvironmentFileType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EnvironmentFileType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EnvironmentFileType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EnvironmentFileType {
+    fn into(self) -> String {
+        match self {
+            EnvironmentFileType::S3 => "s3".to_string(),
+            EnvironmentFileType::UnknownVariant(UnknownEnvironmentFileType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EnvironmentFileType {
+    fn into(self) -> &'a str {
+        match self {
+            EnvironmentFileType::S3 => &"s3",
+            EnvironmentFileType::UnknownVariant(UnknownEnvironmentFileType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for EnvironmentFileType {
+    fn from(name: &str) -> Self {
+        match name {
+            "s3" => EnvironmentFileType::S3,
+            _ => EnvironmentFileType::UnknownVariant(UnknownEnvironmentFileType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EnvironmentFileType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "s3" => EnvironmentFileType::S3,
+            _ => EnvironmentFileType::UnknownVariant(UnknownEnvironmentFileType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EnvironmentFileType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EnvironmentFileType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EnvironmentFileType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The authorization configuration details for Amazon FSx for Windows File Server file system. See <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_FSxWindowsFileServerVolumeConfiguration.html">FSxWindowsFileServerVolumeConfiguration</a> in the <i>Amazon Elastic Container Service API Reference</i>.</p> <p>For more information and the input format, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/wfsx-volumes.html">Amazon FSx for Windows File Server Volumes</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -1521,7 +3571,113 @@ pub struct FirelensConfiguration {
     pub options: Option<::std::collections::HashMap<String, String>>,
     /// <p>The log router to use. The valid values are <code>fluentd</code> or <code>fluentbit</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FirelensConfigurationType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFirelensConfigurationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FirelensConfigurationType {
+    Fluentbit,
+    Fluentd,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFirelensConfigurationType),
+}
+
+impl Default for FirelensConfigurationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FirelensConfigurationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FirelensConfigurationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FirelensConfigurationType {
+    fn into(self) -> String {
+        match self {
+            FirelensConfigurationType::Fluentbit => "fluentbit".to_string(),
+            FirelensConfigurationType::Fluentd => "fluentd".to_string(),
+            FirelensConfigurationType::UnknownVariant(UnknownFirelensConfigurationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FirelensConfigurationType {
+    fn into(self) -> &'a str {
+        match self {
+            FirelensConfigurationType::Fluentbit => &"fluentbit",
+            FirelensConfigurationType::Fluentd => &"fluentd",
+            FirelensConfigurationType::UnknownVariant(UnknownFirelensConfigurationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FirelensConfigurationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "fluentbit" => FirelensConfigurationType::Fluentbit,
+            "fluentd" => FirelensConfigurationType::Fluentd,
+            _ => FirelensConfigurationType::UnknownVariant(UnknownFirelensConfigurationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FirelensConfigurationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "fluentbit" => FirelensConfigurationType::Fluentbit,
+            "fluentd" => FirelensConfigurationType::Fluentd,
+            _ => {
+                FirelensConfigurationType::UnknownVariant(UnknownFirelensConfigurationType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for FirelensConfigurationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FirelensConfigurationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FirelensConfigurationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>An object representing a container health check. Health check parameters that are specified in a container definition override any Docker health checks that exist in the container image (such as those specified in a parent image or from the image&#39;s Dockerfile).</p> <p>You can view the health status of both individual containers and a task with the DescribeTasks API operation or when viewing the task details in the console.</p> <p>The following describes the possible <code>healthStatus</code> values for a container:</p> <ul> <li> <p> <code>HEALTHY</code>-The container health check has passed successfully.</p> </li> <li> <p> <code>UNHEALTHY</code>-The container health check has failed.</p> </li> <li> <p> <code>UNKNOWN</code>-The container health check is being evaluated or there is no container health check defined.</p> </li> </ul> <p>The following describes the possible <code>healthStatus</code> values for a task. The container health check status of nonessential containers do not have an effect on the health status of a task.</p> <ul> <li> <p> <code>HEALTHY</code>-All essential containers within the task have passed their health checks.</p> </li> <li> <p> <code>UNHEALTHY</code>-One or more essential containers have failed their health check.</p> </li> <li> <p> <code>UNKNOWN</code>-The essential containers within the task are still having their health checks evaluated or there are no container health checks defined.</p> </li> </ul> <p>If a task is run manually, and not as part of a service, the task will continue its lifecycle regardless of its health status. For tasks that are part of a service, if the task reports as unhealthy then the task will be stopped and the service scheduler will replace it.</p> <p>The following are notes about container health check support:</p> <ul> <li> <p>Container health checks require version 1.17.0 or greater of the Amazon ECS container agent. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html">Updating the Amazon ECS Container Agent</a>.</p> </li> <li> <p>Container health checks are supported for Fargate tasks if you are using platform version 1.1.0 or greater. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a>.</p> </li> <li> <p>Container health checks are not supported for tasks that are part of a service that is configured to use a Classic Load Balancer.</p> </li> </ul></p>
@@ -1546,6 +3702,112 @@ pub struct HealthCheck {
     #[serde(rename = "timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHealthStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HealthStatus {
+    Healthy,
+    Unhealthy,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHealthStatus),
+}
+
+impl Default for HealthStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HealthStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HealthStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HealthStatus {
+    fn into(self) -> String {
+        match self {
+            HealthStatus::Healthy => "HEALTHY".to_string(),
+            HealthStatus::Unhealthy => "UNHEALTHY".to_string(),
+            HealthStatus::Unknown => "UNKNOWN".to_string(),
+            HealthStatus::UnknownVariant(UnknownHealthStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HealthStatus {
+    fn into(self) -> &'a str {
+        match self {
+            HealthStatus::Healthy => &"HEALTHY",
+            HealthStatus::Unhealthy => &"UNHEALTHY",
+            HealthStatus::Unknown => &"UNKNOWN",
+            HealthStatus::UnknownVariant(UnknownHealthStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HealthStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => HealthStatus::Healthy,
+            "UNHEALTHY" => HealthStatus::Unhealthy,
+            "UNKNOWN" => HealthStatus::Unknown,
+            _ => HealthStatus::UnknownVariant(UnknownHealthStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HealthStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => HealthStatus::Healthy,
+            "UNHEALTHY" => HealthStatus::Unhealthy,
+            "UNKNOWN" => HealthStatus::Unknown,
+            _ => HealthStatus::UnknownVariant(UnknownHealthStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HealthStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for HealthStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HealthStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Hostnames and IP address entries that are added to the <code>/etc/hosts</code> file of a container via the <code>extraHosts</code> parameter of its <a>ContainerDefinition</a>. </p>
@@ -1592,6 +3854,111 @@ pub struct InferenceAcceleratorOverride {
     pub device_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpcMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpcMode {
+    Host,
+    None,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpcMode),
+}
+
+impl Default for IpcMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpcMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpcMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpcMode {
+    fn into(self) -> String {
+        match self {
+            IpcMode::Host => "host".to_string(),
+            IpcMode::None => "none".to_string(),
+            IpcMode::Task => "task".to_string(),
+            IpcMode::UnknownVariant(UnknownIpcMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpcMode {
+    fn into(self) -> &'a str {
+        match self {
+            IpcMode::Host => &"host",
+            IpcMode::None => &"none",
+            IpcMode::Task => &"task",
+            IpcMode::UnknownVariant(UnknownIpcMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpcMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "host" => IpcMode::Host,
+            "none" => IpcMode::None,
+            "task" => IpcMode::Task,
+            _ => IpcMode::UnknownVariant(UnknownIpcMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpcMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "host" => IpcMode::Host,
+            "none" => IpcMode::None,
+            "task" => IpcMode::Task,
+            _ => IpcMode::UnknownVariant(UnknownIpcMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpcMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IpcMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpcMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The Linux capabilities for the container that are added to or dropped from the default configuration provided by Docker. For more information on the default capabilities and the non-default available capabilities, see <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities">Runtime privilege and Linux capabilities</a> in the <i>Docker run reference</i>. For more detailed information on these Linux capabilities, see the <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">capabilities(7)</a> Linux manual page.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KernelCapabilities {
@@ -1616,6 +3983,106 @@ pub struct KeyValuePair {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLaunchType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LaunchType {
+    Ec2,
+    Fargate,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLaunchType),
+}
+
+impl Default for LaunchType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LaunchType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LaunchType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LaunchType {
+    fn into(self) -> String {
+        match self {
+            LaunchType::Ec2 => "EC2".to_string(),
+            LaunchType::Fargate => "FARGATE".to_string(),
+            LaunchType::UnknownVariant(UnknownLaunchType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LaunchType {
+    fn into(self) -> &'a str {
+        match self {
+            LaunchType::Ec2 => &"EC2",
+            LaunchType::Fargate => &"FARGATE",
+            LaunchType::UnknownVariant(UnknownLaunchType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LaunchType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EC2" => LaunchType::Ec2,
+            "FARGATE" => LaunchType::Fargate,
+            _ => LaunchType::UnknownVariant(UnknownLaunchType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LaunchType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EC2" => LaunchType::Ec2,
+            "FARGATE" => LaunchType::Fargate,
+            _ => LaunchType::UnknownVariant(UnknownLaunchType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LaunchType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LaunchType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LaunchType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Linux-specific options that are applied to the container, such as Linux <a>KernelCapabilities</a>.</p>
@@ -1665,7 +4132,7 @@ pub struct ListAccountSettingsRequest {
     /// <p>The name of the account setting you want to list the settings for.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SettingName>,
     /// <p><p>The <code>nextToken</code> value returned from a <code>ListAccountSettings</code> request indicating that more results are available to fulfill the request and further calls will be needed. If <code>maxResults</code> was provided, it is possible the number of results to be fewer than <code>maxResults</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1718,7 +4185,7 @@ pub struct ListAttributesRequest {
     pub next_token: Option<String>,
     /// <p>The type of the target with which to list attributes.</p>
     #[serde(rename = "targetType")]
-    pub target_type: String,
+    pub target_type: TargetType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1782,7 +4249,7 @@ pub struct ListContainerInstancesRequest {
     /// <p>Filters the container instances by status. For example, if you specify the <code>DRAINING</code> status, the results include only container instances that have been set to <code>DRAINING</code> using <a>UpdateContainerInstancesState</a>. If you do not specify this parameter, the default is to include container instances set to all states other than <code>INACTIVE</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ContainerInstanceStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1808,7 +4275,7 @@ pub struct ListServicesRequest {
     /// <p>The launch type for the services to list.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>The maximum number of service results returned by <code>ListServices</code> in paginated output. When this parameter is used, <code>ListServices</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListServices</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListServices</code> returns up to 10 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1820,7 +4287,7 @@ pub struct ListServicesRequest {
     /// <p>The scheduling strategy for services to list.</p>
     #[serde(rename = "schedulingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scheduling_strategy: Option<String>,
+    pub scheduling_strategy: Option<SchedulingStrategy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1871,7 +4338,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
     /// <p>The task definition family status with which to filter the <code>ListTaskDefinitionFamilies</code> results. By default, both <code>ACTIVE</code> and <code>INACTIVE</code> task definition families are listed. If this parameter is set to <code>ACTIVE</code>, only task definition families that have an <code>ACTIVE</code> task definition revision are returned. If this parameter is set to <code>INACTIVE</code>, only task definition families that do not have any <code>ACTIVE</code> task definition revisions are returned. If you paginate the resulting output, be sure to keep the <code>status</code> value constant in each subsequent request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TaskDefinitionFamilyStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1905,11 +4372,11 @@ pub struct ListTaskDefinitionsRequest {
     /// <p>The order in which to sort the results. Valid values are <code>ASC</code> and <code>DESC</code>. By default (<code>ASC</code>), task definitions are listed lexicographically by family name and in ascending numerical order by revision so that the newest task definitions in a family are listed last. Setting this parameter to <code>DESC</code> reverses the sort order on family name and revision so that the newest task definitions in a family are listed first.</p>
     #[serde(rename = "sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort: Option<String>,
+    pub sort: Option<SortOrder>,
     /// <p>The task definition status with which to filter the <code>ListTaskDefinitions</code> results. By default, only <code>ACTIVE</code> task definitions are listed. By setting this parameter to <code>INACTIVE</code>, you can view task definitions that are <code>INACTIVE</code> as long as an active task or service still references them. If you paginate the resulting output, be sure to keep the <code>status</code> value constant in each subsequent request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TaskDefinitionStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1939,7 +4406,7 @@ pub struct ListTasksRequest {
     /// <p><p>The task desired status with which to filter the <code>ListTasks</code> results. Specifying a <code>desiredStatus</code> of <code>STOPPED</code> limits the results to tasks that Amazon ECS has set the desired status to <code>STOPPED</code>. This can be useful for debugging tasks that are not starting properly or have died or finished. The default status filter is <code>RUNNING</code>, which shows tasks that Amazon ECS has set the desired status to <code>RUNNING</code>.</p> <note> <p>Although you can filter results based on a desired status of <code>PENDING</code>, this does not return any results. Amazon ECS never sets the desired status of a task to that value (only a task&#39;s <code>lastStatus</code> may have a value of <code>PENDING</code>).</p> </note></p>
     #[serde(rename = "desiredStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub desired_status: Option<String>,
+    pub desired_status: Option<DesiredStatus>,
     /// <p>The name of the family with which to filter the <code>ListTasks</code> results. Specifying a <code>family</code> limits the results to tasks that belong to that family.</p>
     #[serde(rename = "family")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1947,7 +4414,7 @@ pub struct ListTasksRequest {
     /// <p>The launch type for services to list.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>The maximum number of task results returned by <code>ListTasks</code> in paginated output. When this parameter is used, <code>ListTasks</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListTasks</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListTasks</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2005,7 +4472,7 @@ pub struct LoadBalancer {
 pub struct LogConfiguration {
     /// <p><p>The log driver to use for the container.</p> <p>For tasks on AWS Fargate, the supported log drivers are <code>awslogs</code>, <code>splunk</code>, and <code>awsfirelens</code>.</p> <p>For tasks hosted on Amazon EC2 instances, the supported log drivers are <code>awslogs</code>, <code>fluentd</code>, <code>gelf</code>, <code>json-file</code>, <code>journald</code>, <code>logentries</code>,<code>syslog</code>, <code>splunk</code>, and <code>awsfirelens</code>.</p> <p>For more information about using the <code>awslogs</code> log driver, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_awslogs.html">Using the awslogs log driver</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>For more information about using the <code>awsfirelens</code> log driver, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom log routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>If you have a custom driver that is not listed, you can fork the Amazon ECS container agent project that is <a href="https://github.com/aws/amazon-ecs-agent">available on GitHub</a> and customize it to work with that driver. We encourage you to submit pull requests for changes that you would like to have included. However, we do not currently provide support for running modified copies of this software.</p> </note></p>
     #[serde(rename = "logDriver")]
-    pub log_driver: String,
+    pub log_driver: LogDriver,
     /// <p>The configuration options to send to the log driver. This parameter requires version 1.19 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version --format '{{.Server.APIVersion}}'</code> </p>
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2014,6 +4481,136 @@ pub struct LogConfiguration {
     #[serde(rename = "secretOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_options: Option<Vec<Secret>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogDriver {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogDriver {
+    Awsfirelens,
+    Awslogs,
+    Fluentd,
+    Gelf,
+    Journald,
+    JsonFile,
+    Splunk,
+    Syslog,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogDriver),
+}
+
+impl Default for LogDriver {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogDriver {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogDriver {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogDriver {
+    fn into(self) -> String {
+        match self {
+            LogDriver::Awsfirelens => "awsfirelens".to_string(),
+            LogDriver::Awslogs => "awslogs".to_string(),
+            LogDriver::Fluentd => "fluentd".to_string(),
+            LogDriver::Gelf => "gelf".to_string(),
+            LogDriver::Journald => "journald".to_string(),
+            LogDriver::JsonFile => "json-file".to_string(),
+            LogDriver::Splunk => "splunk".to_string(),
+            LogDriver::Syslog => "syslog".to_string(),
+            LogDriver::UnknownVariant(UnknownLogDriver { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogDriver {
+    fn into(self) -> &'a str {
+        match self {
+            LogDriver::Awsfirelens => &"awsfirelens",
+            LogDriver::Awslogs => &"awslogs",
+            LogDriver::Fluentd => &"fluentd",
+            LogDriver::Gelf => &"gelf",
+            LogDriver::Journald => &"journald",
+            LogDriver::JsonFile => &"json-file",
+            LogDriver::Splunk => &"splunk",
+            LogDriver::Syslog => &"syslog",
+            LogDriver::UnknownVariant(UnknownLogDriver { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogDriver {
+    fn from(name: &str) -> Self {
+        match name {
+            "awsfirelens" => LogDriver::Awsfirelens,
+            "awslogs" => LogDriver::Awslogs,
+            "fluentd" => LogDriver::Fluentd,
+            "gelf" => LogDriver::Gelf,
+            "journald" => LogDriver::Journald,
+            "json-file" => LogDriver::JsonFile,
+            "splunk" => LogDriver::Splunk,
+            "syslog" => LogDriver::Syslog,
+            _ => LogDriver::UnknownVariant(UnknownLogDriver {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogDriver {
+    fn from(name: String) -> Self {
+        match &*name {
+            "awsfirelens" => LogDriver::Awsfirelens,
+            "awslogs" => LogDriver::Awslogs,
+            "fluentd" => LogDriver::Fluentd,
+            "gelf" => LogDriver::Gelf,
+            "journald" => LogDriver::Journald,
+            "json-file" => LogDriver::JsonFile,
+            "splunk" => LogDriver::Splunk,
+            "syslog" => LogDriver::Syslog,
+            _ => LogDriver::UnknownVariant(UnknownLogDriver { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogDriver {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogDriver {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogDriver {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The managed scaling settings for the Auto Scaling group capacity provider.</p> <p>When managed scaling is enabled, Amazon ECS manages the scale-in and scale-out actions of the Auto Scaling group. Amazon ECS manages a target tracking scaling policy using an Amazon ECS-managed CloudWatch metric with the specified <code>targetCapacity</code> value as the target value for the metric. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html#asg-capacity-providers-managed-scaling">Using Managed Scaling</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If managed scaling is disabled, the user must manage the scaling of the Auto Scaling group.</p>
@@ -2034,11 +4631,225 @@ pub struct ManagedScaling {
     /// <p>Whether or not to enable managed scaling for the capacity provider.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ManagedScalingStatus>,
     /// <p>The target capacity value for the capacity provider. The specified value must be greater than <code>0</code> and less than or equal to <code>100</code>. A value of <code>100</code> will result in the Amazon EC2 instances in your Auto Scaling group being completely utilized.</p>
     #[serde(rename = "targetCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_capacity: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownManagedScalingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ManagedScalingStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownManagedScalingStatus),
+}
+
+impl Default for ManagedScalingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ManagedScalingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ManagedScalingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ManagedScalingStatus {
+    fn into(self) -> String {
+        match self {
+            ManagedScalingStatus::Disabled => "DISABLED".to_string(),
+            ManagedScalingStatus::Enabled => "ENABLED".to_string(),
+            ManagedScalingStatus::UnknownVariant(UnknownManagedScalingStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ManagedScalingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ManagedScalingStatus::Disabled => &"DISABLED",
+            ManagedScalingStatus::Enabled => &"ENABLED",
+            ManagedScalingStatus::UnknownVariant(UnknownManagedScalingStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ManagedScalingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ManagedScalingStatus::Disabled,
+            "ENABLED" => ManagedScalingStatus::Enabled,
+            _ => ManagedScalingStatus::UnknownVariant(UnknownManagedScalingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ManagedScalingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ManagedScalingStatus::Disabled,
+            "ENABLED" => ManagedScalingStatus::Enabled,
+            _ => ManagedScalingStatus::UnknownVariant(UnknownManagedScalingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ManagedScalingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ManagedScalingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ManagedScalingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownManagedTerminationProtection {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ManagedTerminationProtection {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownManagedTerminationProtection),
+}
+
+impl Default for ManagedTerminationProtection {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ManagedTerminationProtection {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ManagedTerminationProtection {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ManagedTerminationProtection {
+    fn into(self) -> String {
+        match self {
+            ManagedTerminationProtection::Disabled => "DISABLED".to_string(),
+            ManagedTerminationProtection::Enabled => "ENABLED".to_string(),
+            ManagedTerminationProtection::UnknownVariant(UnknownManagedTerminationProtection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ManagedTerminationProtection {
+    fn into(self) -> &'a str {
+        match self {
+            ManagedTerminationProtection::Disabled => &"DISABLED",
+            ManagedTerminationProtection::Enabled => &"ENABLED",
+            ManagedTerminationProtection::UnknownVariant(UnknownManagedTerminationProtection {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ManagedTerminationProtection {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ManagedTerminationProtection::Disabled,
+            "ENABLED" => ManagedTerminationProtection::Enabled,
+            _ => {
+                ManagedTerminationProtection::UnknownVariant(UnknownManagedTerminationProtection {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for ManagedTerminationProtection {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ManagedTerminationProtection::Disabled,
+            "ENABLED" => ManagedTerminationProtection::Enabled,
+            _ => {
+                ManagedTerminationProtection::UnknownVariant(UnknownManagedTerminationProtection {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ManagedTerminationProtection {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ManagedTerminationProtection {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ManagedTerminationProtection {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details on a volume mount point that is used in a container definition.</p>
@@ -2076,7 +4887,7 @@ pub struct NetworkBinding {
     /// <p>The protocol used for the network binding.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<TransportProtocol>,
 }
 
 /// <p>An object representing the network configuration for a task or service.</p>
@@ -2106,6 +4917,216 @@ pub struct NetworkInterface {
     pub private_ipv_4_address: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNetworkMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NetworkMode {
+    Awsvpc,
+    Bridge,
+    Host,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNetworkMode),
+}
+
+impl Default for NetworkMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NetworkMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NetworkMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NetworkMode {
+    fn into(self) -> String {
+        match self {
+            NetworkMode::Awsvpc => "awsvpc".to_string(),
+            NetworkMode::Bridge => "bridge".to_string(),
+            NetworkMode::Host => "host".to_string(),
+            NetworkMode::None => "none".to_string(),
+            NetworkMode::UnknownVariant(UnknownNetworkMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NetworkMode {
+    fn into(self) -> &'a str {
+        match self {
+            NetworkMode::Awsvpc => &"awsvpc",
+            NetworkMode::Bridge => &"bridge",
+            NetworkMode::Host => &"host",
+            NetworkMode::None => &"none",
+            NetworkMode::UnknownVariant(UnknownNetworkMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for NetworkMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "awsvpc" => NetworkMode::Awsvpc,
+            "bridge" => NetworkMode::Bridge,
+            "host" => NetworkMode::Host,
+            "none" => NetworkMode::None,
+            _ => NetworkMode::UnknownVariant(UnknownNetworkMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NetworkMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "awsvpc" => NetworkMode::Awsvpc,
+            "bridge" => NetworkMode::Bridge,
+            "host" => NetworkMode::Host,
+            "none" => NetworkMode::None,
+            _ => NetworkMode::UnknownVariant(UnknownNetworkMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NetworkMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NetworkMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NetworkMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPidMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PidMode {
+    Host,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPidMode),
+}
+
+impl Default for PidMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PidMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PidMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PidMode {
+    fn into(self) -> String {
+        match self {
+            PidMode::Host => "host".to_string(),
+            PidMode::Task => "task".to_string(),
+            PidMode::UnknownVariant(UnknownPidMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PidMode {
+    fn into(self) -> &'a str {
+        match self {
+            PidMode::Host => &"host",
+            PidMode::Task => &"task",
+            PidMode::UnknownVariant(UnknownPidMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PidMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "host" => PidMode::Host,
+            "task" => PidMode::Task,
+            _ => PidMode::UnknownVariant(UnknownPidMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PidMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "host" => PidMode::Host,
+            "task" => PidMode::Task,
+            _ => PidMode::UnknownVariant(UnknownPidMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PidMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PidMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PidMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>An object representing a constraint on task placement. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>If you are using the Fargate launch type, task placement constraints are not supported.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PlacementConstraint {
@@ -2116,7 +5137,111 @@ pub struct PlacementConstraint {
     /// <p>The type of constraint. Use <code>distinctInstance</code> to ensure that each task in a particular group is running on a different container instance. Use <code>memberOf</code> to restrict the selection to a group of valid candidates.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PlacementConstraintType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlacementConstraintType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlacementConstraintType {
+    DistinctInstance,
+    MemberOf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlacementConstraintType),
+}
+
+impl Default for PlacementConstraintType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlacementConstraintType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlacementConstraintType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlacementConstraintType {
+    fn into(self) -> String {
+        match self {
+            PlacementConstraintType::DistinctInstance => "distinctInstance".to_string(),
+            PlacementConstraintType::MemberOf => "memberOf".to_string(),
+            PlacementConstraintType::UnknownVariant(UnknownPlacementConstraintType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlacementConstraintType {
+    fn into(self) -> &'a str {
+        match self {
+            PlacementConstraintType::DistinctInstance => &"distinctInstance",
+            PlacementConstraintType::MemberOf => &"memberOf",
+            PlacementConstraintType::UnknownVariant(UnknownPlacementConstraintType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlacementConstraintType {
+    fn from(name: &str) -> Self {
+        match name {
+            "distinctInstance" => PlacementConstraintType::DistinctInstance,
+            "memberOf" => PlacementConstraintType::MemberOf,
+            _ => PlacementConstraintType::UnknownVariant(UnknownPlacementConstraintType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlacementConstraintType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "distinctInstance" => PlacementConstraintType::DistinctInstance,
+            "memberOf" => PlacementConstraintType::MemberOf,
+            _ => PlacementConstraintType::UnknownVariant(UnknownPlacementConstraintType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementConstraintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlacementConstraintType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlacementConstraintType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The task placement strategy for a task or service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html">Task Placement Strategies</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -2129,7 +5254,116 @@ pub struct PlacementStrategy {
     /// <p>The type of placement strategy. The <code>random</code> placement strategy randomly places tasks on available candidates. The <code>spread</code> placement strategy spreads placement across available candidates evenly based on the <code>field</code> parameter. The <code>binpack</code> strategy places tasks on available candidates that have the least available amount of the resource that is specified with the <code>field</code> parameter. For example, if you binpack on memory, a task is placed on the instance with the least amount of remaining memory (but still enough to run the task).</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<PlacementStrategyType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlacementStrategyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlacementStrategyType {
+    Binpack,
+    Random,
+    Spread,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlacementStrategyType),
+}
+
+impl Default for PlacementStrategyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlacementStrategyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlacementStrategyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlacementStrategyType {
+    fn into(self) -> String {
+        match self {
+            PlacementStrategyType::Binpack => "binpack".to_string(),
+            PlacementStrategyType::Random => "random".to_string(),
+            PlacementStrategyType::Spread => "spread".to_string(),
+            PlacementStrategyType::UnknownVariant(UnknownPlacementStrategyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlacementStrategyType {
+    fn into(self) -> &'a str {
+        match self {
+            PlacementStrategyType::Binpack => &"binpack",
+            PlacementStrategyType::Random => &"random",
+            PlacementStrategyType::Spread => &"spread",
+            PlacementStrategyType::UnknownVariant(UnknownPlacementStrategyType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlacementStrategyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "binpack" => PlacementStrategyType::Binpack,
+            "random" => PlacementStrategyType::Random,
+            "spread" => PlacementStrategyType::Spread,
+            _ => PlacementStrategyType::UnknownVariant(UnknownPlacementStrategyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlacementStrategyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "binpack" => PlacementStrategyType::Binpack,
+            "random" => PlacementStrategyType::Random,
+            "spread" => PlacementStrategyType::Spread,
+            _ => PlacementStrategyType::UnknownVariant(UnknownPlacementStrategyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlacementStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlacementStrategyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlacementStrategyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The devices that are available on the container instance. The only supported device type is a GPU.</p>
@@ -2141,7 +5375,107 @@ pub struct PlatformDevice {
     pub id: String,
     /// <p>The type of device that is available on the container instance. The only supported value is <code>GPU</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: PlatformDeviceType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlatformDeviceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlatformDeviceType {
+    Gpu,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlatformDeviceType),
+}
+
+impl Default for PlatformDeviceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlatformDeviceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlatformDeviceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlatformDeviceType {
+    fn into(self) -> String {
+        match self {
+            PlatformDeviceType::Gpu => "GPU".to_string(),
+            PlatformDeviceType::UnknownVariant(UnknownPlatformDeviceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlatformDeviceType {
+    fn into(self) -> &'a str {
+        match self {
+            PlatformDeviceType::Gpu => &"GPU",
+            PlatformDeviceType::UnknownVariant(UnknownPlatformDeviceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PlatformDeviceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GPU" => PlatformDeviceType::Gpu,
+            _ => PlatformDeviceType::UnknownVariant(UnknownPlatformDeviceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlatformDeviceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GPU" => PlatformDeviceType::Gpu,
+            _ => PlatformDeviceType::UnknownVariant(UnknownPlatformDeviceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlatformDeviceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlatformDeviceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PlatformDeviceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Port mappings allow containers to access ports on the host container instance to send or receive traffic. Port mappings are specified as part of the container definition.</p> <p>If you are using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>. The <code>hostPort</code> can be left blank or it must be the same value as the <code>containerPort</code>.</p> <p>After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>
@@ -2158,7 +5492,107 @@ pub struct PortMapping {
     /// <p>The protocol used for the port mapping. Valid values are <code>tcp</code> and <code>udp</code>. The default is <code>tcp</code>.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protocol: Option<String>,
+    pub protocol: Option<TransportProtocol>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPropagateTags {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PropagateTags {
+    Service,
+    TaskDefinition,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPropagateTags),
+}
+
+impl Default for PropagateTags {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PropagateTags {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PropagateTags {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PropagateTags {
+    fn into(self) -> String {
+        match self {
+            PropagateTags::Service => "SERVICE".to_string(),
+            PropagateTags::TaskDefinition => "TASK_DEFINITION".to_string(),
+            PropagateTags::UnknownVariant(UnknownPropagateTags { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PropagateTags {
+    fn into(self) -> &'a str {
+        match self {
+            PropagateTags::Service => &"SERVICE",
+            PropagateTags::TaskDefinition => &"TASK_DEFINITION",
+            PropagateTags::UnknownVariant(UnknownPropagateTags { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PropagateTags {
+    fn from(name: &str) -> Self {
+        match name {
+            "SERVICE" => PropagateTags::Service,
+            "TASK_DEFINITION" => PropagateTags::TaskDefinition,
+            _ => PropagateTags::UnknownVariant(UnknownPropagateTags {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PropagateTags {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SERVICE" => PropagateTags::Service,
+            "TASK_DEFINITION" => PropagateTags::TaskDefinition,
+            _ => PropagateTags::UnknownVariant(UnknownPropagateTags { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PropagateTags {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PropagateTags {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PropagateTags {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The configuration details for the App Mesh proxy.</p> <p>For tasks using the EC2 launch type, the container instances require at least version 1.26.0 of the container agent and at least version 1.26.0-1 of the <code>ecs-init</code> package to enable a proxy configuration. If your container instances are launched from the Amazon ECS-optimized AMI version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html">Amazon ECS-optimized Linux AMI</a> </p>
@@ -2174,7 +5608,106 @@ pub struct ProxyConfiguration {
     /// <p>The proxy type. The only supported value is <code>APPMESH</code>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ProxyConfigurationType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProxyConfigurationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProxyConfigurationType {
+    Appmesh,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProxyConfigurationType),
+}
+
+impl Default for ProxyConfigurationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProxyConfigurationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProxyConfigurationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProxyConfigurationType {
+    fn into(self) -> String {
+        match self {
+            ProxyConfigurationType::Appmesh => "APPMESH".to_string(),
+            ProxyConfigurationType::UnknownVariant(UnknownProxyConfigurationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProxyConfigurationType {
+    fn into(self) -> &'a str {
+        match self {
+            ProxyConfigurationType::Appmesh => &"APPMESH",
+            ProxyConfigurationType::UnknownVariant(UnknownProxyConfigurationType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProxyConfigurationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPMESH" => ProxyConfigurationType::Appmesh,
+            _ => ProxyConfigurationType::UnknownVariant(UnknownProxyConfigurationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProxyConfigurationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPMESH" => ProxyConfigurationType::Appmesh,
+            _ => ProxyConfigurationType::UnknownVariant(UnknownProxyConfigurationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProxyConfigurationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProxyConfigurationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProxyConfigurationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2182,7 +5715,7 @@ pub struct ProxyConfiguration {
 pub struct PutAccountSettingDefaultRequest {
     /// <p>The resource name for which to modify the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the ENI limit for your Amazon ECS container instances is affected. If <code>containerInsights</code> is specified, the default setting for CloudWatch Container Insights for your clusters is affected.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: SettingName,
     /// <p>The account setting value for the specified principal ARN. Accepted values are <code>enabled</code> and <code>disabled</code>.</p>
     #[serde(rename = "value")]
     pub value: String,
@@ -2201,7 +5734,7 @@ pub struct PutAccountSettingDefaultResponse {
 pub struct PutAccountSettingRequest {
     /// <p>The Amazon ECS resource name for which to modify the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the elastic network interface (ENI) limit for your Amazon ECS container instances is affected. If <code>containerInsights</code> is specified, the default setting for CloudWatch Container Insights for your clusters is affected.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: SettingName,
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If you specify the root user, it modifies the account setting for all IAM users, IAM roles, and the root user of the account unless an IAM user or role explicitly overrides these settings. If this field is omitted, the setting is changed only for the authenticated user.</p>
     #[serde(rename = "principalArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2337,7 +5870,7 @@ pub struct RegisterTaskDefinitionRequest {
     /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ipc_mode: Option<String>,
+    pub ipc_mode: Option<IpcMode>,
     /// <p><p>The amount of memory (in MiB) used by the task. It can be expressed as an integer using MiB, for example <code>1024</code>, or as a string using GB, for example <code>1GB</code> or <code>1 GB</code>, in a task definition. String values are converted to an integer indicating the MiB when the task definition is registered.</p> <note> <p>Task-level CPU and memory parameters are ignored for Windows containers. We recommend specifying container-level resources for Windows containers.</p> </note> <p>If using the EC2 launch type, this field is optional.</p> <p>If using the Fargate launch type, this field is required and you must use one of the following values, which determines your range of supported values for the <code>cpu</code> parameter:</p> <ul> <li> <p>512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available <code>cpu</code> values: 256 (.25 vCPU)</p> </li> <li> <p>1024 (1 GB), 2048 (2 GB), 3072 (3 GB), 4096 (4 GB) - Available <code>cpu</code> values: 512 (.5 vCPU)</p> </li> <li> <p>2048 (2 GB), 3072 (3 GB), 4096 (4 GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB) - Available <code>cpu</code> values: 1024 (1 vCPU)</p> </li> <li> <p>Between 4096 (4 GB) and 16384 (16 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 2048 (2 vCPU)</p> </li> <li> <p>Between 8192 (8 GB) and 30720 (30 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 4096 (4 vCPU)</p> </li> </ul></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2345,11 +5878,11 @@ pub struct RegisterTaskDefinitionRequest {
     /// <p>The Docker networking mode to use for the containers in the task. The valid values are <code>none</code>, <code>bridge</code>, <code>awsvpc</code>, and <code>host</code>. If no network mode is specified, the default is <code>bridge</code>.</p> <p>For Amazon ECS tasks on Fargate, the <code>awsvpc</code> network mode is required. For Amazon ECS tasks on Amazon EC2 instances, any network mode can be used. If the network mode is set to <code>none</code>, you cannot specify port mappings in your container definitions, and the tasks containers do not have external connectivity. The <code>host</code> and <code>awsvpc</code> network modes offer the highest networking performance for containers because they use the EC2 network stack instead of the virtualized network stack provided by the <code>bridge</code> mode.</p> <p>With the <code>host</code> and <code>awsvpc</code> network modes, exposed container ports are mapped directly to the corresponding host port (for the <code>host</code> network mode) or the attached elastic network interface port (for the <code>awsvpc</code> network mode), so you cannot take advantage of dynamic host port mappings. </p> <important> <p>When using the <code>host</code> network mode, you should not run containers using the root user (UID 0). It is considered best practice to use a non-root user.</p> </important> <p>If the network mode is <code>awsvpc</code>, the task is allocated an elastic network interface, and you must specify a <a>NetworkConfiguration</a> value when you create a service or run a task with the task definition. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task Networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>Currently, only Amazon ECS-optimized AMIs, other Amazon Linux variants with the <code>ecs-init</code> package, or AWS Fargate infrastructure support the <code>awsvpc</code> network mode. </p> </note> <p>If the network mode is <code>host</code>, you cannot run multiple instantiations of the same task on a single container instance when port mappings are used.</p> <p>Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode. If you use the console to register a task definition with Windows containers, you must choose the <code>&lt;default&gt;</code> network mode object. </p> <p>For more information, see <a href="https://docs.docker.com/engine/reference/run/#network-settings">Network settings</a> in the <i>Docker run reference</i>.</p>
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub network_mode: Option<String>,
+    pub network_mode: Option<NetworkMode>,
     /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pid_mode: Option<String>,
+    pub pid_mode: Option<PidMode>,
     /// <p>An array of placement constraint objects to use for the task. You can specify a maximum of 10 constraints per task (this limit includes constraints in the task definition and those specified at runtime).</p>
     #[serde(rename = "placementConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2360,7 +5893,7 @@ pub struct RegisterTaskDefinitionRequest {
     /// <p>The task launch type that Amazon ECS should validate the task definition against. This ensures that the task definition parameters are compatible with the specified launch type. If no value is specified, it defaults to <code>EC2</code>.</p>
     #[serde(rename = "requiresCompatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub requires_compatibilities: Option<Vec<String>>,
+    pub requires_compatibilities: Option<Vec<Compatibility>>,
     /// <p><p>The metadata that you apply to the task definition to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per resource - 50</p> </li> <li> <p>For each resource, each tag key must be unique, and each tag key can have only one value.</p> </li> <li> <p>Maximum key length - 128 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length - 256 Unicode characters in UTF-8</p> </li> <li> <p>If your tagging schema is used across multiple services and resources, remember that other services may have restrictions on allowed characters. Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following characters: + - = . _ : / @.</p> </li> <li> <p>Tag keys and values are case-sensitive.</p> </li> <li> <p>Do not use <code>aws:</code>, <code>AWS:</code>, or any upper or lowercase combination of such as a prefix for either keys or values as it is reserved for AWS use. You cannot edit or delete tag keys or values with this prefix. Tags with this prefix do not count against your tags per resource limit.</p> </li> </ul></p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2430,10 +5963,110 @@ pub struct Resource {
 pub struct ResourceRequirement {
     /// <p>The type of resource to assign to a container. The supported values are <code>GPU</code> or <code>InferenceAccelerator</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ResourceType,
     /// <p>The value for the specified resource type.</p> <p>If the <code>GPU</code> type is used, the value is the number of physical <code>GPUs</code> the Amazon ECS container agent will reserve for the container. The number of GPUs reserved for all containers in a task should not exceed the number of available GPUs on the container instance the task is launched on.</p> <p>If the <code>InferenceAccelerator</code> type is used, the <code>value</code> should match the <code>deviceName</code> for an <a>InferenceAccelerator</a> specified in a task definition.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Gpu,
+    InferenceAccelerator,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Gpu => "GPU".to_string(),
+            ResourceType::InferenceAccelerator => "InferenceAccelerator".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Gpu => &"GPU",
+            ResourceType::InferenceAccelerator => &"InferenceAccelerator",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GPU" => ResourceType::Gpu,
+            "InferenceAccelerator" => ResourceType::InferenceAccelerator,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GPU" => ResourceType::Gpu,
+            "InferenceAccelerator" => ResourceType::InferenceAccelerator,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2462,7 +6095,7 @@ pub struct RunTaskRequest {
     /// <p>The launch type on which to run your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>The network configuration for the task. This parameter is required for task definitions that use the <code>awsvpc</code> network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task Networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2486,7 +6119,7 @@ pub struct RunTaskRequest {
     /// <p><p>Specifies whether to propagate the tags from the task definition to the task. If no value is specified, the tags are not propagated. Tags can only be propagated to the task during task creation. To add tags to a task after task creation, use the <a>TagResource</a> API action.</p> <note> <p>An error will be received if you specify the <code>SERVICE</code> option when running a task.</p> </note></p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub propagate_tags: Option<String>,
+    pub propagate_tags: Option<PropagateTags>,
     /// <p>The reference ID to use for the task.</p>
     #[serde(rename = "referenceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2523,11 +6156,310 @@ pub struct Scale {
     /// <p>The unit of measure for the scale value.</p>
     #[serde(rename = "unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unit: Option<String>,
+    pub unit: Option<ScaleUnit>,
     /// <p>The value, specified as a percent total of a service's <code>desiredCount</code>, to scale the task set. Accepted values are numbers between 0 and 100.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScaleUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScaleUnit {
+    Percent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScaleUnit),
+}
+
+impl Default for ScaleUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScaleUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScaleUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScaleUnit {
+    fn into(self) -> String {
+        match self {
+            ScaleUnit::Percent => "PERCENT".to_string(),
+            ScaleUnit::UnknownVariant(UnknownScaleUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScaleUnit {
+    fn into(self) -> &'a str {
+        match self {
+            ScaleUnit::Percent => &"PERCENT",
+            ScaleUnit::UnknownVariant(UnknownScaleUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScaleUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "PERCENT" => ScaleUnit::Percent,
+            _ => ScaleUnit::UnknownVariant(UnknownScaleUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScaleUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PERCENT" => ScaleUnit::Percent,
+            _ => ScaleUnit::UnknownVariant(UnknownScaleUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScaleUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScaleUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScaleUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSchedulingStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SchedulingStrategy {
+    Daemon,
+    Replica,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSchedulingStrategy),
+}
+
+impl Default for SchedulingStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SchedulingStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SchedulingStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SchedulingStrategy {
+    fn into(self) -> String {
+        match self {
+            SchedulingStrategy::Daemon => "DAEMON".to_string(),
+            SchedulingStrategy::Replica => "REPLICA".to_string(),
+            SchedulingStrategy::UnknownVariant(UnknownSchedulingStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SchedulingStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            SchedulingStrategy::Daemon => &"DAEMON",
+            SchedulingStrategy::Replica => &"REPLICA",
+            SchedulingStrategy::UnknownVariant(UnknownSchedulingStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SchedulingStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAEMON" => SchedulingStrategy::Daemon,
+            "REPLICA" => SchedulingStrategy::Replica,
+            _ => SchedulingStrategy::UnknownVariant(UnknownSchedulingStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SchedulingStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAEMON" => SchedulingStrategy::Daemon,
+            "REPLICA" => SchedulingStrategy::Replica,
+            _ => SchedulingStrategy::UnknownVariant(UnknownSchedulingStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SchedulingStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SchedulingStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SchedulingStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScope {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Scope {
+    Shared,
+    Task,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScope),
+}
+
+impl Default for Scope {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Scope {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Scope {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Scope {
+    fn into(self) -> String {
+        match self {
+            Scope::Shared => "shared".to_string(),
+            Scope::Task => "task".to_string(),
+            Scope::UnknownVariant(UnknownScope { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Scope {
+    fn into(self) -> &'a str {
+        match self {
+            Scope::Shared => &"shared",
+            Scope::Task => &"task",
+            Scope::UnknownVariant(UnknownScope { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Scope {
+    fn from(name: &str) -> Self {
+        match name {
+            "shared" => Scope::Shared,
+            "task" => Scope::Task,
+            _ => Scope::UnknownVariant(UnknownScope {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Scope {
+    fn from(name: String) -> Self {
+        match &*name {
+            "shared" => Scope::Shared,
+            "task" => Scope::Task,
+            _ => Scope::UnknownVariant(UnknownScope { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Scope {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Scope {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Scope {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object representing the secret to expose to your container. Secrets can be exposed to a container in the following ways:</p> <ul> <li> <p>To inject sensitive data into your containers as environment variables, use the <code>secrets</code> container definition parameter.</p> </li> <li> <p>To reference sensitive information in the log configuration of a container, use the <code>secretOptions</code> container definition parameter.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html">Specifying Sensitive Data</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -2592,7 +6524,7 @@ pub struct Service {
     /// <p>The launch type on which your service is running. If no value is specified, it will default to <code>EC2</code>. Valid values include <code>EC2</code> and <code>FARGATE</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>A list of Elastic Load Balancing load balancer objects, containing the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2620,7 +6552,7 @@ pub struct Service {
     /// <p>Specifies whether to propagate the tags from the task definition or the service to the task. If no value is specified, the tags are not propagated.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub propagate_tags: Option<String>,
+    pub propagate_tags: Option<PropagateTags>,
     /// <p>The ARN of the IAM role associated with the service that allows the Amazon ECS container agent to register container instances with an Elastic Load Balancing load balancer.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2632,7 +6564,7 @@ pub struct Service {
     /// <p><p>The scheduling strategy to use for the service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html">Services</a>.</p> <p>There are two service scheduler strategies available:</p> <ul> <li> <p> <code>REPLICA</code>-The replica scheduling strategy places and maintains the desired number of tasks across your cluster. By default, the service scheduler spreads tasks across Availability Zones. You can use task placement strategies and constraints to customize task placement decisions.</p> </li> <li> <p> <code>DAEMON</code>-The daemon scheduling strategy deploys exactly one task on each active container instance that meets all of the task placement constraints that you specify in your cluster. The service scheduler also evaluates the task placement constraints for running tasks and will stop tasks that do not meet the placement constraints.</p> <note> <p>Fargate tasks do not support the <code>DAEMON</code> scheduling strategy.</p> </note> </li> </ul></p>
     #[serde(rename = "schedulingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scheduling_strategy: Option<String>,
+    pub scheduling_strategy: Option<SchedulingStrategy>,
     /// <p>The ARN that identifies the service. The ARN contains the <code>arn:aws:ecs</code> namespace, followed by the Region of the service, the AWS account ID of the service owner, the <code>service</code> namespace, and then the service name. For example, <code>arn:aws:ecs:region:012345678910:service/my-service</code>.</p>
     #[serde(rename = "serviceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2681,6 +6613,102 @@ pub struct ServiceEvent {
     pub message: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceField),
+}
+
+impl Default for ServiceField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceField {
+    fn into(self) -> String {
+        match self {
+            ServiceField::Tags => "TAGS".to_string(),
+            ServiceField::UnknownVariant(UnknownServiceField { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceField {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceField::Tags => &"TAGS",
+            ServiceField::UnknownVariant(UnknownServiceField { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => ServiceField::Tags,
+            _ => ServiceField::UnknownVariant(UnknownServiceField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ServiceField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => ServiceField::Tags,
+            _ => ServiceField::UnknownVariant(UnknownServiceField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ServiceField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ServiceField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details of the service registry.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceRegistry {
@@ -2709,7 +6737,7 @@ pub struct Setting {
     /// <p>The Amazon ECS resource name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SettingName>,
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If this field is omitted, the authenticated user is assumed.</p>
     #[serde(rename = "principalArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2718,6 +6746,325 @@ pub struct Setting {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSettingName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SettingName {
+    AwsvpcTrunking,
+    ContainerInsights,
+    ContainerInstanceLongArnFormat,
+    ServiceLongArnFormat,
+    TaskLongArnFormat,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSettingName),
+}
+
+impl Default for SettingName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SettingName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SettingName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SettingName {
+    fn into(self) -> String {
+        match self {
+            SettingName::AwsvpcTrunking => "awsvpcTrunking".to_string(),
+            SettingName::ContainerInsights => "containerInsights".to_string(),
+            SettingName::ContainerInstanceLongArnFormat => {
+                "containerInstanceLongArnFormat".to_string()
+            }
+            SettingName::ServiceLongArnFormat => "serviceLongArnFormat".to_string(),
+            SettingName::TaskLongArnFormat => "taskLongArnFormat".to_string(),
+            SettingName::UnknownVariant(UnknownSettingName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SettingName {
+    fn into(self) -> &'a str {
+        match self {
+            SettingName::AwsvpcTrunking => &"awsvpcTrunking",
+            SettingName::ContainerInsights => &"containerInsights",
+            SettingName::ContainerInstanceLongArnFormat => &"containerInstanceLongArnFormat",
+            SettingName::ServiceLongArnFormat => &"serviceLongArnFormat",
+            SettingName::TaskLongArnFormat => &"taskLongArnFormat",
+            SettingName::UnknownVariant(UnknownSettingName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SettingName {
+    fn from(name: &str) -> Self {
+        match name {
+            "awsvpcTrunking" => SettingName::AwsvpcTrunking,
+            "containerInsights" => SettingName::ContainerInsights,
+            "containerInstanceLongArnFormat" => SettingName::ContainerInstanceLongArnFormat,
+            "serviceLongArnFormat" => SettingName::ServiceLongArnFormat,
+            "taskLongArnFormat" => SettingName::TaskLongArnFormat,
+            _ => SettingName::UnknownVariant(UnknownSettingName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SettingName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "awsvpcTrunking" => SettingName::AwsvpcTrunking,
+            "containerInsights" => SettingName::ContainerInsights,
+            "containerInstanceLongArnFormat" => SettingName::ContainerInstanceLongArnFormat,
+            "serviceLongArnFormat" => SettingName::ServiceLongArnFormat,
+            "taskLongArnFormat" => SettingName::TaskLongArnFormat,
+            _ => SettingName::UnknownVariant(UnknownSettingName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SettingName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SettingName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SettingName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Asc => "ASC".to_string(),
+            SortOrder::Desc => "DESC".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Asc => &"ASC",
+            SortOrder::Desc => &"DESC",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => SortOrder::Asc,
+            "DESC" => SortOrder::Desc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => SortOrder::Asc,
+            "DESC" => SortOrder::Desc,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStabilityStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StabilityStatus {
+    Stabilizing,
+    SteadyState,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStabilityStatus),
+}
+
+impl Default for StabilityStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StabilityStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StabilityStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StabilityStatus {
+    fn into(self) -> String {
+        match self {
+            StabilityStatus::Stabilizing => "STABILIZING".to_string(),
+            StabilityStatus::SteadyState => "STEADY_STATE".to_string(),
+            StabilityStatus::UnknownVariant(UnknownStabilityStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StabilityStatus {
+    fn into(self) -> &'a str {
+        match self {
+            StabilityStatus::Stabilizing => &"STABILIZING",
+            StabilityStatus::SteadyState => &"STEADY_STATE",
+            StabilityStatus::UnknownVariant(UnknownStabilityStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StabilityStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "STABILIZING" => StabilityStatus::Stabilizing,
+            "STEADY_STATE" => StabilityStatus::SteadyState,
+            _ => StabilityStatus::UnknownVariant(UnknownStabilityStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StabilityStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STABILIZING" => StabilityStatus::Stabilizing,
+            "STEADY_STATE" => StabilityStatus::SteadyState,
+            _ => StabilityStatus::UnknownVariant(UnknownStabilityStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StabilityStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StabilityStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StabilityStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2749,7 +7096,7 @@ pub struct StartTaskRequest {
     /// <p>Specifies whether to propagate the tags from the task definition or the service to the task. If no value is specified, the tags are not propagated.</p>
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub propagate_tags: Option<String>,
+    pub propagate_tags: Option<PropagateTags>,
     /// <p>The reference ID to use for the task.</p>
     #[serde(rename = "referenceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2963,6 +7310,101 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTargetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TargetType {
+    ContainerInstance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTargetType),
+}
+
+impl Default for TargetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TargetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TargetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TargetType {
+    fn into(self) -> String {
+        match self {
+            TargetType::ContainerInstance => "container-instance".to_string(),
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TargetType {
+    fn into(self) -> &'a str {
+        match self {
+            TargetType::ContainerInstance => &"container-instance",
+            TargetType::UnknownVariant(UnknownTargetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TargetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "container-instance" => TargetType::ContainerInstance,
+            _ => TargetType::UnknownVariant(UnknownTargetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TargetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "container-instance" => TargetType::ContainerInstance,
+            _ => TargetType::UnknownVariant(UnknownTargetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TargetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TargetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TargetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Details on a task in a cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2990,7 +7432,7 @@ pub struct Task {
     /// <p>The connectivity status of a task.</p>
     #[serde(rename = "connectivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connectivity: Option<String>,
+    pub connectivity: Option<Connectivity>,
     /// <p>The Unix timestamp for when the task last went into <code>CONNECTED</code> status.</p>
     #[serde(rename = "connectivityAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3026,7 +7468,7 @@ pub struct Task {
     /// <p><p>The health status for the task, which is determined by the health of the essential containers in the task. If all essential containers in the task are reporting as <code>HEALTHY</code>, then the task status also reports as <code>HEALTHY</code>. If any essential containers in the task are reporting as <code>UNHEALTHY</code> or <code>UNKNOWN</code>, then the task status also reports as <code>UNHEALTHY</code> or <code>UNKNOWN</code>, accordingly.</p> <note> <p>The Amazon ECS container agent does not monitor or report on Docker health checks that are embedded in a container image (such as those specified in a parent image or from the image&#39;s Dockerfile) and not specified in the container definition. Health check parameters that are specified in a container definition override any Docker health checks that exist in the container image.</p> </note></p>
     #[serde(rename = "healthStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_status: Option<String>,
+    pub health_status: Option<HealthStatus>,
     /// <p>The Elastic Inference accelerator associated with the task.</p>
     #[serde(rename = "inferenceAccelerators")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3038,7 +7480,7 @@ pub struct Task {
     /// <p>The launch type on which your task is running. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p><p>The amount of memory (in MiB) used by the task as expressed in a task definition. It can be expressed as an integer using MiB, for example <code>1024</code>. It can also be expressed as a string using GB, for example <code>1GB</code> or <code>1 GB</code>. String values are converted to an integer indicating the MiB when the task definition is registered.</p> <p>If you are using the EC2 launch type, this field is optional.</p> <p>If you are using the Fargate launch type, this field is required and you must use one of the following values, which determines your range of supported values for the <code>cpu</code> parameter:</p> <ul> <li> <p>512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available <code>cpu</code> values: 256 (.25 vCPU)</p> </li> <li> <p>1024 (1 GB), 2048 (2 GB), 3072 (3 GB), 4096 (4 GB) - Available <code>cpu</code> values: 512 (.5 vCPU)</p> </li> <li> <p>2048 (2 GB), 3072 (3 GB), 4096 (4 GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB) - Available <code>cpu</code> values: 1024 (1 vCPU)</p> </li> <li> <p>Between 4096 (4 GB) and 16384 (16 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 2048 (2 vCPU)</p> </li> <li> <p>Between 8192 (8 GB) and 30720 (30 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 4096 (4 vCPU)</p> </li> </ul></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3070,7 +7512,7 @@ pub struct Task {
     /// <p>The stop code indicating why a task was stopped. The <code>stoppedReason</code> may contain additional details.</p>
     #[serde(rename = "stopCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stop_code: Option<String>,
+    pub stop_code: Option<TaskStopCode>,
     /// <p>The Unix timestamp for when the task was stopped (the task transitioned from the <code>RUNNING</code> state to the <code>STOPPED</code> state).</p>
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3108,7 +7550,7 @@ pub struct TaskDefinition {
     /// <p>The launch type to use with your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "compatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compatibilities: Option<Vec<String>>,
+    pub compatibilities: Option<Vec<Compatibility>>,
     /// <p>A list of container definitions in JSON format that describe the different containers that make up your task. For more information about container definition parameters and defaults, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html">Amazon ECS Task Definitions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "containerDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3132,7 +7574,7 @@ pub struct TaskDefinition {
     /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ipc_mode: Option<String>,
+    pub ipc_mode: Option<IpcMode>,
     /// <p><p>The amount (in MiB) of memory used by the task.</p> <p>If using the EC2 launch type, you must specify either a task-level memory value or a container-level memory value. This field is optional and any value can be used. If a task-level memory value is specified then the container-level memory value is optional. For more information regarding container-level memory and memory reservation, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html">ContainerDefinition</a>.</p> <p>If using the Fargate launch type, this field is required and you must use one of the following values, which determines your range of valid values for the <code>cpu</code> parameter:</p> <ul> <li> <p>512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available <code>cpu</code> values: 256 (.25 vCPU)</p> </li> <li> <p>1024 (1 GB), 2048 (2 GB), 3072 (3 GB), 4096 (4 GB) - Available <code>cpu</code> values: 512 (.5 vCPU)</p> </li> <li> <p>2048 (2 GB), 3072 (3 GB), 4096 (4 GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB) - Available <code>cpu</code> values: 1024 (1 vCPU)</p> </li> <li> <p>Between 4096 (4 GB) and 16384 (16 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 2048 (2 vCPU)</p> </li> <li> <p>Between 8192 (8 GB) and 30720 (30 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 4096 (4 vCPU)</p> </li> </ul></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3140,11 +7582,11 @@ pub struct TaskDefinition {
     /// <p>The Docker networking mode to use for the containers in the task. The valid values are <code>none</code>, <code>bridge</code>, <code>awsvpc</code>, and <code>host</code>. If no network mode is specified, the default is <code>bridge</code>.</p> <p>For Amazon ECS tasks on Fargate, the <code>awsvpc</code> network mode is required. For Amazon ECS tasks on Amazon EC2 instances, any network mode can be used. If the network mode is set to <code>none</code>, you cannot specify port mappings in your container definitions, and the tasks containers do not have external connectivity. The <code>host</code> and <code>awsvpc</code> network modes offer the highest networking performance for containers because they use the EC2 network stack instead of the virtualized network stack provided by the <code>bridge</code> mode.</p> <p>With the <code>host</code> and <code>awsvpc</code> network modes, exposed container ports are mapped directly to the corresponding host port (for the <code>host</code> network mode) or the attached elastic network interface port (for the <code>awsvpc</code> network mode), so you cannot take advantage of dynamic host port mappings. </p> <important> <p>When using the <code>host</code> network mode, you should not run containers using the root user (UID 0). It is considered best practice to use a non-root user.</p> </important> <p>If the network mode is <code>awsvpc</code>, the task is allocated an elastic network interface, and you must specify a <a>NetworkConfiguration</a> value when you create a service or run a task with the task definition. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task Networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>Currently, only Amazon ECS-optimized AMIs, other Amazon Linux variants with the <code>ecs-init</code> package, or AWS Fargate infrastructure support the <code>awsvpc</code> network mode. </p> </note> <p>If the network mode is <code>host</code>, you cannot run multiple instantiations of the same task on a single container instance when port mappings are used.</p> <p>Docker for Windows uses different network modes than Docker for Linux. When you register a task definition with Windows containers, you must not specify a network mode. If you use the console to register a task definition with Windows containers, you must choose the <code>&lt;default&gt;</code> network mode object. </p> <p>For more information, see <a href="https://docs.docker.com/engine/reference/run/#network-settings">Network settings</a> in the <i>Docker run reference</i>.</p>
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub network_mode: Option<String>,
+    pub network_mode: Option<NetworkMode>,
     /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pid_mode: Option<String>,
+    pub pid_mode: Option<PidMode>,
     /// <p>An array of placement constraint objects to use for tasks. This field is not valid if you are using the Fargate launch type for your task.</p>
     #[serde(rename = "placementConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3160,7 +7602,7 @@ pub struct TaskDefinition {
     /// <p>The launch type the task requires. If no value is specified, it will default to <code>EC2</code>. Valid values include <code>EC2</code> and <code>FARGATE</code>.</p>
     #[serde(rename = "requiresCompatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub requires_compatibilities: Option<Vec<String>>,
+    pub requires_compatibilities: Option<Vec<Compatibility>>,
     /// <p>The revision of the task in a particular family. The revision is a version number of a task definition in a family. When you register a task definition for the first time, the revision is <code>1</code>. Each time that you register a new revision of a task definition in the same family, the revision value always increases by one, even if you have deregistered previous revisions in this family.</p>
     #[serde(rename = "revision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3168,7 +7610,7 @@ pub struct TaskDefinition {
     /// <p>The status of the task definition.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<TaskDefinitionStatus>,
     /// <p>The full Amazon Resource Name (ARN) of the task definition.</p>
     #[serde(rename = "taskDefinitionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3183,6 +7625,218 @@ pub struct TaskDefinition {
     pub volumes: Option<Vec<Volume>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskDefinitionFamilyStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskDefinitionFamilyStatus {
+    Active,
+    All,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskDefinitionFamilyStatus),
+}
+
+impl Default for TaskDefinitionFamilyStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskDefinitionFamilyStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskDefinitionFamilyStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskDefinitionFamilyStatus {
+    fn into(self) -> String {
+        match self {
+            TaskDefinitionFamilyStatus::Active => "ACTIVE".to_string(),
+            TaskDefinitionFamilyStatus::All => "ALL".to_string(),
+            TaskDefinitionFamilyStatus::Inactive => "INACTIVE".to_string(),
+            TaskDefinitionFamilyStatus::UnknownVariant(UnknownTaskDefinitionFamilyStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskDefinitionFamilyStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TaskDefinitionFamilyStatus::Active => &"ACTIVE",
+            TaskDefinitionFamilyStatus::All => &"ALL",
+            TaskDefinitionFamilyStatus::Inactive => &"INACTIVE",
+            TaskDefinitionFamilyStatus::UnknownVariant(UnknownTaskDefinitionFamilyStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskDefinitionFamilyStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => TaskDefinitionFamilyStatus::Active,
+            "ALL" => TaskDefinitionFamilyStatus::All,
+            "INACTIVE" => TaskDefinitionFamilyStatus::Inactive,
+            _ => TaskDefinitionFamilyStatus::UnknownVariant(UnknownTaskDefinitionFamilyStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskDefinitionFamilyStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => TaskDefinitionFamilyStatus::Active,
+            "ALL" => TaskDefinitionFamilyStatus::All,
+            "INACTIVE" => TaskDefinitionFamilyStatus::Inactive,
+            _ => TaskDefinitionFamilyStatus::UnknownVariant(UnknownTaskDefinitionFamilyStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionFamilyStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskDefinitionFamilyStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaskDefinitionFamilyStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskDefinitionField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskDefinitionField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskDefinitionField),
+}
+
+impl Default for TaskDefinitionField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskDefinitionField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskDefinitionField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskDefinitionField {
+    fn into(self) -> String {
+        match self {
+            TaskDefinitionField::Tags => "TAGS".to_string(),
+            TaskDefinitionField::UnknownVariant(UnknownTaskDefinitionField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskDefinitionField {
+    fn into(self) -> &'a str {
+        match self {
+            TaskDefinitionField::Tags => &"TAGS",
+            TaskDefinitionField::UnknownVariant(UnknownTaskDefinitionField { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TaskDefinitionField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => TaskDefinitionField::Tags,
+            _ => TaskDefinitionField::UnknownVariant(UnknownTaskDefinitionField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskDefinitionField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => TaskDefinitionField::Tags,
+            _ => TaskDefinitionField::UnknownVariant(UnknownTaskDefinitionField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskDefinitionField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaskDefinitionField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>An object representing a constraint on task placement in the task definition. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>If you are using the Fargate launch type, task placement constraints are not supported.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TaskDefinitionPlacementConstraint {
@@ -3193,7 +7847,310 @@ pub struct TaskDefinitionPlacementConstraint {
     /// <p>The type of constraint. The <code>MemberOf</code> constraint restricts selection to be from a group of valid candidates.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<TaskDefinitionPlacementConstraintType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskDefinitionPlacementConstraintType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskDefinitionPlacementConstraintType {
+    MemberOf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskDefinitionPlacementConstraintType),
+}
+
+impl Default for TaskDefinitionPlacementConstraintType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskDefinitionPlacementConstraintType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskDefinitionPlacementConstraintType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskDefinitionPlacementConstraintType {
+    fn into(self) -> String {
+        match self {
+            TaskDefinitionPlacementConstraintType::MemberOf => "memberOf".to_string(),
+            TaskDefinitionPlacementConstraintType::UnknownVariant(
+                UnknownTaskDefinitionPlacementConstraintType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskDefinitionPlacementConstraintType {
+    fn into(self) -> &'a str {
+        match self {
+            TaskDefinitionPlacementConstraintType::MemberOf => &"memberOf",
+            TaskDefinitionPlacementConstraintType::UnknownVariant(
+                UnknownTaskDefinitionPlacementConstraintType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskDefinitionPlacementConstraintType {
+    fn from(name: &str) -> Self {
+        match name {
+            "memberOf" => TaskDefinitionPlacementConstraintType::MemberOf,
+            _ => TaskDefinitionPlacementConstraintType::UnknownVariant(
+                UnknownTaskDefinitionPlacementConstraintType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for TaskDefinitionPlacementConstraintType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "memberOf" => TaskDefinitionPlacementConstraintType::MemberOf,
+            _ => TaskDefinitionPlacementConstraintType::UnknownVariant(
+                UnknownTaskDefinitionPlacementConstraintType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionPlacementConstraintType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskDefinitionPlacementConstraintType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TaskDefinitionPlacementConstraintType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskDefinitionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskDefinitionStatus {
+    Active,
+    Inactive,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskDefinitionStatus),
+}
+
+impl Default for TaskDefinitionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskDefinitionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskDefinitionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskDefinitionStatus {
+    fn into(self) -> String {
+        match self {
+            TaskDefinitionStatus::Active => "ACTIVE".to_string(),
+            TaskDefinitionStatus::Inactive => "INACTIVE".to_string(),
+            TaskDefinitionStatus::UnknownVariant(UnknownTaskDefinitionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskDefinitionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TaskDefinitionStatus::Active => &"ACTIVE",
+            TaskDefinitionStatus::Inactive => &"INACTIVE",
+            TaskDefinitionStatus::UnknownVariant(UnknownTaskDefinitionStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskDefinitionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => TaskDefinitionStatus::Active,
+            "INACTIVE" => TaskDefinitionStatus::Inactive,
+            _ => TaskDefinitionStatus::UnknownVariant(UnknownTaskDefinitionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskDefinitionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => TaskDefinitionStatus::Active,
+            "INACTIVE" => TaskDefinitionStatus::Inactive,
+            _ => TaskDefinitionStatus::UnknownVariant(UnknownTaskDefinitionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskDefinitionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskDefinitionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TaskDefinitionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskField),
+}
+
+impl Default for TaskField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskField {
+    fn into(self) -> String {
+        match self {
+            TaskField::Tags => "TAGS".to_string(),
+            TaskField::UnknownVariant(UnknownTaskField { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskField {
+    fn into(self) -> &'a str {
+        match self {
+            TaskField::Tags => &"TAGS",
+            TaskField::UnknownVariant(UnknownTaskField { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => TaskField::Tags,
+            _ => TaskField::UnknownVariant(UnknownTaskField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => TaskField::Tags,
+            _ => TaskField::UnknownVariant(UnknownTaskField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaskField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The overrides associated with a task.</p>
@@ -3256,7 +8213,7 @@ pub struct TaskSet {
     /// <p>The launch type the tasks in the task set are using. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub launch_type: Option<String>,
+    pub launch_type: Option<LaunchType>,
     /// <p>Details on a load balancer that is used with a task set.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3292,7 +8249,7 @@ pub struct TaskSet {
     /// <p>The stability status, which indicates whether the task set has reached a steady state. If the following conditions are met, the task set will be in <code>STEADY_STATE</code>:</p> <ul> <li> <p>The task <code>runningCount</code> is equal to the <code>computedDesiredCount</code>.</p> </li> <li> <p>The <code>pendingCount</code> is <code>0</code>.</p> </li> <li> <p>There are no tasks running on container instances in the <code>DRAINING</code> status.</p> </li> <li> <p>All tasks are reporting a healthy status from the load balancers, service discovery, and container health checks.</p> </li> </ul> <p>If any of those conditions are not met, the stability status returns <code>STABILIZING</code>.</p>
     #[serde(rename = "stabilityStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stability_status: Option<String>,
+    pub stability_status: Option<StabilityStatus>,
     /// <p>The Unix timestamp for when the task set stability status was retrieved.</p>
     #[serde(rename = "stabilityStatusAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3323,6 +8280,208 @@ pub struct TaskSet {
     pub updated_at: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskSetField {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskSetField {
+    Tags,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskSetField),
+}
+
+impl Default for TaskSetField {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskSetField {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskSetField {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskSetField {
+    fn into(self) -> String {
+        match self {
+            TaskSetField::Tags => "TAGS".to_string(),
+            TaskSetField::UnknownVariant(UnknownTaskSetField { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskSetField {
+    fn into(self) -> &'a str {
+        match self {
+            TaskSetField::Tags => &"TAGS",
+            TaskSetField::UnknownVariant(UnknownTaskSetField { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskSetField {
+    fn from(name: &str) -> Self {
+        match name {
+            "TAGS" => TaskSetField::Tags,
+            _ => TaskSetField::UnknownVariant(UnknownTaskSetField {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskSetField {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TAGS" => TaskSetField::Tags,
+            _ => TaskSetField::UnknownVariant(UnknownTaskSetField { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskSetField {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TaskSetField {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TaskSetField {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTaskStopCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TaskStopCode {
+    EssentialContainerExited,
+    TaskFailedToStart,
+    UserInitiated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTaskStopCode),
+}
+
+impl Default for TaskStopCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TaskStopCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TaskStopCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TaskStopCode {
+    fn into(self) -> String {
+        match self {
+            TaskStopCode::EssentialContainerExited => "EssentialContainerExited".to_string(),
+            TaskStopCode::TaskFailedToStart => "TaskFailedToStart".to_string(),
+            TaskStopCode::UserInitiated => "UserInitiated".to_string(),
+            TaskStopCode::UnknownVariant(UnknownTaskStopCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TaskStopCode {
+    fn into(self) -> &'a str {
+        match self {
+            TaskStopCode::EssentialContainerExited => &"EssentialContainerExited",
+            TaskStopCode::TaskFailedToStart => &"TaskFailedToStart",
+            TaskStopCode::UserInitiated => &"UserInitiated",
+            TaskStopCode::UnknownVariant(UnknownTaskStopCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TaskStopCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "EssentialContainerExited" => TaskStopCode::EssentialContainerExited,
+            "TaskFailedToStart" => TaskStopCode::TaskFailedToStart,
+            "UserInitiated" => TaskStopCode::UserInitiated,
+            _ => TaskStopCode::UnknownVariant(UnknownTaskStopCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TaskStopCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EssentialContainerExited" => TaskStopCode::EssentialContainerExited,
+            "TaskFailedToStart" => TaskStopCode::TaskFailedToStart,
+            "UserInitiated" => TaskStopCode::UserInitiated,
+            _ => TaskStopCode::UnknownVariant(UnknownTaskStopCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TaskStopCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TaskStopCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TaskStopCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The container path, mount options, and size of the tmpfs mount.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tmpfs {
@@ -3338,6 +8497,110 @@ pub struct Tmpfs {
     pub size: i64,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransportProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransportProtocol {
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransportProtocol),
+}
+
+impl Default for TransportProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransportProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransportProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransportProtocol {
+    fn into(self) -> String {
+        match self {
+            TransportProtocol::Tcp => "tcp".to_string(),
+            TransportProtocol::Udp => "udp".to_string(),
+            TransportProtocol::UnknownVariant(UnknownTransportProtocol { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransportProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            TransportProtocol::Tcp => &"tcp",
+            TransportProtocol::Udp => &"udp",
+            TransportProtocol::UnknownVariant(UnknownTransportProtocol { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TransportProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "tcp" => TransportProtocol::Tcp,
+            "udp" => TransportProtocol::Udp,
+            _ => TransportProtocol::UnknownVariant(UnknownTransportProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TransportProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "tcp" => TransportProtocol::Tcp,
+            "udp" => TransportProtocol::Udp,
+            _ => TransportProtocol::UnknownVariant(UnknownTransportProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransportProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TransportProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransportProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The <code>ulimit</code> settings to pass to the container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Ulimit {
@@ -3346,10 +8609,175 @@ pub struct Ulimit {
     pub hard_limit: i64,
     /// <p>The <code>type</code> of the <code>ulimit</code>.</p>
     #[serde(rename = "name")]
-    pub name: String,
+    pub name: UlimitName,
     /// <p>The soft limit for the ulimit type.</p>
     #[serde(rename = "softLimit")]
     pub soft_limit: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUlimitName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UlimitName {
+    Core,
+    Cpu,
+    Data,
+    Fsize,
+    Locks,
+    Memlock,
+    Msgqueue,
+    Nice,
+    Nofile,
+    Nproc,
+    Rss,
+    Rtprio,
+    Rttime,
+    Sigpending,
+    Stack,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUlimitName),
+}
+
+impl Default for UlimitName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UlimitName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UlimitName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UlimitName {
+    fn into(self) -> String {
+        match self {
+            UlimitName::Core => "core".to_string(),
+            UlimitName::Cpu => "cpu".to_string(),
+            UlimitName::Data => "data".to_string(),
+            UlimitName::Fsize => "fsize".to_string(),
+            UlimitName::Locks => "locks".to_string(),
+            UlimitName::Memlock => "memlock".to_string(),
+            UlimitName::Msgqueue => "msgqueue".to_string(),
+            UlimitName::Nice => "nice".to_string(),
+            UlimitName::Nofile => "nofile".to_string(),
+            UlimitName::Nproc => "nproc".to_string(),
+            UlimitName::Rss => "rss".to_string(),
+            UlimitName::Rtprio => "rtprio".to_string(),
+            UlimitName::Rttime => "rttime".to_string(),
+            UlimitName::Sigpending => "sigpending".to_string(),
+            UlimitName::Stack => "stack".to_string(),
+            UlimitName::UnknownVariant(UnknownUlimitName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UlimitName {
+    fn into(self) -> &'a str {
+        match self {
+            UlimitName::Core => &"core",
+            UlimitName::Cpu => &"cpu",
+            UlimitName::Data => &"data",
+            UlimitName::Fsize => &"fsize",
+            UlimitName::Locks => &"locks",
+            UlimitName::Memlock => &"memlock",
+            UlimitName::Msgqueue => &"msgqueue",
+            UlimitName::Nice => &"nice",
+            UlimitName::Nofile => &"nofile",
+            UlimitName::Nproc => &"nproc",
+            UlimitName::Rss => &"rss",
+            UlimitName::Rtprio => &"rtprio",
+            UlimitName::Rttime => &"rttime",
+            UlimitName::Sigpending => &"sigpending",
+            UlimitName::Stack => &"stack",
+            UlimitName::UnknownVariant(UnknownUlimitName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for UlimitName {
+    fn from(name: &str) -> Self {
+        match name {
+            "core" => UlimitName::Core,
+            "cpu" => UlimitName::Cpu,
+            "data" => UlimitName::Data,
+            "fsize" => UlimitName::Fsize,
+            "locks" => UlimitName::Locks,
+            "memlock" => UlimitName::Memlock,
+            "msgqueue" => UlimitName::Msgqueue,
+            "nice" => UlimitName::Nice,
+            "nofile" => UlimitName::Nofile,
+            "nproc" => UlimitName::Nproc,
+            "rss" => UlimitName::Rss,
+            "rtprio" => UlimitName::Rtprio,
+            "rttime" => UlimitName::Rttime,
+            "sigpending" => UlimitName::Sigpending,
+            "stack" => UlimitName::Stack,
+            _ => UlimitName::UnknownVariant(UnknownUlimitName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for UlimitName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "core" => UlimitName::Core,
+            "cpu" => UlimitName::Cpu,
+            "data" => UlimitName::Data,
+            "fsize" => UlimitName::Fsize,
+            "locks" => UlimitName::Locks,
+            "memlock" => UlimitName::Memlock,
+            "msgqueue" => UlimitName::Msgqueue,
+            "nice" => UlimitName::Nice,
+            "nofile" => UlimitName::Nofile,
+            "nproc" => UlimitName::Nproc,
+            "rss" => UlimitName::Rss,
+            "rtprio" => UlimitName::Rtprio,
+            "rttime" => UlimitName::Rttime,
+            "sigpending" => UlimitName::Sigpending,
+            "stack" => UlimitName::Stack,
+            _ => UlimitName::UnknownVariant(UnknownUlimitName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UlimitName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for UlimitName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UlimitName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3438,7 +8866,7 @@ pub struct UpdateContainerInstancesStateRequest {
     pub container_instances: Vec<String>,
     /// <p>The container instance state with which to update the container instance. The only valid values for this action are <code>ACTIVE</code> and <code>DRAINING</code>. A container instance can only be updated to <code>DRAINING</code> status once it has reached an <code>ACTIVE</code> state. If a container instance is in <code>REGISTERING</code>, <code>DEREGISTERING</code>, or <code>REGISTRATION_FAILED</code> state you can describe the container instance but will be unable to update the container instance state.</p>
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: ContainerInstanceStatus,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

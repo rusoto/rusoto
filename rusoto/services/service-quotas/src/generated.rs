@@ -85,6 +85,119 @@ pub struct DisassociateServiceQuotaTemplateRequest {}
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceQuotaTemplateResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ErrorCode {
+    DependencyAccessDeniedError,
+    DependencyServiceError,
+    DependencyThrottlingError,
+    ServiceQuotaNotAvailableError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownErrorCode),
+}
+
+impl Default for ErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ErrorCode {
+    fn into(self) -> String {
+        match self {
+            ErrorCode::DependencyAccessDeniedError => "DEPENDENCY_ACCESS_DENIED_ERROR".to_string(),
+            ErrorCode::DependencyServiceError => "DEPENDENCY_SERVICE_ERROR".to_string(),
+            ErrorCode::DependencyThrottlingError => "DEPENDENCY_THROTTLING_ERROR".to_string(),
+            ErrorCode::ServiceQuotaNotAvailableError => {
+                "SERVICE_QUOTA_NOT_AVAILABLE_ERROR".to_string()
+            }
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            ErrorCode::DependencyAccessDeniedError => &"DEPENDENCY_ACCESS_DENIED_ERROR",
+            ErrorCode::DependencyServiceError => &"DEPENDENCY_SERVICE_ERROR",
+            ErrorCode::DependencyThrottlingError => &"DEPENDENCY_THROTTLING_ERROR",
+            ErrorCode::ServiceQuotaNotAvailableError => &"SERVICE_QUOTA_NOT_AVAILABLE_ERROR",
+            ErrorCode::UnknownVariant(UnknownErrorCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEPENDENCY_ACCESS_DENIED_ERROR" => ErrorCode::DependencyAccessDeniedError,
+            "DEPENDENCY_SERVICE_ERROR" => ErrorCode::DependencyServiceError,
+            "DEPENDENCY_THROTTLING_ERROR" => ErrorCode::DependencyThrottlingError,
+            "SERVICE_QUOTA_NOT_AVAILABLE_ERROR" => ErrorCode::ServiceQuotaNotAvailableError,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEPENDENCY_ACCESS_DENIED_ERROR" => ErrorCode::DependencyAccessDeniedError,
+            "DEPENDENCY_SERVICE_ERROR" => ErrorCode::DependencyServiceError,
+            "DEPENDENCY_THROTTLING_ERROR" => ErrorCode::DependencyThrottlingError,
+            "SERVICE_QUOTA_NOT_AVAILABLE_ERROR" => ErrorCode::ServiceQuotaNotAvailableError,
+            _ => ErrorCode::UnknownVariant(UnknownErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An error that explains why an action did not succeed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -92,7 +205,7 @@ pub struct ErrorReason {
     /// <p><p>Service Quotas returns the following error values:</p> <ul> <li> <p> <code>DEPENDENCY<em>ACCESS</em>DENIED<em>ERROR</code> - The caller does not have the required permissions to complete the action. To resolve the error, you must have permission to access the service or quota.</p> </li> <li> <p> <code>DEPENDENCY</em>THROTTLING<em>ERROR</code> - The service is throttling Service Quotas.</p> </li> <li> <p> <code>DEPENDENCY</em>SERVICE<em>ERROR</code> - The service is not available.</p> </li> <li> <p> <code>SERVICE</em>QUOTA<em>NOT</em>AVAILABLE_ERROR</code> - There was an error in Service Quotas.</p> </li> </ul></p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<ErrorCode>,
     /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -129,7 +242,7 @@ pub struct GetAssociationForServiceQuotaTemplateResponse {
     /// <p>The association status. If the status is <code>ASSOCIATED</code>, the quota increase requests in the template are automatically applied to new accounts in your organization.</p>
     #[serde(rename = "ServiceQuotaTemplateAssociationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_quota_template_association_status: Option<String>,
+    pub service_quota_template_association_status: Option<ServiceQuotaTemplateAssociationStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -241,7 +354,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryByQuotaRequest {
     /// <p>The status value of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RequestStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -275,7 +388,7 @@ pub struct ListRequestedServiceQuotaChangeHistoryRequest {
     /// <p>The status of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RequestStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -420,6 +533,132 @@ pub struct MetricInfo {
     pub metric_statistic_recommendation: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPeriodUnit {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PeriodUnit {
+    Day,
+    Hour,
+    Microsecond,
+    Millisecond,
+    Minute,
+    Second,
+    Week,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPeriodUnit),
+}
+
+impl Default for PeriodUnit {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PeriodUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PeriodUnit {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PeriodUnit {
+    fn into(self) -> String {
+        match self {
+            PeriodUnit::Day => "DAY".to_string(),
+            PeriodUnit::Hour => "HOUR".to_string(),
+            PeriodUnit::Microsecond => "MICROSECOND".to_string(),
+            PeriodUnit::Millisecond => "MILLISECOND".to_string(),
+            PeriodUnit::Minute => "MINUTE".to_string(),
+            PeriodUnit::Second => "SECOND".to_string(),
+            PeriodUnit::Week => "WEEK".to_string(),
+            PeriodUnit::UnknownVariant(UnknownPeriodUnit { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PeriodUnit {
+    fn into(self) -> &'a str {
+        match self {
+            PeriodUnit::Day => &"DAY",
+            PeriodUnit::Hour => &"HOUR",
+            PeriodUnit::Microsecond => &"MICROSECOND",
+            PeriodUnit::Millisecond => &"MILLISECOND",
+            PeriodUnit::Minute => &"MINUTE",
+            PeriodUnit::Second => &"SECOND",
+            PeriodUnit::Week => &"WEEK",
+            PeriodUnit::UnknownVariant(UnknownPeriodUnit { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PeriodUnit {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAY" => PeriodUnit::Day,
+            "HOUR" => PeriodUnit::Hour,
+            "MICROSECOND" => PeriodUnit::Microsecond,
+            "MILLISECOND" => PeriodUnit::Millisecond,
+            "MINUTE" => PeriodUnit::Minute,
+            "SECOND" => PeriodUnit::Second,
+            "WEEK" => PeriodUnit::Week,
+            _ => PeriodUnit::UnknownVariant(UnknownPeriodUnit {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PeriodUnit {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAY" => PeriodUnit::Day,
+            "HOUR" => PeriodUnit::Hour,
+            "MICROSECOND" => PeriodUnit::Microsecond,
+            "MILLISECOND" => PeriodUnit::Millisecond,
+            "MINUTE" => PeriodUnit::Minute,
+            "SECOND" => PeriodUnit::Second,
+            "WEEK" => PeriodUnit::Week,
+            _ => PeriodUnit::UnknownVariant(UnknownPeriodUnit { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PeriodUnit {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PeriodUnit {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PeriodUnit {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutServiceQuotaIncreaseRequestIntoTemplateRequest {
@@ -453,7 +692,7 @@ pub struct QuotaPeriod {
     /// <p>The time unit.</p>
     #[serde(rename = "PeriodUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub period_unit: Option<String>,
+    pub period_unit: Option<PeriodUnit>,
     /// <p>The value.</p>
     #[serde(rename = "PeriodValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -481,6 +720,121 @@ pub struct RequestServiceQuotaIncreaseResponse {
     #[serde(rename = "RequestedQuota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requested_quota: Option<RequestedServiceQuotaChange>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRequestStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RequestStatus {
+    Approved,
+    CaseClosed,
+    CaseOpened,
+    Denied,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRequestStatus),
+}
+
+impl Default for RequestStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RequestStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RequestStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RequestStatus {
+    fn into(self) -> String {
+        match self {
+            RequestStatus::Approved => "APPROVED".to_string(),
+            RequestStatus::CaseClosed => "CASE_CLOSED".to_string(),
+            RequestStatus::CaseOpened => "CASE_OPENED".to_string(),
+            RequestStatus::Denied => "DENIED".to_string(),
+            RequestStatus::Pending => "PENDING".to_string(),
+            RequestStatus::UnknownVariant(UnknownRequestStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RequestStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RequestStatus::Approved => &"APPROVED",
+            RequestStatus::CaseClosed => &"CASE_CLOSED",
+            RequestStatus::CaseOpened => &"CASE_OPENED",
+            RequestStatus::Denied => &"DENIED",
+            RequestStatus::Pending => &"PENDING",
+            RequestStatus::UnknownVariant(UnknownRequestStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RequestStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVED" => RequestStatus::Approved,
+            "CASE_CLOSED" => RequestStatus::CaseClosed,
+            "CASE_OPENED" => RequestStatus::CaseOpened,
+            "DENIED" => RequestStatus::Denied,
+            "PENDING" => RequestStatus::Pending,
+            _ => RequestStatus::UnknownVariant(UnknownRequestStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RequestStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVED" => RequestStatus::Approved,
+            "CASE_CLOSED" => RequestStatus::CaseClosed,
+            "CASE_OPENED" => RequestStatus::CaseOpened,
+            "DENIED" => RequestStatus::Denied,
+            "PENDING" => RequestStatus::Pending,
+            _ => RequestStatus::UnknownVariant(UnknownRequestStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RequestStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RequestStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RequestStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a quota increase request.</p>
@@ -538,7 +892,7 @@ pub struct RequestedServiceQuotaChange {
     /// <p>The state of the quota increase request.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RequestStatus>,
     /// <p>The unit of measurement.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -649,6 +1003,115 @@ pub struct ServiceQuotaIncreaseRequestInTemplate {
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownServiceQuotaTemplateAssociationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ServiceQuotaTemplateAssociationStatus {
+    Associated,
+    Disassociated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownServiceQuotaTemplateAssociationStatus),
+}
+
+impl Default for ServiceQuotaTemplateAssociationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ServiceQuotaTemplateAssociationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ServiceQuotaTemplateAssociationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ServiceQuotaTemplateAssociationStatus {
+    fn into(self) -> String {
+        match self {
+            ServiceQuotaTemplateAssociationStatus::Associated => "ASSOCIATED".to_string(),
+            ServiceQuotaTemplateAssociationStatus::Disassociated => "DISASSOCIATED".to_string(),
+            ServiceQuotaTemplateAssociationStatus::UnknownVariant(
+                UnknownServiceQuotaTemplateAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ServiceQuotaTemplateAssociationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ServiceQuotaTemplateAssociationStatus::Associated => &"ASSOCIATED",
+            ServiceQuotaTemplateAssociationStatus::Disassociated => &"DISASSOCIATED",
+            ServiceQuotaTemplateAssociationStatus::UnknownVariant(
+                UnknownServiceQuotaTemplateAssociationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ServiceQuotaTemplateAssociationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASSOCIATED" => ServiceQuotaTemplateAssociationStatus::Associated,
+            "DISASSOCIATED" => ServiceQuotaTemplateAssociationStatus::Disassociated,
+            _ => ServiceQuotaTemplateAssociationStatus::UnknownVariant(
+                UnknownServiceQuotaTemplateAssociationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ServiceQuotaTemplateAssociationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASSOCIATED" => ServiceQuotaTemplateAssociationStatus::Associated,
+            "DISASSOCIATED" => ServiceQuotaTemplateAssociationStatus::Disassociated,
+            _ => ServiceQuotaTemplateAssociationStatus::UnknownVariant(
+                UnknownServiceQuotaTemplateAssociationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ServiceQuotaTemplateAssociationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ServiceQuotaTemplateAssociationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ServiceQuotaTemplateAssociationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A complex data type that contains a tag key and tag value.</p>

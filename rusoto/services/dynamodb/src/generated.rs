@@ -68,6 +68,112 @@ pub struct ArchivalSummary {
     pub archival_reason: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAttributeAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AttributeAction {
+    Add,
+    Delete,
+    Put,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAttributeAction),
+}
+
+impl Default for AttributeAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AttributeAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AttributeAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AttributeAction {
+    fn into(self) -> String {
+        match self {
+            AttributeAction::Add => "ADD".to_string(),
+            AttributeAction::Delete => "DELETE".to_string(),
+            AttributeAction::Put => "PUT".to_string(),
+            AttributeAction::UnknownVariant(UnknownAttributeAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AttributeAction {
+    fn into(self) -> &'a str {
+        match self {
+            AttributeAction::Add => &"ADD",
+            AttributeAction::Delete => &"DELETE",
+            AttributeAction::Put => &"PUT",
+            AttributeAction::UnknownVariant(UnknownAttributeAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AttributeAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "ADD" => AttributeAction::Add,
+            "DELETE" => AttributeAction::Delete,
+            "PUT" => AttributeAction::Put,
+            _ => AttributeAction::UnknownVariant(UnknownAttributeAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AttributeAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ADD" => AttributeAction::Add,
+            "DELETE" => AttributeAction::Delete,
+            "PUT" => AttributeAction::Put,
+            _ => AttributeAction::UnknownVariant(UnknownAttributeAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AttributeAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AttributeAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AttributeAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents an attribute for describing the key schema for the table and indexes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AttributeDefinition {
@@ -76,7 +182,7 @@ pub struct AttributeDefinition {
     pub attribute_name: String,
     /// <p><p>The data type for the attribute, where:</p> <ul> <li> <p> <code>S</code> - the attribute is of type String</p> </li> <li> <p> <code>N</code> - the attribute is of type Number</p> </li> <li> <p> <code>B</code> - the attribute is of type Binary</p> </li> </ul></p>
     #[serde(rename = "AttributeType")]
-    pub attribute_type: String,
+    pub attribute_type: ScalarAttributeType,
 }
 
 /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -141,7 +247,7 @@ pub struct AttributeValueUpdate {
     /// <p><p>Specifies how to perform the update. Valid values are <code>PUT</code> (default), <code>DELETE</code>, and <code>ADD</code>. The behavior depends on whether the specified primary key already exists in the table.</p> <p> <b>If an item with the specified <i>Key</i> is found in the table:</b> </p> <ul> <li> <p> <code>PUT</code> - Adds the specified attribute to the item. If the attribute already exists, it is replaced by the new value. </p> </li> <li> <p> <code>DELETE</code> - If no value is specified, the attribute and its value are removed from the item. The data type of the specified value must match the existing value&#39;s data type.</p> <p>If a <i>set</i> of values is specified, then those values are subtracted from the old set. For example, if the attribute value was the set <code>[a,b,c]</code> and the <code>DELETE</code> action specified <code>[a,c]</code>, then the final attribute value would be <code>[b]</code>. Specifying an empty set is an error.</p> </li> <li> <p> <code>ADD</code> - If the attribute does not already exist, then the attribute and its values are added to the item. If the attribute does exist, then the behavior of <code>ADD</code> depends on the data type of the attribute:</p> <ul> <li> <p>If the existing attribute is a number, and if <code>Value</code> is also a number, then the <code>Value</code> is mathematically added to the existing attribute. If <code>Value</code> is a negative number, then it is subtracted from the existing attribute.</p> <note> <p> If you use <code>ADD</code> to increment or decrement a number value for an item that doesn&#39;t exist before the update, DynamoDB uses 0 as the initial value.</p> <p>In addition, if you use <code>ADD</code> to update an existing item, and intend to increment or decrement an attribute value which does not yet exist, DynamoDB uses <code>0</code> as the initial value. For example, suppose that the item you want to update does not yet have an attribute named <i>itemcount</i>, but you decide to <code>ADD</code> the number <code>3</code> to this attribute anyway, even though it currently does not exist. DynamoDB will create the <i>itemcount</i> attribute, set its initial value to <code>0</code>, and finally add <code>3</code> to it. The result will be a new <i>itemcount</i> attribute in the item, with a value of <code>3</code>.</p> </note> </li> <li> <p>If the existing data type is a set, and if the <code>Value</code> is also a set, then the <code>Value</code> is added to the existing set. (This is a <i>set</i> operation, not mathematical addition.) For example, if the attribute value was the set <code>[1,2]</code>, and the <code>ADD</code> action specified <code>[3]</code>, then the final attribute value would be <code>[1,2,3]</code>. An error occurs if an Add action is specified for a set attribute and the attribute type specified does not match the existing set type. </p> <p>Both sets must have the same primitive data type. For example, if the existing data type is a set of strings, the <code>Value</code> must also be a set of strings. The same holds true for number sets and binary sets.</p> </li> </ul> <p>This action is only valid for an existing attribute whose data type is number or is a set. Do not use <code>ADD</code> for any other data types.</p> </li> </ul> <p> <b>If no item with the specified <i>Key</i> is found:</b> </p> <ul> <li> <p> <code>PUT</code> - DynamoDB creates a new item with the specified primary key, and then adds the attribute. </p> </li> <li> <p> <code>DELETE</code> - Nothing happens; there is no attribute to delete.</p> </li> <li> <p> <code>ADD</code> - DynamoDB creates an item with the supplied primary key and number (or set of numbers) for the attribute value. The only data types allowed are number and number set; no other data types can be specified.</p> </li> </ul></p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<AttributeAction>,
     /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -312,10 +418,116 @@ pub struct BackupDetails {
     pub backup_size_bytes: Option<i64>,
     /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED. </p>
     #[serde(rename = "BackupStatus")]
-    pub backup_status: String,
+    pub backup_status: BackupStatus,
     /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - You create and manage these using the on-demand backup feature.</p> </li> <li> <p> <code>SYSTEM</code> - If you delete a table with point-in-time recovery enabled, a <code>SYSTEM</code> backup is automatically created and is retained for 35 days (at no additional cost). System backups allow you to restore the deleted table to the state it was in just before the point of deletion. </p> </li> <li> <p> <code>AWS_BACKUP</code> - On-demand backup created by you from AWS Backup service.</p> </li> </ul></p>
     #[serde(rename = "BackupType")]
-    pub backup_type: String,
+    pub backup_type: BackupType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupStatus {
+    Available,
+    Creating,
+    Deleted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupStatus),
+}
+
+impl Default for BackupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupStatus {
+    fn into(self) -> String {
+        match self {
+            BackupStatus::Available => "AVAILABLE".to_string(),
+            BackupStatus::Creating => "CREATING".to_string(),
+            BackupStatus::Deleted => "DELETED".to_string(),
+            BackupStatus::UnknownVariant(UnknownBackupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BackupStatus::Available => &"AVAILABLE",
+            BackupStatus::Creating => &"CREATING",
+            BackupStatus::Deleted => &"DELETED",
+            BackupStatus::UnknownVariant(UnknownBackupStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => BackupStatus::Available,
+            "CREATING" => BackupStatus::Creating,
+            "DELETED" => BackupStatus::Deleted,
+            _ => BackupStatus::UnknownVariant(UnknownBackupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => BackupStatus::Available,
+            "CREATING" => BackupStatus::Creating,
+            "DELETED" => BackupStatus::Deleted,
+            _ => BackupStatus::UnknownVariant(UnknownBackupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Contains details for the backup.</p>
@@ -345,11 +557,11 @@ pub struct BackupSummary {
     /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED.</p>
     #[serde(rename = "BackupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_status: Option<String>,
+    pub backup_status: Option<BackupStatus>,
     /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - You create and manage these using the on-demand backup feature.</p> </li> <li> <p> <code>SYSTEM</code> - If you delete a table with point-in-time recovery enabled, a <code>SYSTEM</code> backup is automatically created and is retained for 35 days (at no additional cost). System backups allow you to restore the deleted table to the state it was in just before the point of deletion. </p> </li> <li> <p> <code>AWS_BACKUP</code> - On-demand backup created by you from AWS Backup service.</p> </li> </ul></p>
     #[serde(rename = "BackupType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_type: Option<String>,
+    pub backup_type: Option<BackupType>,
     /// <p>ARN associated with the table.</p>
     #[serde(rename = "TableArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -362,6 +574,227 @@ pub struct BackupSummary {
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupType {
+    AwsBackup,
+    System,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupType),
+}
+
+impl Default for BackupType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupType {
+    fn into(self) -> String {
+        match self {
+            BackupType::AwsBackup => "AWS_BACKUP".to_string(),
+            BackupType::System => "SYSTEM".to_string(),
+            BackupType::User => "USER".to_string(),
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupType {
+    fn into(self) -> &'a str {
+        match self {
+            BackupType::AwsBackup => &"AWS_BACKUP",
+            BackupType::System => &"SYSTEM",
+            BackupType::User => &"USER",
+            BackupType::UnknownVariant(UnknownBackupType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackupType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_BACKUP" => BackupType::AwsBackup,
+            "SYSTEM" => BackupType::System,
+            "USER" => BackupType::User,
+            _ => BackupType::UnknownVariant(UnknownBackupType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_BACKUP" => BackupType::AwsBackup,
+            "SYSTEM" => BackupType::System,
+            "USER" => BackupType::User,
+            _ => BackupType::UnknownVariant(UnknownBackupType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BackupType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackupType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackupTypeFilter {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackupTypeFilter {
+    All,
+    AwsBackup,
+    System,
+    User,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackupTypeFilter),
+}
+
+impl Default for BackupTypeFilter {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackupTypeFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackupTypeFilter {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackupTypeFilter {
+    fn into(self) -> String {
+        match self {
+            BackupTypeFilter::All => "ALL".to_string(),
+            BackupTypeFilter::AwsBackup => "AWS_BACKUP".to_string(),
+            BackupTypeFilter::System => "SYSTEM".to_string(),
+            BackupTypeFilter::User => "USER".to_string(),
+            BackupTypeFilter::UnknownVariant(UnknownBackupTypeFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackupTypeFilter {
+    fn into(self) -> &'a str {
+        match self {
+            BackupTypeFilter::All => &"ALL",
+            BackupTypeFilter::AwsBackup => &"AWS_BACKUP",
+            BackupTypeFilter::System => &"SYSTEM",
+            BackupTypeFilter::User => &"USER",
+            BackupTypeFilter::UnknownVariant(UnknownBackupTypeFilter { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BackupTypeFilter {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => BackupTypeFilter::All,
+            "AWS_BACKUP" => BackupTypeFilter::AwsBackup,
+            "SYSTEM" => BackupTypeFilter::System,
+            "USER" => BackupTypeFilter::User,
+            _ => BackupTypeFilter::UnknownVariant(UnknownBackupTypeFilter {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackupTypeFilter {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => BackupTypeFilter::All,
+            "AWS_BACKUP" => BackupTypeFilter::AwsBackup,
+            "SYSTEM" => BackupTypeFilter::System,
+            "USER" => BackupTypeFilter::User,
+            _ => BackupTypeFilter::UnknownVariant(UnknownBackupTypeFilter { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackupTypeFilter {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BackupTypeFilter {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for BackupTypeFilter {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -390,7 +823,7 @@ pub struct BatchGetItemInput {
     pub request_items: ::std::collections::HashMap<String, KeysAndAttributes>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
 }
 
 /// <p>Represents the output of a <code>BatchGetItem</code> operation.</p>
@@ -423,11 +856,181 @@ pub struct BatchStatementError {
     /// <p> The error code associated with the failed PartiQL batch statement. </p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+    pub code: Option<BatchStatementErrorCodeEnum>,
     /// <p> The error message associated with the PartiQL batch resposne. </p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchStatementErrorCodeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchStatementErrorCodeEnum {
+    AccessDenied,
+    ConditionalCheckFailed,
+    DuplicateItem,
+    InternalServerError,
+    ItemCollectionSizeLimitExceeded,
+    ProvisionedThroughputExceeded,
+    RequestLimitExceeded,
+    ResourceNotFound,
+    ThrottlingError,
+    TransactionConflict,
+    ValidationError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchStatementErrorCodeEnum),
+}
+
+impl Default for BatchStatementErrorCodeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchStatementErrorCodeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchStatementErrorCodeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchStatementErrorCodeEnum {
+    fn into(self) -> String {
+        match self {
+            BatchStatementErrorCodeEnum::AccessDenied => "AccessDenied".to_string(),
+            BatchStatementErrorCodeEnum::ConditionalCheckFailed => {
+                "ConditionalCheckFailed".to_string()
+            }
+            BatchStatementErrorCodeEnum::DuplicateItem => "DuplicateItem".to_string(),
+            BatchStatementErrorCodeEnum::InternalServerError => "InternalServerError".to_string(),
+            BatchStatementErrorCodeEnum::ItemCollectionSizeLimitExceeded => {
+                "ItemCollectionSizeLimitExceeded".to_string()
+            }
+            BatchStatementErrorCodeEnum::ProvisionedThroughputExceeded => {
+                "ProvisionedThroughputExceeded".to_string()
+            }
+            BatchStatementErrorCodeEnum::RequestLimitExceeded => "RequestLimitExceeded".to_string(),
+            BatchStatementErrorCodeEnum::ResourceNotFound => "ResourceNotFound".to_string(),
+            BatchStatementErrorCodeEnum::ThrottlingError => "ThrottlingError".to_string(),
+            BatchStatementErrorCodeEnum::TransactionConflict => "TransactionConflict".to_string(),
+            BatchStatementErrorCodeEnum::ValidationError => "ValidationError".to_string(),
+            BatchStatementErrorCodeEnum::UnknownVariant(UnknownBatchStatementErrorCodeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchStatementErrorCodeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            BatchStatementErrorCodeEnum::AccessDenied => &"AccessDenied",
+            BatchStatementErrorCodeEnum::ConditionalCheckFailed => &"ConditionalCheckFailed",
+            BatchStatementErrorCodeEnum::DuplicateItem => &"DuplicateItem",
+            BatchStatementErrorCodeEnum::InternalServerError => &"InternalServerError",
+            BatchStatementErrorCodeEnum::ItemCollectionSizeLimitExceeded => {
+                &"ItemCollectionSizeLimitExceeded"
+            }
+            BatchStatementErrorCodeEnum::ProvisionedThroughputExceeded => {
+                &"ProvisionedThroughputExceeded"
+            }
+            BatchStatementErrorCodeEnum::RequestLimitExceeded => &"RequestLimitExceeded",
+            BatchStatementErrorCodeEnum::ResourceNotFound => &"ResourceNotFound",
+            BatchStatementErrorCodeEnum::ThrottlingError => &"ThrottlingError",
+            BatchStatementErrorCodeEnum::TransactionConflict => &"TransactionConflict",
+            BatchStatementErrorCodeEnum::ValidationError => &"ValidationError",
+            BatchStatementErrorCodeEnum::UnknownVariant(UnknownBatchStatementErrorCodeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchStatementErrorCodeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => BatchStatementErrorCodeEnum::AccessDenied,
+            "ConditionalCheckFailed" => BatchStatementErrorCodeEnum::ConditionalCheckFailed,
+            "DuplicateItem" => BatchStatementErrorCodeEnum::DuplicateItem,
+            "InternalServerError" => BatchStatementErrorCodeEnum::InternalServerError,
+            "ItemCollectionSizeLimitExceeded" => {
+                BatchStatementErrorCodeEnum::ItemCollectionSizeLimitExceeded
+            }
+            "ProvisionedThroughputExceeded" => {
+                BatchStatementErrorCodeEnum::ProvisionedThroughputExceeded
+            }
+            "RequestLimitExceeded" => BatchStatementErrorCodeEnum::RequestLimitExceeded,
+            "ResourceNotFound" => BatchStatementErrorCodeEnum::ResourceNotFound,
+            "ThrottlingError" => BatchStatementErrorCodeEnum::ThrottlingError,
+            "TransactionConflict" => BatchStatementErrorCodeEnum::TransactionConflict,
+            "ValidationError" => BatchStatementErrorCodeEnum::ValidationError,
+            _ => BatchStatementErrorCodeEnum::UnknownVariant(UnknownBatchStatementErrorCodeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BatchStatementErrorCodeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => BatchStatementErrorCodeEnum::AccessDenied,
+            "ConditionalCheckFailed" => BatchStatementErrorCodeEnum::ConditionalCheckFailed,
+            "DuplicateItem" => BatchStatementErrorCodeEnum::DuplicateItem,
+            "InternalServerError" => BatchStatementErrorCodeEnum::InternalServerError,
+            "ItemCollectionSizeLimitExceeded" => {
+                BatchStatementErrorCodeEnum::ItemCollectionSizeLimitExceeded
+            }
+            "ProvisionedThroughputExceeded" => {
+                BatchStatementErrorCodeEnum::ProvisionedThroughputExceeded
+            }
+            "RequestLimitExceeded" => BatchStatementErrorCodeEnum::RequestLimitExceeded,
+            "ResourceNotFound" => BatchStatementErrorCodeEnum::ResourceNotFound,
+            "ThrottlingError" => BatchStatementErrorCodeEnum::ThrottlingError,
+            "TransactionConflict" => BatchStatementErrorCodeEnum::TransactionConflict,
+            "ValidationError" => BatchStatementErrorCodeEnum::ValidationError,
+            _ => BatchStatementErrorCodeEnum::UnknownVariant(UnknownBatchStatementErrorCodeEnum {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchStatementErrorCodeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BatchStatementErrorCodeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BatchStatementErrorCodeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> A PartiQL batch statement request. </p>
@@ -474,11 +1077,11 @@ pub struct BatchWriteItemInput {
     pub request_items: ::std::collections::HashMap<String, Vec<WriteRequest>>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections, if any, that were modified during the operation are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned.</p>
     #[serde(rename = "ReturnItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_item_collection_metrics: Option<String>,
+    pub return_item_collection_metrics: Option<ReturnItemCollectionMetrics>,
 }
 
 /// <p>Represents the output of a <code>BatchWriteItem</code> operation.</p>
@@ -500,6 +1103,106 @@ pub struct BatchWriteItemOutput {
     pub unprocessed_items: Option<::std::collections::HashMap<String, Vec<WriteRequest>>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBillingMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BillingMode {
+    PayPerRequest,
+    Provisioned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBillingMode),
+}
+
+impl Default for BillingMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BillingMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BillingMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BillingMode {
+    fn into(self) -> String {
+        match self {
+            BillingMode::PayPerRequest => "PAY_PER_REQUEST".to_string(),
+            BillingMode::Provisioned => "PROVISIONED".to_string(),
+            BillingMode::UnknownVariant(UnknownBillingMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BillingMode {
+    fn into(self) -> &'a str {
+        match self {
+            BillingMode::PayPerRequest => &"PAY_PER_REQUEST",
+            BillingMode::Provisioned => &"PROVISIONED",
+            BillingMode::UnknownVariant(UnknownBillingMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BillingMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "PAY_PER_REQUEST" => BillingMode::PayPerRequest,
+            "PROVISIONED" => BillingMode::Provisioned,
+            _ => BillingMode::UnknownVariant(UnknownBillingMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BillingMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PAY_PER_REQUEST" => BillingMode::PayPerRequest,
+            "PROVISIONED" => BillingMode::Provisioned,
+            _ => BillingMode::UnknownVariant(UnknownBillingMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BillingMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BillingMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BillingMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the details for the read/write capacity mode.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -507,7 +1210,7 @@ pub struct BillingModeSummary {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode: Option<String>,
+    pub billing_mode: Option<BillingMode>,
     /// <p>Represents the time when <code>PAY_PER_REQUEST</code> was last set as the read/write capacity mode.</p>
     #[serde(rename = "LastUpdateToPayPerRequestDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -543,6 +1246,166 @@ pub struct Capacity {
     pub write_capacity_units: Option<f64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperator {
+    BeginsWith,
+    Between,
+    Contains,
+    Eq,
+    Ge,
+    Gt,
+    In,
+    Le,
+    Lt,
+    Ne,
+    NotContains,
+    NotNull,
+    Null,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperator),
+}
+
+impl Default for ComparisonOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperator {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperator::BeginsWith => "BEGINS_WITH".to_string(),
+            ComparisonOperator::Between => "BETWEEN".to_string(),
+            ComparisonOperator::Contains => "CONTAINS".to_string(),
+            ComparisonOperator::Eq => "EQ".to_string(),
+            ComparisonOperator::Ge => "GE".to_string(),
+            ComparisonOperator::Gt => "GT".to_string(),
+            ComparisonOperator::In => "IN".to_string(),
+            ComparisonOperator::Le => "LE".to_string(),
+            ComparisonOperator::Lt => "LT".to_string(),
+            ComparisonOperator::Ne => "NE".to_string(),
+            ComparisonOperator::NotContains => "NOT_CONTAINS".to_string(),
+            ComparisonOperator::NotNull => "NOT_NULL".to_string(),
+            ComparisonOperator::Null => "NULL".to_string(),
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperator::BeginsWith => &"BEGINS_WITH",
+            ComparisonOperator::Between => &"BETWEEN",
+            ComparisonOperator::Contains => &"CONTAINS",
+            ComparisonOperator::Eq => &"EQ",
+            ComparisonOperator::Ge => &"GE",
+            ComparisonOperator::Gt => &"GT",
+            ComparisonOperator::In => &"IN",
+            ComparisonOperator::Le => &"LE",
+            ComparisonOperator::Lt => &"LT",
+            ComparisonOperator::Ne => &"NE",
+            ComparisonOperator::NotContains => &"NOT_CONTAINS",
+            ComparisonOperator::NotNull => &"NOT_NULL",
+            ComparisonOperator::Null => &"NULL",
+            ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            "BETWEEN" => ComparisonOperator::Between,
+            "CONTAINS" => ComparisonOperator::Contains,
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "IN" => ComparisonOperator::In,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            "NOT_CONTAINS" => ComparisonOperator::NotContains,
+            "NOT_NULL" => ComparisonOperator::NotNull,
+            "NULL" => ComparisonOperator::Null,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEGINS_WITH" => ComparisonOperator::BeginsWith,
+            "BETWEEN" => ComparisonOperator::Between,
+            "CONTAINS" => ComparisonOperator::Contains,
+            "EQ" => ComparisonOperator::Eq,
+            "GE" => ComparisonOperator::Ge,
+            "GT" => ComparisonOperator::Gt,
+            "IN" => ComparisonOperator::In,
+            "LE" => ComparisonOperator::Le,
+            "LT" => ComparisonOperator::Lt,
+            "NE" => ComparisonOperator::Ne,
+            "NOT_CONTAINS" => ComparisonOperator::NotContains,
+            "NOT_NULL" => ComparisonOperator::NotNull,
+            "NULL" => ComparisonOperator::Null,
+            _ => ComparisonOperator::UnknownVariant(UnknownComparisonOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ComparisonOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Represents the selection criteria for a <code>Query</code> or <code>Scan</code> operation:</p> <ul> <li> <p>For a <code>Query</code> operation, <code>Condition</code> is used for specifying the <code>KeyConditions</code> to use when querying a table or an index. For <code>KeyConditions</code>, only the following comparison operators are supported:</p> <p> <code>EQ | LE | LT | GE | GT | BEGINS_WITH | BETWEEN</code> </p> <p> <code>Condition</code> is also used in a <code>QueryFilter</code>, which evaluates the query results and returns only the desired values.</p> </li> <li> <p>For a <code>Scan</code> operation, <code>Condition</code> is used in a <code>ScanFilter</code>, which evaluates the scan results and returns only the desired values.</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -553,7 +1416,7 @@ pub struct Condition {
     pub attribute_value_list: Option<Vec<AttributeValue>>,
     /// <p>A comparator for evaluating attributes. For example, equals, greater than, less than, etc.</p> <p>The following comparison operators are available:</p> <p> <code>EQ | NE | LE | LT | GE | GT | NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH | IN | BETWEEN</code> </p> <p>The following are descriptions of each comparison operator.</p> <ul> <li> <p> <code>EQ</code> : Equal. <code>EQ</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not equal <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>NE</code> : Not equal. <code>NE</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not equal <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>LE</code> : Less than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>LT</code> : Less than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>GE</code> : Greater than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>GT</code> : Greater than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>NOT_NULL</code> : The attribute exists. <code>NOT_NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the existence of an attribute, not its data type. If the data type of attribute "<code>a</code>" is null, and you evaluate it using <code>NOT_NULL</code>, the result is a Boolean <code>true</code>. This result is because the attribute "<code>a</code>" exists; its data type is not relevant to the <code>NOT_NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>NULL</code> : The attribute does not exist. <code>NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the nonexistence of an attribute, not its data type. If the data type of attribute "<code>a</code>" is null, and you evaluate it using <code>NULL</code>, the result is a Boolean <code>false</code>. This is because the attribute "<code>a</code>" exists; its data type is not relevant to the <code>NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>CONTAINS</code> : Checks for a subsequence, or value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is of type String, then the operator checks for a substring match. If the target attribute of the comparison is of type Binary, then the operator looks for a subsequence of the target that matches the input. If the target attribute of the comparison is a set ("<code>SS</code>", "<code>NS</code>", or "<code>BS</code>"), then the operator evaluates to true if it finds an exact match with any member of the set.</p> <p>CONTAINS is supported for lists: When evaluating "<code>a CONTAINS b</code>", "<code>a</code>" can be a list; however, "<code>b</code>" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>NOT_CONTAINS</code> : Checks for absence of a subsequence, or absence of a value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is a String, then the operator checks for the absence of a substring match. If the target attribute of the comparison is Binary, then the operator checks for the absence of a subsequence of the target that matches the input. If the target attribute of the comparison is a set ("<code>SS</code>", "<code>NS</code>", or "<code>BS</code>"), then the operator evaluates to true if it <i>does not</i> find an exact match with any member of the set.</p> <p>NOT_CONTAINS is supported for lists: When evaluating "<code>a NOT CONTAINS b</code>", "<code>a</code>" can be a list; however, "<code>b</code>" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>BEGINS_WITH</code> : Checks for a prefix. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String or Binary (not a Number or a set type). The target attribute of the comparison must be of type String or Binary (not a Number or a set type).</p> <p/> </li> <li> <p> <code>IN</code> : Checks for matching elements in a list.</p> <p> <code>AttributeValueList</code> can contain one or more <code>AttributeValue</code> elements of type String, Number, or Binary. These attributes are compared against an existing attribute of an item. If any elements of the input are equal to the item attribute, the expression evaluates to true.</p> </li> <li> <p> <code>BETWEEN</code> : Greater than or equal to the first value, and less than or equal to the second value. </p> <p> <code>AttributeValueList</code> must contain two <code>AttributeValue</code> elements of the same type, either String, Number, or Binary (not a set type). A target attribute matches if the target value is greater than, or equal to, the first element and less than, or equal to, the second element. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not compare to <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code> </p> </li> </ul> <p>For usage examples of <code>AttributeValueList</code> and <code>ComparisonOperator</code>, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.html">Legacy Conditional Parameters</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ComparisonOperator")]
-    pub comparison_operator: String,
+    pub comparison_operator: ComparisonOperator,
 }
 
 /// <p>Represents a request to perform a check that an item exists or to check the condition of specific attributes of the item.</p>
@@ -577,10 +1440,115 @@ pub struct ConditionCheck {
     /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>ConditionCheck</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
     #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values_on_condition_check_failure: Option<String>,
+    pub return_values_on_condition_check_failure: Option<ReturnValuesOnConditionCheckFailure>,
     /// <p>Name of the table for the check item request.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConditionalOperator {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConditionalOperator {
+    And,
+    Or,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConditionalOperator),
+}
+
+impl Default for ConditionalOperator {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConditionalOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConditionalOperator {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConditionalOperator {
+    fn into(self) -> String {
+        match self {
+            ConditionalOperator::And => "AND".to_string(),
+            ConditionalOperator::Or => "OR".to_string(),
+            ConditionalOperator::UnknownVariant(UnknownConditionalOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConditionalOperator {
+    fn into(self) -> &'a str {
+        match self {
+            ConditionalOperator::And => &"AND",
+            ConditionalOperator::Or => &"OR",
+            ConditionalOperator::UnknownVariant(UnknownConditionalOperator { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConditionalOperator {
+    fn from(name: &str) -> Self {
+        match name {
+            "AND" => ConditionalOperator::And,
+            "OR" => ConditionalOperator::Or,
+            _ => ConditionalOperator::UnknownVariant(UnknownConditionalOperator {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConditionalOperator {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AND" => ConditionalOperator::And,
+            "OR" => ConditionalOperator::Or,
+            _ => ConditionalOperator::UnknownVariant(UnknownConditionalOperator { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConditionalOperator {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConditionalOperator {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConditionalOperator {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -623,11 +1591,345 @@ pub struct ConsumedCapacity {
 pub struct ContinuousBackupsDescription {
     /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states: ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
-    pub continuous_backups_status: String,
+    pub continuous_backups_status: ContinuousBackupsStatus,
     /// <p>The description of the point in time recovery settings applied to the table.</p>
     #[serde(rename = "PointInTimeRecoveryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContinuousBackupsStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContinuousBackupsStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContinuousBackupsStatus),
+}
+
+impl Default for ContinuousBackupsStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContinuousBackupsStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContinuousBackupsStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContinuousBackupsStatus {
+    fn into(self) -> String {
+        match self {
+            ContinuousBackupsStatus::Disabled => "DISABLED".to_string(),
+            ContinuousBackupsStatus::Enabled => "ENABLED".to_string(),
+            ContinuousBackupsStatus::UnknownVariant(UnknownContinuousBackupsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContinuousBackupsStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContinuousBackupsStatus::Disabled => &"DISABLED",
+            ContinuousBackupsStatus::Enabled => &"ENABLED",
+            ContinuousBackupsStatus::UnknownVariant(UnknownContinuousBackupsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContinuousBackupsStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ContinuousBackupsStatus::Disabled,
+            "ENABLED" => ContinuousBackupsStatus::Enabled,
+            _ => ContinuousBackupsStatus::UnknownVariant(UnknownContinuousBackupsStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContinuousBackupsStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ContinuousBackupsStatus::Disabled,
+            "ENABLED" => ContinuousBackupsStatus::Enabled,
+            _ => ContinuousBackupsStatus::UnknownVariant(UnknownContinuousBackupsStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContinuousBackupsStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContinuousBackupsStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContinuousBackupsStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContributorInsightsAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContributorInsightsAction {
+    Disable,
+    Enable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContributorInsightsAction),
+}
+
+impl Default for ContributorInsightsAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContributorInsightsAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContributorInsightsAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContributorInsightsAction {
+    fn into(self) -> String {
+        match self {
+            ContributorInsightsAction::Disable => "DISABLE".to_string(),
+            ContributorInsightsAction::Enable => "ENABLE".to_string(),
+            ContributorInsightsAction::UnknownVariant(UnknownContributorInsightsAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContributorInsightsAction {
+    fn into(self) -> &'a str {
+        match self {
+            ContributorInsightsAction::Disable => &"DISABLE",
+            ContributorInsightsAction::Enable => &"ENABLE",
+            ContributorInsightsAction::UnknownVariant(UnknownContributorInsightsAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContributorInsightsAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLE" => ContributorInsightsAction::Disable,
+            "ENABLE" => ContributorInsightsAction::Enable,
+            _ => ContributorInsightsAction::UnknownVariant(UnknownContributorInsightsAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContributorInsightsAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLE" => ContributorInsightsAction::Disable,
+            "ENABLE" => ContributorInsightsAction::Enable,
+            _ => {
+                ContributorInsightsAction::UnknownVariant(UnknownContributorInsightsAction { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContributorInsightsAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContributorInsightsAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ContributorInsightsAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContributorInsightsStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContributorInsightsStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    Failed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContributorInsightsStatus),
+}
+
+impl Default for ContributorInsightsStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContributorInsightsStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContributorInsightsStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContributorInsightsStatus {
+    fn into(self) -> String {
+        match self {
+            ContributorInsightsStatus::Disabled => "DISABLED".to_string(),
+            ContributorInsightsStatus::Disabling => "DISABLING".to_string(),
+            ContributorInsightsStatus::Enabled => "ENABLED".to_string(),
+            ContributorInsightsStatus::Enabling => "ENABLING".to_string(),
+            ContributorInsightsStatus::Failed => "FAILED".to_string(),
+            ContributorInsightsStatus::UnknownVariant(UnknownContributorInsightsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContributorInsightsStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContributorInsightsStatus::Disabled => &"DISABLED",
+            ContributorInsightsStatus::Disabling => &"DISABLING",
+            ContributorInsightsStatus::Enabled => &"ENABLED",
+            ContributorInsightsStatus::Enabling => &"ENABLING",
+            ContributorInsightsStatus::Failed => &"FAILED",
+            ContributorInsightsStatus::UnknownVariant(UnknownContributorInsightsStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContributorInsightsStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => ContributorInsightsStatus::Disabled,
+            "DISABLING" => ContributorInsightsStatus::Disabling,
+            "ENABLED" => ContributorInsightsStatus::Enabled,
+            "ENABLING" => ContributorInsightsStatus::Enabling,
+            "FAILED" => ContributorInsightsStatus::Failed,
+            _ => ContributorInsightsStatus::UnknownVariant(UnknownContributorInsightsStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContributorInsightsStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => ContributorInsightsStatus::Disabled,
+            "DISABLING" => ContributorInsightsStatus::Disabling,
+            "ENABLED" => ContributorInsightsStatus::Enabled,
+            "ENABLING" => ContributorInsightsStatus::Enabling,
+            "FAILED" => ContributorInsightsStatus::Failed,
+            _ => {
+                ContributorInsightsStatus::UnknownVariant(UnknownContributorInsightsStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContributorInsightsStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContributorInsightsStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContributorInsightsStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a Contributor Insights summary entry.</p>
@@ -637,7 +1939,7 @@ pub struct ContributorInsightsSummary {
     /// <p>Describes the current status for contributor insights for the given table and index, if applicable.</p>
     #[serde(rename = "ContributorInsightsStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contributor_insights_status: Option<String>,
+    pub contributor_insights_status: Option<ContributorInsightsStatus>,
     /// <p>Name of the index associated with the summary, if any.</p>
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -747,7 +2049,7 @@ pub struct CreateTableInput {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode: Option<String>,
+    pub billing_mode: Option<BillingMode>,
     /// <p><p>One or more global secondary indexes (the maximum is 20) to be created on the table. Each global secondary index in the array includes the following:</p> <ul> <li> <p> <code>IndexName</code> - The name of the global secondary index. Must be unique only for this table.</p> <p/> </li> <li> <p> <code>KeySchema</code> - Specifies the key schema for the global secondary index.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes is in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 100. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units.</p> </li> </ul></p>
     #[serde(rename = "GlobalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -812,7 +2114,7 @@ pub struct Delete {
     /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Delete</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
     #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values_on_condition_check_failure: Option<String>,
+    pub return_values_on_condition_check_failure: Option<ReturnValuesOnConditionCheckFailure>,
     /// <p>Name of the table in which the item to be deleted resides.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -855,7 +2157,7 @@ pub struct DeleteItemInput {
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ConditionalOperator.html">ConditionalOperator</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditional_operator: Option<String>,
+    pub conditional_operator: Option<ConditionalOperator>,
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.Expected.html">Expected</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "Expected")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -873,15 +2175,15 @@ pub struct DeleteItemInput {
     pub key: ::std::collections::HashMap<String, AttributeValue>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections, if any, that were modified during the operation are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned.</p>
     #[serde(rename = "ReturnItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_item_collection_metrics: Option<String>,
+    pub return_item_collection_metrics: Option<ReturnItemCollectionMetrics>,
     /// <p><p>Use <code>ReturnValues</code> if you want to get the item attributes as they appeared before they were deleted. For <code>DeleteItem</code>, the valid values are:</p> <ul> <li> <p> <code>NONE</code> - If <code>ReturnValues</code> is not specified, or if its value is <code>NONE</code>, then nothing is returned. (This setting is the default for <code>ReturnValues</code>.)</p> </li> <li> <p> <code>ALL<em>OLD</code> - The content of the old item is returned.</p> </li> </ul> <note> <p>The <code>ReturnValues</code> parameter is used by several DynamoDB operations; however, <code>DeleteItem</code> does not recognize any values other than <code>NONE</code> or <code>ALL</em>OLD</code>.</p> </note></p>
     #[serde(rename = "ReturnValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values: Option<String>,
+    pub return_values: Option<ReturnValue>,
     /// <p>The name of the table from which to delete the item.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -1006,7 +2308,7 @@ pub struct DescribeContributorInsightsOutput {
     /// <p>Current Status contributor insights.</p>
     #[serde(rename = "ContributorInsightsStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contributor_insights_status: Option<String>,
+    pub contributor_insights_status: Option<ContributorInsightsStatus>,
     /// <p><p>Returns information about the last failure that encountered.</p> <p>The most common exceptions for a FAILED status are:</p> <ul> <li> <p>LimitExceededException - Per-account Amazon CloudWatch Contributor Insights rule limit reached. Please disable Contributor Insights for other tables/indexes OR disable Contributor Insights rules before retrying.</p> </li> <li> <p>AccessDeniedException - Amazon CloudWatch Contributor Insights rules cannot be modified due to insufficient permissions.</p> </li> <li> <p>AccessDeniedException - Failed to create service-linked role for Contributor Insights due to insufficient permissions.</p> </li> <li> <p>InternalServerError - Failed to create Amazon CloudWatch Contributor Insights rules. Please retry request.</p> </li> </ul></p>
     #[serde(rename = "FailureException")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1193,6 +2495,126 @@ pub struct DescribeTimeToLiveOutput {
     pub time_to_live_description: Option<TimeToLiveDescription>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDestinationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DestinationStatus {
+    Active,
+    Disabled,
+    Disabling,
+    EnableFailed,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDestinationStatus),
+}
+
+impl Default for DestinationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DestinationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DestinationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DestinationStatus {
+    fn into(self) -> String {
+        match self {
+            DestinationStatus::Active => "ACTIVE".to_string(),
+            DestinationStatus::Disabled => "DISABLED".to_string(),
+            DestinationStatus::Disabling => "DISABLING".to_string(),
+            DestinationStatus::EnableFailed => "ENABLE_FAILED".to_string(),
+            DestinationStatus::Enabling => "ENABLING".to_string(),
+            DestinationStatus::UnknownVariant(UnknownDestinationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DestinationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DestinationStatus::Active => &"ACTIVE",
+            DestinationStatus::Disabled => &"DISABLED",
+            DestinationStatus::Disabling => &"DISABLING",
+            DestinationStatus::EnableFailed => &"ENABLE_FAILED",
+            DestinationStatus::Enabling => &"ENABLING",
+            DestinationStatus::UnknownVariant(UnknownDestinationStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DestinationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DestinationStatus::Active,
+            "DISABLED" => DestinationStatus::Disabled,
+            "DISABLING" => DestinationStatus::Disabling,
+            "ENABLE_FAILED" => DestinationStatus::EnableFailed,
+            "ENABLING" => DestinationStatus::Enabling,
+            _ => DestinationStatus::UnknownVariant(UnknownDestinationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DestinationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DestinationStatus::Active,
+            "DISABLED" => DestinationStatus::Disabled,
+            "DISABLING" => DestinationStatus::Disabling,
+            "ENABLE_FAILED" => DestinationStatus::EnableFailed,
+            "ENABLING" => DestinationStatus::Enabling,
+            _ => DestinationStatus::UnknownVariant(UnknownDestinationStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DestinationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DestinationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DestinationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An endpoint information details.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1270,7 +2692,7 @@ pub struct ExpectedAttributeValue {
     /// <p><p>A comparator for evaluating attributes in the <code>AttributeValueList</code>. For example, equals, greater than, less than, etc.</p> <p>The following comparison operators are available:</p> <p> <code>EQ | NE | LE | LT | GE | GT | NOT<em>NULL | NULL | CONTAINS | NOT</em>CONTAINS | BEGINS<em>WITH | IN | BETWEEN</code> </p> <p>The following are descriptions of each comparison operator.</p> <ul> <li> <p> <code>EQ</code> : Equal. <code>EQ</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>NE</code> : Not equal. <code>NE</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>LE</code> : Less than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>LT</code> : Less than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>GE</code> : Greater than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>GT</code> : Greater than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not equal <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code>.</p> <p/> </li> <li> <p> <code>NOT</em>NULL</code> : The attribute exists. <code>NOT<em>NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the existence of an attribute, not its data type. If the data type of attribute &quot;<code>a</code>&quot; is null, and you evaluate it using <code>NOT</em>NULL</code>, the result is a Boolean <code>true</code>. This result is because the attribute &quot;<code>a</code>&quot; exists; its data type is not relevant to the <code>NOT<em>NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>NULL</code> : The attribute does not exist. <code>NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the nonexistence of an attribute, not its data type. If the data type of attribute &quot;<code>a</code>&quot; is null, and you evaluate it using <code>NULL</code>, the result is a Boolean <code>false</code>. This is because the attribute &quot;<code>a</code>&quot; exists; its data type is not relevant to the <code>NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>CONTAINS</code> : Checks for a subsequence, or value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is of type String, then the operator checks for a substring match. If the target attribute of the comparison is of type Binary, then the operator looks for a subsequence of the target that matches the input. If the target attribute of the comparison is a set (&quot;<code>SS</code>&quot;, &quot;<code>NS</code>&quot;, or &quot;<code>BS</code>&quot;), then the operator evaluates to true if it finds an exact match with any member of the set.</p> <p>CONTAINS is supported for lists: When evaluating &quot;<code>a CONTAINS b</code>&quot;, &quot;<code>a</code>&quot; can be a list; however, &quot;<code>b</code>&quot; cannot be a set, a map, or a list.</p> </li> <li> <p> <code>NOT</em>CONTAINS</code> : Checks for absence of a subsequence, or absence of a value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is a String, then the operator checks for the absence of a substring match. If the target attribute of the comparison is Binary, then the operator checks for the absence of a subsequence of the target that matches the input. If the target attribute of the comparison is a set (&quot;<code>SS</code>&quot;, &quot;<code>NS</code>&quot;, or &quot;<code>BS</code>&quot;), then the operator evaluates to true if it <i>does not</i> find an exact match with any member of the set.</p> <p>NOT<em>CONTAINS is supported for lists: When evaluating &quot;<code>a NOT CONTAINS b</code>&quot;, &quot;<code>a</code>&quot; can be a list; however, &quot;<code>b</code>&quot; cannot be a set, a map, or a list.</p> </li> <li> <p> <code>BEGINS</em>WITH</code> : Checks for a prefix. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String or Binary (not a Number or a set type). The target attribute of the comparison must be of type String or Binary (not a Number or a set type).</p> <p/> </li> <li> <p> <code>IN</code> : Checks for matching elements in a list.</p> <p> <code>AttributeValueList</code> can contain one or more <code>AttributeValue</code> elements of type String, Number, or Binary. These attributes are compared against an existing attribute of an item. If any elements of the input are equal to the item attribute, the expression evaluates to true.</p> </li> <li> <p> <code>BETWEEN</code> : Greater than or equal to the first value, and less than or equal to the second value. </p> <p> <code>AttributeValueList</code> must contain two <code>AttributeValue</code> elements of the same type, either String, Number, or Binary (not a set type). A target attribute matches if the target value is greater than, or equal to, the first element and less than, or equal to, the second element. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{&quot;S&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;N&quot;:&quot;6&quot;}</code>. Also, <code>{&quot;N&quot;:&quot;6&quot;}</code> does not compare to <code>{&quot;NS&quot;:[&quot;6&quot;, &quot;2&quot;, &quot;1&quot;]}</code> </p> </li> </ul></p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperator>,
     /// <p><p>Causes DynamoDB to evaluate the value before attempting a conditional operation:</p> <ul> <li> <p>If <code>Exists</code> is <code>true</code>, DynamoDB will check to see if that attribute value already exists in the table. If it is found, then the operation succeeds. If it is not found, the operation fails with a <code>ConditionCheckFailedException</code>.</p> </li> <li> <p>If <code>Exists</code> is <code>false</code>, DynamoDB assumes that the attribute value does not exist in the table. If in fact the value does not exist, then the assumption is valid and the operation succeeds. If the value is found, despite the assumption that it does not exist, the operation fails with a <code>ConditionCheckFailedException</code>.</p> </li> </ul> <p>The default setting for <code>Exists</code> is <code>true</code>. If you supply a <code>Value</code> all by itself, DynamoDB assumes the attribute exists: You don&#39;t have to set <code>Exists</code> to <code>true</code>, because it is implied.</p> <p>DynamoDB returns a <code>ValidationException</code> if:</p> <ul> <li> <p> <code>Exists</code> is <code>true</code> but there is no <code>Value</code> to check. (You expect a value to exist, but don&#39;t specify what that value is.)</p> </li> <li> <p> <code>Exists</code> is <code>false</code> but you also provide a <code>Value</code>. (You cannot expect an attribute to have a value, while also expecting it not to exist.)</p> </li> </ul></p>
     #[serde(rename = "Exists")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1304,7 +2726,7 @@ pub struct ExportDescription {
     /// <p>The format of the exported data. Valid values for <code>ExportFormat</code> are <code>DYNAMODB_JSON</code> or <code>ION</code>.</p>
     #[serde(rename = "ExportFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_format: Option<String>,
+    pub export_format: Option<ExportFormat>,
     /// <p>The name of the manifest file for the export task.</p>
     #[serde(rename = "ExportManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1312,7 +2734,7 @@ pub struct ExportDescription {
     /// <p>Export can be in one of the following states: IN_PROGRESS, COMPLETED, or FAILED.</p>
     #[serde(rename = "ExportStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_status: Option<String>,
+    pub export_status: Option<ExportStatus>,
     /// <p>Point in time from which table data was exported.</p>
     #[serde(rename = "ExportTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1344,7 +2766,7 @@ pub struct ExportDescription {
     /// <p><p>Type of encryption used on the bucket where export data is stored. Valid values for <code>S3SseAlgorithm</code> are:</p> <ul> <li> <p> <code>AES256</code> - server-side encryption with Amazon S3 managed keys</p> </li> <li> <p> <code>KMS</code> - server-side encryption with AWS KMS managed keys</p> </li> </ul></p>
     #[serde(rename = "S3SseAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_sse_algorithm: Option<String>,
+    pub s3_sse_algorithm: Option<S3SseAlgorithm>,
     /// <p>The ID of the AWS KMS managed key used to encrypt the S3 bucket where export data is stored (if applicable).</p>
     #[serde(rename = "S3SseKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1363,6 +2785,212 @@ pub struct ExportDescription {
     pub table_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportFormat {
+    DynamodbJson,
+    Ion,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportFormat),
+}
+
+impl Default for ExportFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportFormat {
+    fn into(self) -> String {
+        match self {
+            ExportFormat::DynamodbJson => "DYNAMODB_JSON".to_string(),
+            ExportFormat::Ion => "ION".to_string(),
+            ExportFormat::UnknownVariant(UnknownExportFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ExportFormat::DynamodbJson => &"DYNAMODB_JSON",
+            ExportFormat::Ion => &"ION",
+            ExportFormat::UnknownVariant(UnknownExportFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "DYNAMODB_JSON" => ExportFormat::DynamodbJson,
+            "ION" => ExportFormat::Ion,
+            _ => ExportFormat::UnknownVariant(UnknownExportFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DYNAMODB_JSON" => ExportFormat::DynamodbJson,
+            "ION" => ExportFormat::Ion,
+            _ => ExportFormat::UnknownVariant(UnknownExportFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportStatus {
+    Completed,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportStatus),
+}
+
+impl Default for ExportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportStatus {
+    fn into(self) -> String {
+        match self {
+            ExportStatus::Completed => "COMPLETED".to_string(),
+            ExportStatus::Failed => "FAILED".to_string(),
+            ExportStatus::InProgress => "IN_PROGRESS".to_string(),
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExportStatus::Completed => &"COMPLETED",
+            ExportStatus::Failed => &"FAILED",
+            ExportStatus::InProgress => &"IN_PROGRESS",
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETED" => ExportStatus::Completed,
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETED" => ExportStatus::Completed,
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Summary information about an export task.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1374,7 +3002,7 @@ pub struct ExportSummary {
     /// <p>Export can be in one of the following states: IN_PROGRESS, COMPLETED, or FAILED.</p>
     #[serde(rename = "ExportStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_status: Option<String>,
+    pub export_status: Option<ExportStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1387,7 +3015,7 @@ pub struct ExportTableToPointInTimeInput {
     /// <p>The format for the exported data. Valid values for <code>ExportFormat</code> are <code>DYNAMODB_JSON</code> or <code>ION</code>.</p>
     #[serde(rename = "ExportFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_format: Option<String>,
+    pub export_format: Option<ExportFormat>,
     /// <p>Time in the past from which to export table data. The table export will be a snapshot of the table's state at this point in time.</p>
     #[serde(rename = "ExportTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1406,7 +3034,7 @@ pub struct ExportTableToPointInTimeInput {
     /// <p><p>Type of encryption used on the bucket where export data will be stored. Valid values for <code>S3SseAlgorithm</code> are:</p> <ul> <li> <p> <code>AES256</code> - server-side encryption with Amazon S3 managed keys</p> </li> <li> <p> <code>KMS</code> - server-side encryption with AWS KMS managed keys</p> </li> </ul></p>
     #[serde(rename = "S3SseAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_sse_algorithm: Option<String>,
+    pub s3_sse_algorithm: Option<S3SseAlgorithm>,
     /// <p>The ID of the AWS KMS managed key used to encrypt the S3 bucket where export data will be stored (if applicable).</p>
     #[serde(rename = "S3SseKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1484,7 +3112,7 @@ pub struct GetItemInput {
     pub projection_expression: Option<String>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>The name of the table containing the requested item.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -1559,7 +3187,7 @@ pub struct GlobalSecondaryIndexDescription {
     /// <p><p>The current state of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul></p>
     #[serde(rename = "IndexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_status: Option<String>,
+    pub index_status: Option<IndexStatus>,
     /// <p>The number of items in the specified index. DynamoDB updates this value approximately every six hours. Recent changes might not be reflected in this value.</p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1651,7 +3279,7 @@ pub struct GlobalTableDescription {
     /// <p><p>The current state of the global table:</p> <ul> <li> <p> <code>CREATING</code> - The global table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The global table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The global table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The global table is ready for use.</p> </li> </ul></p>
     #[serde(rename = "GlobalTableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub global_table_status: Option<String>,
+    pub global_table_status: Option<GlobalTableStatus>,
     /// <p>The Regions where the global table has replicas.</p>
     #[serde(rename = "ReplicationGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1673,6 +3301,232 @@ pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
     #[serde(rename = "ProvisionedWriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_write_capacity_units: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGlobalTableStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GlobalTableStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGlobalTableStatus),
+}
+
+impl Default for GlobalTableStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GlobalTableStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GlobalTableStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GlobalTableStatus {
+    fn into(self) -> String {
+        match self {
+            GlobalTableStatus::Active => "ACTIVE".to_string(),
+            GlobalTableStatus::Creating => "CREATING".to_string(),
+            GlobalTableStatus::Deleting => "DELETING".to_string(),
+            GlobalTableStatus::Updating => "UPDATING".to_string(),
+            GlobalTableStatus::UnknownVariant(UnknownGlobalTableStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GlobalTableStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GlobalTableStatus::Active => &"ACTIVE",
+            GlobalTableStatus::Creating => &"CREATING",
+            GlobalTableStatus::Deleting => &"DELETING",
+            GlobalTableStatus::Updating => &"UPDATING",
+            GlobalTableStatus::UnknownVariant(UnknownGlobalTableStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GlobalTableStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => GlobalTableStatus::Active,
+            "CREATING" => GlobalTableStatus::Creating,
+            "DELETING" => GlobalTableStatus::Deleting,
+            "UPDATING" => GlobalTableStatus::Updating,
+            _ => GlobalTableStatus::UnknownVariant(UnknownGlobalTableStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GlobalTableStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => GlobalTableStatus::Active,
+            "CREATING" => GlobalTableStatus::Creating,
+            "DELETING" => GlobalTableStatus::Deleting,
+            "UPDATING" => GlobalTableStatus::Updating,
+            _ => GlobalTableStatus::UnknownVariant(UnknownGlobalTableStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GlobalTableStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GlobalTableStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GlobalTableStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIndexStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IndexStatus {
+    Active,
+    Creating,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIndexStatus),
+}
+
+impl Default for IndexStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IndexStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IndexStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IndexStatus {
+    fn into(self) -> String {
+        match self {
+            IndexStatus::Active => "ACTIVE".to_string(),
+            IndexStatus::Creating => "CREATING".to_string(),
+            IndexStatus::Deleting => "DELETING".to_string(),
+            IndexStatus::Updating => "UPDATING".to_string(),
+            IndexStatus::UnknownVariant(UnknownIndexStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IndexStatus {
+    fn into(self) -> &'a str {
+        match self {
+            IndexStatus::Active => &"ACTIVE",
+            IndexStatus::Creating => &"CREATING",
+            IndexStatus::Deleting => &"DELETING",
+            IndexStatus::Updating => &"UPDATING",
+            IndexStatus::UnknownVariant(UnknownIndexStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IndexStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => IndexStatus::Active,
+            "CREATING" => IndexStatus::Creating,
+            "DELETING" => IndexStatus::Deleting,
+            "UPDATING" => IndexStatus::Updating,
+            _ => IndexStatus::UnknownVariant(UnknownIndexStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IndexStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => IndexStatus::Active,
+            "CREATING" => IndexStatus::Creating,
+            "DELETING" => IndexStatus::Deleting,
+            "UPDATING" => IndexStatus::Updating,
+            _ => IndexStatus::UnknownVariant(UnknownIndexStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IndexStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for IndexStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IndexStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
@@ -1707,7 +3561,107 @@ pub struct KeySchemaElement {
     pub attribute_name: String,
     /// <p><p>The role that this key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39;s usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
     #[serde(rename = "KeyType")]
-    pub key_type: String,
+    pub key_type: KeyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyType {
+    Hash,
+    Range,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyType),
+}
+
+impl Default for KeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        match self {
+            KeyType::Hash => "HASH".to_string(),
+            KeyType::Range => "RANGE".to_string(),
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyType::Hash => &"HASH",
+            KeyType::Range => &"RANGE",
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "HASH" => KeyType::Hash,
+            "RANGE" => KeyType::Range,
+            _ => KeyType::UnknownVariant(UnknownKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HASH" => KeyType::Hash,
+            "RANGE" => KeyType::Range,
+            _ => KeyType::UnknownVariant(UnknownKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents a set of primary keys and, for each key, the attributes to retrieve from the table.</p> <p>For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide the partition key. For a composite primary key, you must provide <i>both</i> the partition key and the sort key.</p>
@@ -1741,7 +3695,7 @@ pub struct KinesisDataStreamDestination {
     /// <p>The current status of replication.</p>
     #[serde(rename = "DestinationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_status: Option<String>,
+    pub destination_status: Option<DestinationStatus>,
     /// <p>The human-readable string that corresponds to the replica status.</p>
     #[serde(rename = "DestinationStatusDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1769,7 +3723,7 @@ pub struct KinesisStreamingDestinationOutput {
     /// <p>The current status of the replication.</p>
     #[serde(rename = "DestinationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination_status: Option<String>,
+    pub destination_status: Option<DestinationStatus>,
     /// <p>The ARN for the specific Kinesis data stream.</p>
     #[serde(rename = "StreamArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1786,7 +3740,7 @@ pub struct ListBackupsInput {
     /// <p><p>The backups from the table specified by <code>BackupType</code> are listed.</p> <p>Where <code>BackupType</code> can be:</p> <ul> <li> <p> <code>USER</code> - On-demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On-demand backup automatically created by DynamoDB.</p> </li> <li> <p> <code>ALL</code> - All types of on-demand backups (USER and SYSTEM).</p> </li> </ul></p>
     #[serde(rename = "BackupType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backup_type: Option<String>,
+    pub backup_type: Option<BackupTypeFilter>,
     /// <p> <code>LastEvaluatedBackupArn</code> is the Amazon Resource Name (ARN) of the backup last evaluated when the current page of results was returned, inclusive of the current page of results. This value may be specified as the <code>ExclusiveStartBackupArn</code> of a new <code>ListBackups</code> operation in order to fetch the next page of results. </p>
     #[serde(rename = "ExclusiveStartBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2056,7 +4010,7 @@ pub struct PointInTimeRecoveryDescription {
     /// <p><p>The current state of point in time recovery:</p> <ul> <li> <p> <code>ENABLING</code> - Point in time recovery is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Point in time recovery is enabled.</p> </li> <li> <p> <code>DISABLED</code> - Point in time recovery is disabled.</p> </li> </ul></p>
     #[serde(rename = "PointInTimeRecoveryStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub point_in_time_recovery_status: Option<String>,
+    pub point_in_time_recovery_status: Option<PointInTimeRecoveryStatus>,
 }
 
 /// <p>Represents the settings used to enable point in time recovery.</p>
@@ -2066,6 +4020,113 @@ pub struct PointInTimeRecoverySpecification {
     /// <p>Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "PointInTimeRecoveryEnabled")]
     pub point_in_time_recovery_enabled: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPointInTimeRecoveryStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PointInTimeRecoveryStatus {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPointInTimeRecoveryStatus),
+}
+
+impl Default for PointInTimeRecoveryStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PointInTimeRecoveryStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PointInTimeRecoveryStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PointInTimeRecoveryStatus {
+    fn into(self) -> String {
+        match self {
+            PointInTimeRecoveryStatus::Disabled => "DISABLED".to_string(),
+            PointInTimeRecoveryStatus::Enabled => "ENABLED".to_string(),
+            PointInTimeRecoveryStatus::UnknownVariant(UnknownPointInTimeRecoveryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PointInTimeRecoveryStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PointInTimeRecoveryStatus::Disabled => &"DISABLED",
+            PointInTimeRecoveryStatus::Enabled => &"ENABLED",
+            PointInTimeRecoveryStatus::UnknownVariant(UnknownPointInTimeRecoveryStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PointInTimeRecoveryStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => PointInTimeRecoveryStatus::Disabled,
+            "ENABLED" => PointInTimeRecoveryStatus::Enabled,
+            _ => PointInTimeRecoveryStatus::UnknownVariant(UnknownPointInTimeRecoveryStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PointInTimeRecoveryStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => PointInTimeRecoveryStatus::Disabled,
+            "ENABLED" => PointInTimeRecoveryStatus::Enabled,
+            _ => {
+                PointInTimeRecoveryStatus::UnknownVariant(UnknownPointInTimeRecoveryStatus { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for PointInTimeRecoveryStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PointInTimeRecoveryStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PointInTimeRecoveryStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
@@ -2078,7 +4139,112 @@ pub struct Projection {
     /// <p><p>The set of attributes that are projected into the index:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - In addition to the attributes described in <code>KEYS</em>ONLY</code>, the secondary index will include other non-key attributes that you specify.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul></p>
     #[serde(rename = "ProjectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub projection_type: Option<String>,
+    pub projection_type: Option<ProjectionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProjectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProjectionType {
+    All,
+    Include,
+    KeysOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProjectionType),
+}
+
+impl Default for ProjectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProjectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProjectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProjectionType {
+    fn into(self) -> String {
+        match self {
+            ProjectionType::All => "ALL".to_string(),
+            ProjectionType::Include => "INCLUDE".to_string(),
+            ProjectionType::KeysOnly => "KEYS_ONLY".to_string(),
+            ProjectionType::UnknownVariant(UnknownProjectionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProjectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ProjectionType::All => &"ALL",
+            ProjectionType::Include => &"INCLUDE",
+            ProjectionType::KeysOnly => &"KEYS_ONLY",
+            ProjectionType::UnknownVariant(UnknownProjectionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProjectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => ProjectionType::All,
+            "INCLUDE" => ProjectionType::Include,
+            "KEYS_ONLY" => ProjectionType::KeysOnly,
+            _ => ProjectionType::UnknownVariant(UnknownProjectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProjectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => ProjectionType::All,
+            "INCLUDE" => ProjectionType::Include,
+            "KEYS_ONLY" => ProjectionType::KeysOnly,
+            _ => ProjectionType::UnknownVariant(UnknownProjectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProjectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProjectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProjectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Service, Account, and Table Quotas</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -2149,7 +4315,7 @@ pub struct Put {
     /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Put</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
     #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values_on_condition_check_failure: Option<String>,
+    pub return_values_on_condition_check_failure: Option<ReturnValuesOnConditionCheckFailure>,
     /// <p>Name of the table in which to write the item.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -2166,7 +4332,7 @@ pub struct PutItemInput {
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ConditionalOperator.html">ConditionalOperator</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditional_operator: Option<String>,
+    pub conditional_operator: Option<ConditionalOperator>,
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.Expected.html">Expected</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "Expected")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2184,15 +4350,15 @@ pub struct PutItemInput {
     pub item: ::std::collections::HashMap<String, AttributeValue>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections, if any, that were modified during the operation are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned.</p>
     #[serde(rename = "ReturnItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_item_collection_metrics: Option<String>,
+    pub return_item_collection_metrics: Option<ReturnItemCollectionMetrics>,
     /// <p><p>Use <code>ReturnValues</code> if you want to get the item attributes as they appeared before they were updated with the <code>PutItem</code> request. For <code>PutItem</code>, the valid values are:</p> <ul> <li> <p> <code>NONE</code> - If <code>ReturnValues</code> is not specified, or if its value is <code>NONE</code>, then nothing is returned. (This setting is the default for <code>ReturnValues</code>.)</p> </li> <li> <p> <code>ALL<em>OLD</code> - If <code>PutItem</code> overwrote an attribute name-value pair, then the content of the old item is returned.</p> </li> </ul> <note> <p>The <code>ReturnValues</code> parameter is used by several DynamoDB operations; however, <code>PutItem</code> does not recognize any values other than <code>NONE</code> or <code>ALL</em>OLD</code>.</p> </note></p>
     #[serde(rename = "ReturnValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values: Option<String>,
+    pub return_values: Option<ReturnValue>,
     /// <p>The name of the table to contain the item.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -2235,7 +4401,7 @@ pub struct QueryInput {
     /// <p>This is a legacy parameter. Use <code>FilterExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ConditionalOperator.html">ConditionalOperator</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditional_operator: Option<String>,
+    pub conditional_operator: Option<ConditionalOperator>,
     /// <p>Determines the read consistency model: If set to <code>true</code>, then the operation uses strongly consistent reads; otherwise, the operation uses eventually consistent reads.</p> <p>Strongly consistent reads are not supported on global secondary indexes. If you query a global secondary index with <code>ConsistentRead</code> set to <code>true</code>, you will receive a <code>ValidationException</code>.</p>
     #[serde(rename = "ConsistentRead")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2282,7 +4448,7 @@ pub struct QueryInput {
     pub query_filter: Option<::std::collections::HashMap<String, Condition>>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Specifies the order for index traversal: If <code>true</code> (default), the traversal is performed in ascending order; if <code>false</code>, the traversal is performed in descending order. </p> <p>Items with the same partition key value are stored in sorted order by sort key. If the sort key data type is Number, the results are stored in numeric order. For type String, the results are stored in order of UTF-8 bytes. For type Binary, DynamoDB treats each byte of the binary data as unsigned.</p> <p>If <code>ScanIndexForward</code> is <code>true</code>, DynamoDB returns the results in the order in which they are stored (by sort key value). This is the default behavior. If <code>ScanIndexForward</code> is <code>false</code>, DynamoDB reads the results in reverse order by sort key value, and then returns the results to the client.</p>
     #[serde(rename = "ScanIndexForward")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2290,7 +4456,7 @@ pub struct QueryInput {
     /// <p><p>The attributes to be returned in the result. You can retrieve all item attributes, specific item attributes, the count of matching items, or in the case of an index, some or all of the attributes projected into the index.</p> <ul> <li> <p> <code>ALL<em>ATTRIBUTES</code> - Returns all of the item attributes from the specified table or index. If you query a local secondary index, then for each matching item in the index, DynamoDB fetches the entire item from the parent table. If the index is configured to project all item attributes, then all of the data can be obtained from the local secondary index, and no fetching is required.</p> </li> <li> <p> <code>ALL</em>PROJECTED<em>ATTRIBUTES</code> - Allowed only when querying an index. Retrieves all attributes that have been projected into the index. If the index is configured to project all attributes, this return value is equivalent to specifying <code>ALL</em>ATTRIBUTES</code>.</p> </li> <li> <p> <code>COUNT</code> - Returns the number of matching items, rather than the matching items themselves.</p> </li> <li> <p> <code>SPECIFIC<em>ATTRIBUTES</code> - Returns only the attributes listed in <code>AttributesToGet</code>. This return value is equivalent to specifying <code>AttributesToGet</code> without specifying any value for <code>Select</code>.</p> <p>If you query or scan a local secondary index and request only attributes that are projected into that index, the operation will read only the index and not the table. If any of the requested attributes are not projected into the local secondary index, DynamoDB fetches each of these attributes from the parent table. This extra fetching incurs additional throughput cost and latency.</p> <p>If you query or scan a global secondary index, you can only request attributes that are projected into the index. Global secondary index queries cannot fetch attributes from the parent table.</p> </li> </ul> <p>If neither <code>Select</code> nor <code>AttributesToGet</code> are specified, DynamoDB defaults to <code>ALL</em>ATTRIBUTES</code> when accessing a table, and <code>ALL<em>PROJECTED</em>ATTRIBUTES</code> when accessing an index. You cannot use both <code>Select</code> and <code>AttributesToGet</code> together in a single request, unless the value for <code>Select</code> is <code>SPECIFIC<em>ATTRIBUTES</code>. (This usage is equivalent to specifying <code>AttributesToGet</code> without any value for <code>Select</code>.)</p> <note> <p>If you use the <code>ProjectionExpression</code> parameter, then the value for <code>Select</code> can only be <code>SPECIFIC</em>ATTRIBUTES</code>. Any other value for <code>Select</code> will return an error.</p> </note></p>
     #[serde(rename = "Select")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub select: Option<String>,
+    pub select: Option<Select>,
     /// <p>The name of the table containing the requested items.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -2354,7 +4520,7 @@ pub struct ReplicaAutoScalingDescription {
     /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replica_status: Option<String>,
+    pub replica_status: Option<ReplicaStatus>,
 }
 
 /// <p>Represents the auto scaling settings of a replica that will be modified.</p>
@@ -2401,7 +4567,7 @@ pub struct ReplicaDescription {
     /// <p><p>The current state of the replica:</p> <ul> <li> <p> <code>CREATING</code> - The replica is being created.</p> </li> <li> <p> <code>UPDATING</code> - The replica is being updated.</p> </li> <li> <p> <code>DELETING</code> - The replica is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The replica is ready for use.</p> </li> <li> <p> <code>REGION<em>DISABLED</code> - The replica is inaccessible because the AWS Region has been disabled.</p> <note> <p>If the AWS Region remains inaccessible for more than 20 hours, DynamoDB will remove this replica from the replication group. The replica will not be deleted and replication will stop from and to this region.</p> </note> </li> <li> <p> <code>INACCESSIBLE</em>ENCRYPTION_CREDENTIALS </code> - The AWS KMS key used to encrypt the table is inaccessible.</p> <note> <p>If the AWS KMS key remains inaccessible for more than 20 hours, DynamoDB will remove this replica from the replication group. The replica will not be deleted and replication will stop from and to this region.</p> </note> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replica_status: Option<String>,
+    pub replica_status: Option<ReplicaStatus>,
     /// <p>Detailed information about the replica status.</p>
     #[serde(rename = "ReplicaStatusDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2436,7 +4602,7 @@ pub struct ReplicaGlobalSecondaryIndexAutoScalingDescription {
     /// <p><p>The current state of the replica global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The index is ready for use.</p> </li> </ul></p>
     #[serde(rename = "IndexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_status: Option<String>,
+    pub index_status: Option<IndexStatus>,
     #[serde(rename = "ProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_read_capacity_auto_scaling_settings: Option<AutoScalingSettingsDescription>,
@@ -2482,7 +4648,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
     /// <p><p> The current status of the global secondary index:</p> <ul> <li> <p> <code>CREATING</code> - The global secondary index is being created.</p> </li> <li> <p> <code>UPDATING</code> - The global secondary index is being updated.</p> </li> <li> <p> <code>DELETING</code> - The global secondary index is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The global secondary index is ready for use.</p> </li> </ul></p>
     #[serde(rename = "IndexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_status: Option<String>,
+    pub index_status: Option<IndexStatus>,
     /// <p>Auto scaling settings for a global secondary index replica's read capacity units.</p>
     #[serde(rename = "ProvisionedReadCapacityAutoScalingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2555,7 +4721,7 @@ pub struct ReplicaSettingsDescription {
     /// <p><p>The current state of the Region:</p> <ul> <li> <p> <code>CREATING</code> - The Region is being created.</p> </li> <li> <p> <code>UPDATING</code> - The Region is being updated.</p> </li> <li> <p> <code>DELETING</code> - The Region is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The Region is ready for use.</p> </li> </ul></p>
     #[serde(rename = "ReplicaStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replica_status: Option<String>,
+    pub replica_status: Option<ReplicaStatus>,
 }
 
 /// <p>Represents the settings for a global table in a Region that will be modified.</p>
@@ -2579,6 +4745,140 @@ pub struct ReplicaSettingsUpdate {
     #[serde(rename = "ReplicaProvisionedReadCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replica_provisioned_read_capacity_units: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplicaStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplicaStatus {
+    Active,
+    Creating,
+    CreationFailed,
+    Deleting,
+    InaccessibleEncryptionCredentials,
+    RegionDisabled,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplicaStatus),
+}
+
+impl Default for ReplicaStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplicaStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplicaStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplicaStatus {
+    fn into(self) -> String {
+        match self {
+            ReplicaStatus::Active => "ACTIVE".to_string(),
+            ReplicaStatus::Creating => "CREATING".to_string(),
+            ReplicaStatus::CreationFailed => "CREATION_FAILED".to_string(),
+            ReplicaStatus::Deleting => "DELETING".to_string(),
+            ReplicaStatus::InaccessibleEncryptionCredentials => {
+                "INACCESSIBLE_ENCRYPTION_CREDENTIALS".to_string()
+            }
+            ReplicaStatus::RegionDisabled => "REGION_DISABLED".to_string(),
+            ReplicaStatus::Updating => "UPDATING".to_string(),
+            ReplicaStatus::UnknownVariant(UnknownReplicaStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplicaStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReplicaStatus::Active => &"ACTIVE",
+            ReplicaStatus::Creating => &"CREATING",
+            ReplicaStatus::CreationFailed => &"CREATION_FAILED",
+            ReplicaStatus::Deleting => &"DELETING",
+            ReplicaStatus::InaccessibleEncryptionCredentials => {
+                &"INACCESSIBLE_ENCRYPTION_CREDENTIALS"
+            }
+            ReplicaStatus::RegionDisabled => &"REGION_DISABLED",
+            ReplicaStatus::Updating => &"UPDATING",
+            ReplicaStatus::UnknownVariant(UnknownReplicaStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReplicaStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ReplicaStatus::Active,
+            "CREATING" => ReplicaStatus::Creating,
+            "CREATION_FAILED" => ReplicaStatus::CreationFailed,
+            "DELETING" => ReplicaStatus::Deleting,
+            "INACCESSIBLE_ENCRYPTION_CREDENTIALS" => {
+                ReplicaStatus::InaccessibleEncryptionCredentials
+            }
+            "REGION_DISABLED" => ReplicaStatus::RegionDisabled,
+            "UPDATING" => ReplicaStatus::Updating,
+            _ => ReplicaStatus::UnknownVariant(UnknownReplicaStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplicaStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ReplicaStatus::Active,
+            "CREATING" => ReplicaStatus::Creating,
+            "CREATION_FAILED" => ReplicaStatus::CreationFailed,
+            "DELETING" => ReplicaStatus::Deleting,
+            "INACCESSIBLE_ENCRYPTION_CREDENTIALS" => {
+                ReplicaStatus::InaccessibleEncryptionCredentials
+            }
+            "REGION_DISABLED" => ReplicaStatus::RegionDisabled,
+            "UPDATING" => ReplicaStatus::Updating,
+            _ => ReplicaStatus::UnknownVariant(UnknownReplicaStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplicaStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReplicaStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReplicaStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing global table.</p> </li> <li> <p>New parameters for an existing replica.</p> </li> <li> <p>An existing replica to be removed from an existing global table.</p> </li> </ul></p>
@@ -2642,7 +4942,7 @@ pub struct RestoreTableFromBackupInput {
     /// <p>The billing mode of the restored table.</p>
     #[serde(rename = "BillingModeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode_override: Option<String>,
+    pub billing_mode_override: Option<BillingMode>,
     /// <p>List of global secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
     #[serde(rename = "GlobalSecondaryIndexOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2679,7 +4979,7 @@ pub struct RestoreTableToPointInTimeInput {
     /// <p>The billing mode of the restored table.</p>
     #[serde(rename = "BillingModeOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode_override: Option<String>,
+    pub billing_mode_override: Option<BillingMode>,
     /// <p>List of global secondary indexes for the restored table. The indexes provided should match existing secondary indexes. You can choose to exclude some or all of the indexes at the time of restore.</p>
     #[serde(rename = "GlobalSecondaryIndexOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2726,6 +5026,550 @@ pub struct RestoreTableToPointInTimeOutput {
     pub table_description: Option<TableDescription>,
 }
 
+/// <p><p>Determines the level of detail about provisioned throughput consumption that is returned in the response:</p> <ul> <li> <p> <code>INDEXES</code> - The response includes the aggregate <code>ConsumedCapacity</code> for the operation, together with <code>ConsumedCapacity</code> for each table and secondary index that was accessed.</p> <p>Note that some operations, such as <code>GetItem</code> and <code>BatchGetItem</code>, do not access any indexes at all. In these cases, specifying <code>INDEXES</code> will only return <code>ConsumedCapacity</code> information for table(s).</p> </li> <li> <p> <code>TOTAL</code> - The response includes only the aggregate <code>ConsumedCapacity</code> for the operation.</p> </li> <li> <p> <code>NONE</code> - No <code>ConsumedCapacity</code> details are included in the response.</p> </li> </ul></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReturnConsumedCapacity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReturnConsumedCapacity {
+    Indexes,
+    None,
+    Total,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReturnConsumedCapacity),
+}
+
+impl Default for ReturnConsumedCapacity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReturnConsumedCapacity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReturnConsumedCapacity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReturnConsumedCapacity {
+    fn into(self) -> String {
+        match self {
+            ReturnConsumedCapacity::Indexes => "INDEXES".to_string(),
+            ReturnConsumedCapacity::None => "NONE".to_string(),
+            ReturnConsumedCapacity::Total => "TOTAL".to_string(),
+            ReturnConsumedCapacity::UnknownVariant(UnknownReturnConsumedCapacity {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReturnConsumedCapacity {
+    fn into(self) -> &'a str {
+        match self {
+            ReturnConsumedCapacity::Indexes => &"INDEXES",
+            ReturnConsumedCapacity::None => &"NONE",
+            ReturnConsumedCapacity::Total => &"TOTAL",
+            ReturnConsumedCapacity::UnknownVariant(UnknownReturnConsumedCapacity {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReturnConsumedCapacity {
+    fn from(name: &str) -> Self {
+        match name {
+            "INDEXES" => ReturnConsumedCapacity::Indexes,
+            "NONE" => ReturnConsumedCapacity::None,
+            "TOTAL" => ReturnConsumedCapacity::Total,
+            _ => ReturnConsumedCapacity::UnknownVariant(UnknownReturnConsumedCapacity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReturnConsumedCapacity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INDEXES" => ReturnConsumedCapacity::Indexes,
+            "NONE" => ReturnConsumedCapacity::None,
+            "TOTAL" => ReturnConsumedCapacity::Total,
+            _ => ReturnConsumedCapacity::UnknownVariant(UnknownReturnConsumedCapacity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnConsumedCapacity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReturnConsumedCapacity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReturnConsumedCapacity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReturnItemCollectionMetrics {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReturnItemCollectionMetrics {
+    None,
+    Size,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReturnItemCollectionMetrics),
+}
+
+impl Default for ReturnItemCollectionMetrics {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReturnItemCollectionMetrics {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReturnItemCollectionMetrics {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReturnItemCollectionMetrics {
+    fn into(self) -> String {
+        match self {
+            ReturnItemCollectionMetrics::None => "NONE".to_string(),
+            ReturnItemCollectionMetrics::Size => "SIZE".to_string(),
+            ReturnItemCollectionMetrics::UnknownVariant(UnknownReturnItemCollectionMetrics {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReturnItemCollectionMetrics {
+    fn into(self) -> &'a str {
+        match self {
+            ReturnItemCollectionMetrics::None => &"NONE",
+            ReturnItemCollectionMetrics::Size => &"SIZE",
+            ReturnItemCollectionMetrics::UnknownVariant(UnknownReturnItemCollectionMetrics {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReturnItemCollectionMetrics {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ReturnItemCollectionMetrics::None,
+            "SIZE" => ReturnItemCollectionMetrics::Size,
+            _ => ReturnItemCollectionMetrics::UnknownVariant(UnknownReturnItemCollectionMetrics {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReturnItemCollectionMetrics {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ReturnItemCollectionMetrics::None,
+            "SIZE" => ReturnItemCollectionMetrics::Size,
+            _ => ReturnItemCollectionMetrics::UnknownVariant(UnknownReturnItemCollectionMetrics {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnItemCollectionMetrics {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReturnItemCollectionMetrics {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReturnItemCollectionMetrics {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReturnValue {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReturnValue {
+    AllNew,
+    AllOld,
+    None,
+    UpdatedNew,
+    UpdatedOld,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReturnValue),
+}
+
+impl Default for ReturnValue {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReturnValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReturnValue {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReturnValue {
+    fn into(self) -> String {
+        match self {
+            ReturnValue::AllNew => "ALL_NEW".to_string(),
+            ReturnValue::AllOld => "ALL_OLD".to_string(),
+            ReturnValue::None => "NONE".to_string(),
+            ReturnValue::UpdatedNew => "UPDATED_NEW".to_string(),
+            ReturnValue::UpdatedOld => "UPDATED_OLD".to_string(),
+            ReturnValue::UnknownVariant(UnknownReturnValue { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReturnValue {
+    fn into(self) -> &'a str {
+        match self {
+            ReturnValue::AllNew => &"ALL_NEW",
+            ReturnValue::AllOld => &"ALL_OLD",
+            ReturnValue::None => &"NONE",
+            ReturnValue::UpdatedNew => &"UPDATED_NEW",
+            ReturnValue::UpdatedOld => &"UPDATED_OLD",
+            ReturnValue::UnknownVariant(UnknownReturnValue { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReturnValue {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_NEW" => ReturnValue::AllNew,
+            "ALL_OLD" => ReturnValue::AllOld,
+            "NONE" => ReturnValue::None,
+            "UPDATED_NEW" => ReturnValue::UpdatedNew,
+            "UPDATED_OLD" => ReturnValue::UpdatedOld,
+            _ => ReturnValue::UnknownVariant(UnknownReturnValue {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReturnValue {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_NEW" => ReturnValue::AllNew,
+            "ALL_OLD" => ReturnValue::AllOld,
+            "NONE" => ReturnValue::None,
+            "UPDATED_NEW" => ReturnValue::UpdatedNew,
+            "UPDATED_OLD" => ReturnValue::UpdatedOld,
+            _ => ReturnValue::UnknownVariant(UnknownReturnValue { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnValue {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReturnValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReturnValue {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReturnValuesOnConditionCheckFailure {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReturnValuesOnConditionCheckFailure {
+    AllOld,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReturnValuesOnConditionCheckFailure),
+}
+
+impl Default for ReturnValuesOnConditionCheckFailure {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReturnValuesOnConditionCheckFailure {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReturnValuesOnConditionCheckFailure {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReturnValuesOnConditionCheckFailure {
+    fn into(self) -> String {
+        match self {
+            ReturnValuesOnConditionCheckFailure::AllOld => "ALL_OLD".to_string(),
+            ReturnValuesOnConditionCheckFailure::None => "NONE".to_string(),
+            ReturnValuesOnConditionCheckFailure::UnknownVariant(
+                UnknownReturnValuesOnConditionCheckFailure { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReturnValuesOnConditionCheckFailure {
+    fn into(self) -> &'a str {
+        match self {
+            ReturnValuesOnConditionCheckFailure::AllOld => &"ALL_OLD",
+            ReturnValuesOnConditionCheckFailure::None => &"NONE",
+            ReturnValuesOnConditionCheckFailure::UnknownVariant(
+                UnknownReturnValuesOnConditionCheckFailure { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ReturnValuesOnConditionCheckFailure {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_OLD" => ReturnValuesOnConditionCheckFailure::AllOld,
+            "NONE" => ReturnValuesOnConditionCheckFailure::None,
+            _ => ReturnValuesOnConditionCheckFailure::UnknownVariant(
+                UnknownReturnValuesOnConditionCheckFailure {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ReturnValuesOnConditionCheckFailure {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_OLD" => ReturnValuesOnConditionCheckFailure::AllOld,
+            "NONE" => ReturnValuesOnConditionCheckFailure::None,
+            _ => ReturnValuesOnConditionCheckFailure::UnknownVariant(
+                UnknownReturnValuesOnConditionCheckFailure { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReturnValuesOnConditionCheckFailure {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReturnValuesOnConditionCheckFailure {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReturnValuesOnConditionCheckFailure {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3SseAlgorithm {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3SseAlgorithm {
+    Aes256,
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3SseAlgorithm),
+}
+
+impl Default for S3SseAlgorithm {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3SseAlgorithm {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3SseAlgorithm {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3SseAlgorithm {
+    fn into(self) -> String {
+        match self {
+            S3SseAlgorithm::Aes256 => "AES256".to_string(),
+            S3SseAlgorithm::Kms => "KMS".to_string(),
+            S3SseAlgorithm::UnknownVariant(UnknownS3SseAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3SseAlgorithm {
+    fn into(self) -> &'a str {
+        match self {
+            S3SseAlgorithm::Aes256 => &"AES256",
+            S3SseAlgorithm::Kms => &"KMS",
+            S3SseAlgorithm::UnknownVariant(UnknownS3SseAlgorithm { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for S3SseAlgorithm {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => S3SseAlgorithm::Aes256,
+            "KMS" => S3SseAlgorithm::Kms,
+            _ => S3SseAlgorithm::UnknownVariant(UnknownS3SseAlgorithm {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3SseAlgorithm {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => S3SseAlgorithm::Aes256,
+            "KMS" => S3SseAlgorithm::Kms,
+            _ => S3SseAlgorithm::UnknownVariant(UnknownS3SseAlgorithm { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3SseAlgorithm {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3SseAlgorithm {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3SseAlgorithm {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The description of the server-side encryption status on the specified table.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2741,11 +5585,11 @@ pub struct SSEDescription {
     /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption that uses AWS Key Management Service. The key is stored in your account and is managed by AWS KMS (AWS KMS charges apply).</p> </li> </ul></p>
     #[serde(rename = "SSEType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sse_type: Option<String>,
+    pub sse_type: Option<SSEType>,
     /// <p><p>Represents the current state of server-side encryption. The only supported values are:</p> <ul> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>UPDATING</code> - Server-side encryption is being updated.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SSEStatus>,
 }
 
 /// <p>Represents the settings used to enable server-side encryption.</p>
@@ -2763,7 +5607,332 @@ pub struct SSESpecification {
     /// <p><p>Server-side encryption type. The only supported value is:</p> <ul> <li> <p> <code>KMS</code> - Server-side encryption that uses AWS Key Management Service. The key is stored in your account and is managed by AWS KMS (AWS KMS charges apply).</p> </li> </ul></p>
     #[serde(rename = "SSEType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sse_type: Option<String>,
+    pub sse_type: Option<SSEType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSSEStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SSEStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSSEStatus),
+}
+
+impl Default for SSEStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SSEStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SSEStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SSEStatus {
+    fn into(self) -> String {
+        match self {
+            SSEStatus::Disabled => "DISABLED".to_string(),
+            SSEStatus::Disabling => "DISABLING".to_string(),
+            SSEStatus::Enabled => "ENABLED".to_string(),
+            SSEStatus::Enabling => "ENABLING".to_string(),
+            SSEStatus::Updating => "UPDATING".to_string(),
+            SSEStatus::UnknownVariant(UnknownSSEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SSEStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SSEStatus::Disabled => &"DISABLED",
+            SSEStatus::Disabling => &"DISABLING",
+            SSEStatus::Enabled => &"ENABLED",
+            SSEStatus::Enabling => &"ENABLING",
+            SSEStatus::Updating => &"UPDATING",
+            SSEStatus::UnknownVariant(UnknownSSEStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SSEStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => SSEStatus::Disabled,
+            "DISABLING" => SSEStatus::Disabling,
+            "ENABLED" => SSEStatus::Enabled,
+            "ENABLING" => SSEStatus::Enabling,
+            "UPDATING" => SSEStatus::Updating,
+            _ => SSEStatus::UnknownVariant(UnknownSSEStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SSEStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => SSEStatus::Disabled,
+            "DISABLING" => SSEStatus::Disabling,
+            "ENABLED" => SSEStatus::Enabled,
+            "ENABLING" => SSEStatus::Enabling,
+            "UPDATING" => SSEStatus::Updating,
+            _ => SSEStatus::UnknownVariant(UnknownSSEStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SSEStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SSEStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SSEStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSSEType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SSEType {
+    Aes256,
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSSEType),
+}
+
+impl Default for SSEType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SSEType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SSEType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SSEType {
+    fn into(self) -> String {
+        match self {
+            SSEType::Aes256 => "AES256".to_string(),
+            SSEType::Kms => "KMS".to_string(),
+            SSEType::UnknownVariant(UnknownSSEType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SSEType {
+    fn into(self) -> &'a str {
+        match self {
+            SSEType::Aes256 => &"AES256",
+            SSEType::Kms => &"KMS",
+            SSEType::UnknownVariant(UnknownSSEType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SSEType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => SSEType::Aes256,
+            "KMS" => SSEType::Kms,
+            _ => SSEType::UnknownVariant(UnknownSSEType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SSEType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => SSEType::Aes256,
+            "KMS" => SSEType::Kms,
+            _ => SSEType::UnknownVariant(UnknownSSEType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SSEType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SSEType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SSEType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalarAttributeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalarAttributeType {
+    B,
+    N,
+    S,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalarAttributeType),
+}
+
+impl Default for ScalarAttributeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalarAttributeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalarAttributeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalarAttributeType {
+    fn into(self) -> String {
+        match self {
+            ScalarAttributeType::B => "B".to_string(),
+            ScalarAttributeType::N => "N".to_string(),
+            ScalarAttributeType::S => "S".to_string(),
+            ScalarAttributeType::UnknownVariant(UnknownScalarAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalarAttributeType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalarAttributeType::B => &"B",
+            ScalarAttributeType::N => &"N",
+            ScalarAttributeType::S => &"S",
+            ScalarAttributeType::UnknownVariant(UnknownScalarAttributeType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScalarAttributeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "B" => ScalarAttributeType::B,
+            "N" => ScalarAttributeType::N,
+            "S" => ScalarAttributeType::S,
+            _ => ScalarAttributeType::UnknownVariant(UnknownScalarAttributeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalarAttributeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "B" => ScalarAttributeType::B,
+            "N" => ScalarAttributeType::N,
+            "S" => ScalarAttributeType::S,
+            _ => ScalarAttributeType::UnknownVariant(UnknownScalarAttributeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalarAttributeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalarAttributeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalarAttributeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
@@ -2777,7 +5946,7 @@ pub struct ScanInput {
     /// <p>This is a legacy parameter. Use <code>FilterExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ConditionalOperator.html">ConditionalOperator</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditional_operator: Option<String>,
+    pub conditional_operator: Option<ConditionalOperator>,
     /// <p>A Boolean value that determines the read consistency model during the scan:</p> <ul> <li> <p>If <code>ConsistentRead</code> is <code>false</code>, then the data returned from <code>Scan</code> might not contain the results from other recently completed write operations (<code>PutItem</code>, <code>UpdateItem</code>, or <code>DeleteItem</code>).</p> </li> <li> <p>If <code>ConsistentRead</code> is <code>true</code>, then all of the write operations that completed before the <code>Scan</code> began are guaranteed to be contained in the <code>Scan</code> response.</p> </li> </ul> <p>The default setting for <code>ConsistentRead</code> is <code>false</code>.</p> <p>The <code>ConsistentRead</code> parameter is not supported on global secondary indexes. If you scan a global secondary index with <code>ConsistentRead</code> set to true, you will receive a <code>ValidationException</code>.</p>
     #[serde(rename = "ConsistentRead")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2812,7 +5981,7 @@ pub struct ScanInput {
     pub projection_expression: Option<String>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>This is a legacy parameter. Use <code>FilterExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ScanFilter.html">ScanFilter</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ScanFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2824,7 +5993,7 @@ pub struct ScanInput {
     /// <p><p>The attributes to be returned in the result. You can retrieve all item attributes, specific item attributes, the count of matching items, or in the case of an index, some or all of the attributes projected into the index.</p> <ul> <li> <p> <code>ALL<em>ATTRIBUTES</code> - Returns all of the item attributes from the specified table or index. If you query a local secondary index, then for each matching item in the index, DynamoDB fetches the entire item from the parent table. If the index is configured to project all item attributes, then all of the data can be obtained from the local secondary index, and no fetching is required.</p> </li> <li> <p> <code>ALL</em>PROJECTED<em>ATTRIBUTES</code> - Allowed only when querying an index. Retrieves all attributes that have been projected into the index. If the index is configured to project all attributes, this return value is equivalent to specifying <code>ALL</em>ATTRIBUTES</code>.</p> </li> <li> <p> <code>COUNT</code> - Returns the number of matching items, rather than the matching items themselves.</p> </li> <li> <p> <code>SPECIFIC<em>ATTRIBUTES</code> - Returns only the attributes listed in <code>AttributesToGet</code>. This return value is equivalent to specifying <code>AttributesToGet</code> without specifying any value for <code>Select</code>.</p> <p>If you query or scan a local secondary index and request only attributes that are projected into that index, the operation reads only the index and not the table. If any of the requested attributes are not projected into the local secondary index, DynamoDB fetches each of these attributes from the parent table. This extra fetching incurs additional throughput cost and latency.</p> <p>If you query or scan a global secondary index, you can only request attributes that are projected into the index. Global secondary index queries cannot fetch attributes from the parent table.</p> </li> </ul> <p>If neither <code>Select</code> nor <code>AttributesToGet</code> are specified, DynamoDB defaults to <code>ALL</em>ATTRIBUTES</code> when accessing a table, and <code>ALL<em>PROJECTED</em>ATTRIBUTES</code> when accessing an index. You cannot use both <code>Select</code> and <code>AttributesToGet</code> together in a single request, unless the value for <code>Select</code> is <code>SPECIFIC<em>ATTRIBUTES</code>. (This usage is equivalent to specifying <code>AttributesToGet</code> without any value for <code>Select</code>.)</p> <note> <p>If you use the <code>ProjectionExpression</code> parameter, then the value for <code>Select</code> can only be <code>SPECIFIC</em>ATTRIBUTES</code>. Any other value for <code>Select</code> will return an error.</p> </note></p>
     #[serde(rename = "Select")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub select: Option<String>,
+    pub select: Option<Select>,
     /// <p>The name of the table containing the requested items; or, if you provide <code>IndexName</code>, the name of the table to which that index belongs.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -2860,6 +6029,117 @@ pub struct ScanOutput {
     pub scanned_count: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSelect {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Select {
+    AllAttributes,
+    AllProjectedAttributes,
+    Count,
+    SpecificAttributes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSelect),
+}
+
+impl Default for Select {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Select {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Select {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Select {
+    fn into(self) -> String {
+        match self {
+            Select::AllAttributes => "ALL_ATTRIBUTES".to_string(),
+            Select::AllProjectedAttributes => "ALL_PROJECTED_ATTRIBUTES".to_string(),
+            Select::Count => "COUNT".to_string(),
+            Select::SpecificAttributes => "SPECIFIC_ATTRIBUTES".to_string(),
+            Select::UnknownVariant(UnknownSelect { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Select {
+    fn into(self) -> &'a str {
+        match self {
+            Select::AllAttributes => &"ALL_ATTRIBUTES",
+            Select::AllProjectedAttributes => &"ALL_PROJECTED_ATTRIBUTES",
+            Select::Count => &"COUNT",
+            Select::SpecificAttributes => &"SPECIFIC_ATTRIBUTES",
+            Select::UnknownVariant(UnknownSelect { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Select {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL_ATTRIBUTES" => Select::AllAttributes,
+            "ALL_PROJECTED_ATTRIBUTES" => Select::AllProjectedAttributes,
+            "COUNT" => Select::Count,
+            "SPECIFIC_ATTRIBUTES" => Select::SpecificAttributes,
+            _ => Select::UnknownVariant(UnknownSelect {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Select {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL_ATTRIBUTES" => Select::AllAttributes,
+            "ALL_PROJECTED_ATTRIBUTES" => Select::AllProjectedAttributes,
+            "COUNT" => Select::Count,
+            "SPECIFIC_ATTRIBUTES" => Select::SpecificAttributes,
+            _ => Select::UnknownVariant(UnknownSelect { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Select {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Select {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Select {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Contains the details of the table when the backup was created. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2867,7 +6147,7 @@ pub struct SourceTableDetails {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode: Option<String>,
+    pub billing_mode: Option<BillingMode>,
     /// <p>Number of items in the table. Note that this is an approximate value. </p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2932,7 +6212,117 @@ pub struct StreamSpecification {
     /// <p><p> When an item in the table is modified, <code>StreamViewType</code> determines what information is written to the stream for this table. Valid values for <code>StreamViewType</code> are:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - Only the key attributes of the modified item are written to the stream.</p> </li> <li> <p> <code>NEW</em>IMAGE</code> - The entire item, as it appears after it was modified, is written to the stream.</p> </li> <li> <p> <code>OLD<em>IMAGE</code> - The entire item, as it appeared before it was modified, is written to the stream.</p> </li> <li> <p> <code>NEW</em>AND<em>OLD</em>IMAGES</code> - Both the new and the old item images of the item are written to the stream.</p> </li> </ul></p>
     #[serde(rename = "StreamViewType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream_view_type: Option<String>,
+    pub stream_view_type: Option<StreamViewType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStreamViewType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StreamViewType {
+    KeysOnly,
+    NewAndOldImages,
+    NewImage,
+    OldImage,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStreamViewType),
+}
+
+impl Default for StreamViewType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StreamViewType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StreamViewType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StreamViewType {
+    fn into(self) -> String {
+        match self {
+            StreamViewType::KeysOnly => "KEYS_ONLY".to_string(),
+            StreamViewType::NewAndOldImages => "NEW_AND_OLD_IMAGES".to_string(),
+            StreamViewType::NewImage => "NEW_IMAGE".to_string(),
+            StreamViewType::OldImage => "OLD_IMAGE".to_string(),
+            StreamViewType::UnknownVariant(UnknownStreamViewType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StreamViewType {
+    fn into(self) -> &'a str {
+        match self {
+            StreamViewType::KeysOnly => &"KEYS_ONLY",
+            StreamViewType::NewAndOldImages => &"NEW_AND_OLD_IMAGES",
+            StreamViewType::NewImage => &"NEW_IMAGE",
+            StreamViewType::OldImage => &"OLD_IMAGE",
+            StreamViewType::UnknownVariant(UnknownStreamViewType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StreamViewType {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEYS_ONLY" => StreamViewType::KeysOnly,
+            "NEW_AND_OLD_IMAGES" => StreamViewType::NewAndOldImages,
+            "NEW_IMAGE" => StreamViewType::NewImage,
+            "OLD_IMAGE" => StreamViewType::OldImage,
+            _ => StreamViewType::UnknownVariant(UnknownStreamViewType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StreamViewType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEYS_ONLY" => StreamViewType::KeysOnly,
+            "NEW_AND_OLD_IMAGES" => StreamViewType::NewAndOldImages,
+            "NEW_IMAGE" => StreamViewType::NewImage,
+            "OLD_IMAGE" => StreamViewType::OldImage,
+            _ => StreamViewType::UnknownVariant(UnknownStreamViewType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StreamViewType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StreamViewType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StreamViewType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the auto scaling configuration for a global table.</p>
@@ -2950,7 +6340,7 @@ pub struct TableAutoScalingDescription {
     /// <p><p>The current state of the table:</p> <ul> <li> <p> <code>CREATING</code> - The table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The table is ready for use.</p> </li> </ul></p>
     #[serde(rename = "TableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_status: Option<String>,
+    pub table_status: Option<TableStatus>,
 }
 
 /// <p>Represents the properties of a table.</p>
@@ -3040,7 +6430,137 @@ pub struct TableDescription {
     /// <p><p>The current state of the table:</p> <ul> <li> <p> <code>CREATING</code> - The table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The table is ready for use.</p> </li> <li> <p> <code>INACCESSIBLE<em>ENCRYPTION</em>CREDENTIALS</code> - The AWS KMS key used to encrypt the table in inaccessible. Table operations may fail due to failure to use the AWS KMS key. DynamoDB will initiate the table archival process when a table&#39;s AWS KMS key remains inaccessible for more than seven days. </p> </li> <li> <p> <code>ARCHIVING</code> - The table is being archived. Operations are not allowed until archival is complete. </p> </li> <li> <p> <code>ARCHIVED</code> - The table has been archived. See the ArchivalReason for more information. </p> </li> </ul></p>
     #[serde(rename = "TableStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub table_status: Option<String>,
+    pub table_status: Option<TableStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTableStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TableStatus {
+    Active,
+    Archived,
+    Archiving,
+    Creating,
+    Deleting,
+    InaccessibleEncryptionCredentials,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTableStatus),
+}
+
+impl Default for TableStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TableStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TableStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TableStatus {
+    fn into(self) -> String {
+        match self {
+            TableStatus::Active => "ACTIVE".to_string(),
+            TableStatus::Archived => "ARCHIVED".to_string(),
+            TableStatus::Archiving => "ARCHIVING".to_string(),
+            TableStatus::Creating => "CREATING".to_string(),
+            TableStatus::Deleting => "DELETING".to_string(),
+            TableStatus::InaccessibleEncryptionCredentials => {
+                "INACCESSIBLE_ENCRYPTION_CREDENTIALS".to_string()
+            }
+            TableStatus::Updating => "UPDATING".to_string(),
+            TableStatus::UnknownVariant(UnknownTableStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TableStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TableStatus::Active => &"ACTIVE",
+            TableStatus::Archived => &"ARCHIVED",
+            TableStatus::Archiving => &"ARCHIVING",
+            TableStatus::Creating => &"CREATING",
+            TableStatus::Deleting => &"DELETING",
+            TableStatus::InaccessibleEncryptionCredentials => {
+                &"INACCESSIBLE_ENCRYPTION_CREDENTIALS"
+            }
+            TableStatus::Updating => &"UPDATING",
+            TableStatus::UnknownVariant(UnknownTableStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TableStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => TableStatus::Active,
+            "ARCHIVED" => TableStatus::Archived,
+            "ARCHIVING" => TableStatus::Archiving,
+            "CREATING" => TableStatus::Creating,
+            "DELETING" => TableStatus::Deleting,
+            "INACCESSIBLE_ENCRYPTION_CREDENTIALS" => TableStatus::InaccessibleEncryptionCredentials,
+            "UPDATING" => TableStatus::Updating,
+            _ => TableStatus::UnknownVariant(UnknownTableStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TableStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => TableStatus::Active,
+            "ARCHIVED" => TableStatus::Archived,
+            "ARCHIVING" => TableStatus::Archiving,
+            "CREATING" => TableStatus::Creating,
+            "DELETING" => TableStatus::Deleting,
+            "INACCESSIBLE_ENCRYPTION_CREDENTIALS" => TableStatus::InaccessibleEncryptionCredentials,
+            "UPDATING" => TableStatus::Updating,
+            _ => TableStatus::UnknownVariant(UnknownTableStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TableStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TableStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TableStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a tag. A tag is a key-value pair. You can add up to 50 tags to a single DynamoDB table. </p> <p> AWS-assigned tag names and values are automatically assigned the <code>aws:</code> prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix <code>user:</code> in the Cost Allocation Report. You cannot backdate the application of a tag. </p> <p>For an overview on tagging DynamoDB resources, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -3076,7 +6596,7 @@ pub struct TimeToLiveDescription {
     /// <p> The TTL status for the table.</p>
     #[serde(rename = "TimeToLiveStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_to_live_status: Option<String>,
+    pub time_to_live_status: Option<TimeToLiveStatus>,
 }
 
 /// <p>Represents the settings used to enable or disable Time to Live (TTL) for the specified table.</p>
@@ -3088,6 +6608,121 @@ pub struct TimeToLiveSpecification {
     /// <p>Indicates whether TTL is to be enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "Enabled")]
     pub enabled: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTimeToLiveStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TimeToLiveStatus {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTimeToLiveStatus),
+}
+
+impl Default for TimeToLiveStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TimeToLiveStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TimeToLiveStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TimeToLiveStatus {
+    fn into(self) -> String {
+        match self {
+            TimeToLiveStatus::Disabled => "DISABLED".to_string(),
+            TimeToLiveStatus::Disabling => "DISABLING".to_string(),
+            TimeToLiveStatus::Enabled => "ENABLED".to_string(),
+            TimeToLiveStatus::Enabling => "ENABLING".to_string(),
+            TimeToLiveStatus::UnknownVariant(UnknownTimeToLiveStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TimeToLiveStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TimeToLiveStatus::Disabled => &"DISABLED",
+            TimeToLiveStatus::Disabling => &"DISABLING",
+            TimeToLiveStatus::Enabled => &"ENABLED",
+            TimeToLiveStatus::Enabling => &"ENABLING",
+            TimeToLiveStatus::UnknownVariant(UnknownTimeToLiveStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TimeToLiveStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => TimeToLiveStatus::Disabled,
+            "DISABLING" => TimeToLiveStatus::Disabling,
+            "ENABLED" => TimeToLiveStatus::Enabled,
+            "ENABLING" => TimeToLiveStatus::Enabling,
+            _ => TimeToLiveStatus::UnknownVariant(UnknownTimeToLiveStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TimeToLiveStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => TimeToLiveStatus::Disabled,
+            "DISABLING" => TimeToLiveStatus::Disabling,
+            "ENABLED" => TimeToLiveStatus::Enabled,
+            "ENABLING" => TimeToLiveStatus::Enabling,
+            _ => TimeToLiveStatus::UnknownVariant(UnknownTimeToLiveStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TimeToLiveStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for TimeToLiveStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TimeToLiveStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies an item to be retrieved as part of the transaction.</p>
@@ -3105,7 +6740,7 @@ pub struct TransactGetItemsInput {
     /// <p>A value of <code>TOTAL</code> causes consumed capacity information to be returned, and a value of <code>NONE</code> prevents that information from being returned. No other value is valid.</p>
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>An ordered array of up to 25 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure.</p>
     #[serde(rename = "TransactItems")]
     pub transact_items: Vec<TransactGetItem>,
@@ -3155,11 +6790,11 @@ pub struct TransactWriteItemsInput {
     pub client_request_token: Option<String>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections (if any), that were modified during the operation and are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned. </p>
     #[serde(rename = "ReturnItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_item_collection_metrics: Option<String>,
+    pub return_item_collection_metrics: Option<ReturnItemCollectionMetrics>,
     /// <p>An ordered array of up to 25 <code>TransactWriteItem</code> objects, each of which contains a <code>ConditionCheck</code>, <code>Put</code>, <code>Update</code>, or <code>Delete</code> object. These can operate on items in different tables, but the tables must reside in the same AWS account and Region, and no two of them can operate on the same item. </p>
     #[serde(rename = "TransactItems")]
     pub transact_items: Vec<TransactWriteItem>,
@@ -3212,7 +6847,7 @@ pub struct Update {
     /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Update</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE, ALL_OLD, UPDATED_OLD, ALL_NEW, UPDATED_NEW.</p>
     #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values_on_condition_check_failure: Option<String>,
+    pub return_values_on_condition_check_failure: Option<ReturnValuesOnConditionCheckFailure>,
     /// <p>Name of the table for the <code>UpdateItem</code> request.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -3246,7 +6881,7 @@ pub struct UpdateContinuousBackupsOutput {
 pub struct UpdateContributorInsightsInput {
     /// <p>Represents the contributor insights action.</p>
     #[serde(rename = "ContributorInsightsAction")]
-    pub contributor_insights_action: String,
+    pub contributor_insights_action: ContributorInsightsAction,
     /// <p>The global secondary index name, if applicable.</p>
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3262,7 +6897,7 @@ pub struct UpdateContributorInsightsOutput {
     /// <p>The status of contributor insights</p>
     #[serde(rename = "ContributorInsightsStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contributor_insights_status: Option<String>,
+    pub contributor_insights_status: Option<ContributorInsightsStatus>,
     /// <p>The name of the global secondary index, if applicable.</p>
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3311,7 +6946,7 @@ pub struct UpdateGlobalTableSettingsInput {
     /// <p><p>The billing mode of the global table. If <code>GlobalTableBillingMode</code> is not specified, the global table defaults to <code>PROVISIONED</code> capacity billing mode.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "GlobalTableBillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub global_table_billing_mode: Option<String>,
+    pub global_table_billing_mode: Option<BillingMode>,
     /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
     #[serde(rename = "GlobalTableGlobalSecondaryIndexSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3363,7 +6998,7 @@ pub struct UpdateItemInput {
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.ConditionalOperator.html">ConditionalOperator</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conditional_operator: Option<String>,
+    pub conditional_operator: Option<ConditionalOperator>,
     /// <p>This is a legacy parameter. Use <code>ConditionExpression</code> instead. For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.Expected.html">Expected</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "Expected")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3381,15 +7016,15 @@ pub struct UpdateItemInput {
     pub key: ::std::collections::HashMap<String, AttributeValue>,
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_consumed_capacity: Option<String>,
+    pub return_consumed_capacity: Option<ReturnConsumedCapacity>,
     /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections, if any, that were modified during the operation are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned.</p>
     #[serde(rename = "ReturnItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_item_collection_metrics: Option<String>,
+    pub return_item_collection_metrics: Option<ReturnItemCollectionMetrics>,
     /// <p>Use <code>ReturnValues</code> if you want to get the item attributes as they appear before or after they are updated. For <code>UpdateItem</code>, the valid values are:</p> <ul> <li> <p> <code>NONE</code> - If <code>ReturnValues</code> is not specified, or if its value is <code>NONE</code>, then nothing is returned. (This setting is the default for <code>ReturnValues</code>.)</p> </li> <li> <p> <code>ALL_OLD</code> - Returns all of the attributes of the item, as they appeared before the UpdateItem operation.</p> </li> <li> <p> <code>UPDATED_OLD</code> - Returns only the updated attributes, as they appeared before the UpdateItem operation.</p> </li> <li> <p> <code>ALL_NEW</code> - Returns all of the attributes of the item, as they appear after the UpdateItem operation.</p> </li> <li> <p> <code>UPDATED_NEW</code> - Returns only the updated attributes, as they appear after the UpdateItem operation.</p> </li> </ul> <p>There is no additional cost associated with requesting a return value aside from the small network and processing overhead of receiving a larger response. No read capacity units are consumed.</p> <p>The values returned are strongly consistent.</p>
     #[serde(rename = "ReturnValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub return_values: Option<String>,
+    pub return_values: Option<ReturnValue>,
     /// <p>The name of the table containing the item to update.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
@@ -3449,7 +7084,7 @@ pub struct UpdateTableInput {
     /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. When switching from pay-per-request to provisioned capacity, initial provisioned capacity values must be set. The initial provisioned capacity values are estimated based on the consumed read and write capacity of your table and global secondary indexes over the past 30 minutes.</p> <ul> <li> <p> <code>PROVISIONED</code> - We recommend using <code>PROVISIONED</code> for predictable workloads. <code>PROVISIONED</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.ProvisionedThroughput.Manual">Provisioned Mode</a>.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. <code>PAY<em>PER</em>REQUEST</code> sets the billing mode to <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand">On-Demand Mode</a>. </p> </li> </ul></p>
     #[serde(rename = "BillingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_mode: Option<String>,
+    pub billing_mode: Option<BillingMode>,
     /// <p>An array of one or more global secondary indexes for the table. For each index in the array, you can request one action:</p> <ul> <li> <p> <code>Create</code> - add a new global secondary index to the table.</p> </li> <li> <p> <code>Update</code> - modify the provisioned throughput settings of an existing global secondary index.</p> </li> <li> <p> <code>Delete</code> - remove a global secondary index from the table.</p> </li> </ul> <p>You can create or delete only one global secondary index per <code>UpdateTable</code> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.OnlineOps.html">Managing Global Secondary Indexes</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "GlobalSecondaryIndexUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]

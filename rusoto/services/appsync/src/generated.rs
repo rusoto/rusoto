@@ -31,7 +31,7 @@ pub struct AdditionalAuthenticationProvider {
     /// <p>The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.</p>
     #[serde(rename = "authenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_type: Option<String>,
+    pub authentication_type: Option<AuthenticationType>,
     /// <p>The OpenID Connect configuration.</p>
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -49,7 +49,7 @@ pub struct ApiCache {
     /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_caching_behavior: Option<String>,
+    pub api_caching_behavior: Option<ApiCachingBehavior>,
     /// <p>At rest encryption flag for cache. This setting cannot be updated after creation.</p>
     #[serde(rename = "atRestEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -57,7 +57,7 @@ pub struct ApiCache {
     /// <p><p>The cache instance status.</p> <ul> <li> <p> <b>AVAILABLE</b>: The instance is available for use.</p> </li> <li> <p> <b>CREATING</b>: The instance is currently creating.</p> </li> <li> <p> <b>DELETING</b>: The instance is currently deleting.</p> </li> <li> <p> <b>MODIFYING</b>: The instance is currently modifying.</p> </li> <li> <p> <b>FAILED</b>: The instance has failed creation.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ApiCacheStatus>,
     /// <p>Transit encryption flag when connecting to cache. This setting cannot be updated after creation.</p>
     #[serde(rename = "transitEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -69,7 +69,392 @@ pub struct ApiCache {
     /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ApiCacheType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApiCacheStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApiCacheStatus {
+    Available,
+    Creating,
+    Deleting,
+    Failed,
+    Modifying,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApiCacheStatus),
+}
+
+impl Default for ApiCacheStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApiCacheStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApiCacheStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApiCacheStatus {
+    fn into(self) -> String {
+        match self {
+            ApiCacheStatus::Available => "AVAILABLE".to_string(),
+            ApiCacheStatus::Creating => "CREATING".to_string(),
+            ApiCacheStatus::Deleting => "DELETING".to_string(),
+            ApiCacheStatus::Failed => "FAILED".to_string(),
+            ApiCacheStatus::Modifying => "MODIFYING".to_string(),
+            ApiCacheStatus::UnknownVariant(UnknownApiCacheStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApiCacheStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ApiCacheStatus::Available => &"AVAILABLE",
+            ApiCacheStatus::Creating => &"CREATING",
+            ApiCacheStatus::Deleting => &"DELETING",
+            ApiCacheStatus::Failed => &"FAILED",
+            ApiCacheStatus::Modifying => &"MODIFYING",
+            ApiCacheStatus::UnknownVariant(UnknownApiCacheStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApiCacheStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => ApiCacheStatus::Available,
+            "CREATING" => ApiCacheStatus::Creating,
+            "DELETING" => ApiCacheStatus::Deleting,
+            "FAILED" => ApiCacheStatus::Failed,
+            "MODIFYING" => ApiCacheStatus::Modifying,
+            _ => ApiCacheStatus::UnknownVariant(UnknownApiCacheStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApiCacheStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => ApiCacheStatus::Available,
+            "CREATING" => ApiCacheStatus::Creating,
+            "DELETING" => ApiCacheStatus::Deleting,
+            "FAILED" => ApiCacheStatus::Failed,
+            "MODIFYING" => ApiCacheStatus::Modifying,
+            _ => ApiCacheStatus::UnknownVariant(UnknownApiCacheStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiCacheStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ApiCacheStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApiCacheStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApiCacheType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApiCacheType {
+    Large,
+    Large12X,
+    Large2X,
+    Large4X,
+    Large8X,
+    Medium,
+    R42Xlarge,
+    R44Xlarge,
+    R48Xlarge,
+    R4Large,
+    R4Xlarge,
+    Small,
+    T2Medium,
+    T2Small,
+    Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApiCacheType),
+}
+
+impl Default for ApiCacheType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApiCacheType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApiCacheType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApiCacheType {
+    fn into(self) -> String {
+        match self {
+            ApiCacheType::Large => "LARGE".to_string(),
+            ApiCacheType::Large12X => "LARGE_12X".to_string(),
+            ApiCacheType::Large2X => "LARGE_2X".to_string(),
+            ApiCacheType::Large4X => "LARGE_4X".to_string(),
+            ApiCacheType::Large8X => "LARGE_8X".to_string(),
+            ApiCacheType::Medium => "MEDIUM".to_string(),
+            ApiCacheType::R42Xlarge => "R4_2XLARGE".to_string(),
+            ApiCacheType::R44Xlarge => "R4_4XLARGE".to_string(),
+            ApiCacheType::R48Xlarge => "R4_8XLARGE".to_string(),
+            ApiCacheType::R4Large => "R4_LARGE".to_string(),
+            ApiCacheType::R4Xlarge => "R4_XLARGE".to_string(),
+            ApiCacheType::Small => "SMALL".to_string(),
+            ApiCacheType::T2Medium => "T2_MEDIUM".to_string(),
+            ApiCacheType::T2Small => "T2_SMALL".to_string(),
+            ApiCacheType::Xlarge => "XLARGE".to_string(),
+            ApiCacheType::UnknownVariant(UnknownApiCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApiCacheType {
+    fn into(self) -> &'a str {
+        match self {
+            ApiCacheType::Large => &"LARGE",
+            ApiCacheType::Large12X => &"LARGE_12X",
+            ApiCacheType::Large2X => &"LARGE_2X",
+            ApiCacheType::Large4X => &"LARGE_4X",
+            ApiCacheType::Large8X => &"LARGE_8X",
+            ApiCacheType::Medium => &"MEDIUM",
+            ApiCacheType::R42Xlarge => &"R4_2XLARGE",
+            ApiCacheType::R44Xlarge => &"R4_4XLARGE",
+            ApiCacheType::R48Xlarge => &"R4_8XLARGE",
+            ApiCacheType::R4Large => &"R4_LARGE",
+            ApiCacheType::R4Xlarge => &"R4_XLARGE",
+            ApiCacheType::Small => &"SMALL",
+            ApiCacheType::T2Medium => &"T2_MEDIUM",
+            ApiCacheType::T2Small => &"T2_SMALL",
+            ApiCacheType::Xlarge => &"XLARGE",
+            ApiCacheType::UnknownVariant(UnknownApiCacheType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApiCacheType {
+    fn from(name: &str) -> Self {
+        match name {
+            "LARGE" => ApiCacheType::Large,
+            "LARGE_12X" => ApiCacheType::Large12X,
+            "LARGE_2X" => ApiCacheType::Large2X,
+            "LARGE_4X" => ApiCacheType::Large4X,
+            "LARGE_8X" => ApiCacheType::Large8X,
+            "MEDIUM" => ApiCacheType::Medium,
+            "R4_2XLARGE" => ApiCacheType::R42Xlarge,
+            "R4_4XLARGE" => ApiCacheType::R44Xlarge,
+            "R4_8XLARGE" => ApiCacheType::R48Xlarge,
+            "R4_LARGE" => ApiCacheType::R4Large,
+            "R4_XLARGE" => ApiCacheType::R4Xlarge,
+            "SMALL" => ApiCacheType::Small,
+            "T2_MEDIUM" => ApiCacheType::T2Medium,
+            "T2_SMALL" => ApiCacheType::T2Small,
+            "XLARGE" => ApiCacheType::Xlarge,
+            _ => ApiCacheType::UnknownVariant(UnknownApiCacheType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApiCacheType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LARGE" => ApiCacheType::Large,
+            "LARGE_12X" => ApiCacheType::Large12X,
+            "LARGE_2X" => ApiCacheType::Large2X,
+            "LARGE_4X" => ApiCacheType::Large4X,
+            "LARGE_8X" => ApiCacheType::Large8X,
+            "MEDIUM" => ApiCacheType::Medium,
+            "R4_2XLARGE" => ApiCacheType::R42Xlarge,
+            "R4_4XLARGE" => ApiCacheType::R44Xlarge,
+            "R4_8XLARGE" => ApiCacheType::R48Xlarge,
+            "R4_LARGE" => ApiCacheType::R4Large,
+            "R4_XLARGE" => ApiCacheType::R4Xlarge,
+            "SMALL" => ApiCacheType::Small,
+            "T2_MEDIUM" => ApiCacheType::T2Medium,
+            "T2_SMALL" => ApiCacheType::T2Small,
+            "XLARGE" => ApiCacheType::Xlarge,
+            _ => ApiCacheType::UnknownVariant(UnknownApiCacheType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiCacheType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApiCacheType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApiCacheType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApiCachingBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApiCachingBehavior {
+    FullRequestCaching,
+    PerResolverCaching,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApiCachingBehavior),
+}
+
+impl Default for ApiCachingBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApiCachingBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApiCachingBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApiCachingBehavior {
+    fn into(self) -> String {
+        match self {
+            ApiCachingBehavior::FullRequestCaching => "FULL_REQUEST_CACHING".to_string(),
+            ApiCachingBehavior::PerResolverCaching => "PER_RESOLVER_CACHING".to_string(),
+            ApiCachingBehavior::UnknownVariant(UnknownApiCachingBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApiCachingBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            ApiCachingBehavior::FullRequestCaching => &"FULL_REQUEST_CACHING",
+            ApiCachingBehavior::PerResolverCaching => &"PER_RESOLVER_CACHING",
+            ApiCachingBehavior::UnknownVariant(UnknownApiCachingBehavior { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ApiCachingBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_REQUEST_CACHING" => ApiCachingBehavior::FullRequestCaching,
+            "PER_RESOLVER_CACHING" => ApiCachingBehavior::PerResolverCaching,
+            _ => ApiCachingBehavior::UnknownVariant(UnknownApiCachingBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApiCachingBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_REQUEST_CACHING" => ApiCachingBehavior::FullRequestCaching,
+            "PER_RESOLVER_CACHING" => ApiCachingBehavior::PerResolverCaching,
+            _ => ApiCachingBehavior::UnknownVariant(UnknownApiCachingBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiCachingBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApiCachingBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApiCachingBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time and deletion time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time and deletion time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time and and deletion time in seconds and accepts a user-provided expiration time in seconds. Expired API keys are kept for 60 days after the expiration time. Key expiration time can be updated while the key is not deleted. </p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds. After the expiration time, using the key to authenticate will fail. But the key can be reinstated before deletion.</p> </li> <li> <p>Deletion is stored in Amazon DynamoDB as seconds. The key will be deleted after deletion time. </p> </li> </ul></p>
@@ -94,16 +479,229 @@ pub struct ApiKey {
     pub id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticationType {
+    AmazonCognitoUserPools,
+    ApiKey,
+    AwsIam,
+    OpenidConnect,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticationType),
+}
+
+impl Default for AuthenticationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticationType {
+    fn into(self) -> String {
+        match self {
+            AuthenticationType::AmazonCognitoUserPools => "AMAZON_COGNITO_USER_POOLS".to_string(),
+            AuthenticationType::ApiKey => "API_KEY".to_string(),
+            AuthenticationType::AwsIam => "AWS_IAM".to_string(),
+            AuthenticationType::OpenidConnect => "OPENID_CONNECT".to_string(),
+            AuthenticationType::UnknownVariant(UnknownAuthenticationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticationType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticationType::AmazonCognitoUserPools => &"AMAZON_COGNITO_USER_POOLS",
+            AuthenticationType::ApiKey => &"API_KEY",
+            AuthenticationType::AwsIam => &"AWS_IAM",
+            AuthenticationType::OpenidConnect => &"OPENID_CONNECT",
+            AuthenticationType::UnknownVariant(UnknownAuthenticationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuthenticationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMAZON_COGNITO_USER_POOLS" => AuthenticationType::AmazonCognitoUserPools,
+            "API_KEY" => AuthenticationType::ApiKey,
+            "AWS_IAM" => AuthenticationType::AwsIam,
+            "OPENID_CONNECT" => AuthenticationType::OpenidConnect,
+            _ => AuthenticationType::UnknownVariant(UnknownAuthenticationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthenticationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMAZON_COGNITO_USER_POOLS" => AuthenticationType::AmazonCognitoUserPools,
+            "API_KEY" => AuthenticationType::ApiKey,
+            "AWS_IAM" => AuthenticationType::AwsIam,
+            "OPENID_CONNECT" => AuthenticationType::OpenidConnect,
+            _ => AuthenticationType::UnknownVariant(UnknownAuthenticationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthenticationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthenticationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The authorization config in case the HTTP endpoint requires authorization.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AuthorizationConfig {
     /// <p><p>The authorization type required by the HTTP endpoint.</p> <ul> <li> <p> <b>AWS_IAM</b>: The authorization type is Sigv4.</p> </li> </ul></p>
     #[serde(rename = "authorizationType")]
-    pub authorization_type: String,
+    pub authorization_type: AuthorizationType,
     /// <p>The AWS IAM settings.</p>
     #[serde(rename = "awsIamConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iam_config: Option<AwsIamConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthorizationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthorizationType {
+    AwsIam,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthorizationType),
+}
+
+impl Default for AuthorizationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthorizationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthorizationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthorizationType {
+    fn into(self) -> String {
+        match self {
+            AuthorizationType::AwsIam => "AWS_IAM".to_string(),
+            AuthorizationType::UnknownVariant(UnknownAuthorizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthorizationType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthorizationType::AwsIam => &"AWS_IAM",
+            AuthorizationType::UnknownVariant(UnknownAuthorizationType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AuthorizationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_IAM" => AuthorizationType::AwsIam,
+            _ => AuthorizationType::UnknownVariant(UnknownAuthorizationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthorizationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_IAM" => AuthorizationType::AwsIam,
+            _ => AuthorizationType::UnknownVariant(UnknownAuthorizationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthorizationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthorizationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The AWS IAM configuration.</p>
@@ -147,13 +745,231 @@ pub struct CognitoUserPoolConfig {
     pub user_pool_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConflictDetectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConflictDetectionType {
+    None,
+    Version,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConflictDetectionType),
+}
+
+impl Default for ConflictDetectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConflictDetectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConflictDetectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConflictDetectionType {
+    fn into(self) -> String {
+        match self {
+            ConflictDetectionType::None => "NONE".to_string(),
+            ConflictDetectionType::Version => "VERSION".to_string(),
+            ConflictDetectionType::UnknownVariant(UnknownConflictDetectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConflictDetectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ConflictDetectionType::None => &"NONE",
+            ConflictDetectionType::Version => &"VERSION",
+            ConflictDetectionType::UnknownVariant(UnknownConflictDetectionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConflictDetectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => ConflictDetectionType::None,
+            "VERSION" => ConflictDetectionType::Version,
+            _ => ConflictDetectionType::UnknownVariant(UnknownConflictDetectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConflictDetectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => ConflictDetectionType::None,
+            "VERSION" => ConflictDetectionType::Version,
+            _ => ConflictDetectionType::UnknownVariant(UnknownConflictDetectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConflictDetectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConflictDetectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConflictDetectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConflictHandlerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConflictHandlerType {
+    Automerge,
+    Lambda,
+    None,
+    OptimisticConcurrency,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConflictHandlerType),
+}
+
+impl Default for ConflictHandlerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConflictHandlerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConflictHandlerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConflictHandlerType {
+    fn into(self) -> String {
+        match self {
+            ConflictHandlerType::Automerge => "AUTOMERGE".to_string(),
+            ConflictHandlerType::Lambda => "LAMBDA".to_string(),
+            ConflictHandlerType::None => "NONE".to_string(),
+            ConflictHandlerType::OptimisticConcurrency => "OPTIMISTIC_CONCURRENCY".to_string(),
+            ConflictHandlerType::UnknownVariant(UnknownConflictHandlerType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConflictHandlerType {
+    fn into(self) -> &'a str {
+        match self {
+            ConflictHandlerType::Automerge => &"AUTOMERGE",
+            ConflictHandlerType::Lambda => &"LAMBDA",
+            ConflictHandlerType::None => &"NONE",
+            ConflictHandlerType::OptimisticConcurrency => &"OPTIMISTIC_CONCURRENCY",
+            ConflictHandlerType::UnknownVariant(UnknownConflictHandlerType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ConflictHandlerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMERGE" => ConflictHandlerType::Automerge,
+            "LAMBDA" => ConflictHandlerType::Lambda,
+            "NONE" => ConflictHandlerType::None,
+            "OPTIMISTIC_CONCURRENCY" => ConflictHandlerType::OptimisticConcurrency,
+            _ => ConflictHandlerType::UnknownVariant(UnknownConflictHandlerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConflictHandlerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMERGE" => ConflictHandlerType::Automerge,
+            "LAMBDA" => ConflictHandlerType::Lambda,
+            "NONE" => ConflictHandlerType::None,
+            "OPTIMISTIC_CONCURRENCY" => ConflictHandlerType::OptimisticConcurrency,
+            _ => ConflictHandlerType::UnknownVariant(UnknownConflictHandlerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConflictHandlerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConflictHandlerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConflictHandlerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the input of a <code>CreateApiCache</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiCacheRequest {
     /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
-    pub api_caching_behavior: String,
+    pub api_caching_behavior: ApiCachingBehavior,
     /// <p>The GraphQL API Id.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
@@ -170,7 +986,7 @@ pub struct CreateApiCacheRequest {
     pub ttl: i64,
     /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ApiCacheType,
 }
 
 /// <p>Represents the output of a <code>CreateApiCache</code> operation.</p>
@@ -247,7 +1063,7 @@ pub struct CreateDataSourceRequest {
     pub service_role_arn: Option<String>,
     /// <p>The type of the <code>DataSource</code>.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: DataSourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -306,7 +1122,7 @@ pub struct CreateGraphqlApiRequest {
     pub additional_authentication_providers: Option<Vec<AdditionalAuthenticationProvider>>,
     /// <p>The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.</p>
     #[serde(rename = "authenticationType")]
-    pub authentication_type: String,
+    pub authentication_type: AuthenticationType,
     /// <p>The Amazon CloudWatch Logs configuration.</p>
     #[serde(rename = "logConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,7 +1177,7 @@ pub struct CreateResolverRequest {
     /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
     #[serde(rename = "kind")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub kind: Option<String>,
+    pub kind: Option<ResolverKind>,
     /// <p>The <code>PipelineConfig</code>.</p>
     #[serde(rename = "pipelineConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -403,7 +1219,7 @@ pub struct CreateTypeRequest {
     pub definition: String,
     /// <p>The type format: SDL or JSON.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: TypeDefinitionFormat,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -458,7 +1274,227 @@ pub struct DataSource {
     /// <p><p>The type of the data source.</p> <ul> <li> <p> <b>AMAZON<em>DYNAMODB</b>: The data source is an Amazon DynamoDB table.</p> </li> <li> <p> <b>AMAZON</em>ELASTICSEARCH</b>: The data source is an Amazon Elasticsearch Service domain.</p> </li> <li> <p> <b>AWS<em>LAMBDA</b>: The data source is an AWS Lambda function.</p> </li> <li> <p> <b>NONE</b>: There is no data source. This type is used when you wish to invoke a GraphQL operation without connecting to a data source, such as performing data transformation with resolvers or triggering a subscription to be invoked from a mutation.</p> </li> <li> <p> <b>HTTP</b>: The data source is an HTTP endpoint.</p> </li> <li> <p> <b>RELATIONAL</em>DATABASE</b>: The data source is a relational database.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DataSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSourceType {
+    AmazonDynamodb,
+    AmazonElasticsearch,
+    AwsLambda,
+    Http,
+    None,
+    RelationalDatabase,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSourceType),
+}
+
+impl Default for DataSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSourceType {
+    fn into(self) -> String {
+        match self {
+            DataSourceType::AmazonDynamodb => "AMAZON_DYNAMODB".to_string(),
+            DataSourceType::AmazonElasticsearch => "AMAZON_ELASTICSEARCH".to_string(),
+            DataSourceType::AwsLambda => "AWS_LAMBDA".to_string(),
+            DataSourceType::Http => "HTTP".to_string(),
+            DataSourceType::None => "NONE".to_string(),
+            DataSourceType::RelationalDatabase => "RELATIONAL_DATABASE".to_string(),
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            DataSourceType::AmazonDynamodb => &"AMAZON_DYNAMODB",
+            DataSourceType::AmazonElasticsearch => &"AMAZON_ELASTICSEARCH",
+            DataSourceType::AwsLambda => &"AWS_LAMBDA",
+            DataSourceType::Http => &"HTTP",
+            DataSourceType::None => &"NONE",
+            DataSourceType::RelationalDatabase => &"RELATIONAL_DATABASE",
+            DataSourceType::UnknownVariant(UnknownDataSourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMAZON_DYNAMODB" => DataSourceType::AmazonDynamodb,
+            "AMAZON_ELASTICSEARCH" => DataSourceType::AmazonElasticsearch,
+            "AWS_LAMBDA" => DataSourceType::AwsLambda,
+            "HTTP" => DataSourceType::Http,
+            "NONE" => DataSourceType::None,
+            "RELATIONAL_DATABASE" => DataSourceType::RelationalDatabase,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMAZON_DYNAMODB" => DataSourceType::AmazonDynamodb,
+            "AMAZON_ELASTICSEARCH" => DataSourceType::AmazonElasticsearch,
+            "AWS_LAMBDA" => DataSourceType::AwsLambda,
+            "HTTP" => DataSourceType::Http,
+            "NONE" => DataSourceType::None,
+            "RELATIONAL_DATABASE" => DataSourceType::RelationalDatabase,
+            _ => DataSourceType::UnknownVariant(UnknownDataSourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DataSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDefaultAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DefaultAction {
+    Allow,
+    Deny,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDefaultAction),
+}
+
+impl Default for DefaultAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DefaultAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DefaultAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DefaultAction {
+    fn into(self) -> String {
+        match self {
+            DefaultAction::Allow => "ALLOW".to_string(),
+            DefaultAction::Deny => "DENY".to_string(),
+            DefaultAction::UnknownVariant(UnknownDefaultAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DefaultAction {
+    fn into(self) -> &'a str {
+        match self {
+            DefaultAction::Allow => &"ALLOW",
+            DefaultAction::Deny => &"DENY",
+            DefaultAction::UnknownVariant(UnknownDefaultAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DefaultAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALLOW" => DefaultAction::Allow,
+            "DENY" => DefaultAction::Deny,
+            _ => DefaultAction::UnknownVariant(UnknownDefaultAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DefaultAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALLOW" => DefaultAction::Allow,
+            "DENY" => DefaultAction::Deny,
+            _ => DefaultAction::UnknownVariant(UnknownDefaultAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DefaultAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DefaultAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DefaultAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input of a <code>DeleteApiCache</code> operation.</p>
@@ -616,6 +1652,111 @@ pub struct ElasticsearchDataSourceConfig {
     pub endpoint: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFieldLogLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FieldLogLevel {
+    All,
+    Error,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFieldLogLevel),
+}
+
+impl Default for FieldLogLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FieldLogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FieldLogLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FieldLogLevel {
+    fn into(self) -> String {
+        match self {
+            FieldLogLevel::All => "ALL".to_string(),
+            FieldLogLevel::Error => "ERROR".to_string(),
+            FieldLogLevel::None => "NONE".to_string(),
+            FieldLogLevel::UnknownVariant(UnknownFieldLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FieldLogLevel {
+    fn into(self) -> &'a str {
+        match self {
+            FieldLogLevel::All => &"ALL",
+            FieldLogLevel::Error => &"ERROR",
+            FieldLogLevel::None => &"NONE",
+            FieldLogLevel::UnknownVariant(UnknownFieldLogLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FieldLogLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALL" => FieldLogLevel::All,
+            "ERROR" => FieldLogLevel::Error,
+            "NONE" => FieldLogLevel::None,
+            _ => FieldLogLevel::UnknownVariant(UnknownFieldLogLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FieldLogLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALL" => FieldLogLevel::All,
+            "ERROR" => FieldLogLevel::Error,
+            "NONE" => FieldLogLevel::None,
+            _ => FieldLogLevel::UnknownVariant(UnknownFieldLogLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FieldLogLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FieldLogLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FieldLogLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Represents the input of a <code>FlushApiCache</code> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -752,7 +1893,7 @@ pub struct GetIntrospectionSchemaRequest {
     pub api_id: String,
     /// <p>The schema format: SDL or JSON.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: OutputType,
     /// <p>A flag that specifies whether the schema introspection should contain directives.</p>
     #[serde(rename = "includeDirectives")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -806,7 +1947,7 @@ pub struct GetSchemaCreationStatusResponse {
     /// <p>The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SchemaStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -817,7 +1958,7 @@ pub struct GetTypeRequest {
     pub api_id: String,
     /// <p>The type format: SDL or JSON.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: TypeDefinitionFormat,
     /// <p>The type name.</p>
     #[serde(rename = "typeName")]
     pub type_name: String,
@@ -851,7 +1992,7 @@ pub struct GraphqlApi {
     /// <p>The authentication type.</p>
     #[serde(rename = "authenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_type: Option<String>,
+    pub authentication_type: Option<AuthenticationType>,
     /// <p>The Amazon CloudWatch Logs configuration.</p>
     #[serde(rename = "logConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1118,7 +2259,7 @@ pub struct ListTypesRequest {
     pub api_id: String,
     /// <p>The type format: SDL or JSON.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: TypeDefinitionFormat,
     /// <p>The maximum number of results you want the request to return.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1154,7 +2295,7 @@ pub struct LogConfig {
     pub exclude_verbose_content: Option<bool>,
     /// <p><p>The field logging level. Values can be NONE, ERROR, or ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "fieldLogLevel")]
-    pub field_log_level: String,
+    pub field_log_level: FieldLogLevel,
 }
 
 /// <p>Describes an OpenID Connect configuration.</p>
@@ -1175,6 +2316,107 @@ pub struct OpenIDConnectConfig {
     /// <p>The issuer for the OpenID Connect configuration. The issuer returned by discovery must exactly match the value of <code>iss</code> in the ID token.</p>
     #[serde(rename = "issuer")]
     pub issuer: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOutputType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OutputType {
+    Json,
+    Sdl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOutputType),
+}
+
+impl Default for OutputType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OutputType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OutputType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OutputType {
+    fn into(self) -> String {
+        match self {
+            OutputType::Json => "JSON".to_string(),
+            OutputType::Sdl => "SDL".to_string(),
+            OutputType::UnknownVariant(UnknownOutputType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OutputType {
+    fn into(self) -> &'a str {
+        match self {
+            OutputType::Json => &"JSON",
+            OutputType::Sdl => &"SDL",
+            OutputType::UnknownVariant(UnknownOutputType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OutputType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => OutputType::Json,
+            "SDL" => OutputType::Sdl,
+            _ => OutputType::UnknownVariant(UnknownOutputType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OutputType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => OutputType::Json,
+            "SDL" => OutputType::Sdl,
+            _ => OutputType::UnknownVariant(UnknownOutputType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OutputType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OutputType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OutputType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The pipeline configuration for a resolver of kind <code>PIPELINE</code>.</p>
@@ -1221,7 +2463,112 @@ pub struct RelationalDatabaseDataSourceConfig {
     /// <p><p>Source type for the relational database.</p> <ul> <li> <p> <b>RDS<em>HTTP</em>ENDPOINT</b>: The relational database source type is an Amazon RDS HTTP endpoint.</p> </li> </ul></p>
     #[serde(rename = "relationalDatabaseSourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub relational_database_source_type: Option<String>,
+    pub relational_database_source_type: Option<RelationalDatabaseSourceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelationalDatabaseSourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelationalDatabaseSourceType {
+    RdsHttpEndpoint,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelationalDatabaseSourceType),
+}
+
+impl Default for RelationalDatabaseSourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelationalDatabaseSourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelationalDatabaseSourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelationalDatabaseSourceType {
+    fn into(self) -> String {
+        match self {
+            RelationalDatabaseSourceType::RdsHttpEndpoint => "RDS_HTTP_ENDPOINT".to_string(),
+            RelationalDatabaseSourceType::UnknownVariant(UnknownRelationalDatabaseSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelationalDatabaseSourceType {
+    fn into(self) -> &'a str {
+        match self {
+            RelationalDatabaseSourceType::RdsHttpEndpoint => &"RDS_HTTP_ENDPOINT",
+            RelationalDatabaseSourceType::UnknownVariant(UnknownRelationalDatabaseSourceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RelationalDatabaseSourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RDS_HTTP_ENDPOINT" => RelationalDatabaseSourceType::RdsHttpEndpoint,
+            _ => {
+                RelationalDatabaseSourceType::UnknownVariant(UnknownRelationalDatabaseSourceType {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for RelationalDatabaseSourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RDS_HTTP_ENDPOINT" => RelationalDatabaseSourceType::RdsHttpEndpoint,
+            _ => {
+                RelationalDatabaseSourceType::UnknownVariant(UnknownRelationalDatabaseSourceType {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelationalDatabaseSourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RelationalDatabaseSourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RelationalDatabaseSourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a resolver.</p>
@@ -1243,7 +2590,7 @@ pub struct Resolver {
     /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
     #[serde(rename = "kind")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub kind: Option<String>,
+    pub kind: Option<ResolverKind>,
     /// <p>The <code>PipelineConfig</code>.</p>
     #[serde(rename = "pipelineConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1270,6 +2617,227 @@ pub struct Resolver {
     pub type_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResolverKind {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResolverKind {
+    Pipeline,
+    Unit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResolverKind),
+}
+
+impl Default for ResolverKind {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResolverKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResolverKind {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResolverKind {
+    fn into(self) -> String {
+        match self {
+            ResolverKind::Pipeline => "PIPELINE".to_string(),
+            ResolverKind::Unit => "UNIT".to_string(),
+            ResolverKind::UnknownVariant(UnknownResolverKind { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResolverKind {
+    fn into(self) -> &'a str {
+        match self {
+            ResolverKind::Pipeline => &"PIPELINE",
+            ResolverKind::Unit => &"UNIT",
+            ResolverKind::UnknownVariant(UnknownResolverKind { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResolverKind {
+    fn from(name: &str) -> Self {
+        match name {
+            "PIPELINE" => ResolverKind::Pipeline,
+            "UNIT" => ResolverKind::Unit,
+            _ => ResolverKind::UnknownVariant(UnknownResolverKind {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResolverKind {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PIPELINE" => ResolverKind::Pipeline,
+            "UNIT" => ResolverKind::Unit,
+            _ => ResolverKind::UnknownVariant(UnknownResolverKind { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResolverKind {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResolverKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResolverKind {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSchemaStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SchemaStatus {
+    Active,
+    Deleting,
+    Failed,
+    NotApplicable,
+    Processing,
+    Success,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSchemaStatus),
+}
+
+impl Default for SchemaStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SchemaStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SchemaStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SchemaStatus {
+    fn into(self) -> String {
+        match self {
+            SchemaStatus::Active => "ACTIVE".to_string(),
+            SchemaStatus::Deleting => "DELETING".to_string(),
+            SchemaStatus::Failed => "FAILED".to_string(),
+            SchemaStatus::NotApplicable => "NOT_APPLICABLE".to_string(),
+            SchemaStatus::Processing => "PROCESSING".to_string(),
+            SchemaStatus::Success => "SUCCESS".to_string(),
+            SchemaStatus::UnknownVariant(UnknownSchemaStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SchemaStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SchemaStatus::Active => &"ACTIVE",
+            SchemaStatus::Deleting => &"DELETING",
+            SchemaStatus::Failed => &"FAILED",
+            SchemaStatus::NotApplicable => &"NOT_APPLICABLE",
+            SchemaStatus::Processing => &"PROCESSING",
+            SchemaStatus::Success => &"SUCCESS",
+            SchemaStatus::UnknownVariant(UnknownSchemaStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SchemaStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => SchemaStatus::Active,
+            "DELETING" => SchemaStatus::Deleting,
+            "FAILED" => SchemaStatus::Failed,
+            "NOT_APPLICABLE" => SchemaStatus::NotApplicable,
+            "PROCESSING" => SchemaStatus::Processing,
+            "SUCCESS" => SchemaStatus::Success,
+            _ => SchemaStatus::UnknownVariant(UnknownSchemaStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SchemaStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => SchemaStatus::Active,
+            "DELETING" => SchemaStatus::Deleting,
+            "FAILED" => SchemaStatus::Failed,
+            "NOT_APPLICABLE" => SchemaStatus::NotApplicable,
+            "PROCESSING" => SchemaStatus::Processing,
+            "SUCCESS" => SchemaStatus::Success,
+            _ => SchemaStatus::UnknownVariant(UnknownSchemaStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SchemaStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SchemaStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SchemaStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSchemaCreationRequest {
@@ -1292,7 +2860,7 @@ pub struct StartSchemaCreationResponse {
     /// <p>The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SchemaStatus>,
 }
 
 /// <p>Describes a Sync configuration for a resolver.</p> <p>Contains information on which Conflict Detection as well as Resolution strategy should be performed when the resolver is invoked.</p>
@@ -1301,11 +2869,11 @@ pub struct SyncConfig {
     /// <p><p>The Conflict Detection strategy to use.</p> <ul> <li> <p> <b>VERSION</b>: Detect conflicts based on object versions for this resolver.</p> </li> <li> <p> <b>NONE</b>: Do not detect conflicts when executing this resolver.</p> </li> </ul></p>
     #[serde(rename = "conflictDetection")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detection: Option<String>,
+    pub conflict_detection: Option<ConflictDetectionType>,
     /// <p><p>The Conflict Resolution strategy to perform in the event of a conflict.</p> <ul> <li> <p> <b>OPTIMISTIC_CONCURRENCY</b>: Resolve conflicts by rejecting mutations when versions do not match the latest version at the server.</p> </li> <li> <p> <b>AUTOMERGE</b>: Resolve conflicts with the Automerge conflict resolution strategy.</p> </li> <li> <p> <b>LAMBDA</b>: Resolve conflicts with a Lambda function supplied in the LambdaConflictHandlerConfig.</p> </li> </ul></p>
     #[serde(rename = "conflictHandler")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_handler: Option<String>,
+    pub conflict_handler: Option<ConflictHandlerType>,
     /// <p>The <code>LambdaConflictHandlerConfig</code> when configuring LAMBDA as the Conflict Handler.</p>
     #[serde(rename = "lambdaConflictHandlerConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1346,11 +2914,115 @@ pub struct Type {
     /// <p>The type format: SDL or JSON.</p>
     #[serde(rename = "format")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: Option<TypeDefinitionFormat>,
     /// <p>The type name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTypeDefinitionFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TypeDefinitionFormat {
+    Json,
+    Sdl,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTypeDefinitionFormat),
+}
+
+impl Default for TypeDefinitionFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TypeDefinitionFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TypeDefinitionFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TypeDefinitionFormat {
+    fn into(self) -> String {
+        match self {
+            TypeDefinitionFormat::Json => "JSON".to_string(),
+            TypeDefinitionFormat::Sdl => "SDL".to_string(),
+            TypeDefinitionFormat::UnknownVariant(UnknownTypeDefinitionFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TypeDefinitionFormat {
+    fn into(self) -> &'a str {
+        match self {
+            TypeDefinitionFormat::Json => &"JSON",
+            TypeDefinitionFormat::Sdl => &"SDL",
+            TypeDefinitionFormat::UnknownVariant(UnknownTypeDefinitionFormat {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for TypeDefinitionFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => TypeDefinitionFormat::Json,
+            "SDL" => TypeDefinitionFormat::Sdl,
+            _ => TypeDefinitionFormat::UnknownVariant(UnknownTypeDefinitionFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TypeDefinitionFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => TypeDefinitionFormat::Json,
+            "SDL" => TypeDefinitionFormat::Sdl,
+            _ => TypeDefinitionFormat::UnknownVariant(UnknownTypeDefinitionFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TypeDefinitionFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TypeDefinitionFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TypeDefinitionFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1374,7 +3046,7 @@ pub struct UntagResourceResponse {}
 pub struct UpdateApiCacheRequest {
     /// <p><p>Caching behavior.</p> <ul> <li> <p> <b>FULL<em>REQUEST</em>CACHING</b>: All requests are fully cached.</p> </li> <li> <p> <b>PER<em>RESOLVER</em>CACHING</b>: Individual resolvers that you specify are cached.</p> </li> </ul></p>
     #[serde(rename = "apiCachingBehavior")]
-    pub api_caching_behavior: String,
+    pub api_caching_behavior: ApiCachingBehavior,
     /// <p>The GraphQL API Id.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
@@ -1383,7 +3055,7 @@ pub struct UpdateApiCacheRequest {
     pub ttl: i64,
     /// <p><p>The cache instance type. Valid values are </p> <ul> <li> <p> <code>SMALL</code> </p> </li> <li> <p> <code>MEDIUM</code> </p> </li> <li> <p> <code>LARGE</code> </p> </li> <li> <p> <code>XLARGE</code> </p> </li> <li> <p> <code>LARGE<em>2X</code> </p> </li> <li> <p> <code>LARGE</em>4X</code> </p> </li> <li> <p> <code>LARGE<em>8X</code> (not available in all regions)</p> </li> <li> <p> <code>LARGE</em>12X</code> </p> </li> </ul> <p>Historically, instance types were identified by an EC2-style value. As of July 2020, this is deprecated, and the generic identifiers above should be used.</p> <p>The following legacy instance types are available, but their use is discouraged:</p> <ul> <li> <p> <b>T2<em>SMALL</b>: A t2.small instance type.</p> </li> <li> <p> <b>T2</em>MEDIUM</b>: A t2.medium instance type.</p> </li> <li> <p> <b>R4<em>LARGE</b>: A r4.large instance type.</p> </li> <li> <p> <b>R4</em>XLARGE</b>: A r4.xlarge instance type.</p> </li> <li> <p> <b>R4<em>2XLARGE</b>: A r4.2xlarge instance type.</p> </li> <li> <p> <b>R4</em>4XLARGE</b>: A r4.4xlarge instance type.</p> </li> <li> <p> <b>R4_8XLARGE</b>: A r4.8xlarge instance type.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: ApiCacheType,
 }
 
 /// <p>Represents the output of a <code>UpdateApiCache</code> operation.</p>
@@ -1463,7 +3135,7 @@ pub struct UpdateDataSourceRequest {
     pub service_role_arn: Option<String>,
     /// <p>The new data source type.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: DataSourceType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1529,7 +3201,7 @@ pub struct UpdateGraphqlApiRequest {
     /// <p>The new authentication type for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "authenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_type: Option<String>,
+    pub authentication_type: Option<AuthenticationType>,
     /// <p>The Amazon CloudWatch Logs configuration for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "logConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1580,7 +3252,7 @@ pub struct UpdateResolverRequest {
     /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
     #[serde(rename = "kind")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub kind: Option<String>,
+    pub kind: Option<ResolverKind>,
     /// <p>The <code>PipelineConfig</code>.</p>
     #[serde(rename = "pipelineConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1623,7 +3295,7 @@ pub struct UpdateTypeRequest {
     pub definition: Option<String>,
     /// <p>The new type format: SDL or JSON.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: TypeDefinitionFormat,
     /// <p>The new type name.</p>
     #[serde(rename = "typeName")]
     pub type_name: String,
@@ -1650,7 +3322,7 @@ pub struct UserPoolConfig {
     pub aws_region: String,
     /// <p>The action that you want your GraphQL API to take when a request that uses Amazon Cognito user pool authentication doesn't match the Amazon Cognito user pool configuration.</p>
     #[serde(rename = "defaultAction")]
-    pub default_action: String,
+    pub default_action: DefaultAction,
     /// <p>The user pool ID.</p>
     #[serde(rename = "userPoolId")]
     pub user_pool_id: String,

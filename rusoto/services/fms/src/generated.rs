@@ -50,6 +50,127 @@ impl FmsClient {
 }
 
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAccountRoleStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AccountRoleStatus {
+    Creating,
+    Deleted,
+    Deleting,
+    PendingDeletion,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAccountRoleStatus),
+}
+
+impl Default for AccountRoleStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AccountRoleStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AccountRoleStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AccountRoleStatus {
+    fn into(self) -> String {
+        match self {
+            AccountRoleStatus::Creating => "CREATING".to_string(),
+            AccountRoleStatus::Deleted => "DELETED".to_string(),
+            AccountRoleStatus::Deleting => "DELETING".to_string(),
+            AccountRoleStatus::PendingDeletion => "PENDING_DELETION".to_string(),
+            AccountRoleStatus::Ready => "READY".to_string(),
+            AccountRoleStatus::UnknownVariant(UnknownAccountRoleStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AccountRoleStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AccountRoleStatus::Creating => &"CREATING",
+            AccountRoleStatus::Deleted => &"DELETED",
+            AccountRoleStatus::Deleting => &"DELETING",
+            AccountRoleStatus::PendingDeletion => &"PENDING_DELETION",
+            AccountRoleStatus::Ready => &"READY",
+            AccountRoleStatus::UnknownVariant(UnknownAccountRoleStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for AccountRoleStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => AccountRoleStatus::Creating,
+            "DELETED" => AccountRoleStatus::Deleted,
+            "DELETING" => AccountRoleStatus::Deleting,
+            "PENDING_DELETION" => AccountRoleStatus::PendingDeletion,
+            "READY" => AccountRoleStatus::Ready,
+            _ => AccountRoleStatus::UnknownVariant(UnknownAccountRoleStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AccountRoleStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => AccountRoleStatus::Creating,
+            "DELETED" => AccountRoleStatus::Deleted,
+            "DELETING" => AccountRoleStatus::Deleting,
+            "PENDING_DELETION" => AccountRoleStatus::PendingDeletion,
+            "READY" => AccountRoleStatus::Ready,
+            _ => AccountRoleStatus::UnknownVariant(UnknownAccountRoleStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AccountRoleStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AccountRoleStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AccountRoleStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An individual AWS Firewall Manager application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct App {
@@ -190,7 +311,113 @@ pub struct ComplianceViolator {
     /// <p>The reason that the resource is not protected by the policy.</p>
     #[serde(rename = "ViolationReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub violation_reason: Option<String>,
+    pub violation_reason: Option<ViolationReason>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCustomerPolicyScopeIdType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CustomerPolicyScopeIdType {
+    Account,
+    OrgUnit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCustomerPolicyScopeIdType),
+}
+
+impl Default for CustomerPolicyScopeIdType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CustomerPolicyScopeIdType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CustomerPolicyScopeIdType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CustomerPolicyScopeIdType {
+    fn into(self) -> String {
+        match self {
+            CustomerPolicyScopeIdType::Account => "ACCOUNT".to_string(),
+            CustomerPolicyScopeIdType::OrgUnit => "ORG_UNIT".to_string(),
+            CustomerPolicyScopeIdType::UnknownVariant(UnknownCustomerPolicyScopeIdType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CustomerPolicyScopeIdType {
+    fn into(self) -> &'a str {
+        match self {
+            CustomerPolicyScopeIdType::Account => &"ACCOUNT",
+            CustomerPolicyScopeIdType::OrgUnit => &"ORG_UNIT",
+            CustomerPolicyScopeIdType::UnknownVariant(UnknownCustomerPolicyScopeIdType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for CustomerPolicyScopeIdType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCOUNT" => CustomerPolicyScopeIdType::Account,
+            "ORG_UNIT" => CustomerPolicyScopeIdType::OrgUnit,
+            _ => CustomerPolicyScopeIdType::UnknownVariant(UnknownCustomerPolicyScopeIdType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CustomerPolicyScopeIdType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCOUNT" => CustomerPolicyScopeIdType::Account,
+            "ORG_UNIT" => CustomerPolicyScopeIdType::OrgUnit,
+            _ => {
+                CustomerPolicyScopeIdType::UnknownVariant(UnknownCustomerPolicyScopeIdType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for CustomerPolicyScopeIdType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CustomerPolicyScopeIdType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CustomerPolicyScopeIdType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -225,6 +452,121 @@ pub struct DeleteProtocolsListRequest {
     pub list_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDependentServiceName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DependentServiceName {
+    Awsconfig,
+    AwsshieldAdvanced,
+    Awsvpc,
+    Awswaf,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDependentServiceName),
+}
+
+impl Default for DependentServiceName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DependentServiceName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DependentServiceName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DependentServiceName {
+    fn into(self) -> String {
+        match self {
+            DependentServiceName::Awsconfig => "AWSCONFIG".to_string(),
+            DependentServiceName::AwsshieldAdvanced => "AWSSHIELD_ADVANCED".to_string(),
+            DependentServiceName::Awsvpc => "AWSVPC".to_string(),
+            DependentServiceName::Awswaf => "AWSWAF".to_string(),
+            DependentServiceName::UnknownVariant(UnknownDependentServiceName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DependentServiceName {
+    fn into(self) -> &'a str {
+        match self {
+            DependentServiceName::Awsconfig => &"AWSCONFIG",
+            DependentServiceName::AwsshieldAdvanced => &"AWSSHIELD_ADVANCED",
+            DependentServiceName::Awsvpc => &"AWSVPC",
+            DependentServiceName::Awswaf => &"AWSWAF",
+            DependentServiceName::UnknownVariant(UnknownDependentServiceName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DependentServiceName {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWSCONFIG" => DependentServiceName::Awsconfig,
+            "AWSSHIELD_ADVANCED" => DependentServiceName::AwsshieldAdvanced,
+            "AWSVPC" => DependentServiceName::Awsvpc,
+            "AWSWAF" => DependentServiceName::Awswaf,
+            _ => DependentServiceName::UnknownVariant(UnknownDependentServiceName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DependentServiceName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWSCONFIG" => DependentServiceName::Awsconfig,
+            "AWSSHIELD_ADVANCED" => DependentServiceName::AwsshieldAdvanced,
+            "AWSVPC" => DependentServiceName::Awsvpc,
+            "AWSWAF" => DependentServiceName::Awswaf,
+            _ => DependentServiceName::UnknownVariant(UnknownDependentServiceName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DependentServiceName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DependentServiceName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DependentServiceName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateAdminAccountRequest {}
@@ -236,7 +578,7 @@ pub struct EvaluationResult {
     /// <p>Describes an AWS account's compliance with the AWS Firewall Manager policy.</p>
     #[serde(rename = "ComplianceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compliance_status: Option<String>,
+    pub compliance_status: Option<PolicyComplianceStatusType>,
     /// <p>Indicates that over 100 resources are noncompliant with the AWS Firewall Manager policy.</p>
     #[serde(rename = "EvaluationLimitExceeded")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,7 +603,7 @@ pub struct GetAdminAccountResponse {
     /// <p>The status of the AWS account that you set as the AWS Firewall Manager administrator.</p>
     #[serde(rename = "RoleStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_status: Option<String>,
+    pub role_status: Option<AccountRoleStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -393,7 +735,7 @@ pub struct GetProtectionStatusResponse {
     /// <p>The service type that is protected by the policy. Currently, this is always <code>SHIELD_ADVANCED</code>.</p>
     #[serde(rename = "ServiceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub service_type: Option<String>,
+    pub service_type: Option<SecurityServiceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -737,14 +1079,14 @@ pub struct Policy {
     /// <p><p>Specifies the AWS account IDs and AWS Organizations organizational units (OUs) to exclude from the policy. Specifying an OU is the equivalent of specifying all accounts in the OU and in any of its child OUs, including any child OUs and accounts that are added at a later time.</p> <p>You can specify inclusions or exclusions, but not both. If you specify an <code>IncludeMap</code>, AWS Firewall Manager applies the policy to all accounts specified by the <code>IncludeMap</code>, and does not evaluate any <code>ExcludeMap</code> specifications. If you do not specify an <code>IncludeMap</code>, then Firewall Manager applies the policy to all accounts except for those specified by the <code>ExcludeMap</code>.</p> <p>You can specify account IDs, OUs, or a combination: </p> <ul> <li> <p>Specify account IDs by setting the key to <code>ACCOUNT</code>. For example, the following is a valid map: <code>{“ACCOUNT” : [“accountID1”, “accountID2”]}</code>.</p> </li> <li> <p>Specify OUs by setting the key to <code>ORG<em>UNIT</code>. For example, the following is a valid map: <code>{“ORG</em>UNIT” : [“ouid111”, “ouid112”]}</code>.</p> </li> <li> <p>Specify accounts and OUs together in a single map, separated with a comma. For example, the following is a valid map: <code>{“ACCOUNT” : [“accountID1”, “accountID2”], “ORG_UNIT” : [“ouid111”, “ouid112”]}</code>.</p> </li> </ul></p>
     #[serde(rename = "ExcludeMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub exclude_map: Option<::std::collections::HashMap<String, Vec<String>>>,
+    pub exclude_map: Option<::std::collections::HashMap<CustomerPolicyScopeIdType, Vec<String>>>,
     /// <p>If set to <code>True</code>, resources with the tags that are specified in the <code>ResourceTag</code> array are not in scope of the policy. If set to <code>False</code>, and the <code>ResourceTag</code> array is not null, only resources with the specified tags are in scope of the policy.</p>
     #[serde(rename = "ExcludeResourceTags")]
     pub exclude_resource_tags: bool,
     /// <p><p>Specifies the AWS account IDs and AWS Organizations organizational units (OUs) to include in the policy. Specifying an OU is the equivalent of specifying all accounts in the OU and in any of its child OUs, including any child OUs and accounts that are added at a later time.</p> <p>You can specify inclusions or exclusions, but not both. If you specify an <code>IncludeMap</code>, AWS Firewall Manager applies the policy to all accounts specified by the <code>IncludeMap</code>, and does not evaluate any <code>ExcludeMap</code> specifications. If you do not specify an <code>IncludeMap</code>, then Firewall Manager applies the policy to all accounts except for those specified by the <code>ExcludeMap</code>.</p> <p>You can specify account IDs, OUs, or a combination: </p> <ul> <li> <p>Specify account IDs by setting the key to <code>ACCOUNT</code>. For example, the following is a valid map: <code>{“ACCOUNT” : [“accountID1”, “accountID2”]}</code>.</p> </li> <li> <p>Specify OUs by setting the key to <code>ORG<em>UNIT</code>. For example, the following is a valid map: <code>{“ORG</em>UNIT” : [“ouid111”, “ouid112”]}</code>.</p> </li> <li> <p>Specify accounts and OUs together in a single map, separated with a comma. For example, the following is a valid map: <code>{“ACCOUNT” : [“accountID1”, “accountID2”], “ORG_UNIT” : [“ouid111”, “ouid112”]}</code>.</p> </li> </ul></p>
     #[serde(rename = "IncludeMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_map: Option<::std::collections::HashMap<String, Vec<String>>>,
+    pub include_map: Option<::std::collections::HashMap<CustomerPolicyScopeIdType, Vec<String>>>,
     /// <p>The ID of the AWS Firewall Manager policy.</p>
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -790,7 +1132,7 @@ pub struct PolicyComplianceDetail {
     /// <p>Details about problems with dependent services, such as AWS WAF or AWS Config, that are causing a resource to be noncompliant. The details include the name of the dependent service and the error message received that indicates the problem with the service.</p>
     #[serde(rename = "IssueInfoMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub issue_info_map: Option<::std::collections::HashMap<String, String>>,
+    pub issue_info_map: Option<::std::collections::HashMap<DependentServiceName, String>>,
     /// <p>The AWS account ID.</p>
     #[serde(rename = "MemberAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,7 +1162,7 @@ pub struct PolicyComplianceStatus {
     /// <p>Details about problems with dependent services, such as AWS WAF or AWS Config, that are causing a resource to be noncompliant. The details include the name of the dependent service and the error message received that indicates the problem with the service.</p>
     #[serde(rename = "IssueInfoMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub issue_info_map: Option<::std::collections::HashMap<String, String>>,
+    pub issue_info_map: Option<::std::collections::HashMap<DependentServiceName, String>>,
     /// <p>Timestamp of the last update to the <code>EvaluationResult</code> objects.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,6 +1183,113 @@ pub struct PolicyComplianceStatus {
     #[serde(rename = "PolicyOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_owner: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyComplianceStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyComplianceStatusType {
+    Compliant,
+    NonCompliant,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyComplianceStatusType),
+}
+
+impl Default for PolicyComplianceStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyComplianceStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyComplianceStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyComplianceStatusType {
+    fn into(self) -> String {
+        match self {
+            PolicyComplianceStatusType::Compliant => "COMPLIANT".to_string(),
+            PolicyComplianceStatusType::NonCompliant => "NON_COMPLIANT".to_string(),
+            PolicyComplianceStatusType::UnknownVariant(UnknownPolicyComplianceStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyComplianceStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyComplianceStatusType::Compliant => &"COMPLIANT",
+            PolicyComplianceStatusType::NonCompliant => &"NON_COMPLIANT",
+            PolicyComplianceStatusType::UnknownVariant(UnknownPolicyComplianceStatusType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyComplianceStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLIANT" => PolicyComplianceStatusType::Compliant,
+            "NON_COMPLIANT" => PolicyComplianceStatusType::NonCompliant,
+            _ => PolicyComplianceStatusType::UnknownVariant(UnknownPolicyComplianceStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyComplianceStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLIANT" => PolicyComplianceStatusType::Compliant,
+            "NON_COMPLIANT" => PolicyComplianceStatusType::NonCompliant,
+            _ => PolicyComplianceStatusType::UnknownVariant(UnknownPolicyComplianceStatusType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyComplianceStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PolicyComplianceStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyComplianceStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Details of the AWS Firewall Manager policy. </p>
@@ -870,7 +1319,7 @@ pub struct PolicySummary {
     /// <p>The service that the policy is using to protect the resources. This specifies the type of policy that is created, either an AWS WAF policy, a Shield Advanced policy, or a security group policy.</p>
     #[serde(rename = "SecurityServiceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub security_service_type: Option<String>,
+    pub security_service_type: Option<SecurityServiceType>,
 }
 
 /// <p>An AWS Firewall Manager protocols list.</p>
@@ -1012,6 +1461,111 @@ pub struct PutProtocolsListResponse {
     pub protocols_list_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRemediationActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RemediationActionType {
+    Modify,
+    Remove,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRemediationActionType),
+}
+
+impl Default for RemediationActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RemediationActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RemediationActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RemediationActionType {
+    fn into(self) -> String {
+        match self {
+            RemediationActionType::Modify => "MODIFY".to_string(),
+            RemediationActionType::Remove => "REMOVE".to_string(),
+            RemediationActionType::UnknownVariant(UnknownRemediationActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RemediationActionType {
+    fn into(self) -> &'a str {
+        match self {
+            RemediationActionType::Modify => &"MODIFY",
+            RemediationActionType::Remove => &"REMOVE",
+            RemediationActionType::UnknownVariant(UnknownRemediationActionType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RemediationActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MODIFY" => RemediationActionType::Modify,
+            "REMOVE" => RemediationActionType::Remove,
+            _ => RemediationActionType::UnknownVariant(UnknownRemediationActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RemediationActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MODIFY" => RemediationActionType::Modify,
+            "REMOVE" => RemediationActionType::Remove,
+            _ => RemediationActionType::UnknownVariant(UnknownRemediationActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RemediationActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RemediationActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RemediationActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The resource tags that AWS Firewall Manager uses to determine if a particular resource should be included or excluded from the AWS Firewall Manager policy. Tags enable you to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value. Firewall Manager combines the tags with "AND" so that, if you add more than one tag to a policy scope, a resource must have all the specified tags to be included or excluded. For more information, see <a href="https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html">Working with Tag Editor</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceTag {
@@ -1075,7 +1629,7 @@ pub struct SecurityGroupRemediationAction {
     /// <p>The remediation action that will be performed.</p>
     #[serde(rename = "RemediationActionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub remediation_action_type: Option<String>,
+    pub remediation_action_type: Option<RemediationActionType>,
     /// <p>The final state of the rule specified in the <code>ViolationTarget</code> after it is remediated.</p>
     #[serde(rename = "RemediationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1121,7 +1675,140 @@ pub struct SecurityServicePolicyData {
     pub managed_service_data: Option<String>,
     /// <p>The service that the policy is using to protect the resources. This specifies the type of policy that is created, either an AWS WAF policy, a Shield Advanced policy, or a security group policy. For security group policies, Firewall Manager supports one security group for each common policy and for each content audit policy. This is an adjustable limit that you can increase by contacting AWS Support.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: SecurityServiceType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSecurityServiceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SecurityServiceType {
+    NetworkFirewall,
+    SecurityGroupsCommon,
+    SecurityGroupsContentAudit,
+    SecurityGroupsUsageAudit,
+    ShieldAdvanced,
+    Waf,
+    Wafv2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSecurityServiceType),
+}
+
+impl Default for SecurityServiceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SecurityServiceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SecurityServiceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SecurityServiceType {
+    fn into(self) -> String {
+        match self {
+            SecurityServiceType::NetworkFirewall => "NETWORK_FIREWALL".to_string(),
+            SecurityServiceType::SecurityGroupsCommon => "SECURITY_GROUPS_COMMON".to_string(),
+            SecurityServiceType::SecurityGroupsContentAudit => {
+                "SECURITY_GROUPS_CONTENT_AUDIT".to_string()
+            }
+            SecurityServiceType::SecurityGroupsUsageAudit => {
+                "SECURITY_GROUPS_USAGE_AUDIT".to_string()
+            }
+            SecurityServiceType::ShieldAdvanced => "SHIELD_ADVANCED".to_string(),
+            SecurityServiceType::Waf => "WAF".to_string(),
+            SecurityServiceType::Wafv2 => "WAFV2".to_string(),
+            SecurityServiceType::UnknownVariant(UnknownSecurityServiceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SecurityServiceType {
+    fn into(self) -> &'a str {
+        match self {
+            SecurityServiceType::NetworkFirewall => &"NETWORK_FIREWALL",
+            SecurityServiceType::SecurityGroupsCommon => &"SECURITY_GROUPS_COMMON",
+            SecurityServiceType::SecurityGroupsContentAudit => &"SECURITY_GROUPS_CONTENT_AUDIT",
+            SecurityServiceType::SecurityGroupsUsageAudit => &"SECURITY_GROUPS_USAGE_AUDIT",
+            SecurityServiceType::ShieldAdvanced => &"SHIELD_ADVANCED",
+            SecurityServiceType::Waf => &"WAF",
+            SecurityServiceType::Wafv2 => &"WAFV2",
+            SecurityServiceType::UnknownVariant(UnknownSecurityServiceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SecurityServiceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "NETWORK_FIREWALL" => SecurityServiceType::NetworkFirewall,
+            "SECURITY_GROUPS_COMMON" => SecurityServiceType::SecurityGroupsCommon,
+            "SECURITY_GROUPS_CONTENT_AUDIT" => SecurityServiceType::SecurityGroupsContentAudit,
+            "SECURITY_GROUPS_USAGE_AUDIT" => SecurityServiceType::SecurityGroupsUsageAudit,
+            "SHIELD_ADVANCED" => SecurityServiceType::ShieldAdvanced,
+            "WAF" => SecurityServiceType::Waf,
+            "WAFV2" => SecurityServiceType::Wafv2,
+            _ => SecurityServiceType::UnknownVariant(UnknownSecurityServiceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SecurityServiceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NETWORK_FIREWALL" => SecurityServiceType::NetworkFirewall,
+            "SECURITY_GROUPS_COMMON" => SecurityServiceType::SecurityGroupsCommon,
+            "SECURITY_GROUPS_CONTENT_AUDIT" => SecurityServiceType::SecurityGroupsContentAudit,
+            "SECURITY_GROUPS_USAGE_AUDIT" => SecurityServiceType::SecurityGroupsUsageAudit,
+            "SHIELD_ADVANCED" => SecurityServiceType::ShieldAdvanced,
+            "WAF" => SecurityServiceType::Waf,
+            "WAFV2" => SecurityServiceType::Wafv2,
+            _ => SecurityServiceType::UnknownVariant(UnknownSecurityServiceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SecurityServiceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SecurityServiceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SecurityServiceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>AWS Network Firewall stateful rule group, used in a <a>NetworkFirewallPolicyDescription</a>. </p>
@@ -1224,6 +1911,194 @@ pub struct ViolationDetail {
     /// <p>List of violations for the requested resource.</p>
     #[serde(rename = "ResourceViolations")]
     pub resource_violations: Vec<ResourceViolation>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownViolationReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ViolationReason {
+    MissingExpectedRouteTable,
+    MissingFirewall,
+    MissingFirewallSubnetInAz,
+    NetworkFirewallPolicyModified,
+    ResourceIncorrectWebAcl,
+    ResourceMissingSecurityGroup,
+    ResourceMissingShieldProtection,
+    ResourceMissingWebAcl,
+    ResourceMissingWebAclOrShieldProtection,
+    ResourceViolatesAuditSecurityGroup,
+    SecurityGroupRedundant,
+    SecurityGroupUnused,
+    WebAclMissingRuleGroup,
+    #[doc(hidden)]
+    UnknownVariant(UnknownViolationReason),
+}
+
+impl Default for ViolationReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ViolationReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ViolationReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ViolationReason {
+    fn into(self) -> String {
+        match self {
+            ViolationReason::MissingExpectedRouteTable => {
+                "MISSING_EXPECTED_ROUTE_TABLE".to_string()
+            }
+            ViolationReason::MissingFirewall => "MISSING_FIREWALL".to_string(),
+            ViolationReason::MissingFirewallSubnetInAz => {
+                "MISSING_FIREWALL_SUBNET_IN_AZ".to_string()
+            }
+            ViolationReason::NetworkFirewallPolicyModified => {
+                "NETWORK_FIREWALL_POLICY_MODIFIED".to_string()
+            }
+            ViolationReason::ResourceIncorrectWebAcl => "RESOURCE_INCORRECT_WEB_ACL".to_string(),
+            ViolationReason::ResourceMissingSecurityGroup => {
+                "RESOURCE_MISSING_SECURITY_GROUP".to_string()
+            }
+            ViolationReason::ResourceMissingShieldProtection => {
+                "RESOURCE_MISSING_SHIELD_PROTECTION".to_string()
+            }
+            ViolationReason::ResourceMissingWebAcl => "RESOURCE_MISSING_WEB_ACL".to_string(),
+            ViolationReason::ResourceMissingWebAclOrShieldProtection => {
+                "RESOURCE_MISSING_WEB_ACL_OR_SHIELD_PROTECTION".to_string()
+            }
+            ViolationReason::ResourceViolatesAuditSecurityGroup => {
+                "RESOURCE_VIOLATES_AUDIT_SECURITY_GROUP".to_string()
+            }
+            ViolationReason::SecurityGroupRedundant => "SECURITY_GROUP_REDUNDANT".to_string(),
+            ViolationReason::SecurityGroupUnused => "SECURITY_GROUP_UNUSED".to_string(),
+            ViolationReason::WebAclMissingRuleGroup => "WEB_ACL_MISSING_RULE_GROUP".to_string(),
+            ViolationReason::UnknownVariant(UnknownViolationReason { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ViolationReason {
+    fn into(self) -> &'a str {
+        match self {
+            ViolationReason::MissingExpectedRouteTable => &"MISSING_EXPECTED_ROUTE_TABLE",
+            ViolationReason::MissingFirewall => &"MISSING_FIREWALL",
+            ViolationReason::MissingFirewallSubnetInAz => &"MISSING_FIREWALL_SUBNET_IN_AZ",
+            ViolationReason::NetworkFirewallPolicyModified => &"NETWORK_FIREWALL_POLICY_MODIFIED",
+            ViolationReason::ResourceIncorrectWebAcl => &"RESOURCE_INCORRECT_WEB_ACL",
+            ViolationReason::ResourceMissingSecurityGroup => &"RESOURCE_MISSING_SECURITY_GROUP",
+            ViolationReason::ResourceMissingShieldProtection => {
+                &"RESOURCE_MISSING_SHIELD_PROTECTION"
+            }
+            ViolationReason::ResourceMissingWebAcl => &"RESOURCE_MISSING_WEB_ACL",
+            ViolationReason::ResourceMissingWebAclOrShieldProtection => {
+                &"RESOURCE_MISSING_WEB_ACL_OR_SHIELD_PROTECTION"
+            }
+            ViolationReason::ResourceViolatesAuditSecurityGroup => {
+                &"RESOURCE_VIOLATES_AUDIT_SECURITY_GROUP"
+            }
+            ViolationReason::SecurityGroupRedundant => &"SECURITY_GROUP_REDUNDANT",
+            ViolationReason::SecurityGroupUnused => &"SECURITY_GROUP_UNUSED",
+            ViolationReason::WebAclMissingRuleGroup => &"WEB_ACL_MISSING_RULE_GROUP",
+            ViolationReason::UnknownVariant(UnknownViolationReason { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ViolationReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "MISSING_EXPECTED_ROUTE_TABLE" => ViolationReason::MissingExpectedRouteTable,
+            "MISSING_FIREWALL" => ViolationReason::MissingFirewall,
+            "MISSING_FIREWALL_SUBNET_IN_AZ" => ViolationReason::MissingFirewallSubnetInAz,
+            "NETWORK_FIREWALL_POLICY_MODIFIED" => ViolationReason::NetworkFirewallPolicyModified,
+            "RESOURCE_INCORRECT_WEB_ACL" => ViolationReason::ResourceIncorrectWebAcl,
+            "RESOURCE_MISSING_SECURITY_GROUP" => ViolationReason::ResourceMissingSecurityGroup,
+            "RESOURCE_MISSING_SHIELD_PROTECTION" => {
+                ViolationReason::ResourceMissingShieldProtection
+            }
+            "RESOURCE_MISSING_WEB_ACL" => ViolationReason::ResourceMissingWebAcl,
+            "RESOURCE_MISSING_WEB_ACL_OR_SHIELD_PROTECTION" => {
+                ViolationReason::ResourceMissingWebAclOrShieldProtection
+            }
+            "RESOURCE_VIOLATES_AUDIT_SECURITY_GROUP" => {
+                ViolationReason::ResourceViolatesAuditSecurityGroup
+            }
+            "SECURITY_GROUP_REDUNDANT" => ViolationReason::SecurityGroupRedundant,
+            "SECURITY_GROUP_UNUSED" => ViolationReason::SecurityGroupUnused,
+            "WEB_ACL_MISSING_RULE_GROUP" => ViolationReason::WebAclMissingRuleGroup,
+            _ => ViolationReason::UnknownVariant(UnknownViolationReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ViolationReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MISSING_EXPECTED_ROUTE_TABLE" => ViolationReason::MissingExpectedRouteTable,
+            "MISSING_FIREWALL" => ViolationReason::MissingFirewall,
+            "MISSING_FIREWALL_SUBNET_IN_AZ" => ViolationReason::MissingFirewallSubnetInAz,
+            "NETWORK_FIREWALL_POLICY_MODIFIED" => ViolationReason::NetworkFirewallPolicyModified,
+            "RESOURCE_INCORRECT_WEB_ACL" => ViolationReason::ResourceIncorrectWebAcl,
+            "RESOURCE_MISSING_SECURITY_GROUP" => ViolationReason::ResourceMissingSecurityGroup,
+            "RESOURCE_MISSING_SHIELD_PROTECTION" => {
+                ViolationReason::ResourceMissingShieldProtection
+            }
+            "RESOURCE_MISSING_WEB_ACL" => ViolationReason::ResourceMissingWebAcl,
+            "RESOURCE_MISSING_WEB_ACL_OR_SHIELD_PROTECTION" => {
+                ViolationReason::ResourceMissingWebAclOrShieldProtection
+            }
+            "RESOURCE_VIOLATES_AUDIT_SECURITY_GROUP" => {
+                ViolationReason::ResourceViolatesAuditSecurityGroup
+            }
+            "SECURITY_GROUP_REDUNDANT" => ViolationReason::SecurityGroupRedundant,
+            "SECURITY_GROUP_UNUSED" => ViolationReason::SecurityGroupUnused,
+            "WEB_ACL_MISSING_RULE_GROUP" => ViolationReason::WebAclMissingRuleGroup,
+            _ => ViolationReason::UnknownVariant(UnknownViolationReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ViolationReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ViolationReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ViolationReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// Errors returned by AssociateAdminAccount

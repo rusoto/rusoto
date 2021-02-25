@@ -121,6 +121,110 @@ pub struct ApiKeyIds {
     pub warnings: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApiKeySourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApiKeySourceType {
+    Authorizer,
+    Header,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApiKeySourceType),
+}
+
+impl Default for ApiKeySourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApiKeySourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApiKeySourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApiKeySourceType {
+    fn into(self) -> String {
+        match self {
+            ApiKeySourceType::Authorizer => "AUTHORIZER".to_string(),
+            ApiKeySourceType::Header => "HEADER".to_string(),
+            ApiKeySourceType::UnknownVariant(UnknownApiKeySourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApiKeySourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ApiKeySourceType::Authorizer => &"AUTHORIZER",
+            ApiKeySourceType::Header => &"HEADER",
+            ApiKeySourceType::UnknownVariant(UnknownApiKeySourceType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ApiKeySourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTHORIZER" => ApiKeySourceType::Authorizer,
+            "HEADER" => ApiKeySourceType::Header,
+            _ => ApiKeySourceType::UnknownVariant(UnknownApiKeySourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApiKeySourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTHORIZER" => ApiKeySourceType::Authorizer,
+            "HEADER" => ApiKeySourceType::Header,
+            _ => ApiKeySourceType::UnknownVariant(UnknownApiKeySourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiKeySourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApiKeySourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApiKeySourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -136,6 +240,102 @@ pub struct ApiKeys {
     #[serde(rename = "warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApiKeysFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApiKeysFormat {
+    Csv,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApiKeysFormat),
+}
+
+impl Default for ApiKeysFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApiKeysFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApiKeysFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApiKeysFormat {
+    fn into(self) -> String {
+        match self {
+            ApiKeysFormat::Csv => "csv".to_string(),
+            ApiKeysFormat::UnknownVariant(UnknownApiKeysFormat { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApiKeysFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ApiKeysFormat::Csv => &"csv",
+            ApiKeysFormat::UnknownVariant(UnknownApiKeysFormat { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApiKeysFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "csv" => ApiKeysFormat::Csv,
+            _ => ApiKeysFormat::UnknownVariant(UnknownApiKeysFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApiKeysFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "csv" => ApiKeysFormat::Csv,
+            _ => ApiKeysFormat::UnknownVariant(UnknownApiKeysFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApiKeysFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApiKeysFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ApiKeysFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>API stage name of the associated API stage in a usage plan.</p>
@@ -198,7 +398,114 @@ pub struct Authorizer {
     /// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<AuthorizerType>,
+}
+
+/// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthorizerType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthorizerType {
+    CognitoUserPools,
+    Request,
+    Token,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthorizerType),
+}
+
+impl Default for AuthorizerType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthorizerType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthorizerType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthorizerType {
+    fn into(self) -> String {
+        match self {
+            AuthorizerType::CognitoUserPools => "COGNITO_USER_POOLS".to_string(),
+            AuthorizerType::Request => "REQUEST".to_string(),
+            AuthorizerType::Token => "TOKEN".to_string(),
+            AuthorizerType::UnknownVariant(UnknownAuthorizerType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthorizerType {
+    fn into(self) -> &'a str {
+        match self {
+            AuthorizerType::CognitoUserPools => &"COGNITO_USER_POOLS",
+            AuthorizerType::Request => &"REQUEST",
+            AuthorizerType::Token => &"TOKEN",
+            AuthorizerType::UnknownVariant(UnknownAuthorizerType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthorizerType {
+    fn from(name: &str) -> Self {
+        match name {
+            "COGNITO_USER_POOLS" => AuthorizerType::CognitoUserPools,
+            "REQUEST" => AuthorizerType::Request,
+            "TOKEN" => AuthorizerType::Token,
+            _ => AuthorizerType::UnknownVariant(UnknownAuthorizerType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthorizerType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COGNITO_USER_POOLS" => AuthorizerType::CognitoUserPools,
+            "REQUEST" => AuthorizerType::Request,
+            "TOKEN" => AuthorizerType::Token,
+            _ => AuthorizerType::UnknownVariant(UnknownAuthorizerType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthorizerType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthorizerType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthorizerType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
@@ -243,6 +550,264 @@ pub struct BasePathMappings {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+/// <p>Returns the size of the <b>CacheCluster</b>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCacheClusterSize {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CacheClusterSize {
+    _0_5,
+    _1_6,
+    _118,
+    _13_5,
+    _237,
+    _28_4,
+    _58_2,
+    _6_1,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCacheClusterSize),
+}
+
+impl Default for CacheClusterSize {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CacheClusterSize {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CacheClusterSize {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CacheClusterSize {
+    fn into(self) -> String {
+        match self {
+            CacheClusterSize::_0_5 => "0.5".to_string(),
+            CacheClusterSize::_1_6 => "1.6".to_string(),
+            CacheClusterSize::_118 => "118".to_string(),
+            CacheClusterSize::_13_5 => "13.5".to_string(),
+            CacheClusterSize::_237 => "237".to_string(),
+            CacheClusterSize::_28_4 => "28.4".to_string(),
+            CacheClusterSize::_58_2 => "58.2".to_string(),
+            CacheClusterSize::_6_1 => "6.1".to_string(),
+            CacheClusterSize::UnknownVariant(UnknownCacheClusterSize { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CacheClusterSize {
+    fn into(self) -> &'a str {
+        match self {
+            CacheClusterSize::_0_5 => &"0.5",
+            CacheClusterSize::_1_6 => &"1.6",
+            CacheClusterSize::_118 => &"118",
+            CacheClusterSize::_13_5 => &"13.5",
+            CacheClusterSize::_237 => &"237",
+            CacheClusterSize::_28_4 => &"28.4",
+            CacheClusterSize::_58_2 => &"58.2",
+            CacheClusterSize::_6_1 => &"6.1",
+            CacheClusterSize::UnknownVariant(UnknownCacheClusterSize { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CacheClusterSize {
+    fn from(name: &str) -> Self {
+        match name {
+            "0.5" => CacheClusterSize::_0_5,
+            "1.6" => CacheClusterSize::_1_6,
+            "118" => CacheClusterSize::_118,
+            "13.5" => CacheClusterSize::_13_5,
+            "237" => CacheClusterSize::_237,
+            "28.4" => CacheClusterSize::_28_4,
+            "58.2" => CacheClusterSize::_58_2,
+            "6.1" => CacheClusterSize::_6_1,
+            _ => CacheClusterSize::UnknownVariant(UnknownCacheClusterSize {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CacheClusterSize {
+    fn from(name: String) -> Self {
+        match &*name {
+            "0.5" => CacheClusterSize::_0_5,
+            "1.6" => CacheClusterSize::_1_6,
+            "118" => CacheClusterSize::_118,
+            "13.5" => CacheClusterSize::_13_5,
+            "237" => CacheClusterSize::_237,
+            "28.4" => CacheClusterSize::_28_4,
+            "58.2" => CacheClusterSize::_58_2,
+            "6.1" => CacheClusterSize::_6_1,
+            _ => CacheClusterSize::UnknownVariant(UnknownCacheClusterSize { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheClusterSize {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CacheClusterSize {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CacheClusterSize {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>Returns the status of the <b>CacheCluster</b>.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCacheClusterStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CacheClusterStatus {
+    Available,
+    CreateInProgress,
+    DeleteInProgress,
+    FlushInProgress,
+    NotAvailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCacheClusterStatus),
+}
+
+impl Default for CacheClusterStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CacheClusterStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CacheClusterStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CacheClusterStatus {
+    fn into(self) -> String {
+        match self {
+            CacheClusterStatus::Available => "AVAILABLE".to_string(),
+            CacheClusterStatus::CreateInProgress => "CREATE_IN_PROGRESS".to_string(),
+            CacheClusterStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            CacheClusterStatus::FlushInProgress => "FLUSH_IN_PROGRESS".to_string(),
+            CacheClusterStatus::NotAvailable => "NOT_AVAILABLE".to_string(),
+            CacheClusterStatus::UnknownVariant(UnknownCacheClusterStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CacheClusterStatus {
+    fn into(self) -> &'a str {
+        match self {
+            CacheClusterStatus::Available => &"AVAILABLE",
+            CacheClusterStatus::CreateInProgress => &"CREATE_IN_PROGRESS",
+            CacheClusterStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            CacheClusterStatus::FlushInProgress => &"FLUSH_IN_PROGRESS",
+            CacheClusterStatus::NotAvailable => &"NOT_AVAILABLE",
+            CacheClusterStatus::UnknownVariant(UnknownCacheClusterStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CacheClusterStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => CacheClusterStatus::Available,
+            "CREATE_IN_PROGRESS" => CacheClusterStatus::CreateInProgress,
+            "DELETE_IN_PROGRESS" => CacheClusterStatus::DeleteInProgress,
+            "FLUSH_IN_PROGRESS" => CacheClusterStatus::FlushInProgress,
+            "NOT_AVAILABLE" => CacheClusterStatus::NotAvailable,
+            _ => CacheClusterStatus::UnknownVariant(UnknownCacheClusterStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CacheClusterStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => CacheClusterStatus::Available,
+            "CREATE_IN_PROGRESS" => CacheClusterStatus::CreateInProgress,
+            "DELETE_IN_PROGRESS" => CacheClusterStatus::DeleteInProgress,
+            "FLUSH_IN_PROGRESS" => CacheClusterStatus::FlushInProgress,
+            "NOT_AVAILABLE" => CacheClusterStatus::NotAvailable,
+            _ => CacheClusterStatus::UnknownVariant(UnknownCacheClusterStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CacheClusterStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for CacheClusterStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CacheClusterStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration settings of a canary deployment.</p>
@@ -307,6 +872,210 @@ pub struct ClientCertificates {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConnectionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConnectionType {
+    Internet,
+    VpcLink,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConnectionType),
+}
+
+impl Default for ConnectionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConnectionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConnectionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConnectionType {
+    fn into(self) -> String {
+        match self {
+            ConnectionType::Internet => "INTERNET".to_string(),
+            ConnectionType::VpcLink => "VPC_LINK".to_string(),
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConnectionType {
+    fn into(self) -> &'a str {
+        match self {
+            ConnectionType::Internet => &"INTERNET",
+            ConnectionType::VpcLink => &"VPC_LINK",
+            ConnectionType::UnknownVariant(UnknownConnectionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConnectionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERNET" => ConnectionType::Internet,
+            "VPC_LINK" => ConnectionType::VpcLink,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConnectionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERNET" => ConnectionType::Internet,
+            "VPC_LINK" => ConnectionType::VpcLink,
+            _ => ConnectionType::UnknownVariant(UnknownConnectionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConnectionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConnectionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConnectionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentHandlingStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentHandlingStrategy {
+    ConvertToBinary,
+    ConvertToText,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentHandlingStrategy),
+}
+
+impl Default for ContentHandlingStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentHandlingStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentHandlingStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentHandlingStrategy {
+    fn into(self) -> String {
+        match self {
+            ContentHandlingStrategy::ConvertToBinary => "CONVERT_TO_BINARY".to_string(),
+            ContentHandlingStrategy::ConvertToText => "CONVERT_TO_TEXT".to_string(),
+            ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentHandlingStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            ContentHandlingStrategy::ConvertToBinary => &"CONVERT_TO_BINARY",
+            ContentHandlingStrategy::ConvertToText => &"CONVERT_TO_TEXT",
+            ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentHandlingStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONVERT_TO_BINARY" => ContentHandlingStrategy::ConvertToBinary,
+            "CONVERT_TO_TEXT" => ContentHandlingStrategy::ConvertToText,
+            _ => ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentHandlingStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONVERT_TO_BINARY" => ContentHandlingStrategy::ConvertToBinary,
+            "CONVERT_TO_TEXT" => ContentHandlingStrategy::ConvertToText,
+            _ => ContentHandlingStrategy::UnknownVariant(UnknownContentHandlingStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentHandlingStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentHandlingStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentHandlingStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Request to create an <a>ApiKey</a> resource.</p>
@@ -387,7 +1156,7 @@ pub struct CreateAuthorizerRequest {
     pub rest_api_id: String,
     /// <p>[Required] The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: AuthorizerType,
 }
 
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
@@ -421,7 +1190,7 @@ pub struct CreateDeploymentRequest {
     /// <p>Specifies the cache cluster size for the <a>Stage</a> resource specified in the input, if a cache cluster is enabled.</p>
     #[serde(rename = "cacheClusterSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cache_cluster_size: Option<String>,
+    pub cache_cluster_size: Option<CacheClusterSize>,
     /// <p>The input configuration for the canary deployment when the deployment is a canary release deployment. </p>
     #[serde(rename = "canarySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -531,7 +1300,7 @@ pub struct CreateDomainNameRequest {
     /// <p>The Transport Layer Security (TLS) version + cipher suite for this <a>DomainName</a>. The valid values are <code>TLS_1_0</code> and <code>TLS_1_2</code>.</p>
     #[serde(rename = "securityPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub security_policy: Option<String>,
+    pub security_policy: Option<SecurityPolicy>,
     /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -604,7 +1373,7 @@ pub struct CreateRestApiRequest {
     /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul></p>
     #[serde(rename = "apiKeySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_source: Option<String>,
+    pub api_key_source: Option<ApiKeySourceType>,
     /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
     #[serde(rename = "binaryMediaTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -657,7 +1426,7 @@ pub struct CreateStageRequest {
     /// <p>The stage's cache cluster size.</p>
     #[serde(rename = "cacheClusterSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cache_cluster_size: Option<String>,
+    pub cache_cluster_size: Option<CacheClusterSize>,
     /// <p>The canary deployment settings of this stage.</p>
     #[serde(rename = "canarySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -850,7 +1619,7 @@ pub struct DeleteDomainNameRequest {
 pub struct DeleteGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
-    pub response_type: String,
+    pub response_type: GatewayResponseType,
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
@@ -1117,7 +1886,161 @@ pub struct DocumentationPartLocation {
     pub status_code: Option<String>,
     /// <p>[Required] The type of API entity to which the documentation content applies. Valid values are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHORIZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: DocumentationPartType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDocumentationPartType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DocumentationPartType {
+    Api,
+    Authorizer,
+    Method,
+    Model,
+    PathParameter,
+    QueryParameter,
+    RequestBody,
+    RequestHeader,
+    Resource,
+    Response,
+    ResponseBody,
+    ResponseHeader,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDocumentationPartType),
+}
+
+impl Default for DocumentationPartType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DocumentationPartType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DocumentationPartType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DocumentationPartType {
+    fn into(self) -> String {
+        match self {
+            DocumentationPartType::Api => "API".to_string(),
+            DocumentationPartType::Authorizer => "AUTHORIZER".to_string(),
+            DocumentationPartType::Method => "METHOD".to_string(),
+            DocumentationPartType::Model => "MODEL".to_string(),
+            DocumentationPartType::PathParameter => "PATH_PARAMETER".to_string(),
+            DocumentationPartType::QueryParameter => "QUERY_PARAMETER".to_string(),
+            DocumentationPartType::RequestBody => "REQUEST_BODY".to_string(),
+            DocumentationPartType::RequestHeader => "REQUEST_HEADER".to_string(),
+            DocumentationPartType::Resource => "RESOURCE".to_string(),
+            DocumentationPartType::Response => "RESPONSE".to_string(),
+            DocumentationPartType::ResponseBody => "RESPONSE_BODY".to_string(),
+            DocumentationPartType::ResponseHeader => "RESPONSE_HEADER".to_string(),
+            DocumentationPartType::UnknownVariant(UnknownDocumentationPartType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DocumentationPartType {
+    fn into(self) -> &'a str {
+        match self {
+            DocumentationPartType::Api => &"API",
+            DocumentationPartType::Authorizer => &"AUTHORIZER",
+            DocumentationPartType::Method => &"METHOD",
+            DocumentationPartType::Model => &"MODEL",
+            DocumentationPartType::PathParameter => &"PATH_PARAMETER",
+            DocumentationPartType::QueryParameter => &"QUERY_PARAMETER",
+            DocumentationPartType::RequestBody => &"REQUEST_BODY",
+            DocumentationPartType::RequestHeader => &"REQUEST_HEADER",
+            DocumentationPartType::Resource => &"RESOURCE",
+            DocumentationPartType::Response => &"RESPONSE",
+            DocumentationPartType::ResponseBody => &"RESPONSE_BODY",
+            DocumentationPartType::ResponseHeader => &"RESPONSE_HEADER",
+            DocumentationPartType::UnknownVariant(UnknownDocumentationPartType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DocumentationPartType {
+    fn from(name: &str) -> Self {
+        match name {
+            "API" => DocumentationPartType::Api,
+            "AUTHORIZER" => DocumentationPartType::Authorizer,
+            "METHOD" => DocumentationPartType::Method,
+            "MODEL" => DocumentationPartType::Model,
+            "PATH_PARAMETER" => DocumentationPartType::PathParameter,
+            "QUERY_PARAMETER" => DocumentationPartType::QueryParameter,
+            "REQUEST_BODY" => DocumentationPartType::RequestBody,
+            "REQUEST_HEADER" => DocumentationPartType::RequestHeader,
+            "RESOURCE" => DocumentationPartType::Resource,
+            "RESPONSE" => DocumentationPartType::Response,
+            "RESPONSE_BODY" => DocumentationPartType::ResponseBody,
+            "RESPONSE_HEADER" => DocumentationPartType::ResponseHeader,
+            _ => DocumentationPartType::UnknownVariant(UnknownDocumentationPartType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DocumentationPartType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "API" => DocumentationPartType::Api,
+            "AUTHORIZER" => DocumentationPartType::Authorizer,
+            "METHOD" => DocumentationPartType::Method,
+            "MODEL" => DocumentationPartType::Model,
+            "PATH_PARAMETER" => DocumentationPartType::PathParameter,
+            "QUERY_PARAMETER" => DocumentationPartType::QueryParameter,
+            "REQUEST_BODY" => DocumentationPartType::RequestBody,
+            "REQUEST_HEADER" => DocumentationPartType::RequestHeader,
+            "RESOURCE" => DocumentationPartType::Resource,
+            "RESPONSE" => DocumentationPartType::Response,
+            "RESPONSE_BODY" => DocumentationPartType::ResponseBody,
+            "RESPONSE_HEADER" => DocumentationPartType::ResponseHeader,
+            _ => DocumentationPartType::UnknownVariant(UnknownDocumentationPartType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DocumentationPartType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DocumentationPartType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DocumentationPartType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
@@ -1195,7 +2118,7 @@ pub struct DomainName {
     /// <p>The status of the <a>DomainName</a> migration. The valid values are <code>AVAILABLE</code> and <code>UPDATING</code>. If the status is <code>UPDATING</code>, the domain cannot be modified further until the existing operation is complete. If it is <code>AVAILABLE</code>, the domain can be updated.</p>
     #[serde(rename = "domainNameStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub domain_name_status: Option<String>,
+    pub domain_name_status: Option<DomainNameStatus>,
     /// <p>An optional text message containing detailed information about status of the <a>DomainName</a> migration.</p>
     #[serde(rename = "domainNameStatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1227,11 +2150,121 @@ pub struct DomainName {
     /// <p>The Transport Layer Security (TLS) version + cipher suite for this <a>DomainName</a>. The valid values are <code>TLS_1_0</code> and <code>TLS_1_2</code>.</p>
     #[serde(rename = "securityPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub security_policy: Option<String>,
+    pub security_policy: Option<SecurityPolicy>,
     /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDomainNameStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DomainNameStatus {
+    Available,
+    Pending,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDomainNameStatus),
+}
+
+impl Default for DomainNameStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DomainNameStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DomainNameStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DomainNameStatus {
+    fn into(self) -> String {
+        match self {
+            DomainNameStatus::Available => "AVAILABLE".to_string(),
+            DomainNameStatus::Pending => "PENDING".to_string(),
+            DomainNameStatus::Updating => "UPDATING".to_string(),
+            DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DomainNameStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DomainNameStatus::Available => &"AVAILABLE",
+            DomainNameStatus::Pending => &"PENDING",
+            DomainNameStatus::Updating => &"UPDATING",
+            DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DomainNameStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => DomainNameStatus::Available,
+            "PENDING" => DomainNameStatus::Pending,
+            "UPDATING" => DomainNameStatus::Updating,
+            _ => DomainNameStatus::UnknownVariant(UnknownDomainNameStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DomainNameStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => DomainNameStatus::Available,
+            "PENDING" => DomainNameStatus::Pending,
+            "UPDATING" => DomainNameStatus::Updating,
+            _ => DomainNameStatus::UnknownVariant(UnknownDomainNameStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DomainNameStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DomainNameStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DomainNameStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
@@ -1253,11 +2286,118 @@ pub struct EndpointConfiguration {
     /// <p>A list of endpoint types of an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>). For an edge-optimized API and its custom domain name, the endpoint type is <code>"EDGE"</code>. For a regional API and its custom domain name, the endpoint type is <code>REGIONAL</code>. For a private API, the endpoint type is <code>PRIVATE</code>.</p>
     #[serde(rename = "types")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub types: Option<Vec<String>>,
+    pub types: Option<Vec<EndpointType>>,
     /// <p>A list of VpcEndpointIds of an API (<a>RestApi</a>) against which to create Route53 ALIASes. It is only supported for <code>PRIVATE</code> endpoint type.</p>
     #[serde(rename = "vpcEndpointIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_ids: Option<Vec<String>>,
+}
+
+/// <p>The endpoint type. The valid values are <code>EDGE</code> for edge-optimized API setup, most suitable for mobile applications; <code>REGIONAL</code> for regional API endpoint setup, most suitable for calling from AWS Region; and <code>PRIVATE</code> for private APIs.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEndpointType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EndpointType {
+    Edge,
+    Private,
+    Regional,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEndpointType),
+}
+
+impl Default for EndpointType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EndpointType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EndpointType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EndpointType {
+    fn into(self) -> String {
+        match self {
+            EndpointType::Edge => "EDGE".to_string(),
+            EndpointType::Private => "PRIVATE".to_string(),
+            EndpointType::Regional => "REGIONAL".to_string(),
+            EndpointType::UnknownVariant(UnknownEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EndpointType {
+    fn into(self) -> &'a str {
+        match self {
+            EndpointType::Edge => &"EDGE",
+            EndpointType::Private => &"PRIVATE",
+            EndpointType::Regional => &"REGIONAL",
+            EndpointType::UnknownVariant(UnknownEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EndpointType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EDGE" => EndpointType::Edge,
+            "PRIVATE" => EndpointType::Private,
+            "REGIONAL" => EndpointType::Regional,
+            _ => EndpointType::UnknownVariant(UnknownEndpointType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EndpointType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EDGE" => EndpointType::Edge,
+            "PRIVATE" => EndpointType::Private,
+            "REGIONAL" => EndpointType::Regional,
+            _ => EndpointType::UnknownVariant(UnknownEndpointType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EndpointType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EndpointType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EndpointType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
@@ -1314,11 +2454,209 @@ pub struct GatewayResponse {
     /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p>
     #[serde(rename = "responseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_type: Option<String>,
+    pub response_type: Option<GatewayResponseType>,
     /// <p>The HTTP status code for this <a>GatewayResponse</a>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGatewayResponseType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GatewayResponseType {
+    AccessDenied,
+    ApiConfigurationError,
+    AuthorizerConfigurationError,
+    AuthorizerFailure,
+    BadRequestBody,
+    BadRequestParameters,
+    Default4Xx,
+    Default5Xx,
+    ExpiredToken,
+    IntegrationFailure,
+    IntegrationTimeout,
+    InvalidApiKey,
+    InvalidSignature,
+    MissingAuthenticationToken,
+    QuotaExceeded,
+    RequestTooLarge,
+    ResourceNotFound,
+    Throttled,
+    Unauthorized,
+    UnsupportedMediaType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGatewayResponseType),
+}
+
+impl Default for GatewayResponseType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GatewayResponseType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GatewayResponseType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GatewayResponseType {
+    fn into(self) -> String {
+        match self {
+            GatewayResponseType::AccessDenied => "ACCESS_DENIED".to_string(),
+            GatewayResponseType::ApiConfigurationError => "API_CONFIGURATION_ERROR".to_string(),
+            GatewayResponseType::AuthorizerConfigurationError => {
+                "AUTHORIZER_CONFIGURATION_ERROR".to_string()
+            }
+            GatewayResponseType::AuthorizerFailure => "AUTHORIZER_FAILURE".to_string(),
+            GatewayResponseType::BadRequestBody => "BAD_REQUEST_BODY".to_string(),
+            GatewayResponseType::BadRequestParameters => "BAD_REQUEST_PARAMETERS".to_string(),
+            GatewayResponseType::Default4Xx => "DEFAULT_4XX".to_string(),
+            GatewayResponseType::Default5Xx => "DEFAULT_5XX".to_string(),
+            GatewayResponseType::ExpiredToken => "EXPIRED_TOKEN".to_string(),
+            GatewayResponseType::IntegrationFailure => "INTEGRATION_FAILURE".to_string(),
+            GatewayResponseType::IntegrationTimeout => "INTEGRATION_TIMEOUT".to_string(),
+            GatewayResponseType::InvalidApiKey => "INVALID_API_KEY".to_string(),
+            GatewayResponseType::InvalidSignature => "INVALID_SIGNATURE".to_string(),
+            GatewayResponseType::MissingAuthenticationToken => {
+                "MISSING_AUTHENTICATION_TOKEN".to_string()
+            }
+            GatewayResponseType::QuotaExceeded => "QUOTA_EXCEEDED".to_string(),
+            GatewayResponseType::RequestTooLarge => "REQUEST_TOO_LARGE".to_string(),
+            GatewayResponseType::ResourceNotFound => "RESOURCE_NOT_FOUND".to_string(),
+            GatewayResponseType::Throttled => "THROTTLED".to_string(),
+            GatewayResponseType::Unauthorized => "UNAUTHORIZED".to_string(),
+            GatewayResponseType::UnsupportedMediaType => "UNSUPPORTED_MEDIA_TYPE".to_string(),
+            GatewayResponseType::UnknownVariant(UnknownGatewayResponseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GatewayResponseType {
+    fn into(self) -> &'a str {
+        match self {
+            GatewayResponseType::AccessDenied => &"ACCESS_DENIED",
+            GatewayResponseType::ApiConfigurationError => &"API_CONFIGURATION_ERROR",
+            GatewayResponseType::AuthorizerConfigurationError => &"AUTHORIZER_CONFIGURATION_ERROR",
+            GatewayResponseType::AuthorizerFailure => &"AUTHORIZER_FAILURE",
+            GatewayResponseType::BadRequestBody => &"BAD_REQUEST_BODY",
+            GatewayResponseType::BadRequestParameters => &"BAD_REQUEST_PARAMETERS",
+            GatewayResponseType::Default4Xx => &"DEFAULT_4XX",
+            GatewayResponseType::Default5Xx => &"DEFAULT_5XX",
+            GatewayResponseType::ExpiredToken => &"EXPIRED_TOKEN",
+            GatewayResponseType::IntegrationFailure => &"INTEGRATION_FAILURE",
+            GatewayResponseType::IntegrationTimeout => &"INTEGRATION_TIMEOUT",
+            GatewayResponseType::InvalidApiKey => &"INVALID_API_KEY",
+            GatewayResponseType::InvalidSignature => &"INVALID_SIGNATURE",
+            GatewayResponseType::MissingAuthenticationToken => &"MISSING_AUTHENTICATION_TOKEN",
+            GatewayResponseType::QuotaExceeded => &"QUOTA_EXCEEDED",
+            GatewayResponseType::RequestTooLarge => &"REQUEST_TOO_LARGE",
+            GatewayResponseType::ResourceNotFound => &"RESOURCE_NOT_FOUND",
+            GatewayResponseType::Throttled => &"THROTTLED",
+            GatewayResponseType::Unauthorized => &"UNAUTHORIZED",
+            GatewayResponseType::UnsupportedMediaType => &"UNSUPPORTED_MEDIA_TYPE",
+            GatewayResponseType::UnknownVariant(UnknownGatewayResponseType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GatewayResponseType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCESS_DENIED" => GatewayResponseType::AccessDenied,
+            "API_CONFIGURATION_ERROR" => GatewayResponseType::ApiConfigurationError,
+            "AUTHORIZER_CONFIGURATION_ERROR" => GatewayResponseType::AuthorizerConfigurationError,
+            "AUTHORIZER_FAILURE" => GatewayResponseType::AuthorizerFailure,
+            "BAD_REQUEST_BODY" => GatewayResponseType::BadRequestBody,
+            "BAD_REQUEST_PARAMETERS" => GatewayResponseType::BadRequestParameters,
+            "DEFAULT_4XX" => GatewayResponseType::Default4Xx,
+            "DEFAULT_5XX" => GatewayResponseType::Default5Xx,
+            "EXPIRED_TOKEN" => GatewayResponseType::ExpiredToken,
+            "INTEGRATION_FAILURE" => GatewayResponseType::IntegrationFailure,
+            "INTEGRATION_TIMEOUT" => GatewayResponseType::IntegrationTimeout,
+            "INVALID_API_KEY" => GatewayResponseType::InvalidApiKey,
+            "INVALID_SIGNATURE" => GatewayResponseType::InvalidSignature,
+            "MISSING_AUTHENTICATION_TOKEN" => GatewayResponseType::MissingAuthenticationToken,
+            "QUOTA_EXCEEDED" => GatewayResponseType::QuotaExceeded,
+            "REQUEST_TOO_LARGE" => GatewayResponseType::RequestTooLarge,
+            "RESOURCE_NOT_FOUND" => GatewayResponseType::ResourceNotFound,
+            "THROTTLED" => GatewayResponseType::Throttled,
+            "UNAUTHORIZED" => GatewayResponseType::Unauthorized,
+            "UNSUPPORTED_MEDIA_TYPE" => GatewayResponseType::UnsupportedMediaType,
+            _ => GatewayResponseType::UnknownVariant(UnknownGatewayResponseType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GatewayResponseType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCESS_DENIED" => GatewayResponseType::AccessDenied,
+            "API_CONFIGURATION_ERROR" => GatewayResponseType::ApiConfigurationError,
+            "AUTHORIZER_CONFIGURATION_ERROR" => GatewayResponseType::AuthorizerConfigurationError,
+            "AUTHORIZER_FAILURE" => GatewayResponseType::AuthorizerFailure,
+            "BAD_REQUEST_BODY" => GatewayResponseType::BadRequestBody,
+            "BAD_REQUEST_PARAMETERS" => GatewayResponseType::BadRequestParameters,
+            "DEFAULT_4XX" => GatewayResponseType::Default4Xx,
+            "DEFAULT_5XX" => GatewayResponseType::Default5Xx,
+            "EXPIRED_TOKEN" => GatewayResponseType::ExpiredToken,
+            "INTEGRATION_FAILURE" => GatewayResponseType::IntegrationFailure,
+            "INTEGRATION_TIMEOUT" => GatewayResponseType::IntegrationTimeout,
+            "INVALID_API_KEY" => GatewayResponseType::InvalidApiKey,
+            "INVALID_SIGNATURE" => GatewayResponseType::InvalidSignature,
+            "MISSING_AUTHENTICATION_TOKEN" => GatewayResponseType::MissingAuthenticationToken,
+            "QUOTA_EXCEEDED" => GatewayResponseType::QuotaExceeded,
+            "REQUEST_TOO_LARGE" => GatewayResponseType::RequestTooLarge,
+            "RESOURCE_NOT_FOUND" => GatewayResponseType::ResourceNotFound,
+            "THROTTLED" => GatewayResponseType::Throttled,
+            "UNAUTHORIZED" => GatewayResponseType::Unauthorized,
+            "UNSUPPORTED_MEDIA_TYPE" => GatewayResponseType::UnsupportedMediaType,
+            _ => GatewayResponseType::UnknownVariant(UnknownGatewayResponseType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GatewayResponseType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GatewayResponseType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GatewayResponseType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p/> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p/> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
@@ -1529,7 +2867,7 @@ pub struct GetDocumentationPartsRequest {
     /// <p>The status of the API documentation parts to retrieve. Valid values are <code>DOCUMENTED</code> for retrieving <a>DocumentationPart</a> resources with content and <code>UNDOCUMENTED</code> for <a>DocumentationPart</a> resources without content.</p>
     #[serde(rename = "locationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub location_status: Option<String>,
+    pub location_status: Option<LocationStatusType>,
     /// <p>The name of API entities of the to-be-retrieved documentation parts.</p>
     #[serde(rename = "nameQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1548,7 +2886,7 @@ pub struct GetDocumentationPartsRequest {
     /// <p>The type of API entities of the to-be-retrieved documentation parts. </p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<DocumentationPartType>,
 }
 
 /// <p>Gets a documentation snapshot of an API.</p>
@@ -1632,7 +2970,7 @@ pub struct GetExportRequest {
 pub struct GetGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
-    pub response_type: String,
+    pub response_type: GatewayResponseType,
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
@@ -2067,7 +3405,7 @@ pub struct ImportApiKeysRequest {
     pub fail_on_warnings: Option<bool>,
     /// <p>A query parameter to specify the input format to imported API keys. Currently, only the <code>csv</code> format is supported.</p>
     #[serde(rename = "format")]
-    pub format: String,
+    pub format: ApiKeysFormat,
 }
 
 /// <p>Import documentation parts from an external (e.g., OpenAPI) definition file. </p>
@@ -2089,7 +3427,7 @@ pub struct ImportDocumentationPartsRequest {
     /// <p>A query parameter to indicate whether to overwrite (<code>OVERWRITE</code>) any existing <a>DocumentationParts</a> definition or to merge (<code>MERGE</code>) the new definition into the existing one. The default value is <code>MERGE</code>.</p>
     #[serde(rename = "mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<PutMode>,
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
@@ -2136,11 +3474,11 @@ pub struct Integration {
     /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehavior</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling: Option<String>,
+    pub content_handling: Option<ContentHandlingStrategy>,
     /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "credentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2176,7 +3514,7 @@ pub struct Integration {
     /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<IntegrationType>,
     /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Uniform</em>Resource<em>Identifier&quot; target=&quot;</em>blank&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2190,7 +3528,7 @@ pub struct IntegrationResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling: Option<String>,
+    pub content_handling: Option<ContentHandlingStrategy>,
     /// <p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> is a valid and unique response header name and <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.</p>
     #[serde(rename = "responseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2207,6 +3545,228 @@ pub struct IntegrationResponse {
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
+}
+
+/// <p>The integration type. The valid value is <code>HTTP</code> for integrating an API method with an HTTP backend; <code>AWS</code> with any AWS service endpoints; <code>MOCK</code> for testing without actually invoking the backend; <code>HTTP_PROXY</code> for integrating with the HTTP proxy integration; <code>AWS_PROXY</code> for integrating with the Lambda proxy integration. </p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIntegrationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IntegrationType {
+    Aws,
+    AwsProxy,
+    Http,
+    HttpProxy,
+    Mock,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIntegrationType),
+}
+
+impl Default for IntegrationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IntegrationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IntegrationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IntegrationType {
+    fn into(self) -> String {
+        match self {
+            IntegrationType::Aws => "AWS".to_string(),
+            IntegrationType::AwsProxy => "AWS_PROXY".to_string(),
+            IntegrationType::Http => "HTTP".to_string(),
+            IntegrationType::HttpProxy => "HTTP_PROXY".to_string(),
+            IntegrationType::Mock => "MOCK".to_string(),
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IntegrationType {
+    fn into(self) -> &'a str {
+        match self {
+            IntegrationType::Aws => &"AWS",
+            IntegrationType::AwsProxy => &"AWS_PROXY",
+            IntegrationType::Http => &"HTTP",
+            IntegrationType::HttpProxy => &"HTTP_PROXY",
+            IntegrationType::Mock => &"MOCK",
+            IntegrationType::UnknownVariant(UnknownIntegrationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IntegrationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS" => IntegrationType::Aws,
+            "AWS_PROXY" => IntegrationType::AwsProxy,
+            "HTTP" => IntegrationType::Http,
+            "HTTP_PROXY" => IntegrationType::HttpProxy,
+            "MOCK" => IntegrationType::Mock,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IntegrationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS" => IntegrationType::Aws,
+            "AWS_PROXY" => IntegrationType::AwsProxy,
+            "HTTP" => IntegrationType::Http,
+            "HTTP_PROXY" => IntegrationType::HttpProxy,
+            "MOCK" => IntegrationType::Mock,
+            _ => IntegrationType::UnknownVariant(UnknownIntegrationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IntegrationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IntegrationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IntegrationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLocationStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LocationStatusType {
+    Documented,
+    Undocumented,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLocationStatusType),
+}
+
+impl Default for LocationStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LocationStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LocationStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LocationStatusType {
+    fn into(self) -> String {
+        match self {
+            LocationStatusType::Documented => "DOCUMENTED".to_string(),
+            LocationStatusType::Undocumented => "UNDOCUMENTED".to_string(),
+            LocationStatusType::UnknownVariant(UnknownLocationStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LocationStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            LocationStatusType::Documented => &"DOCUMENTED",
+            LocationStatusType::Undocumented => &"UNDOCUMENTED",
+            LocationStatusType::UnknownVariant(UnknownLocationStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LocationStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DOCUMENTED" => LocationStatusType::Documented,
+            "UNDOCUMENTED" => LocationStatusType::Undocumented,
+            _ => LocationStatusType::UnknownVariant(UnknownLocationStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LocationStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DOCUMENTED" => LocationStatusType::Documented,
+            "UNDOCUMENTED" => LocationStatusType::Undocumented,
+            _ => LocationStatusType::UnknownVariant(UnknownLocationStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LocationStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LocationStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for LocationStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
@@ -2320,7 +3880,7 @@ pub struct MethodSetting {
     /// <p>Specifies how to handle unauthorized requests for cache invalidation. The PATCH path for this setting is <code>/{method_setting_key}/caching/unauthorizedCacheControlHeaderStrategy</code>, and the available values are <code>FAIL_WITH_403</code>, <code>SUCCEED_WITH_RESPONSE_HEADER</code>, <code>SUCCEED_WITHOUT_RESPONSE_HEADER</code>.</p>
     #[serde(rename = "unauthorizedCacheControlHeaderStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unauthorized_cache_control_header_strategy: Option<String>,
+    pub unauthorized_cache_control_header_strategy: Option<UnauthorizedCacheControlHeaderStrategy>,
 }
 
 /// <p>Represents a summary of a <a>Method</a> resource, given a particular date and time.</p>
@@ -2408,6 +3968,127 @@ pub struct MutualTlsAuthenticationInput {
     pub truststore_version: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOp {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Op {
+    Add,
+    Copy,
+    Move,
+    Remove,
+    Replace,
+    Test,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOp),
+}
+
+impl Default for Op {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Op {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Op {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Op {
+    fn into(self) -> String {
+        match self {
+            Op::Add => "add".to_string(),
+            Op::Copy => "copy".to_string(),
+            Op::Move => "move".to_string(),
+            Op::Remove => "remove".to_string(),
+            Op::Replace => "replace".to_string(),
+            Op::Test => "test".to_string(),
+            Op::UnknownVariant(UnknownOp { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Op {
+    fn into(self) -> &'a str {
+        match self {
+            Op::Add => &"add",
+            Op::Copy => &"copy",
+            Op::Move => &"move",
+            Op::Remove => &"remove",
+            Op::Replace => &"replace",
+            Op::Test => &"test",
+            Op::UnknownVariant(UnknownOp { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Op {
+    fn from(name: &str) -> Self {
+        match name {
+            "add" => Op::Add,
+            "copy" => Op::Copy,
+            "move" => Op::Move,
+            "remove" => Op::Remove,
+            "replace" => Op::Replace,
+            "test" => Op::Test,
+            _ => Op::UnknownVariant(UnknownOp {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Op {
+    fn from(name: String) -> Self {
+        match &*name {
+            "add" => Op::Add,
+            "copy" => Op::Copy,
+            "move" => Op::Move,
+            "remove" => Op::Remove,
+            "replace" => Op::Replace,
+            "test" => Op::Test,
+            _ => Op::UnknownVariant(UnknownOp { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Op {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Op {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for Op {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2419,7 +4100,7 @@ pub struct PatchOperation {
     /// <p> An update operation to be performed with this PATCH request. The valid value can be <code>add</code>, <code>remove</code>, <code>replace</code> or <code>copy</code>. Not all valid operations are supported for a given resource. Support of the operations depends on specific operational contexts. Attempts to apply an unsupported operation on a resource will return an error message.</p>
     #[serde(rename = "op")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub op: Option<String>,
+    pub op: Option<Op>,
     /// <p>The <code>op</code> operation's target, as identified by a <a href="https://tools.ietf.org/html/draft-ietf-appsawg-json-pointer-08">JSON Pointer</a> value that references a location within the targeted resource. For example, if the target resource has an updateable property of <code>{"name":"value"}</code>, the path for this property is <code>/name</code>. If the <code>name</code> property value is a JSON object (e.g., <code>{"name": {"child/name": "child-value"}}</code>), the path for the <code>child/name</code> property will be <code>/name/child~1name</code>. Any slash ("/") character appearing in path names must be escaped with "~1", as shown in the example above. Each <code>op</code> operation can have only one <code>path</code> associated with it.</p>
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2444,7 +4125,7 @@ pub struct PutGatewayResponseRequest {
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
-    pub response_type: String,
+    pub response_type: GatewayResponseType,
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
@@ -2473,11 +4154,11 @@ pub struct PutIntegrationRequest {
     /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: Option<ConnectionType>,
     /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehavior</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling: Option<String>,
+    pub content_handling: Option<ContentHandlingStrategy>,
     /// <p>Specifies whether credentials are required for a put integration.</p>
     #[serde(rename = "credentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2516,7 +4197,7 @@ pub struct PutIntegrationRequest {
     pub tls_config: Option<TlsConfig>,
     /// <p>[Required] Specifies a put integration input's type.</p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: IntegrationType,
     /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Uniform</em>Resource<em>Identifier&quot; target=&quot;</em>blank&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2530,7 +4211,7 @@ pub struct PutIntegrationResponseRequest {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling: Option<String>,
+    pub content_handling: Option<ContentHandlingStrategy>,
     /// <p>[Required] Specifies a put integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
@@ -2629,6 +4310,107 @@ pub struct PutMethodResponseRequest {
     pub status_code: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPutMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PutMode {
+    Merge,
+    Overwrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPutMode),
+}
+
+impl Default for PutMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PutMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PutMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PutMode {
+    fn into(self) -> String {
+        match self {
+            PutMode::Merge => "merge".to_string(),
+            PutMode::Overwrite => "overwrite".to_string(),
+            PutMode::UnknownVariant(UnknownPutMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PutMode {
+    fn into(self) -> &'a str {
+        match self {
+            PutMode::Merge => &"merge",
+            PutMode::Overwrite => &"overwrite",
+            PutMode::UnknownVariant(UnknownPutMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PutMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "merge" => PutMode::Merge,
+            "overwrite" => PutMode::Overwrite,
+            _ => PutMode::UnknownVariant(UnknownPutMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PutMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "merge" => PutMode::Merge,
+            "overwrite" => PutMode::Overwrite,
+            _ => PutMode::UnknownVariant(UnknownPutMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PutMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PutMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for PutMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2648,7 +4430,7 @@ pub struct PutRestApiRequest {
     /// <p>The <code>mode</code> query parameter to specify the update mode. Valid values are "merge" and "overwrite". By default, the update mode is "merge".</p>
     #[serde(rename = "mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<PutMode>,
     /// <p>Custom header parameters as part of the request. For example, to exclude <a>DocumentationParts</a> from an imported API, set <code>ignore=documentation</code> as a <code>parameters</code> value, as in the AWS CLI command of <code>aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'</code>.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2656,6 +4438,111 @@ pub struct PutRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQuotaPeriodType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QuotaPeriodType {
+    Day,
+    Month,
+    Week,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQuotaPeriodType),
+}
+
+impl Default for QuotaPeriodType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QuotaPeriodType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QuotaPeriodType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QuotaPeriodType {
+    fn into(self) -> String {
+        match self {
+            QuotaPeriodType::Day => "DAY".to_string(),
+            QuotaPeriodType::Month => "MONTH".to_string(),
+            QuotaPeriodType::Week => "WEEK".to_string(),
+            QuotaPeriodType::UnknownVariant(UnknownQuotaPeriodType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QuotaPeriodType {
+    fn into(self) -> &'a str {
+        match self {
+            QuotaPeriodType::Day => &"DAY",
+            QuotaPeriodType::Month => &"MONTH",
+            QuotaPeriodType::Week => &"WEEK",
+            QuotaPeriodType::UnknownVariant(UnknownQuotaPeriodType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QuotaPeriodType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DAY" => QuotaPeriodType::Day,
+            "MONTH" => QuotaPeriodType::Month,
+            "WEEK" => QuotaPeriodType::Week,
+            _ => QuotaPeriodType::UnknownVariant(UnknownQuotaPeriodType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QuotaPeriodType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DAY" => QuotaPeriodType::Day,
+            "MONTH" => QuotaPeriodType::Month,
+            "WEEK" => QuotaPeriodType::Week,
+            _ => QuotaPeriodType::UnknownVariant(UnknownQuotaPeriodType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QuotaPeriodType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QuotaPeriodType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QuotaPeriodType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Quotas configured for a usage plan.</p>
@@ -2672,7 +4559,7 @@ pub struct QuotaSettings {
     /// <p>The time period in which the limit applies. Valid values are "DAY", "WEEK" or "MONTH".</p>
     #[serde(rename = "period")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub period: Option<String>,
+    pub period: Option<QuotaPeriodType>,
 }
 
 /// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
@@ -2756,7 +4643,7 @@ pub struct RestApi {
     /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul></p>
     #[serde(rename = "apiKeySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_source: Option<String>,
+    pub api_key_source: Option<ApiKeySourceType>,
     /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
     #[serde(rename = "binaryMediaTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2892,6 +4779,106 @@ pub struct SdkTypes {
     pub position: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSecurityPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SecurityPolicy {
+    Tls10,
+    Tls12,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSecurityPolicy),
+}
+
+impl Default for SecurityPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SecurityPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SecurityPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SecurityPolicy {
+    fn into(self) -> String {
+        match self {
+            SecurityPolicy::Tls10 => "TLS_1_0".to_string(),
+            SecurityPolicy::Tls12 => "TLS_1_2".to_string(),
+            SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SecurityPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            SecurityPolicy::Tls10 => &"TLS_1_0",
+            SecurityPolicy::Tls12 => &"TLS_1_2",
+            SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SecurityPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "TLS_1_0" => SecurityPolicy::Tls10,
+            "TLS_1_2" => SecurityPolicy::Tls12,
+            _ => SecurityPolicy::UnknownVariant(UnknownSecurityPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SecurityPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TLS_1_0" => SecurityPolicy::Tls10,
+            "TLS_1_2" => SecurityPolicy::Tls12,
+            _ => SecurityPolicy::UnknownVariant(UnknownSecurityPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SecurityPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SecurityPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SecurityPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2907,11 +4894,11 @@ pub struct Stage {
     /// <p>The size of the cache cluster for the stage, if enabled.</p>
     #[serde(rename = "cacheClusterSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cache_cluster_size: Option<String>,
+    pub cache_cluster_size: Option<CacheClusterSize>,
     /// <p>The status of the cache cluster for the stage, if enabled.</p>
     #[serde(rename = "cacheClusterStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub cache_cluster_status: Option<String>,
+    pub cache_cluster_status: Option<CacheClusterStatus>,
     /// <p>Settings for the canary deployment in this stage.</p>
     #[serde(rename = "canarySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3181,6 +5168,136 @@ pub struct TlsConfig {
     pub insecure_skip_verification: Option<bool>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownUnauthorizedCacheControlHeaderStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum UnauthorizedCacheControlHeaderStrategy {
+    FailWith403,
+    SucceedWithoutResponseHeader,
+    SucceedWithResponseHeader,
+    #[doc(hidden)]
+    UnknownVariant(UnknownUnauthorizedCacheControlHeaderStrategy),
+}
+
+impl Default for UnauthorizedCacheControlHeaderStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for UnauthorizedCacheControlHeaderStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for UnauthorizedCacheControlHeaderStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for UnauthorizedCacheControlHeaderStrategy {
+    fn into(self) -> String {
+        match self {
+            UnauthorizedCacheControlHeaderStrategy::FailWith403 => "FAIL_WITH_403".to_string(),
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader => {
+                "SUCCEED_WITHOUT_RESPONSE_HEADER".to_string()
+            }
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader => {
+                "SUCCEED_WITH_RESPONSE_HEADER".to_string()
+            }
+            UnauthorizedCacheControlHeaderStrategy::UnknownVariant(
+                UnknownUnauthorizedCacheControlHeaderStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a UnauthorizedCacheControlHeaderStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            UnauthorizedCacheControlHeaderStrategy::FailWith403 => &"FAIL_WITH_403",
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader => {
+                &"SUCCEED_WITHOUT_RESPONSE_HEADER"
+            }
+            UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader => {
+                &"SUCCEED_WITH_RESPONSE_HEADER"
+            }
+            UnauthorizedCacheControlHeaderStrategy::UnknownVariant(
+                UnknownUnauthorizedCacheControlHeaderStrategy { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for UnauthorizedCacheControlHeaderStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAIL_WITH_403" => UnauthorizedCacheControlHeaderStrategy::FailWith403,
+            "SUCCEED_WITHOUT_RESPONSE_HEADER" => {
+                UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader
+            }
+            "SUCCEED_WITH_RESPONSE_HEADER" => {
+                UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader
+            }
+            _ => UnauthorizedCacheControlHeaderStrategy::UnknownVariant(
+                UnknownUnauthorizedCacheControlHeaderStrategy {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for UnauthorizedCacheControlHeaderStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAIL_WITH_403" => UnauthorizedCacheControlHeaderStrategy::FailWith403,
+            "SUCCEED_WITHOUT_RESPONSE_HEADER" => {
+                UnauthorizedCacheControlHeaderStrategy::SucceedWithoutResponseHeader
+            }
+            "SUCCEED_WITH_RESPONSE_HEADER" => {
+                UnauthorizedCacheControlHeaderStrategy::SucceedWithResponseHeader
+            }
+            _ => UnauthorizedCacheControlHeaderStrategy::UnknownVariant(
+                UnknownUnauthorizedCacheControlHeaderStrategy { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for UnauthorizedCacheControlHeaderStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for UnauthorizedCacheControlHeaderStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for UnauthorizedCacheControlHeaderStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Removes a tag from a given resource.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3332,7 +5449,7 @@ pub struct UpdateGatewayResponseRequest {
     pub patch_operations: Option<Vec<PatchOperation>>,
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
-    pub response_type: String,
+    pub response_type: GatewayResponseType,
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
@@ -3669,7 +5786,7 @@ pub struct VpcLink {
     /// <p>The status of the VPC link. The valid values are <code>AVAILABLE</code>, <code>PENDING</code>, <code>DELETING</code>, or <code>FAILED</code>. Deploying an API will wait if the status is <code>PENDING</code> and will fail if the status is <code>DELETING</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<VpcLinkStatus>,
     /// <p>A description about the VPC link status.</p>
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3682,6 +5799,117 @@ pub struct VpcLink {
     #[serde(rename = "targetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arns: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownVpcLinkStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum VpcLinkStatus {
+    Available,
+    Deleting,
+    Failed,
+    Pending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownVpcLinkStatus),
+}
+
+impl Default for VpcLinkStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for VpcLinkStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for VpcLinkStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for VpcLinkStatus {
+    fn into(self) -> String {
+        match self {
+            VpcLinkStatus::Available => "AVAILABLE".to_string(),
+            VpcLinkStatus::Deleting => "DELETING".to_string(),
+            VpcLinkStatus::Failed => "FAILED".to_string(),
+            VpcLinkStatus::Pending => "PENDING".to_string(),
+            VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a VpcLinkStatus {
+    fn into(self) -> &'a str {
+        match self {
+            VpcLinkStatus::Available => &"AVAILABLE",
+            VpcLinkStatus::Deleting => &"DELETING",
+            VpcLinkStatus::Failed => &"FAILED",
+            VpcLinkStatus::Pending => &"PENDING",
+            VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for VpcLinkStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => VpcLinkStatus::Available,
+            "DELETING" => VpcLinkStatus::Deleting,
+            "FAILED" => VpcLinkStatus::Failed,
+            "PENDING" => VpcLinkStatus::Pending,
+            _ => VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for VpcLinkStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => VpcLinkStatus::Available,
+            "DELETING" => VpcLinkStatus::Deleting,
+            "FAILED" => VpcLinkStatus::Failed,
+            "PENDING" => VpcLinkStatus::Pending,
+            _ => VpcLinkStatus::UnknownVariant(UnknownVpcLinkStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for VpcLinkStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for VpcLinkStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for VpcLinkStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>

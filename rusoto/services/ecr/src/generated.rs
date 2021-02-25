@@ -224,7 +224,7 @@ pub struct CreateRepositoryRequest {
     /// <p>The tag mutability setting for the repository. If this parameter is omitted, the default setting of <code>MUTABLE</code> will be used which will allow image tags to be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
+    pub image_tag_mutability: Option<ImageTagMutability>,
     /// <p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -404,7 +404,7 @@ pub struct DescribeImagesFilter {
     /// <p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag_status: Option<String>,
+    pub tag_status: Option<TagStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -504,11 +504,232 @@ pub struct DescribeRepositoriesResponse {
 pub struct EncryptionConfiguration {
     /// <p>The encryption type to use.</p> <p>If you use the <code>KMS</code> encryption type, the contents of the repository will be encrypted using server-side encryption with customer master keys (CMKs) stored in AWS KMS. When you use AWS KMS to encrypt your data, you can either use the default AWS managed CMK for Amazon ECR, or specify your own CMK, which you already created. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs Stored in AWS Key Management Service (SSE-KMS)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p> <p>If you use the <code>AES256</code> encryption type, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts the images in the repository using an AES-256 encryption algorithm. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Protecting Data Using Server-Side Encryption with Amazon S3-Managed Encryption Keys (SSE-S3)</a> in the <i>Amazon Simple Storage Service Console Developer Guide.</i>.</p>
     #[serde(rename = "encryptionType")]
-    pub encryption_type: String,
+    pub encryption_type: EncryptionType,
     /// <p>If you use the <code>KMS</code> encryption type, specify the CMK to use for encryption. The alias, key ID, or full ARN of the CMK can be specified. The key must exist in the same Region as the repository. If no key is specified, the default AWS managed CMK for Amazon ECR will be used.</p>
     #[serde(rename = "kmsKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionType {
+    Aes256,
+    Kms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionType),
+}
+
+impl Default for EncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionType {
+    fn into(self) -> String {
+        match self {
+            EncryptionType::Aes256 => "AES256".to_string(),
+            EncryptionType::Kms => "KMS".to_string(),
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionType::Aes256 => &"AES256",
+            EncryptionType::Kms => &"KMS",
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => EncryptionType::Aes256,
+            "KMS" => EncryptionType::Kms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => EncryptionType::Aes256,
+            "KMS" => EncryptionType::Kms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFindingSeverity {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FindingSeverity {
+    Critical,
+    High,
+    Informational,
+    Low,
+    Medium,
+    Undefined,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFindingSeverity),
+}
+
+impl Default for FindingSeverity {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FindingSeverity {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FindingSeverity {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FindingSeverity {
+    fn into(self) -> String {
+        match self {
+            FindingSeverity::Critical => "CRITICAL".to_string(),
+            FindingSeverity::High => "HIGH".to_string(),
+            FindingSeverity::Informational => "INFORMATIONAL".to_string(),
+            FindingSeverity::Low => "LOW".to_string(),
+            FindingSeverity::Medium => "MEDIUM".to_string(),
+            FindingSeverity::Undefined => "UNDEFINED".to_string(),
+            FindingSeverity::UnknownVariant(UnknownFindingSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FindingSeverity {
+    fn into(self) -> &'a str {
+        match self {
+            FindingSeverity::Critical => &"CRITICAL",
+            FindingSeverity::High => &"HIGH",
+            FindingSeverity::Informational => &"INFORMATIONAL",
+            FindingSeverity::Low => &"LOW",
+            FindingSeverity::Medium => &"MEDIUM",
+            FindingSeverity::Undefined => &"UNDEFINED",
+            FindingSeverity::UnknownVariant(UnknownFindingSeverity { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FindingSeverity {
+    fn from(name: &str) -> Self {
+        match name {
+            "CRITICAL" => FindingSeverity::Critical,
+            "HIGH" => FindingSeverity::High,
+            "INFORMATIONAL" => FindingSeverity::Informational,
+            "LOW" => FindingSeverity::Low,
+            "MEDIUM" => FindingSeverity::Medium,
+            "UNDEFINED" => FindingSeverity::Undefined,
+            _ => FindingSeverity::UnknownVariant(UnknownFindingSeverity {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FindingSeverity {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CRITICAL" => FindingSeverity::Critical,
+            "HIGH" => FindingSeverity::High,
+            "INFORMATIONAL" => FindingSeverity::Informational,
+            "LOW" => FindingSeverity::Low,
+            "MEDIUM" => FindingSeverity::Medium,
+            "UNDEFINED" => FindingSeverity::Undefined,
+            _ => FindingSeverity::UnknownVariant(UnknownFindingSeverity { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FindingSeverity {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FindingSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FindingSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -606,7 +827,7 @@ pub struct GetLifecyclePolicyPreviewResponse {
     /// <p>The status of the lifecycle policy preview request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LifecyclePolicyPreviewStatus>,
     /// <p>The list of images that is returned as a result of the action.</p>
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -718,6 +939,102 @@ pub struct Image {
     pub repository_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageActionType {
+    Expire,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageActionType),
+}
+
+impl Default for ImageActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageActionType {
+    fn into(self) -> String {
+        match self {
+            ImageActionType::Expire => "EXPIRE".to_string(),
+            ImageActionType::UnknownVariant(UnknownImageActionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageActionType {
+    fn into(self) -> &'a str {
+        match self {
+            ImageActionType::Expire => &"EXPIRE",
+            ImageActionType::UnknownVariant(UnknownImageActionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImageActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXPIRE" => ImageActionType::Expire,
+            _ => ImageActionType::UnknownVariant(UnknownImageActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXPIRE" => ImageActionType::Expire,
+            _ => ImageActionType::UnknownVariant(UnknownImageActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -771,7 +1088,7 @@ pub struct ImageFailure {
     /// <p>The code associated with the failure.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<ImageFailureCode>,
     /// <p>The reason for the failure.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -780,6 +1097,140 @@ pub struct ImageFailure {
     #[serde(rename = "imageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<ImageIdentifier>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageFailureCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageFailureCode {
+    ImageNotFound,
+    ImageReferencedByManifestList,
+    ImageTagDoesNotMatchDigest,
+    InvalidImageDigest,
+    InvalidImageTag,
+    KmsError,
+    MissingDigestAndTag,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageFailureCode),
+}
+
+impl Default for ImageFailureCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageFailureCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageFailureCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageFailureCode {
+    fn into(self) -> String {
+        match self {
+            ImageFailureCode::ImageNotFound => "ImageNotFound".to_string(),
+            ImageFailureCode::ImageReferencedByManifestList => {
+                "ImageReferencedByManifestList".to_string()
+            }
+            ImageFailureCode::ImageTagDoesNotMatchDigest => {
+                "ImageTagDoesNotMatchDigest".to_string()
+            }
+            ImageFailureCode::InvalidImageDigest => "InvalidImageDigest".to_string(),
+            ImageFailureCode::InvalidImageTag => "InvalidImageTag".to_string(),
+            ImageFailureCode::KmsError => "KmsError".to_string(),
+            ImageFailureCode::MissingDigestAndTag => "MissingDigestAndTag".to_string(),
+            ImageFailureCode::UnknownVariant(UnknownImageFailureCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageFailureCode {
+    fn into(self) -> &'a str {
+        match self {
+            ImageFailureCode::ImageNotFound => &"ImageNotFound",
+            ImageFailureCode::ImageReferencedByManifestList => &"ImageReferencedByManifestList",
+            ImageFailureCode::ImageTagDoesNotMatchDigest => &"ImageTagDoesNotMatchDigest",
+            ImageFailureCode::InvalidImageDigest => &"InvalidImageDigest",
+            ImageFailureCode::InvalidImageTag => &"InvalidImageTag",
+            ImageFailureCode::KmsError => &"KmsError",
+            ImageFailureCode::MissingDigestAndTag => &"MissingDigestAndTag",
+            ImageFailureCode::UnknownVariant(UnknownImageFailureCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ImageFailureCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ImageNotFound" => ImageFailureCode::ImageNotFound,
+            "ImageReferencedByManifestList" => ImageFailureCode::ImageReferencedByManifestList,
+            "ImageTagDoesNotMatchDigest" => ImageFailureCode::ImageTagDoesNotMatchDigest,
+            "InvalidImageDigest" => ImageFailureCode::InvalidImageDigest,
+            "InvalidImageTag" => ImageFailureCode::InvalidImageTag,
+            "KmsError" => ImageFailureCode::KmsError,
+            "MissingDigestAndTag" => ImageFailureCode::MissingDigestAndTag,
+            _ => ImageFailureCode::UnknownVariant(UnknownImageFailureCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageFailureCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ImageNotFound" => ImageFailureCode::ImageNotFound,
+            "ImageReferencedByManifestList" => ImageFailureCode::ImageReferencedByManifestList,
+            "ImageTagDoesNotMatchDigest" => ImageFailureCode::ImageTagDoesNotMatchDigest,
+            "InvalidImageDigest" => ImageFailureCode::InvalidImageDigest,
+            "InvalidImageTag" => ImageFailureCode::InvalidImageTag,
+            "KmsError" => ImageFailureCode::KmsError,
+            "MissingDigestAndTag" => ImageFailureCode::MissingDigestAndTag,
+            _ => ImageFailureCode::UnknownVariant(UnknownImageFailureCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImageFailureCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageFailureCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An object with identifying information for an Amazon ECR image.</p>
@@ -814,7 +1265,7 @@ pub struct ImageScanFinding {
     /// <p>The finding severity.</p>
     #[serde(rename = "severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub severity: Option<String>,
+    pub severity: Option<FindingSeverity>,
     /// <p>A link containing additional details about the security vulnerability.</p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -828,7 +1279,7 @@ pub struct ImageScanFindings {
     /// <p>The image vulnerability counts, sorted by severity.</p>
     #[serde(rename = "findingSeverityCounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
+    pub finding_severity_counts: Option<::std::collections::HashMap<FindingSeverity, i64>>,
     /// <p>The findings from the image scan.</p>
     #[serde(rename = "findings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -850,7 +1301,7 @@ pub struct ImageScanFindingsSummary {
     /// <p>The image vulnerability counts, sorted by severity.</p>
     #[serde(rename = "findingSeverityCounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_severity_counts: Option<::std::collections::HashMap<String, i64>>,
+    pub finding_severity_counts: Option<::std::collections::HashMap<FindingSeverity, i64>>,
     /// <p>The time of the last completed image scan.</p>
     #[serde(rename = "imageScanCompletedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -872,7 +1323,7 @@ pub struct ImageScanStatus {
     /// <p>The current state of an image scan.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ScanStatus>,
 }
 
 /// <p>The image scanning configuration for a repository.</p>
@@ -882,6 +1333,110 @@ pub struct ImageScanningConfiguration {
     #[serde(rename = "scanOnPush")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scan_on_push: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImageTagMutability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImageTagMutability {
+    Immutable,
+    Mutable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImageTagMutability),
+}
+
+impl Default for ImageTagMutability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImageTagMutability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImageTagMutability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImageTagMutability {
+    fn into(self) -> String {
+        match self {
+            ImageTagMutability::Immutable => "IMMUTABLE".to_string(),
+            ImageTagMutability::Mutable => "MUTABLE".to_string(),
+            ImageTagMutability::UnknownVariant(UnknownImageTagMutability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImageTagMutability {
+    fn into(self) -> &'a str {
+        match self {
+            ImageTagMutability::Immutable => &"IMMUTABLE",
+            ImageTagMutability::Mutable => &"MUTABLE",
+            ImageTagMutability::UnknownVariant(UnknownImageTagMutability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ImageTagMutability {
+    fn from(name: &str) -> Self {
+        match name {
+            "IMMUTABLE" => ImageTagMutability::Immutable,
+            "MUTABLE" => ImageTagMutability::Mutable,
+            _ => ImageTagMutability::UnknownVariant(UnknownImageTagMutability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImageTagMutability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IMMUTABLE" => ImageTagMutability::Immutable,
+            "MUTABLE" => ImageTagMutability::Mutable,
+            _ => ImageTagMutability::UnknownVariant(UnknownImageTagMutability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImageTagMutability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImageTagMutability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImageTagMutability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -916,7 +1471,7 @@ pub struct Layer {
     /// <p>The availability status of the image layer.</p>
     #[serde(rename = "layerAvailability")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub layer_availability: Option<String>,
+    pub layer_availability: Option<LayerAvailability>,
     /// <p>The <code>sha256</code> digest of the image layer.</p>
     #[serde(rename = "layerDigest")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -931,6 +1486,111 @@ pub struct Layer {
     pub media_type: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLayerAvailability {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LayerAvailability {
+    Available,
+    Unavailable,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLayerAvailability),
+}
+
+impl Default for LayerAvailability {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LayerAvailability {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LayerAvailability {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LayerAvailability {
+    fn into(self) -> String {
+        match self {
+            LayerAvailability::Available => "AVAILABLE".to_string(),
+            LayerAvailability::Unavailable => "UNAVAILABLE".to_string(),
+            LayerAvailability::UnknownVariant(UnknownLayerAvailability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LayerAvailability {
+    fn into(self) -> &'a str {
+        match self {
+            LayerAvailability::Available => &"AVAILABLE",
+            LayerAvailability::Unavailable => &"UNAVAILABLE",
+            LayerAvailability::UnknownVariant(UnknownLayerAvailability { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LayerAvailability {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => LayerAvailability::Available,
+            "UNAVAILABLE" => LayerAvailability::Unavailable,
+            _ => LayerAvailability::UnknownVariant(UnknownLayerAvailability {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LayerAvailability {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => LayerAvailability::Available,
+            "UNAVAILABLE" => LayerAvailability::Unavailable,
+            _ => LayerAvailability::UnknownVariant(UnknownLayerAvailability { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerAvailability {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LayerAvailability {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LayerAvailability {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>An object representing an Amazon ECR image layer failure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -938,7 +1598,7 @@ pub struct LayerFailure {
     /// <p>The failure code associated with the failure.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<LayerFailureCode>,
     /// <p>The reason for the failure.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -949,6 +1609,111 @@ pub struct LayerFailure {
     pub layer_digest: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLayerFailureCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LayerFailureCode {
+    InvalidLayerDigest,
+    MissingLayerDigest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLayerFailureCode),
+}
+
+impl Default for LayerFailureCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LayerFailureCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LayerFailureCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LayerFailureCode {
+    fn into(self) -> String {
+        match self {
+            LayerFailureCode::InvalidLayerDigest => "InvalidLayerDigest".to_string(),
+            LayerFailureCode::MissingLayerDigest => "MissingLayerDigest".to_string(),
+            LayerFailureCode::UnknownVariant(UnknownLayerFailureCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LayerFailureCode {
+    fn into(self) -> &'a str {
+        match self {
+            LayerFailureCode::InvalidLayerDigest => &"InvalidLayerDigest",
+            LayerFailureCode::MissingLayerDigest => &"MissingLayerDigest",
+            LayerFailureCode::UnknownVariant(UnknownLayerFailureCode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for LayerFailureCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "InvalidLayerDigest" => LayerFailureCode::InvalidLayerDigest,
+            "MissingLayerDigest" => LayerFailureCode::MissingLayerDigest,
+            _ => LayerFailureCode::UnknownVariant(UnknownLayerFailureCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LayerFailureCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InvalidLayerDigest" => LayerFailureCode::InvalidLayerDigest,
+            "MissingLayerDigest" => LayerFailureCode::MissingLayerDigest,
+            _ => LayerFailureCode::UnknownVariant(UnknownLayerFailureCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LayerFailureCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LayerFailureCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LayerFailureCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The filter for the lifecycle policy preview.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -956,7 +1721,7 @@ pub struct LifecyclePolicyPreviewFilter {
     /// <p>The tag status of the image.</p>
     #[serde(rename = "tagStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag_status: Option<String>,
+    pub tag_status: Option<TagStatus>,
 }
 
 /// <p>The result of the lifecycle policy preview.</p>
@@ -985,6 +1750,127 @@ pub struct LifecyclePolicyPreviewResult {
     pub image_tags: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLifecyclePolicyPreviewStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LifecyclePolicyPreviewStatus {
+    Complete,
+    Expired,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLifecyclePolicyPreviewStatus),
+}
+
+impl Default for LifecyclePolicyPreviewStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LifecyclePolicyPreviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LifecyclePolicyPreviewStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LifecyclePolicyPreviewStatus {
+    fn into(self) -> String {
+        match self {
+            LifecyclePolicyPreviewStatus::Complete => "COMPLETE".to_string(),
+            LifecyclePolicyPreviewStatus::Expired => "EXPIRED".to_string(),
+            LifecyclePolicyPreviewStatus::Failed => "FAILED".to_string(),
+            LifecyclePolicyPreviewStatus::InProgress => "IN_PROGRESS".to_string(),
+            LifecyclePolicyPreviewStatus::UnknownVariant(UnknownLifecyclePolicyPreviewStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LifecyclePolicyPreviewStatus {
+    fn into(self) -> &'a str {
+        match self {
+            LifecyclePolicyPreviewStatus::Complete => &"COMPLETE",
+            LifecyclePolicyPreviewStatus::Expired => &"EXPIRED",
+            LifecyclePolicyPreviewStatus::Failed => &"FAILED",
+            LifecyclePolicyPreviewStatus::InProgress => &"IN_PROGRESS",
+            LifecyclePolicyPreviewStatus::UnknownVariant(UnknownLifecyclePolicyPreviewStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for LifecyclePolicyPreviewStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => LifecyclePolicyPreviewStatus::Complete,
+            "EXPIRED" => LifecyclePolicyPreviewStatus::Expired,
+            "FAILED" => LifecyclePolicyPreviewStatus::Failed,
+            "IN_PROGRESS" => LifecyclePolicyPreviewStatus::InProgress,
+            _ => {
+                LifecyclePolicyPreviewStatus::UnknownVariant(UnknownLifecyclePolicyPreviewStatus {
+                    name: name.to_owned(),
+                })
+            }
+        }
+    }
+}
+
+impl From<String> for LifecyclePolicyPreviewStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => LifecyclePolicyPreviewStatus::Complete,
+            "EXPIRED" => LifecyclePolicyPreviewStatus::Expired,
+            "FAILED" => LifecyclePolicyPreviewStatus::Failed,
+            "IN_PROGRESS" => LifecyclePolicyPreviewStatus::InProgress,
+            _ => {
+                LifecyclePolicyPreviewStatus::UnknownVariant(UnknownLifecyclePolicyPreviewStatus {
+                    name,
+                })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifecyclePolicyPreviewStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LifecyclePolicyPreviewStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LifecyclePolicyPreviewStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The summary of the lifecycle policy preview request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1002,7 +1888,7 @@ pub struct LifecyclePolicyRuleAction {
     /// <p>The type of action to be taken.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ImageActionType>,
 }
 
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
@@ -1012,7 +1898,7 @@ pub struct ListImagesFilter {
     /// <p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tag_status: Option<String>,
+    pub tag_status: Option<TagStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1142,7 +2028,7 @@ pub struct PutImageScanningConfigurationResponse {
 pub struct PutImageTagMutabilityRequest {
     /// <p>The tag mutability setting for the repository. If <code>MUTABLE</code> is specified, image tags can be overwritten. If <code>IMMUTABLE</code> is specified, all image tags within the repository will be immutable which will prevent them from being overwritten.</p>
     #[serde(rename = "imageTagMutability")]
-    pub image_tag_mutability: String,
+    pub image_tag_mutability: ImageTagMutability,
     /// <p>The AWS account ID associated with the registry that contains the repository in which to update the image tag mutability settings. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1158,7 +2044,7 @@ pub struct PutImageTagMutabilityResponse {
     /// <p>The image tag mutability setting for the repository.</p>
     #[serde(rename = "imageTagMutability")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
+    pub image_tag_mutability: Option<ImageTagMutability>,
     /// <p>The registry ID associated with the request.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1284,7 +2170,7 @@ pub struct Repository {
     /// <p>The tag mutability setting for the repository.</p>
     #[serde(rename = "imageTagMutability")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub image_tag_mutability: Option<String>,
+    pub image_tag_mutability: Option<ImageTagMutability>,
     /// <p>The AWS account ID associated with the registry that contains the repository.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1301,6 +2187,112 @@ pub struct Repository {
     #[serde(rename = "repositoryUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_uri: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScanStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScanStatus {
+    Complete,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScanStatus),
+}
+
+impl Default for ScanStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScanStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScanStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScanStatus {
+    fn into(self) -> String {
+        match self {
+            ScanStatus::Complete => "COMPLETE".to_string(),
+            ScanStatus::Failed => "FAILED".to_string(),
+            ScanStatus::InProgress => "IN_PROGRESS".to_string(),
+            ScanStatus::UnknownVariant(UnknownScanStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScanStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ScanStatus::Complete => &"COMPLETE",
+            ScanStatus::Failed => &"FAILED",
+            ScanStatus::InProgress => &"IN_PROGRESS",
+            ScanStatus::UnknownVariant(UnknownScanStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScanStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ScanStatus::Complete,
+            "FAILED" => ScanStatus::Failed,
+            "IN_PROGRESS" => ScanStatus::InProgress,
+            _ => ScanStatus::UnknownVariant(UnknownScanStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScanStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ScanStatus::Complete,
+            "FAILED" => ScanStatus::Failed,
+            "IN_PROGRESS" => ScanStatus::InProgress,
+            _ => ScanStatus::UnknownVariant(UnknownScanStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScanStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ScanStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScanStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1407,7 +2399,7 @@ pub struct StartLifecyclePolicyPreviewResponse {
     /// <p>The status of the lifecycle policy preview request.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<LifecyclePolicyPreviewStatus>,
 }
 
 /// <p>The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
@@ -1437,6 +2429,112 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTagStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TagStatus {
+    Any,
+    Tagged,
+    Untagged,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTagStatus),
+}
+
+impl Default for TagStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TagStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TagStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TagStatus {
+    fn into(self) -> String {
+        match self {
+            TagStatus::Any => "ANY".to_string(),
+            TagStatus::Tagged => "TAGGED".to_string(),
+            TagStatus::Untagged => "UNTAGGED".to_string(),
+            TagStatus::UnknownVariant(UnknownTagStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TagStatus {
+    fn into(self) -> &'a str {
+        match self {
+            TagStatus::Any => &"ANY",
+            TagStatus::Tagged => &"TAGGED",
+            TagStatus::Untagged => &"UNTAGGED",
+            TagStatus::UnknownVariant(UnknownTagStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for TagStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ANY" => TagStatus::Any,
+            "TAGGED" => TagStatus::Tagged,
+            "UNTAGGED" => TagStatus::Untagged,
+            _ => TagStatus::UnknownVariant(UnknownTagStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TagStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ANY" => TagStatus::Any,
+            "TAGGED" => TagStatus::Tagged,
+            "UNTAGGED" => TagStatus::Untagged,
+            _ => TagStatus::UnknownVariant(UnknownTagStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TagStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TagStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for TagStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]

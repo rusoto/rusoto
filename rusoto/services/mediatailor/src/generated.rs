@@ -40,7 +40,7 @@ pub struct AvailSuppression {
     /// <p>Sets the mode for avail suppression, also known as ad suppression. By default, ad suppression is off and all ad breaks are filled by MediaTailor with ads or slate.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<String>,
+    pub mode: Option<Mode>,
     /// <p>The avail suppression value is a live edge offset time in HH:MM:SS. MediaTailor won&#39;t fill ad breaks on or behind this time in the manifest lookback window. </p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -88,7 +88,7 @@ pub struct DashConfiguration {
     /// <p>The setting that controls whether MediaTailor handles manifests from the origin server as multi-period manifests or single-period manifests. If your origin server produces single-period manifests, set this to SINGLE_PERIOD. The default setting is MULTI_PERIOD. For multi-period manifests, omit this setting or set it to MULTI_PERIOD. </p>
     #[serde(rename = "OriginManifestType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_manifest_type: Option<String>,
+    pub origin_manifest_type: Option<OriginManifestType>,
 }
 
 /// <p>The configuration for DASH PUT operations. </p>
@@ -102,7 +102,7 @@ pub struct DashConfigurationForPut {
     /// <p>The setting that controls whether MediaTailor handles manifests from the origin server as multi-period manifests or single-period manifests. If your origin server produces single-period manifests, set this to SINGLE_PERIOD. The default setting is MULTI_PERIOD. For multi-period manifests, omit this setting or set it to MULTI_PERIOD. </p>
     #[serde(rename = "OriginManifestType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_manifest_type: Option<String>,
+    pub origin_manifest_type: Option<OriginManifestType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -275,6 +275,210 @@ pub struct ManifestProcessingRules {
     #[serde(rename = "AdMarkerPassthrough")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_marker_passthrough: Option<AdMarkerPassthrough>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Mode {
+    BehindLiveEdge,
+    Off,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMode),
+}
+
+impl Default for Mode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Mode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Mode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Mode {
+    fn into(self) -> String {
+        match self {
+            Mode::BehindLiveEdge => "BEHIND_LIVE_EDGE".to_string(),
+            Mode::Off => "OFF".to_string(),
+            Mode::UnknownVariant(UnknownMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Mode {
+    fn into(self) -> &'a str {
+        match self {
+            Mode::BehindLiveEdge => &"BEHIND_LIVE_EDGE",
+            Mode::Off => &"OFF",
+            Mode::UnknownVariant(UnknownMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Mode {
+    fn from(name: &str) -> Self {
+        match name {
+            "BEHIND_LIVE_EDGE" => Mode::BehindLiveEdge,
+            "OFF" => Mode::Off,
+            _ => Mode::UnknownVariant(UnknownMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Mode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BEHIND_LIVE_EDGE" => Mode::BehindLiveEdge,
+            "OFF" => Mode::Off,
+            _ => Mode::UnknownVariant(UnknownMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Mode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Mode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Mode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOriginManifestType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OriginManifestType {
+    MultiPeriod,
+    SinglePeriod,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOriginManifestType),
+}
+
+impl Default for OriginManifestType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OriginManifestType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OriginManifestType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OriginManifestType {
+    fn into(self) -> String {
+        match self {
+            OriginManifestType::MultiPeriod => "MULTI_PERIOD".to_string(),
+            OriginManifestType::SinglePeriod => "SINGLE_PERIOD".to_string(),
+            OriginManifestType::UnknownVariant(UnknownOriginManifestType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OriginManifestType {
+    fn into(self) -> &'a str {
+        match self {
+            OriginManifestType::MultiPeriod => &"MULTI_PERIOD",
+            OriginManifestType::SinglePeriod => &"SINGLE_PERIOD",
+            OriginManifestType::UnknownVariant(UnknownOriginManifestType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OriginManifestType {
+    fn from(name: &str) -> Self {
+        match name {
+            "MULTI_PERIOD" => OriginManifestType::MultiPeriod,
+            "SINGLE_PERIOD" => OriginManifestType::SinglePeriod,
+            _ => OriginManifestType::UnknownVariant(UnknownOriginManifestType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OriginManifestType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "MULTI_PERIOD" => OriginManifestType::MultiPeriod,
+            "SINGLE_PERIOD" => OriginManifestType::SinglePeriod,
+            _ => OriginManifestType::UnknownVariant(UnknownOriginManifestType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OriginManifestType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OriginManifestType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OriginManifestType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The AWSMediaTailor configuration.</p>

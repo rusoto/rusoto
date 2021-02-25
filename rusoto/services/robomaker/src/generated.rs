@@ -25,6 +25,112 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownArchitecture {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Architecture {
+    Arm64,
+    Armhf,
+    X8664,
+    #[doc(hidden)]
+    UnknownVariant(UnknownArchitecture),
+}
+
+impl Default for Architecture {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Architecture {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Architecture {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Architecture {
+    fn into(self) -> String {
+        match self {
+            Architecture::Arm64 => "ARM64".to_string(),
+            Architecture::Armhf => "ARMHF".to_string(),
+            Architecture::X8664 => "X86_64".to_string(),
+            Architecture::UnknownVariant(UnknownArchitecture { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Architecture {
+    fn into(self) -> &'a str {
+        match self {
+            Architecture::Arm64 => &"ARM64",
+            Architecture::Armhf => &"ARMHF",
+            Architecture::X8664 => &"X86_64",
+            Architecture::UnknownVariant(UnknownArchitecture { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Architecture {
+    fn from(name: &str) -> Self {
+        match name {
+            "ARM64" => Architecture::Arm64,
+            "ARMHF" => Architecture::Armhf,
+            "X86_64" => Architecture::X8664,
+            _ => Architecture::UnknownVariant(UnknownArchitecture {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Architecture {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ARM64" => Architecture::Arm64,
+            "ARMHF" => Architecture::Armhf,
+            "X86_64" => Architecture::X8664,
+            _ => Architecture::UnknownVariant(UnknownArchitecture { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Architecture {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Architecture {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Architecture {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteWorldsRequest {
@@ -199,7 +305,7 @@ pub struct CreateDeploymentJobResponse {
     /// <p><p>The failure code of the simulation job if it failed:</p> <dl> <dt>BadPermissionError</dt> <dd> <p>AWS Greengrass requires a service-level role permission to access other services. The role must include the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSGreengrassResourceAccessRolePolicy$jsonEditor"> <code>AWSGreengrassResourceAccessRolePolicy</code> managed policy</a>. </p> </dd> <dt>ExtractingBundleFailure</dt> <dd> <p>The robot application could not be extracted from the bundle.</p> </dd> <dt>FailureThresholdBreached</dt> <dd> <p>The percentage of robots that could not be updated exceeded the percentage set for the deployment.</p> </dd> <dt>GreengrassDeploymentFailed</dt> <dd> <p>The robot application could not be deployed to the robot.</p> </dd> <dt>GreengrassGroupVersionDoesNotExist</dt> <dd> <p>The AWS Greengrass group or version associated with a robot is missing.</p> </dd> <dt>InternalServerError</dt> <dd> <p>An internal error has occurred. Retry your request, but if the problem persists, contact us with details.</p> </dd> <dt>MissingRobotApplicationArchitecture</dt> <dd> <p>The robot application does not have a source that matches the architecture of the robot.</p> </dd> <dt>MissingRobotDeploymentResource</dt> <dd> <p>One or more of the resources specified for the robot application are missing. For example, does the robot application have the correct launch package and launch file?</p> </dd> <dt>PostLaunchFileFailure</dt> <dd> <p>The post-launch script failed.</p> </dd> <dt>PreLaunchFileFailure</dt> <dd> <p>The pre-launch script failed.</p> </dd> <dt>ResourceNotFound</dt> <dd> <p>One or more deployment resources are missing. For example, do robot application source bundles still exist? </p> </dd> <dt>RobotDeploymentNoResponse</dt> <dd> <p>There is no response from the robot. It might not be powered on or connected to the internet.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<DeploymentJobErrorCode>,
     /// <p>The failure reason of the deployment job if it failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,7 +317,7 @@ pub struct CreateDeploymentJobResponse {
     /// <p>The status of the deployment job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
     /// <p>The list of all tags added to the deployment job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -356,7 +462,7 @@ pub struct CreateRobotApplicationVersionResponse {
 pub struct CreateRobotRequest {
     /// <p>The target architecture of the robot.</p>
     #[serde(rename = "architecture")]
-    pub architecture: String,
+    pub architecture: Architecture,
     /// <p>The Greengrass group id.</p>
     #[serde(rename = "greengrassGroupId")]
     pub greengrass_group_id: String,
@@ -375,7 +481,7 @@ pub struct CreateRobotResponse {
     /// <p>The target architecture of the robot.</p>
     #[serde(rename = "architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>The Amazon Resource Name (ARN) of the robot.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -539,7 +645,7 @@ pub struct CreateSimulationJobRequest {
     /// <p><p>The failure behavior the simulation job.</p> <dl> <dt>Continue</dt> <dd> <p>Restart the simulation job in the same host instance.</p> </dd> <dt>Fail</dt> <dd> <p>Stop the simulation job and terminate the instance.</p> </dd> </dl></p>
     #[serde(rename = "failureBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_behavior: Option<String>,
+    pub failure_behavior: Option<FailureBehavior>,
     /// <p>The IAM role name that allows the simulation instance to call the AWS APIs that are specified in its associated policies on your behalf. This is how credentials are passed in to your simulation job. </p>
     #[serde(rename = "iamRole")]
     pub iam_role: String,
@@ -594,11 +700,11 @@ pub struct CreateSimulationJobResponse {
     /// <p>the failure behavior for the simulation job.</p>
     #[serde(rename = "failureBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_behavior: Option<String>,
+    pub failure_behavior: Option<FailureBehavior>,
     /// <p><p>The failure code of the simulation job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>RobotApplicationCrash</dt> <dd> <p>Robot application exited abnormally.</p> </dd> <dt>SimulationApplicationCrash</dt> <dd> <p> Simulation application exited abnormally.</p> </dd> <dt>BadPermissionsRobotApplication</dt> <dd> <p>Robot application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsSimulationApplication</dt> <dd> <p>Simulation application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsS3Output</dt> <dd> <p>Unable to publish outputs to customer-provided S3 bucket.</p> </dd> <dt>BadPermissionsCloudwatchLogs</dt> <dd> <p>Unable to publish logs to customer-provided CloudWatch Logs resource.</p> </dd> <dt>SubnetIpLimitExceeded</dt> <dd> <p>Subnet IP limit exceeded.</p> </dd> <dt>ENILimitExceeded</dt> <dd> <p>ENI limit exceeded.</p> </dd> <dt>BadPermissionsUserCredentials</dt> <dd> <p>Unable to use the Role provided.</p> </dd> <dt>InvalidBundleRobotApplication</dt> <dd> <p>Robot bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>InvalidBundleSimulationApplication</dt> <dd> <p>Simulation bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>RobotApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for RobotApplication does not match value during version creation.</p> </dd> <dt>SimulationApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for SimulationApplication does not match value during version creation.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobErrorCode>,
     /// <p>The IAM role that allows the simulation job to call the AWS APIs that are specified in its associated policies on your behalf.</p>
     #[serde(rename = "iamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -638,7 +744,7 @@ pub struct CreateSimulationJobResponse {
     /// <p>The status of the simulation job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobStatus>,
     /// <p>The list of all tags added to the simulation job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -688,7 +794,7 @@ pub struct CreateWorldExportJobResponse {
     /// <p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> <dt>AllWorldGenerationFailed</dt> <dd> <p>All of the worlds in the world generation job failed. This can happen if your <code>worldCount</code> is greater than 50 or less than 1. </p> </dd> </dl> <p>For more information about troubleshooting WorldForge, see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/troubleshooting-worldforge.html">Troubleshooting Simulation WorldForge</a>. </p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<WorldExportJobErrorCode>,
     /// <p>The IAM role that the world export process uses to access the Amazon S3 bucket and put the export. </p>
     #[serde(rename = "iamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -699,7 +805,7 @@ pub struct CreateWorldExportJobResponse {
     /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldExportJobStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the world export job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -747,11 +853,11 @@ pub struct CreateWorldGenerationJobResponse {
     /// <p><p>The failure code of the world generator job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<WorldGenerationJobErrorCode>,
     /// <p><p>The status of the world generator job.</p> <dl> <dt>Pending</dt> <dd> <p>The world generator job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generator job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generator job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generator job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generator job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generator job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldGenerationJobStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the world generator job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -978,7 +1084,7 @@ pub struct DeploymentJob {
     /// <p>The deployment job failure code.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<DeploymentJobErrorCode>,
     /// <p>A short description of the reason why the deployment job failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -990,7 +1096,240 @@ pub struct DeploymentJob {
     /// <p>The status of the deployment job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentJobErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentJobErrorCode {
+    BadPermissionError,
+    DownloadConditionFailed,
+    EnvironmentSetupError,
+    EtagMismatch,
+    ExtractingBundleFailure,
+    FailureThresholdBreached,
+    GreengrassDeploymentFailed,
+    GreengrassGroupVersionDoesNotExist,
+    InternalServerError,
+    InvalidGreengrassGroup,
+    LambdaDeleted,
+    MissingRobotApplicationArchitecture,
+    MissingRobotArchitecture,
+    MissingRobotDeploymentResource,
+    PostLaunchFileFailure,
+    PreLaunchFileFailure,
+    ResourceNotFound,
+    RobotAgentConnectionTimeout,
+    RobotDeploymentAborted,
+    RobotDeploymentNoResponse,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentJobErrorCode),
+}
+
+impl Default for DeploymentJobErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentJobErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentJobErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentJobErrorCode {
+    fn into(self) -> String {
+        match self {
+            DeploymentJobErrorCode::BadPermissionError => "BadPermissionError".to_string(),
+            DeploymentJobErrorCode::DownloadConditionFailed => {
+                "DownloadConditionFailed".to_string()
+            }
+            DeploymentJobErrorCode::EnvironmentSetupError => "EnvironmentSetupError".to_string(),
+            DeploymentJobErrorCode::EtagMismatch => "EtagMismatch".to_string(),
+            DeploymentJobErrorCode::ExtractingBundleFailure => {
+                "ExtractingBundleFailure".to_string()
+            }
+            DeploymentJobErrorCode::FailureThresholdBreached => {
+                "FailureThresholdBreached".to_string()
+            }
+            DeploymentJobErrorCode::GreengrassDeploymentFailed => {
+                "GreengrassDeploymentFailed".to_string()
+            }
+            DeploymentJobErrorCode::GreengrassGroupVersionDoesNotExist => {
+                "GreengrassGroupVersionDoesNotExist".to_string()
+            }
+            DeploymentJobErrorCode::InternalServerError => "InternalServerError".to_string(),
+            DeploymentJobErrorCode::InvalidGreengrassGroup => "InvalidGreengrassGroup".to_string(),
+            DeploymentJobErrorCode::LambdaDeleted => "LambdaDeleted".to_string(),
+            DeploymentJobErrorCode::MissingRobotApplicationArchitecture => {
+                "MissingRobotApplicationArchitecture".to_string()
+            }
+            DeploymentJobErrorCode::MissingRobotArchitecture => {
+                "MissingRobotArchitecture".to_string()
+            }
+            DeploymentJobErrorCode::MissingRobotDeploymentResource => {
+                "MissingRobotDeploymentResource".to_string()
+            }
+            DeploymentJobErrorCode::PostLaunchFileFailure => "PostLaunchFileFailure".to_string(),
+            DeploymentJobErrorCode::PreLaunchFileFailure => "PreLaunchFileFailure".to_string(),
+            DeploymentJobErrorCode::ResourceNotFound => "ResourceNotFound".to_string(),
+            DeploymentJobErrorCode::RobotAgentConnectionTimeout => {
+                "RobotAgentConnectionTimeout".to_string()
+            }
+            DeploymentJobErrorCode::RobotDeploymentAborted => "RobotDeploymentAborted".to_string(),
+            DeploymentJobErrorCode::RobotDeploymentNoResponse => {
+                "RobotDeploymentNoResponse".to_string()
+            }
+            DeploymentJobErrorCode::UnknownVariant(UnknownDeploymentJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentJobErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentJobErrorCode::BadPermissionError => &"BadPermissionError",
+            DeploymentJobErrorCode::DownloadConditionFailed => &"DownloadConditionFailed",
+            DeploymentJobErrorCode::EnvironmentSetupError => &"EnvironmentSetupError",
+            DeploymentJobErrorCode::EtagMismatch => &"EtagMismatch",
+            DeploymentJobErrorCode::ExtractingBundleFailure => &"ExtractingBundleFailure",
+            DeploymentJobErrorCode::FailureThresholdBreached => &"FailureThresholdBreached",
+            DeploymentJobErrorCode::GreengrassDeploymentFailed => &"GreengrassDeploymentFailed",
+            DeploymentJobErrorCode::GreengrassGroupVersionDoesNotExist => {
+                &"GreengrassGroupVersionDoesNotExist"
+            }
+            DeploymentJobErrorCode::InternalServerError => &"InternalServerError",
+            DeploymentJobErrorCode::InvalidGreengrassGroup => &"InvalidGreengrassGroup",
+            DeploymentJobErrorCode::LambdaDeleted => &"LambdaDeleted",
+            DeploymentJobErrorCode::MissingRobotApplicationArchitecture => {
+                &"MissingRobotApplicationArchitecture"
+            }
+            DeploymentJobErrorCode::MissingRobotArchitecture => &"MissingRobotArchitecture",
+            DeploymentJobErrorCode::MissingRobotDeploymentResource => {
+                &"MissingRobotDeploymentResource"
+            }
+            DeploymentJobErrorCode::PostLaunchFileFailure => &"PostLaunchFileFailure",
+            DeploymentJobErrorCode::PreLaunchFileFailure => &"PreLaunchFileFailure",
+            DeploymentJobErrorCode::ResourceNotFound => &"ResourceNotFound",
+            DeploymentJobErrorCode::RobotAgentConnectionTimeout => &"RobotAgentConnectionTimeout",
+            DeploymentJobErrorCode::RobotDeploymentAborted => &"RobotDeploymentAborted",
+            DeploymentJobErrorCode::RobotDeploymentNoResponse => &"RobotDeploymentNoResponse",
+            DeploymentJobErrorCode::UnknownVariant(UnknownDeploymentJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentJobErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "BadPermissionError" => DeploymentJobErrorCode::BadPermissionError,
+            "DownloadConditionFailed" => DeploymentJobErrorCode::DownloadConditionFailed,
+            "EnvironmentSetupError" => DeploymentJobErrorCode::EnvironmentSetupError,
+            "EtagMismatch" => DeploymentJobErrorCode::EtagMismatch,
+            "ExtractingBundleFailure" => DeploymentJobErrorCode::ExtractingBundleFailure,
+            "FailureThresholdBreached" => DeploymentJobErrorCode::FailureThresholdBreached,
+            "GreengrassDeploymentFailed" => DeploymentJobErrorCode::GreengrassDeploymentFailed,
+            "GreengrassGroupVersionDoesNotExist" => {
+                DeploymentJobErrorCode::GreengrassGroupVersionDoesNotExist
+            }
+            "InternalServerError" => DeploymentJobErrorCode::InternalServerError,
+            "InvalidGreengrassGroup" => DeploymentJobErrorCode::InvalidGreengrassGroup,
+            "LambdaDeleted" => DeploymentJobErrorCode::LambdaDeleted,
+            "MissingRobotApplicationArchitecture" => {
+                DeploymentJobErrorCode::MissingRobotApplicationArchitecture
+            }
+            "MissingRobotArchitecture" => DeploymentJobErrorCode::MissingRobotArchitecture,
+            "MissingRobotDeploymentResource" => {
+                DeploymentJobErrorCode::MissingRobotDeploymentResource
+            }
+            "PostLaunchFileFailure" => DeploymentJobErrorCode::PostLaunchFileFailure,
+            "PreLaunchFileFailure" => DeploymentJobErrorCode::PreLaunchFileFailure,
+            "ResourceNotFound" => DeploymentJobErrorCode::ResourceNotFound,
+            "RobotAgentConnectionTimeout" => DeploymentJobErrorCode::RobotAgentConnectionTimeout,
+            "RobotDeploymentAborted" => DeploymentJobErrorCode::RobotDeploymentAborted,
+            "RobotDeploymentNoResponse" => DeploymentJobErrorCode::RobotDeploymentNoResponse,
+            _ => DeploymentJobErrorCode::UnknownVariant(UnknownDeploymentJobErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentJobErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BadPermissionError" => DeploymentJobErrorCode::BadPermissionError,
+            "DownloadConditionFailed" => DeploymentJobErrorCode::DownloadConditionFailed,
+            "EnvironmentSetupError" => DeploymentJobErrorCode::EnvironmentSetupError,
+            "EtagMismatch" => DeploymentJobErrorCode::EtagMismatch,
+            "ExtractingBundleFailure" => DeploymentJobErrorCode::ExtractingBundleFailure,
+            "FailureThresholdBreached" => DeploymentJobErrorCode::FailureThresholdBreached,
+            "GreengrassDeploymentFailed" => DeploymentJobErrorCode::GreengrassDeploymentFailed,
+            "GreengrassGroupVersionDoesNotExist" => {
+                DeploymentJobErrorCode::GreengrassGroupVersionDoesNotExist
+            }
+            "InternalServerError" => DeploymentJobErrorCode::InternalServerError,
+            "InvalidGreengrassGroup" => DeploymentJobErrorCode::InvalidGreengrassGroup,
+            "LambdaDeleted" => DeploymentJobErrorCode::LambdaDeleted,
+            "MissingRobotApplicationArchitecture" => {
+                DeploymentJobErrorCode::MissingRobotApplicationArchitecture
+            }
+            "MissingRobotArchitecture" => DeploymentJobErrorCode::MissingRobotArchitecture,
+            "MissingRobotDeploymentResource" => {
+                DeploymentJobErrorCode::MissingRobotDeploymentResource
+            }
+            "PostLaunchFileFailure" => DeploymentJobErrorCode::PostLaunchFileFailure,
+            "PreLaunchFileFailure" => DeploymentJobErrorCode::PreLaunchFileFailure,
+            "ResourceNotFound" => DeploymentJobErrorCode::ResourceNotFound,
+            "RobotAgentConnectionTimeout" => DeploymentJobErrorCode::RobotAgentConnectionTimeout,
+            "RobotDeploymentAborted" => DeploymentJobErrorCode::RobotDeploymentAborted,
+            "RobotDeploymentNoResponse" => DeploymentJobErrorCode::RobotDeploymentNoResponse,
+            _ => DeploymentJobErrorCode::UnknownVariant(UnknownDeploymentJobErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentJobErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentJobErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentJobErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Configuration information for a deployment launch.</p>
@@ -1014,6 +1353,131 @@ pub struct DeploymentLaunchConfig {
     #[serde(rename = "preLaunchFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_launch_file: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentStatus {
+    Canceled,
+    Failed,
+    InProgress,
+    Pending,
+    Preparing,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentStatus),
+}
+
+impl Default for DeploymentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentStatus {
+    fn into(self) -> String {
+        match self {
+            DeploymentStatus::Canceled => "Canceled".to_string(),
+            DeploymentStatus::Failed => "Failed".to_string(),
+            DeploymentStatus::InProgress => "InProgress".to_string(),
+            DeploymentStatus::Pending => "Pending".to_string(),
+            DeploymentStatus::Preparing => "Preparing".to_string(),
+            DeploymentStatus::Succeeded => "Succeeded".to_string(),
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentStatus::Canceled => &"Canceled",
+            DeploymentStatus::Failed => &"Failed",
+            DeploymentStatus::InProgress => &"InProgress",
+            DeploymentStatus::Pending => &"Pending",
+            DeploymentStatus::Preparing => &"Preparing",
+            DeploymentStatus::Succeeded => &"Succeeded",
+            DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeploymentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Canceled" => DeploymentStatus::Canceled,
+            "Failed" => DeploymentStatus::Failed,
+            "InProgress" => DeploymentStatus::InProgress,
+            "Pending" => DeploymentStatus::Pending,
+            "Preparing" => DeploymentStatus::Preparing,
+            "Succeeded" => DeploymentStatus::Succeeded,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Canceled" => DeploymentStatus::Canceled,
+            "Failed" => DeploymentStatus::Failed,
+            "InProgress" => DeploymentStatus::InProgress,
+            "Pending" => DeploymentStatus::Pending,
+            "Preparing" => DeploymentStatus::Preparing,
+            "Succeeded" => DeploymentStatus::Succeeded,
+            _ => DeploymentStatus::UnknownVariant(UnknownDeploymentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeploymentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1070,7 +1534,7 @@ pub struct DescribeDeploymentJobResponse {
     /// <p>The deployment job failure code.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<DeploymentJobErrorCode>,
     /// <p>A short description of the reason why the deployment job failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1086,7 +1550,7 @@ pub struct DescribeDeploymentJobResponse {
     /// <p>The status of the deployment job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
     /// <p>The list of all tags added to the specified deployment job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1119,7 +1583,7 @@ pub struct DescribeFleetResponse {
     /// <p>The status of the last deployment.</p>
     #[serde(rename = "lastDeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_deployment_status: Option<String>,
+    pub last_deployment_status: Option<DeploymentStatus>,
     /// <p>The time of the last deployment.</p>
     #[serde(rename = "lastDeploymentTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1201,7 +1665,7 @@ pub struct DescribeRobotResponse {
     /// <p>The target architecture of the robot application.</p>
     #[serde(rename = "architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>The Amazon Resource Name (ARN) of the robot.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1233,7 +1697,7 @@ pub struct DescribeRobotResponse {
     /// <p>The status of the fleet.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RobotStatus>,
     /// <p>The list of all tags added to the specified robot.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1335,7 +1799,7 @@ pub struct DescribeSimulationJobBatchResponse {
     /// <p>The failure code of the simulation job batch.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobBatchErrorCode>,
     /// <p>The reason the simulation job batch failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1351,7 +1815,7 @@ pub struct DescribeSimulationJobBatchResponse {
     /// <p><p>The status of the batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobBatchStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the simulation job batch.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1388,11 +1852,11 @@ pub struct DescribeSimulationJobResponse {
     /// <p>The failure behavior for the simulation job.</p>
     #[serde(rename = "failureBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_behavior: Option<String>,
+    pub failure_behavior: Option<FailureBehavior>,
     /// <p><p>The failure code of the simulation job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>RobotApplicationCrash</dt> <dd> <p>Robot application exited abnormally.</p> </dd> <dt>SimulationApplicationCrash</dt> <dd> <p> Simulation application exited abnormally.</p> </dd> <dt>BadPermissionsRobotApplication</dt> <dd> <p>Robot application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsSimulationApplication</dt> <dd> <p>Simulation application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsS3Output</dt> <dd> <p>Unable to publish outputs to customer-provided S3 bucket.</p> </dd> <dt>BadPermissionsCloudwatchLogs</dt> <dd> <p>Unable to publish logs to customer-provided CloudWatch Logs resource.</p> </dd> <dt>SubnetIpLimitExceeded</dt> <dd> <p>Subnet IP limit exceeded.</p> </dd> <dt>ENILimitExceeded</dt> <dd> <p>ENI limit exceeded.</p> </dd> <dt>BadPermissionsUserCredentials</dt> <dd> <p>Unable to use the Role provided.</p> </dd> <dt>InvalidBundleRobotApplication</dt> <dd> <p>Robot bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>InvalidBundleSimulationApplication</dt> <dd> <p>Simulation bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>RobotApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for RobotApplication does not match value during version creation.</p> </dd> <dt>SimulationApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for SimulationApplication does not match value during version creation.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobErrorCode>,
     /// <p>Details about why the simulation job failed. For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/troubleshooting.html">Troubleshooting</a>.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1444,7 +1908,7 @@ pub struct DescribeSimulationJobResponse {
     /// <p>The status of the simulation job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobStatus>,
     /// <p>The list of all tags added to the specified simulation job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1481,7 +1945,7 @@ pub struct DescribeWorldExportJobResponse {
     /// <p><p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<WorldExportJobErrorCode>,
     /// <p>The reason why the world export job failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1496,7 +1960,7 @@ pub struct DescribeWorldExportJobResponse {
     /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> and <code>failureReason</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldExportJobStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the world export job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1533,7 +1997,7 @@ pub struct DescribeWorldGenerationJobResponse {
     /// <p><p>The failure code of the world generation job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<WorldGenerationJobErrorCode>,
     /// <p>The reason why the world generation job failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1545,7 +2009,7 @@ pub struct DescribeWorldGenerationJobResponse {
     /// <p><p>The status of the world generation job:</p> <dl> <dt>Pending</dt> <dd> <p>The world generation job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generation job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generation job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generation job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generation job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generation job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldGenerationJobStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the world generation job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1645,7 +2109,7 @@ pub struct FailedCreateSimulationJobRequest {
     /// <p>The failure code.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobErrorCode>,
     /// <p>The failure reason of the simulation job request.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1654,6 +2118,106 @@ pub struct FailedCreateSimulationJobRequest {
     #[serde(rename = "request")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request: Option<SimulationJobRequest>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFailureBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FailureBehavior {
+    Continue,
+    Fail,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFailureBehavior),
+}
+
+impl Default for FailureBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FailureBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FailureBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FailureBehavior {
+    fn into(self) -> String {
+        match self {
+            FailureBehavior::Continue => "Continue".to_string(),
+            FailureBehavior::Fail => "Fail".to_string(),
+            FailureBehavior::UnknownVariant(UnknownFailureBehavior { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FailureBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            FailureBehavior::Continue => &"Continue",
+            FailureBehavior::Fail => &"Fail",
+            FailureBehavior::UnknownVariant(UnknownFailureBehavior { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FailureBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "Continue" => FailureBehavior::Continue,
+            "Fail" => FailureBehavior::Fail,
+            _ => FailureBehavior::UnknownVariant(UnknownFailureBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FailureBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Continue" => FailureBehavior::Continue,
+            "Fail" => FailureBehavior::Fail,
+            _ => FailureBehavior::UnknownVariant(UnknownFailureBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FailureBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FailureBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FailureBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about worlds that failed.</p>
@@ -1721,7 +2285,7 @@ pub struct Fleet {
     /// <p>The status of the last fleet deployment.</p>
     #[serde(rename = "lastDeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub last_deployment_status: Option<String>,
+    pub last_deployment_status: Option<DeploymentStatus>,
     /// <p>The time of the last deployment.</p>
     #[serde(rename = "lastDeploymentTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2195,7 +2759,7 @@ pub struct ProgressDetail {
     /// <p><p>The current progress status.</p> <dl> <dt>Validating</dt> <dd> <p>Validating the deployment.</p> </dd> <dt>DownloadingExtracting</dt> <dd> <p>Downloading and extracting the bundle on the robot.</p> </dd> <dt>ExecutingPreLaunch</dt> <dd> <p>Executing pre-launch script(s) if provided.</p> </dd> <dt>Launching</dt> <dd> <p>Launching the robot application.</p> </dd> <dt>ExecutingPostLaunch</dt> <dd> <p>Executing post-launch script(s) if provided.</p> </dd> <dt>Finished</dt> <dd> <p>Deployment is complete.</p> </dd> </dl></p>
     #[serde(rename = "currentProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub current_progress: Option<String>,
+    pub current_progress: Option<RobotDeploymentStep>,
     /// <p>Estimated amount of time in seconds remaining in the step. This currently only applies to the <code>Downloading/Extracting</code> step of the deployment. It is empty for other steps.</p>
     #[serde(rename = "estimatedTimeRemainingSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2240,11 +2804,110 @@ pub struct RenderingEngine {
     /// <p>The name of the rendering engine.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<RenderingEngineType>,
     /// <p>The version of the rendering engine.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRenderingEngineType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RenderingEngineType {
+    Ogre,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRenderingEngineType),
+}
+
+impl Default for RenderingEngineType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RenderingEngineType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RenderingEngineType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RenderingEngineType {
+    fn into(self) -> String {
+        match self {
+            RenderingEngineType::Ogre => "OGRE".to_string(),
+            RenderingEngineType::UnknownVariant(UnknownRenderingEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RenderingEngineType {
+    fn into(self) -> &'a str {
+        match self {
+            RenderingEngineType::Ogre => &"OGRE",
+            RenderingEngineType::UnknownVariant(UnknownRenderingEngineType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RenderingEngineType {
+    fn from(name: &str) -> Self {
+        match name {
+            "OGRE" => RenderingEngineType::Ogre,
+            _ => RenderingEngineType::UnknownVariant(UnknownRenderingEngineType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RenderingEngineType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OGRE" => RenderingEngineType::Ogre,
+            _ => RenderingEngineType::UnknownVariant(UnknownRenderingEngineType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RenderingEngineType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RenderingEngineType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RenderingEngineType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2266,7 +2929,7 @@ pub struct Robot {
     /// <p>The architecture of the robot.</p>
     #[serde(rename = "architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>The Amazon Resource Name (ARN) of the robot.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2298,7 +2961,7 @@ pub struct Robot {
     /// <p>The status of the robot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RobotStatus>,
 }
 
 /// <p>Application configuration information for a robot.</p>
@@ -2361,7 +3024,7 @@ pub struct RobotDeployment {
     /// <p>The robot deployment failure code.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<DeploymentJobErrorCode>,
     /// <p>A short description of the reason why the robot deployment failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2373,7 +3036,139 @@ pub struct RobotDeployment {
     /// <p>The status of the robot deployment.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<RobotStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRobotDeploymentStep {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RobotDeploymentStep {
+    DownloadingExtracting,
+    ExecutingDownloadCondition,
+    ExecutingPostLaunch,
+    ExecutingPreLaunch,
+    Finished,
+    Launching,
+    Validating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRobotDeploymentStep),
+}
+
+impl Default for RobotDeploymentStep {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RobotDeploymentStep {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RobotDeploymentStep {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RobotDeploymentStep {
+    fn into(self) -> String {
+        match self {
+            RobotDeploymentStep::DownloadingExtracting => "DownloadingExtracting".to_string(),
+            RobotDeploymentStep::ExecutingDownloadCondition => {
+                "ExecutingDownloadCondition".to_string()
+            }
+            RobotDeploymentStep::ExecutingPostLaunch => "ExecutingPostLaunch".to_string(),
+            RobotDeploymentStep::ExecutingPreLaunch => "ExecutingPreLaunch".to_string(),
+            RobotDeploymentStep::Finished => "Finished".to_string(),
+            RobotDeploymentStep::Launching => "Launching".to_string(),
+            RobotDeploymentStep::Validating => "Validating".to_string(),
+            RobotDeploymentStep::UnknownVariant(UnknownRobotDeploymentStep { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RobotDeploymentStep {
+    fn into(self) -> &'a str {
+        match self {
+            RobotDeploymentStep::DownloadingExtracting => &"DownloadingExtracting",
+            RobotDeploymentStep::ExecutingDownloadCondition => &"ExecutingDownloadCondition",
+            RobotDeploymentStep::ExecutingPostLaunch => &"ExecutingPostLaunch",
+            RobotDeploymentStep::ExecutingPreLaunch => &"ExecutingPreLaunch",
+            RobotDeploymentStep::Finished => &"Finished",
+            RobotDeploymentStep::Launching => &"Launching",
+            RobotDeploymentStep::Validating => &"Validating",
+            RobotDeploymentStep::UnknownVariant(UnknownRobotDeploymentStep { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RobotDeploymentStep {
+    fn from(name: &str) -> Self {
+        match name {
+            "DownloadingExtracting" => RobotDeploymentStep::DownloadingExtracting,
+            "ExecutingDownloadCondition" => RobotDeploymentStep::ExecutingDownloadCondition,
+            "ExecutingPostLaunch" => RobotDeploymentStep::ExecutingPostLaunch,
+            "ExecutingPreLaunch" => RobotDeploymentStep::ExecutingPreLaunch,
+            "Finished" => RobotDeploymentStep::Finished,
+            "Launching" => RobotDeploymentStep::Launching,
+            "Validating" => RobotDeploymentStep::Validating,
+            _ => RobotDeploymentStep::UnknownVariant(UnknownRobotDeploymentStep {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RobotDeploymentStep {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DownloadingExtracting" => RobotDeploymentStep::DownloadingExtracting,
+            "ExecutingDownloadCondition" => RobotDeploymentStep::ExecutingDownloadCondition,
+            "ExecutingPostLaunch" => RobotDeploymentStep::ExecutingPostLaunch,
+            "ExecutingPreLaunch" => RobotDeploymentStep::ExecutingPreLaunch,
+            "Finished" => RobotDeploymentStep::Finished,
+            "Launching" => RobotDeploymentStep::Launching,
+            "Validating" => RobotDeploymentStep::Validating,
+            _ => RobotDeploymentStep::UnknownVariant(UnknownRobotDeploymentStep { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RobotDeploymentStep {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RobotDeploymentStep {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RobotDeploymentStep {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a robot software suite (ROS distribution).</p>
@@ -2382,11 +3177,354 @@ pub struct RobotSoftwareSuite {
     /// <p>The name of the robot software suite (ROS distribution).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<RobotSoftwareSuiteType>,
     /// <p>The version of the robot software suite (ROS distribution).</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub version: Option<String>,
+    pub version: Option<RobotSoftwareSuiteVersionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRobotSoftwareSuiteType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RobotSoftwareSuiteType {
+    Ros,
+    Ros2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRobotSoftwareSuiteType),
+}
+
+impl Default for RobotSoftwareSuiteType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RobotSoftwareSuiteType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RobotSoftwareSuiteType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RobotSoftwareSuiteType {
+    fn into(self) -> String {
+        match self {
+            RobotSoftwareSuiteType::Ros => "ROS".to_string(),
+            RobotSoftwareSuiteType::Ros2 => "ROS2".to_string(),
+            RobotSoftwareSuiteType::UnknownVariant(UnknownRobotSoftwareSuiteType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RobotSoftwareSuiteType {
+    fn into(self) -> &'a str {
+        match self {
+            RobotSoftwareSuiteType::Ros => &"ROS",
+            RobotSoftwareSuiteType::Ros2 => &"ROS2",
+            RobotSoftwareSuiteType::UnknownVariant(UnknownRobotSoftwareSuiteType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RobotSoftwareSuiteType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ROS" => RobotSoftwareSuiteType::Ros,
+            "ROS2" => RobotSoftwareSuiteType::Ros2,
+            _ => RobotSoftwareSuiteType::UnknownVariant(UnknownRobotSoftwareSuiteType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RobotSoftwareSuiteType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ROS" => RobotSoftwareSuiteType::Ros,
+            "ROS2" => RobotSoftwareSuiteType::Ros2,
+            _ => RobotSoftwareSuiteType::UnknownVariant(UnknownRobotSoftwareSuiteType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RobotSoftwareSuiteType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RobotSoftwareSuiteType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RobotSoftwareSuiteType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRobotSoftwareSuiteVersionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RobotSoftwareSuiteVersionType {
+    Dashing,
+    Kinetic,
+    Melodic,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRobotSoftwareSuiteVersionType),
+}
+
+impl Default for RobotSoftwareSuiteVersionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RobotSoftwareSuiteVersionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RobotSoftwareSuiteVersionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RobotSoftwareSuiteVersionType {
+    fn into(self) -> String {
+        match self {
+            RobotSoftwareSuiteVersionType::Dashing => "Dashing".to_string(),
+            RobotSoftwareSuiteVersionType::Kinetic => "Kinetic".to_string(),
+            RobotSoftwareSuiteVersionType::Melodic => "Melodic".to_string(),
+            RobotSoftwareSuiteVersionType::UnknownVariant(
+                UnknownRobotSoftwareSuiteVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RobotSoftwareSuiteVersionType {
+    fn into(self) -> &'a str {
+        match self {
+            RobotSoftwareSuiteVersionType::Dashing => &"Dashing",
+            RobotSoftwareSuiteVersionType::Kinetic => &"Kinetic",
+            RobotSoftwareSuiteVersionType::Melodic => &"Melodic",
+            RobotSoftwareSuiteVersionType::UnknownVariant(
+                UnknownRobotSoftwareSuiteVersionType { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for RobotSoftwareSuiteVersionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Dashing" => RobotSoftwareSuiteVersionType::Dashing,
+            "Kinetic" => RobotSoftwareSuiteVersionType::Kinetic,
+            "Melodic" => RobotSoftwareSuiteVersionType::Melodic,
+            _ => RobotSoftwareSuiteVersionType::UnknownVariant(
+                UnknownRobotSoftwareSuiteVersionType {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for RobotSoftwareSuiteVersionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Dashing" => RobotSoftwareSuiteVersionType::Dashing,
+            "Kinetic" => RobotSoftwareSuiteVersionType::Kinetic,
+            "Melodic" => RobotSoftwareSuiteVersionType::Melodic,
+            _ => RobotSoftwareSuiteVersionType::UnknownVariant(
+                UnknownRobotSoftwareSuiteVersionType { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RobotSoftwareSuiteVersionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RobotSoftwareSuiteVersionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RobotSoftwareSuiteVersionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRobotStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RobotStatus {
+    Available,
+    Deploying,
+    Failed,
+    InSync,
+    NoResponse,
+    PendingNewDeployment,
+    Registered,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRobotStatus),
+}
+
+impl Default for RobotStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RobotStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RobotStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RobotStatus {
+    fn into(self) -> String {
+        match self {
+            RobotStatus::Available => "Available".to_string(),
+            RobotStatus::Deploying => "Deploying".to_string(),
+            RobotStatus::Failed => "Failed".to_string(),
+            RobotStatus::InSync => "InSync".to_string(),
+            RobotStatus::NoResponse => "NoResponse".to_string(),
+            RobotStatus::PendingNewDeployment => "PendingNewDeployment".to_string(),
+            RobotStatus::Registered => "Registered".to_string(),
+            RobotStatus::UnknownVariant(UnknownRobotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RobotStatus {
+    fn into(self) -> &'a str {
+        match self {
+            RobotStatus::Available => &"Available",
+            RobotStatus::Deploying => &"Deploying",
+            RobotStatus::Failed => &"Failed",
+            RobotStatus::InSync => &"InSync",
+            RobotStatus::NoResponse => &"NoResponse",
+            RobotStatus::PendingNewDeployment => &"PendingNewDeployment",
+            RobotStatus::Registered => &"Registered",
+            RobotStatus::UnknownVariant(UnknownRobotStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for RobotStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Available" => RobotStatus::Available,
+            "Deploying" => RobotStatus::Deploying,
+            "Failed" => RobotStatus::Failed,
+            "InSync" => RobotStatus::InSync,
+            "NoResponse" => RobotStatus::NoResponse,
+            "PendingNewDeployment" => RobotStatus::PendingNewDeployment,
+            "Registered" => RobotStatus::Registered,
+            _ => RobotStatus::UnknownVariant(UnknownRobotStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RobotStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Available" => RobotStatus::Available,
+            "Deploying" => RobotStatus::Deploying,
+            "Failed" => RobotStatus::Failed,
+            "InSync" => RobotStatus::InSync,
+            "NoResponse" => RobotStatus::NoResponse,
+            "PendingNewDeployment" => RobotStatus::PendingNewDeployment,
+            "Registered" => RobotStatus::Registered,
+            _ => RobotStatus::UnknownVariant(UnknownRobotStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RobotStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for RobotStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RobotStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about S3 keys.</p>
@@ -2490,11 +3628,11 @@ pub struct SimulationJob {
     /// <p><p>The failure behavior the simulation job.</p> <dl> <dt>Continue</dt> <dd> <p>Restart the simulation job in the same host instance.</p> </dd> <dt>Fail</dt> <dd> <p>Stop the simulation job and terminate the instance.</p> </dd> </dl></p>
     #[serde(rename = "failureBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_behavior: Option<String>,
+    pub failure_behavior: Option<FailureBehavior>,
     /// <p>The failure code of the simulation job if it failed.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobErrorCode>,
     /// <p>The reason why the simulation job failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2546,7 +3684,7 @@ pub struct SimulationJob {
     /// <p>Status of the simulation job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the simulation job.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2555,6 +3693,248 @@ pub struct SimulationJob {
     #[serde(rename = "vpcConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_config: Option<VPCConfigResponse>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSimulationJobBatchErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SimulationJobBatchErrorCode {
+    InternalServiceError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSimulationJobBatchErrorCode),
+}
+
+impl Default for SimulationJobBatchErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SimulationJobBatchErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SimulationJobBatchErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SimulationJobBatchErrorCode {
+    fn into(self) -> String {
+        match self {
+            SimulationJobBatchErrorCode::InternalServiceError => "InternalServiceError".to_string(),
+            SimulationJobBatchErrorCode::UnknownVariant(UnknownSimulationJobBatchErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SimulationJobBatchErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            SimulationJobBatchErrorCode::InternalServiceError => &"InternalServiceError",
+            SimulationJobBatchErrorCode::UnknownVariant(UnknownSimulationJobBatchErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SimulationJobBatchErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "InternalServiceError" => SimulationJobBatchErrorCode::InternalServiceError,
+            _ => SimulationJobBatchErrorCode::UnknownVariant(UnknownSimulationJobBatchErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SimulationJobBatchErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "InternalServiceError" => SimulationJobBatchErrorCode::InternalServiceError,
+            _ => SimulationJobBatchErrorCode::UnknownVariant(UnknownSimulationJobBatchErrorCode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SimulationJobBatchErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SimulationJobBatchErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SimulationJobBatchErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSimulationJobBatchStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SimulationJobBatchStatus {
+    Canceled,
+    Canceling,
+    Completed,
+    Completing,
+    Failed,
+    InProgress,
+    Pending,
+    TimedOut,
+    TimingOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSimulationJobBatchStatus),
+}
+
+impl Default for SimulationJobBatchStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SimulationJobBatchStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SimulationJobBatchStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SimulationJobBatchStatus {
+    fn into(self) -> String {
+        match self {
+            SimulationJobBatchStatus::Canceled => "Canceled".to_string(),
+            SimulationJobBatchStatus::Canceling => "Canceling".to_string(),
+            SimulationJobBatchStatus::Completed => "Completed".to_string(),
+            SimulationJobBatchStatus::Completing => "Completing".to_string(),
+            SimulationJobBatchStatus::Failed => "Failed".to_string(),
+            SimulationJobBatchStatus::InProgress => "InProgress".to_string(),
+            SimulationJobBatchStatus::Pending => "Pending".to_string(),
+            SimulationJobBatchStatus::TimedOut => "TimedOut".to_string(),
+            SimulationJobBatchStatus::TimingOut => "TimingOut".to_string(),
+            SimulationJobBatchStatus::UnknownVariant(UnknownSimulationJobBatchStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SimulationJobBatchStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SimulationJobBatchStatus::Canceled => &"Canceled",
+            SimulationJobBatchStatus::Canceling => &"Canceling",
+            SimulationJobBatchStatus::Completed => &"Completed",
+            SimulationJobBatchStatus::Completing => &"Completing",
+            SimulationJobBatchStatus::Failed => &"Failed",
+            SimulationJobBatchStatus::InProgress => &"InProgress",
+            SimulationJobBatchStatus::Pending => &"Pending",
+            SimulationJobBatchStatus::TimedOut => &"TimedOut",
+            SimulationJobBatchStatus::TimingOut => &"TimingOut",
+            SimulationJobBatchStatus::UnknownVariant(UnknownSimulationJobBatchStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SimulationJobBatchStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Canceled" => SimulationJobBatchStatus::Canceled,
+            "Canceling" => SimulationJobBatchStatus::Canceling,
+            "Completed" => SimulationJobBatchStatus::Completed,
+            "Completing" => SimulationJobBatchStatus::Completing,
+            "Failed" => SimulationJobBatchStatus::Failed,
+            "InProgress" => SimulationJobBatchStatus::InProgress,
+            "Pending" => SimulationJobBatchStatus::Pending,
+            "TimedOut" => SimulationJobBatchStatus::TimedOut,
+            "TimingOut" => SimulationJobBatchStatus::TimingOut,
+            _ => SimulationJobBatchStatus::UnknownVariant(UnknownSimulationJobBatchStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SimulationJobBatchStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Canceled" => SimulationJobBatchStatus::Canceled,
+            "Canceling" => SimulationJobBatchStatus::Canceling,
+            "Completed" => SimulationJobBatchStatus::Completed,
+            "Completing" => SimulationJobBatchStatus::Completing,
+            "Failed" => SimulationJobBatchStatus::Failed,
+            "InProgress" => SimulationJobBatchStatus::InProgress,
+            "Pending" => SimulationJobBatchStatus::Pending,
+            "TimedOut" => SimulationJobBatchStatus::TimedOut,
+            "TimingOut" => SimulationJobBatchStatus::TimingOut,
+            _ => SimulationJobBatchStatus::UnknownVariant(UnknownSimulationJobBatchStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SimulationJobBatchStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SimulationJobBatchStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SimulationJobBatchStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a simulation job batch.</p>
@@ -2588,7 +3968,307 @@ pub struct SimulationJobBatchSummary {
     /// <p><p>The status of the simulation job batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobBatchStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSimulationJobErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SimulationJobErrorCode {
+    BadPermissionsCloudwatchLogs,
+    BadPermissionsRobotApplication,
+    BadPermissionsS3Object,
+    BadPermissionsS3Output,
+    BadPermissionsSimulationApplication,
+    BadPermissionsUserCredentials,
+    BatchCanceled,
+    BatchTimedOut,
+    EnilimitExceeded,
+    InternalServiceError,
+    InvalidBundleRobotApplication,
+    InvalidBundleSimulationApplication,
+    InvalidInput,
+    InvalidS3Resource,
+    LimitExceeded,
+    MismatchedEtag,
+    RequestThrottled,
+    ResourceNotFound,
+    RobotApplicationCrash,
+    RobotApplicationVersionMismatchedEtag,
+    SimulationApplicationCrash,
+    SimulationApplicationVersionMismatchedEtag,
+    SubnetIpLimitExceeded,
+    WrongRegionRobotApplication,
+    WrongRegionS3Bucket,
+    WrongRegionS3Output,
+    WrongRegionSimulationApplication,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSimulationJobErrorCode),
+}
+
+impl Default for SimulationJobErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SimulationJobErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SimulationJobErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SimulationJobErrorCode {
+    fn into(self) -> String {
+        match self {
+            SimulationJobErrorCode::BadPermissionsCloudwatchLogs => {
+                "BadPermissionsCloudwatchLogs".to_string()
+            }
+            SimulationJobErrorCode::BadPermissionsRobotApplication => {
+                "BadPermissionsRobotApplication".to_string()
+            }
+            SimulationJobErrorCode::BadPermissionsS3Object => "BadPermissionsS3Object".to_string(),
+            SimulationJobErrorCode::BadPermissionsS3Output => "BadPermissionsS3Output".to_string(),
+            SimulationJobErrorCode::BadPermissionsSimulationApplication => {
+                "BadPermissionsSimulationApplication".to_string()
+            }
+            SimulationJobErrorCode::BadPermissionsUserCredentials => {
+                "BadPermissionsUserCredentials".to_string()
+            }
+            SimulationJobErrorCode::BatchCanceled => "BatchCanceled".to_string(),
+            SimulationJobErrorCode::BatchTimedOut => "BatchTimedOut".to_string(),
+            SimulationJobErrorCode::EnilimitExceeded => "ENILimitExceeded".to_string(),
+            SimulationJobErrorCode::InternalServiceError => "InternalServiceError".to_string(),
+            SimulationJobErrorCode::InvalidBundleRobotApplication => {
+                "InvalidBundleRobotApplication".to_string()
+            }
+            SimulationJobErrorCode::InvalidBundleSimulationApplication => {
+                "InvalidBundleSimulationApplication".to_string()
+            }
+            SimulationJobErrorCode::InvalidInput => "InvalidInput".to_string(),
+            SimulationJobErrorCode::InvalidS3Resource => "InvalidS3Resource".to_string(),
+            SimulationJobErrorCode::LimitExceeded => "LimitExceeded".to_string(),
+            SimulationJobErrorCode::MismatchedEtag => "MismatchedEtag".to_string(),
+            SimulationJobErrorCode::RequestThrottled => "RequestThrottled".to_string(),
+            SimulationJobErrorCode::ResourceNotFound => "ResourceNotFound".to_string(),
+            SimulationJobErrorCode::RobotApplicationCrash => "RobotApplicationCrash".to_string(),
+            SimulationJobErrorCode::RobotApplicationVersionMismatchedEtag => {
+                "RobotApplicationVersionMismatchedEtag".to_string()
+            }
+            SimulationJobErrorCode::SimulationApplicationCrash => {
+                "SimulationApplicationCrash".to_string()
+            }
+            SimulationJobErrorCode::SimulationApplicationVersionMismatchedEtag => {
+                "SimulationApplicationVersionMismatchedEtag".to_string()
+            }
+            SimulationJobErrorCode::SubnetIpLimitExceeded => "SubnetIpLimitExceeded".to_string(),
+            SimulationJobErrorCode::WrongRegionRobotApplication => {
+                "WrongRegionRobotApplication".to_string()
+            }
+            SimulationJobErrorCode::WrongRegionS3Bucket => "WrongRegionS3Bucket".to_string(),
+            SimulationJobErrorCode::WrongRegionS3Output => "WrongRegionS3Output".to_string(),
+            SimulationJobErrorCode::WrongRegionSimulationApplication => {
+                "WrongRegionSimulationApplication".to_string()
+            }
+            SimulationJobErrorCode::UnknownVariant(UnknownSimulationJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SimulationJobErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            SimulationJobErrorCode::BadPermissionsCloudwatchLogs => &"BadPermissionsCloudwatchLogs",
+            SimulationJobErrorCode::BadPermissionsRobotApplication => {
+                &"BadPermissionsRobotApplication"
+            }
+            SimulationJobErrorCode::BadPermissionsS3Object => &"BadPermissionsS3Object",
+            SimulationJobErrorCode::BadPermissionsS3Output => &"BadPermissionsS3Output",
+            SimulationJobErrorCode::BadPermissionsSimulationApplication => {
+                &"BadPermissionsSimulationApplication"
+            }
+            SimulationJobErrorCode::BadPermissionsUserCredentials => {
+                &"BadPermissionsUserCredentials"
+            }
+            SimulationJobErrorCode::BatchCanceled => &"BatchCanceled",
+            SimulationJobErrorCode::BatchTimedOut => &"BatchTimedOut",
+            SimulationJobErrorCode::EnilimitExceeded => &"ENILimitExceeded",
+            SimulationJobErrorCode::InternalServiceError => &"InternalServiceError",
+            SimulationJobErrorCode::InvalidBundleRobotApplication => {
+                &"InvalidBundleRobotApplication"
+            }
+            SimulationJobErrorCode::InvalidBundleSimulationApplication => {
+                &"InvalidBundleSimulationApplication"
+            }
+            SimulationJobErrorCode::InvalidInput => &"InvalidInput",
+            SimulationJobErrorCode::InvalidS3Resource => &"InvalidS3Resource",
+            SimulationJobErrorCode::LimitExceeded => &"LimitExceeded",
+            SimulationJobErrorCode::MismatchedEtag => &"MismatchedEtag",
+            SimulationJobErrorCode::RequestThrottled => &"RequestThrottled",
+            SimulationJobErrorCode::ResourceNotFound => &"ResourceNotFound",
+            SimulationJobErrorCode::RobotApplicationCrash => &"RobotApplicationCrash",
+            SimulationJobErrorCode::RobotApplicationVersionMismatchedEtag => {
+                &"RobotApplicationVersionMismatchedEtag"
+            }
+            SimulationJobErrorCode::SimulationApplicationCrash => &"SimulationApplicationCrash",
+            SimulationJobErrorCode::SimulationApplicationVersionMismatchedEtag => {
+                &"SimulationApplicationVersionMismatchedEtag"
+            }
+            SimulationJobErrorCode::SubnetIpLimitExceeded => &"SubnetIpLimitExceeded",
+            SimulationJobErrorCode::WrongRegionRobotApplication => &"WrongRegionRobotApplication",
+            SimulationJobErrorCode::WrongRegionS3Bucket => &"WrongRegionS3Bucket",
+            SimulationJobErrorCode::WrongRegionS3Output => &"WrongRegionS3Output",
+            SimulationJobErrorCode::WrongRegionSimulationApplication => {
+                &"WrongRegionSimulationApplication"
+            }
+            SimulationJobErrorCode::UnknownVariant(UnknownSimulationJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SimulationJobErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "BadPermissionsCloudwatchLogs" => SimulationJobErrorCode::BadPermissionsCloudwatchLogs,
+            "BadPermissionsRobotApplication" => {
+                SimulationJobErrorCode::BadPermissionsRobotApplication
+            }
+            "BadPermissionsS3Object" => SimulationJobErrorCode::BadPermissionsS3Object,
+            "BadPermissionsS3Output" => SimulationJobErrorCode::BadPermissionsS3Output,
+            "BadPermissionsSimulationApplication" => {
+                SimulationJobErrorCode::BadPermissionsSimulationApplication
+            }
+            "BadPermissionsUserCredentials" => {
+                SimulationJobErrorCode::BadPermissionsUserCredentials
+            }
+            "BatchCanceled" => SimulationJobErrorCode::BatchCanceled,
+            "BatchTimedOut" => SimulationJobErrorCode::BatchTimedOut,
+            "ENILimitExceeded" => SimulationJobErrorCode::EnilimitExceeded,
+            "InternalServiceError" => SimulationJobErrorCode::InternalServiceError,
+            "InvalidBundleRobotApplication" => {
+                SimulationJobErrorCode::InvalidBundleRobotApplication
+            }
+            "InvalidBundleSimulationApplication" => {
+                SimulationJobErrorCode::InvalidBundleSimulationApplication
+            }
+            "InvalidInput" => SimulationJobErrorCode::InvalidInput,
+            "InvalidS3Resource" => SimulationJobErrorCode::InvalidS3Resource,
+            "LimitExceeded" => SimulationJobErrorCode::LimitExceeded,
+            "MismatchedEtag" => SimulationJobErrorCode::MismatchedEtag,
+            "RequestThrottled" => SimulationJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => SimulationJobErrorCode::ResourceNotFound,
+            "RobotApplicationCrash" => SimulationJobErrorCode::RobotApplicationCrash,
+            "RobotApplicationVersionMismatchedEtag" => {
+                SimulationJobErrorCode::RobotApplicationVersionMismatchedEtag
+            }
+            "SimulationApplicationCrash" => SimulationJobErrorCode::SimulationApplicationCrash,
+            "SimulationApplicationVersionMismatchedEtag" => {
+                SimulationJobErrorCode::SimulationApplicationVersionMismatchedEtag
+            }
+            "SubnetIpLimitExceeded" => SimulationJobErrorCode::SubnetIpLimitExceeded,
+            "WrongRegionRobotApplication" => SimulationJobErrorCode::WrongRegionRobotApplication,
+            "WrongRegionS3Bucket" => SimulationJobErrorCode::WrongRegionS3Bucket,
+            "WrongRegionS3Output" => SimulationJobErrorCode::WrongRegionS3Output,
+            "WrongRegionSimulationApplication" => {
+                SimulationJobErrorCode::WrongRegionSimulationApplication
+            }
+            _ => SimulationJobErrorCode::UnknownVariant(UnknownSimulationJobErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SimulationJobErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BadPermissionsCloudwatchLogs" => SimulationJobErrorCode::BadPermissionsCloudwatchLogs,
+            "BadPermissionsRobotApplication" => {
+                SimulationJobErrorCode::BadPermissionsRobotApplication
+            }
+            "BadPermissionsS3Object" => SimulationJobErrorCode::BadPermissionsS3Object,
+            "BadPermissionsS3Output" => SimulationJobErrorCode::BadPermissionsS3Output,
+            "BadPermissionsSimulationApplication" => {
+                SimulationJobErrorCode::BadPermissionsSimulationApplication
+            }
+            "BadPermissionsUserCredentials" => {
+                SimulationJobErrorCode::BadPermissionsUserCredentials
+            }
+            "BatchCanceled" => SimulationJobErrorCode::BatchCanceled,
+            "BatchTimedOut" => SimulationJobErrorCode::BatchTimedOut,
+            "ENILimitExceeded" => SimulationJobErrorCode::EnilimitExceeded,
+            "InternalServiceError" => SimulationJobErrorCode::InternalServiceError,
+            "InvalidBundleRobotApplication" => {
+                SimulationJobErrorCode::InvalidBundleRobotApplication
+            }
+            "InvalidBundleSimulationApplication" => {
+                SimulationJobErrorCode::InvalidBundleSimulationApplication
+            }
+            "InvalidInput" => SimulationJobErrorCode::InvalidInput,
+            "InvalidS3Resource" => SimulationJobErrorCode::InvalidS3Resource,
+            "LimitExceeded" => SimulationJobErrorCode::LimitExceeded,
+            "MismatchedEtag" => SimulationJobErrorCode::MismatchedEtag,
+            "RequestThrottled" => SimulationJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => SimulationJobErrorCode::ResourceNotFound,
+            "RobotApplicationCrash" => SimulationJobErrorCode::RobotApplicationCrash,
+            "RobotApplicationVersionMismatchedEtag" => {
+                SimulationJobErrorCode::RobotApplicationVersionMismatchedEtag
+            }
+            "SimulationApplicationCrash" => SimulationJobErrorCode::SimulationApplicationCrash,
+            "SimulationApplicationVersionMismatchedEtag" => {
+                SimulationJobErrorCode::SimulationApplicationVersionMismatchedEtag
+            }
+            "SubnetIpLimitExceeded" => SimulationJobErrorCode::SubnetIpLimitExceeded,
+            "WrongRegionRobotApplication" => SimulationJobErrorCode::WrongRegionRobotApplication,
+            "WrongRegionS3Bucket" => SimulationJobErrorCode::WrongRegionS3Bucket,
+            "WrongRegionS3Output" => SimulationJobErrorCode::WrongRegionS3Output,
+            "WrongRegionSimulationApplication" => {
+                SimulationJobErrorCode::WrongRegionSimulationApplication
+            }
+            _ => SimulationJobErrorCode::UnknownVariant(UnknownSimulationJobErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SimulationJobErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SimulationJobErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SimulationJobErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a simulation job request.</p>
@@ -2605,7 +4285,7 @@ pub struct SimulationJobRequest {
     /// <p><p>The failure behavior the simulation job.</p> <dl> <dt>Continue</dt> <dd> <p>Restart the simulation job in the same host instance.</p> </dd> <dt>Fail</dt> <dd> <p>Stop the simulation job and terminate the instance.</p> </dd> </dl></p>
     #[serde(rename = "failureBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_behavior: Option<String>,
+    pub failure_behavior: Option<FailureBehavior>,
     /// <p>The IAM role name that allows the simulation instance to call the AWS APIs that are specified in its associated policies on your behalf. This is how credentials are passed in to your simulation job. </p>
     #[serde(rename = "iamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2640,6 +4320,151 @@ pub struct SimulationJobRequest {
     pub vpc_config: Option<VPCConfig>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSimulationJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SimulationJobStatus {
+    Canceled,
+    Completed,
+    Failed,
+    Pending,
+    Preparing,
+    Restarting,
+    Running,
+    RunningFailed,
+    Terminated,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSimulationJobStatus),
+}
+
+impl Default for SimulationJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SimulationJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SimulationJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SimulationJobStatus {
+    fn into(self) -> String {
+        match self {
+            SimulationJobStatus::Canceled => "Canceled".to_string(),
+            SimulationJobStatus::Completed => "Completed".to_string(),
+            SimulationJobStatus::Failed => "Failed".to_string(),
+            SimulationJobStatus::Pending => "Pending".to_string(),
+            SimulationJobStatus::Preparing => "Preparing".to_string(),
+            SimulationJobStatus::Restarting => "Restarting".to_string(),
+            SimulationJobStatus::Running => "Running".to_string(),
+            SimulationJobStatus::RunningFailed => "RunningFailed".to_string(),
+            SimulationJobStatus::Terminated => "Terminated".to_string(),
+            SimulationJobStatus::Terminating => "Terminating".to_string(),
+            SimulationJobStatus::UnknownVariant(UnknownSimulationJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SimulationJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            SimulationJobStatus::Canceled => &"Canceled",
+            SimulationJobStatus::Completed => &"Completed",
+            SimulationJobStatus::Failed => &"Failed",
+            SimulationJobStatus::Pending => &"Pending",
+            SimulationJobStatus::Preparing => &"Preparing",
+            SimulationJobStatus::Restarting => &"Restarting",
+            SimulationJobStatus::Running => &"Running",
+            SimulationJobStatus::RunningFailed => &"RunningFailed",
+            SimulationJobStatus::Terminated => &"Terminated",
+            SimulationJobStatus::Terminating => &"Terminating",
+            SimulationJobStatus::UnknownVariant(UnknownSimulationJobStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SimulationJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Canceled" => SimulationJobStatus::Canceled,
+            "Completed" => SimulationJobStatus::Completed,
+            "Failed" => SimulationJobStatus::Failed,
+            "Pending" => SimulationJobStatus::Pending,
+            "Preparing" => SimulationJobStatus::Preparing,
+            "Restarting" => SimulationJobStatus::Restarting,
+            "Running" => SimulationJobStatus::Running,
+            "RunningFailed" => SimulationJobStatus::RunningFailed,
+            "Terminated" => SimulationJobStatus::Terminated,
+            "Terminating" => SimulationJobStatus::Terminating,
+            _ => SimulationJobStatus::UnknownVariant(UnknownSimulationJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SimulationJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Canceled" => SimulationJobStatus::Canceled,
+            "Completed" => SimulationJobStatus::Completed,
+            "Failed" => SimulationJobStatus::Failed,
+            "Pending" => SimulationJobStatus::Pending,
+            "Preparing" => SimulationJobStatus::Preparing,
+            "Restarting" => SimulationJobStatus::Restarting,
+            "Running" => SimulationJobStatus::Running,
+            "RunningFailed" => SimulationJobStatus::RunningFailed,
+            "Terminated" => SimulationJobStatus::Terminated,
+            "Terminating" => SimulationJobStatus::Terminating,
+            _ => SimulationJobStatus::UnknownVariant(UnknownSimulationJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SimulationJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SimulationJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SimulationJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Summary information for a simulation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2671,7 +4496,7 @@ pub struct SimulationJobSummary {
     /// <p>The status of the simulation job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobStatus>,
 }
 
 /// <p>Information about a simulation software suite.</p>
@@ -2680,11 +4505,117 @@ pub struct SimulationSoftwareSuite {
     /// <p>The name of the simulation software suite.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<SimulationSoftwareSuiteType>,
     /// <p>The version of the simulation software suite.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSimulationSoftwareSuiteType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SimulationSoftwareSuiteType {
+    Gazebo,
+    RosbagPlay,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSimulationSoftwareSuiteType),
+}
+
+impl Default for SimulationSoftwareSuiteType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SimulationSoftwareSuiteType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SimulationSoftwareSuiteType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SimulationSoftwareSuiteType {
+    fn into(self) -> String {
+        match self {
+            SimulationSoftwareSuiteType::Gazebo => "Gazebo".to_string(),
+            SimulationSoftwareSuiteType::RosbagPlay => "RosbagPlay".to_string(),
+            SimulationSoftwareSuiteType::UnknownVariant(UnknownSimulationSoftwareSuiteType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SimulationSoftwareSuiteType {
+    fn into(self) -> &'a str {
+        match self {
+            SimulationSoftwareSuiteType::Gazebo => &"Gazebo",
+            SimulationSoftwareSuiteType::RosbagPlay => &"RosbagPlay",
+            SimulationSoftwareSuiteType::UnknownVariant(UnknownSimulationSoftwareSuiteType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SimulationSoftwareSuiteType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Gazebo" => SimulationSoftwareSuiteType::Gazebo,
+            "RosbagPlay" => SimulationSoftwareSuiteType::RosbagPlay,
+            _ => SimulationSoftwareSuiteType::UnknownVariant(UnknownSimulationSoftwareSuiteType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SimulationSoftwareSuiteType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Gazebo" => SimulationSoftwareSuiteType::Gazebo,
+            "RosbagPlay" => SimulationSoftwareSuiteType::RosbagPlay,
+            _ => SimulationSoftwareSuiteType::UnknownVariant(UnknownSimulationSoftwareSuiteType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SimulationSoftwareSuiteType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SimulationSoftwareSuiteType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SimulationSoftwareSuiteType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a source.</p>
@@ -2694,7 +4625,7 @@ pub struct Source {
     /// <p>The taget processor architecture for the application.</p>
     #[serde(rename = "architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>A hash of the object specified by <code>s3Bucket</code> and <code>s3Key</code>.</p>
     #[serde(rename = "etag")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2716,7 +4647,7 @@ pub struct SourceConfig {
     /// <p>The target processor architecture for the application.</p>
     #[serde(rename = "architecture")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub architecture: Option<String>,
+    pub architecture: Option<Architecture>,
     /// <p>The Amazon S3 bucket name.</p>
     #[serde(rename = "s3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2777,7 +4708,7 @@ pub struct StartSimulationJobBatchResponse {
     /// <p>The failure code if the simulation job batch failed.</p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<SimulationJobBatchErrorCode>,
     /// <p>The reason the simulation job batch failed.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2789,7 +4720,7 @@ pub struct StartSimulationJobBatchResponse {
     /// <p><p>The status of the simulation job batch.</p> <dl> <dt>Pending</dt> <dd> <p>The simulation job batch request is pending.</p> </dd> <dt>InProgress</dt> <dd> <p>The simulation job batch is in progress. </p> </dd> <dt>Failed</dt> <dd> <p>The simulation job batch failed. One or more simulation job requests could not be completed due to an internal failure (like <code>InternalServiceError</code>). See <code>failureCode</code> and <code>failureReason</code> for more information.</p> </dd> <dt>Completed</dt> <dd> <p>The simulation batch job completed. A batch is complete when (1) there are no pending simulation job requests in the batch and none of the failed simulation job requests are due to <code>InternalServiceError</code> and (2) when all created simulation jobs have reached a terminal state (for example, <code>Completed</code> or <code>Failed</code>). </p> </dd> <dt>Canceled</dt> <dd> <p>The simulation batch job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The simulation batch job is being cancelled.</p> </dd> <dt>Completing</dt> <dd> <p>The simulation batch job is completing.</p> </dd> <dt>TimingOut</dt> <dd> <p>The simulation job batch is timing out.</p> <p>If a batch timing out, and there are pending requests that were failing due to an internal failure (like <code>InternalServiceError</code>), the batch status will be <code>Failed</code>. If there are no such failing request, the batch status will be <code>TimedOut</code>. </p> </dd> <dt>TimedOut</dt> <dd> <p>The simulation batch job timed out.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<SimulationJobBatchStatus>,
     /// <p>A map that contains tag keys and tag values that are attached to the deployment job batch.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2829,7 +4760,7 @@ pub struct SyncDeploymentJobResponse {
     /// <p><p>The failure code if the job fails:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>RobotApplicationCrash</dt> <dd> <p>Robot application exited abnormally.</p> </dd> <dt>SimulationApplicationCrash</dt> <dd> <p> Simulation application exited abnormally.</p> </dd> <dt>BadPermissionsRobotApplication</dt> <dd> <p>Robot application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsSimulationApplication</dt> <dd> <p>Simulation application bundle could not be downloaded.</p> </dd> <dt>BadPermissionsS3Output</dt> <dd> <p>Unable to publish outputs to customer-provided S3 bucket.</p> </dd> <dt>BadPermissionsCloudwatchLogs</dt> <dd> <p>Unable to publish logs to customer-provided CloudWatch Logs resource.</p> </dd> <dt>SubnetIpLimitExceeded</dt> <dd> <p>Subnet IP limit exceeded.</p> </dd> <dt>ENILimitExceeded</dt> <dd> <p>ENI limit exceeded.</p> </dd> <dt>BadPermissionsUserCredentials</dt> <dd> <p>Unable to use the Role provided.</p> </dd> <dt>InvalidBundleRobotApplication</dt> <dd> <p>Robot bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>InvalidBundleSimulationApplication</dt> <dd> <p>Simulation bundle cannot be extracted (invalid format, bundling error, or other issue).</p> </dd> <dt>RobotApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for RobotApplication does not match value during version creation.</p> </dd> <dt>SimulationApplicationVersionMismatchedEtag</dt> <dd> <p>Etag for SimulationApplication does not match value during version creation.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<DeploymentJobErrorCode>,
     /// <p>The failure reason if the job fails.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2841,7 +4772,7 @@ pub struct SyncDeploymentJobResponse {
     /// <p>The status of the synchronization job.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeploymentStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3126,6 +5057,256 @@ pub struct WorldCount {
     pub interior_count_per_floorplan: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorldExportJobErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorldExportJobErrorCode {
+    AccessDenied,
+    InternalServiceError,
+    InvalidInput,
+    LimitExceeded,
+    RequestThrottled,
+    ResourceNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorldExportJobErrorCode),
+}
+
+impl Default for WorldExportJobErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorldExportJobErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorldExportJobErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorldExportJobErrorCode {
+    fn into(self) -> String {
+        match self {
+            WorldExportJobErrorCode::AccessDenied => "AccessDenied".to_string(),
+            WorldExportJobErrorCode::InternalServiceError => "InternalServiceError".to_string(),
+            WorldExportJobErrorCode::InvalidInput => "InvalidInput".to_string(),
+            WorldExportJobErrorCode::LimitExceeded => "LimitExceeded".to_string(),
+            WorldExportJobErrorCode::RequestThrottled => "RequestThrottled".to_string(),
+            WorldExportJobErrorCode::ResourceNotFound => "ResourceNotFound".to_string(),
+            WorldExportJobErrorCode::UnknownVariant(UnknownWorldExportJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorldExportJobErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            WorldExportJobErrorCode::AccessDenied => &"AccessDenied",
+            WorldExportJobErrorCode::InternalServiceError => &"InternalServiceError",
+            WorldExportJobErrorCode::InvalidInput => &"InvalidInput",
+            WorldExportJobErrorCode::LimitExceeded => &"LimitExceeded",
+            WorldExportJobErrorCode::RequestThrottled => &"RequestThrottled",
+            WorldExportJobErrorCode::ResourceNotFound => &"ResourceNotFound",
+            WorldExportJobErrorCode::UnknownVariant(UnknownWorldExportJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorldExportJobErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AccessDenied" => WorldExportJobErrorCode::AccessDenied,
+            "InternalServiceError" => WorldExportJobErrorCode::InternalServiceError,
+            "InvalidInput" => WorldExportJobErrorCode::InvalidInput,
+            "LimitExceeded" => WorldExportJobErrorCode::LimitExceeded,
+            "RequestThrottled" => WorldExportJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => WorldExportJobErrorCode::ResourceNotFound,
+            _ => WorldExportJobErrorCode::UnknownVariant(UnknownWorldExportJobErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorldExportJobErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AccessDenied" => WorldExportJobErrorCode::AccessDenied,
+            "InternalServiceError" => WorldExportJobErrorCode::InternalServiceError,
+            "InvalidInput" => WorldExportJobErrorCode::InvalidInput,
+            "LimitExceeded" => WorldExportJobErrorCode::LimitExceeded,
+            "RequestThrottled" => WorldExportJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => WorldExportJobErrorCode::ResourceNotFound,
+            _ => WorldExportJobErrorCode::UnknownVariant(UnknownWorldExportJobErrorCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorldExportJobErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorldExportJobErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorldExportJobErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorldExportJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorldExportJobStatus {
+    Canceled,
+    Canceling,
+    Completed,
+    Failed,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorldExportJobStatus),
+}
+
+impl Default for WorldExportJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorldExportJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorldExportJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorldExportJobStatus {
+    fn into(self) -> String {
+        match self {
+            WorldExportJobStatus::Canceled => "Canceled".to_string(),
+            WorldExportJobStatus::Canceling => "Canceling".to_string(),
+            WorldExportJobStatus::Completed => "Completed".to_string(),
+            WorldExportJobStatus::Failed => "Failed".to_string(),
+            WorldExportJobStatus::Pending => "Pending".to_string(),
+            WorldExportJobStatus::Running => "Running".to_string(),
+            WorldExportJobStatus::UnknownVariant(UnknownWorldExportJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorldExportJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            WorldExportJobStatus::Canceled => &"Canceled",
+            WorldExportJobStatus::Canceling => &"Canceling",
+            WorldExportJobStatus::Completed => &"Completed",
+            WorldExportJobStatus::Failed => &"Failed",
+            WorldExportJobStatus::Pending => &"Pending",
+            WorldExportJobStatus::Running => &"Running",
+            WorldExportJobStatus::UnknownVariant(UnknownWorldExportJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorldExportJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Canceled" => WorldExportJobStatus::Canceled,
+            "Canceling" => WorldExportJobStatus::Canceling,
+            "Completed" => WorldExportJobStatus::Completed,
+            "Failed" => WorldExportJobStatus::Failed,
+            "Pending" => WorldExportJobStatus::Pending,
+            "Running" => WorldExportJobStatus::Running,
+            _ => WorldExportJobStatus::UnknownVariant(UnknownWorldExportJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorldExportJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Canceled" => WorldExportJobStatus::Canceled,
+            "Canceling" => WorldExportJobStatus::Canceling,
+            "Completed" => WorldExportJobStatus::Completed,
+            "Failed" => WorldExportJobStatus::Failed,
+            "Pending" => WorldExportJobStatus::Pending,
+            "Running" => WorldExportJobStatus::Running,
+            _ => WorldExportJobStatus::UnknownVariant(UnknownWorldExportJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorldExportJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorldExportJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorldExportJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a world export job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3141,7 +5322,7 @@ pub struct WorldExportJobSummary {
     /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldExportJobStatus>,
     /// <p>A list of worlds.</p>
     #[serde(rename = "worlds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3155,7 +5336,7 @@ pub struct WorldFailure {
     /// <p><p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
     #[serde(rename = "failureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub failure_code: Option<String>,
+    pub failure_code: Option<WorldGenerationJobErrorCode>,
     /// <p>The number of failed worlds.</p>
     #[serde(rename = "failureCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3164,6 +5345,265 @@ pub struct WorldFailure {
     #[serde(rename = "sampleFailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_failure_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorldGenerationJobErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorldGenerationJobErrorCode {
+    AllWorldGenerationFailed,
+    InternalServiceError,
+    InvalidInput,
+    LimitExceeded,
+    RequestThrottled,
+    ResourceNotFound,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorldGenerationJobErrorCode),
+}
+
+impl Default for WorldGenerationJobErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorldGenerationJobErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorldGenerationJobErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorldGenerationJobErrorCode {
+    fn into(self) -> String {
+        match self {
+            WorldGenerationJobErrorCode::AllWorldGenerationFailed => {
+                "AllWorldGenerationFailed".to_string()
+            }
+            WorldGenerationJobErrorCode::InternalServiceError => "InternalServiceError".to_string(),
+            WorldGenerationJobErrorCode::InvalidInput => "InvalidInput".to_string(),
+            WorldGenerationJobErrorCode::LimitExceeded => "LimitExceeded".to_string(),
+            WorldGenerationJobErrorCode::RequestThrottled => "RequestThrottled".to_string(),
+            WorldGenerationJobErrorCode::ResourceNotFound => "ResourceNotFound".to_string(),
+            WorldGenerationJobErrorCode::UnknownVariant(UnknownWorldGenerationJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorldGenerationJobErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            WorldGenerationJobErrorCode::AllWorldGenerationFailed => &"AllWorldGenerationFailed",
+            WorldGenerationJobErrorCode::InternalServiceError => &"InternalServiceError",
+            WorldGenerationJobErrorCode::InvalidInput => &"InvalidInput",
+            WorldGenerationJobErrorCode::LimitExceeded => &"LimitExceeded",
+            WorldGenerationJobErrorCode::RequestThrottled => &"RequestThrottled",
+            WorldGenerationJobErrorCode::ResourceNotFound => &"ResourceNotFound",
+            WorldGenerationJobErrorCode::UnknownVariant(UnknownWorldGenerationJobErrorCode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorldGenerationJobErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllWorldGenerationFailed" => WorldGenerationJobErrorCode::AllWorldGenerationFailed,
+            "InternalServiceError" => WorldGenerationJobErrorCode::InternalServiceError,
+            "InvalidInput" => WorldGenerationJobErrorCode::InvalidInput,
+            "LimitExceeded" => WorldGenerationJobErrorCode::LimitExceeded,
+            "RequestThrottled" => WorldGenerationJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => WorldGenerationJobErrorCode::ResourceNotFound,
+            _ => WorldGenerationJobErrorCode::UnknownVariant(UnknownWorldGenerationJobErrorCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorldGenerationJobErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllWorldGenerationFailed" => WorldGenerationJobErrorCode::AllWorldGenerationFailed,
+            "InternalServiceError" => WorldGenerationJobErrorCode::InternalServiceError,
+            "InvalidInput" => WorldGenerationJobErrorCode::InvalidInput,
+            "LimitExceeded" => WorldGenerationJobErrorCode::LimitExceeded,
+            "RequestThrottled" => WorldGenerationJobErrorCode::RequestThrottled,
+            "ResourceNotFound" => WorldGenerationJobErrorCode::ResourceNotFound,
+            _ => WorldGenerationJobErrorCode::UnknownVariant(UnknownWorldGenerationJobErrorCode {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorldGenerationJobErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorldGenerationJobErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorldGenerationJobErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownWorldGenerationJobStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum WorldGenerationJobStatus {
+    Canceled,
+    Canceling,
+    Completed,
+    Failed,
+    PartialFailed,
+    Pending,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownWorldGenerationJobStatus),
+}
+
+impl Default for WorldGenerationJobStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for WorldGenerationJobStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for WorldGenerationJobStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for WorldGenerationJobStatus {
+    fn into(self) -> String {
+        match self {
+            WorldGenerationJobStatus::Canceled => "Canceled".to_string(),
+            WorldGenerationJobStatus::Canceling => "Canceling".to_string(),
+            WorldGenerationJobStatus::Completed => "Completed".to_string(),
+            WorldGenerationJobStatus::Failed => "Failed".to_string(),
+            WorldGenerationJobStatus::PartialFailed => "PartialFailed".to_string(),
+            WorldGenerationJobStatus::Pending => "Pending".to_string(),
+            WorldGenerationJobStatus::Running => "Running".to_string(),
+            WorldGenerationJobStatus::UnknownVariant(UnknownWorldGenerationJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a WorldGenerationJobStatus {
+    fn into(self) -> &'a str {
+        match self {
+            WorldGenerationJobStatus::Canceled => &"Canceled",
+            WorldGenerationJobStatus::Canceling => &"Canceling",
+            WorldGenerationJobStatus::Completed => &"Completed",
+            WorldGenerationJobStatus::Failed => &"Failed",
+            WorldGenerationJobStatus::PartialFailed => &"PartialFailed",
+            WorldGenerationJobStatus::Pending => &"Pending",
+            WorldGenerationJobStatus::Running => &"Running",
+            WorldGenerationJobStatus::UnknownVariant(UnknownWorldGenerationJobStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for WorldGenerationJobStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "Canceled" => WorldGenerationJobStatus::Canceled,
+            "Canceling" => WorldGenerationJobStatus::Canceling,
+            "Completed" => WorldGenerationJobStatus::Completed,
+            "Failed" => WorldGenerationJobStatus::Failed,
+            "PartialFailed" => WorldGenerationJobStatus::PartialFailed,
+            "Pending" => WorldGenerationJobStatus::Pending,
+            "Running" => WorldGenerationJobStatus::Running,
+            _ => WorldGenerationJobStatus::UnknownVariant(UnknownWorldGenerationJobStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for WorldGenerationJobStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Canceled" => WorldGenerationJobStatus::Canceled,
+            "Canceling" => WorldGenerationJobStatus::Canceling,
+            "Completed" => WorldGenerationJobStatus::Completed,
+            "Failed" => WorldGenerationJobStatus::Failed,
+            "PartialFailed" => WorldGenerationJobStatus::PartialFailed,
+            "Pending" => WorldGenerationJobStatus::Pending,
+            "Running" => WorldGenerationJobStatus::Running,
+            _ => WorldGenerationJobStatus::UnknownVariant(UnknownWorldGenerationJobStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for WorldGenerationJobStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for WorldGenerationJobStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for WorldGenerationJobStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a world generator job.</p>
@@ -3185,7 +5625,7 @@ pub struct WorldGenerationJobSummary {
     /// <p><p>The status of the world generator job:</p> <dl> <dt>Pending</dt> <dd> <p>The world generator job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generator job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generator job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generator job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generator job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generator job is being cancelled.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<WorldGenerationJobStatus>,
     /// <p>The number of worlds that were generated.</p>
     #[serde(rename = "succeededWorldCount")]
     #[serde(skip_serializing_if = "Option::is_none")]

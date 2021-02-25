@@ -57,7 +57,7 @@ pub struct Approval {
     /// <p>The state of the approval, APPROVE or REVOKE. REVOKE states are not stored.</p>
     #[serde(rename = "approvalState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approval_state: Option<String>,
+    pub approval_state: Option<ApprovalState>,
     /// <p>The Amazon Resource Name (ARN) of the user.</p>
     #[serde(rename = "userArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -127,7 +127,7 @@ pub struct ApprovalRuleOverriddenEventMetadata {
     /// <p>The status of the override event.</p>
     #[serde(rename = "overrideStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub override_status: Option<String>,
+    pub override_status: Option<OverrideStatus>,
     /// <p>The revision ID of the pull request when the override event occurred.</p>
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -172,6 +172,106 @@ pub struct ApprovalRuleTemplate {
     pub rule_content_sha_256: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownApprovalState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ApprovalState {
+    Approve,
+    Revoke,
+    #[doc(hidden)]
+    UnknownVariant(UnknownApprovalState),
+}
+
+impl Default for ApprovalState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ApprovalState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ApprovalState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ApprovalState {
+    fn into(self) -> String {
+        match self {
+            ApprovalState::Approve => "APPROVE".to_string(),
+            ApprovalState::Revoke => "REVOKE".to_string(),
+            ApprovalState::UnknownVariant(UnknownApprovalState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ApprovalState {
+    fn into(self) -> &'a str {
+        match self {
+            ApprovalState::Approve => &"APPROVE",
+            ApprovalState::Revoke => &"REVOKE",
+            ApprovalState::UnknownVariant(UnknownApprovalState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ApprovalState {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPROVE" => ApprovalState::Approve,
+            "REVOKE" => ApprovalState::Revoke,
+            _ => ApprovalState::UnknownVariant(UnknownApprovalState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ApprovalState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPROVE" => ApprovalState::Approve,
+            "REVOKE" => ApprovalState::Revoke,
+            _ => ApprovalState::UnknownVariant(UnknownApprovalState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ApprovalState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ApprovalState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ApprovalState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Returns information about a change in the approval state for a pull request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -179,7 +279,7 @@ pub struct ApprovalStateChangedEventMetadata {
     /// <p>The approval status for the pull request.</p>
     #[serde(rename = "approvalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub approval_status: Option<String>,
+    pub approval_status: Option<ApprovalState>,
     /// <p>The revision ID of the pull request when the approval state changed.</p>
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -258,11 +358,11 @@ pub struct BatchDescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -280,7 +380,7 @@ pub struct BatchDescribeMergeConflictsInput {
     pub max_merge_hunks: Option<i64>,
     /// <p>The merge option or strategy you want to use to merge the code.</p>
     #[serde(rename = "mergeOption")]
-    pub merge_option: String,
+    pub merge_option: MergeOptionTypeEnum,
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -456,6 +556,112 @@ pub struct BranchInfo {
     pub commit_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeTypeEnum {
+    A,
+    D,
+    M,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeTypeEnum),
+}
+
+impl Default for ChangeTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ChangeTypeEnum::A => "A".to_string(),
+            ChangeTypeEnum::D => "D".to_string(),
+            ChangeTypeEnum::M => "M".to_string(),
+            ChangeTypeEnum::UnknownVariant(UnknownChangeTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeTypeEnum::A => &"A",
+            ChangeTypeEnum::D => &"D",
+            ChangeTypeEnum::M => &"M",
+            ChangeTypeEnum::UnknownVariant(UnknownChangeTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "A" => ChangeTypeEnum::A,
+            "D" => ChangeTypeEnum::D,
+            "M" => ChangeTypeEnum::M,
+            _ => ChangeTypeEnum::UnknownVariant(UnknownChangeTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "A" => ChangeTypeEnum::A,
+            "D" => ChangeTypeEnum::D,
+            "M" => ChangeTypeEnum::M,
+            _ => ChangeTypeEnum::UnknownVariant(UnknownChangeTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChangeTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChangeTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Returns information about a specific comment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -622,6 +828,113 @@ pub struct Conflict {
     pub merge_hunks: Option<Vec<MergeHunk>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConflictDetailLevelTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConflictDetailLevelTypeEnum {
+    FileLevel,
+    LineLevel,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConflictDetailLevelTypeEnum),
+}
+
+impl Default for ConflictDetailLevelTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConflictDetailLevelTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConflictDetailLevelTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConflictDetailLevelTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ConflictDetailLevelTypeEnum::FileLevel => "FILE_LEVEL".to_string(),
+            ConflictDetailLevelTypeEnum::LineLevel => "LINE_LEVEL".to_string(),
+            ConflictDetailLevelTypeEnum::UnknownVariant(UnknownConflictDetailLevelTypeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConflictDetailLevelTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ConflictDetailLevelTypeEnum::FileLevel => &"FILE_LEVEL",
+            ConflictDetailLevelTypeEnum::LineLevel => &"LINE_LEVEL",
+            ConflictDetailLevelTypeEnum::UnknownVariant(UnknownConflictDetailLevelTypeEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConflictDetailLevelTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "FILE_LEVEL" => ConflictDetailLevelTypeEnum::FileLevel,
+            "LINE_LEVEL" => ConflictDetailLevelTypeEnum::LineLevel,
+            _ => ConflictDetailLevelTypeEnum::UnknownVariant(UnknownConflictDetailLevelTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConflictDetailLevelTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FILE_LEVEL" => ConflictDetailLevelTypeEnum::FileLevel,
+            "LINE_LEVEL" => ConflictDetailLevelTypeEnum::LineLevel,
+            _ => ConflictDetailLevelTypeEnum::UnknownVariant(UnknownConflictDetailLevelTypeEnum {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConflictDetailLevelTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConflictDetailLevelTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConflictDetailLevelTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the metadata for a conflict in a merge operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -684,6 +997,127 @@ pub struct ConflictResolution {
     #[serde(rename = "setFileModes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub set_file_modes: Option<Vec<SetFileModeEntry>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConflictResolutionStrategyTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConflictResolutionStrategyTypeEnum {
+    AcceptDestination,
+    AcceptSource,
+    Automerge,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConflictResolutionStrategyTypeEnum),
+}
+
+impl Default for ConflictResolutionStrategyTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConflictResolutionStrategyTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConflictResolutionStrategyTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConflictResolutionStrategyTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ConflictResolutionStrategyTypeEnum::AcceptDestination => {
+                "ACCEPT_DESTINATION".to_string()
+            }
+            ConflictResolutionStrategyTypeEnum::AcceptSource => "ACCEPT_SOURCE".to_string(),
+            ConflictResolutionStrategyTypeEnum::Automerge => "AUTOMERGE".to_string(),
+            ConflictResolutionStrategyTypeEnum::None => "NONE".to_string(),
+            ConflictResolutionStrategyTypeEnum::UnknownVariant(
+                UnknownConflictResolutionStrategyTypeEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConflictResolutionStrategyTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ConflictResolutionStrategyTypeEnum::AcceptDestination => &"ACCEPT_DESTINATION",
+            ConflictResolutionStrategyTypeEnum::AcceptSource => &"ACCEPT_SOURCE",
+            ConflictResolutionStrategyTypeEnum::Automerge => &"AUTOMERGE",
+            ConflictResolutionStrategyTypeEnum::None => &"NONE",
+            ConflictResolutionStrategyTypeEnum::UnknownVariant(
+                UnknownConflictResolutionStrategyTypeEnum { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ConflictResolutionStrategyTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPT_DESTINATION" => ConflictResolutionStrategyTypeEnum::AcceptDestination,
+            "ACCEPT_SOURCE" => ConflictResolutionStrategyTypeEnum::AcceptSource,
+            "AUTOMERGE" => ConflictResolutionStrategyTypeEnum::Automerge,
+            "NONE" => ConflictResolutionStrategyTypeEnum::None,
+            _ => ConflictResolutionStrategyTypeEnum::UnknownVariant(
+                UnknownConflictResolutionStrategyTypeEnum {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ConflictResolutionStrategyTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPT_DESTINATION" => ConflictResolutionStrategyTypeEnum::AcceptDestination,
+            "ACCEPT_SOURCE" => ConflictResolutionStrategyTypeEnum::AcceptSource,
+            "AUTOMERGE" => ConflictResolutionStrategyTypeEnum::Automerge,
+            "NONE" => ConflictResolutionStrategyTypeEnum::None,
+            _ => ConflictResolutionStrategyTypeEnum::UnknownVariant(
+                UnknownConflictResolutionStrategyTypeEnum { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConflictResolutionStrategyTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConflictResolutionStrategyTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ConflictResolutionStrategyTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -882,7 +1316,7 @@ pub struct CreateUnreferencedMergeCommitInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
     #[serde(rename = "conflictResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -890,7 +1324,7 @@ pub struct CreateUnreferencedMergeCommitInput {
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -904,7 +1338,7 @@ pub struct CreateUnreferencedMergeCommitInput {
     pub keep_empty_folders: Option<bool>,
     /// <p>The merge option or strategy you want to use to merge the code.</p>
     #[serde(rename = "mergeOption")]
-    pub merge_option: String,
+    pub merge_option: MergeOptionTypeEnum,
     /// <p>The name of the repository where you want to create the unreferenced merge commit.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -1084,11 +1518,11 @@ pub struct DescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -1101,7 +1535,7 @@ pub struct DescribeMergeConflictsInput {
     pub max_merge_hunks: Option<i64>,
     /// <p>The merge option or strategy you want to use to merge the code.</p>
     #[serde(rename = "mergeOption")]
-    pub merge_option: String,
+    pub merge_option: MergeOptionTypeEnum,
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1157,7 +1591,7 @@ pub struct DescribePullRequestEventsInput {
     /// <p>Optional. The pull request event type about which you want to return information.</p>
     #[serde(rename = "pullRequestEventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pull_request_event_type: Option<String>,
+    pub pull_request_event_type: Option<PullRequestEventType>,
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -1190,7 +1624,7 @@ pub struct Difference {
     /// <p>Whether the change type of the difference is an addition (A), deletion (D), or modification (M).</p>
     #[serde(rename = "changeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub change_type: Option<String>,
+    pub change_type: Option<ChangeTypeEnum>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1260,7 +1694,7 @@ pub struct File {
     /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
     /// <p>The relative path of the file from the folder where the query originated.</p>
     #[serde(rename = "relativePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1282,7 +1716,116 @@ pub struct FileMetadata {
     /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileModeTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileModeTypeEnum {
+    Executable,
+    Normal,
+    Symlink,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileModeTypeEnum),
+}
+
+impl Default for FileModeTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileModeTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileModeTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileModeTypeEnum {
+    fn into(self) -> String {
+        match self {
+            FileModeTypeEnum::Executable => "EXECUTABLE".to_string(),
+            FileModeTypeEnum::Normal => "NORMAL".to_string(),
+            FileModeTypeEnum::Symlink => "SYMLINK".to_string(),
+            FileModeTypeEnum::UnknownVariant(UnknownFileModeTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileModeTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            FileModeTypeEnum::Executable => &"EXECUTABLE",
+            FileModeTypeEnum::Normal => &"NORMAL",
+            FileModeTypeEnum::Symlink => &"SYMLINK",
+            FileModeTypeEnum::UnknownVariant(UnknownFileModeTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for FileModeTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "EXECUTABLE" => FileModeTypeEnum::Executable,
+            "NORMAL" => FileModeTypeEnum::Normal,
+            "SYMLINK" => FileModeTypeEnum::Symlink,
+            _ => FileModeTypeEnum::UnknownVariant(UnknownFileModeTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileModeTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EXECUTABLE" => FileModeTypeEnum::Executable,
+            "NORMAL" => FileModeTypeEnum::Normal,
+            "SYMLINK" => FileModeTypeEnum::Symlink,
+            _ => FileModeTypeEnum::UnknownVariant(UnknownFileModeTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileModeTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileModeTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileModeTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about file modes in a merge or pull request.</p>
@@ -1292,15 +1835,15 @@ pub struct FileModes {
     /// <p>The file mode of a file in the base of a merge or pull request.</p>
     #[serde(rename = "base")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub base: Option<String>,
+    pub base: Option<FileModeTypeEnum>,
     /// <p>The file mode of a file in the destination of a merge or pull request.</p>
     #[serde(rename = "destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination: Option<String>,
+    pub destination: Option<FileModeTypeEnum>,
     /// <p>The file mode of a file in the source of a merge or pull request.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<String>,
+    pub source: Option<FileModeTypeEnum>,
 }
 
 /// <p>Information about the size of files in a merge or pull request.</p>
@@ -1630,7 +2173,7 @@ pub struct GetFileOutput {
     pub file_content: bytes::Bytes,
     /// <p><p>The extrapolated file mode permissions of the blob. Valid values include strings such as EXECUTABLE and not numeric values.</p> <note> <p>The file mode permissions returned by this API are not the standard file mode permission values, such as 100644, but rather extrapolated values. See the supported return values.</p> </note></p>
     #[serde(rename = "fileMode")]
-    pub file_mode: String,
+    pub file_mode: FileModeTypeEnum,
     /// <p>The fully qualified path to the specified file. Returns the name and extension of the file.</p>
     #[serde(rename = "filePath")]
     pub file_path: String,
@@ -1691,11 +2234,11 @@ pub struct GetMergeCommitInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -1734,11 +2277,11 @@ pub struct GetMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -1748,7 +2291,7 @@ pub struct GetMergeConflictsInput {
     pub max_conflict_files: Option<i64>,
     /// <p>The merge option or strategy you want to use to merge the code. </p>
     #[serde(rename = "mergeOption")]
-    pub merge_option: String,
+    pub merge_option: MergeOptionTypeEnum,
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1792,11 +2335,11 @@ pub struct GetMergeOptionsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -1819,7 +2362,7 @@ pub struct GetMergeOptionsOutput {
     pub destination_commit_id: String,
     /// <p>The merge option or strategy used to merge the code.</p>
     #[serde(rename = "mergeOptions")]
-    pub merge_options: Vec<String>,
+    pub merge_options: Vec<MergeOptionTypeEnum>,
     /// <p>The commit ID of the source commit specifier that was used in the merge evaluation.</p>
     #[serde(rename = "sourceCommitId")]
     pub source_commit_id: String,
@@ -2045,7 +2588,7 @@ pub struct ListPullRequestsInput {
     /// <p>Optional. The status of the pull request. If used, this refines the results to the pull requests that match the specified status.</p>
     #[serde(rename = "pullRequestStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pull_request_status: Option<String>,
+    pub pull_request_status: Option<PullRequestStatusEnum>,
     /// <p>The name of the repository for which you want to list pull requests.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -2103,11 +2646,11 @@ pub struct ListRepositoriesInput {
     /// <p>The order in which to sort the results of a list repositories operation.</p>
     #[serde(rename = "order")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub order: Option<String>,
+    pub order: Option<OrderEnum>,
     /// <p>The criteria used to sort the results of a list repositories operation.</p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_by: Option<String>,
+    pub sort_by: Option<SortByEnum>,
 }
 
 /// <p>Represents the output of a list repositories operation.</p>
@@ -2163,7 +2706,7 @@ pub struct Location {
     /// <p>In a comparison of commits or a pull request, whether the change is in the before or after of that comparison.</p>
     #[serde(rename = "relativeFileVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub relative_file_version: Option<String>,
+    pub relative_file_version: Option<RelativeFileVersionEnum>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2211,7 +2754,7 @@ pub struct MergeBranchesBySquashInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
     #[serde(rename = "conflictResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2219,7 +2762,7 @@ pub struct MergeBranchesBySquashInput {
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -2270,7 +2813,7 @@ pub struct MergeBranchesByThreeWayInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
     #[serde(rename = "conflictResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2278,7 +2821,7 @@ pub struct MergeBranchesByThreeWayInput {
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -2370,7 +2913,7 @@ pub struct MergeMetadata {
     /// <p>The merge strategy used in the merge.</p>
     #[serde(rename = "mergeOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub merge_option: Option<String>,
+    pub merge_option: Option<MergeOptionTypeEnum>,
     /// <p>The Amazon Resource Name (ARN) of the user who merged the branches.</p>
     #[serde(rename = "mergedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2384,11 +2927,120 @@ pub struct MergeOperations {
     /// <p>The operation on a file in the destination of a merge or pull request.</p>
     #[serde(rename = "destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination: Option<String>,
+    pub destination: Option<ChangeTypeEnum>,
     /// <p>The operation (add, modify, or delete) on a file in the source of a merge or pull request.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<String>,
+    pub source: Option<ChangeTypeEnum>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMergeOptionTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MergeOptionTypeEnum {
+    FastForwardMerge,
+    SquashMerge,
+    ThreeWayMerge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMergeOptionTypeEnum),
+}
+
+impl Default for MergeOptionTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MergeOptionTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MergeOptionTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MergeOptionTypeEnum {
+    fn into(self) -> String {
+        match self {
+            MergeOptionTypeEnum::FastForwardMerge => "FAST_FORWARD_MERGE".to_string(),
+            MergeOptionTypeEnum::SquashMerge => "SQUASH_MERGE".to_string(),
+            MergeOptionTypeEnum::ThreeWayMerge => "THREE_WAY_MERGE".to_string(),
+            MergeOptionTypeEnum::UnknownVariant(UnknownMergeOptionTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MergeOptionTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            MergeOptionTypeEnum::FastForwardMerge => &"FAST_FORWARD_MERGE",
+            MergeOptionTypeEnum::SquashMerge => &"SQUASH_MERGE",
+            MergeOptionTypeEnum::ThreeWayMerge => &"THREE_WAY_MERGE",
+            MergeOptionTypeEnum::UnknownVariant(UnknownMergeOptionTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for MergeOptionTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAST_FORWARD_MERGE" => MergeOptionTypeEnum::FastForwardMerge,
+            "SQUASH_MERGE" => MergeOptionTypeEnum::SquashMerge,
+            "THREE_WAY_MERGE" => MergeOptionTypeEnum::ThreeWayMerge,
+            _ => MergeOptionTypeEnum::UnknownVariant(UnknownMergeOptionTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MergeOptionTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAST_FORWARD_MERGE" => MergeOptionTypeEnum::FastForwardMerge,
+            "SQUASH_MERGE" => MergeOptionTypeEnum::SquashMerge,
+            "THREE_WAY_MERGE" => MergeOptionTypeEnum::ThreeWayMerge,
+            _ => MergeOptionTypeEnum::UnknownVariant(UnknownMergeOptionTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MergeOptionTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MergeOptionTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MergeOptionTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2429,7 +3081,7 @@ pub struct MergePullRequestBySquashInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
     #[serde(rename = "conflictResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2437,7 +3089,7 @@ pub struct MergePullRequestBySquashInput {
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The email address of the person merging the branches. This information is used in the commit information for the merge.</p>
     #[serde(rename = "email")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2480,7 +3132,7 @@ pub struct MergePullRequestByThreeWayInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
     #[serde(rename = "conflictDetailLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_detail_level: Option<String>,
+    pub conflict_detail_level: Option<ConflictDetailLevelTypeEnum>,
     /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
     #[serde(rename = "conflictResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2488,7 +3140,7 @@ pub struct MergePullRequestByThreeWayInput {
     /// <p>Specifies which branch to use when resolving conflicts, or whether to attempt automatically merging two versions of a file. The default is NONE, which requires any conflicts to be resolved manually before the merge operation is successful.</p>
     #[serde(rename = "conflictResolutionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conflict_resolution_strategy: Option<String>,
+    pub conflict_resolution_strategy: Option<ConflictResolutionStrategyTypeEnum>,
     /// <p>The email address of the person merging the branches. This information is used in the commit information for the merge.</p>
     #[serde(rename = "email")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2517,6 +3169,117 @@ pub struct MergePullRequestByThreeWayOutput {
     pub pull_request: Option<PullRequest>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObjectTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObjectTypeEnum {
+    Directory,
+    File,
+    GitLink,
+    SymbolicLink,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObjectTypeEnum),
+}
+
+impl Default for ObjectTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObjectTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObjectTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObjectTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ObjectTypeEnum::Directory => "DIRECTORY".to_string(),
+            ObjectTypeEnum::File => "FILE".to_string(),
+            ObjectTypeEnum::GitLink => "GIT_LINK".to_string(),
+            ObjectTypeEnum::SymbolicLink => "SYMBOLIC_LINK".to_string(),
+            ObjectTypeEnum::UnknownVariant(UnknownObjectTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObjectTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ObjectTypeEnum::Directory => &"DIRECTORY",
+            ObjectTypeEnum::File => &"FILE",
+            ObjectTypeEnum::GitLink => &"GIT_LINK",
+            ObjectTypeEnum::SymbolicLink => &"SYMBOLIC_LINK",
+            ObjectTypeEnum::UnknownVariant(UnknownObjectTypeEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ObjectTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "DIRECTORY" => ObjectTypeEnum::Directory,
+            "FILE" => ObjectTypeEnum::File,
+            "GIT_LINK" => ObjectTypeEnum::GitLink,
+            "SYMBOLIC_LINK" => ObjectTypeEnum::SymbolicLink,
+            _ => ObjectTypeEnum::UnknownVariant(UnknownObjectTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObjectTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DIRECTORY" => ObjectTypeEnum::Directory,
+            "FILE" => ObjectTypeEnum::File,
+            "GIT_LINK" => ObjectTypeEnum::GitLink,
+            "SYMBOLIC_LINK" => ObjectTypeEnum::SymbolicLink,
+            _ => ObjectTypeEnum::UnknownVariant(UnknownObjectTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObjectTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ObjectTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ObjectTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about the type of an object in a merge operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2524,15 +3287,116 @@ pub struct ObjectTypes {
     /// <p>The type of the object in the base commit of the merge.</p>
     #[serde(rename = "base")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub base: Option<String>,
+    pub base: Option<ObjectTypeEnum>,
     /// <p>The type of the object in the destination branch.</p>
     #[serde(rename = "destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination: Option<String>,
+    pub destination: Option<ObjectTypeEnum>,
     /// <p>The type of the object in the source branch.</p>
     #[serde(rename = "source")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<String>,
+    pub source: Option<ObjectTypeEnum>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderEnum {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderEnum),
+}
+
+impl Default for OrderEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderEnum {
+    fn into(self) -> String {
+        match self {
+            OrderEnum::Ascending => "ascending".to_string(),
+            OrderEnum::Descending => "descending".to_string(),
+            OrderEnum::UnknownVariant(UnknownOrderEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderEnum {
+    fn into(self) -> &'a str {
+        match self {
+            OrderEnum::Ascending => &"ascending",
+            OrderEnum::Descending => &"descending",
+            OrderEnum::UnknownVariant(UnknownOrderEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "ascending" => OrderEnum::Ascending,
+            "descending" => OrderEnum::Descending,
+            _ => OrderEnum::UnknownVariant(UnknownOrderEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ascending" => OrderEnum::Ascending,
+            "descending" => OrderEnum::Descending,
+            _ => OrderEnum::UnknownVariant(UnknownOrderEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns information about the template that created the approval rule for a pull request.</p>
@@ -2554,13 +3418,113 @@ pub struct OriginApprovalRuleTemplate {
 pub struct OverridePullRequestApprovalRulesInput {
     /// <p>Whether you want to set aside approval rule requirements for the pull request (OVERRIDE) or revoke a previous override and apply approval rule requirements (REVOKE). REVOKE status is not stored.</p>
     #[serde(rename = "overrideStatus")]
-    pub override_status: String,
+    pub override_status: OverrideStatus,
     /// <p>The system-generated ID of the pull request for which you want to override all approval rule requirements. To get this information, use <a>GetPullRequest</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
     /// <p>The system-generated ID of the most recent revision of the pull request. You cannot override approval rules for anything but the most recent revision of a pull request. To get the revision ID, use GetPullRequest.</p>
     #[serde(rename = "revisionId")]
     pub revision_id: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOverrideStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OverrideStatus {
+    Override,
+    Revoke,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOverrideStatus),
+}
+
+impl Default for OverrideStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OverrideStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OverrideStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OverrideStatus {
+    fn into(self) -> String {
+        match self {
+            OverrideStatus::Override => "OVERRIDE".to_string(),
+            OverrideStatus::Revoke => "REVOKE".to_string(),
+            OverrideStatus::UnknownVariant(UnknownOverrideStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OverrideStatus {
+    fn into(self) -> &'a str {
+        match self {
+            OverrideStatus::Override => &"OVERRIDE",
+            OverrideStatus::Revoke => &"REVOKE",
+            OverrideStatus::UnknownVariant(UnknownOverrideStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OverrideStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "OVERRIDE" => OverrideStatus::Override,
+            "REVOKE" => OverrideStatus::Revoke,
+            _ => OverrideStatus::UnknownVariant(UnknownOverrideStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OverrideStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "OVERRIDE" => OverrideStatus::Override,
+            "REVOKE" => OverrideStatus::Revoke,
+            _ => OverrideStatus::UnknownVariant(UnknownOverrideStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OverrideStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OverrideStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OverrideStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2746,7 +3710,7 @@ pub struct PullRequest {
     /// <p>The status of the pull request. Pull request status can only change from <code>OPEN</code> to <code>CLOSED</code>.</p>
     #[serde(rename = "pullRequestStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pull_request_status: Option<String>,
+    pub pull_request_status: Option<PullRequestStatusEnum>,
     /// <p>The targets of the pull request, including the source branch and destination branch for the pull request.</p>
     #[serde(rename = "pullRequestTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2814,7 +3778,7 @@ pub struct PullRequestEvent {
     /// <p>The type of the pull request event (for example, a status change event (PULL_REQUEST_STATUS_CHANGED) or update event (PULL_REQUEST_SOURCE_REFERENCE_UPDATED)).</p>
     #[serde(rename = "pullRequestEventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pull_request_event_type: Option<String>,
+    pub pull_request_event_type: Option<PullRequestEventType>,
     /// <p>The system-generated ID of the pull request.</p>
     #[serde(rename = "pullRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2833,6 +3797,203 @@ pub struct PullRequestEvent {
     #[serde(rename = "pullRequestStatusChangedEventMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_status_changed_event_metadata: Option<PullRequestStatusChangedEventMetadata>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPullRequestEventType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PullRequestEventType {
+    PullRequestApprovalRuleCreated,
+    PullRequestApprovalRuleDeleted,
+    PullRequestApprovalRuleOverridden,
+    PullRequestApprovalRuleUpdated,
+    PullRequestApprovalStateChanged,
+    PullRequestCreated,
+    PullRequestMergeStateChanged,
+    PullRequestSourceReferenceUpdated,
+    PullRequestStatusChanged,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPullRequestEventType),
+}
+
+impl Default for PullRequestEventType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PullRequestEventType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PullRequestEventType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PullRequestEventType {
+    fn into(self) -> String {
+        match self {
+            PullRequestEventType::PullRequestApprovalRuleCreated => {
+                "PULL_REQUEST_APPROVAL_RULE_CREATED".to_string()
+            }
+            PullRequestEventType::PullRequestApprovalRuleDeleted => {
+                "PULL_REQUEST_APPROVAL_RULE_DELETED".to_string()
+            }
+            PullRequestEventType::PullRequestApprovalRuleOverridden => {
+                "PULL_REQUEST_APPROVAL_RULE_OVERRIDDEN".to_string()
+            }
+            PullRequestEventType::PullRequestApprovalRuleUpdated => {
+                "PULL_REQUEST_APPROVAL_RULE_UPDATED".to_string()
+            }
+            PullRequestEventType::PullRequestApprovalStateChanged => {
+                "PULL_REQUEST_APPROVAL_STATE_CHANGED".to_string()
+            }
+            PullRequestEventType::PullRequestCreated => "PULL_REQUEST_CREATED".to_string(),
+            PullRequestEventType::PullRequestMergeStateChanged => {
+                "PULL_REQUEST_MERGE_STATE_CHANGED".to_string()
+            }
+            PullRequestEventType::PullRequestSourceReferenceUpdated => {
+                "PULL_REQUEST_SOURCE_REFERENCE_UPDATED".to_string()
+            }
+            PullRequestEventType::PullRequestStatusChanged => {
+                "PULL_REQUEST_STATUS_CHANGED".to_string()
+            }
+            PullRequestEventType::UnknownVariant(UnknownPullRequestEventType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PullRequestEventType {
+    fn into(self) -> &'a str {
+        match self {
+            PullRequestEventType::PullRequestApprovalRuleCreated => {
+                &"PULL_REQUEST_APPROVAL_RULE_CREATED"
+            }
+            PullRequestEventType::PullRequestApprovalRuleDeleted => {
+                &"PULL_REQUEST_APPROVAL_RULE_DELETED"
+            }
+            PullRequestEventType::PullRequestApprovalRuleOverridden => {
+                &"PULL_REQUEST_APPROVAL_RULE_OVERRIDDEN"
+            }
+            PullRequestEventType::PullRequestApprovalRuleUpdated => {
+                &"PULL_REQUEST_APPROVAL_RULE_UPDATED"
+            }
+            PullRequestEventType::PullRequestApprovalStateChanged => {
+                &"PULL_REQUEST_APPROVAL_STATE_CHANGED"
+            }
+            PullRequestEventType::PullRequestCreated => &"PULL_REQUEST_CREATED",
+            PullRequestEventType::PullRequestMergeStateChanged => {
+                &"PULL_REQUEST_MERGE_STATE_CHANGED"
+            }
+            PullRequestEventType::PullRequestSourceReferenceUpdated => {
+                &"PULL_REQUEST_SOURCE_REFERENCE_UPDATED"
+            }
+            PullRequestEventType::PullRequestStatusChanged => &"PULL_REQUEST_STATUS_CHANGED",
+            PullRequestEventType::UnknownVariant(UnknownPullRequestEventType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PullRequestEventType {
+    fn from(name: &str) -> Self {
+        match name {
+            "PULL_REQUEST_APPROVAL_RULE_CREATED" => {
+                PullRequestEventType::PullRequestApprovalRuleCreated
+            }
+            "PULL_REQUEST_APPROVAL_RULE_DELETED" => {
+                PullRequestEventType::PullRequestApprovalRuleDeleted
+            }
+            "PULL_REQUEST_APPROVAL_RULE_OVERRIDDEN" => {
+                PullRequestEventType::PullRequestApprovalRuleOverridden
+            }
+            "PULL_REQUEST_APPROVAL_RULE_UPDATED" => {
+                PullRequestEventType::PullRequestApprovalRuleUpdated
+            }
+            "PULL_REQUEST_APPROVAL_STATE_CHANGED" => {
+                PullRequestEventType::PullRequestApprovalStateChanged
+            }
+            "PULL_REQUEST_CREATED" => PullRequestEventType::PullRequestCreated,
+            "PULL_REQUEST_MERGE_STATE_CHANGED" => {
+                PullRequestEventType::PullRequestMergeStateChanged
+            }
+            "PULL_REQUEST_SOURCE_REFERENCE_UPDATED" => {
+                PullRequestEventType::PullRequestSourceReferenceUpdated
+            }
+            "PULL_REQUEST_STATUS_CHANGED" => PullRequestEventType::PullRequestStatusChanged,
+            _ => PullRequestEventType::UnknownVariant(UnknownPullRequestEventType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PullRequestEventType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "PULL_REQUEST_APPROVAL_RULE_CREATED" => {
+                PullRequestEventType::PullRequestApprovalRuleCreated
+            }
+            "PULL_REQUEST_APPROVAL_RULE_DELETED" => {
+                PullRequestEventType::PullRequestApprovalRuleDeleted
+            }
+            "PULL_REQUEST_APPROVAL_RULE_OVERRIDDEN" => {
+                PullRequestEventType::PullRequestApprovalRuleOverridden
+            }
+            "PULL_REQUEST_APPROVAL_RULE_UPDATED" => {
+                PullRequestEventType::PullRequestApprovalRuleUpdated
+            }
+            "PULL_REQUEST_APPROVAL_STATE_CHANGED" => {
+                PullRequestEventType::PullRequestApprovalStateChanged
+            }
+            "PULL_REQUEST_CREATED" => PullRequestEventType::PullRequestCreated,
+            "PULL_REQUEST_MERGE_STATE_CHANGED" => {
+                PullRequestEventType::PullRequestMergeStateChanged
+            }
+            "PULL_REQUEST_SOURCE_REFERENCE_UPDATED" => {
+                PullRequestEventType::PullRequestSourceReferenceUpdated
+            }
+            "PULL_REQUEST_STATUS_CHANGED" => PullRequestEventType::PullRequestStatusChanged,
+            _ => PullRequestEventType::UnknownVariant(UnknownPullRequestEventType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PullRequestEventType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PullRequestEventType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PullRequestEventType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns information about the change in the merge state for a pull request event. </p>
@@ -2882,7 +4043,111 @@ pub struct PullRequestStatusChangedEventMetadata {
     /// <p>The changed status of the pull request.</p>
     #[serde(rename = "pullRequestStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pull_request_status: Option<String>,
+    pub pull_request_status: Option<PullRequestStatusEnum>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPullRequestStatusEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PullRequestStatusEnum {
+    Closed,
+    Open,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPullRequestStatusEnum),
+}
+
+impl Default for PullRequestStatusEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PullRequestStatusEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PullRequestStatusEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PullRequestStatusEnum {
+    fn into(self) -> String {
+        match self {
+            PullRequestStatusEnum::Closed => "CLOSED".to_string(),
+            PullRequestStatusEnum::Open => "OPEN".to_string(),
+            PullRequestStatusEnum::UnknownVariant(UnknownPullRequestStatusEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PullRequestStatusEnum {
+    fn into(self) -> &'a str {
+        match self {
+            PullRequestStatusEnum::Closed => &"CLOSED",
+            PullRequestStatusEnum::Open => &"OPEN",
+            PullRequestStatusEnum::UnknownVariant(UnknownPullRequestStatusEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PullRequestStatusEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOSED" => PullRequestStatusEnum::Closed,
+            "OPEN" => PullRequestStatusEnum::Open,
+            _ => PullRequestStatusEnum::UnknownVariant(UnknownPullRequestStatusEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PullRequestStatusEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOSED" => PullRequestStatusEnum::Closed,
+            "OPEN" => PullRequestStatusEnum::Open,
+            _ => PullRequestStatusEnum::UnknownVariant(UnknownPullRequestStatusEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PullRequestStatusEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PullRequestStatusEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PullRequestStatusEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns information about a pull request target.</p>
@@ -2946,7 +4211,7 @@ pub struct PutFileEntry {
     /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
     /// <p>The full path to the file in the repository, including the name of the file.</p>
     #[serde(rename = "filePath")]
     pub file_path: String,
@@ -2981,7 +4246,7 @@ pub struct PutFileInput {
     /// <p>The file mode permissions of the blob. Valid file mode permissions are listed here.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
     /// <p><p>The name of the file you want to add or update, including the relative path to the file in the repository.</p> <note> <p>If the path does not currently exist in the repository, the path is created as part of adding the file.</p> </note></p>
     #[serde(rename = "filePath")]
     pub file_path: String,
@@ -3070,6 +4335,110 @@ pub struct ReactionValueFormats {
     pub unicode: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRelativeFileVersionEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RelativeFileVersionEnum {
+    After,
+    Before,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRelativeFileVersionEnum),
+}
+
+impl Default for RelativeFileVersionEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RelativeFileVersionEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RelativeFileVersionEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RelativeFileVersionEnum {
+    fn into(self) -> String {
+        match self {
+            RelativeFileVersionEnum::After => "AFTER".to_string(),
+            RelativeFileVersionEnum::Before => "BEFORE".to_string(),
+            RelativeFileVersionEnum::UnknownVariant(UnknownRelativeFileVersionEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RelativeFileVersionEnum {
+    fn into(self) -> &'a str {
+        match self {
+            RelativeFileVersionEnum::After => &"AFTER",
+            RelativeFileVersionEnum::Before => &"BEFORE",
+            RelativeFileVersionEnum::UnknownVariant(UnknownRelativeFileVersionEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RelativeFileVersionEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFTER" => RelativeFileVersionEnum::After,
+            "BEFORE" => RelativeFileVersionEnum::Before,
+            _ => RelativeFileVersionEnum::UnknownVariant(UnknownRelativeFileVersionEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RelativeFileVersionEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFTER" => RelativeFileVersionEnum::After,
+            "BEFORE" => RelativeFileVersionEnum::Before,
+            _ => RelativeFileVersionEnum::UnknownVariant(UnknownRelativeFileVersionEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RelativeFileVersionEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RelativeFileVersionEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RelativeFileVersionEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about a replacement content entry in the conflict of a merge or pull request operation.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3086,13 +4455,128 @@ pub struct ReplaceContentEntry {
     /// <p>The file mode to apply during conflict resoltion.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
     /// <p>The path of the conflicting file.</p>
     #[serde(rename = "filePath")]
     pub file_path: String,
     /// <p>The replacement type to use when determining how to resolve the conflict.</p>
     #[serde(rename = "replacementType")]
-    pub replacement_type: String,
+    pub replacement_type: ReplacementTypeEnum,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReplacementTypeEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReplacementTypeEnum {
+    KeepBase,
+    KeepDestination,
+    KeepSource,
+    UseNewContent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReplacementTypeEnum),
+}
+
+impl Default for ReplacementTypeEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReplacementTypeEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReplacementTypeEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReplacementTypeEnum {
+    fn into(self) -> String {
+        match self {
+            ReplacementTypeEnum::KeepBase => "KEEP_BASE".to_string(),
+            ReplacementTypeEnum::KeepDestination => "KEEP_DESTINATION".to_string(),
+            ReplacementTypeEnum::KeepSource => "KEEP_SOURCE".to_string(),
+            ReplacementTypeEnum::UseNewContent => "USE_NEW_CONTENT".to_string(),
+            ReplacementTypeEnum::UnknownVariant(UnknownReplacementTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReplacementTypeEnum {
+    fn into(self) -> &'a str {
+        match self {
+            ReplacementTypeEnum::KeepBase => &"KEEP_BASE",
+            ReplacementTypeEnum::KeepDestination => &"KEEP_DESTINATION",
+            ReplacementTypeEnum::KeepSource => &"KEEP_SOURCE",
+            ReplacementTypeEnum::UseNewContent => &"USE_NEW_CONTENT",
+            ReplacementTypeEnum::UnknownVariant(UnknownReplacementTypeEnum { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReplacementTypeEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "KEEP_BASE" => ReplacementTypeEnum::KeepBase,
+            "KEEP_DESTINATION" => ReplacementTypeEnum::KeepDestination,
+            "KEEP_SOURCE" => ReplacementTypeEnum::KeepSource,
+            "USE_NEW_CONTENT" => ReplacementTypeEnum::UseNewContent,
+            _ => ReplacementTypeEnum::UnknownVariant(UnknownReplacementTypeEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReplacementTypeEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "KEEP_BASE" => ReplacementTypeEnum::KeepBase,
+            "KEEP_DESTINATION" => ReplacementTypeEnum::KeepDestination,
+            "KEEP_SOURCE" => ReplacementTypeEnum::KeepSource,
+            "USE_NEW_CONTENT" => ReplacementTypeEnum::UseNewContent,
+            _ => ReplacementTypeEnum::UnknownVariant(UnknownReplacementTypeEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReplacementTypeEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ReplacementTypeEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReplacementTypeEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a repository.</p>
@@ -3171,10 +4655,126 @@ pub struct RepositoryTrigger {
     pub destination_arn: String,
     /// <p><p>The repository events that cause the trigger to run actions in another service, such as sending a notification through Amazon SNS. </p> <note> <p>The valid value &quot;all&quot; cannot be used with any other values.</p> </note></p>
     #[serde(rename = "events")]
-    pub events: Vec<String>,
+    pub events: Vec<RepositoryTriggerEventEnum>,
     /// <p>The name of the trigger.</p>
     #[serde(rename = "name")]
     pub name: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRepositoryTriggerEventEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RepositoryTriggerEventEnum {
+    All,
+    CreateReference,
+    DeleteReference,
+    UpdateReference,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRepositoryTriggerEventEnum),
+}
+
+impl Default for RepositoryTriggerEventEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RepositoryTriggerEventEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RepositoryTriggerEventEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RepositoryTriggerEventEnum {
+    fn into(self) -> String {
+        match self {
+            RepositoryTriggerEventEnum::All => "all".to_string(),
+            RepositoryTriggerEventEnum::CreateReference => "createReference".to_string(),
+            RepositoryTriggerEventEnum::DeleteReference => "deleteReference".to_string(),
+            RepositoryTriggerEventEnum::UpdateReference => "updateReference".to_string(),
+            RepositoryTriggerEventEnum::UnknownVariant(UnknownRepositoryTriggerEventEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RepositoryTriggerEventEnum {
+    fn into(self) -> &'a str {
+        match self {
+            RepositoryTriggerEventEnum::All => &"all",
+            RepositoryTriggerEventEnum::CreateReference => &"createReference",
+            RepositoryTriggerEventEnum::DeleteReference => &"deleteReference",
+            RepositoryTriggerEventEnum::UpdateReference => &"updateReference",
+            RepositoryTriggerEventEnum::UnknownVariant(UnknownRepositoryTriggerEventEnum {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RepositoryTriggerEventEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "all" => RepositoryTriggerEventEnum::All,
+            "createReference" => RepositoryTriggerEventEnum::CreateReference,
+            "deleteReference" => RepositoryTriggerEventEnum::DeleteReference,
+            "updateReference" => RepositoryTriggerEventEnum::UpdateReference,
+            _ => RepositoryTriggerEventEnum::UnknownVariant(UnknownRepositoryTriggerEventEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RepositoryTriggerEventEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "all" => RepositoryTriggerEventEnum::All,
+            "createReference" => RepositoryTriggerEventEnum::CreateReference,
+            "deleteReference" => RepositoryTriggerEventEnum::DeleteReference,
+            "updateReference" => RepositoryTriggerEventEnum::UpdateReference,
+            _ => RepositoryTriggerEventEnum::UnknownVariant(UnknownRepositoryTriggerEventEnum {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RepositoryTriggerEventEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RepositoryTriggerEventEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RepositoryTriggerEventEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A trigger failed to run.</p>
@@ -3197,10 +4797,111 @@ pub struct RepositoryTriggerExecutionFailure {
 pub struct SetFileModeEntry {
     /// <p>The file mode for the file.</p>
     #[serde(rename = "fileMode")]
-    pub file_mode: String,
+    pub file_mode: FileModeTypeEnum,
     /// <p>The full path to the file, including the name of the file.</p>
     #[serde(rename = "filePath")]
     pub file_path: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortByEnum {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortByEnum {
+    LastModifiedDate,
+    RepositoryName,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortByEnum),
+}
+
+impl Default for SortByEnum {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortByEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortByEnum {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortByEnum {
+    fn into(self) -> String {
+        match self {
+            SortByEnum::LastModifiedDate => "lastModifiedDate".to_string(),
+            SortByEnum::RepositoryName => "repositoryName".to_string(),
+            SortByEnum::UnknownVariant(UnknownSortByEnum { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortByEnum {
+    fn into(self) -> &'a str {
+        match self {
+            SortByEnum::LastModifiedDate => &"lastModifiedDate",
+            SortByEnum::RepositoryName => &"repositoryName",
+            SortByEnum::UnknownVariant(UnknownSortByEnum { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortByEnum {
+    fn from(name: &str) -> Self {
+        match name {
+            "lastModifiedDate" => SortByEnum::LastModifiedDate,
+            "repositoryName" => SortByEnum::RepositoryName,
+            _ => SortByEnum::UnknownVariant(UnknownSortByEnum {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortByEnum {
+    fn from(name: String) -> Self {
+        match &*name {
+            "lastModifiedDate" => SortByEnum::LastModifiedDate,
+            "repositoryName" => SortByEnum::RepositoryName,
+            _ => SortByEnum::UnknownVariant(UnknownSortByEnum { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortByEnum {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortByEnum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortByEnum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about a source file that is part of changes made in a commit.</p>
@@ -3249,7 +4950,7 @@ pub struct SymbolicLink {
     /// <p>The file mode permissions of the blob that cotains information about the symbolic link.</p>
     #[serde(rename = "fileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_mode: Option<String>,
+    pub file_mode: Option<FileModeTypeEnum>,
     /// <p>The relative path of the symbolic link from the folder where the query originated.</p>
     #[serde(rename = "relativePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3443,7 +5144,7 @@ pub struct UpdatePullRequestApprovalRuleContentOutput {
 pub struct UpdatePullRequestApprovalStateInput {
     /// <p>The approval state to associate with the user on the pull request.</p>
     #[serde(rename = "approvalState")]
-    pub approval_state: String,
+    pub approval_state: ApprovalState,
     /// <p>The system-generated ID of the pull request.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -3479,7 +5180,7 @@ pub struct UpdatePullRequestStatusInput {
     pub pull_request_id: String,
     /// <p>The status of the pull request. The only valid operations are to update the status from <code>OPEN</code> to <code>OPEN</code>, <code>OPEN</code> to <code>CLOSED</code> or from <code>CLOSED</code> to <code>CLOSED</code>.</p>
     #[serde(rename = "pullRequestStatus")]
-    pub pull_request_status: String,
+    pub pull_request_status: PullRequestStatusEnum,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

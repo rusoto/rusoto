@@ -98,11 +98,11 @@ pub struct BotChannelAssociation {
     /// <p><p>The status of the bot channel. </p> <ul> <li> <p> <code>CREATED</code> - The channel has been created and is ready for use.</p> </li> <li> <p> <code>IN_PROGRESS</code> - Channel creation is in progress.</p> </li> <li> <p> <code>FAILED</code> - There was an error creating the channel. For information about the reason for the failure, see the <code>failureReason</code> field.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChannelStatus>,
     /// <p>Specifies the type of association by indicating the type of channel being established between the Amazon Lex bot and the external messaging platform.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelType>,
 }
 
 /// <p>Provides information about a bot. .</p>
@@ -128,7 +128,7 @@ pub struct BotMetadata {
     /// <p>The status of the bot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -146,7 +146,7 @@ pub struct BuiltinIntentMetadata {
     /// <p>A list of identifiers for the locales that the intent supports.</p>
     #[serde(rename = "supportedLocales")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_locales: Option<Vec<String>>,
+    pub supported_locales: Option<Vec<Locale>>,
 }
 
 /// <p>Provides information about a slot used in a built-in intent.</p>
@@ -170,7 +170,224 @@ pub struct BuiltinSlotTypeMetadata {
     /// <p>A list of target locales for the slot. </p>
     #[serde(rename = "supportedLocales")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_locales: Option<Vec<String>>,
+    pub supported_locales: Option<Vec<Locale>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelStatus {
+    Created,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelStatus),
+}
+
+impl Default for ChannelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelStatus {
+    fn into(self) -> String {
+        match self {
+            ChannelStatus::Created => "CREATED".to_string(),
+            ChannelStatus::Failed => "FAILED".to_string(),
+            ChannelStatus::InProgress => "IN_PROGRESS".to_string(),
+            ChannelStatus::UnknownVariant(UnknownChannelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelStatus::Created => &"CREATED",
+            ChannelStatus::Failed => &"FAILED",
+            ChannelStatus::InProgress => &"IN_PROGRESS",
+            ChannelStatus::UnknownVariant(UnknownChannelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATED" => ChannelStatus::Created,
+            "FAILED" => ChannelStatus::Failed,
+            "IN_PROGRESS" => ChannelStatus::InProgress,
+            _ => ChannelStatus::UnknownVariant(UnknownChannelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATED" => ChannelStatus::Created,
+            "FAILED" => ChannelStatus::Failed,
+            "IN_PROGRESS" => ChannelStatus::InProgress,
+            _ => ChannelStatus::UnknownVariant(UnknownChannelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChannelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelType {
+    Facebook,
+    Kik,
+    Slack,
+    TwilioSms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelType),
+}
+
+impl Default for ChannelType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelType {
+    fn into(self) -> String {
+        match self {
+            ChannelType::Facebook => "Facebook".to_string(),
+            ChannelType::Kik => "Kik".to_string(),
+            ChannelType::Slack => "Slack".to_string(),
+            ChannelType::TwilioSms => "Twilio-Sms".to_string(),
+            ChannelType::UnknownVariant(UnknownChannelType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelType {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelType::Facebook => &"Facebook",
+            ChannelType::Kik => &"Kik",
+            ChannelType::Slack => &"Slack",
+            ChannelType::TwilioSms => &"Twilio-Sms",
+            ChannelType::UnknownVariant(UnknownChannelType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Facebook" => ChannelType::Facebook,
+            "Kik" => ChannelType::Kik,
+            "Slack" => ChannelType::Slack,
+            "Twilio-Sms" => ChannelType::TwilioSms,
+            _ => ChannelType::UnknownVariant(UnknownChannelType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Facebook" => ChannelType::Facebook,
+            "Kik" => ChannelType::Kik,
+            "Slack" => ChannelType::Slack,
+            "Twilio-Sms" => ChannelType::TwilioSms,
+            _ => ChannelType::UnknownVariant(UnknownChannelType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChannelType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies a Lambda function that verifies requests to a bot or fulfills the user's request to a bot..</p>
@@ -182,6 +399,111 @@ pub struct CodeHook {
     /// <p>The Amazon Resource Name (ARN) of the Lambda function.</p>
     #[serde(rename = "uri")]
     pub uri: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentType {
+    CustomPayload,
+    PlainText,
+    Ssml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentType),
+}
+
+impl Default for ContentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentType {
+    fn into(self) -> String {
+        match self {
+            ContentType::CustomPayload => "CustomPayload".to_string(),
+            ContentType::PlainText => "PlainText".to_string(),
+            ContentType::Ssml => "SSML".to_string(),
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentType {
+    fn into(self) -> &'a str {
+        match self {
+            ContentType::CustomPayload => &"CustomPayload",
+            ContentType::PlainText => &"PlainText",
+            ContentType::Ssml => &"SSML",
+            ContentType::UnknownVariant(UnknownContentType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CustomPayload" => ContentType::CustomPayload,
+            "PlainText" => ContentType::PlainText,
+            "SSML" => ContentType::Ssml,
+            _ => ContentType::UnknownVariant(UnknownContentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CustomPayload" => ContentType::CustomPayload,
+            "PlainText" => ContentType::PlainText,
+            "SSML" => ContentType::Ssml,
+            _ => ContentType::UnknownVariant(UnknownContentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides the settings needed for conversation logs.</p>
@@ -276,7 +598,7 @@ pub struct CreateBotVersionResponse {
     /// <p> Specifies the target locale for the bot. </p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The name of the bot.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -284,7 +606,7 @@ pub struct CreateBotVersionResponse {
     /// <p> When you send a request to create or update a bot, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>. After Amazon Lex builds the bot, it sets <code>status</code> to <code>READY</code>. If Amazon Lex can't build the bot, it sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The version of the bot. </p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -434,7 +756,7 @@ pub struct CreateSlotTypeVersionResponse {
     /// <p>The strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value_selection_strategy: Option<String>,
+    pub value_selection_strategy: Option<SlotValueSelectionStrategy>,
     /// <p>The version assigned to the new slot type version. </p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -534,6 +856,106 @@ pub struct DeleteUtterancesRequest {
     pub user_id: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDestination {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Destination {
+    CloudwatchLogs,
+    S3,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDestination),
+}
+
+impl Default for Destination {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Destination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Destination {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Destination {
+    fn into(self) -> String {
+        match self {
+            Destination::CloudwatchLogs => "CLOUDWATCH_LOGS".to_string(),
+            Destination::S3 => "S3".to_string(),
+            Destination::UnknownVariant(UnknownDestination { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Destination {
+    fn into(self) -> &'a str {
+        match self {
+            Destination::CloudwatchLogs => &"CLOUDWATCH_LOGS",
+            Destination::S3 => &"S3",
+            Destination::UnknownVariant(UnknownDestination { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Destination {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLOUDWATCH_LOGS" => Destination::CloudwatchLogs,
+            "S3" => Destination::S3,
+            _ => Destination::UnknownVariant(UnknownDestination {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Destination {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLOUDWATCH_LOGS" => Destination::CloudwatchLogs,
+            "S3" => Destination::S3,
+            _ => Destination::UnknownVariant(UnknownDestination { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Destination {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Destination {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Destination {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Each slot type can have a set of values. Each enumeration value represents a value the slot type can take. </p> <p>For example, a pizza ordering bot could have a slot type that specifies the type of crust that the pizza should have. The slot type could include the values </p> <ul> <li> <p>thick</p> </li> <li> <p>thin</p> </li> <li> <p>stuffed</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EnumerationValue {
@@ -544,6 +966,212 @@ pub struct EnumerationValue {
     /// <p>The value of the slot type.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportStatus {
+    Failed,
+    InProgress,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportStatus),
+}
+
+impl Default for ExportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportStatus {
+    fn into(self) -> String {
+        match self {
+            ExportStatus::Failed => "FAILED".to_string(),
+            ExportStatus::InProgress => "IN_PROGRESS".to_string(),
+            ExportStatus::Ready => "READY".to_string(),
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExportStatus::Failed => &"FAILED",
+            ExportStatus::InProgress => &"IN_PROGRESS",
+            ExportStatus::Ready => &"READY",
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            "READY" => ExportStatus::Ready,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            "READY" => ExportStatus::Ready,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportType {
+    AlexaSkillsKit,
+    Lex,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportType),
+}
+
+impl Default for ExportType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportType {
+    fn into(self) -> String {
+        match self {
+            ExportType::AlexaSkillsKit => "ALEXA_SKILLS_KIT".to_string(),
+            ExportType::Lex => "LEX".to_string(),
+            ExportType::UnknownVariant(UnknownExportType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportType {
+    fn into(self) -> &'a str {
+        match self {
+            ExportType::AlexaSkillsKit => &"ALEXA_SKILLS_KIT",
+            ExportType::Lex => &"LEX",
+            ExportType::UnknownVariant(UnknownExportType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALEXA_SKILLS_KIT" => ExportType::AlexaSkillsKit,
+            "LEX" => ExportType::Lex,
+            _ => ExportType::UnknownVariant(UnknownExportType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALEXA_SKILLS_KIT" => ExportType::AlexaSkillsKit,
+            "LEX" => ExportType::Lex,
+            _ => ExportType::UnknownVariant(UnknownExportType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A prompt for additional activity after an intent is fulfilled. For example, after the <code>OrderPizza</code> intent is fulfilled, you might prompt the user to find out whether the user wants to order drinks.</p>
@@ -566,7 +1194,111 @@ pub struct FulfillmentActivity {
     pub code_hook: Option<CodeHook>,
     /// <p> How the intent should be fulfilled, either by running a Lambda function or by returning the slot data to the client application. </p>
     #[serde(rename = "type")]
-    pub type_: String,
+    pub type_: FulfillmentActivityType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFulfillmentActivityType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FulfillmentActivityType {
+    CodeHook,
+    ReturnIntent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFulfillmentActivityType),
+}
+
+impl Default for FulfillmentActivityType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FulfillmentActivityType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FulfillmentActivityType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FulfillmentActivityType {
+    fn into(self) -> String {
+        match self {
+            FulfillmentActivityType::CodeHook => "CodeHook".to_string(),
+            FulfillmentActivityType::ReturnIntent => "ReturnIntent".to_string(),
+            FulfillmentActivityType::UnknownVariant(UnknownFulfillmentActivityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FulfillmentActivityType {
+    fn into(self) -> &'a str {
+        match self {
+            FulfillmentActivityType::CodeHook => &"CodeHook",
+            FulfillmentActivityType::ReturnIntent => &"ReturnIntent",
+            FulfillmentActivityType::UnknownVariant(UnknownFulfillmentActivityType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for FulfillmentActivityType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CodeHook" => FulfillmentActivityType::CodeHook,
+            "ReturnIntent" => FulfillmentActivityType::ReturnIntent,
+            _ => FulfillmentActivityType::UnknownVariant(UnknownFulfillmentActivityType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FulfillmentActivityType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CodeHook" => FulfillmentActivityType::CodeHook,
+            "ReturnIntent" => FulfillmentActivityType::ReturnIntent,
+            _ => FulfillmentActivityType::UnknownVariant(UnknownFulfillmentActivityType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FulfillmentActivityType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FulfillmentActivityType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FulfillmentActivityType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -698,11 +1430,11 @@ pub struct GetBotChannelAssociationResponse {
     /// <p><p>The status of the bot channel. </p> <ul> <li> <p> <code>CREATED</code> - The channel has been created and is ready for use.</p> </li> <li> <p> <code>IN_PROGRESS</code> - Channel creation is in progress.</p> </li> <li> <p> <code>FAILED</code> - There was an error creating the channel. For information about the reason for the failure, see the <code>failureReason</code> field.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChannelStatus>,
     /// <p>The type of the messaging platform.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<ChannelType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -806,7 +1538,7 @@ pub struct GetBotResponse {
     /// <p> The target locale for the bot. </p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The name of the bot.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -818,7 +1550,7 @@ pub struct GetBotResponse {
     /// <p>The status of the bot. </p> <p>When the status is <code>BUILDING</code> Amazon Lex is building the bot for testing and use.</p> <p>If the status of the bot is <code>READY_BASIC_TESTING</code>, you can test the bot using the exact utterances specified in the bot's intents. When the bot is ready for full testing or to run, the status is <code>READY</code>.</p> <p>If there was a problem with building the bot, the status is <code>FAILED</code> and the <code>failureReason</code> field explains why the bot did not build.</p> <p>If the bot was saved but not built, the status is <code>NOT_BUILT</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>The version of the bot. For a new bot, the version is always <code>$LATEST</code>.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -910,7 +1642,7 @@ pub struct GetBuiltinIntentResponse {
     /// <p>A list of locales that the intent supports.</p>
     #[serde(rename = "supportedLocales")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_locales: Option<Vec<String>>,
+    pub supported_locales: Option<Vec<Locale>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -919,7 +1651,7 @@ pub struct GetBuiltinIntentsRequest {
     /// <p>A list of locales that the intent supports.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The maximum number of intents to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -953,7 +1685,7 @@ pub struct GetBuiltinSlotTypesRequest {
     /// <p>A list of locales that the slot type supports.</p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The maximum number of slot types to return in the response. The default is 10.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -986,13 +1718,13 @@ pub struct GetBuiltinSlotTypesResponse {
 pub struct GetExportRequest {
     /// <p>The format of the exported data.</p>
     #[serde(rename = "exportType")]
-    pub export_type: String,
+    pub export_type: ExportType,
     /// <p>The name of the bot to export.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The type of resource to export. </p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>The version of the bot to export.</p>
     #[serde(rename = "version")]
     pub version: String,
@@ -1004,11 +1736,11 @@ pub struct GetExportResponse {
     /// <p><p>The status of the export. </p> <ul> <li> <p> <code>IN_PROGRESS</code> - The export is in progress.</p> </li> <li> <p> <code>READY</code> - The export is complete.</p> </li> <li> <p> <code>FAILED</code> - The export could not be completed.</p> </li> </ul></p>
     #[serde(rename = "exportStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_status: Option<String>,
+    pub export_status: Option<ExportStatus>,
     /// <p>The format of the exported data.</p>
     #[serde(rename = "exportType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_type: Option<String>,
+    pub export_type: Option<ExportType>,
     /// <p>If <code>status</code> is <code>FAILED</code>, Amazon Lex provides the reason that it failed to export the resource.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1020,7 +1752,7 @@ pub struct GetExportResponse {
     /// <p>The type of the exported resource.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>An S3 pre-signed URL that provides the location of the exported resource. The exported resource is a ZIP archive that contains the exported resource in JSON format. The structure of the archive may change. Your code should not rely on the archive structure.</p>
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1057,11 +1789,11 @@ pub struct GetImportResponse {
     /// <p>The status of the import job. If the status is <code>FAILED</code>, you can get the reason for the failure from the <code>failureReason</code> field.</p>
     #[serde(rename = "importStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub import_status: Option<String>,
+    pub import_status: Option<ImportStatus>,
     /// <p>The action taken when there was a conflict between an existing resource and a resource in the import file.</p>
     #[serde(rename = "mergeStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub merge_strategy: Option<String>,
+    pub merge_strategy: Option<MergeStrategy>,
     /// <p>The name given to the import job.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1069,7 +1801,7 @@ pub struct GetImportResponse {
     /// <p>The type of resource imported.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1268,7 +2000,7 @@ pub struct GetSlotTypeResponse {
     /// <p>The strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value_selection_strategy: Option<String>,
+    pub value_selection_strategy: Option<SlotValueSelectionStrategy>,
     /// <p>The version of the slot type.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1345,7 +2077,7 @@ pub struct GetUtterancesViewRequest {
     pub bot_versions: Vec<String>,
     /// <p>To return utterances that were recognized and handled, use <code>Detected</code>. To return utterances that were not recognized, use <code>Missed</code>.</p>
     #[serde(rename = "statusType")]
-    pub status_type: String,
+    pub status_type: StatusType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1359,6 +2091,112 @@ pub struct GetUtterancesViewResponse {
     #[serde(rename = "utterances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub utterances: Option<Vec<UtteranceList>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImportStatus {
+    Complete,
+    Failed,
+    InProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImportStatus),
+}
+
+impl Default for ImportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImportStatus {
+    fn into(self) -> String {
+        match self {
+            ImportStatus::Complete => "COMPLETE".to_string(),
+            ImportStatus::Failed => "FAILED".to_string(),
+            ImportStatus::InProgress => "IN_PROGRESS".to_string(),
+            ImportStatus::UnknownVariant(UnknownImportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ImportStatus::Complete => &"COMPLETE",
+            ImportStatus::Failed => &"FAILED",
+            ImportStatus::InProgress => &"IN_PROGRESS",
+            ImportStatus::UnknownVariant(UnknownImportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "COMPLETE" => ImportStatus::Complete,
+            "FAILED" => ImportStatus::Failed,
+            "IN_PROGRESS" => ImportStatus::InProgress,
+            _ => ImportStatus::UnknownVariant(UnknownImportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "COMPLETE" => ImportStatus::Complete,
+            "FAILED" => ImportStatus::Failed,
+            "IN_PROGRESS" => ImportStatus::InProgress,
+            _ => ImportStatus::UnknownVariant(UnknownImportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The name of a context that must be active for an intent to be selected by Amazon Lex.</p>
@@ -1438,20 +2276,160 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLocale {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Locale {
+    DeDE,
+    EnAU,
+    EnGB,
+    EnUS,
+    Es419,
+    EsES,
+    EsUS,
+    FrCA,
+    FrFR,
+    ItIT,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLocale),
+}
+
+impl Default for Locale {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Locale {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Locale {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Locale {
+    fn into(self) -> String {
+        match self {
+            Locale::DeDE => "de-DE".to_string(),
+            Locale::EnAU => "en-AU".to_string(),
+            Locale::EnGB => "en-GB".to_string(),
+            Locale::EnUS => "en-US".to_string(),
+            Locale::Es419 => "es-419".to_string(),
+            Locale::EsES => "es-ES".to_string(),
+            Locale::EsUS => "es-US".to_string(),
+            Locale::FrCA => "fr-CA".to_string(),
+            Locale::FrFR => "fr-FR".to_string(),
+            Locale::ItIT => "it-IT".to_string(),
+            Locale::UnknownVariant(UnknownLocale { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Locale {
+    fn into(self) -> &'a str {
+        match self {
+            Locale::DeDE => &"de-DE",
+            Locale::EnAU => &"en-AU",
+            Locale::EnGB => &"en-GB",
+            Locale::EnUS => &"en-US",
+            Locale::Es419 => &"es-419",
+            Locale::EsES => &"es-ES",
+            Locale::EsUS => &"es-US",
+            Locale::FrCA => &"fr-CA",
+            Locale::FrFR => &"fr-FR",
+            Locale::ItIT => &"it-IT",
+            Locale::UnknownVariant(UnknownLocale { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Locale {
+    fn from(name: &str) -> Self {
+        match name {
+            "de-DE" => Locale::DeDE,
+            "en-AU" => Locale::EnAU,
+            "en-GB" => Locale::EnGB,
+            "en-US" => Locale::EnUS,
+            "es-419" => Locale::Es419,
+            "es-ES" => Locale::EsES,
+            "es-US" => Locale::EsUS,
+            "fr-CA" => Locale::FrCA,
+            "fr-FR" => Locale::FrFR,
+            "it-IT" => Locale::ItIT,
+            _ => Locale::UnknownVariant(UnknownLocale {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Locale {
+    fn from(name: String) -> Self {
+        match &*name {
+            "de-DE" => Locale::DeDE,
+            "en-AU" => Locale::EnAU,
+            "en-GB" => Locale::EnGB,
+            "en-US" => Locale::EnUS,
+            "es-419" => Locale::Es419,
+            "es-ES" => Locale::EsES,
+            "es-US" => Locale::EsUS,
+            "fr-CA" => Locale::FrCA,
+            "fr-FR" => Locale::FrFR,
+            "it-IT" => Locale::ItIT,
+            _ => Locale::UnknownVariant(UnknownLocale { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Locale {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Locale {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Locale {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Settings used to configure delivery mode and destination for conversation logs.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogSettingsRequest {
     /// <p>Where the logs will be delivered. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
     #[serde(rename = "destination")]
-    pub destination: String,
+    pub destination: Destination,
     /// <p>The Amazon Resource Name (ARN) of the AWS KMS customer managed key for encrypting audio logs delivered to an S3 bucket. The key does not apply to CloudWatch Logs and is optional for S3 buckets.</p>
     #[serde(rename = "kmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
     /// <p>The type of logging to enable. Text logs are delivered to a CloudWatch Logs log group. Audio logs are delivered to an S3 bucket.</p>
     #[serde(rename = "logType")]
-    pub log_type: String,
+    pub log_type: LogType,
     /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs should be delivered.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
@@ -1464,7 +2442,7 @@ pub struct LogSettingsResponse {
     /// <p>The destination where logs are delivered.</p>
     #[serde(rename = "destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination: Option<String>,
+    pub destination: Option<Destination>,
     /// <p>The Amazon Resource Name (ARN) of the key used to encrypt audio logs in an S3 bucket.</p>
     #[serde(rename = "kmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1472,7 +2450,7 @@ pub struct LogSettingsResponse {
     /// <p>The type of logging that is enabled.</p>
     #[serde(rename = "logType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub log_type: Option<String>,
+    pub log_type: Option<LogType>,
     /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or S3 bucket where the logs are delivered.</p>
     #[serde(rename = "resourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1483,6 +2461,206 @@ pub struct LogSettingsResponse {
     pub resource_prefix: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLogType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LogType {
+    Audio,
+    Text,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLogType),
+}
+
+impl Default for LogType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LogType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LogType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LogType {
+    fn into(self) -> String {
+        match self {
+            LogType::Audio => "AUDIO".to_string(),
+            LogType::Text => "TEXT".to_string(),
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LogType {
+    fn into(self) -> &'a str {
+        match self {
+            LogType::Audio => &"AUDIO",
+            LogType::Text => &"TEXT",
+            LogType::UnknownVariant(UnknownLogType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LogType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUDIO" => LogType::Audio,
+            "TEXT" => LogType::Text,
+            _ => LogType::UnknownVariant(UnknownLogType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LogType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUDIO" => LogType::Audio,
+            "TEXT" => LogType::Text,
+            _ => LogType::UnknownVariant(UnknownLogType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LogType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LogType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LogType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMergeStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MergeStrategy {
+    FailOnConflict,
+    OverwriteLatest,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMergeStrategy),
+}
+
+impl Default for MergeStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MergeStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MergeStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MergeStrategy {
+    fn into(self) -> String {
+        match self {
+            MergeStrategy::FailOnConflict => "FAIL_ON_CONFLICT".to_string(),
+            MergeStrategy::OverwriteLatest => "OVERWRITE_LATEST".to_string(),
+            MergeStrategy::UnknownVariant(UnknownMergeStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MergeStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            MergeStrategy::FailOnConflict => &"FAIL_ON_CONFLICT",
+            MergeStrategy::OverwriteLatest => &"OVERWRITE_LATEST",
+            MergeStrategy::UnknownVariant(UnknownMergeStrategy { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MergeStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAIL_ON_CONFLICT" => MergeStrategy::FailOnConflict,
+            "OVERWRITE_LATEST" => MergeStrategy::OverwriteLatest,
+            _ => MergeStrategy::UnknownVariant(UnknownMergeStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MergeStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAIL_ON_CONFLICT" => MergeStrategy::FailOnConflict,
+            "OVERWRITE_LATEST" => MergeStrategy::OverwriteLatest,
+            _ => MergeStrategy::UnknownVariant(UnknownMergeStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MergeStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MergeStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MergeStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The message object that provides the message text and its type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Message {
@@ -1491,11 +2669,115 @@ pub struct Message {
     pub content: String,
     /// <p>The content type of the message string.</p>
     #[serde(rename = "contentType")]
-    pub content_type: String,
+    pub content_type: ContentType,
     /// <p>Identifies the message group that the message belongs to. When a group is assigned to a message, Amazon Lex returns one message from each group in the response.</p>
     #[serde(rename = "groupNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownObfuscationSetting {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ObfuscationSetting {
+    DefaultObfuscation,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownObfuscationSetting),
+}
+
+impl Default for ObfuscationSetting {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ObfuscationSetting {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ObfuscationSetting {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ObfuscationSetting {
+    fn into(self) -> String {
+        match self {
+            ObfuscationSetting::DefaultObfuscation => "DEFAULT_OBFUSCATION".to_string(),
+            ObfuscationSetting::None => "NONE".to_string(),
+            ObfuscationSetting::UnknownVariant(UnknownObfuscationSetting { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ObfuscationSetting {
+    fn into(self) -> &'a str {
+        match self {
+            ObfuscationSetting::DefaultObfuscation => &"DEFAULT_OBFUSCATION",
+            ObfuscationSetting::None => &"NONE",
+            ObfuscationSetting::UnknownVariant(UnknownObfuscationSetting { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ObfuscationSetting {
+    fn from(name: &str) -> Self {
+        match name {
+            "DEFAULT_OBFUSCATION" => ObfuscationSetting::DefaultObfuscation,
+            "NONE" => ObfuscationSetting::None,
+            _ => ObfuscationSetting::UnknownVariant(UnknownObfuscationSetting {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ObfuscationSetting {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DEFAULT_OBFUSCATION" => ObfuscationSetting::DefaultObfuscation,
+            "NONE" => ObfuscationSetting::None,
+            _ => ObfuscationSetting::UnknownVariant(UnknownObfuscationSetting { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ObfuscationSetting {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ObfuscationSetting {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ObfuscationSetting {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The specification of an output context that is set when an intent is fulfilled.</p>
@@ -1510,6 +2792,107 @@ pub struct OutputContext {
     /// <p>The number of conversation turns that the context should be active. A conversation turn is one <code>PostContent</code> or <code>PostText</code> request and the corresponding response from Amazon Lex.</p>
     #[serde(rename = "turnsToLive")]
     pub turns_to_live: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessBehavior {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessBehavior {
+    Build,
+    Save,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessBehavior),
+}
+
+impl Default for ProcessBehavior {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessBehavior {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessBehavior {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessBehavior {
+    fn into(self) -> String {
+        match self {
+            ProcessBehavior::Build => "BUILD".to_string(),
+            ProcessBehavior::Save => "SAVE".to_string(),
+            ProcessBehavior::UnknownVariant(UnknownProcessBehavior { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessBehavior {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessBehavior::Build => &"BUILD",
+            ProcessBehavior::Save => &"SAVE",
+            ProcessBehavior::UnknownVariant(UnknownProcessBehavior { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessBehavior {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILD" => ProcessBehavior::Build,
+            "SAVE" => ProcessBehavior::Save,
+            _ => ProcessBehavior::UnknownVariant(UnknownProcessBehavior {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessBehavior {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILD" => ProcessBehavior::Build,
+            "SAVE" => ProcessBehavior::Save,
+            _ => ProcessBehavior::UnknownVariant(UnknownProcessBehavior { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessBehavior {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ProcessBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>
@@ -1642,7 +3025,7 @@ pub struct PutBotRequest {
     pub intents: Option<Vec<Intent>>,
     /// <p> Specifies the target locale for the bot. Any intent used in the bot must be compatible with the locale of the bot. </p> <p>The default is <code>en-US</code>.</p>
     #[serde(rename = "locale")]
-    pub locale: String,
+    pub locale: Locale,
     /// <p>The name of the bot. The name is <i>not</i> case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
@@ -1653,7 +3036,7 @@ pub struct PutBotRequest {
     /// <p>If you set the <code>processBehavior</code> element to <code>BUILD</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>SAVE</code> Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>BUILD</code>.</p>
     #[serde(rename = "processBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub process_behavior: Option<String>,
+    pub process_behavior: Option<ProcessBehavior>,
     /// <p>A list of tags to add to the bot. You can only add tags when you create a bot, you can't use the <code>PutBot</code> operation to update the tags on a bot. To update tags, use the <code>TagResource</code> operation.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1722,7 +3105,7 @@ pub struct PutBotResponse {
     /// <p> The target locale for the bot. </p>
     #[serde(rename = "locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub locale: Option<String>,
+    pub locale: Option<Locale>,
     /// <p>The name of the bot.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1734,7 +3117,7 @@ pub struct PutBotResponse {
     /// <p> When you send a request to create a bot with <code>processBehavior</code> set to <code>BUILD</code>, Amazon Lex sets the <code>status</code> response element to <code>BUILDING</code>.</p> <p>In the <code>READY_BASIC_TESTING</code> state you can test the bot with user inputs that exactly match the utterances configured for the bot's intents and values in the slot types.</p> <p>If Amazon Lex can't build the bot, Amazon Lex sets <code>status</code> to <code>FAILED</code>. Amazon Lex returns the reason for the failure in the <code>failureReason</code> response element. </p> <p>When you set <code>processBehavior</code> to <code>SAVE</code>, Amazon Lex sets the status code to <code>NOT BUILT</code>.</p> <p>When the bot is in the <code>READY</code> state you can test and publish the bot.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<Status>,
     /// <p>A list of tags associated with the bot.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1931,7 +3314,7 @@ pub struct PutSlotTypeRequest {
     /// <p>Determines the slot resolution strategy that Amazon Lex uses to return slot type values. The field can be set to one of the following values:</p> <ul> <li> <p> <code>ORIGINAL_VALUE</code> - Returns the value entered by the user, if the user value is similar to the slot value.</p> </li> <li> <p> <code>TOP_RESOLUTION</code> - If there is a resolution list for the slot, return the first value in the resolution list as the slot type value. If there is no resolution list, null is returned.</p> </li> </ul> <p>If you don't specify the <code>valueSelectionStrategy</code>, the default is <code>ORIGINAL_VALUE</code>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value_selection_strategy: Option<String>,
+    pub value_selection_strategy: Option<SlotValueSelectionStrategy>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1976,11 +3359,123 @@ pub struct PutSlotTypeResponse {
     /// <p>The slot resolution strategy that Amazon Lex uses to determine the value of the slot. For more information, see <a>PutSlotType</a>.</p>
     #[serde(rename = "valueSelectionStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub value_selection_strategy: Option<String>,
+    pub value_selection_strategy: Option<SlotValueSelectionStrategy>,
     /// <p>The version of the slot type. For a new slot type, the version is always <code>$LATEST</code>. </p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReferenceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReferenceType {
+    Bot,
+    BotAlias,
+    BotChannel,
+    Intent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReferenceType),
+}
+
+impl Default for ReferenceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReferenceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReferenceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReferenceType {
+    fn into(self) -> String {
+        match self {
+            ReferenceType::Bot => "Bot".to_string(),
+            ReferenceType::BotAlias => "BotAlias".to_string(),
+            ReferenceType::BotChannel => "BotChannel".to_string(),
+            ReferenceType::Intent => "Intent".to_string(),
+            ReferenceType::UnknownVariant(UnknownReferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReferenceType {
+    fn into(self) -> &'a str {
+        match self {
+            ReferenceType::Bot => &"Bot",
+            ReferenceType::BotAlias => &"BotAlias",
+            ReferenceType::BotChannel => &"BotChannel",
+            ReferenceType::Intent => &"Intent",
+            ReferenceType::UnknownVariant(UnknownReferenceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ReferenceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Bot" => ReferenceType::Bot,
+            "BotAlias" => ReferenceType::BotAlias,
+            "BotChannel" => ReferenceType::BotChannel,
+            "Intent" => ReferenceType::Intent,
+            _ => ReferenceType::UnknownVariant(UnknownReferenceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReferenceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Bot" => ReferenceType::Bot,
+            "BotAlias" => ReferenceType::BotAlias,
+            "BotChannel" => ReferenceType::BotChannel,
+            "Intent" => ReferenceType::Intent,
+            _ => ReferenceType::UnknownVariant(UnknownReferenceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReferenceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(feature = "serialize_structs")]
+impl Serialize for ReferenceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ReferenceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the resource that refers to the resource that you are attempting to delete. This object is returned as part of the <code>ResourceInUseException</code> exception. </p>
@@ -1990,6 +3485,111 @@ pub struct ResourceReference {
     pub name: Option<String>,
     /// <p>The version of the resource that is using the resource that you are trying to delete.</p>
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownResourceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ResourceType {
+    Bot,
+    Intent,
+    SlotType,
+    #[doc(hidden)]
+    UnknownVariant(UnknownResourceType),
+}
+
+impl Default for ResourceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ResourceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ResourceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ResourceType {
+    fn into(self) -> String {
+        match self {
+            ResourceType::Bot => "BOT".to_string(),
+            ResourceType::Intent => "INTENT".to_string(),
+            ResourceType::SlotType => "SLOT_TYPE".to_string(),
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ResourceType {
+    fn into(self) -> &'a str {
+        match self {
+            ResourceType::Bot => &"BOT",
+            ResourceType::Intent => &"INTENT",
+            ResourceType::SlotType => &"SLOT_TYPE",
+            ResourceType::UnknownVariant(UnknownResourceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ResourceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "BOT" => ResourceType::Bot,
+            "INTENT" => ResourceType::Intent,
+            "SLOT_TYPE" => ResourceType::SlotType,
+            _ => ResourceType::UnknownVariant(UnknownResourceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ResourceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BOT" => ResourceType::Bot,
+            "INTENT" => ResourceType::Intent,
+            "SLOT_TYPE" => ResourceType::SlotType,
+            _ => ResourceType::UnknownVariant(UnknownResourceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ResourceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ResourceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ResourceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Identifies the version of a specific slot.</p>
@@ -2009,7 +3609,7 @@ pub struct Slot {
     /// <p>Determines whether a slot is obfuscated in conversation logs and stored utterances. When you obfuscate a slot, the value is replaced by the slot name in curly braces ({}). For example, if the slot name is "full_name", obfuscated values are replaced with "{full_name}". For more information, see <a href="https://docs.aws.amazon.com/lex/latest/dg/how-obfuscate.html"> Slot Obfuscation </a>. </p>
     #[serde(rename = "obfuscationSetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub obfuscation_setting: Option<String>,
+    pub obfuscation_setting: Option<ObfuscationSetting>,
     /// <p> Directs Amazon Lex the order in which to elicit this slot value from the user. For example, if the intent has two slots with priorities 1 and 2, AWS Amazon Lex first elicits a value for the slot with priority 1.</p> <p>If multiple slots share the same priority, the order in which Amazon Lex elicits values is arbitrary.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2024,7 +3624,7 @@ pub struct Slot {
     pub sample_utterances: Option<Vec<String>>,
     /// <p>Specifies whether the slot is required or optional. </p>
     #[serde(rename = "slotConstraint")]
-    pub slot_constraint: String,
+    pub slot_constraint: SlotConstraint,
     /// <p>The type of the slot, either a custom slot type that you defined or one of the built-in slot types.</p>
     #[serde(rename = "slotType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2037,6 +3637,106 @@ pub struct Slot {
     #[serde(rename = "valueElicitationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value_elicitation_prompt: Option<Prompt>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSlotConstraint {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SlotConstraint {
+    Optional,
+    Required,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSlotConstraint),
+}
+
+impl Default for SlotConstraint {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SlotConstraint {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SlotConstraint {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SlotConstraint {
+    fn into(self) -> String {
+        match self {
+            SlotConstraint::Optional => "Optional".to_string(),
+            SlotConstraint::Required => "Required".to_string(),
+            SlotConstraint::UnknownVariant(UnknownSlotConstraint { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SlotConstraint {
+    fn into(self) -> &'a str {
+        match self {
+            SlotConstraint::Optional => &"Optional",
+            SlotConstraint::Required => &"Required",
+            SlotConstraint::UnknownVariant(UnknownSlotConstraint { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SlotConstraint {
+    fn from(name: &str) -> Self {
+        match name {
+            "Optional" => SlotConstraint::Optional,
+            "Required" => SlotConstraint::Required,
+            _ => SlotConstraint::UnknownVariant(UnknownSlotConstraint {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SlotConstraint {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Optional" => SlotConstraint::Optional,
+            "Required" => SlotConstraint::Required,
+            _ => SlotConstraint::UnknownVariant(UnknownSlotConstraint { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SlotConstraint {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SlotConstraint {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SlotConstraint {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A default value for a slot.</p>
@@ -2098,12 +3798,118 @@ pub struct SlotTypeRegexConfiguration {
     pub pattern: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSlotValueSelectionStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SlotValueSelectionStrategy {
+    OriginalValue,
+    TopResolution,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSlotValueSelectionStrategy),
+}
+
+impl Default for SlotValueSelectionStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SlotValueSelectionStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SlotValueSelectionStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SlotValueSelectionStrategy {
+    fn into(self) -> String {
+        match self {
+            SlotValueSelectionStrategy::OriginalValue => "ORIGINAL_VALUE".to_string(),
+            SlotValueSelectionStrategy::TopResolution => "TOP_RESOLUTION".to_string(),
+            SlotValueSelectionStrategy::UnknownVariant(UnknownSlotValueSelectionStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SlotValueSelectionStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            SlotValueSelectionStrategy::OriginalValue => &"ORIGINAL_VALUE",
+            SlotValueSelectionStrategy::TopResolution => &"TOP_RESOLUTION",
+            SlotValueSelectionStrategy::UnknownVariant(UnknownSlotValueSelectionStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SlotValueSelectionStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ORIGINAL_VALUE" => SlotValueSelectionStrategy::OriginalValue,
+            "TOP_RESOLUTION" => SlotValueSelectionStrategy::TopResolution,
+            _ => SlotValueSelectionStrategy::UnknownVariant(UnknownSlotValueSelectionStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SlotValueSelectionStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ORIGINAL_VALUE" => SlotValueSelectionStrategy::OriginalValue,
+            "TOP_RESOLUTION" => SlotValueSelectionStrategy::TopResolution,
+            _ => SlotValueSelectionStrategy::UnknownVariant(UnknownSlotValueSelectionStrategy {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SlotValueSelectionStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SlotValueSelectionStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SlotValueSelectionStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImportRequest {
     /// <p><p>Specifies the action that the <code>StartImport</code> operation should take when there is an existing resource with the same name.</p> <ul> <li> <p>FAIL<em>ON</em>CONFLICT - The import operation is stopped on the first conflict between a resource in the import file and an existing resource. The name of the resource causing the conflict is in the <code>failureReason</code> field of the response to the <code>GetImport</code> operation.</p> <p>OVERWRITE_LATEST - The import operation proceeds even if there is a conflict with an existing resource. The $LASTEST version of the existing resource is overwritten with the data from the import file.</p> </li> </ul></p>
     #[serde(rename = "mergeStrategy")]
-    pub merge_strategy: String,
+    pub merge_strategy: MergeStrategy,
     /// <p>A zip archive in binary format. The archive should contain one file, a JSON file containing the resource to import. The resource should match the type specified in the <code>resourceType</code> field.</p>
     #[serde(rename = "payload")]
     #[serde(
@@ -2114,7 +3920,7 @@ pub struct StartImportRequest {
     pub payload: bytes::Bytes,
     /// <p><p>Specifies the type of resource to export. Each resource also exports any resources that it depends on. </p> <ul> <li> <p>A bot exports dependent intents.</p> </li> <li> <p>An intent exports dependent slot types.</p> </li> </ul></p>
     #[serde(rename = "resourceType")]
-    pub resource_type: String,
+    pub resource_type: ResourceType,
     /// <p>A list of tags to add to the imported bot. You can only add tags when you import a bot, you can't add tags to an intent or slot type.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2135,11 +3941,11 @@ pub struct StartImportResponse {
     /// <p>The status of the import job. If the status is <code>FAILED</code>, you can get the reason for the failure using the <code>GetImport</code> operation.</p>
     #[serde(rename = "importStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub import_status: Option<String>,
+    pub import_status: Option<ImportStatus>,
     /// <p>The action to take when there is a merge conflict.</p>
     #[serde(rename = "mergeStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub merge_strategy: Option<String>,
+    pub merge_strategy: Option<MergeStrategy>,
     /// <p>The name given to the import job.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2147,7 +3953,7 @@ pub struct StartImportResponse {
     /// <p>The type of resource to import.</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_type: Option<String>,
+    pub resource_type: Option<ResourceType>,
     /// <p>A list of tags added to the imported bot.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2164,6 +3970,223 @@ pub struct Statement {
     #[serde(rename = "responseCard")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_card: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Building,
+    Failed,
+    NotBuilt,
+    Ready,
+    ReadyBasicTesting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Building => "BUILDING".to_string(),
+            Status::Failed => "FAILED".to_string(),
+            Status::NotBuilt => "NOT_BUILT".to_string(),
+            Status::Ready => "READY".to_string(),
+            Status::ReadyBasicTesting => "READY_BASIC_TESTING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Building => &"BUILDING",
+            Status::Failed => &"FAILED",
+            Status::NotBuilt => &"NOT_BUILT",
+            Status::Ready => &"READY",
+            Status::ReadyBasicTesting => &"READY_BASIC_TESTING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "BUILDING" => Status::Building,
+            "FAILED" => Status::Failed,
+            "NOT_BUILT" => Status::NotBuilt,
+            "READY" => Status::Ready,
+            "READY_BASIC_TESTING" => Status::ReadyBasicTesting,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BUILDING" => Status::Building,
+            "FAILED" => Status::Failed,
+            "NOT_BUILT" => Status::NotBuilt,
+            "READY" => Status::Ready,
+            "READY_BASIC_TESTING" => Status::ReadyBasicTesting,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusType {
+    Detected,
+    Missed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusType),
+}
+
+impl Default for StatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusType {
+    fn into(self) -> String {
+        match self {
+            StatusType::Detected => "Detected".to_string(),
+            StatusType::Missed => "Missed".to_string(),
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusType {
+    fn into(self) -> &'a str {
+        match self {
+            StatusType::Detected => &"Detected",
+            StatusType::Missed => &"Missed",
+            StatusType::UnknownVariant(UnknownStatusType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Detected" => StatusType::Detected,
+            "Missed" => StatusType::Missed,
+            _ => StatusType::UnknownVariant(UnknownStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Detected" => StatusType::Detected,
+            "Missed" => StatusType::Missed,
+            _ => StatusType::UnknownVariant(UnknownStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for StatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A list of key/value pairs that identify a bot, bot alias, or bot channel. Tag keys and values can consist of Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @. </p>

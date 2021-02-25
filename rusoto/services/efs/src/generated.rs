@@ -48,7 +48,7 @@ pub struct AccessPointDescription {
     /// <p>Identifies the lifecycle phase of the access point.</p>
     #[serde(rename = "LifeCycleState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub life_cycle_state: Option<String>,
+    pub life_cycle_state: Option<LifeCycleState>,
     /// <p>The name of the access point. This is the value of the <code>Name</code> tag.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -76,7 +76,7 @@ pub struct AccessPointDescription {
 pub struct BackupPolicy {
     /// <p><p>Describes the status of the file system&#39;s backup policy.</p> <ul> <li> <p> <i> <code>ENABLED</code> - EFS is automatically backing up the file system.</i> </p> </li> <li> <p> <i> <code>ENABLING</code> - EFS is turning on automatic backups for the file system.</i> </p> </li> <li> <p> <i> <code>DISABLED</code> - automatic back ups are turned off for the file system.</i> </p> </li> <li> <p> <i> <code>DISABLED</code> - EFS is turning off automatic backups for the file system.</i> </p> </li> </ul></p>
     #[serde(rename = "Status")]
-    pub status: String,
+    pub status: Status,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -128,7 +128,7 @@ pub struct CreateFileSystemRequest {
     /// <p>The performance mode of the file system. We recommend <code>generalPurpose</code> performance mode for most file systems. File systems using the <code>maxIO</code> performance mode can scale to higher levels of aggregate throughput and operations per second with a tradeoff of slightly higher latencies for most file operations. The performance mode can't be changed after the file system has been created.</p>
     #[serde(rename = "PerformanceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub performance_mode: Option<String>,
+    pub performance_mode: Option<PerformanceMode>,
     /// <p>The throughput, measured in MiB/s, that you want to provision for a file system that you're creating. Valid values are 1-1024. Required if <code>ThroughputMode</code> is set to <code>provisioned</code>. The upper limit for throughput is 1024 MiB/s. You can get this limit increased by contacting AWS Support. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>
     #[serde(rename = "ProvisionedThroughputInMibps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -140,7 +140,7 @@ pub struct CreateFileSystemRequest {
     /// <p>The throughput mode for the file system to be created. There are two throughput modes to choose from for your file system: <code>bursting</code> and <code>provisioned</code>. If you set <code>ThroughputMode</code> to <code>provisioned</code>, you must also set a value for <code>ProvisionedThroughPutInMibps</code>. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change. For more, see <a href="https://docs.aws.amazon.com/efs/latest/ug/performance.html#provisioned-throughput">Specifying Throughput with Provisioned Mode</a> in the <i>Amazon EFS User Guide.</i> </p>
     #[serde(rename = "ThroughputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub throughput_mode: Option<String>,
+    pub throughput_mode: Option<ThroughputMode>,
 }
 
 /// <p><p/></p>
@@ -454,7 +454,7 @@ pub struct FileSystemDescription {
     pub kms_key_id: Option<String>,
     /// <p>The lifecycle phase of the file system.</p>
     #[serde(rename = "LifeCycleState")]
-    pub life_cycle_state: String,
+    pub life_cycle_state: LifeCycleState,
     /// <p>You can add tags to a file system, including a <code>Name</code> tag. For more information, see <a>CreateFileSystem</a>. If the file system has a <code>Name</code> tag, Amazon EFS returns the value in this field. </p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -467,7 +467,7 @@ pub struct FileSystemDescription {
     pub owner_id: String,
     /// <p>The performance mode of the file system.</p>
     #[serde(rename = "PerformanceMode")]
-    pub performance_mode: String,
+    pub performance_mode: PerformanceMode,
     /// <p>The throughput, measured in MiB/s, that you want to provision for a file system. Valid values are 1-1024. Required if <code>ThroughputMode</code> is set to <code>provisioned</code>. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see <a href="https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits">Amazon EFS Limits That You Can Increase</a> in the <i>Amazon EFS User Guide.</i> </p>
     #[serde(rename = "ProvisionedThroughputInMibps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -481,7 +481,7 @@ pub struct FileSystemDescription {
     /// <p>The throughput mode for a file system. There are two throughput modes to choose from for your file system: <code>bursting</code> and <code>provisioned</code>. If you set <code>ThroughputMode</code> to <code>provisioned</code>, you must also set a value for <code>ProvisionedThroughPutInMibps</code>. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change. </p>
     #[serde(rename = "ThroughputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub throughput_mode: Option<String>,
+    pub throughput_mode: Option<ThroughputMode>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -518,6 +518,122 @@ pub struct FileSystemSize {
     pub value_in_standard: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLifeCycleState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LifeCycleState {
+    Available,
+    Creating,
+    Deleted,
+    Deleting,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLifeCycleState),
+}
+
+impl Default for LifeCycleState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LifeCycleState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LifeCycleState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LifeCycleState {
+    fn into(self) -> String {
+        match self {
+            LifeCycleState::Available => "available".to_string(),
+            LifeCycleState::Creating => "creating".to_string(),
+            LifeCycleState::Deleted => "deleted".to_string(),
+            LifeCycleState::Deleting => "deleting".to_string(),
+            LifeCycleState::Updating => "updating".to_string(),
+            LifeCycleState::UnknownVariant(UnknownLifeCycleState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LifeCycleState {
+    fn into(self) -> &'a str {
+        match self {
+            LifeCycleState::Available => &"available",
+            LifeCycleState::Creating => &"creating",
+            LifeCycleState::Deleted => &"deleted",
+            LifeCycleState::Deleting => &"deleting",
+            LifeCycleState::Updating => &"updating",
+            LifeCycleState::UnknownVariant(UnknownLifeCycleState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LifeCycleState {
+    fn from(name: &str) -> Self {
+        match name {
+            "available" => LifeCycleState::Available,
+            "creating" => LifeCycleState::Creating,
+            "deleted" => LifeCycleState::Deleted,
+            "deleting" => LifeCycleState::Deleting,
+            "updating" => LifeCycleState::Updating,
+            _ => LifeCycleState::UnknownVariant(UnknownLifeCycleState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LifeCycleState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "available" => LifeCycleState::Available,
+            "creating" => LifeCycleState::Creating,
+            "deleted" => LifeCycleState::Deleted,
+            "deleting" => LifeCycleState::Deleting,
+            "updating" => LifeCycleState::Updating,
+            _ => LifeCycleState::UnknownVariant(UnknownLifeCycleState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LifeCycleState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for LifeCycleState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LifeCycleState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecycleConfigurationDescription {
@@ -533,7 +649,7 @@ pub struct LifecyclePolicy {
     /// <p> A value that describes the period of time that a file is not accessed, after which it transitions to the IA storage class. Metadata operations such as listing the contents of a directory don't count as file access events.</p>
     #[serde(rename = "TransitionToIA")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub transition_to_ia: Option<String>,
+    pub transition_to_ia: Option<TransitionToIARules>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -599,7 +715,7 @@ pub struct MountTargetDescription {
     pub ip_address: Option<String>,
     /// <p>Lifecycle state of the mount target.</p>
     #[serde(rename = "LifeCycleState")]
-    pub life_cycle_state: String,
+    pub life_cycle_state: LifeCycleState,
     /// <p>System-assigned mount target ID.</p>
     #[serde(rename = "MountTargetId")]
     pub mount_target_id: String,
@@ -618,6 +734,106 @@ pub struct MountTargetDescription {
     #[serde(rename = "VpcId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPerformanceMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PerformanceMode {
+    GeneralPurpose,
+    MaxIO,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPerformanceMode),
+}
+
+impl Default for PerformanceMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PerformanceMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PerformanceMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PerformanceMode {
+    fn into(self) -> String {
+        match self {
+            PerformanceMode::GeneralPurpose => "generalPurpose".to_string(),
+            PerformanceMode::MaxIO => "maxIO".to_string(),
+            PerformanceMode::UnknownVariant(UnknownPerformanceMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PerformanceMode {
+    fn into(self) -> &'a str {
+        match self {
+            PerformanceMode::GeneralPurpose => &"generalPurpose",
+            PerformanceMode::MaxIO => &"maxIO",
+            PerformanceMode::UnknownVariant(UnknownPerformanceMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PerformanceMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "generalPurpose" => PerformanceMode::GeneralPurpose,
+            "maxIO" => PerformanceMode::MaxIO,
+            _ => PerformanceMode::UnknownVariant(UnknownPerformanceMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PerformanceMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "generalPurpose" => PerformanceMode::GeneralPurpose,
+            "maxIO" => PerformanceMode::MaxIO,
+            _ => PerformanceMode::UnknownVariant(UnknownPerformanceMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PerformanceMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PerformanceMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PerformanceMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The full POSIX identity, including the user ID, group ID, and any secondary group IDs, on the access point that is used for all file system operations performed by NFS clients using the access point.</p>
@@ -685,6 +901,116 @@ pub struct RootDirectory {
     pub path: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Status {
+    Disabled,
+    Disabling,
+    Enabled,
+    Enabling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatus),
+}
+
+impl Default for Status {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Status {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Status {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Status {
+    fn into(self) -> String {
+        match self {
+            Status::Disabled => "DISABLED".to_string(),
+            Status::Disabling => "DISABLING".to_string(),
+            Status::Enabled => "ENABLED".to_string(),
+            Status::Enabling => "ENABLING".to_string(),
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Status {
+    fn into(self) -> &'a str {
+        match self {
+            Status::Disabled => &"DISABLED",
+            Status::Disabling => &"DISABLING",
+            Status::Enabled => &"ENABLED",
+            Status::Enabling => &"ENABLING",
+            Status::UnknownVariant(UnknownStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => Status::Disabled,
+            "DISABLING" => Status::Disabling,
+            "ENABLED" => Status::Enabled,
+            "ENABLING" => Status::Enabling,
+            _ => Status::UnknownVariant(UnknownStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Status {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => Status::Disabled,
+            "DISABLING" => Status::Disabling,
+            "ENABLED" => Status::Enabled,
+            "ENABLING" => Status::Enabling,
+            _ => Status::UnknownVariant(UnknownStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Status {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Status {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Status {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A tag is a key-value pair. Allowed characters are letters, white space, and numbers that can be represented in UTF-8, and the following characters:<code> + - = . _ : /</code> </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -705,6 +1031,225 @@ pub struct TagResourceRequest {
     /// <p><p/></p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownThroughputMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ThroughputMode {
+    Bursting,
+    Provisioned,
+    #[doc(hidden)]
+    UnknownVariant(UnknownThroughputMode),
+}
+
+impl Default for ThroughputMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ThroughputMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ThroughputMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ThroughputMode {
+    fn into(self) -> String {
+        match self {
+            ThroughputMode::Bursting => "bursting".to_string(),
+            ThroughputMode::Provisioned => "provisioned".to_string(),
+            ThroughputMode::UnknownVariant(UnknownThroughputMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ThroughputMode {
+    fn into(self) -> &'a str {
+        match self {
+            ThroughputMode::Bursting => &"bursting",
+            ThroughputMode::Provisioned => &"provisioned",
+            ThroughputMode::UnknownVariant(UnknownThroughputMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ThroughputMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "bursting" => ThroughputMode::Bursting,
+            "provisioned" => ThroughputMode::Provisioned,
+            _ => ThroughputMode::UnknownVariant(UnknownThroughputMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ThroughputMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "bursting" => ThroughputMode::Bursting,
+            "provisioned" => ThroughputMode::Provisioned,
+            _ => ThroughputMode::UnknownVariant(UnknownThroughputMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ThroughputMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ThroughputMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ThroughputMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownTransitionToIARules {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum TransitionToIARules {
+    After14Days,
+    After30Days,
+    After60Days,
+    After7Days,
+    After90Days,
+    #[doc(hidden)]
+    UnknownVariant(UnknownTransitionToIARules),
+}
+
+impl Default for TransitionToIARules {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for TransitionToIARules {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for TransitionToIARules {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for TransitionToIARules {
+    fn into(self) -> String {
+        match self {
+            TransitionToIARules::After14Days => "AFTER_14_DAYS".to_string(),
+            TransitionToIARules::After30Days => "AFTER_30_DAYS".to_string(),
+            TransitionToIARules::After60Days => "AFTER_60_DAYS".to_string(),
+            TransitionToIARules::After7Days => "AFTER_7_DAYS".to_string(),
+            TransitionToIARules::After90Days => "AFTER_90_DAYS".to_string(),
+            TransitionToIARules::UnknownVariant(UnknownTransitionToIARules { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a TransitionToIARules {
+    fn into(self) -> &'a str {
+        match self {
+            TransitionToIARules::After14Days => &"AFTER_14_DAYS",
+            TransitionToIARules::After30Days => &"AFTER_30_DAYS",
+            TransitionToIARules::After60Days => &"AFTER_60_DAYS",
+            TransitionToIARules::After7Days => &"AFTER_7_DAYS",
+            TransitionToIARules::After90Days => &"AFTER_90_DAYS",
+            TransitionToIARules::UnknownVariant(UnknownTransitionToIARules { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for TransitionToIARules {
+    fn from(name: &str) -> Self {
+        match name {
+            "AFTER_14_DAYS" => TransitionToIARules::After14Days,
+            "AFTER_30_DAYS" => TransitionToIARules::After30Days,
+            "AFTER_60_DAYS" => TransitionToIARules::After60Days,
+            "AFTER_7_DAYS" => TransitionToIARules::After7Days,
+            "AFTER_90_DAYS" => TransitionToIARules::After90Days,
+            _ => TransitionToIARules::UnknownVariant(UnknownTransitionToIARules {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for TransitionToIARules {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AFTER_14_DAYS" => TransitionToIARules::After14Days,
+            "AFTER_30_DAYS" => TransitionToIARules::After30Days,
+            "AFTER_60_DAYS" => TransitionToIARules::After60Days,
+            "AFTER_7_DAYS" => TransitionToIARules::After7Days,
+            "AFTER_90_DAYS" => TransitionToIARules::After90Days,
+            _ => TransitionToIARules::UnknownVariant(UnknownTransitionToIARules { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for TransitionToIARules {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for TransitionToIARules {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for TransitionToIARules {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -731,7 +1276,7 @@ pub struct UpdateFileSystemRequest {
     /// <p>(Optional) The throughput mode that you want your file system to use. If you're not updating your throughput mode, you don't need to provide this value in your request. If you are changing the <code>ThroughputMode</code> to <code>provisioned</code>, you must also set a value for <code>ProvisionedThroughputInMibps</code>.</p>
     #[serde(rename = "ThroughputMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub throughput_mode: Option<String>,
+    pub throughput_mode: Option<ThroughputMode>,
 }
 
 /// Errors returned by CreateAccessPoint

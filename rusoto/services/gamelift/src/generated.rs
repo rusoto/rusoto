@@ -56,7 +56,7 @@ use serde_json;
 pub struct AcceptMatchInput {
     /// <p>Player response to the proposed match.</p>
     #[serde(rename = "AcceptanceType")]
-    pub acceptance_type: String,
+    pub acceptance_type: AcceptanceType,
     /// <p>A unique identifier for a player delivering the response. This parameter can include one or multiple player IDs.</p>
     #[serde(rename = "PlayerIds")]
     pub player_ids: Vec<String>,
@@ -68,6 +68,107 @@ pub struct AcceptMatchInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptMatchOutput {}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAcceptanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AcceptanceType {
+    Accept,
+    Reject,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAcceptanceType),
+}
+
+impl Default for AcceptanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AcceptanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AcceptanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AcceptanceType {
+    fn into(self) -> String {
+        match self {
+            AcceptanceType::Accept => "ACCEPT".to_string(),
+            AcceptanceType::Reject => "REJECT".to_string(),
+            AcceptanceType::UnknownVariant(UnknownAcceptanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AcceptanceType {
+    fn into(self) -> &'a str {
+        match self {
+            AcceptanceType::Accept => &"ACCEPT",
+            AcceptanceType::Reject => &"REJECT",
+            AcceptanceType::UnknownVariant(UnknownAcceptanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AcceptanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPT" => AcceptanceType::Accept,
+            "REJECT" => AcceptanceType::Reject,
+            _ => AcceptanceType::UnknownVariant(UnknownAcceptanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AcceptanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPT" => AcceptanceType::Accept,
+            "REJECT" => AcceptanceType::Reject,
+            _ => AcceptanceType::UnknownVariant(UnknownAcceptanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AcceptanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AcceptanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for AcceptanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 /// <p><p>Properties that describe an alias resource.</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -142,6 +243,215 @@ pub struct AwsCredentials {
     pub session_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBackfillMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BackfillMode {
+    Automatic,
+    Manual,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBackfillMode),
+}
+
+impl Default for BackfillMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BackfillMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BackfillMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BackfillMode {
+    fn into(self) -> String {
+        match self {
+            BackfillMode::Automatic => "AUTOMATIC".to_string(),
+            BackfillMode::Manual => "MANUAL".to_string(),
+            BackfillMode::UnknownVariant(UnknownBackfillMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BackfillMode {
+    fn into(self) -> &'a str {
+        match self {
+            BackfillMode::Automatic => &"AUTOMATIC",
+            BackfillMode::Manual => &"MANUAL",
+            BackfillMode::UnknownVariant(UnknownBackfillMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BackfillMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTOMATIC" => BackfillMode::Automatic,
+            "MANUAL" => BackfillMode::Manual,
+            _ => BackfillMode::UnknownVariant(UnknownBackfillMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BackfillMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTOMATIC" => BackfillMode::Automatic,
+            "MANUAL" => BackfillMode::Manual,
+            _ => BackfillMode::UnknownVariant(UnknownBackfillMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BackfillMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BackfillMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BackfillMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBalancingStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BalancingStrategy {
+    OnDemandOnly,
+    SpotOnly,
+    SpotPreferred,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBalancingStrategy),
+}
+
+impl Default for BalancingStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BalancingStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BalancingStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BalancingStrategy {
+    fn into(self) -> String {
+        match self {
+            BalancingStrategy::OnDemandOnly => "ON_DEMAND_ONLY".to_string(),
+            BalancingStrategy::SpotOnly => "SPOT_ONLY".to_string(),
+            BalancingStrategy::SpotPreferred => "SPOT_PREFERRED".to_string(),
+            BalancingStrategy::UnknownVariant(UnknownBalancingStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BalancingStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            BalancingStrategy::OnDemandOnly => &"ON_DEMAND_ONLY",
+            BalancingStrategy::SpotOnly => &"SPOT_ONLY",
+            BalancingStrategy::SpotPreferred => &"SPOT_PREFERRED",
+            BalancingStrategy::UnknownVariant(UnknownBalancingStrategy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BalancingStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ON_DEMAND_ONLY" => BalancingStrategy::OnDemandOnly,
+            "SPOT_ONLY" => BalancingStrategy::SpotOnly,
+            "SPOT_PREFERRED" => BalancingStrategy::SpotPreferred,
+            _ => BalancingStrategy::UnknownVariant(UnknownBalancingStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BalancingStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ON_DEMAND_ONLY" => BalancingStrategy::OnDemandOnly,
+            "SPOT_ONLY" => BalancingStrategy::SpotOnly,
+            "SPOT_PREFERRED" => BalancingStrategy::SpotPreferred,
+            _ => BalancingStrategy::UnknownVariant(UnknownBalancingStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BalancingStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BalancingStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BalancingStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Properties describing a custom game build.</p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -165,7 +475,7 @@ pub struct Build {
     /// <p>Operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>File size of the uploaded game build, expressed in bytes. When the build status is <code>INITIALIZED</code>, this value is 0.</p>
     #[serde(rename = "SizeOnDisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -173,11 +483,116 @@ pub struct Build {
     /// <p><p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> -- A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> -- The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> -- The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<BuildStatus>,
     /// <p>Version information that is associated with a build or script. Version strings do not need to be unique. This value can be set using <a>CreateBuild</a> or <a>UpdateBuild</a>.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBuildStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BuildStatus {
+    Failed,
+    Initialized,
+    Ready,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBuildStatus),
+}
+
+impl Default for BuildStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BuildStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BuildStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BuildStatus {
+    fn into(self) -> String {
+        match self {
+            BuildStatus::Failed => "FAILED".to_string(),
+            BuildStatus::Initialized => "INITIALIZED".to_string(),
+            BuildStatus::Ready => "READY".to_string(),
+            BuildStatus::UnknownVariant(UnknownBuildStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BuildStatus {
+    fn into(self) -> &'a str {
+        match self {
+            BuildStatus::Failed => &"FAILED",
+            BuildStatus::Initialized => &"INITIALIZED",
+            BuildStatus::Ready => &"READY",
+            BuildStatus::UnknownVariant(UnknownBuildStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BuildStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => BuildStatus::Failed,
+            "INITIALIZED" => BuildStatus::Initialized,
+            "READY" => BuildStatus::Ready,
+            _ => BuildStatus::UnknownVariant(UnknownBuildStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BuildStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => BuildStatus::Failed,
+            "INITIALIZED" => BuildStatus::Initialized,
+            "READY" => BuildStatus::Ready,
+            _ => BuildStatus::UnknownVariant(UnknownBuildStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BuildStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BuildStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BuildStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information about the use of a TLS/SSL certificate for a fleet. TLS certificate generation is enabled at the fleet level, with one certificate generated for the fleet. When this feature is enabled, the certificate can be retrieved using the <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk.html">GameLift Server SDK</a> call <code>GetInstanceCertificate</code>. All instances in a fleet share the same certificate.</p>
@@ -185,7 +600,107 @@ pub struct Build {
 pub struct CertificateConfiguration {
     /// <p>Indicates whether a TLS/SSL certificate was generated for a fleet. </p> <p> </p> <p> </p>
     #[serde(rename = "CertificateType")]
-    pub certificate_type: String,
+    pub certificate_type: CertificateType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCertificateType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CertificateType {
+    Disabled,
+    Generated,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCertificateType),
+}
+
+impl Default for CertificateType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CertificateType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CertificateType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CertificateType {
+    fn into(self) -> String {
+        match self {
+            CertificateType::Disabled => "DISABLED".to_string(),
+            CertificateType::Generated => "GENERATED".to_string(),
+            CertificateType::UnknownVariant(UnknownCertificateType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CertificateType {
+    fn into(self) -> &'a str {
+        match self {
+            CertificateType::Disabled => &"DISABLED",
+            CertificateType::Generated => &"GENERATED",
+            CertificateType::UnknownVariant(UnknownCertificateType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CertificateType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => CertificateType::Disabled,
+            "GENERATED" => CertificateType::Generated,
+            _ => CertificateType::UnknownVariant(UnknownCertificateType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CertificateType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => CertificateType::Disabled,
+            "GENERATED" => CertificateType::Generated,
+            _ => CertificateType::UnknownVariant(UnknownCertificateType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CertificateType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CertificateType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CertificateType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -211,6 +726,130 @@ pub struct ClaimGameServerOutput {
     #[serde(rename = "GameServer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_server: Option<GameServer>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComparisonOperatorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComparisonOperatorType {
+    GreaterThanOrEqualToThreshold,
+    GreaterThanThreshold,
+    LessThanOrEqualToThreshold,
+    LessThanThreshold,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComparisonOperatorType),
+}
+
+impl Default for ComparisonOperatorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComparisonOperatorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComparisonOperatorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComparisonOperatorType {
+    fn into(self) -> String {
+        match self {
+            ComparisonOperatorType::GreaterThanOrEqualToThreshold => {
+                "GreaterThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperatorType::GreaterThanThreshold => "GreaterThanThreshold".to_string(),
+            ComparisonOperatorType::LessThanOrEqualToThreshold => {
+                "LessThanOrEqualToThreshold".to_string()
+            }
+            ComparisonOperatorType::LessThanThreshold => "LessThanThreshold".to_string(),
+            ComparisonOperatorType::UnknownVariant(UnknownComparisonOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComparisonOperatorType {
+    fn into(self) -> &'a str {
+        match self {
+            ComparisonOperatorType::GreaterThanOrEqualToThreshold => {
+                &"GreaterThanOrEqualToThreshold"
+            }
+            ComparisonOperatorType::GreaterThanThreshold => &"GreaterThanThreshold",
+            ComparisonOperatorType::LessThanOrEqualToThreshold => &"LessThanOrEqualToThreshold",
+            ComparisonOperatorType::LessThanThreshold => &"LessThanThreshold",
+            ComparisonOperatorType::UnknownVariant(UnknownComparisonOperatorType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComparisonOperatorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "GreaterThanOrEqualToThreshold" => {
+                ComparisonOperatorType::GreaterThanOrEqualToThreshold
+            }
+            "GreaterThanThreshold" => ComparisonOperatorType::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperatorType::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperatorType::LessThanThreshold,
+            _ => ComparisonOperatorType::UnknownVariant(UnknownComparisonOperatorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComparisonOperatorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GreaterThanOrEqualToThreshold" => {
+                ComparisonOperatorType::GreaterThanOrEqualToThreshold
+            }
+            "GreaterThanThreshold" => ComparisonOperatorType::GreaterThanThreshold,
+            "LessThanOrEqualToThreshold" => ComparisonOperatorType::LessThanOrEqualToThreshold,
+            "LessThanThreshold" => ComparisonOperatorType::LessThanThreshold,
+            _ => ComparisonOperatorType::UnknownVariant(UnknownComparisonOperatorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComparisonOperatorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComparisonOperatorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComparisonOperatorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input for a request operation.</p>
@@ -254,7 +893,7 @@ pub struct CreateBuildInput {
     /// <p>The operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build. If your game build contains multiple executables, they all must run on the same operating system. If an operating system is not specified when creating a build, Amazon GameLift uses the default value (WINDOWS_2012). This value cannot be changed later.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>The location where your game build files are stored. Use this parameter only when creating a build using files that are stored in an S3 bucket that you own. Identify an S3 bucket name and key, which must in the same Region where you're creating a build. This parameter must also specify the ARN for an IAM role that you've set up to give Amazon GameLift access your S3 bucket. To call this operation with a storage location, you must have IAM PassRole permission. For more details on IAM roles and PassRole permissions, see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/setting-up-role.html"> Set up a role for GameLift access</a>. </p>
     #[serde(rename = "StorageLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -309,11 +948,11 @@ pub struct CreateFleetInput {
     pub ec2_inbound_permissions: Option<Vec<IpPermission>>,
     /// <p>The name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
     #[serde(rename = "EC2InstanceType")]
-    pub ec2_instance_type: String,
+    pub ec2_instance_type: EC2InstanceType,
     /// <p>Indicates whether to use On-Demand instances or Spot instances for this fleet. If empty, the default is <code>ON_DEMAND</code>. Both categories of instances use identical hardware and configurations based on the instance type selected for this fleet. Learn more about <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html#gamelift-ec2-instances-spot"> On-Demand versus Spot Instances</a>. </p>
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fleet_type: Option<String>,
+    pub fleet_type: Option<FleetType>,
     /// <p>A unique identifier for an AWS IAM role that manages access to your AWS services. Fleets with an instance role ARN allow applications that are running on the fleet's instances to assume the role. Learn more about using on-box credentials for your game servers at <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html"> Access external resources from a game server</a>. To call this operation with instance role ARN, you must have IAM PassRole permissions. See <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-iam-policy-examples.html">IAM policy examples for GameLift</a>. </p>
     #[serde(rename = "InstanceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -332,7 +971,7 @@ pub struct CreateFleetInput {
     /// <p><p>A game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet&#39;s protection policy using <a>UpdateFleetAttributes</a>, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> - The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> - If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub new_game_session_protection_policy: Option<String>,
+    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
     /// <p>A unique identifier for the AWS account with the VPC that you want to peer your Amazon GameLift fleet with. You can find your account ID in the AWS Management Console under account settings. </p>
     #[serde(rename = "PeerVpcAwsAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -387,14 +1026,14 @@ pub struct CreateGameServerGroupInput {
     /// <p><p>Indicates how GameLift FleetIQ balances the use of Spot Instances and On-Demand Instances in the game server group. Method options include the following:</p> <ul> <li> <p> <code>SPOT<em>ONLY</code> - Only Spot Instances are used in the game server group. If Spot Instances are unavailable or not viable for game hosting, the game server group provides no hosting capacity until Spot Instances can again be used. Until then, no new instances are started, and the existing nonviable Spot Instances are terminated (after current gameplay ends) and are not replaced.</p> </li> <li> <p> <code>SPOT</em>PREFERRED</code> - (default value) Spot Instances are used whenever available in the game server group. If Spot Instances are unavailable, the game server group continues to provide hosting capacity by falling back to On-Demand Instances. Existing nonviable Spot Instances are terminated (after current gameplay ends) and are replaced with new On-Demand Instances.</p> </li> <li> <p> <code>ON<em>DEMAND</em>ONLY</code> - Only On-Demand Instances are used in the game server group. No Spot Instances are used, even when available, while this balancing strategy is in force.</p> </li> </ul></p>
     #[serde(rename = "BalancingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub balancing_strategy: Option<String>,
+    pub balancing_strategy: Option<BalancingStrategy>,
     /// <p>An identifier for the new game server group. This value is used to generate unique ARN identifiers for the EC2 Auto Scaling group and the GameLift FleetIQ game server group. The name must be unique per Region per AWS account.</p>
     #[serde(rename = "GameServerGroupName")]
     pub game_server_group_name: String,
     /// <p>A flag that indicates whether instances in the game server group are protected from early termination. Unprotected instances that have active game servers running might be terminated during a scale-down event, causing players to be dropped from the game. Protected instances cannot be terminated while there are active game servers running except in the event of a forced game server group deletion (see ). An exception to this is with Spot Instances, which can be terminated by AWS regardless of protection status. This property is set to <code>NO_PROTECTION</code> by default.</p>
     #[serde(rename = "GameServerProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub game_server_protection_policy: Option<String>,
+    pub game_server_protection_policy: Option<GameServerProtectionPolicy>,
     /// <p>The EC2 instance types and sizes to use in the Auto Scaling group. The instance definitions must specify at least two different instance types that are supported by GameLift FleetIQ. For more information on instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">EC2 Instance Types</a> in the <i>Amazon EC2 User Guide</i>. You can optionally specify capacity weighting for each instance type. If no weight value is specified for an instance type, it is set to the default value "1". For more information about capacity weighting, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html"> Instance Weighting for Amazon EC2 Auto Scaling</a> in the Amazon EC2 Auto Scaling User Guide.</p>
     #[serde(rename = "InstanceDefinitions")]
     pub instance_definitions: Vec<InstanceDefinition>,
@@ -533,7 +1172,7 @@ pub struct CreateMatchmakingConfigurationInput {
     /// <p>The method used to backfill game sessions that are created with this matchmaking configuration. Specify <code>MANUAL</code> when your game manages backfill requests manually or does not use the match backfill feature. Specify <code>AUTOMATIC</code> to have GameLift create a <a>StartMatchBackfill</a> request whenever a game session has one or more open slots. Learn more about manual and automatic backfill in <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-backfill.html"> Backfill Existing Games with FlexMatch</a>. Automatic backfill is not available when <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "BackfillMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backfill_mode: Option<String>,
+    pub backfill_mode: Option<BackfillMode>,
     /// <p>Information to be added to all events related to this matchmaking configuration. </p>
     #[serde(rename = "CustomEventData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -545,7 +1184,7 @@ pub struct CreateMatchmakingConfigurationInput {
     /// <p><p>Indicates whether this matchmaking configuration is being used with GameLift hosting or as a standalone matchmaking solution. </p> <ul> <li> <p> <b>STANDALONE</b> - FlexMatch forms matches and returns match information, including players and team assignments, in a <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html#match-events-matchmakingsucceeded"> MatchmakingSucceeded</a> event.</p> </li> <li> <p> <b>WITH_QUEUE</b> - FlexMatch forms matches and uses the specified GameLift queue to start a game session for the match. </p> </li> </ul></p>
     #[serde(rename = "FlexMatchMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flex_match_mode: Option<String>,
+    pub flex_match_mode: Option<FlexMatchMode>,
     /// <p>A set of custom properties for a game session, formatted as key-value pairs. These properties are passed to a game server process in the <a>GameSession</a> object with a request to start a new game session (see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. This parameter is not used if <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "GameProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -777,7 +1416,7 @@ pub struct DeleteGameServerGroupInput {
     /// <p><p>The type of delete to perform. Options include the following:</p> <ul> <li> <p> <code>SAFE<em>DELETE</code> – (default) Terminates the game server group and EC2 Auto Scaling group only when it has no game servers that are in <code>UTILIZED</code> status.</p> </li> <li> <p> <code>FORCE</em>DELETE</code> – Terminates the game server group, including all active game servers regardless of their utilization status, and the EC2 Auto Scaling group. </p> </li> <li> <p> <code>RETAIN</code> – Does a safe delete of the game server group but retains the EC2 Auto Scaling group as is.</p> </li> </ul></p>
     #[serde(rename = "DeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delete_option: Option<String>,
+    pub delete_option: Option<GameServerGroupDeleteOption>,
     /// <p>A unique identifier for the game server group. Use either the <a>GameServerGroup</a> name or ARN value.</p>
     #[serde(rename = "GameServerGroupName")]
     pub game_server_group_name: String,
@@ -940,7 +1579,7 @@ pub struct DescribeEC2InstanceLimitsInput {
     /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions. Leave this parameter blank to retrieve limits for all types.</p>
     #[serde(rename = "EC2InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ec2_instance_type: Option<String>,
+    pub ec2_instance_type: Option<EC2InstanceType>,
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
@@ -1518,7 +2157,7 @@ pub struct DescribeScalingPoliciesInput {
     /// <p><p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> -- The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> -- A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> -- A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> -- A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> -- The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> -- The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
     #[serde(rename = "StatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_filter: Option<String>,
+    pub status_filter: Option<ScalingStatusType>,
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
@@ -1644,11 +2283,511 @@ pub struct EC2InstanceLimit {
     /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
     #[serde(rename = "EC2InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ec2_instance_type: Option<String>,
+    pub ec2_instance_type: Option<EC2InstanceType>,
     /// <p>Number of instances allowed.</p>
     #[serde(rename = "InstanceLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_limit: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEC2InstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EC2InstanceType {
+    C32Xlarge,
+    C34Xlarge,
+    C38Xlarge,
+    C3Large,
+    C3Xlarge,
+    C42Xlarge,
+    C44Xlarge,
+    C48Xlarge,
+    C4Large,
+    C4Xlarge,
+    C512Xlarge,
+    C518Xlarge,
+    C524Xlarge,
+    C52Xlarge,
+    C54Xlarge,
+    C59Xlarge,
+    C5Large,
+    C5Xlarge,
+    C5A12Xlarge,
+    C5A16Xlarge,
+    C5A24Xlarge,
+    C5A2Xlarge,
+    C5A4Xlarge,
+    C5A8Xlarge,
+    C5ALarge,
+    C5AXlarge,
+    M32Xlarge,
+    M3Large,
+    M3Medium,
+    M3Xlarge,
+    M410Xlarge,
+    M42Xlarge,
+    M44Xlarge,
+    M4Large,
+    M4Xlarge,
+    M512Xlarge,
+    M516Xlarge,
+    M524Xlarge,
+    M52Xlarge,
+    M54Xlarge,
+    M58Xlarge,
+    M5Large,
+    M5Xlarge,
+    M5A12Xlarge,
+    M5A16Xlarge,
+    M5A24Xlarge,
+    M5A2Xlarge,
+    M5A4Xlarge,
+    M5A8Xlarge,
+    M5ALarge,
+    M5AXlarge,
+    R32Xlarge,
+    R34Xlarge,
+    R38Xlarge,
+    R3Large,
+    R3Xlarge,
+    R416Xlarge,
+    R42Xlarge,
+    R44Xlarge,
+    R48Xlarge,
+    R4Large,
+    R4Xlarge,
+    R512Xlarge,
+    R516Xlarge,
+    R524Xlarge,
+    R52Xlarge,
+    R54Xlarge,
+    R58Xlarge,
+    R5Large,
+    R5Xlarge,
+    R5A12Xlarge,
+    R5A16Xlarge,
+    R5A24Xlarge,
+    R5A2Xlarge,
+    R5A4Xlarge,
+    R5A8Xlarge,
+    R5ALarge,
+    R5AXlarge,
+    T2Large,
+    T2Medium,
+    T2Micro,
+    T2Small,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEC2InstanceType),
+}
+
+impl Default for EC2InstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EC2InstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EC2InstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EC2InstanceType {
+    fn into(self) -> String {
+        match self {
+            EC2InstanceType::C32Xlarge => "c3.2xlarge".to_string(),
+            EC2InstanceType::C34Xlarge => "c3.4xlarge".to_string(),
+            EC2InstanceType::C38Xlarge => "c3.8xlarge".to_string(),
+            EC2InstanceType::C3Large => "c3.large".to_string(),
+            EC2InstanceType::C3Xlarge => "c3.xlarge".to_string(),
+            EC2InstanceType::C42Xlarge => "c4.2xlarge".to_string(),
+            EC2InstanceType::C44Xlarge => "c4.4xlarge".to_string(),
+            EC2InstanceType::C48Xlarge => "c4.8xlarge".to_string(),
+            EC2InstanceType::C4Large => "c4.large".to_string(),
+            EC2InstanceType::C4Xlarge => "c4.xlarge".to_string(),
+            EC2InstanceType::C512Xlarge => "c5.12xlarge".to_string(),
+            EC2InstanceType::C518Xlarge => "c5.18xlarge".to_string(),
+            EC2InstanceType::C524Xlarge => "c5.24xlarge".to_string(),
+            EC2InstanceType::C52Xlarge => "c5.2xlarge".to_string(),
+            EC2InstanceType::C54Xlarge => "c5.4xlarge".to_string(),
+            EC2InstanceType::C59Xlarge => "c5.9xlarge".to_string(),
+            EC2InstanceType::C5Large => "c5.large".to_string(),
+            EC2InstanceType::C5Xlarge => "c5.xlarge".to_string(),
+            EC2InstanceType::C5A12Xlarge => "c5a.12xlarge".to_string(),
+            EC2InstanceType::C5A16Xlarge => "c5a.16xlarge".to_string(),
+            EC2InstanceType::C5A24Xlarge => "c5a.24xlarge".to_string(),
+            EC2InstanceType::C5A2Xlarge => "c5a.2xlarge".to_string(),
+            EC2InstanceType::C5A4Xlarge => "c5a.4xlarge".to_string(),
+            EC2InstanceType::C5A8Xlarge => "c5a.8xlarge".to_string(),
+            EC2InstanceType::C5ALarge => "c5a.large".to_string(),
+            EC2InstanceType::C5AXlarge => "c5a.xlarge".to_string(),
+            EC2InstanceType::M32Xlarge => "m3.2xlarge".to_string(),
+            EC2InstanceType::M3Large => "m3.large".to_string(),
+            EC2InstanceType::M3Medium => "m3.medium".to_string(),
+            EC2InstanceType::M3Xlarge => "m3.xlarge".to_string(),
+            EC2InstanceType::M410Xlarge => "m4.10xlarge".to_string(),
+            EC2InstanceType::M42Xlarge => "m4.2xlarge".to_string(),
+            EC2InstanceType::M44Xlarge => "m4.4xlarge".to_string(),
+            EC2InstanceType::M4Large => "m4.large".to_string(),
+            EC2InstanceType::M4Xlarge => "m4.xlarge".to_string(),
+            EC2InstanceType::M512Xlarge => "m5.12xlarge".to_string(),
+            EC2InstanceType::M516Xlarge => "m5.16xlarge".to_string(),
+            EC2InstanceType::M524Xlarge => "m5.24xlarge".to_string(),
+            EC2InstanceType::M52Xlarge => "m5.2xlarge".to_string(),
+            EC2InstanceType::M54Xlarge => "m5.4xlarge".to_string(),
+            EC2InstanceType::M58Xlarge => "m5.8xlarge".to_string(),
+            EC2InstanceType::M5Large => "m5.large".to_string(),
+            EC2InstanceType::M5Xlarge => "m5.xlarge".to_string(),
+            EC2InstanceType::M5A12Xlarge => "m5a.12xlarge".to_string(),
+            EC2InstanceType::M5A16Xlarge => "m5a.16xlarge".to_string(),
+            EC2InstanceType::M5A24Xlarge => "m5a.24xlarge".to_string(),
+            EC2InstanceType::M5A2Xlarge => "m5a.2xlarge".to_string(),
+            EC2InstanceType::M5A4Xlarge => "m5a.4xlarge".to_string(),
+            EC2InstanceType::M5A8Xlarge => "m5a.8xlarge".to_string(),
+            EC2InstanceType::M5ALarge => "m5a.large".to_string(),
+            EC2InstanceType::M5AXlarge => "m5a.xlarge".to_string(),
+            EC2InstanceType::R32Xlarge => "r3.2xlarge".to_string(),
+            EC2InstanceType::R34Xlarge => "r3.4xlarge".to_string(),
+            EC2InstanceType::R38Xlarge => "r3.8xlarge".to_string(),
+            EC2InstanceType::R3Large => "r3.large".to_string(),
+            EC2InstanceType::R3Xlarge => "r3.xlarge".to_string(),
+            EC2InstanceType::R416Xlarge => "r4.16xlarge".to_string(),
+            EC2InstanceType::R42Xlarge => "r4.2xlarge".to_string(),
+            EC2InstanceType::R44Xlarge => "r4.4xlarge".to_string(),
+            EC2InstanceType::R48Xlarge => "r4.8xlarge".to_string(),
+            EC2InstanceType::R4Large => "r4.large".to_string(),
+            EC2InstanceType::R4Xlarge => "r4.xlarge".to_string(),
+            EC2InstanceType::R512Xlarge => "r5.12xlarge".to_string(),
+            EC2InstanceType::R516Xlarge => "r5.16xlarge".to_string(),
+            EC2InstanceType::R524Xlarge => "r5.24xlarge".to_string(),
+            EC2InstanceType::R52Xlarge => "r5.2xlarge".to_string(),
+            EC2InstanceType::R54Xlarge => "r5.4xlarge".to_string(),
+            EC2InstanceType::R58Xlarge => "r5.8xlarge".to_string(),
+            EC2InstanceType::R5Large => "r5.large".to_string(),
+            EC2InstanceType::R5Xlarge => "r5.xlarge".to_string(),
+            EC2InstanceType::R5A12Xlarge => "r5a.12xlarge".to_string(),
+            EC2InstanceType::R5A16Xlarge => "r5a.16xlarge".to_string(),
+            EC2InstanceType::R5A24Xlarge => "r5a.24xlarge".to_string(),
+            EC2InstanceType::R5A2Xlarge => "r5a.2xlarge".to_string(),
+            EC2InstanceType::R5A4Xlarge => "r5a.4xlarge".to_string(),
+            EC2InstanceType::R5A8Xlarge => "r5a.8xlarge".to_string(),
+            EC2InstanceType::R5ALarge => "r5a.large".to_string(),
+            EC2InstanceType::R5AXlarge => "r5a.xlarge".to_string(),
+            EC2InstanceType::T2Large => "t2.large".to_string(),
+            EC2InstanceType::T2Medium => "t2.medium".to_string(),
+            EC2InstanceType::T2Micro => "t2.micro".to_string(),
+            EC2InstanceType::T2Small => "t2.small".to_string(),
+            EC2InstanceType::UnknownVariant(UnknownEC2InstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EC2InstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            EC2InstanceType::C32Xlarge => &"c3.2xlarge",
+            EC2InstanceType::C34Xlarge => &"c3.4xlarge",
+            EC2InstanceType::C38Xlarge => &"c3.8xlarge",
+            EC2InstanceType::C3Large => &"c3.large",
+            EC2InstanceType::C3Xlarge => &"c3.xlarge",
+            EC2InstanceType::C42Xlarge => &"c4.2xlarge",
+            EC2InstanceType::C44Xlarge => &"c4.4xlarge",
+            EC2InstanceType::C48Xlarge => &"c4.8xlarge",
+            EC2InstanceType::C4Large => &"c4.large",
+            EC2InstanceType::C4Xlarge => &"c4.xlarge",
+            EC2InstanceType::C512Xlarge => &"c5.12xlarge",
+            EC2InstanceType::C518Xlarge => &"c5.18xlarge",
+            EC2InstanceType::C524Xlarge => &"c5.24xlarge",
+            EC2InstanceType::C52Xlarge => &"c5.2xlarge",
+            EC2InstanceType::C54Xlarge => &"c5.4xlarge",
+            EC2InstanceType::C59Xlarge => &"c5.9xlarge",
+            EC2InstanceType::C5Large => &"c5.large",
+            EC2InstanceType::C5Xlarge => &"c5.xlarge",
+            EC2InstanceType::C5A12Xlarge => &"c5a.12xlarge",
+            EC2InstanceType::C5A16Xlarge => &"c5a.16xlarge",
+            EC2InstanceType::C5A24Xlarge => &"c5a.24xlarge",
+            EC2InstanceType::C5A2Xlarge => &"c5a.2xlarge",
+            EC2InstanceType::C5A4Xlarge => &"c5a.4xlarge",
+            EC2InstanceType::C5A8Xlarge => &"c5a.8xlarge",
+            EC2InstanceType::C5ALarge => &"c5a.large",
+            EC2InstanceType::C5AXlarge => &"c5a.xlarge",
+            EC2InstanceType::M32Xlarge => &"m3.2xlarge",
+            EC2InstanceType::M3Large => &"m3.large",
+            EC2InstanceType::M3Medium => &"m3.medium",
+            EC2InstanceType::M3Xlarge => &"m3.xlarge",
+            EC2InstanceType::M410Xlarge => &"m4.10xlarge",
+            EC2InstanceType::M42Xlarge => &"m4.2xlarge",
+            EC2InstanceType::M44Xlarge => &"m4.4xlarge",
+            EC2InstanceType::M4Large => &"m4.large",
+            EC2InstanceType::M4Xlarge => &"m4.xlarge",
+            EC2InstanceType::M512Xlarge => &"m5.12xlarge",
+            EC2InstanceType::M516Xlarge => &"m5.16xlarge",
+            EC2InstanceType::M524Xlarge => &"m5.24xlarge",
+            EC2InstanceType::M52Xlarge => &"m5.2xlarge",
+            EC2InstanceType::M54Xlarge => &"m5.4xlarge",
+            EC2InstanceType::M58Xlarge => &"m5.8xlarge",
+            EC2InstanceType::M5Large => &"m5.large",
+            EC2InstanceType::M5Xlarge => &"m5.xlarge",
+            EC2InstanceType::M5A12Xlarge => &"m5a.12xlarge",
+            EC2InstanceType::M5A16Xlarge => &"m5a.16xlarge",
+            EC2InstanceType::M5A24Xlarge => &"m5a.24xlarge",
+            EC2InstanceType::M5A2Xlarge => &"m5a.2xlarge",
+            EC2InstanceType::M5A4Xlarge => &"m5a.4xlarge",
+            EC2InstanceType::M5A8Xlarge => &"m5a.8xlarge",
+            EC2InstanceType::M5ALarge => &"m5a.large",
+            EC2InstanceType::M5AXlarge => &"m5a.xlarge",
+            EC2InstanceType::R32Xlarge => &"r3.2xlarge",
+            EC2InstanceType::R34Xlarge => &"r3.4xlarge",
+            EC2InstanceType::R38Xlarge => &"r3.8xlarge",
+            EC2InstanceType::R3Large => &"r3.large",
+            EC2InstanceType::R3Xlarge => &"r3.xlarge",
+            EC2InstanceType::R416Xlarge => &"r4.16xlarge",
+            EC2InstanceType::R42Xlarge => &"r4.2xlarge",
+            EC2InstanceType::R44Xlarge => &"r4.4xlarge",
+            EC2InstanceType::R48Xlarge => &"r4.8xlarge",
+            EC2InstanceType::R4Large => &"r4.large",
+            EC2InstanceType::R4Xlarge => &"r4.xlarge",
+            EC2InstanceType::R512Xlarge => &"r5.12xlarge",
+            EC2InstanceType::R516Xlarge => &"r5.16xlarge",
+            EC2InstanceType::R524Xlarge => &"r5.24xlarge",
+            EC2InstanceType::R52Xlarge => &"r5.2xlarge",
+            EC2InstanceType::R54Xlarge => &"r5.4xlarge",
+            EC2InstanceType::R58Xlarge => &"r5.8xlarge",
+            EC2InstanceType::R5Large => &"r5.large",
+            EC2InstanceType::R5Xlarge => &"r5.xlarge",
+            EC2InstanceType::R5A12Xlarge => &"r5a.12xlarge",
+            EC2InstanceType::R5A16Xlarge => &"r5a.16xlarge",
+            EC2InstanceType::R5A24Xlarge => &"r5a.24xlarge",
+            EC2InstanceType::R5A2Xlarge => &"r5a.2xlarge",
+            EC2InstanceType::R5A4Xlarge => &"r5a.4xlarge",
+            EC2InstanceType::R5A8Xlarge => &"r5a.8xlarge",
+            EC2InstanceType::R5ALarge => &"r5a.large",
+            EC2InstanceType::R5AXlarge => &"r5a.xlarge",
+            EC2InstanceType::T2Large => &"t2.large",
+            EC2InstanceType::T2Medium => &"t2.medium",
+            EC2InstanceType::T2Micro => &"t2.micro",
+            EC2InstanceType::T2Small => &"t2.small",
+            EC2InstanceType::UnknownVariant(UnknownEC2InstanceType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EC2InstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "c3.2xlarge" => EC2InstanceType::C32Xlarge,
+            "c3.4xlarge" => EC2InstanceType::C34Xlarge,
+            "c3.8xlarge" => EC2InstanceType::C38Xlarge,
+            "c3.large" => EC2InstanceType::C3Large,
+            "c3.xlarge" => EC2InstanceType::C3Xlarge,
+            "c4.2xlarge" => EC2InstanceType::C42Xlarge,
+            "c4.4xlarge" => EC2InstanceType::C44Xlarge,
+            "c4.8xlarge" => EC2InstanceType::C48Xlarge,
+            "c4.large" => EC2InstanceType::C4Large,
+            "c4.xlarge" => EC2InstanceType::C4Xlarge,
+            "c5.12xlarge" => EC2InstanceType::C512Xlarge,
+            "c5.18xlarge" => EC2InstanceType::C518Xlarge,
+            "c5.24xlarge" => EC2InstanceType::C524Xlarge,
+            "c5.2xlarge" => EC2InstanceType::C52Xlarge,
+            "c5.4xlarge" => EC2InstanceType::C54Xlarge,
+            "c5.9xlarge" => EC2InstanceType::C59Xlarge,
+            "c5.large" => EC2InstanceType::C5Large,
+            "c5.xlarge" => EC2InstanceType::C5Xlarge,
+            "c5a.12xlarge" => EC2InstanceType::C5A12Xlarge,
+            "c5a.16xlarge" => EC2InstanceType::C5A16Xlarge,
+            "c5a.24xlarge" => EC2InstanceType::C5A24Xlarge,
+            "c5a.2xlarge" => EC2InstanceType::C5A2Xlarge,
+            "c5a.4xlarge" => EC2InstanceType::C5A4Xlarge,
+            "c5a.8xlarge" => EC2InstanceType::C5A8Xlarge,
+            "c5a.large" => EC2InstanceType::C5ALarge,
+            "c5a.xlarge" => EC2InstanceType::C5AXlarge,
+            "m3.2xlarge" => EC2InstanceType::M32Xlarge,
+            "m3.large" => EC2InstanceType::M3Large,
+            "m3.medium" => EC2InstanceType::M3Medium,
+            "m3.xlarge" => EC2InstanceType::M3Xlarge,
+            "m4.10xlarge" => EC2InstanceType::M410Xlarge,
+            "m4.2xlarge" => EC2InstanceType::M42Xlarge,
+            "m4.4xlarge" => EC2InstanceType::M44Xlarge,
+            "m4.large" => EC2InstanceType::M4Large,
+            "m4.xlarge" => EC2InstanceType::M4Xlarge,
+            "m5.12xlarge" => EC2InstanceType::M512Xlarge,
+            "m5.16xlarge" => EC2InstanceType::M516Xlarge,
+            "m5.24xlarge" => EC2InstanceType::M524Xlarge,
+            "m5.2xlarge" => EC2InstanceType::M52Xlarge,
+            "m5.4xlarge" => EC2InstanceType::M54Xlarge,
+            "m5.8xlarge" => EC2InstanceType::M58Xlarge,
+            "m5.large" => EC2InstanceType::M5Large,
+            "m5.xlarge" => EC2InstanceType::M5Xlarge,
+            "m5a.12xlarge" => EC2InstanceType::M5A12Xlarge,
+            "m5a.16xlarge" => EC2InstanceType::M5A16Xlarge,
+            "m5a.24xlarge" => EC2InstanceType::M5A24Xlarge,
+            "m5a.2xlarge" => EC2InstanceType::M5A2Xlarge,
+            "m5a.4xlarge" => EC2InstanceType::M5A4Xlarge,
+            "m5a.8xlarge" => EC2InstanceType::M5A8Xlarge,
+            "m5a.large" => EC2InstanceType::M5ALarge,
+            "m5a.xlarge" => EC2InstanceType::M5AXlarge,
+            "r3.2xlarge" => EC2InstanceType::R32Xlarge,
+            "r3.4xlarge" => EC2InstanceType::R34Xlarge,
+            "r3.8xlarge" => EC2InstanceType::R38Xlarge,
+            "r3.large" => EC2InstanceType::R3Large,
+            "r3.xlarge" => EC2InstanceType::R3Xlarge,
+            "r4.16xlarge" => EC2InstanceType::R416Xlarge,
+            "r4.2xlarge" => EC2InstanceType::R42Xlarge,
+            "r4.4xlarge" => EC2InstanceType::R44Xlarge,
+            "r4.8xlarge" => EC2InstanceType::R48Xlarge,
+            "r4.large" => EC2InstanceType::R4Large,
+            "r4.xlarge" => EC2InstanceType::R4Xlarge,
+            "r5.12xlarge" => EC2InstanceType::R512Xlarge,
+            "r5.16xlarge" => EC2InstanceType::R516Xlarge,
+            "r5.24xlarge" => EC2InstanceType::R524Xlarge,
+            "r5.2xlarge" => EC2InstanceType::R52Xlarge,
+            "r5.4xlarge" => EC2InstanceType::R54Xlarge,
+            "r5.8xlarge" => EC2InstanceType::R58Xlarge,
+            "r5.large" => EC2InstanceType::R5Large,
+            "r5.xlarge" => EC2InstanceType::R5Xlarge,
+            "r5a.12xlarge" => EC2InstanceType::R5A12Xlarge,
+            "r5a.16xlarge" => EC2InstanceType::R5A16Xlarge,
+            "r5a.24xlarge" => EC2InstanceType::R5A24Xlarge,
+            "r5a.2xlarge" => EC2InstanceType::R5A2Xlarge,
+            "r5a.4xlarge" => EC2InstanceType::R5A4Xlarge,
+            "r5a.8xlarge" => EC2InstanceType::R5A8Xlarge,
+            "r5a.large" => EC2InstanceType::R5ALarge,
+            "r5a.xlarge" => EC2InstanceType::R5AXlarge,
+            "t2.large" => EC2InstanceType::T2Large,
+            "t2.medium" => EC2InstanceType::T2Medium,
+            "t2.micro" => EC2InstanceType::T2Micro,
+            "t2.small" => EC2InstanceType::T2Small,
+            _ => EC2InstanceType::UnknownVariant(UnknownEC2InstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EC2InstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "c3.2xlarge" => EC2InstanceType::C32Xlarge,
+            "c3.4xlarge" => EC2InstanceType::C34Xlarge,
+            "c3.8xlarge" => EC2InstanceType::C38Xlarge,
+            "c3.large" => EC2InstanceType::C3Large,
+            "c3.xlarge" => EC2InstanceType::C3Xlarge,
+            "c4.2xlarge" => EC2InstanceType::C42Xlarge,
+            "c4.4xlarge" => EC2InstanceType::C44Xlarge,
+            "c4.8xlarge" => EC2InstanceType::C48Xlarge,
+            "c4.large" => EC2InstanceType::C4Large,
+            "c4.xlarge" => EC2InstanceType::C4Xlarge,
+            "c5.12xlarge" => EC2InstanceType::C512Xlarge,
+            "c5.18xlarge" => EC2InstanceType::C518Xlarge,
+            "c5.24xlarge" => EC2InstanceType::C524Xlarge,
+            "c5.2xlarge" => EC2InstanceType::C52Xlarge,
+            "c5.4xlarge" => EC2InstanceType::C54Xlarge,
+            "c5.9xlarge" => EC2InstanceType::C59Xlarge,
+            "c5.large" => EC2InstanceType::C5Large,
+            "c5.xlarge" => EC2InstanceType::C5Xlarge,
+            "c5a.12xlarge" => EC2InstanceType::C5A12Xlarge,
+            "c5a.16xlarge" => EC2InstanceType::C5A16Xlarge,
+            "c5a.24xlarge" => EC2InstanceType::C5A24Xlarge,
+            "c5a.2xlarge" => EC2InstanceType::C5A2Xlarge,
+            "c5a.4xlarge" => EC2InstanceType::C5A4Xlarge,
+            "c5a.8xlarge" => EC2InstanceType::C5A8Xlarge,
+            "c5a.large" => EC2InstanceType::C5ALarge,
+            "c5a.xlarge" => EC2InstanceType::C5AXlarge,
+            "m3.2xlarge" => EC2InstanceType::M32Xlarge,
+            "m3.large" => EC2InstanceType::M3Large,
+            "m3.medium" => EC2InstanceType::M3Medium,
+            "m3.xlarge" => EC2InstanceType::M3Xlarge,
+            "m4.10xlarge" => EC2InstanceType::M410Xlarge,
+            "m4.2xlarge" => EC2InstanceType::M42Xlarge,
+            "m4.4xlarge" => EC2InstanceType::M44Xlarge,
+            "m4.large" => EC2InstanceType::M4Large,
+            "m4.xlarge" => EC2InstanceType::M4Xlarge,
+            "m5.12xlarge" => EC2InstanceType::M512Xlarge,
+            "m5.16xlarge" => EC2InstanceType::M516Xlarge,
+            "m5.24xlarge" => EC2InstanceType::M524Xlarge,
+            "m5.2xlarge" => EC2InstanceType::M52Xlarge,
+            "m5.4xlarge" => EC2InstanceType::M54Xlarge,
+            "m5.8xlarge" => EC2InstanceType::M58Xlarge,
+            "m5.large" => EC2InstanceType::M5Large,
+            "m5.xlarge" => EC2InstanceType::M5Xlarge,
+            "m5a.12xlarge" => EC2InstanceType::M5A12Xlarge,
+            "m5a.16xlarge" => EC2InstanceType::M5A16Xlarge,
+            "m5a.24xlarge" => EC2InstanceType::M5A24Xlarge,
+            "m5a.2xlarge" => EC2InstanceType::M5A2Xlarge,
+            "m5a.4xlarge" => EC2InstanceType::M5A4Xlarge,
+            "m5a.8xlarge" => EC2InstanceType::M5A8Xlarge,
+            "m5a.large" => EC2InstanceType::M5ALarge,
+            "m5a.xlarge" => EC2InstanceType::M5AXlarge,
+            "r3.2xlarge" => EC2InstanceType::R32Xlarge,
+            "r3.4xlarge" => EC2InstanceType::R34Xlarge,
+            "r3.8xlarge" => EC2InstanceType::R38Xlarge,
+            "r3.large" => EC2InstanceType::R3Large,
+            "r3.xlarge" => EC2InstanceType::R3Xlarge,
+            "r4.16xlarge" => EC2InstanceType::R416Xlarge,
+            "r4.2xlarge" => EC2InstanceType::R42Xlarge,
+            "r4.4xlarge" => EC2InstanceType::R44Xlarge,
+            "r4.8xlarge" => EC2InstanceType::R48Xlarge,
+            "r4.large" => EC2InstanceType::R4Large,
+            "r4.xlarge" => EC2InstanceType::R4Xlarge,
+            "r5.12xlarge" => EC2InstanceType::R512Xlarge,
+            "r5.16xlarge" => EC2InstanceType::R516Xlarge,
+            "r5.24xlarge" => EC2InstanceType::R524Xlarge,
+            "r5.2xlarge" => EC2InstanceType::R52Xlarge,
+            "r5.4xlarge" => EC2InstanceType::R54Xlarge,
+            "r5.8xlarge" => EC2InstanceType::R58Xlarge,
+            "r5.large" => EC2InstanceType::R5Large,
+            "r5.xlarge" => EC2InstanceType::R5Xlarge,
+            "r5a.12xlarge" => EC2InstanceType::R5A12Xlarge,
+            "r5a.16xlarge" => EC2InstanceType::R5A16Xlarge,
+            "r5a.24xlarge" => EC2InstanceType::R5A24Xlarge,
+            "r5a.2xlarge" => EC2InstanceType::R5A2Xlarge,
+            "r5a.4xlarge" => EC2InstanceType::R5A4Xlarge,
+            "r5a.8xlarge" => EC2InstanceType::R5A8Xlarge,
+            "r5a.large" => EC2InstanceType::R5ALarge,
+            "r5a.xlarge" => EC2InstanceType::R5AXlarge,
+            "t2.large" => EC2InstanceType::T2Large,
+            "t2.medium" => EC2InstanceType::T2Medium,
+            "t2.micro" => EC2InstanceType::T2Micro,
+            "t2.small" => EC2InstanceType::T2Small,
+            _ => EC2InstanceType::UnknownVariant(UnknownEC2InstanceType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EC2InstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EC2InstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EC2InstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>
@@ -1658,7 +2797,7 @@ pub struct Event {
     /// <p><p>The type of event being logged. </p> <p> <b>Fleet creation events (ordered by fleet creation activity):</b> </p> <ul> <li> <p>FLEET<em>CREATED -- A fleet resource was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p>FLEET</em>STATE<em>DOWNLOADING -- Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> FLEET</em>BINARY<em>DOWNLOAD</em>FAILED -- The build failed to download to the fleet instance.</p> </li> <li> <p>FLEET<em>CREATION</em>EXTRACTING<em>BUILD – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p>FLEET</em>CREATION<em>RUNNING</em>INSTALLER – The game server build files were successfully extracted, and the Amazon GameLift is now running the build&#39;s install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>CREATION</em>VALIDATING<em>RUNTIME</em>CONFIG -- The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet&#39;s runtime configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the runtime configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>STATE</em>VALIDATING -- Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> FLEET<em>VALIDATION</em>LAUNCH<em>PATH</em>NOT<em>FOUND -- Validation of the runtime configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p>FLEET</em>STATE<em>BUILDING -- Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p>FLEET</em>VALIDATION<em>EXECUTABLE</em>RUNTIME<em>FAILURE -- Validation of the runtime configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p>FLEET</em>STATE<em>ACTIVATING -- Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> FLEET</em>ACTIVATION<em>FAILED - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. Learn more at <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-creating-debug.html#fleets-creating-debug-creation"> Debug Fleet Creation Issues</a> </p> </li> <li> <p>FLEET</em>STATE<em>ACTIVE -- The fleet&#39;s status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> <p> <b>VPC peering events:</b> </p> <ul> <li> <p>FLEET</em>VPC<em>PEERING</em>SUCCEEDED -- A VPC peering connection has been established between the VPC for an Amazon GameLift fleet and a VPC in your AWS account.</p> </li> <li> <p>FLEET<em>VPC</em>PEERING<em>FAILED -- A requested VPC peering connection has failed. Event details and status information (see <a>DescribeVpcPeeringConnections</a>) provide additional detail. A common reason for peering failure is that the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve this, change the CIDR block for the VPC in your AWS account. For more information on VPC peering failures, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html">https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html</a> </p> </li> <li> <p>FLEET</em>VPC<em>PEERING</em>DELETED -- A VPC peering connection has been successfully deleted.</p> </li> </ul> <p> <b>Spot instance events:</b> </p> <ul> <li> <p> INSTANCE<em>INTERRUPTED -- A spot instance was interrupted by EC2 with a two-minute notification.</p> </li> </ul> <p> <b>Other fleet events:</b> </p> <ul> <li> <p>FLEET</em>SCALING<em>EVENT -- A change was made to the fleet&#39;s capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p>FLEET</em>NEW<em>GAME</em>SESSION<em>PROTECTION</em>POLICY<em>UPDATED -- A change was made to the fleet&#39;s game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p>FLEET</em>DELETED -- A request to delete a fleet was initiated.</p> </li> <li> <p> GENERIC_EVENT -- An unspecified event has occurred.</p> </li> </ul></p>
     #[serde(rename = "EventCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_code: Option<String>,
+    pub event_code: Option<EventCode>,
     /// <p>A unique identifier for a fleet event.</p>
     #[serde(rename = "EventId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1679,6 +2818,413 @@ pub struct Event {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEventCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EventCode {
+    FleetActivationFailed,
+    FleetActivationFailedNoInstances,
+    FleetBinaryDownloadFailed,
+    FleetCreated,
+    FleetCreationExtractingBuild,
+    FleetCreationRunningInstaller,
+    FleetCreationValidatingRuntimeConfig,
+    FleetDeleted,
+    FleetInitializationFailed,
+    FleetNewGameSessionProtectionPolicyUpdated,
+    FleetScalingEvent,
+    FleetStateActivating,
+    FleetStateActive,
+    FleetStateBuilding,
+    FleetStateDownloading,
+    FleetStateError,
+    FleetStateValidating,
+    FleetValidationExecutableRuntimeFailure,
+    FleetValidationLaunchPathNotFound,
+    FleetValidationTimedOut,
+    FleetVpcPeeringDeleted,
+    FleetVpcPeeringFailed,
+    FleetVpcPeeringSucceeded,
+    GameSessionActivationTimeout,
+    GenericEvent,
+    InstanceInterrupted,
+    ServerProcessCrashed,
+    ServerProcessForceTerminated,
+    ServerProcessInvalidPath,
+    ServerProcessProcessExitTimeout,
+    ServerProcessProcessReadyTimeout,
+    ServerProcessSdkInitializationTimeout,
+    ServerProcessTerminatedUnhealthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEventCode),
+}
+
+impl Default for EventCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EventCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EventCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EventCode {
+    fn into(self) -> String {
+        match self {
+            EventCode::FleetActivationFailed => "FLEET_ACTIVATION_FAILED".to_string(),
+            EventCode::FleetActivationFailedNoInstances => {
+                "FLEET_ACTIVATION_FAILED_NO_INSTANCES".to_string()
+            }
+            EventCode::FleetBinaryDownloadFailed => "FLEET_BINARY_DOWNLOAD_FAILED".to_string(),
+            EventCode::FleetCreated => "FLEET_CREATED".to_string(),
+            EventCode::FleetCreationExtractingBuild => {
+                "FLEET_CREATION_EXTRACTING_BUILD".to_string()
+            }
+            EventCode::FleetCreationRunningInstaller => {
+                "FLEET_CREATION_RUNNING_INSTALLER".to_string()
+            }
+            EventCode::FleetCreationValidatingRuntimeConfig => {
+                "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG".to_string()
+            }
+            EventCode::FleetDeleted => "FLEET_DELETED".to_string(),
+            EventCode::FleetInitializationFailed => "FLEET_INITIALIZATION_FAILED".to_string(),
+            EventCode::FleetNewGameSessionProtectionPolicyUpdated => {
+                "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED".to_string()
+            }
+            EventCode::FleetScalingEvent => "FLEET_SCALING_EVENT".to_string(),
+            EventCode::FleetStateActivating => "FLEET_STATE_ACTIVATING".to_string(),
+            EventCode::FleetStateActive => "FLEET_STATE_ACTIVE".to_string(),
+            EventCode::FleetStateBuilding => "FLEET_STATE_BUILDING".to_string(),
+            EventCode::FleetStateDownloading => "FLEET_STATE_DOWNLOADING".to_string(),
+            EventCode::FleetStateError => "FLEET_STATE_ERROR".to_string(),
+            EventCode::FleetStateValidating => "FLEET_STATE_VALIDATING".to_string(),
+            EventCode::FleetValidationExecutableRuntimeFailure => {
+                "FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE".to_string()
+            }
+            EventCode::FleetValidationLaunchPathNotFound => {
+                "FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND".to_string()
+            }
+            EventCode::FleetValidationTimedOut => "FLEET_VALIDATION_TIMED_OUT".to_string(),
+            EventCode::FleetVpcPeeringDeleted => "FLEET_VPC_PEERING_DELETED".to_string(),
+            EventCode::FleetVpcPeeringFailed => "FLEET_VPC_PEERING_FAILED".to_string(),
+            EventCode::FleetVpcPeeringSucceeded => "FLEET_VPC_PEERING_SUCCEEDED".to_string(),
+            EventCode::GameSessionActivationTimeout => {
+                "GAME_SESSION_ACTIVATION_TIMEOUT".to_string()
+            }
+            EventCode::GenericEvent => "GENERIC_EVENT".to_string(),
+            EventCode::InstanceInterrupted => "INSTANCE_INTERRUPTED".to_string(),
+            EventCode::ServerProcessCrashed => "SERVER_PROCESS_CRASHED".to_string(),
+            EventCode::ServerProcessForceTerminated => {
+                "SERVER_PROCESS_FORCE_TERMINATED".to_string()
+            }
+            EventCode::ServerProcessInvalidPath => "SERVER_PROCESS_INVALID_PATH".to_string(),
+            EventCode::ServerProcessProcessExitTimeout => {
+                "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT".to_string()
+            }
+            EventCode::ServerProcessProcessReadyTimeout => {
+                "SERVER_PROCESS_PROCESS_READY_TIMEOUT".to_string()
+            }
+            EventCode::ServerProcessSdkInitializationTimeout => {
+                "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT".to_string()
+            }
+            EventCode::ServerProcessTerminatedUnhealthy => {
+                "SERVER_PROCESS_TERMINATED_UNHEALTHY".to_string()
+            }
+            EventCode::UnknownVariant(UnknownEventCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EventCode {
+    fn into(self) -> &'a str {
+        match self {
+            EventCode::FleetActivationFailed => &"FLEET_ACTIVATION_FAILED",
+            EventCode::FleetActivationFailedNoInstances => &"FLEET_ACTIVATION_FAILED_NO_INSTANCES",
+            EventCode::FleetBinaryDownloadFailed => &"FLEET_BINARY_DOWNLOAD_FAILED",
+            EventCode::FleetCreated => &"FLEET_CREATED",
+            EventCode::FleetCreationExtractingBuild => &"FLEET_CREATION_EXTRACTING_BUILD",
+            EventCode::FleetCreationRunningInstaller => &"FLEET_CREATION_RUNNING_INSTALLER",
+            EventCode::FleetCreationValidatingRuntimeConfig => {
+                &"FLEET_CREATION_VALIDATING_RUNTIME_CONFIG"
+            }
+            EventCode::FleetDeleted => &"FLEET_DELETED",
+            EventCode::FleetInitializationFailed => &"FLEET_INITIALIZATION_FAILED",
+            EventCode::FleetNewGameSessionProtectionPolicyUpdated => {
+                &"FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED"
+            }
+            EventCode::FleetScalingEvent => &"FLEET_SCALING_EVENT",
+            EventCode::FleetStateActivating => &"FLEET_STATE_ACTIVATING",
+            EventCode::FleetStateActive => &"FLEET_STATE_ACTIVE",
+            EventCode::FleetStateBuilding => &"FLEET_STATE_BUILDING",
+            EventCode::FleetStateDownloading => &"FLEET_STATE_DOWNLOADING",
+            EventCode::FleetStateError => &"FLEET_STATE_ERROR",
+            EventCode::FleetStateValidating => &"FLEET_STATE_VALIDATING",
+            EventCode::FleetValidationExecutableRuntimeFailure => {
+                &"FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE"
+            }
+            EventCode::FleetValidationLaunchPathNotFound => {
+                &"FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND"
+            }
+            EventCode::FleetValidationTimedOut => &"FLEET_VALIDATION_TIMED_OUT",
+            EventCode::FleetVpcPeeringDeleted => &"FLEET_VPC_PEERING_DELETED",
+            EventCode::FleetVpcPeeringFailed => &"FLEET_VPC_PEERING_FAILED",
+            EventCode::FleetVpcPeeringSucceeded => &"FLEET_VPC_PEERING_SUCCEEDED",
+            EventCode::GameSessionActivationTimeout => &"GAME_SESSION_ACTIVATION_TIMEOUT",
+            EventCode::GenericEvent => &"GENERIC_EVENT",
+            EventCode::InstanceInterrupted => &"INSTANCE_INTERRUPTED",
+            EventCode::ServerProcessCrashed => &"SERVER_PROCESS_CRASHED",
+            EventCode::ServerProcessForceTerminated => &"SERVER_PROCESS_FORCE_TERMINATED",
+            EventCode::ServerProcessInvalidPath => &"SERVER_PROCESS_INVALID_PATH",
+            EventCode::ServerProcessProcessExitTimeout => &"SERVER_PROCESS_PROCESS_EXIT_TIMEOUT",
+            EventCode::ServerProcessProcessReadyTimeout => &"SERVER_PROCESS_PROCESS_READY_TIMEOUT",
+            EventCode::ServerProcessSdkInitializationTimeout => {
+                &"SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT"
+            }
+            EventCode::ServerProcessTerminatedUnhealthy => &"SERVER_PROCESS_TERMINATED_UNHEALTHY",
+            EventCode::UnknownVariant(UnknownEventCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EventCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "FLEET_ACTIVATION_FAILED" => EventCode::FleetActivationFailed,
+            "FLEET_ACTIVATION_FAILED_NO_INSTANCES" => EventCode::FleetActivationFailedNoInstances,
+            "FLEET_BINARY_DOWNLOAD_FAILED" => EventCode::FleetBinaryDownloadFailed,
+            "FLEET_CREATED" => EventCode::FleetCreated,
+            "FLEET_CREATION_EXTRACTING_BUILD" => EventCode::FleetCreationExtractingBuild,
+            "FLEET_CREATION_RUNNING_INSTALLER" => EventCode::FleetCreationRunningInstaller,
+            "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG" => {
+                EventCode::FleetCreationValidatingRuntimeConfig
+            }
+            "FLEET_DELETED" => EventCode::FleetDeleted,
+            "FLEET_INITIALIZATION_FAILED" => EventCode::FleetInitializationFailed,
+            "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED" => {
+                EventCode::FleetNewGameSessionProtectionPolicyUpdated
+            }
+            "FLEET_SCALING_EVENT" => EventCode::FleetScalingEvent,
+            "FLEET_STATE_ACTIVATING" => EventCode::FleetStateActivating,
+            "FLEET_STATE_ACTIVE" => EventCode::FleetStateActive,
+            "FLEET_STATE_BUILDING" => EventCode::FleetStateBuilding,
+            "FLEET_STATE_DOWNLOADING" => EventCode::FleetStateDownloading,
+            "FLEET_STATE_ERROR" => EventCode::FleetStateError,
+            "FLEET_STATE_VALIDATING" => EventCode::FleetStateValidating,
+            "FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE" => {
+                EventCode::FleetValidationExecutableRuntimeFailure
+            }
+            "FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND" => {
+                EventCode::FleetValidationLaunchPathNotFound
+            }
+            "FLEET_VALIDATION_TIMED_OUT" => EventCode::FleetValidationTimedOut,
+            "FLEET_VPC_PEERING_DELETED" => EventCode::FleetVpcPeeringDeleted,
+            "FLEET_VPC_PEERING_FAILED" => EventCode::FleetVpcPeeringFailed,
+            "FLEET_VPC_PEERING_SUCCEEDED" => EventCode::FleetVpcPeeringSucceeded,
+            "GAME_SESSION_ACTIVATION_TIMEOUT" => EventCode::GameSessionActivationTimeout,
+            "GENERIC_EVENT" => EventCode::GenericEvent,
+            "INSTANCE_INTERRUPTED" => EventCode::InstanceInterrupted,
+            "SERVER_PROCESS_CRASHED" => EventCode::ServerProcessCrashed,
+            "SERVER_PROCESS_FORCE_TERMINATED" => EventCode::ServerProcessForceTerminated,
+            "SERVER_PROCESS_INVALID_PATH" => EventCode::ServerProcessInvalidPath,
+            "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT" => EventCode::ServerProcessProcessExitTimeout,
+            "SERVER_PROCESS_PROCESS_READY_TIMEOUT" => EventCode::ServerProcessProcessReadyTimeout,
+            "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT" => {
+                EventCode::ServerProcessSdkInitializationTimeout
+            }
+            "SERVER_PROCESS_TERMINATED_UNHEALTHY" => EventCode::ServerProcessTerminatedUnhealthy,
+            _ => EventCode::UnknownVariant(UnknownEventCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EventCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FLEET_ACTIVATION_FAILED" => EventCode::FleetActivationFailed,
+            "FLEET_ACTIVATION_FAILED_NO_INSTANCES" => EventCode::FleetActivationFailedNoInstances,
+            "FLEET_BINARY_DOWNLOAD_FAILED" => EventCode::FleetBinaryDownloadFailed,
+            "FLEET_CREATED" => EventCode::FleetCreated,
+            "FLEET_CREATION_EXTRACTING_BUILD" => EventCode::FleetCreationExtractingBuild,
+            "FLEET_CREATION_RUNNING_INSTALLER" => EventCode::FleetCreationRunningInstaller,
+            "FLEET_CREATION_VALIDATING_RUNTIME_CONFIG" => {
+                EventCode::FleetCreationValidatingRuntimeConfig
+            }
+            "FLEET_DELETED" => EventCode::FleetDeleted,
+            "FLEET_INITIALIZATION_FAILED" => EventCode::FleetInitializationFailed,
+            "FLEET_NEW_GAME_SESSION_PROTECTION_POLICY_UPDATED" => {
+                EventCode::FleetNewGameSessionProtectionPolicyUpdated
+            }
+            "FLEET_SCALING_EVENT" => EventCode::FleetScalingEvent,
+            "FLEET_STATE_ACTIVATING" => EventCode::FleetStateActivating,
+            "FLEET_STATE_ACTIVE" => EventCode::FleetStateActive,
+            "FLEET_STATE_BUILDING" => EventCode::FleetStateBuilding,
+            "FLEET_STATE_DOWNLOADING" => EventCode::FleetStateDownloading,
+            "FLEET_STATE_ERROR" => EventCode::FleetStateError,
+            "FLEET_STATE_VALIDATING" => EventCode::FleetStateValidating,
+            "FLEET_VALIDATION_EXECUTABLE_RUNTIME_FAILURE" => {
+                EventCode::FleetValidationExecutableRuntimeFailure
+            }
+            "FLEET_VALIDATION_LAUNCH_PATH_NOT_FOUND" => {
+                EventCode::FleetValidationLaunchPathNotFound
+            }
+            "FLEET_VALIDATION_TIMED_OUT" => EventCode::FleetValidationTimedOut,
+            "FLEET_VPC_PEERING_DELETED" => EventCode::FleetVpcPeeringDeleted,
+            "FLEET_VPC_PEERING_FAILED" => EventCode::FleetVpcPeeringFailed,
+            "FLEET_VPC_PEERING_SUCCEEDED" => EventCode::FleetVpcPeeringSucceeded,
+            "GAME_SESSION_ACTIVATION_TIMEOUT" => EventCode::GameSessionActivationTimeout,
+            "GENERIC_EVENT" => EventCode::GenericEvent,
+            "INSTANCE_INTERRUPTED" => EventCode::InstanceInterrupted,
+            "SERVER_PROCESS_CRASHED" => EventCode::ServerProcessCrashed,
+            "SERVER_PROCESS_FORCE_TERMINATED" => EventCode::ServerProcessForceTerminated,
+            "SERVER_PROCESS_INVALID_PATH" => EventCode::ServerProcessInvalidPath,
+            "SERVER_PROCESS_PROCESS_EXIT_TIMEOUT" => EventCode::ServerProcessProcessExitTimeout,
+            "SERVER_PROCESS_PROCESS_READY_TIMEOUT" => EventCode::ServerProcessProcessReadyTimeout,
+            "SERVER_PROCESS_SDK_INITIALIZATION_TIMEOUT" => {
+                EventCode::ServerProcessSdkInitializationTimeout
+            }
+            "SERVER_PROCESS_TERMINATED_UNHEALTHY" => EventCode::ServerProcessTerminatedUnhealthy,
+            _ => EventCode::UnknownVariant(UnknownEventCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EventCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for EventCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EventCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFleetAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FleetAction {
+    AutoScaling,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFleetAction),
+}
+
+impl Default for FleetAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FleetAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FleetAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FleetAction {
+    fn into(self) -> String {
+        match self {
+            FleetAction::AutoScaling => "AUTO_SCALING".to_string(),
+            FleetAction::UnknownVariant(UnknownFleetAction { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FleetAction {
+    fn into(self) -> &'a str {
+        match self {
+            FleetAction::AutoScaling => &"AUTO_SCALING",
+            FleetAction::UnknownVariant(UnknownFleetAction { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FleetAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "AUTO_SCALING" => FleetAction::AutoScaling,
+            _ => FleetAction::UnknownVariant(UnknownFleetAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FleetAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AUTO_SCALING" => FleetAction::AutoScaling,
+            _ => FleetAction::UnknownVariant(UnknownFleetAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FleetAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FleetAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>General properties describing a fleet.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
@@ -1716,7 +3262,7 @@ pub struct FleetAttributes {
     /// <p>Indicates whether the fleet uses on-demand or spot instances. A spot instance in use may be interrupted with a two-minute notification.</p>
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fleet_type: Option<String>,
+    pub fleet_type: Option<FleetType>,
     /// <p>A unique identifier for an AWS IAM role that manages access to your AWS services.</p>
     #[serde(rename = "InstanceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1724,7 +3270,7 @@ pub struct FleetAttributes {
     /// <p>EC2 instance type indicating the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<EC2InstanceType>,
     /// <p>Location of default log files. When a server process is shut down, Amazon GameLift captures and stores any log files in this location. These logs are in addition to game session logs; see more on game session logs in the <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code">Amazon GameLift Developer Guide</a>. If no default log path for a fleet is specified, Amazon GameLift automatically uploads logs that are stored on each instance at <code>C:\game\logs</code> (for Windows) or <code>/local/game/logs</code> (for Linux). Use the Amazon GameLift console to access stored logs. </p>
     #[serde(rename = "LogPaths")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1740,11 +3286,11 @@ pub struct FleetAttributes {
     /// <p><p>The type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub new_game_session_protection_policy: Option<String>,
+    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
     /// <p>Operating system of the fleet's computing resources. A fleet's operating system depends on the OS specified for the build that is deployed on this fleet.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p>Fleet policy to limit the number of game sessions an individual player can create over a span of time.</p>
     #[serde(rename = "ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1768,11 +3314,11 @@ pub struct FleetAttributes {
     /// <p><p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> -- A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> -- Amazon GameLift is setting up the new fleet, creating new instances with the game build or Realtime script and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> -- Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> -- Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> -- The fleet no longer exists.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<FleetStatus>,
     /// <p>List of fleet activity that have been suspended using <a>StopFleetActions</a>. This includes auto-scaling.</p>
     #[serde(rename = "StoppedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub stopped_actions: Option<Vec<String>>,
+    pub stopped_actions: Option<Vec<FleetAction>>,
     /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "TerminationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1794,7 +3340,243 @@ pub struct FleetCapacity {
     /// <p>Name of an EC2 instance type that is supported in Amazon GameLift. A fleet instance type determines the computing resources of each instance in the fleet, including CPU, memory, storage, and networking capacity. Amazon GameLift supports the following EC2 instance types. See <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for detailed descriptions.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_type: Option<String>,
+    pub instance_type: Option<EC2InstanceType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFleetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FleetStatus {
+    Activating,
+    Active,
+    Building,
+    Deleting,
+    Downloading,
+    Error,
+    New,
+    Terminated,
+    Validating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFleetStatus),
+}
+
+impl Default for FleetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FleetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FleetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FleetStatus {
+    fn into(self) -> String {
+        match self {
+            FleetStatus::Activating => "ACTIVATING".to_string(),
+            FleetStatus::Active => "ACTIVE".to_string(),
+            FleetStatus::Building => "BUILDING".to_string(),
+            FleetStatus::Deleting => "DELETING".to_string(),
+            FleetStatus::Downloading => "DOWNLOADING".to_string(),
+            FleetStatus::Error => "ERROR".to_string(),
+            FleetStatus::New => "NEW".to_string(),
+            FleetStatus::Terminated => "TERMINATED".to_string(),
+            FleetStatus::Validating => "VALIDATING".to_string(),
+            FleetStatus::UnknownVariant(UnknownFleetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FleetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            FleetStatus::Activating => &"ACTIVATING",
+            FleetStatus::Active => &"ACTIVE",
+            FleetStatus::Building => &"BUILDING",
+            FleetStatus::Deleting => &"DELETING",
+            FleetStatus::Downloading => &"DOWNLOADING",
+            FleetStatus::Error => &"ERROR",
+            FleetStatus::New => &"NEW",
+            FleetStatus::Terminated => &"TERMINATED",
+            FleetStatus::Validating => &"VALIDATING",
+            FleetStatus::UnknownVariant(UnknownFleetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FleetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => FleetStatus::Activating,
+            "ACTIVE" => FleetStatus::Active,
+            "BUILDING" => FleetStatus::Building,
+            "DELETING" => FleetStatus::Deleting,
+            "DOWNLOADING" => FleetStatus::Downloading,
+            "ERROR" => FleetStatus::Error,
+            "NEW" => FleetStatus::New,
+            "TERMINATED" => FleetStatus::Terminated,
+            "VALIDATING" => FleetStatus::Validating,
+            _ => FleetStatus::UnknownVariant(UnknownFleetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FleetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => FleetStatus::Activating,
+            "ACTIVE" => FleetStatus::Active,
+            "BUILDING" => FleetStatus::Building,
+            "DELETING" => FleetStatus::Deleting,
+            "DOWNLOADING" => FleetStatus::Downloading,
+            "ERROR" => FleetStatus::Error,
+            "NEW" => FleetStatus::New,
+            "TERMINATED" => FleetStatus::Terminated,
+            "VALIDATING" => FleetStatus::Validating,
+            _ => FleetStatus::UnknownVariant(UnknownFleetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FleetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FleetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFleetType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FleetType {
+    OnDemand,
+    Spot,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFleetType),
+}
+
+impl Default for FleetType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FleetType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FleetType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FleetType {
+    fn into(self) -> String {
+        match self {
+            FleetType::OnDemand => "ON_DEMAND".to_string(),
+            FleetType::Spot => "SPOT".to_string(),
+            FleetType::UnknownVariant(UnknownFleetType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FleetType {
+    fn into(self) -> &'a str {
+        match self {
+            FleetType::OnDemand => &"ON_DEMAND",
+            FleetType::Spot => &"SPOT",
+            FleetType::UnknownVariant(UnknownFleetType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FleetType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ON_DEMAND" => FleetType::OnDemand,
+            "SPOT" => FleetType::Spot,
+            _ => FleetType::UnknownVariant(UnknownFleetType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FleetType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ON_DEMAND" => FleetType::OnDemand,
+            "SPOT" => FleetType::Spot,
+            _ => FleetType::UnknownVariant(UnknownFleetType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FleetType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FleetType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FleetType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
@@ -1823,6 +3605,106 @@ pub struct FleetUtilization {
     pub maximum_player_session_count: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFlexMatchMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FlexMatchMode {
+    Standalone,
+    WithQueue,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFlexMatchMode),
+}
+
+impl Default for FlexMatchMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FlexMatchMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FlexMatchMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FlexMatchMode {
+    fn into(self) -> String {
+        match self {
+            FlexMatchMode::Standalone => "STANDALONE".to_string(),
+            FlexMatchMode::WithQueue => "WITH_QUEUE".to_string(),
+            FlexMatchMode::UnknownVariant(UnknownFlexMatchMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FlexMatchMode {
+    fn into(self) -> &'a str {
+        match self {
+            FlexMatchMode::Standalone => &"STANDALONE",
+            FlexMatchMode::WithQueue => &"WITH_QUEUE",
+            FlexMatchMode::UnknownVariant(UnknownFlexMatchMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FlexMatchMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "STANDALONE" => FlexMatchMode::Standalone,
+            "WITH_QUEUE" => FlexMatchMode::WithQueue,
+            _ => FlexMatchMode::UnknownVariant(UnknownFlexMatchMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FlexMatchMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "STANDALONE" => FlexMatchMode::Standalone,
+            "WITH_QUEUE" => FlexMatchMode::WithQueue,
+            _ => FlexMatchMode::UnknownVariant(UnknownFlexMatchMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FlexMatchMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FlexMatchMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FlexMatchMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Set of key-value pairs that contain information about a game session. When included in a game session request, these properties communicate details to be used when setting up the new game session. For example, a game property might specify a game mode, level, or map. Game properties are passed to the game server process when initiating a new game session. For more information, see the <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create"> Amazon GameLift Developer Guide</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GameProperty {
@@ -1841,7 +3723,7 @@ pub struct GameServer {
     /// <p>Indicates when an available game server has been reserved for gameplay but has not yet started hosting a game. Once it is claimed, the game server remains in <code>CLAIMED</code> status for a maximum of one minute. During this time, game clients connect to the game server to start the game and trigger the game server to update its utilization status. After one minute, the game server claim status reverts to null.</p>
     #[serde(rename = "ClaimStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub claim_status: Option<String>,
+    pub claim_status: Option<GameServerClaimStatus>,
     /// <p>The port and IP address that must be used to establish a client connection to the game server.</p>
     #[serde(rename = "ConnectionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1881,7 +3763,107 @@ pub struct GameServer {
     /// <p><p>Indicates whether the game server is currently available for new games or is busy. Possible statuses include:</p> <ul> <li> <p> <code>AVAILABLE</code> - The game server is available to be claimed. A game server that has been claimed remains in this status until it reports game hosting activity. </p> </li> <li> <p> <code>UTILIZED</code> - The game server is currently hosting a game session with players. </p> </li> </ul></p>
     #[serde(rename = "UtilizationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub utilization_status: Option<String>,
+    pub utilization_status: Option<GameServerUtilizationStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerClaimStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerClaimStatus {
+    Claimed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerClaimStatus),
+}
+
+impl Default for GameServerClaimStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerClaimStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerClaimStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerClaimStatus {
+    fn into(self) -> String {
+        match self {
+            GameServerClaimStatus::Claimed => "CLAIMED".to_string(),
+            GameServerClaimStatus::UnknownVariant(UnknownGameServerClaimStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerClaimStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerClaimStatus::Claimed => &"CLAIMED",
+            GameServerClaimStatus::UnknownVariant(UnknownGameServerClaimStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerClaimStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CLAIMED" => GameServerClaimStatus::Claimed,
+            _ => GameServerClaimStatus::UnknownVariant(UnknownGameServerClaimStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerClaimStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CLAIMED" => GameServerClaimStatus::Claimed,
+            _ => GameServerClaimStatus::UnknownVariant(UnknownGameServerClaimStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerClaimStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameServerClaimStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerClaimStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p> <b>This data type is used with the Amazon GameLift FleetIQ and game server groups.</b> </p> <p>Properties that describe a game server group resource. A game server group manages certain properties related to a corresponding EC2 Auto Scaling group. </p> <p>A game server group is created by a successful call to <code>CreateGameServerGroup</code> and deleted by calling <code>DeleteGameServerGroup</code>. Game server group activity can be temporarily suspended and resumed by calling <code>SuspendGameServerGroup</code> and <code>ResumeGameServerGroup</code>, respectively. </p> <ul> <li> <p> <a>CreateGameServerGroup</a> </p> </li> <li> <p> <a>ListGameServerGroups</a> </p> </li> <li> <p> <a>DescribeGameServerGroup</a> </p> </li> <li> <p> <a>UpdateGameServerGroup</a> </p> </li> <li> <p> <a>DeleteGameServerGroup</a> </p> </li> <li> <p> <a>ResumeGameServerGroup</a> </p> </li> <li> <p> <a>SuspendGameServerGroup</a> </p> </li> <li> <p> <a>DescribeGameServerInstances</a> </p> </li> </ul></p>
@@ -1895,7 +3877,7 @@ pub struct GameServerGroup {
     /// <p><p>Indicates how GameLift FleetIQ balances the use of Spot Instances and On-Demand Instances in the game server group. Method options include the following:</p> <ul> <li> <p> <code>SPOT<em>ONLY</code> - Only Spot Instances are used in the game server group. If Spot Instances are unavailable or not viable for game hosting, the game server group provides no hosting capacity until Spot Instances can again be used. Until then, no new instances are started, and the existing nonviable Spot Instances are terminated (after current gameplay ends) and are not replaced.</p> </li> <li> <p> <code>SPOT</em>PREFERRED</code> - (default value) Spot Instances are used whenever available in the game server group. If Spot Instances are unavailable, the game server group continues to provide hosting capacity by falling back to On-Demand Instances. Existing nonviable Spot Instances are terminated (after current gameplay ends) and are replaced with new On-Demand Instances.</p> </li> <li> <p> <code>ON<em>DEMAND</em>ONLY</code> - Only On-Demand Instances are used in the game server group. No Spot Instances are used, even when available, while this balancing strategy is in force.</p> </li> </ul></p>
     #[serde(rename = "BalancingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub balancing_strategy: Option<String>,
+    pub balancing_strategy: Option<BalancingStrategy>,
     /// <p>A timestamp that indicates when this data object was created. Format is a number expressed in Unix time as milliseconds (for example <code>"1469498468.057"</code>).</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1911,7 +3893,7 @@ pub struct GameServerGroup {
     /// <p>A flag that indicates whether instances in the game server group are protected from early termination. Unprotected instances that have active game servers running might be terminated during a scale-down event, causing players to be dropped from the game. Protected instances cannot be terminated while there are active game servers running except in the event of a forced game server group deletion (see ). An exception to this is with Spot Instances, which can be terminated by AWS regardless of protection status. </p>
     #[serde(rename = "GameServerProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub game_server_protection_policy: Option<String>,
+    pub game_server_protection_policy: Option<GameServerProtectionPolicy>,
     /// <p>The set of EC2 instance types that GameLift FleetIQ can use when balancing and automatically scaling instances in the corresponding Auto Scaling group. </p>
     #[serde(rename = "InstanceDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1927,7 +3909,7 @@ pub struct GameServerGroup {
     /// <p><p>The current status of the game server group. Possible statuses include:</p> <ul> <li> <p> <code>NEW</code> - GameLift FleetIQ has validated the <code>CreateGameServerGroup()</code> request. </p> </li> <li> <p> <code>ACTIVATING</code> - GameLift FleetIQ is setting up a game server group, which includes creating an Auto Scaling group in your AWS account. </p> </li> <li> <p> <code>ACTIVE</code> - The game server group has been successfully created. </p> </li> <li> <p> <code>DELETE_SCHEDULED</code> - A request to delete the game server group has been received. </p> </li> <li> <p> <code>DELETING</code> - GameLift FleetIQ has received a valid <code>DeleteGameServerGroup()</code> request and is processing it. GameLift FleetIQ must first complete and release hosts before it deletes the Auto Scaling group and the game server group. </p> </li> <li> <p> <code>DELETED</code> - The game server group has been successfully deleted. </p> </li> <li> <p> <code>ERROR</code> - The asynchronous processes of activating or deleting a game server group has failed, resulting in an error state.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GameServerGroupStatus>,
     /// <p>Additional information about the current game server group status. This information might provide additional insight on groups that are in <code>ERROR</code> status.</p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1935,7 +3917,106 @@ pub struct GameServerGroup {
     /// <p>A list of activities that are currently suspended for this game server group. If this property is empty, all activities are occurring.</p>
     #[serde(rename = "SuspendedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub suspended_actions: Option<Vec<String>>,
+    pub suspended_actions: Option<Vec<GameServerGroupAction>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerGroupAction {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerGroupAction {
+    ReplaceInstanceTypes,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerGroupAction),
+}
+
+impl Default for GameServerGroupAction {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerGroupAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerGroupAction {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerGroupAction {
+    fn into(self) -> String {
+        match self {
+            GameServerGroupAction::ReplaceInstanceTypes => "REPLACE_INSTANCE_TYPES".to_string(),
+            GameServerGroupAction::UnknownVariant(UnknownGameServerGroupAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerGroupAction {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerGroupAction::ReplaceInstanceTypes => &"REPLACE_INSTANCE_TYPES",
+            GameServerGroupAction::UnknownVariant(UnknownGameServerGroupAction {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerGroupAction {
+    fn from(name: &str) -> Self {
+        match name {
+            "REPLACE_INSTANCE_TYPES" => GameServerGroupAction::ReplaceInstanceTypes,
+            _ => GameServerGroupAction::UnknownVariant(UnknownGameServerGroupAction {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerGroupAction {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REPLACE_INSTANCE_TYPES" => GameServerGroupAction::ReplaceInstanceTypes,
+            _ => GameServerGroupAction::UnknownVariant(UnknownGameServerGroupAction { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerGroupAction {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerGroupAction {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerGroupAction {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> <b>This data type is used with the Amazon GameLift FleetIQ and game server groups.</b> </p> <p>Configuration settings for intelligent automatic scaling that uses target tracking. These settings are used to add an Auto Scaling policy when creating the corresponding Auto Scaling group with <a>CreateGameServerGroup</a>. After the Auto Scaling group is created, all updates to Auto Scaling policies, including changing this policy and adding or removing other policies, is done directly on the Auto Scaling group. </p>
@@ -1949,6 +4030,644 @@ pub struct GameServerGroupAutoScalingPolicy {
     /// <p>Settings for a target-based scaling policy applied to Auto Scaling group. These settings are used to create a target-based policy that tracks the GameLift FleetIQ metric <code>"PercentUtilizedGameServers"</code> and specifies a target value for the metric. As player usage changes, the policy triggers to adjust the game server group capacity so that the metric returns to the target value. </p>
     #[serde(rename = "TargetTrackingConfiguration")]
     pub target_tracking_configuration: TargetTrackingConfiguration,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerGroupDeleteOption {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerGroupDeleteOption {
+    ForceDelete,
+    Retain,
+    SafeDelete,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerGroupDeleteOption),
+}
+
+impl Default for GameServerGroupDeleteOption {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerGroupDeleteOption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerGroupDeleteOption {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerGroupDeleteOption {
+    fn into(self) -> String {
+        match self {
+            GameServerGroupDeleteOption::ForceDelete => "FORCE_DELETE".to_string(),
+            GameServerGroupDeleteOption::Retain => "RETAIN".to_string(),
+            GameServerGroupDeleteOption::SafeDelete => "SAFE_DELETE".to_string(),
+            GameServerGroupDeleteOption::UnknownVariant(UnknownGameServerGroupDeleteOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerGroupDeleteOption {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerGroupDeleteOption::ForceDelete => &"FORCE_DELETE",
+            GameServerGroupDeleteOption::Retain => &"RETAIN",
+            GameServerGroupDeleteOption::SafeDelete => &"SAFE_DELETE",
+            GameServerGroupDeleteOption::UnknownVariant(UnknownGameServerGroupDeleteOption {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerGroupDeleteOption {
+    fn from(name: &str) -> Self {
+        match name {
+            "FORCE_DELETE" => GameServerGroupDeleteOption::ForceDelete,
+            "RETAIN" => GameServerGroupDeleteOption::Retain,
+            "SAFE_DELETE" => GameServerGroupDeleteOption::SafeDelete,
+            _ => GameServerGroupDeleteOption::UnknownVariant(UnknownGameServerGroupDeleteOption {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerGroupDeleteOption {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FORCE_DELETE" => GameServerGroupDeleteOption::ForceDelete,
+            "RETAIN" => GameServerGroupDeleteOption::Retain,
+            "SAFE_DELETE" => GameServerGroupDeleteOption::SafeDelete,
+            _ => GameServerGroupDeleteOption::UnknownVariant(UnknownGameServerGroupDeleteOption {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerGroupDeleteOption {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerGroupDeleteOption {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GameServerGroupDeleteOption {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerGroupInstanceType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerGroupInstanceType {
+    C42Xlarge,
+    C44Xlarge,
+    C48Xlarge,
+    C4Large,
+    C4Xlarge,
+    C512Xlarge,
+    C518Xlarge,
+    C524Xlarge,
+    C52Xlarge,
+    C54Xlarge,
+    C59Xlarge,
+    C5Large,
+    C5Xlarge,
+    M410Xlarge,
+    M42Xlarge,
+    M44Xlarge,
+    M4Large,
+    M4Xlarge,
+    M512Xlarge,
+    M516Xlarge,
+    M524Xlarge,
+    M52Xlarge,
+    M54Xlarge,
+    M58Xlarge,
+    M5Large,
+    M5Xlarge,
+    R416Xlarge,
+    R42Xlarge,
+    R44Xlarge,
+    R48Xlarge,
+    R4Large,
+    R4Xlarge,
+    R512Xlarge,
+    R516Xlarge,
+    R524Xlarge,
+    R52Xlarge,
+    R54Xlarge,
+    R58Xlarge,
+    R5Large,
+    R5Xlarge,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerGroupInstanceType),
+}
+
+impl Default for GameServerGroupInstanceType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerGroupInstanceType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerGroupInstanceType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerGroupInstanceType {
+    fn into(self) -> String {
+        match self {
+            GameServerGroupInstanceType::C42Xlarge => "c4.2xlarge".to_string(),
+            GameServerGroupInstanceType::C44Xlarge => "c4.4xlarge".to_string(),
+            GameServerGroupInstanceType::C48Xlarge => "c4.8xlarge".to_string(),
+            GameServerGroupInstanceType::C4Large => "c4.large".to_string(),
+            GameServerGroupInstanceType::C4Xlarge => "c4.xlarge".to_string(),
+            GameServerGroupInstanceType::C512Xlarge => "c5.12xlarge".to_string(),
+            GameServerGroupInstanceType::C518Xlarge => "c5.18xlarge".to_string(),
+            GameServerGroupInstanceType::C524Xlarge => "c5.24xlarge".to_string(),
+            GameServerGroupInstanceType::C52Xlarge => "c5.2xlarge".to_string(),
+            GameServerGroupInstanceType::C54Xlarge => "c5.4xlarge".to_string(),
+            GameServerGroupInstanceType::C59Xlarge => "c5.9xlarge".to_string(),
+            GameServerGroupInstanceType::C5Large => "c5.large".to_string(),
+            GameServerGroupInstanceType::C5Xlarge => "c5.xlarge".to_string(),
+            GameServerGroupInstanceType::M410Xlarge => "m4.10xlarge".to_string(),
+            GameServerGroupInstanceType::M42Xlarge => "m4.2xlarge".to_string(),
+            GameServerGroupInstanceType::M44Xlarge => "m4.4xlarge".to_string(),
+            GameServerGroupInstanceType::M4Large => "m4.large".to_string(),
+            GameServerGroupInstanceType::M4Xlarge => "m4.xlarge".to_string(),
+            GameServerGroupInstanceType::M512Xlarge => "m5.12xlarge".to_string(),
+            GameServerGroupInstanceType::M516Xlarge => "m5.16xlarge".to_string(),
+            GameServerGroupInstanceType::M524Xlarge => "m5.24xlarge".to_string(),
+            GameServerGroupInstanceType::M52Xlarge => "m5.2xlarge".to_string(),
+            GameServerGroupInstanceType::M54Xlarge => "m5.4xlarge".to_string(),
+            GameServerGroupInstanceType::M58Xlarge => "m5.8xlarge".to_string(),
+            GameServerGroupInstanceType::M5Large => "m5.large".to_string(),
+            GameServerGroupInstanceType::M5Xlarge => "m5.xlarge".to_string(),
+            GameServerGroupInstanceType::R416Xlarge => "r4.16xlarge".to_string(),
+            GameServerGroupInstanceType::R42Xlarge => "r4.2xlarge".to_string(),
+            GameServerGroupInstanceType::R44Xlarge => "r4.4xlarge".to_string(),
+            GameServerGroupInstanceType::R48Xlarge => "r4.8xlarge".to_string(),
+            GameServerGroupInstanceType::R4Large => "r4.large".to_string(),
+            GameServerGroupInstanceType::R4Xlarge => "r4.xlarge".to_string(),
+            GameServerGroupInstanceType::R512Xlarge => "r5.12xlarge".to_string(),
+            GameServerGroupInstanceType::R516Xlarge => "r5.16xlarge".to_string(),
+            GameServerGroupInstanceType::R524Xlarge => "r5.24xlarge".to_string(),
+            GameServerGroupInstanceType::R52Xlarge => "r5.2xlarge".to_string(),
+            GameServerGroupInstanceType::R54Xlarge => "r5.4xlarge".to_string(),
+            GameServerGroupInstanceType::R58Xlarge => "r5.8xlarge".to_string(),
+            GameServerGroupInstanceType::R5Large => "r5.large".to_string(),
+            GameServerGroupInstanceType::R5Xlarge => "r5.xlarge".to_string(),
+            GameServerGroupInstanceType::UnknownVariant(UnknownGameServerGroupInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerGroupInstanceType {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerGroupInstanceType::C42Xlarge => &"c4.2xlarge",
+            GameServerGroupInstanceType::C44Xlarge => &"c4.4xlarge",
+            GameServerGroupInstanceType::C48Xlarge => &"c4.8xlarge",
+            GameServerGroupInstanceType::C4Large => &"c4.large",
+            GameServerGroupInstanceType::C4Xlarge => &"c4.xlarge",
+            GameServerGroupInstanceType::C512Xlarge => &"c5.12xlarge",
+            GameServerGroupInstanceType::C518Xlarge => &"c5.18xlarge",
+            GameServerGroupInstanceType::C524Xlarge => &"c5.24xlarge",
+            GameServerGroupInstanceType::C52Xlarge => &"c5.2xlarge",
+            GameServerGroupInstanceType::C54Xlarge => &"c5.4xlarge",
+            GameServerGroupInstanceType::C59Xlarge => &"c5.9xlarge",
+            GameServerGroupInstanceType::C5Large => &"c5.large",
+            GameServerGroupInstanceType::C5Xlarge => &"c5.xlarge",
+            GameServerGroupInstanceType::M410Xlarge => &"m4.10xlarge",
+            GameServerGroupInstanceType::M42Xlarge => &"m4.2xlarge",
+            GameServerGroupInstanceType::M44Xlarge => &"m4.4xlarge",
+            GameServerGroupInstanceType::M4Large => &"m4.large",
+            GameServerGroupInstanceType::M4Xlarge => &"m4.xlarge",
+            GameServerGroupInstanceType::M512Xlarge => &"m5.12xlarge",
+            GameServerGroupInstanceType::M516Xlarge => &"m5.16xlarge",
+            GameServerGroupInstanceType::M524Xlarge => &"m5.24xlarge",
+            GameServerGroupInstanceType::M52Xlarge => &"m5.2xlarge",
+            GameServerGroupInstanceType::M54Xlarge => &"m5.4xlarge",
+            GameServerGroupInstanceType::M58Xlarge => &"m5.8xlarge",
+            GameServerGroupInstanceType::M5Large => &"m5.large",
+            GameServerGroupInstanceType::M5Xlarge => &"m5.xlarge",
+            GameServerGroupInstanceType::R416Xlarge => &"r4.16xlarge",
+            GameServerGroupInstanceType::R42Xlarge => &"r4.2xlarge",
+            GameServerGroupInstanceType::R44Xlarge => &"r4.4xlarge",
+            GameServerGroupInstanceType::R48Xlarge => &"r4.8xlarge",
+            GameServerGroupInstanceType::R4Large => &"r4.large",
+            GameServerGroupInstanceType::R4Xlarge => &"r4.xlarge",
+            GameServerGroupInstanceType::R512Xlarge => &"r5.12xlarge",
+            GameServerGroupInstanceType::R516Xlarge => &"r5.16xlarge",
+            GameServerGroupInstanceType::R524Xlarge => &"r5.24xlarge",
+            GameServerGroupInstanceType::R52Xlarge => &"r5.2xlarge",
+            GameServerGroupInstanceType::R54Xlarge => &"r5.4xlarge",
+            GameServerGroupInstanceType::R58Xlarge => &"r5.8xlarge",
+            GameServerGroupInstanceType::R5Large => &"r5.large",
+            GameServerGroupInstanceType::R5Xlarge => &"r5.xlarge",
+            GameServerGroupInstanceType::UnknownVariant(UnknownGameServerGroupInstanceType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerGroupInstanceType {
+    fn from(name: &str) -> Self {
+        match name {
+            "c4.2xlarge" => GameServerGroupInstanceType::C42Xlarge,
+            "c4.4xlarge" => GameServerGroupInstanceType::C44Xlarge,
+            "c4.8xlarge" => GameServerGroupInstanceType::C48Xlarge,
+            "c4.large" => GameServerGroupInstanceType::C4Large,
+            "c4.xlarge" => GameServerGroupInstanceType::C4Xlarge,
+            "c5.12xlarge" => GameServerGroupInstanceType::C512Xlarge,
+            "c5.18xlarge" => GameServerGroupInstanceType::C518Xlarge,
+            "c5.24xlarge" => GameServerGroupInstanceType::C524Xlarge,
+            "c5.2xlarge" => GameServerGroupInstanceType::C52Xlarge,
+            "c5.4xlarge" => GameServerGroupInstanceType::C54Xlarge,
+            "c5.9xlarge" => GameServerGroupInstanceType::C59Xlarge,
+            "c5.large" => GameServerGroupInstanceType::C5Large,
+            "c5.xlarge" => GameServerGroupInstanceType::C5Xlarge,
+            "m4.10xlarge" => GameServerGroupInstanceType::M410Xlarge,
+            "m4.2xlarge" => GameServerGroupInstanceType::M42Xlarge,
+            "m4.4xlarge" => GameServerGroupInstanceType::M44Xlarge,
+            "m4.large" => GameServerGroupInstanceType::M4Large,
+            "m4.xlarge" => GameServerGroupInstanceType::M4Xlarge,
+            "m5.12xlarge" => GameServerGroupInstanceType::M512Xlarge,
+            "m5.16xlarge" => GameServerGroupInstanceType::M516Xlarge,
+            "m5.24xlarge" => GameServerGroupInstanceType::M524Xlarge,
+            "m5.2xlarge" => GameServerGroupInstanceType::M52Xlarge,
+            "m5.4xlarge" => GameServerGroupInstanceType::M54Xlarge,
+            "m5.8xlarge" => GameServerGroupInstanceType::M58Xlarge,
+            "m5.large" => GameServerGroupInstanceType::M5Large,
+            "m5.xlarge" => GameServerGroupInstanceType::M5Xlarge,
+            "r4.16xlarge" => GameServerGroupInstanceType::R416Xlarge,
+            "r4.2xlarge" => GameServerGroupInstanceType::R42Xlarge,
+            "r4.4xlarge" => GameServerGroupInstanceType::R44Xlarge,
+            "r4.8xlarge" => GameServerGroupInstanceType::R48Xlarge,
+            "r4.large" => GameServerGroupInstanceType::R4Large,
+            "r4.xlarge" => GameServerGroupInstanceType::R4Xlarge,
+            "r5.12xlarge" => GameServerGroupInstanceType::R512Xlarge,
+            "r5.16xlarge" => GameServerGroupInstanceType::R516Xlarge,
+            "r5.24xlarge" => GameServerGroupInstanceType::R524Xlarge,
+            "r5.2xlarge" => GameServerGroupInstanceType::R52Xlarge,
+            "r5.4xlarge" => GameServerGroupInstanceType::R54Xlarge,
+            "r5.8xlarge" => GameServerGroupInstanceType::R58Xlarge,
+            "r5.large" => GameServerGroupInstanceType::R5Large,
+            "r5.xlarge" => GameServerGroupInstanceType::R5Xlarge,
+            _ => GameServerGroupInstanceType::UnknownVariant(UnknownGameServerGroupInstanceType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerGroupInstanceType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "c4.2xlarge" => GameServerGroupInstanceType::C42Xlarge,
+            "c4.4xlarge" => GameServerGroupInstanceType::C44Xlarge,
+            "c4.8xlarge" => GameServerGroupInstanceType::C48Xlarge,
+            "c4.large" => GameServerGroupInstanceType::C4Large,
+            "c4.xlarge" => GameServerGroupInstanceType::C4Xlarge,
+            "c5.12xlarge" => GameServerGroupInstanceType::C512Xlarge,
+            "c5.18xlarge" => GameServerGroupInstanceType::C518Xlarge,
+            "c5.24xlarge" => GameServerGroupInstanceType::C524Xlarge,
+            "c5.2xlarge" => GameServerGroupInstanceType::C52Xlarge,
+            "c5.4xlarge" => GameServerGroupInstanceType::C54Xlarge,
+            "c5.9xlarge" => GameServerGroupInstanceType::C59Xlarge,
+            "c5.large" => GameServerGroupInstanceType::C5Large,
+            "c5.xlarge" => GameServerGroupInstanceType::C5Xlarge,
+            "m4.10xlarge" => GameServerGroupInstanceType::M410Xlarge,
+            "m4.2xlarge" => GameServerGroupInstanceType::M42Xlarge,
+            "m4.4xlarge" => GameServerGroupInstanceType::M44Xlarge,
+            "m4.large" => GameServerGroupInstanceType::M4Large,
+            "m4.xlarge" => GameServerGroupInstanceType::M4Xlarge,
+            "m5.12xlarge" => GameServerGroupInstanceType::M512Xlarge,
+            "m5.16xlarge" => GameServerGroupInstanceType::M516Xlarge,
+            "m5.24xlarge" => GameServerGroupInstanceType::M524Xlarge,
+            "m5.2xlarge" => GameServerGroupInstanceType::M52Xlarge,
+            "m5.4xlarge" => GameServerGroupInstanceType::M54Xlarge,
+            "m5.8xlarge" => GameServerGroupInstanceType::M58Xlarge,
+            "m5.large" => GameServerGroupInstanceType::M5Large,
+            "m5.xlarge" => GameServerGroupInstanceType::M5Xlarge,
+            "r4.16xlarge" => GameServerGroupInstanceType::R416Xlarge,
+            "r4.2xlarge" => GameServerGroupInstanceType::R42Xlarge,
+            "r4.4xlarge" => GameServerGroupInstanceType::R44Xlarge,
+            "r4.8xlarge" => GameServerGroupInstanceType::R48Xlarge,
+            "r4.large" => GameServerGroupInstanceType::R4Large,
+            "r4.xlarge" => GameServerGroupInstanceType::R4Xlarge,
+            "r5.12xlarge" => GameServerGroupInstanceType::R512Xlarge,
+            "r5.16xlarge" => GameServerGroupInstanceType::R516Xlarge,
+            "r5.24xlarge" => GameServerGroupInstanceType::R524Xlarge,
+            "r5.2xlarge" => GameServerGroupInstanceType::R52Xlarge,
+            "r5.4xlarge" => GameServerGroupInstanceType::R54Xlarge,
+            "r5.8xlarge" => GameServerGroupInstanceType::R58Xlarge,
+            "r5.large" => GameServerGroupInstanceType::R5Large,
+            "r5.xlarge" => GameServerGroupInstanceType::R5Xlarge,
+            _ => GameServerGroupInstanceType::UnknownVariant(UnknownGameServerGroupInstanceType {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerGroupInstanceType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerGroupInstanceType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerGroupInstanceType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerGroupStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerGroupStatus {
+    Activating,
+    Active,
+    Deleted,
+    DeleteScheduled,
+    Deleting,
+    Error,
+    New,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerGroupStatus),
+}
+
+impl Default for GameServerGroupStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerGroupStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerGroupStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerGroupStatus {
+    fn into(self) -> String {
+        match self {
+            GameServerGroupStatus::Activating => "ACTIVATING".to_string(),
+            GameServerGroupStatus::Active => "ACTIVE".to_string(),
+            GameServerGroupStatus::Deleted => "DELETED".to_string(),
+            GameServerGroupStatus::DeleteScheduled => "DELETE_SCHEDULED".to_string(),
+            GameServerGroupStatus::Deleting => "DELETING".to_string(),
+            GameServerGroupStatus::Error => "ERROR".to_string(),
+            GameServerGroupStatus::New => "NEW".to_string(),
+            GameServerGroupStatus::UnknownVariant(UnknownGameServerGroupStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerGroupStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerGroupStatus::Activating => &"ACTIVATING",
+            GameServerGroupStatus::Active => &"ACTIVE",
+            GameServerGroupStatus::Deleted => &"DELETED",
+            GameServerGroupStatus::DeleteScheduled => &"DELETE_SCHEDULED",
+            GameServerGroupStatus::Deleting => &"DELETING",
+            GameServerGroupStatus::Error => &"ERROR",
+            GameServerGroupStatus::New => &"NEW",
+            GameServerGroupStatus::UnknownVariant(UnknownGameServerGroupStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerGroupStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => GameServerGroupStatus::Activating,
+            "ACTIVE" => GameServerGroupStatus::Active,
+            "DELETED" => GameServerGroupStatus::Deleted,
+            "DELETE_SCHEDULED" => GameServerGroupStatus::DeleteScheduled,
+            "DELETING" => GameServerGroupStatus::Deleting,
+            "ERROR" => GameServerGroupStatus::Error,
+            "NEW" => GameServerGroupStatus::New,
+            _ => GameServerGroupStatus::UnknownVariant(UnknownGameServerGroupStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerGroupStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => GameServerGroupStatus::Activating,
+            "ACTIVE" => GameServerGroupStatus::Active,
+            "DELETED" => GameServerGroupStatus::Deleted,
+            "DELETE_SCHEDULED" => GameServerGroupStatus::DeleteScheduled,
+            "DELETING" => GameServerGroupStatus::Deleting,
+            "ERROR" => GameServerGroupStatus::Error,
+            "NEW" => GameServerGroupStatus::New,
+            _ => GameServerGroupStatus::UnknownVariant(UnknownGameServerGroupStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerGroupStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameServerGroupStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerGroupStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerHealthCheck {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerHealthCheck {
+    Healthy,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerHealthCheck),
+}
+
+impl Default for GameServerHealthCheck {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerHealthCheck {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerHealthCheck {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerHealthCheck {
+    fn into(self) -> String {
+        match self {
+            GameServerHealthCheck::Healthy => "HEALTHY".to_string(),
+            GameServerHealthCheck::UnknownVariant(UnknownGameServerHealthCheck {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerHealthCheck {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerHealthCheck::Healthy => &"HEALTHY",
+            GameServerHealthCheck::UnknownVariant(UnknownGameServerHealthCheck {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerHealthCheck {
+    fn from(name: &str) -> Self {
+        match name {
+            "HEALTHY" => GameServerHealthCheck::Healthy,
+            _ => GameServerHealthCheck::UnknownVariant(UnknownGameServerHealthCheck {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerHealthCheck {
+    fn from(name: String) -> Self {
+        match &*name {
+            "HEALTHY" => GameServerHealthCheck::Healthy,
+            _ => GameServerHealthCheck::UnknownVariant(UnknownGameServerHealthCheck { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerHealthCheck {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerHealthCheck {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for GameServerHealthCheck {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p> <b>This data type is used with the Amazon GameLift FleetIQ and game server groups.</b> </p> <p> Additional properties, including status, that describe an EC2 instance in a game server group. Instance configurations are set with game server group properties (see <code>DescribeGameServerGroup</code> and with the EC2 launch template that was used when creating the game server group. </p> <p>Retrieve game server instances for a game server group by calling <code>DescribeGameServerInstances</code>. </p> <ul> <li> <p> <a>CreateGameServerGroup</a> </p> </li> <li> <p> <a>ListGameServerGroups</a> </p> </li> <li> <p> <a>DescribeGameServerGroup</a> </p> </li> <li> <p> <a>UpdateGameServerGroup</a> </p> </li> <li> <p> <a>DeleteGameServerGroup</a> </p> </li> <li> <p> <a>ResumeGameServerGroup</a> </p> </li> <li> <p> <a>SuspendGameServerGroup</a> </p> </li> <li> <p> <a>DescribeGameServerInstances</a> </p> </li> </ul></p>
@@ -1970,7 +4689,329 @@ pub struct GameServerInstance {
     /// <p><p> Current status of the game server instance. </p> <ul> <li> <p> <b>ACTIVE</b> -- The instance is viable for hosting game servers. </p> </li> <li> <p> <b>DRAINING</b> -- The instance is not viable for hosting game servers. Existing game servers are in the process of ending, and new game servers are not started on this instance unless no other resources are available. When the instance is put in DRAINING, a new instance is started up to replace it. Once the instance has no UTILIZED game servers, it will be terminated in favor of the new instance.</p> </li> <li> <p> <b>SPOT_TERMINATING</b> -- The instance is in the process of shutting down due to a Spot instance interruption. No new game servers are started on this instance.</p> </li> </ul></p>
     #[serde(rename = "InstanceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_status: Option<String>,
+    pub instance_status: Option<GameServerInstanceStatus>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerInstanceStatus {
+    Active,
+    Draining,
+    SpotTerminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerInstanceStatus),
+}
+
+impl Default for GameServerInstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerInstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerInstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerInstanceStatus {
+    fn into(self) -> String {
+        match self {
+            GameServerInstanceStatus::Active => "ACTIVE".to_string(),
+            GameServerInstanceStatus::Draining => "DRAINING".to_string(),
+            GameServerInstanceStatus::SpotTerminating => "SPOT_TERMINATING".to_string(),
+            GameServerInstanceStatus::UnknownVariant(UnknownGameServerInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerInstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerInstanceStatus::Active => &"ACTIVE",
+            GameServerInstanceStatus::Draining => &"DRAINING",
+            GameServerInstanceStatus::SpotTerminating => &"SPOT_TERMINATING",
+            GameServerInstanceStatus::UnknownVariant(UnknownGameServerInstanceStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerInstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => GameServerInstanceStatus::Active,
+            "DRAINING" => GameServerInstanceStatus::Draining,
+            "SPOT_TERMINATING" => GameServerInstanceStatus::SpotTerminating,
+            _ => GameServerInstanceStatus::UnknownVariant(UnknownGameServerInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerInstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => GameServerInstanceStatus::Active,
+            "DRAINING" => GameServerInstanceStatus::Draining,
+            "SPOT_TERMINATING" => GameServerInstanceStatus::SpotTerminating,
+            _ => GameServerInstanceStatus::UnknownVariant(UnknownGameServerInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerInstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameServerInstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerInstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerProtectionPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerProtectionPolicy {
+    FullProtection,
+    NoProtection,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerProtectionPolicy),
+}
+
+impl Default for GameServerProtectionPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerProtectionPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerProtectionPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerProtectionPolicy {
+    fn into(self) -> String {
+        match self {
+            GameServerProtectionPolicy::FullProtection => "FULL_PROTECTION".to_string(),
+            GameServerProtectionPolicy::NoProtection => "NO_PROTECTION".to_string(),
+            GameServerProtectionPolicy::UnknownVariant(UnknownGameServerProtectionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerProtectionPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerProtectionPolicy::FullProtection => &"FULL_PROTECTION",
+            GameServerProtectionPolicy::NoProtection => &"NO_PROTECTION",
+            GameServerProtectionPolicy::UnknownVariant(UnknownGameServerProtectionPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerProtectionPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_PROTECTION" => GameServerProtectionPolicy::FullProtection,
+            "NO_PROTECTION" => GameServerProtectionPolicy::NoProtection,
+            _ => GameServerProtectionPolicy::UnknownVariant(UnknownGameServerProtectionPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerProtectionPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_PROTECTION" => GameServerProtectionPolicy::FullProtection,
+            "NO_PROTECTION" => GameServerProtectionPolicy::NoProtection,
+            _ => GameServerProtectionPolicy::UnknownVariant(UnknownGameServerProtectionPolicy {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerProtectionPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerProtectionPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerProtectionPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameServerUtilizationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameServerUtilizationStatus {
+    Available,
+    Utilized,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameServerUtilizationStatus),
+}
+
+impl Default for GameServerUtilizationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameServerUtilizationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameServerUtilizationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameServerUtilizationStatus {
+    fn into(self) -> String {
+        match self {
+            GameServerUtilizationStatus::Available => "AVAILABLE".to_string(),
+            GameServerUtilizationStatus::Utilized => "UTILIZED".to_string(),
+            GameServerUtilizationStatus::UnknownVariant(UnknownGameServerUtilizationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameServerUtilizationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GameServerUtilizationStatus::Available => &"AVAILABLE",
+            GameServerUtilizationStatus::Utilized => &"UTILIZED",
+            GameServerUtilizationStatus::UnknownVariant(UnknownGameServerUtilizationStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameServerUtilizationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "AVAILABLE" => GameServerUtilizationStatus::Available,
+            "UTILIZED" => GameServerUtilizationStatus::Utilized,
+            _ => GameServerUtilizationStatus::UnknownVariant(UnknownGameServerUtilizationStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameServerUtilizationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AVAILABLE" => GameServerUtilizationStatus::Available,
+            "UTILIZED" => GameServerUtilizationStatus::Utilized,
+            _ => GameServerUtilizationStatus::UnknownVariant(UnknownGameServerUtilizationStatus {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameServerUtilizationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for GameServerUtilizationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameServerUtilizationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Properties describing a game session.</p> <p>A game session in ACTIVE status can host players. When a game session ends, its status is set to <code>TERMINATED</code>. </p> <p>Once the session ends, the game session object is retained for 30 days. This means you can reuse idempotency token values after this time. Game session logs are retained for 14 days.</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
@@ -2032,7 +5073,7 @@ pub struct GameSession {
     /// <p>Indicates whether or not the game session is accepting new players.</p>
     #[serde(rename = "PlayerSessionCreationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub player_session_creation_policy: Option<String>,
+    pub player_session_creation_policy: Option<PlayerSessionCreationPolicy>,
     /// <p>Port number for the game session. To connect to a Amazon GameLift game server, an app needs both the IP address and port number.</p>
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2040,11 +5081,11 @@ pub struct GameSession {
     /// <p>Current status of the game session. A game session must have an <code>ACTIVE</code> status to have player sessions.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GameSessionStatus>,
     /// <p>Provides additional information about game session status. <code>INTERRUPTED</code> indicates that the game session was hosted on a spot instance that was reclaimed, causing the active game session to be terminated.</p>
     #[serde(rename = "StatusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_reason: Option<String>,
+    pub status_reason: Option<GameSessionStatusReason>,
     /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "TerminationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2088,7 +5129,7 @@ pub struct GameSessionDetail {
     /// <p><p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "ProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protection_policy: Option<String>,
+    pub protection_policy: Option<ProtectionPolicy>,
 }
 
 /// <p><p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul></p>
@@ -2166,7 +5207,129 @@ pub struct GameSessionPlacement {
     /// <p><p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> -- The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> -- A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> -- The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> -- A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> <li> <p> <b>FAILED</b> -- GameLift is not able to complete the process of placing the game session. Common reasons are the game session terminated before the placement process was completed, or an unexpected internal error.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<GameSessionPlacementState>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameSessionPlacementState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameSessionPlacementState {
+    Cancelled,
+    Failed,
+    Fulfilled,
+    Pending,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameSessionPlacementState),
+}
+
+impl Default for GameSessionPlacementState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameSessionPlacementState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameSessionPlacementState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameSessionPlacementState {
+    fn into(self) -> String {
+        match self {
+            GameSessionPlacementState::Cancelled => "CANCELLED".to_string(),
+            GameSessionPlacementState::Failed => "FAILED".to_string(),
+            GameSessionPlacementState::Fulfilled => "FULFILLED".to_string(),
+            GameSessionPlacementState::Pending => "PENDING".to_string(),
+            GameSessionPlacementState::TimedOut => "TIMED_OUT".to_string(),
+            GameSessionPlacementState::UnknownVariant(UnknownGameSessionPlacementState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameSessionPlacementState {
+    fn into(self) -> &'a str {
+        match self {
+            GameSessionPlacementState::Cancelled => &"CANCELLED",
+            GameSessionPlacementState::Failed => &"FAILED",
+            GameSessionPlacementState::Fulfilled => &"FULFILLED",
+            GameSessionPlacementState::Pending => &"PENDING",
+            GameSessionPlacementState::TimedOut => &"TIMED_OUT",
+            GameSessionPlacementState::UnknownVariant(UnknownGameSessionPlacementState {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameSessionPlacementState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => GameSessionPlacementState::Cancelled,
+            "FAILED" => GameSessionPlacementState::Failed,
+            "FULFILLED" => GameSessionPlacementState::Fulfilled,
+            "PENDING" => GameSessionPlacementState::Pending,
+            "TIMED_OUT" => GameSessionPlacementState::TimedOut,
+            _ => GameSessionPlacementState::UnknownVariant(UnknownGameSessionPlacementState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameSessionPlacementState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => GameSessionPlacementState::Cancelled,
+            "FAILED" => GameSessionPlacementState::Failed,
+            "FULFILLED" => GameSessionPlacementState::Fulfilled,
+            "PENDING" => GameSessionPlacementState::Pending,
+            "TIMED_OUT" => GameSessionPlacementState::TimedOut,
+            _ => {
+                GameSessionPlacementState::UnknownVariant(UnknownGameSessionPlacementState { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameSessionPlacementState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameSessionPlacementState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameSessionPlacementState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue&#39;s default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy&#39;s maximum.</p> </li> </ul> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul></p>
@@ -2202,6 +5365,226 @@ pub struct GameSessionQueueDestination {
     #[serde(rename = "DestinationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameSessionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameSessionStatus {
+    Activating,
+    Active,
+    Error,
+    Terminated,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameSessionStatus),
+}
+
+impl Default for GameSessionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameSessionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameSessionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameSessionStatus {
+    fn into(self) -> String {
+        match self {
+            GameSessionStatus::Activating => "ACTIVATING".to_string(),
+            GameSessionStatus::Active => "ACTIVE".to_string(),
+            GameSessionStatus::Error => "ERROR".to_string(),
+            GameSessionStatus::Terminated => "TERMINATED".to_string(),
+            GameSessionStatus::Terminating => "TERMINATING".to_string(),
+            GameSessionStatus::UnknownVariant(UnknownGameSessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameSessionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            GameSessionStatus::Activating => &"ACTIVATING",
+            GameSessionStatus::Active => &"ACTIVE",
+            GameSessionStatus::Error => &"ERROR",
+            GameSessionStatus::Terminated => &"TERMINATED",
+            GameSessionStatus::Terminating => &"TERMINATING",
+            GameSessionStatus::UnknownVariant(UnknownGameSessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for GameSessionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVATING" => GameSessionStatus::Activating,
+            "ACTIVE" => GameSessionStatus::Active,
+            "ERROR" => GameSessionStatus::Error,
+            "TERMINATED" => GameSessionStatus::Terminated,
+            "TERMINATING" => GameSessionStatus::Terminating,
+            _ => GameSessionStatus::UnknownVariant(UnknownGameSessionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameSessionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVATING" => GameSessionStatus::Activating,
+            "ACTIVE" => GameSessionStatus::Active,
+            "ERROR" => GameSessionStatus::Error,
+            "TERMINATED" => GameSessionStatus::Terminated,
+            "TERMINATING" => GameSessionStatus::Terminating,
+            _ => GameSessionStatus::UnknownVariant(UnknownGameSessionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameSessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameSessionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameSessionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownGameSessionStatusReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum GameSessionStatusReason {
+    Interrupted,
+    #[doc(hidden)]
+    UnknownVariant(UnknownGameSessionStatusReason),
+}
+
+impl Default for GameSessionStatusReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for GameSessionStatusReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for GameSessionStatusReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for GameSessionStatusReason {
+    fn into(self) -> String {
+        match self {
+            GameSessionStatusReason::Interrupted => "INTERRUPTED".to_string(),
+            GameSessionStatusReason::UnknownVariant(UnknownGameSessionStatusReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a GameSessionStatusReason {
+    fn into(self) -> &'a str {
+        match self {
+            GameSessionStatusReason::Interrupted => &"INTERRUPTED",
+            GameSessionStatusReason::UnknownVariant(UnknownGameSessionStatusReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for GameSessionStatusReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERRUPTED" => GameSessionStatusReason::Interrupted,
+            _ => GameSessionStatusReason::UnknownVariant(UnknownGameSessionStatusReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for GameSessionStatusReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERRUPTED" => GameSessionStatusReason::Interrupted,
+            _ => GameSessionStatusReason::UnknownVariant(UnknownGameSessionStatusReason { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for GameSessionStatusReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for GameSessionStatusReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for GameSessionStatusReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input for a request operation.</p>
@@ -2272,15 +5655,15 @@ pub struct Instance {
     /// <p>Operating system that is running on this instance. </p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
     /// <p><p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> -- The instance is in the process of being created and launching server processes as defined in the fleet&#39;s run-time configuration. </p> </li> <li> <p> <b>ACTIVE</b> -- The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> -- The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<InstanceStatus>,
     /// <p>EC2 instance type that defines the computing resources of this instance. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<EC2InstanceType>,
 }
 
 /// <p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>
@@ -2306,7 +5689,7 @@ pub struct InstanceAccess {
     /// <p>Operating system that is running on the instance.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub operating_system: Option<String>,
+    pub operating_system: Option<OperatingSystem>,
 }
 
 /// <p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>
@@ -2328,11 +5711,117 @@ pub struct InstanceCredentials {
 pub struct InstanceDefinition {
     /// <p>An EC2 instance type designation.</p>
     #[serde(rename = "InstanceType")]
-    pub instance_type: String,
+    pub instance_type: GameServerGroupInstanceType,
     /// <p>Instance weighting that indicates how much this instance type contributes to the total capacity of a game server group. Instance weights are used by GameLift FleetIQ to calculate the instance type's cost per unit hour and better identify the most cost-effective options. For detailed information on weighting instance capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html">Instance Weighting</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. Default value is "1".</p>
     #[serde(rename = "WeightedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weighted_capacity: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownInstanceStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum InstanceStatus {
+    Active,
+    Pending,
+    Terminating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownInstanceStatus),
+}
+
+impl Default for InstanceStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for InstanceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for InstanceStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for InstanceStatus {
+    fn into(self) -> String {
+        match self {
+            InstanceStatus::Active => "ACTIVE".to_string(),
+            InstanceStatus::Pending => "PENDING".to_string(),
+            InstanceStatus::Terminating => "TERMINATING".to_string(),
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a InstanceStatus {
+    fn into(self) -> &'a str {
+        match self {
+            InstanceStatus::Active => &"ACTIVE",
+            InstanceStatus::Pending => &"PENDING",
+            InstanceStatus::Terminating => &"TERMINATING",
+            InstanceStatus::UnknownVariant(UnknownInstanceStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for InstanceStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => InstanceStatus::Active,
+            "PENDING" => InstanceStatus::Pending,
+            "TERMINATING" => InstanceStatus::Terminating,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for InstanceStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => InstanceStatus::Active,
+            "PENDING" => InstanceStatus::Pending,
+            "TERMINATING" => InstanceStatus::Terminating,
+            _ => InstanceStatus::UnknownVariant(UnknownInstanceStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for InstanceStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for InstanceStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for InstanceStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A range of IP addresses and port settings that allow inbound traffic to connect to server processes on an Amazon GameLift hosting resource. New game sessions that are started on the fleet are assigned an IP address/port number combination, which must fall into the fleet's allowed ranges. For fleets created with a custom game server, the ranges reflect the server's game session assignments. For Realtime Servers fleets, Amazon GameLift automatically opens two port ranges, one for TCP messaging and one for UDP for use by the Realtime servers.</p>
@@ -2346,10 +5835,110 @@ pub struct IpPermission {
     pub ip_range: String,
     /// <p>The network communication protocol used by the fleet.</p>
     #[serde(rename = "Protocol")]
-    pub protocol: String,
+    pub protocol: IpProtocol,
     /// <p>An ending value for a range of allowed port numbers. Port numbers are end-inclusive. This value must be higher than <code>FromPort</code>.</p>
     #[serde(rename = "ToPort")]
     pub to_port: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownIpProtocol {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum IpProtocol {
+    Tcp,
+    Udp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownIpProtocol),
+}
+
+impl Default for IpProtocol {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for IpProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for IpProtocol {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for IpProtocol {
+    fn into(self) -> String {
+        match self {
+            IpProtocol::Tcp => "TCP".to_string(),
+            IpProtocol::Udp => "UDP".to_string(),
+            IpProtocol::UnknownVariant(UnknownIpProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a IpProtocol {
+    fn into(self) -> &'a str {
+        match self {
+            IpProtocol::Tcp => &"TCP",
+            IpProtocol::Udp => &"UDP",
+            IpProtocol::UnknownVariant(UnknownIpProtocol { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for IpProtocol {
+    fn from(name: &str) -> Self {
+        match name {
+            "TCP" => IpProtocol::Tcp,
+            "UDP" => IpProtocol::Udp,
+            _ => IpProtocol::UnknownVariant(UnknownIpProtocol {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for IpProtocol {
+    fn from(name: String) -> Self {
+        match &*name {
+            "TCP" => IpProtocol::Tcp,
+            "UDP" => IpProtocol::Udp,
+            _ => IpProtocol::UnknownVariant(UnknownIpProtocol { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for IpProtocol {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for IpProtocol {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for IpProtocol {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> <b>This data type is used with the Amazon GameLift FleetIQ and game server groups.</b> </p> <p>An EC2 launch template that contains configuration settings and game server code to be deployed to all instances in a game server group. The launch template is specified when creating a new game server group with <a>CreateGameServerGroup</a>. </p>
@@ -2389,7 +5978,7 @@ pub struct ListAliasesInput {
     /// <p><p>The routing type to filter results on. Use this parameter to retrieve only aliases with a certain routing type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> -- The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> -- The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
     #[serde(rename = "RoutingStrategyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub routing_strategy_type: Option<String>,
+    pub routing_strategy_type: Option<RoutingStrategyType>,
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
@@ -2421,7 +6010,7 @@ pub struct ListBuildsInput {
     /// <p><p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> -- A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> -- The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> -- The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<BuildStatus>,
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
@@ -2517,7 +6106,7 @@ pub struct ListGameServersInput {
     /// <p>Indicates how to sort the returned data based on game server registration timestamp. Use ASCENDING to retrieve oldest game servers first, or use DESCENDING to retrieve newest game servers first. If this parameter is left empty, game servers are returned in no particular order.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<SortOrder>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2609,7 +6198,7 @@ pub struct MatchmakingConfiguration {
     /// <p>The method used to backfill game sessions created with this matchmaking configuration. MANUAL indicates that the game makes backfill requests or does not use the match backfill feature. AUTOMATIC indicates that GameLift creates <a>StartMatchBackfill</a> requests whenever a game session has one or more open slots. Learn more about manual and automatic backfill in <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-backfill.html">Backfill Existing Games with FlexMatch</a>. Automatic backfill is not available when <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "BackfillMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backfill_mode: Option<String>,
+    pub backfill_mode: Option<BackfillMode>,
     /// <p>Amazon Resource Name (<a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">ARN</a>) that is assigned to a GameLift matchmaking configuration resource and uniquely identifies it. ARNs are unique across all Regions. In a GameLift configuration ARN, the resource ID matches the <i>Name</i> value. </p>
     #[serde(rename = "ConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2629,7 +6218,7 @@ pub struct MatchmakingConfiguration {
     /// <p><p>Indicates whether this matchmaking configuration is being used with GameLift hosting or as a standalone matchmaking solution. </p> <ul> <li> <p> <b>STANDALONE</b> - FlexMatch forms matches and returns match information, including players and team assignments, in a <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html#match-events-matchmakingsucceeded"> MatchmakingSucceeded</a> event.</p> </li> <li> <p> <b>WITH_QUEUE</b> - FlexMatch forms matches and uses the specified GameLift queue to start a game session for the match. </p> </li> </ul></p>
     #[serde(rename = "FlexMatchMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flex_match_mode: Option<String>,
+    pub flex_match_mode: Option<FlexMatchMode>,
     /// <p>A set of custom properties for a game session, formatted as key-value pairs. These properties are passed to a game server process in the <a>GameSession</a> object with a request to start a new game session (see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. This parameter is not used when <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "GameProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2662,6 +6251,145 @@ pub struct MatchmakingConfiguration {
     #[serde(rename = "RuleSetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_set_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMatchmakingConfigurationStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MatchmakingConfigurationStatus {
+    Cancelled,
+    Completed,
+    Failed,
+    Placing,
+    Queued,
+    RequiresAcceptance,
+    Searching,
+    TimedOut,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMatchmakingConfigurationStatus),
+}
+
+impl Default for MatchmakingConfigurationStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MatchmakingConfigurationStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MatchmakingConfigurationStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MatchmakingConfigurationStatus {
+    fn into(self) -> String {
+        match self {
+            MatchmakingConfigurationStatus::Cancelled => "CANCELLED".to_string(),
+            MatchmakingConfigurationStatus::Completed => "COMPLETED".to_string(),
+            MatchmakingConfigurationStatus::Failed => "FAILED".to_string(),
+            MatchmakingConfigurationStatus::Placing => "PLACING".to_string(),
+            MatchmakingConfigurationStatus::Queued => "QUEUED".to_string(),
+            MatchmakingConfigurationStatus::RequiresAcceptance => "REQUIRES_ACCEPTANCE".to_string(),
+            MatchmakingConfigurationStatus::Searching => "SEARCHING".to_string(),
+            MatchmakingConfigurationStatus::TimedOut => "TIMED_OUT".to_string(),
+            MatchmakingConfigurationStatus::UnknownVariant(
+                UnknownMatchmakingConfigurationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MatchmakingConfigurationStatus {
+    fn into(self) -> &'a str {
+        match self {
+            MatchmakingConfigurationStatus::Cancelled => &"CANCELLED",
+            MatchmakingConfigurationStatus::Completed => &"COMPLETED",
+            MatchmakingConfigurationStatus::Failed => &"FAILED",
+            MatchmakingConfigurationStatus::Placing => &"PLACING",
+            MatchmakingConfigurationStatus::Queued => &"QUEUED",
+            MatchmakingConfigurationStatus::RequiresAcceptance => &"REQUIRES_ACCEPTANCE",
+            MatchmakingConfigurationStatus::Searching => &"SEARCHING",
+            MatchmakingConfigurationStatus::TimedOut => &"TIMED_OUT",
+            MatchmakingConfigurationStatus::UnknownVariant(
+                UnknownMatchmakingConfigurationStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for MatchmakingConfigurationStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => MatchmakingConfigurationStatus::Cancelled,
+            "COMPLETED" => MatchmakingConfigurationStatus::Completed,
+            "FAILED" => MatchmakingConfigurationStatus::Failed,
+            "PLACING" => MatchmakingConfigurationStatus::Placing,
+            "QUEUED" => MatchmakingConfigurationStatus::Queued,
+            "REQUIRES_ACCEPTANCE" => MatchmakingConfigurationStatus::RequiresAcceptance,
+            "SEARCHING" => MatchmakingConfigurationStatus::Searching,
+            "TIMED_OUT" => MatchmakingConfigurationStatus::TimedOut,
+            _ => MatchmakingConfigurationStatus::UnknownVariant(
+                UnknownMatchmakingConfigurationStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for MatchmakingConfigurationStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => MatchmakingConfigurationStatus::Cancelled,
+            "COMPLETED" => MatchmakingConfigurationStatus::Completed,
+            "FAILED" => MatchmakingConfigurationStatus::Failed,
+            "PLACING" => MatchmakingConfigurationStatus::Placing,
+            "QUEUED" => MatchmakingConfigurationStatus::Queued,
+            "REQUIRES_ACCEPTANCE" => MatchmakingConfigurationStatus::RequiresAcceptance,
+            "SEARCHING" => MatchmakingConfigurationStatus::Searching,
+            "TIMED_OUT" => MatchmakingConfigurationStatus::TimedOut,
+            _ => MatchmakingConfigurationStatus::UnknownVariant(
+                UnknownMatchmakingConfigurationStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MatchmakingConfigurationStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for MatchmakingConfigurationStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MatchmakingConfigurationStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Set of rule statements, used with FlexMatch, that determine how to build your player matches. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-rulesets.html">Build a FlexMatch Rule Set</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player&#39;s skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players, teams, or entire matches. For example, a rule might require each player to meet a certain skill level, each team to have at least one player in a certain role, or the match to have a minimum average skill level. or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time when no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul></p>
@@ -2720,7 +6448,7 @@ pub struct MatchmakingTicket {
     /// <p><p>Current status of the matchmaking request.</p> <ul> <li> <p> <b>QUEUED</b> -- The matchmaking request has been received and is currently waiting to be processed.</p> </li> <li> <p> <b>SEARCHING</b> -- The matchmaking request is currently being processed. </p> </li> <li> <p> <b>REQUIRES<em>ACCEPTANCE</b> -- A match has been proposed and the players must accept the match (see <a>AcceptMatch</a>). This status is used only with requests that use a matchmaking configuration with a player acceptance requirement.</p> </li> <li> <p> <b>PLACING</b> -- The FlexMatch engine has matched players and is in the process of placing a new game session for the match.</p> </li> <li> <p> <b>COMPLETED</b> -- Players have been matched and a game session is ready to host the players. A ticket in this state contains the necessary connection information for players.</p> </li> <li> <p> <b>FAILED</b> -- The matchmaking request was not completed.</p> </li> <li> <p> <b>CANCELLED</b> -- The matchmaking request was canceled. This may be the result of a call to <a>StopMatchmaking</a> or a proposed match that one or more players failed to accept.</p> </li> <li> <p> <b>TIMED</em>OUT</b> -- The matchmaking request was not successful within the duration specified in the matchmaking configuration. </p> </li> </ul> <note> <p>Matchmaking requests that fail to successfully complete (statuses FAILED, CANCELLED, TIMED_OUT) can be resubmitted as new requests with new ticket IDs.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<MatchmakingConfigurationStatus>,
     /// <p>Additional information about the current status.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2733,6 +6461,256 @@ pub struct MatchmakingTicket {
     #[serde(rename = "TicketId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ticket_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownMetricName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum MetricName {
+    ActivatingGameSessions,
+    ActiveGameSessions,
+    ActiveInstances,
+    AvailableGameSessions,
+    AvailablePlayerSessions,
+    CurrentPlayerSessions,
+    IdleInstances,
+    PercentAvailableGameSessions,
+    PercentIdleInstances,
+    QueueDepth,
+    WaitTime,
+    #[doc(hidden)]
+    UnknownVariant(UnknownMetricName),
+}
+
+impl Default for MetricName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for MetricName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for MetricName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for MetricName {
+    fn into(self) -> String {
+        match self {
+            MetricName::ActivatingGameSessions => "ActivatingGameSessions".to_string(),
+            MetricName::ActiveGameSessions => "ActiveGameSessions".to_string(),
+            MetricName::ActiveInstances => "ActiveInstances".to_string(),
+            MetricName::AvailableGameSessions => "AvailableGameSessions".to_string(),
+            MetricName::AvailablePlayerSessions => "AvailablePlayerSessions".to_string(),
+            MetricName::CurrentPlayerSessions => "CurrentPlayerSessions".to_string(),
+            MetricName::IdleInstances => "IdleInstances".to_string(),
+            MetricName::PercentAvailableGameSessions => "PercentAvailableGameSessions".to_string(),
+            MetricName::PercentIdleInstances => "PercentIdleInstances".to_string(),
+            MetricName::QueueDepth => "QueueDepth".to_string(),
+            MetricName::WaitTime => "WaitTime".to_string(),
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a MetricName {
+    fn into(self) -> &'a str {
+        match self {
+            MetricName::ActivatingGameSessions => &"ActivatingGameSessions",
+            MetricName::ActiveGameSessions => &"ActiveGameSessions",
+            MetricName::ActiveInstances => &"ActiveInstances",
+            MetricName::AvailableGameSessions => &"AvailableGameSessions",
+            MetricName::AvailablePlayerSessions => &"AvailablePlayerSessions",
+            MetricName::CurrentPlayerSessions => &"CurrentPlayerSessions",
+            MetricName::IdleInstances => &"IdleInstances",
+            MetricName::PercentAvailableGameSessions => &"PercentAvailableGameSessions",
+            MetricName::PercentIdleInstances => &"PercentIdleInstances",
+            MetricName::QueueDepth => &"QueueDepth",
+            MetricName::WaitTime => &"WaitTime",
+            MetricName::UnknownVariant(UnknownMetricName { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for MetricName {
+    fn from(name: &str) -> Self {
+        match name {
+            "ActivatingGameSessions" => MetricName::ActivatingGameSessions,
+            "ActiveGameSessions" => MetricName::ActiveGameSessions,
+            "ActiveInstances" => MetricName::ActiveInstances,
+            "AvailableGameSessions" => MetricName::AvailableGameSessions,
+            "AvailablePlayerSessions" => MetricName::AvailablePlayerSessions,
+            "CurrentPlayerSessions" => MetricName::CurrentPlayerSessions,
+            "IdleInstances" => MetricName::IdleInstances,
+            "PercentAvailableGameSessions" => MetricName::PercentAvailableGameSessions,
+            "PercentIdleInstances" => MetricName::PercentIdleInstances,
+            "QueueDepth" => MetricName::QueueDepth,
+            "WaitTime" => MetricName::WaitTime,
+            _ => MetricName::UnknownVariant(UnknownMetricName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for MetricName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ActivatingGameSessions" => MetricName::ActivatingGameSessions,
+            "ActiveGameSessions" => MetricName::ActiveGameSessions,
+            "ActiveInstances" => MetricName::ActiveInstances,
+            "AvailableGameSessions" => MetricName::AvailableGameSessions,
+            "AvailablePlayerSessions" => MetricName::AvailablePlayerSessions,
+            "CurrentPlayerSessions" => MetricName::CurrentPlayerSessions,
+            "IdleInstances" => MetricName::IdleInstances,
+            "PercentAvailableGameSessions" => MetricName::PercentAvailableGameSessions,
+            "PercentIdleInstances" => MetricName::PercentIdleInstances,
+            "QueueDepth" => MetricName::QueueDepth,
+            "WaitTime" => MetricName::WaitTime,
+            _ => MetricName::UnknownVariant(UnknownMetricName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for MetricName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for MetricName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for MetricName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOperatingSystem {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OperatingSystem {
+    AmazonLinux,
+    AmazonLinux2,
+    Windows2012,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOperatingSystem),
+}
+
+impl Default for OperatingSystem {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OperatingSystem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OperatingSystem {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OperatingSystem {
+    fn into(self) -> String {
+        match self {
+            OperatingSystem::AmazonLinux => "AMAZON_LINUX".to_string(),
+            OperatingSystem::AmazonLinux2 => "AMAZON_LINUX_2".to_string(),
+            OperatingSystem::Windows2012 => "WINDOWS_2012".to_string(),
+            OperatingSystem::UnknownVariant(UnknownOperatingSystem { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OperatingSystem {
+    fn into(self) -> &'a str {
+        match self {
+            OperatingSystem::AmazonLinux => &"AMAZON_LINUX",
+            OperatingSystem::AmazonLinux2 => &"AMAZON_LINUX_2",
+            OperatingSystem::Windows2012 => &"WINDOWS_2012",
+            OperatingSystem::UnknownVariant(UnknownOperatingSystem { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OperatingSystem {
+    fn from(name: &str) -> Self {
+        match name {
+            "AMAZON_LINUX" => OperatingSystem::AmazonLinux,
+            "AMAZON_LINUX_2" => OperatingSystem::AmazonLinux2,
+            "WINDOWS_2012" => OperatingSystem::Windows2012,
+            _ => OperatingSystem::UnknownVariant(UnknownOperatingSystem {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OperatingSystem {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AMAZON_LINUX" => OperatingSystem::AmazonLinux,
+            "AMAZON_LINUX_2" => OperatingSystem::AmazonLinux2,
+            "WINDOWS_2012" => OperatingSystem::Windows2012,
+            _ => OperatingSystem::UnknownVariant(UnknownOperatingSystem { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OperatingSystem {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OperatingSystem {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OperatingSystem {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
@@ -2847,11 +6825,436 @@ pub struct PlayerSession {
     /// <p><p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> -- The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> -- The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> -- The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> -- A player session request was received, but the player did not connect and/or was not validated within the timeout limit (60 seconds).</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<PlayerSessionStatus>,
     /// <p>Time stamp indicating when this data object was terminated. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "TerminationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlayerSessionCreationPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlayerSessionCreationPolicy {
+    AcceptAll,
+    DenyAll,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlayerSessionCreationPolicy),
+}
+
+impl Default for PlayerSessionCreationPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlayerSessionCreationPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlayerSessionCreationPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlayerSessionCreationPolicy {
+    fn into(self) -> String {
+        match self {
+            PlayerSessionCreationPolicy::AcceptAll => "ACCEPT_ALL".to_string(),
+            PlayerSessionCreationPolicy::DenyAll => "DENY_ALL".to_string(),
+            PlayerSessionCreationPolicy::UnknownVariant(UnknownPlayerSessionCreationPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlayerSessionCreationPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            PlayerSessionCreationPolicy::AcceptAll => &"ACCEPT_ALL",
+            PlayerSessionCreationPolicy::DenyAll => &"DENY_ALL",
+            PlayerSessionCreationPolicy::UnknownVariant(UnknownPlayerSessionCreationPolicy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for PlayerSessionCreationPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACCEPT_ALL" => PlayerSessionCreationPolicy::AcceptAll,
+            "DENY_ALL" => PlayerSessionCreationPolicy::DenyAll,
+            _ => PlayerSessionCreationPolicy::UnknownVariant(UnknownPlayerSessionCreationPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlayerSessionCreationPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACCEPT_ALL" => PlayerSessionCreationPolicy::AcceptAll,
+            "DENY_ALL" => PlayerSessionCreationPolicy::DenyAll,
+            _ => PlayerSessionCreationPolicy::UnknownVariant(UnknownPlayerSessionCreationPolicy {
+                name,
+            }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlayerSessionCreationPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PlayerSessionCreationPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlayerSessionCreationPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPlayerSessionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PlayerSessionStatus {
+    Active,
+    Completed,
+    Reserved,
+    Timedout,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPlayerSessionStatus),
+}
+
+impl Default for PlayerSessionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PlayerSessionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PlayerSessionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PlayerSessionStatus {
+    fn into(self) -> String {
+        match self {
+            PlayerSessionStatus::Active => "ACTIVE".to_string(),
+            PlayerSessionStatus::Completed => "COMPLETED".to_string(),
+            PlayerSessionStatus::Reserved => "RESERVED".to_string(),
+            PlayerSessionStatus::Timedout => "TIMEDOUT".to_string(),
+            PlayerSessionStatus::UnknownVariant(UnknownPlayerSessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PlayerSessionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            PlayerSessionStatus::Active => &"ACTIVE",
+            PlayerSessionStatus::Completed => &"COMPLETED",
+            PlayerSessionStatus::Reserved => &"RESERVED",
+            PlayerSessionStatus::Timedout => &"TIMEDOUT",
+            PlayerSessionStatus::UnknownVariant(UnknownPlayerSessionStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for PlayerSessionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => PlayerSessionStatus::Active,
+            "COMPLETED" => PlayerSessionStatus::Completed,
+            "RESERVED" => PlayerSessionStatus::Reserved,
+            "TIMEDOUT" => PlayerSessionStatus::Timedout,
+            _ => PlayerSessionStatus::UnknownVariant(UnknownPlayerSessionStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PlayerSessionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => PlayerSessionStatus::Active,
+            "COMPLETED" => PlayerSessionStatus::Completed,
+            "RESERVED" => PlayerSessionStatus::Reserved,
+            "TIMEDOUT" => PlayerSessionStatus::Timedout,
+            _ => PlayerSessionStatus::UnknownVariant(UnknownPlayerSessionStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PlayerSessionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for PlayerSessionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PlayerSessionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPolicyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum PolicyType {
+    RuleBased,
+    TargetBased,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPolicyType),
+}
+
+impl Default for PolicyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for PolicyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for PolicyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for PolicyType {
+    fn into(self) -> String {
+        match self {
+            PolicyType::RuleBased => "RuleBased".to_string(),
+            PolicyType::TargetBased => "TargetBased".to_string(),
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a PolicyType {
+    fn into(self) -> &'a str {
+        match self {
+            PolicyType::RuleBased => &"RuleBased",
+            PolicyType::TargetBased => &"TargetBased",
+            PolicyType::UnknownVariant(UnknownPolicyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for PolicyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "RuleBased" => PolicyType::RuleBased,
+            "TargetBased" => PolicyType::TargetBased,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for PolicyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "RuleBased" => PolicyType::RuleBased,
+            "TargetBased" => PolicyType::TargetBased,
+            _ => PolicyType::UnknownVariant(UnknownPolicyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for PolicyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for PolicyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for PolicyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProtectionPolicy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProtectionPolicy {
+    FullProtection,
+    NoProtection,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProtectionPolicy),
+}
+
+impl Default for ProtectionPolicy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProtectionPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProtectionPolicy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProtectionPolicy {
+    fn into(self) -> String {
+        match self {
+            ProtectionPolicy::FullProtection => "FullProtection".to_string(),
+            ProtectionPolicy::NoProtection => "NoProtection".to_string(),
+            ProtectionPolicy::UnknownVariant(UnknownProtectionPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProtectionPolicy {
+    fn into(self) -> &'a str {
+        match self {
+            ProtectionPolicy::FullProtection => &"FullProtection",
+            ProtectionPolicy::NoProtection => &"NoProtection",
+            ProtectionPolicy::UnknownVariant(UnknownProtectionPolicy { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ProtectionPolicy {
+    fn from(name: &str) -> Self {
+        match name {
+            "FullProtection" => ProtectionPolicy::FullProtection,
+            "NoProtection" => ProtectionPolicy::NoProtection,
+            _ => ProtectionPolicy::UnknownVariant(UnknownProtectionPolicy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProtectionPolicy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FullProtection" => ProtectionPolicy::FullProtection,
+            "NoProtection" => ProtectionPolicy::NoProtection,
+            _ => ProtectionPolicy::UnknownVariant(UnknownProtectionPolicy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProtectionPolicy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProtectionPolicy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProtectionPolicy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Represents the input for a request operation.</p>
@@ -2861,7 +7264,7 @@ pub struct PutScalingPolicyInput {
     /// <p>Comparison operator to use when measuring the metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperatorType>,
     /// <p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>
     #[serde(rename = "EvaluationPeriods")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2871,14 +7274,14 @@ pub struct PutScalingPolicyInput {
     pub fleet_id: String,
     /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger a scaling adjustment. For detailed descriptions of fleet metrics, see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html">Monitor Amazon GameLift with Amazon CloudWatch</a>. </p> <ul> <li> <p> <b>ActivatingGameSessions</b> -- Game sessions in the process of being created.</p> </li> <li> <p> <b>ActiveGameSessions</b> -- Game sessions that are currently running.</p> </li> <li> <p> <b>ActiveInstances</b> -- Fleet instances that are currently running at least one game session.</p> </li> <li> <p> <b>AvailableGameSessions</b> -- Additional game sessions that fleet could host simultaneously, given current capacity.</p> </li> <li> <p> <b>AvailablePlayerSessions</b> -- Empty player slots in currently active game sessions. This includes game sessions that are not currently accepting players. Reserved player slots are not included.</p> </li> <li> <p> <b>CurrentPlayerSessions</b> -- Player slots in active game sessions that are being used by a player or are reserved for a player. </p> </li> <li> <p> <b>IdleInstances</b> -- Active instances that are currently hosting zero game sessions. </p> </li> <li> <p> <b>PercentAvailableGameSessions</b> -- Unused percentage of the total number of game sessions that a fleet could host simultaneously, given current capacity. Use this metric for a target-based scaling policy.</p> </li> <li> <p> <b>PercentIdleInstances</b> -- Percentage of the total number of active instances that are hosting zero game sessions.</p> </li> <li> <p> <b>QueueDepth</b> -- Pending game session placement requests, in any queue, where the current fleet is the top-priority destination.</p> </li> <li> <p> <b>WaitTime</b> -- Current wait time for pending game session placement requests, in any queue, where the current fleet is the top-priority destination. </p> </li> </ul></p>
     #[serde(rename = "MetricName")]
-    pub metric_name: String,
+    pub metric_name: MetricName,
     /// <p>A descriptive label that is associated with a scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The type of scaling policy to create. For a target-based policy, set the parameter <i>MetricName</i> to 'PercentAvailableGameSessions' and specify a <i>TargetConfiguration</i>. For a rule-based policy set the following parameters: <i>MetricName</i>, <i>ComparisonOperator</i>, <i>Threshold</i>, <i>EvaluationPeriods</i>, <i>ScalingAdjustmentType</i>, and <i>ScalingAdjustment</i>.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_type: Option<String>,
+    pub policy_type: Option<PolicyType>,
     /// <p>Amount of adjustment to make, based on the scaling adjustment type.</p>
     #[serde(rename = "ScalingAdjustment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2886,7 +7289,7 @@ pub struct PutScalingPolicyInput {
     /// <p><p>The type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> -- add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> -- set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> -- increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of &quot;-10&quot; scales the fleet down by 10%.</p> </li> </ul></p>
     #[serde(rename = "ScalingAdjustmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_adjustment_type: Option<String>,
+    pub scaling_adjustment_type: Option<ScalingAdjustmentType>,
     /// <p>The settings for a target-based scaling policy.</p>
     #[serde(rename = "TargetConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3005,7 +7408,7 @@ pub struct ResumeGameServerGroupInput {
     pub game_server_group_name: String,
     /// <p>The activity to resume for this game server group.</p>
     #[serde(rename = "ResumeActions")]
-    pub resume_actions: Vec<String>,
+    pub resume_actions: Vec<GameServerGroupAction>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3031,7 +7434,111 @@ pub struct RoutingStrategy {
     /// <p><p>The type of routing strategy for the alias.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> - The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> - The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: Option<RoutingStrategyType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRoutingStrategyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RoutingStrategyType {
+    Simple,
+    Terminal,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRoutingStrategyType),
+}
+
+impl Default for RoutingStrategyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RoutingStrategyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RoutingStrategyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RoutingStrategyType {
+    fn into(self) -> String {
+        match self {
+            RoutingStrategyType::Simple => "SIMPLE".to_string(),
+            RoutingStrategyType::Terminal => "TERMINAL".to_string(),
+            RoutingStrategyType::UnknownVariant(UnknownRoutingStrategyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RoutingStrategyType {
+    fn into(self) -> &'a str {
+        match self {
+            RoutingStrategyType::Simple => &"SIMPLE",
+            RoutingStrategyType::Terminal => &"TERMINAL",
+            RoutingStrategyType::UnknownVariant(UnknownRoutingStrategyType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for RoutingStrategyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SIMPLE" => RoutingStrategyType::Simple,
+            "TERMINAL" => RoutingStrategyType::Terminal,
+            _ => RoutingStrategyType::UnknownVariant(UnknownRoutingStrategyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RoutingStrategyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SIMPLE" => RoutingStrategyType::Simple,
+            "TERMINAL" => RoutingStrategyType::Terminal,
+            _ => RoutingStrategyType::UnknownVariant(UnknownRoutingStrategyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RoutingStrategyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RoutingStrategyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RoutingStrategyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>A collection of server process configurations that describe what processes to run on each instance in a fleet. Server processes run either a custom game build executable or a Realtime Servers script. Each instance in the fleet starts the specified server processes and continues to start new processes as existing processes end. Each instance regularly checks for an updated runtime configuration. </p> <p>The runtime configuration enables the instances in a fleet to run multiple processes simultaneously. Learn more about <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-multiprocess.html"> Running Multiple Processes on a Fleet </a>.</p> <p>A Amazon GameLift instance is limited to 50 processes running simultaneously. To calculate the total number of processes in a runtime configuration, add the values of the <code>ConcurrentExecutions</code> parameter for each <a>ServerProcess</a> object.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>StartFleetActions</a> or <a>StopFleetActions</a> </p> </li> </ul></p>
@@ -3072,6 +7579,115 @@ pub struct S3Location {
     pub role_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingAdjustmentType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingAdjustmentType {
+    ChangeInCapacity,
+    ExactCapacity,
+    PercentChangeInCapacity,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingAdjustmentType),
+}
+
+impl Default for ScalingAdjustmentType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingAdjustmentType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingAdjustmentType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingAdjustmentType {
+    fn into(self) -> String {
+        match self {
+            ScalingAdjustmentType::ChangeInCapacity => "ChangeInCapacity".to_string(),
+            ScalingAdjustmentType::ExactCapacity => "ExactCapacity".to_string(),
+            ScalingAdjustmentType::PercentChangeInCapacity => "PercentChangeInCapacity".to_string(),
+            ScalingAdjustmentType::UnknownVariant(UnknownScalingAdjustmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingAdjustmentType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingAdjustmentType::ChangeInCapacity => &"ChangeInCapacity",
+            ScalingAdjustmentType::ExactCapacity => &"ExactCapacity",
+            ScalingAdjustmentType::PercentChangeInCapacity => &"PercentChangeInCapacity",
+            ScalingAdjustmentType::UnknownVariant(UnknownScalingAdjustmentType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ScalingAdjustmentType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ChangeInCapacity" => ScalingAdjustmentType::ChangeInCapacity,
+            "ExactCapacity" => ScalingAdjustmentType::ExactCapacity,
+            "PercentChangeInCapacity" => ScalingAdjustmentType::PercentChangeInCapacity,
+            _ => ScalingAdjustmentType::UnknownVariant(UnknownScalingAdjustmentType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingAdjustmentType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ChangeInCapacity" => ScalingAdjustmentType::ChangeInCapacity,
+            "ExactCapacity" => ScalingAdjustmentType::ExactCapacity,
+            "PercentChangeInCapacity" => ScalingAdjustmentType::PercentChangeInCapacity,
+            _ => ScalingAdjustmentType::UnknownVariant(UnknownScalingAdjustmentType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingAdjustmentType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingAdjustmentType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingAdjustmentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p><p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p>Manage scaling policies:</p> <ul> <li> <p> <a>PutScalingPolicy</a> (auto-scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (auto-scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (auto-scaling)</p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3079,7 +7695,7 @@ pub struct ScalingPolicy {
     /// <p>Comparison operator to use when measuring a metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub comparison_operator: Option<String>,
+    pub comparison_operator: Option<ComparisonOperatorType>,
     /// <p>Length of time (in minutes) the metric must be at or beyond the threshold before a scaling event is triggered.</p>
     #[serde(rename = "EvaluationPeriods")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3091,7 +7707,7 @@ pub struct ScalingPolicy {
     /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger a scaling adjustment. For detailed descriptions of fleet metrics, see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html">Monitor Amazon GameLift with Amazon CloudWatch</a>. </p> <ul> <li> <p> <b>ActivatingGameSessions</b> -- Game sessions in the process of being created.</p> </li> <li> <p> <b>ActiveGameSessions</b> -- Game sessions that are currently running.</p> </li> <li> <p> <b>ActiveInstances</b> -- Fleet instances that are currently running at least one game session.</p> </li> <li> <p> <b>AvailableGameSessions</b> -- Additional game sessions that fleet could host simultaneously, given current capacity.</p> </li> <li> <p> <b>AvailablePlayerSessions</b> -- Empty player slots in currently active game sessions. This includes game sessions that are not currently accepting players. Reserved player slots are not included.</p> </li> <li> <p> <b>CurrentPlayerSessions</b> -- Player slots in active game sessions that are being used by a player or are reserved for a player. </p> </li> <li> <p> <b>IdleInstances</b> -- Active instances that are currently hosting zero game sessions. </p> </li> <li> <p> <b>PercentAvailableGameSessions</b> -- Unused percentage of the total number of game sessions that a fleet could host simultaneously, given current capacity. Use this metric for a target-based scaling policy.</p> </li> <li> <p> <b>PercentIdleInstances</b> -- Percentage of the total number of active instances that are hosting zero game sessions.</p> </li> <li> <p> <b>QueueDepth</b> -- Pending game session placement requests, in any queue, where the current fleet is the top-priority destination.</p> </li> <li> <p> <b>WaitTime</b> -- Current wait time for pending game session placement requests, in any queue, where the current fleet is the top-priority destination. </p> </li> </ul></p>
     #[serde(rename = "MetricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metric_name: Option<String>,
+    pub metric_name: Option<MetricName>,
     /// <p>A descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3099,7 +7715,7 @@ pub struct ScalingPolicy {
     /// <p>The type of scaling policy to create. For a target-based policy, set the parameter <i>MetricName</i> to 'PercentAvailableGameSessions' and specify a <i>TargetConfiguration</i>. For a rule-based policy set the following parameters: <i>MetricName</i>, <i>ComparisonOperator</i>, <i>Threshold</i>, <i>EvaluationPeriods</i>, <i>ScalingAdjustmentType</i>, and <i>ScalingAdjustment</i>.</p>
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_type: Option<String>,
+    pub policy_type: Option<PolicyType>,
     /// <p>Amount of adjustment to make, based on the scaling adjustment type.</p>
     #[serde(rename = "ScalingAdjustment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3107,11 +7723,11 @@ pub struct ScalingPolicy {
     /// <p><p>The type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> -- add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> -- set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> -- increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul></p>
     #[serde(rename = "ScalingAdjustmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub scaling_adjustment_type: Option<String>,
+    pub scaling_adjustment_type: Option<ScalingAdjustmentType>,
     /// <p><p>Current status of the scaling policy. The scaling policy can be in force only when in an <code>ACTIVE</code> status. Scaling policies can be suspended for individual fleets (see <a>StopFleetActions</a>; if suspended for a fleet, the policy status does not change. View a fleet&#39;s stopped actions by calling <a>DescribeFleetCapacity</a>.</p> <ul> <li> <p> <b>ACTIVE</b> -- The scaling policy can be used for auto-scaling a fleet.</p> </li> <li> <p> <b>UPDATE<em>REQUESTED</b> -- A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> -- A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE</em>REQUESTED</b> -- A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> -- The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> -- The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ScalingStatusType>,
     /// <p>The settings for a target-based scaling policy.</p>
     #[serde(rename = "TargetConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3120,6 +7736,135 @@ pub struct ScalingPolicy {
     #[serde(rename = "Threshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threshold: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownScalingStatusType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ScalingStatusType {
+    Active,
+    Deleted,
+    DeleteRequested,
+    Deleting,
+    Error,
+    UpdateRequested,
+    Updating,
+    #[doc(hidden)]
+    UnknownVariant(UnknownScalingStatusType),
+}
+
+impl Default for ScalingStatusType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ScalingStatusType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ScalingStatusType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ScalingStatusType {
+    fn into(self) -> String {
+        match self {
+            ScalingStatusType::Active => "ACTIVE".to_string(),
+            ScalingStatusType::Deleted => "DELETED".to_string(),
+            ScalingStatusType::DeleteRequested => "DELETE_REQUESTED".to_string(),
+            ScalingStatusType::Deleting => "DELETING".to_string(),
+            ScalingStatusType::Error => "ERROR".to_string(),
+            ScalingStatusType::UpdateRequested => "UPDATE_REQUESTED".to_string(),
+            ScalingStatusType::Updating => "UPDATING".to_string(),
+            ScalingStatusType::UnknownVariant(UnknownScalingStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ScalingStatusType {
+    fn into(self) -> &'a str {
+        match self {
+            ScalingStatusType::Active => &"ACTIVE",
+            ScalingStatusType::Deleted => &"DELETED",
+            ScalingStatusType::DeleteRequested => &"DELETE_REQUESTED",
+            ScalingStatusType::Deleting => &"DELETING",
+            ScalingStatusType::Error => &"ERROR",
+            ScalingStatusType::UpdateRequested => &"UPDATE_REQUESTED",
+            ScalingStatusType::Updating => &"UPDATING",
+            ScalingStatusType::UnknownVariant(UnknownScalingStatusType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ScalingStatusType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ScalingStatusType::Active,
+            "DELETED" => ScalingStatusType::Deleted,
+            "DELETE_REQUESTED" => ScalingStatusType::DeleteRequested,
+            "DELETING" => ScalingStatusType::Deleting,
+            "ERROR" => ScalingStatusType::Error,
+            "UPDATE_REQUESTED" => ScalingStatusType::UpdateRequested,
+            "UPDATING" => ScalingStatusType::Updating,
+            _ => ScalingStatusType::UnknownVariant(UnknownScalingStatusType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ScalingStatusType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ScalingStatusType::Active,
+            "DELETED" => ScalingStatusType::Deleted,
+            "DELETE_REQUESTED" => ScalingStatusType::DeleteRequested,
+            "DELETING" => ScalingStatusType::Deleting,
+            "ERROR" => ScalingStatusType::Error,
+            "UPDATE_REQUESTED" => ScalingStatusType::UpdateRequested,
+            "UPDATING" => ScalingStatusType::Updating,
+            _ => ScalingStatusType::UnknownVariant(UnknownScalingStatusType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ScalingStatusType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ScalingStatusType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ScalingStatusType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p><p>Properties describing a Realtime script.</p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateScript</a> </p> </li> <li> <p> <a>ListScripts</a> </p> </li> <li> <p> <a>DescribeScript</a> </p> </li> <li> <p> <a>UpdateScript</a> </p> </li> <li> <p> <a>DeleteScript</a> </p> </li> </ul></p>
@@ -3214,12 +7959,113 @@ pub struct ServerProcess {
     pub parameters: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSortOrder {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SortOrder {
+    Ascending,
+    Descending,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSortOrder),
+}
+
+impl Default for SortOrder {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SortOrder {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SortOrder {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SortOrder {
+    fn into(self) -> String {
+        match self {
+            SortOrder::Ascending => "ASCENDING".to_string(),
+            SortOrder::Descending => "DESCENDING".to_string(),
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SortOrder {
+    fn into(self) -> &'a str {
+        match self {
+            SortOrder::Ascending => &"ASCENDING",
+            SortOrder::Descending => &"DESCENDING",
+            SortOrder::UnknownVariant(UnknownSortOrder { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for SortOrder {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SortOrder {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASCENDING" => SortOrder::Ascending,
+            "DESCENDING" => SortOrder::Descending,
+            _ => SortOrder::UnknownVariant(UnknownSortOrder { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SortOrder {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SortOrder {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for SortOrder {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartFleetActionsInput {
     /// <p>List of actions to restart on the fleet.</p>
     #[serde(rename = "Actions")]
-    pub actions: Vec<String>,
+    pub actions: Vec<FleetAction>,
     /// <p>A unique identifier for a fleet to start actions on. You can use either the fleet ID or ARN value.</p>
     #[serde(rename = "FleetId")]
     pub fleet_id: String,
@@ -3335,7 +8181,7 @@ pub struct StartMatchmakingOutput {
 pub struct StopFleetActionsInput {
     /// <p>List of actions to suspend on the fleet. </p>
     #[serde(rename = "Actions")]
-    pub actions: Vec<String>,
+    pub actions: Vec<FleetAction>,
     /// <p>A unique identifier for a fleet to stop actions on. You can use either the fleet ID or ARN value.</p>
     #[serde(rename = "FleetId")]
     pub fleet_id: String,
@@ -3385,7 +8231,7 @@ pub struct SuspendGameServerGroupInput {
     pub game_server_group_name: String,
     /// <p>The activity to suspend for this game server group.</p>
     #[serde(rename = "SuspendActions")]
-    pub suspend_actions: Vec<String>,
+    pub suspend_actions: Vec<GameServerGroupAction>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3535,7 +8381,7 @@ pub struct UpdateFleetAttributesInput {
     /// <p><p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub new_game_session_protection_policy: Option<String>,
+    pub new_game_session_protection_policy: Option<ProtectionPolicy>,
     /// <p>Policy that limits the number of game sessions an individual player can create over a span of time. </p>
     #[serde(rename = "ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3616,14 +8462,14 @@ pub struct UpdateGameServerGroupInput {
     /// <p><p>Indicates how GameLift FleetIQ balances the use of Spot Instances and On-Demand Instances in the game server group. Method options include the following:</p> <ul> <li> <p> <code>SPOT<em>ONLY</code> - Only Spot Instances are used in the game server group. If Spot Instances are unavailable or not viable for game hosting, the game server group provides no hosting capacity until Spot Instances can again be used. Until then, no new instances are started, and the existing nonviable Spot Instances are terminated (after current gameplay ends) and are not replaced.</p> </li> <li> <p> <code>SPOT</em>PREFERRED</code> - (default value) Spot Instances are used whenever available in the game server group. If Spot Instances are unavailable, the game server group continues to provide hosting capacity by falling back to On-Demand Instances. Existing nonviable Spot Instances are terminated (after current gameplay ends) and are replaced with new On-Demand Instances.</p> </li> <li> <p> <code>ON<em>DEMAND</em>ONLY</code> - Only On-Demand Instances are used in the game server group. No Spot Instances are used, even when available, while this balancing strategy is in force.</p> </li> </ul></p>
     #[serde(rename = "BalancingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub balancing_strategy: Option<String>,
+    pub balancing_strategy: Option<BalancingStrategy>,
     /// <p>A unique identifier for the game server group. Use either the <a>GameServerGroup</a> name or ARN value.</p>
     #[serde(rename = "GameServerGroupName")]
     pub game_server_group_name: String,
     /// <p>A flag that indicates whether instances in the game server group are protected from early termination. Unprotected instances that have active game servers running might be terminated during a scale-down event, causing players to be dropped from the game. Protected instances cannot be terminated while there are active game servers running except in the event of a forced game server group deletion (see ). An exception to this is with Spot Instances, which can be terminated by AWS regardless of protection status. This property is set to <code>NO_PROTECTION</code> by default.</p>
     #[serde(rename = "GameServerProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub game_server_protection_policy: Option<String>,
+    pub game_server_protection_policy: Option<GameServerProtectionPolicy>,
     /// <p>An updated list of EC2 instance types to use in the Auto Scaling group. The instance definitions must specify at least two different instance types that are supported by GameLift FleetIQ. This updated list replaces the entire current list of instance definitions for the game server group. For more information on instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">EC2 Instance Types</a> in the <i>Amazon EC2 User Guide</i>. You can optionally specify capacity weighting for each instance type. If no weight value is specified for an instance type, it is set to the default value "1". For more information about capacity weighting, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html"> Instance Weighting for Amazon EC2 Auto Scaling</a> in the Amazon EC2 Auto Scaling User Guide.</p>
     #[serde(rename = "InstanceDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3659,11 +8505,11 @@ pub struct UpdateGameServerInput {
     /// <p>Indicates health status of the game server. A request that includes this parameter updates the game server's <i>LastHealthCheckTime</i> timestamp. </p>
     #[serde(rename = "HealthCheck")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health_check: Option<String>,
+    pub health_check: Option<GameServerHealthCheck>,
     /// <p>Indicates whether the game server is available or is currently hosting gameplay.</p>
     #[serde(rename = "UtilizationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub utilization_status: Option<String>,
+    pub utilization_status: Option<GameServerUtilizationStatus>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3693,11 +8539,11 @@ pub struct UpdateGameSessionInput {
     /// <p>Policy determining whether or not the game session accepts new players.</p>
     #[serde(rename = "PlayerSessionCreationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub player_session_creation_policy: Option<String>,
+    pub player_session_creation_policy: Option<PlayerSessionCreationPolicy>,
     /// <p><p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "ProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub protection_policy: Option<String>,
+    pub protection_policy: Option<ProtectionPolicy>,
 }
 
 /// <p>Represents the returned data in response to a request operation.</p>
@@ -3760,7 +8606,7 @@ pub struct UpdateMatchmakingConfigurationInput {
     /// <p>The method that is used to backfill game sessions created with this matchmaking configuration. Specify MANUAL when your game manages backfill requests manually or does not use the match backfill feature. Specify AUTOMATIC to have GameLift create a <a>StartMatchBackfill</a> request whenever a game session has one or more open slots. Learn more about manual and automatic backfill in <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-backfill.html">Backfill Existing Games with FlexMatch</a>. Automatic backfill is not available when <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "BackfillMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub backfill_mode: Option<String>,
+    pub backfill_mode: Option<BackfillMode>,
     /// <p>Information to add to all events related to the matchmaking configuration. </p>
     #[serde(rename = "CustomEventData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3772,7 +8618,7 @@ pub struct UpdateMatchmakingConfigurationInput {
     /// <p><p>Indicates whether this matchmaking configuration is being used with GameLift hosting or as a standalone matchmaking solution. </p> <ul> <li> <p> <b>STANDALONE</b> - FlexMatch forms matches and returns match information, including players and team assignments, in a <a href="https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html#match-events-matchmakingsucceeded"> MatchmakingSucceeded</a> event.</p> </li> <li> <p> <b>WITH_QUEUE</b> - FlexMatch forms matches and uses the specified GameLift queue to start a game session for the match. </p> </li> </ul></p>
     #[serde(rename = "FlexMatchMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flex_match_mode: Option<String>,
+    pub flex_match_mode: Option<FlexMatchMode>,
     /// <p>A set of custom properties for a game session, formatted as key-value pairs. These properties are passed to a game server process in the <a>GameSession</a> object with a request to start a new game session (see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession">Start a Game Session</a>). This information is added to the new <a>GameSession</a> object that is created for a successful match. This parameter is not used if <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p>
     #[serde(rename = "GameProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]

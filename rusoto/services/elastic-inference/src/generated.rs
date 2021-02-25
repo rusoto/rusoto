@@ -58,7 +58,7 @@ pub struct AcceleratorTypeOffering {
     /// <p> The location type for the offering. It can assume the following values: region: defines that the offering is at the regional level. availability-zone: defines that the offering is at the availability zone level. availability-zone-id: defines that the offering is at the availability zone level, defined by the availability zone id. </p>
     #[serde(rename = "locationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub location_type: Option<String>,
+    pub location_type: Option<LocationType>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -70,7 +70,7 @@ pub struct DescribeAcceleratorOfferingsRequest {
     pub accelerator_types: Option<Vec<String>>,
     /// <p> The location type that you want to describe accelerator type offerings for. It can assume the following values: region: will return the accelerator type offering at the regional level. availability-zone: will return the accelerator type offering at the availability zone level. availability-zone-id: will return the accelerator type offering at the availability zone level returning the availability zone id. </p>
     #[serde(rename = "locationType")]
-    pub location_type: String,
+    pub location_type: LocationType,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -208,6 +208,111 @@ pub struct ListTagsForResourceResult {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLocationType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LocationType {
+    AvailabilityZone,
+    AvailabilityZoneId,
+    Region,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLocationType),
+}
+
+impl Default for LocationType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LocationType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LocationType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LocationType {
+    fn into(self) -> String {
+        match self {
+            LocationType::AvailabilityZone => "availability-zone".to_string(),
+            LocationType::AvailabilityZoneId => "availability-zone-id".to_string(),
+            LocationType::Region => "region".to_string(),
+            LocationType::UnknownVariant(UnknownLocationType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LocationType {
+    fn into(self) -> &'a str {
+        match self {
+            LocationType::AvailabilityZone => &"availability-zone",
+            LocationType::AvailabilityZoneId => &"availability-zone-id",
+            LocationType::Region => &"region",
+            LocationType::UnknownVariant(UnknownLocationType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LocationType {
+    fn from(name: &str) -> Self {
+        match name {
+            "availability-zone" => LocationType::AvailabilityZone,
+            "availability-zone-id" => LocationType::AvailabilityZoneId,
+            "region" => LocationType::Region,
+            _ => LocationType::UnknownVariant(UnknownLocationType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LocationType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "availability-zone" => LocationType::AvailabilityZone,
+            "availability-zone-id" => LocationType::AvailabilityZoneId,
+            "region" => LocationType::Region,
+            _ => LocationType::UnknownVariant(UnknownLocationType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LocationType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LocationType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LocationType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p> The memory information of an Elastic Inference Accelerator type. </p>

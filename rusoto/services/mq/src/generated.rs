@@ -25,6 +25,112 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The authentication strategy used to secure the broker.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAuthenticationStrategy {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AuthenticationStrategy {
+    Ldap,
+    Simple,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAuthenticationStrategy),
+}
+
+impl Default for AuthenticationStrategy {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AuthenticationStrategy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AuthenticationStrategy {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AuthenticationStrategy {
+    fn into(self) -> String {
+        match self {
+            AuthenticationStrategy::Ldap => "LDAP".to_string(),
+            AuthenticationStrategy::Simple => "SIMPLE".to_string(),
+            AuthenticationStrategy::UnknownVariant(UnknownAuthenticationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AuthenticationStrategy {
+    fn into(self) -> &'a str {
+        match self {
+            AuthenticationStrategy::Ldap => &"LDAP",
+            AuthenticationStrategy::Simple => &"SIMPLE",
+            AuthenticationStrategy::UnknownVariant(UnknownAuthenticationStrategy {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for AuthenticationStrategy {
+    fn from(name: &str) -> Self {
+        match name {
+            "LDAP" => AuthenticationStrategy::Ldap,
+            "SIMPLE" => AuthenticationStrategy::Simple,
+            _ => AuthenticationStrategy::UnknownVariant(UnknownAuthenticationStrategy {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AuthenticationStrategy {
+    fn from(name: String) -> Self {
+        match &*name {
+            "LDAP" => AuthenticationStrategy::Ldap,
+            "SIMPLE" => AuthenticationStrategy::Simple,
+            _ => AuthenticationStrategy::UnknownVariant(UnknownAuthenticationStrategy { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AuthenticationStrategy {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for AuthenticationStrategy {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AuthenticationStrategy {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Name of the availability zone.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -42,7 +148,7 @@ pub struct BrokerEngineType {
     /// <p>The type of broker engine.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>The list of engine versions.</p>
     #[serde(rename = "EngineVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -78,7 +184,7 @@ pub struct BrokerInstanceOption {
     /// <p>The type of broker engine.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>The type of broker instance.</p>
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,15 +192,239 @@ pub struct BrokerInstanceOption {
     /// <p>The broker&#39;s storage type.</p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<BrokerStorageType>,
     /// <p>The list of supported deployment modes.</p>
     #[serde(rename = "SupportedDeploymentModes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_deployment_modes: Option<Vec<String>>,
+    pub supported_deployment_modes: Option<Vec<DeploymentMode>>,
     /// <p>The list of supported engine versions.</p>
     #[serde(rename = "SupportedEngineVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_engine_versions: Option<Vec<String>>,
+}
+
+/// <p>The status of the broker.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBrokerState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BrokerState {
+    CreationFailed,
+    CreationInProgress,
+    DeletionInProgress,
+    RebootInProgress,
+    Running,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBrokerState),
+}
+
+impl Default for BrokerState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BrokerState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BrokerState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BrokerState {
+    fn into(self) -> String {
+        match self {
+            BrokerState::CreationFailed => "CREATION_FAILED".to_string(),
+            BrokerState::CreationInProgress => "CREATION_IN_PROGRESS".to_string(),
+            BrokerState::DeletionInProgress => "DELETION_IN_PROGRESS".to_string(),
+            BrokerState::RebootInProgress => "REBOOT_IN_PROGRESS".to_string(),
+            BrokerState::Running => "RUNNING".to_string(),
+            BrokerState::UnknownVariant(UnknownBrokerState { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BrokerState {
+    fn into(self) -> &'a str {
+        match self {
+            BrokerState::CreationFailed => &"CREATION_FAILED",
+            BrokerState::CreationInProgress => &"CREATION_IN_PROGRESS",
+            BrokerState::DeletionInProgress => &"DELETION_IN_PROGRESS",
+            BrokerState::RebootInProgress => &"REBOOT_IN_PROGRESS",
+            BrokerState::Running => &"RUNNING",
+            BrokerState::UnknownVariant(UnknownBrokerState { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for BrokerState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATION_FAILED" => BrokerState::CreationFailed,
+            "CREATION_IN_PROGRESS" => BrokerState::CreationInProgress,
+            "DELETION_IN_PROGRESS" => BrokerState::DeletionInProgress,
+            "REBOOT_IN_PROGRESS" => BrokerState::RebootInProgress,
+            "RUNNING" => BrokerState::Running,
+            _ => BrokerState::UnknownVariant(UnknownBrokerState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BrokerState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATION_FAILED" => BrokerState::CreationFailed,
+            "CREATION_IN_PROGRESS" => BrokerState::CreationInProgress,
+            "DELETION_IN_PROGRESS" => BrokerState::DeletionInProgress,
+            "REBOOT_IN_PROGRESS" => BrokerState::RebootInProgress,
+            "RUNNING" => BrokerState::Running,
+            _ => BrokerState::UnknownVariant(UnknownBrokerState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BrokerState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BrokerState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BrokerState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+/// <p>The broker&#39;s storage type. <important>EFS is currently not Supported for RabbitMQ engine type.</important></p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBrokerStorageType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BrokerStorageType {
+    Ebs,
+    Efs,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBrokerStorageType),
+}
+
+impl Default for BrokerStorageType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BrokerStorageType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BrokerStorageType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BrokerStorageType {
+    fn into(self) -> String {
+        match self {
+            BrokerStorageType::Ebs => "EBS".to_string(),
+            BrokerStorageType::Efs => "EFS".to_string(),
+            BrokerStorageType::UnknownVariant(UnknownBrokerStorageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BrokerStorageType {
+    fn into(self) -> &'a str {
+        match self {
+            BrokerStorageType::Ebs => &"EBS",
+            BrokerStorageType::Efs => &"EFS",
+            BrokerStorageType::UnknownVariant(UnknownBrokerStorageType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for BrokerStorageType {
+    fn from(name: &str) -> Self {
+        match name {
+            "EBS" => BrokerStorageType::Ebs,
+            "EFS" => BrokerStorageType::Efs,
+            _ => BrokerStorageType::UnknownVariant(UnknownBrokerStorageType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for BrokerStorageType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "EBS" => BrokerStorageType::Ebs,
+            "EFS" => BrokerStorageType::Efs,
+            _ => BrokerStorageType::UnknownVariant(UnknownBrokerStorageType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BrokerStorageType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for BrokerStorageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BrokerStorageType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The Amazon Resource Name (ARN) of the broker.</p>
@@ -116,7 +446,7 @@ pub struct BrokerSummary {
     /// <p>The status of the broker.</p>
     #[serde(rename = "BrokerState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub broker_state: Option<String>,
+    pub broker_state: Option<BrokerState>,
     /// <p>The time when the broker was created.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -124,15 +454,123 @@ pub struct BrokerSummary {
     /// <p>Required. The deployment mode of the broker.</p>
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_mode: Option<String>,
+    pub deployment_mode: Option<DeploymentMode>,
     /// <p>Required. The type of broker engine.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>The broker&#39;s instance type.</p>
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+}
+
+/// <p>The type of change pending for the ActiveMQ user.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChangeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChangeType {
+    Create,
+    Delete,
+    Update,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChangeType),
+}
+
+impl Default for ChangeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChangeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChangeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChangeType {
+    fn into(self) -> String {
+        match self {
+            ChangeType::Create => "CREATE".to_string(),
+            ChangeType::Delete => "DELETE".to_string(),
+            ChangeType::Update => "UPDATE".to_string(),
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChangeType {
+    fn into(self) -> &'a str {
+        match self {
+            ChangeType::Create => &"CREATE",
+            ChangeType::Delete => &"DELETE",
+            ChangeType::Update => &"UPDATE",
+            ChangeType::UnknownVariant(UnknownChangeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChangeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE" => ChangeType::Create,
+            "DELETE" => ChangeType::Delete,
+            "UPDATE" => ChangeType::Update,
+            _ => ChangeType::UnknownVariant(UnknownChangeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChangeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE" => ChangeType::Create,
+            "DELETE" => ChangeType::Delete,
+            "UPDATE" => ChangeType::Update,
+            _ => ChangeType::UnknownVariant(UnknownChangeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChangeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChangeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Returns information about all configurations.</p>
@@ -146,7 +584,7 @@ pub struct Configuration {
     /// <p>The authentication strategy associated with the configuration.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. The date and time of the configuration revision.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -158,7 +596,7 @@ pub struct Configuration {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,7 +675,7 @@ pub struct CreateBrokerRequest {
     /// <p>The authentication strategy used to secure the broker.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -257,7 +695,7 @@ pub struct CreateBrokerRequest {
     /// <p>Required. The deployment mode of the broker.</p>
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_mode: Option<String>,
+    pub deployment_mode: Option<DeploymentMode>,
     /// <p>Encryption options for the broker.</p>
     #[serde(rename = "EncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,7 +703,7 @@ pub struct CreateBrokerRequest {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -297,7 +735,7 @@ pub struct CreateBrokerRequest {
     /// <p>The broker&#39;s storage type.</p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<BrokerStorageType>,
     /// <p>The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER<em>MULTI</em>AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -332,11 +770,11 @@ pub struct CreateConfigurationRequest {
     /// <p>The authentication strategy associated with the configuration.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,7 +799,7 @@ pub struct CreateConfigurationResponse {
     /// <p>The authentication strategy associated with the configuration.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. The date and time of the configuration.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -421,6 +859,131 @@ pub struct CreateUserRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {}
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDayOfWeek {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DayOfWeek {
+    Friday,
+    Monday,
+    Saturday,
+    Sunday,
+    Thursday,
+    Tuesday,
+    Wednesday,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDayOfWeek),
+}
+
+impl Default for DayOfWeek {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DayOfWeek {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DayOfWeek {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DayOfWeek {
+    fn into(self) -> String {
+        match self {
+            DayOfWeek::Friday => "FRIDAY".to_string(),
+            DayOfWeek::Monday => "MONDAY".to_string(),
+            DayOfWeek::Saturday => "SATURDAY".to_string(),
+            DayOfWeek::Sunday => "SUNDAY".to_string(),
+            DayOfWeek::Thursday => "THURSDAY".to_string(),
+            DayOfWeek::Tuesday => "TUESDAY".to_string(),
+            DayOfWeek::Wednesday => "WEDNESDAY".to_string(),
+            DayOfWeek::UnknownVariant(UnknownDayOfWeek { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DayOfWeek {
+    fn into(self) -> &'a str {
+        match self {
+            DayOfWeek::Friday => &"FRIDAY",
+            DayOfWeek::Monday => &"MONDAY",
+            DayOfWeek::Saturday => &"SATURDAY",
+            DayOfWeek::Sunday => &"SUNDAY",
+            DayOfWeek::Thursday => &"THURSDAY",
+            DayOfWeek::Tuesday => &"TUESDAY",
+            DayOfWeek::Wednesday => &"WEDNESDAY",
+            DayOfWeek::UnknownVariant(UnknownDayOfWeek { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DayOfWeek {
+    fn from(name: &str) -> Self {
+        match name {
+            "FRIDAY" => DayOfWeek::Friday,
+            "MONDAY" => DayOfWeek::Monday,
+            "SATURDAY" => DayOfWeek::Saturday,
+            "SUNDAY" => DayOfWeek::Sunday,
+            "THURSDAY" => DayOfWeek::Thursday,
+            "TUESDAY" => DayOfWeek::Tuesday,
+            "WEDNESDAY" => DayOfWeek::Wednesday,
+            _ => DayOfWeek::UnknownVariant(UnknownDayOfWeek {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DayOfWeek {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FRIDAY" => DayOfWeek::Friday,
+            "MONDAY" => DayOfWeek::Monday,
+            "SATURDAY" => DayOfWeek::Saturday,
+            "SUNDAY" => DayOfWeek::Sunday,
+            "THURSDAY" => DayOfWeek::Thursday,
+            "TUESDAY" => DayOfWeek::Tuesday,
+            "WEDNESDAY" => DayOfWeek::Wednesday,
+            _ => DayOfWeek::UnknownVariant(UnknownDayOfWeek { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DayOfWeek {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DayOfWeek {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DayOfWeek {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBrokerRequest {
@@ -463,6 +1026,113 @@ pub struct DeleteUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {}
+
+/// <p>The deployment mode of the broker.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeploymentMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeploymentMode {
+    ActiveStandbyMultiAz,
+    ClusterMultiAz,
+    SingleInstance,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeploymentMode),
+}
+
+impl Default for DeploymentMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeploymentMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeploymentMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeploymentMode {
+    fn into(self) -> String {
+        match self {
+            DeploymentMode::ActiveStandbyMultiAz => "ACTIVE_STANDBY_MULTI_AZ".to_string(),
+            DeploymentMode::ClusterMultiAz => "CLUSTER_MULTI_AZ".to_string(),
+            DeploymentMode::SingleInstance => "SINGLE_INSTANCE".to_string(),
+            DeploymentMode::UnknownVariant(UnknownDeploymentMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeploymentMode {
+    fn into(self) -> &'a str {
+        match self {
+            DeploymentMode::ActiveStandbyMultiAz => &"ACTIVE_STANDBY_MULTI_AZ",
+            DeploymentMode::ClusterMultiAz => &"CLUSTER_MULTI_AZ",
+            DeploymentMode::SingleInstance => &"SINGLE_INSTANCE",
+            DeploymentMode::UnknownVariant(UnknownDeploymentMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeploymentMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE_STANDBY_MULTI_AZ" => DeploymentMode::ActiveStandbyMultiAz,
+            "CLUSTER_MULTI_AZ" => DeploymentMode::ClusterMultiAz,
+            "SINGLE_INSTANCE" => DeploymentMode::SingleInstance,
+            _ => DeploymentMode::UnknownVariant(UnknownDeploymentMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeploymentMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE_STANDBY_MULTI_AZ" => DeploymentMode::ActiveStandbyMultiAz,
+            "CLUSTER_MULTI_AZ" => DeploymentMode::ClusterMultiAz,
+            "SINGLE_INSTANCE" => DeploymentMode::SingleInstance,
+            _ => DeploymentMode::UnknownVariant(UnknownDeploymentMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeploymentMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeploymentMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeploymentMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -554,7 +1224,7 @@ pub struct DescribeBrokerResponse {
     /// <p>The authentication strategy used to secure the broker.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -578,7 +1248,7 @@ pub struct DescribeBrokerResponse {
     /// <p>The status of the broker.</p>
     #[serde(rename = "BrokerState")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub broker_state: Option<String>,
+    pub broker_state: Option<BrokerState>,
     /// <p>The list of all revisions for the specified configuration.</p>
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -590,7 +1260,7 @@ pub struct DescribeBrokerResponse {
     /// <p>Required. The deployment mode of the broker.</p>
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_mode: Option<String>,
+    pub deployment_mode: Option<DeploymentMode>,
     /// <p>Encryption options for the broker.</p>
     #[serde(rename = "EncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -598,7 +1268,7 @@ pub struct DescribeBrokerResponse {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -622,7 +1292,7 @@ pub struct DescribeBrokerResponse {
     /// <p>The authentication strategy that will be applied when the broker is rebooted.</p>
     #[serde(rename = "PendingAuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pending_authentication_strategy: Option<String>,
+    pub pending_authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "PendingEngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -650,7 +1320,7 @@ pub struct DescribeBrokerResponse {
     /// <p>The broker&#39;s storage type.</p>
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_type: Option<String>,
+    pub storage_type: Option<BrokerStorageType>,
     /// <p>The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER<em>MULTI</em>AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,7 +1353,7 @@ pub struct DescribeConfigurationResponse {
     /// <p>The authentication strategy associated with the configuration.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Required. The date and time of the configuration revision.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -695,7 +1365,7 @@ pub struct DescribeConfigurationResponse {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub engine_type: Option<String>,
+    pub engine_type: Option<EngineType>,
     /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -796,6 +1466,108 @@ pub struct EncryptionOptions {
     /// <p>Enables the use of an AWS owned CMK using AWS Key Management Service (KMS).</p>
     #[serde(rename = "UseAwsOwnedKey")]
     pub use_aws_owned_key: bool,
+}
+
+/// <p>The type of broker engine. Note: Currently, Amazon MQ supports ActiveMQ and RabbitMQ.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEngineType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EngineType {
+    Activemq,
+    Rabbitmq,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEngineType),
+}
+
+impl Default for EngineType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EngineType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EngineType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EngineType {
+    fn into(self) -> String {
+        match self {
+            EngineType::Activemq => "ACTIVEMQ".to_string(),
+            EngineType::Rabbitmq => "RABBITMQ".to_string(),
+            EngineType::UnknownVariant(UnknownEngineType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EngineType {
+    fn into(self) -> &'a str {
+        match self {
+            EngineType::Activemq => &"ACTIVEMQ",
+            EngineType::Rabbitmq => &"RABBITMQ",
+            EngineType::UnknownVariant(UnknownEngineType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EngineType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVEMQ" => EngineType::Activemq,
+            "RABBITMQ" => EngineType::Rabbitmq,
+            _ => EngineType::UnknownVariant(UnknownEngineType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EngineType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVEMQ" => EngineType::Activemq,
+            "RABBITMQ" => EngineType::Rabbitmq,
+            _ => EngineType::UnknownVariant(UnknownEngineType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EngineType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EngineType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EngineType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Id of the engine version.</p>
@@ -1131,7 +1903,135 @@ pub struct SanitizationWarning {
     /// <p>Required. The reason for which the XML elements or attributes were sanitized.</p>
     #[serde(rename = "Reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reason: Option<String>,
+    pub reason: Option<SanitizationWarningReason>,
+}
+
+/// <p>The reason for which the XML elements or attributes were sanitized.</p>
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSanitizationWarningReason {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SanitizationWarningReason {
+    DisallowedAttributeRemoved,
+    DisallowedElementRemoved,
+    InvalidAttributeValueRemoved,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSanitizationWarningReason),
+}
+
+impl Default for SanitizationWarningReason {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SanitizationWarningReason {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SanitizationWarningReason {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SanitizationWarningReason {
+    fn into(self) -> String {
+        match self {
+            SanitizationWarningReason::DisallowedAttributeRemoved => {
+                "DISALLOWED_ATTRIBUTE_REMOVED".to_string()
+            }
+            SanitizationWarningReason::DisallowedElementRemoved => {
+                "DISALLOWED_ELEMENT_REMOVED".to_string()
+            }
+            SanitizationWarningReason::InvalidAttributeValueRemoved => {
+                "INVALID_ATTRIBUTE_VALUE_REMOVED".to_string()
+            }
+            SanitizationWarningReason::UnknownVariant(UnknownSanitizationWarningReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SanitizationWarningReason {
+    fn into(self) -> &'a str {
+        match self {
+            SanitizationWarningReason::DisallowedAttributeRemoved => {
+                &"DISALLOWED_ATTRIBUTE_REMOVED"
+            }
+            SanitizationWarningReason::DisallowedElementRemoved => &"DISALLOWED_ELEMENT_REMOVED",
+            SanitizationWarningReason::InvalidAttributeValueRemoved => {
+                &"INVALID_ATTRIBUTE_VALUE_REMOVED"
+            }
+            SanitizationWarningReason::UnknownVariant(UnknownSanitizationWarningReason {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for SanitizationWarningReason {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISALLOWED_ATTRIBUTE_REMOVED" => SanitizationWarningReason::DisallowedAttributeRemoved,
+            "DISALLOWED_ELEMENT_REMOVED" => SanitizationWarningReason::DisallowedElementRemoved,
+            "INVALID_ATTRIBUTE_VALUE_REMOVED" => {
+                SanitizationWarningReason::InvalidAttributeValueRemoved
+            }
+            _ => SanitizationWarningReason::UnknownVariant(UnknownSanitizationWarningReason {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SanitizationWarningReason {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISALLOWED_ATTRIBUTE_REMOVED" => SanitizationWarningReason::DisallowedAttributeRemoved,
+            "DISALLOWED_ELEMENT_REMOVED" => SanitizationWarningReason::DisallowedElementRemoved,
+            "INVALID_ATTRIBUTE_VALUE_REMOVED" => {
+                SanitizationWarningReason::InvalidAttributeValueRemoved
+            }
+            _ => {
+                SanitizationWarningReason::UnknownVariant(UnknownSanitizationWarningReason { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for SanitizationWarningReason {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for SanitizationWarningReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SanitizationWarningReason {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Updates the broker using the specified properties.</p>
@@ -1141,7 +2041,7 @@ pub struct UpdateBrokerRequest {
     /// <p>The authentication strategy used to secure the broker.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1181,7 +2081,7 @@ pub struct UpdateBrokerResponse {
     /// <p>The authentication strategy used to secure the broker.</p>
     #[serde(rename = "AuthenticationStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub authentication_strategy: Option<String>,
+    pub authentication_strategy: Option<AuthenticationStrategy>,
     /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1327,7 +2227,7 @@ pub struct UserPendingChanges {
     /// <p>Required. The type of change pending for the ActiveMQ user.</p>
     #[serde(rename = "PendingChange")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pending_change: Option<String>,
+    pub pending_change: Option<ChangeType>,
 }
 
 /// <p>Returns a list of all broker users.</p>
@@ -1337,7 +2237,7 @@ pub struct UserSummary {
     /// <p>The type of change pending for the broker user.</p>
     #[serde(rename = "PendingChange")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub pending_change: Option<String>,
+    pub pending_change: Option<ChangeType>,
     /// <p>Required. The username of the broker user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1350,7 +2250,7 @@ pub struct WeeklyStartTime {
     /// <p>Required. The day of the week.</p>
     #[serde(rename = "DayOfWeek")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub day_of_week: Option<String>,
+    pub day_of_week: Option<DayOfWeek>,
     /// <p>Required. The time, in 24-hour format.</p>
     #[serde(rename = "TimeOfDay")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -52,6 +52,112 @@ pub struct AbortVaultLockInput {
     pub vault_name: String,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownActionCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ActionCode {
+    ArchiveRetrieval,
+    InventoryRetrieval,
+    Select,
+    #[doc(hidden)]
+    UnknownVariant(UnknownActionCode),
+}
+
+impl Default for ActionCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ActionCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ActionCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ActionCode {
+    fn into(self) -> String {
+        match self {
+            ActionCode::ArchiveRetrieval => "ArchiveRetrieval".to_string(),
+            ActionCode::InventoryRetrieval => "InventoryRetrieval".to_string(),
+            ActionCode::Select => "Select".to_string(),
+            ActionCode::UnknownVariant(UnknownActionCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ActionCode {
+    fn into(self) -> &'a str {
+        match self {
+            ActionCode::ArchiveRetrieval => &"ArchiveRetrieval",
+            ActionCode::InventoryRetrieval => &"InventoryRetrieval",
+            ActionCode::Select => &"Select",
+            ActionCode::UnknownVariant(UnknownActionCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ActionCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "ArchiveRetrieval" => ActionCode::ArchiveRetrieval,
+            "InventoryRetrieval" => ActionCode::InventoryRetrieval,
+            "Select" => ActionCode::Select,
+            _ => ActionCode::UnknownVariant(UnknownActionCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ActionCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ArchiveRetrieval" => ActionCode::ArchiveRetrieval,
+            "InventoryRetrieval" => ActionCode::InventoryRetrieval,
+            "Select" => ActionCode::Select,
+            _ => ActionCode::UnknownVariant(UnknownActionCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ActionCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ActionCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The input values for <code>AddTagsToVault</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -100,7 +206,7 @@ pub struct CSVInput {
     /// <p>Describes the first line of input. Valid values are <code>None</code>, <code>Ignore</code>, and <code>Use</code>.</p>
     #[serde(rename = "FileHeaderInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_header_info: Option<String>,
+    pub file_header_info: Option<FileHeaderInfo>,
     /// <p>A value used as an escape character where the field delimiter is part of the value.</p>
     #[serde(rename = "QuoteCharacter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -133,11 +239,136 @@ pub struct CSVOutput {
     /// <p>A value that indicates whether all output fields should be contained within quotation marks.</p>
     #[serde(rename = "QuoteFields")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub quote_fields: Option<String>,
+    pub quote_fields: Option<QuoteFields>,
     /// <p>A value used to separate individual records from each other.</p>
     #[serde(rename = "RecordDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_delimiter: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCannedACL {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CannedACL {
+    AuthenticatedRead,
+    AwsExecRead,
+    BucketOwnerFullControl,
+    BucketOwnerRead,
+    Private,
+    PublicRead,
+    PublicReadWrite,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCannedACL),
+}
+
+impl Default for CannedACL {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CannedACL {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CannedACL {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CannedACL {
+    fn into(self) -> String {
+        match self {
+            CannedACL::AuthenticatedRead => "authenticated-read".to_string(),
+            CannedACL::AwsExecRead => "aws-exec-read".to_string(),
+            CannedACL::BucketOwnerFullControl => "bucket-owner-full-control".to_string(),
+            CannedACL::BucketOwnerRead => "bucket-owner-read".to_string(),
+            CannedACL::Private => "private".to_string(),
+            CannedACL::PublicRead => "public-read".to_string(),
+            CannedACL::PublicReadWrite => "public-read-write".to_string(),
+            CannedACL::UnknownVariant(UnknownCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CannedACL {
+    fn into(self) -> &'a str {
+        match self {
+            CannedACL::AuthenticatedRead => &"authenticated-read",
+            CannedACL::AwsExecRead => &"aws-exec-read",
+            CannedACL::BucketOwnerFullControl => &"bucket-owner-full-control",
+            CannedACL::BucketOwnerRead => &"bucket-owner-read",
+            CannedACL::Private => &"private",
+            CannedACL::PublicRead => &"public-read",
+            CannedACL::PublicReadWrite => &"public-read-write",
+            CannedACL::UnknownVariant(UnknownCannedACL { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for CannedACL {
+    fn from(name: &str) -> Self {
+        match name {
+            "authenticated-read" => CannedACL::AuthenticatedRead,
+            "aws-exec-read" => CannedACL::AwsExecRead,
+            "bucket-owner-full-control" => CannedACL::BucketOwnerFullControl,
+            "bucket-owner-read" => CannedACL::BucketOwnerRead,
+            "private" => CannedACL::Private,
+            "public-read" => CannedACL::PublicRead,
+            "public-read-write" => CannedACL::PublicReadWrite,
+            _ => CannedACL::UnknownVariant(UnknownCannedACL {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CannedACL {
+    fn from(name: String) -> Self {
+        match &*name {
+            "authenticated-read" => CannedACL::AuthenticatedRead,
+            "aws-exec-read" => CannedACL::AwsExecRead,
+            "bucket-owner-full-control" => CannedACL::BucketOwnerFullControl,
+            "bucket-owner-read" => CannedACL::BucketOwnerRead,
+            "private" => CannedACL::Private,
+            "public-read" => CannedACL::PublicRead,
+            "public-read-write" => CannedACL::PublicReadWrite,
+            _ => CannedACL::UnknownVariant(UnknownCannedACL { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CannedACL {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CannedACL {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CannedACL {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon S3 Glacier (Glacier) can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Glacier returns the URI path of the newly created archive resource.</p>
@@ -336,7 +567,7 @@ pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3, for example <code>AES256</code> or <code>aws:kms</code>.</p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub encryption_type: Option<String>,
+    pub encryption_type: Option<EncryptionType>,
     /// <p>Optional. If the encryption type is <code>aws:kms</code>, you can use this value to specify the encryption context for the job results.</p>
     #[serde(rename = "KMSContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -345,6 +576,306 @@ pub struct Encryption {
     #[serde(rename = "KMSKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownEncryptionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum EncryptionType {
+    Aes256,
+    AwsKms,
+    #[doc(hidden)]
+    UnknownVariant(UnknownEncryptionType),
+}
+
+impl Default for EncryptionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for EncryptionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for EncryptionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for EncryptionType {
+    fn into(self) -> String {
+        match self {
+            EncryptionType::Aes256 => "AES256".to_string(),
+            EncryptionType::AwsKms => "aws:kms".to_string(),
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a EncryptionType {
+    fn into(self) -> &'a str {
+        match self {
+            EncryptionType::Aes256 => &"AES256",
+            EncryptionType::AwsKms => &"aws:kms",
+            EncryptionType::UnknownVariant(UnknownEncryptionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for EncryptionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AES256" => EncryptionType::Aes256,
+            "aws:kms" => EncryptionType::AwsKms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for EncryptionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AES256" => EncryptionType::Aes256,
+            "aws:kms" => EncryptionType::AwsKms,
+            _ => EncryptionType::UnknownVariant(UnknownEncryptionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for EncryptionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for EncryptionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for EncryptionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExpressionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExpressionType {
+    Sql,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExpressionType),
+}
+
+impl Default for ExpressionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExpressionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExpressionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExpressionType {
+    fn into(self) -> String {
+        match self {
+            ExpressionType::Sql => "SQL".to_string(),
+            ExpressionType::UnknownVariant(UnknownExpressionType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExpressionType {
+    fn into(self) -> &'a str {
+        match self {
+            ExpressionType::Sql => &"SQL",
+            ExpressionType::UnknownVariant(UnknownExpressionType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExpressionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "SQL" => ExpressionType::Sql,
+            _ => ExpressionType::UnknownVariant(UnknownExpressionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExpressionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "SQL" => ExpressionType::Sql,
+            _ => ExpressionType::UnknownVariant(UnknownExpressionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExpressionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExpressionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExpressionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileHeaderInfo {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileHeaderInfo {
+    Ignore,
+    None,
+    Use,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileHeaderInfo),
+}
+
+impl Default for FileHeaderInfo {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileHeaderInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileHeaderInfo {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileHeaderInfo {
+    fn into(self) -> String {
+        match self {
+            FileHeaderInfo::Ignore => "IGNORE".to_string(),
+            FileHeaderInfo::None => "NONE".to_string(),
+            FileHeaderInfo::Use => "USE".to_string(),
+            FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileHeaderInfo {
+    fn into(self) -> &'a str {
+        match self {
+            FileHeaderInfo::Ignore => &"IGNORE",
+            FileHeaderInfo::None => &"NONE",
+            FileHeaderInfo::Use => &"USE",
+            FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileHeaderInfo {
+    fn from(name: &str) -> Self {
+        match name {
+            "IGNORE" => FileHeaderInfo::Ignore,
+            "NONE" => FileHeaderInfo::None,
+            "USE" => FileHeaderInfo::Use,
+            _ => FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileHeaderInfo {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IGNORE" => FileHeaderInfo::Ignore,
+            "NONE" => FileHeaderInfo::None,
+            "USE" => FileHeaderInfo::Use,
+            _ => FileHeaderInfo::UnknownVariant(UnknownFileHeaderInfo { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileHeaderInfo {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for FileHeaderInfo {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileHeaderInfo {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Input for GetDataRetrievalPolicy.</p>
@@ -489,7 +1020,7 @@ pub struct GlacierJobDescription {
     /// <p>The job type. This value is either <code>ArchiveRetrieval</code>, <code>InventoryRetrieval</code>, or <code>Select</code>. </p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<String>,
+    pub action: Option<ActionCode>,
     /// <p>The archive ID requested for a select job or archive retrieval. Otherwise, this field is null.</p>
     #[serde(rename = "ArchiveId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -557,7 +1088,7 @@ pub struct GlacierJobDescription {
     /// <p>The status code can be <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code>, and indicates the status of the job.</p>
     #[serde(rename = "StatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status_code: Option<String>,
+    pub status_code: Option<StatusCode>,
     /// <p>A friendly message that describes the job status.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -582,7 +1113,7 @@ pub struct Grant {
     /// <p>Specifies the permission given to the grantee. </p>
     #[serde(rename = "Permission")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub permission: Option<String>,
+    pub permission: Option<Permission>,
 }
 
 /// <p>Contains information about the grantee.</p>
@@ -602,7 +1133,7 @@ pub struct Grantee {
     pub id: Option<String>,
     /// <p>Type of grantee</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: Type,
     /// <p>URI of the grantee group.</p>
     #[serde(rename = "URI")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1041,6 +1572,121 @@ pub struct PartListElement {
     pub sha256_tree_hash: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownPermission {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Permission {
+    FullControl,
+    Read,
+    ReadAcp,
+    Write,
+    WriteAcp,
+    #[doc(hidden)]
+    UnknownVariant(UnknownPermission),
+}
+
+impl Default for Permission {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Permission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Permission {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Permission {
+    fn into(self) -> String {
+        match self {
+            Permission::FullControl => "FULL_CONTROL".to_string(),
+            Permission::Read => "READ".to_string(),
+            Permission::ReadAcp => "READ_ACP".to_string(),
+            Permission::Write => "WRITE".to_string(),
+            Permission::WriteAcp => "WRITE_ACP".to_string(),
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Permission {
+    fn into(self) -> &'a str {
+        match self {
+            Permission::FullControl => &"FULL_CONTROL",
+            Permission::Read => &"READ",
+            Permission::ReadAcp => &"READ_ACP",
+            Permission::Write => &"WRITE",
+            Permission::WriteAcp => &"WRITE_ACP",
+            Permission::UnknownVariant(UnknownPermission { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Permission {
+    fn from(name: &str) -> Self {
+        match name {
+            "FULL_CONTROL" => Permission::FullControl,
+            "READ" => Permission::Read,
+            "READ_ACP" => Permission::ReadAcp,
+            "WRITE" => Permission::Write,
+            "WRITE_ACP" => Permission::WriteAcp,
+            _ => Permission::UnknownVariant(UnknownPermission {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Permission {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FULL_CONTROL" => Permission::FullControl,
+            "READ" => Permission::Read,
+            "READ_ACP" => Permission::ReadAcp,
+            "WRITE" => Permission::Write,
+            "WRITE_ACP" => Permission::WriteAcp,
+            _ => Permission::UnknownVariant(UnknownPermission { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Permission {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Permission {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Permission {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The definition for a provisioned capacity unit.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1076,6 +1722,106 @@ pub struct PurchaseProvisionedCapacityOutput {
     pub capacity_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownQuoteFields {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum QuoteFields {
+    Always,
+    Asneeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownQuoteFields),
+}
+
+impl Default for QuoteFields {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for QuoteFields {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for QuoteFields {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for QuoteFields {
+    fn into(self) -> String {
+        match self {
+            QuoteFields::Always => "ALWAYS".to_string(),
+            QuoteFields::Asneeded => "ASNEEDED".to_string(),
+            QuoteFields::UnknownVariant(UnknownQuoteFields { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a QuoteFields {
+    fn into(self) -> &'a str {
+        match self {
+            QuoteFields::Always => &"ALWAYS",
+            QuoteFields::Asneeded => &"ASNEEDED",
+            QuoteFields::UnknownVariant(UnknownQuoteFields { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for QuoteFields {
+    fn from(name: &str) -> Self {
+        match name {
+            "ALWAYS" => QuoteFields::Always,
+            "ASNEEDED" => QuoteFields::Asneeded,
+            _ => QuoteFields::UnknownVariant(UnknownQuoteFields {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for QuoteFields {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ALWAYS" => QuoteFields::Always,
+            "ASNEEDED" => QuoteFields::Asneeded,
+            _ => QuoteFields::UnknownVariant(UnknownQuoteFields { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for QuoteFields {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for QuoteFields {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for QuoteFields {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The input value for <code>RemoveTagsFromVaultInput</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1106,7 +1852,7 @@ pub struct S3Location {
     /// <p>The canned access control list (ACL) to apply to the job results.</p>
     #[serde(rename = "CannedACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub canned_acl: Option<String>,
+    pub canned_acl: Option<CannedACL>,
     /// <p>Contains information about the encryption used to store the job results in Amazon S3.</p>
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1118,7 +1864,7 @@ pub struct S3Location {
     /// <p>The storage class used to store the job results.</p>
     #[serde(rename = "StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub storage_class: Option<String>,
+    pub storage_class: Option<StorageClass>,
     /// <p>The tag-set that is applied to the job results.</p>
     #[serde(rename = "Tagging")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1139,7 +1885,7 @@ pub struct SelectParameters {
     /// <p>The type of the provided expression, for example <code>SQL</code>.</p>
     #[serde(rename = "ExpressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub expression_type: Option<String>,
+    pub expression_type: Option<ExpressionType>,
     /// <p>Describes the serialization format of the object.</p>
     #[serde(rename = "InputSerialization")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1193,6 +1939,322 @@ pub struct SetVaultNotificationsInput {
     #[serde(rename = "vaultNotificationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vault_notification_config: Option<VaultNotificationConfig>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStatusCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StatusCode {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStatusCode),
+}
+
+impl Default for StatusCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StatusCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StatusCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StatusCode {
+    fn into(self) -> String {
+        match self {
+            StatusCode::Failed => "Failed".to_string(),
+            StatusCode::InProgress => "InProgress".to_string(),
+            StatusCode::Succeeded => "Succeeded".to_string(),
+            StatusCode::UnknownVariant(UnknownStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StatusCode {
+    fn into(self) -> &'a str {
+        match self {
+            StatusCode::Failed => &"Failed",
+            StatusCode::InProgress => &"InProgress",
+            StatusCode::Succeeded => &"Succeeded",
+            StatusCode::UnknownVariant(UnknownStatusCode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StatusCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Failed" => StatusCode::Failed,
+            "InProgress" => StatusCode::InProgress,
+            "Succeeded" => StatusCode::Succeeded,
+            _ => StatusCode::UnknownVariant(UnknownStatusCode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StatusCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Failed" => StatusCode::Failed,
+            "InProgress" => StatusCode::InProgress,
+            "Succeeded" => StatusCode::Succeeded,
+            _ => StatusCode::UnknownVariant(UnknownStatusCode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StatusCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for StatusCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StatusCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownStorageClass {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum StorageClass {
+    ReducedRedundancy,
+    Standard,
+    StandardIa,
+    #[doc(hidden)]
+    UnknownVariant(UnknownStorageClass),
+}
+
+impl Default for StorageClass {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for StorageClass {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for StorageClass {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for StorageClass {
+    fn into(self) -> String {
+        match self {
+            StorageClass::ReducedRedundancy => "REDUCED_REDUNDANCY".to_string(),
+            StorageClass::Standard => "STANDARD".to_string(),
+            StorageClass::StandardIa => "STANDARD_IA".to_string(),
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a StorageClass {
+    fn into(self) -> &'a str {
+        match self {
+            StorageClass::ReducedRedundancy => &"REDUCED_REDUNDANCY",
+            StorageClass::Standard => &"STANDARD",
+            StorageClass::StandardIa => &"STANDARD_IA",
+            StorageClass::UnknownVariant(UnknownStorageClass { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for StorageClass {
+    fn from(name: &str) -> Self {
+        match name {
+            "REDUCED_REDUNDANCY" => StorageClass::ReducedRedundancy,
+            "STANDARD" => StorageClass::Standard,
+            "STANDARD_IA" => StorageClass::StandardIa,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for StorageClass {
+    fn from(name: String) -> Self {
+        match &*name {
+            "REDUCED_REDUNDANCY" => StorageClass::ReducedRedundancy,
+            "STANDARD" => StorageClass::Standard,
+            "STANDARD_IA" => StorageClass::StandardIa,
+            _ => StorageClass::UnknownVariant(UnknownStorageClass { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for StorageClass {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for StorageClass {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for StorageClass {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum Type {
+    AmazonCustomerByEmail,
+    CanonicalUser,
+    Group,
+    #[doc(hidden)]
+    UnknownVariant(UnknownType),
+}
+
+impl Default for Type {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for Type {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for Type {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for Type {
+    fn into(self) -> String {
+        match self {
+            Type::AmazonCustomerByEmail => "AmazonCustomerByEmail".to_string(),
+            Type::CanonicalUser => "CanonicalUser".to_string(),
+            Type::Group => "Group".to_string(),
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a Type {
+    fn into(self) -> &'a str {
+        match self {
+            Type::AmazonCustomerByEmail => &"AmazonCustomerByEmail",
+            Type::CanonicalUser => &"CanonicalUser",
+            Type::Group => &"Group",
+            Type::UnknownVariant(UnknownType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for Type {
+    fn from(name: &str) -> Self {
+        match name {
+            "AmazonCustomerByEmail" => Type::AmazonCustomerByEmail,
+            "CanonicalUser" => Type::CanonicalUser,
+            "Group" => Type::Group,
+            _ => Type::UnknownVariant(UnknownType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for Type {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AmazonCustomerByEmail" => Type::AmazonCustomerByEmail,
+            "CanonicalUser" => Type::CanonicalUser,
+            "Group" => Type::Group,
+            _ => Type::UnknownVariant(UnknownType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for Type {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for Type {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for Type {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Provides options to add an archive to a vault.</p>

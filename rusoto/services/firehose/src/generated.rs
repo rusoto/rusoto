@@ -80,6 +80,225 @@ pub struct CloudWatchLoggingOptions {
     pub log_stream_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownCompressionFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum CompressionFormat {
+    Gzip,
+    HadoopSnappy,
+    Snappy,
+    Uncompressed,
+    Zip,
+    #[doc(hidden)]
+    UnknownVariant(UnknownCompressionFormat),
+}
+
+impl Default for CompressionFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for CompressionFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for CompressionFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for CompressionFormat {
+    fn into(self) -> String {
+        match self {
+            CompressionFormat::Gzip => "GZIP".to_string(),
+            CompressionFormat::HadoopSnappy => "HADOOP_SNAPPY".to_string(),
+            CompressionFormat::Snappy => "Snappy".to_string(),
+            CompressionFormat::Uncompressed => "UNCOMPRESSED".to_string(),
+            CompressionFormat::Zip => "ZIP".to_string(),
+            CompressionFormat::UnknownVariant(UnknownCompressionFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a CompressionFormat {
+    fn into(self) -> &'a str {
+        match self {
+            CompressionFormat::Gzip => &"GZIP",
+            CompressionFormat::HadoopSnappy => &"HADOOP_SNAPPY",
+            CompressionFormat::Snappy => &"Snappy",
+            CompressionFormat::Uncompressed => &"UNCOMPRESSED",
+            CompressionFormat::Zip => &"ZIP",
+            CompressionFormat::UnknownVariant(UnknownCompressionFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for CompressionFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "GZIP" => CompressionFormat::Gzip,
+            "HADOOP_SNAPPY" => CompressionFormat::HadoopSnappy,
+            "Snappy" => CompressionFormat::Snappy,
+            "UNCOMPRESSED" => CompressionFormat::Uncompressed,
+            "ZIP" => CompressionFormat::Zip,
+            _ => CompressionFormat::UnknownVariant(UnknownCompressionFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for CompressionFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GZIP" => CompressionFormat::Gzip,
+            "HADOOP_SNAPPY" => CompressionFormat::HadoopSnappy,
+            "Snappy" => CompressionFormat::Snappy,
+            "UNCOMPRESSED" => CompressionFormat::Uncompressed,
+            "ZIP" => CompressionFormat::Zip,
+            _ => CompressionFormat::UnknownVariant(UnknownCompressionFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for CompressionFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for CompressionFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for CompressionFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContentEncoding {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContentEncoding {
+    Gzip,
+    None,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContentEncoding),
+}
+
+impl Default for ContentEncoding {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContentEncoding {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContentEncoding {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContentEncoding {
+    fn into(self) -> String {
+        match self {
+            ContentEncoding::Gzip => "GZIP".to_string(),
+            ContentEncoding::None => "NONE".to_string(),
+            ContentEncoding::UnknownVariant(UnknownContentEncoding { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContentEncoding {
+    fn into(self) -> &'a str {
+        match self {
+            ContentEncoding::Gzip => &"GZIP",
+            ContentEncoding::None => &"NONE",
+            ContentEncoding::UnknownVariant(UnknownContentEncoding { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContentEncoding {
+    fn from(name: &str) -> Self {
+        match name {
+            "GZIP" => ContentEncoding::Gzip,
+            "NONE" => ContentEncoding::None,
+            _ => ContentEncoding::UnknownVariant(UnknownContentEncoding {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContentEncoding {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GZIP" => ContentEncoding::Gzip,
+            "NONE" => ContentEncoding::None,
+            _ => ContentEncoding::UnknownVariant(UnknownContentEncoding { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContentEncoding {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ContentEncoding {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentEncoding {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes a <code>COPY</code> command for Amazon Redshift.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CopyCommand {
@@ -110,7 +329,7 @@ pub struct CreateDeliveryStreamInput {
     /// <p><p>The delivery stream type. This parameter can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis data stream as a source.</p> </li> </ul></p>
     #[serde(rename = "DeliveryStreamType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delivery_stream_type: Option<String>,
+    pub delivery_stream_type: Option<DeliveryStreamType>,
     /// <p>The destination in Amazon ES. You can specify only one destination.</p>
     #[serde(rename = "ElasticsearchDestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,10 +426,10 @@ pub struct DeliveryStreamDescription {
     pub delivery_stream_name: String,
     /// <p>The status of the delivery stream. If the status of a delivery stream is <code>CREATING_FAILED</code>, this status doesn't change, and you can't invoke <code>CreateDeliveryStream</code> again on it. However, you can invoke the <a>DeleteDeliveryStream</a> operation to delete it.</p>
     #[serde(rename = "DeliveryStreamStatus")]
-    pub delivery_stream_status: String,
+    pub delivery_stream_status: DeliveryStreamStatus,
     /// <p><p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis data stream as a source.</p> </li> </ul></p>
     #[serde(rename = "DeliveryStreamType")]
-    pub delivery_stream_type: String,
+    pub delivery_stream_type: DeliveryStreamType,
     /// <p>The destinations.</p>
     #[serde(rename = "Destinations")]
     pub destinations: Vec<DestinationDescription>,
@@ -249,11 +468,11 @@ pub struct DeliveryStreamEncryptionConfiguration {
     /// <p>Indicates the type of customer master key (CMK) that is used for encryption. The default setting is <code>AWS_OWNED_CMK</code>. For more information about CMKs, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">Customer Master Keys (CMKs)</a>.</p>
     #[serde(rename = "KeyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub key_type: Option<String>,
+    pub key_type: Option<KeyType>,
     /// <p>This is the server-side encryption (SSE) status for the delivery stream. For a full description of the different values of this status, see <a>StartDeliveryStreamEncryption</a> and <a>StopDeliveryStreamEncryption</a>. If this status is <code>ENABLING_FAILED</code> or <code>DISABLING_FAILED</code>, it is the status of the most recent attempt to enable or disable SSE, respectively.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DeliveryStreamEncryptionStatus>,
 }
 
 /// <p>Specifies the type and Amazon Resource Name (ARN) of the CMK to use for Server-Side Encryption (SSE). </p>
@@ -266,7 +485,540 @@ pub struct DeliveryStreamEncryptionConfigurationInput {
     pub key_arn: Option<String>,
     /// <p><p>Indicates the type of customer master key (CMK) to use for encryption. The default setting is <code>AWS<em>OWNED</em>CMK</code>. For more information about CMKs, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">Customer Master Keys (CMKs)</a>. When you invoke <a>CreateDeliveryStream</a> or <a>StartDeliveryStreamEncryption</a> with <code>KeyType</code> set to CUSTOMER<em>MANAGED</em>CMK, Kinesis Data Firehose invokes the Amazon KMS operation <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html">CreateGrant</a> to create a grant that allows the Kinesis Data Firehose service to use the customer managed CMK to perform encryption and decryption. Kinesis Data Firehose manages that grant. </p> <p>When you invoke <a>StartDeliveryStreamEncryption</a> to change the CMK for a delivery stream that is encrypted with a customer managed CMK, Kinesis Data Firehose schedules the grant it had on the old CMK for retirement.</p> <p>You can use a CMK of type CUSTOMER<em>MANAGED</em>CMK to encrypt up to 500 delivery streams. If a <a>CreateDeliveryStream</a> or <a>StartDeliveryStreamEncryption</a> operation exceeds this limit, Kinesis Data Firehose throws a <code>LimitExceededException</code>. </p> <important> <p>To encrypt your delivery stream, use symmetric CMKs. Kinesis Data Firehose doesn&#39;t support asymmetric CMKs. For information about symmetric and asymmetric CMKs, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html">About Symmetric and Asymmetric CMKs</a> in the AWS Key Management Service developer guide.</p> </important></p>
     #[serde(rename = "KeyType")]
-    pub key_type: String,
+    pub key_type: KeyType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryStreamEncryptionStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryStreamEncryptionStatus {
+    Disabled,
+    Disabling,
+    DisablingFailed,
+    Enabled,
+    Enabling,
+    EnablingFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryStreamEncryptionStatus),
+}
+
+impl Default for DeliveryStreamEncryptionStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryStreamEncryptionStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryStreamEncryptionStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryStreamEncryptionStatus {
+    fn into(self) -> String {
+        match self {
+            DeliveryStreamEncryptionStatus::Disabled => "DISABLED".to_string(),
+            DeliveryStreamEncryptionStatus::Disabling => "DISABLING".to_string(),
+            DeliveryStreamEncryptionStatus::DisablingFailed => "DISABLING_FAILED".to_string(),
+            DeliveryStreamEncryptionStatus::Enabled => "ENABLED".to_string(),
+            DeliveryStreamEncryptionStatus::Enabling => "ENABLING".to_string(),
+            DeliveryStreamEncryptionStatus::EnablingFailed => "ENABLING_FAILED".to_string(),
+            DeliveryStreamEncryptionStatus::UnknownVariant(
+                UnknownDeliveryStreamEncryptionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryStreamEncryptionStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryStreamEncryptionStatus::Disabled => &"DISABLED",
+            DeliveryStreamEncryptionStatus::Disabling => &"DISABLING",
+            DeliveryStreamEncryptionStatus::DisablingFailed => &"DISABLING_FAILED",
+            DeliveryStreamEncryptionStatus::Enabled => &"ENABLED",
+            DeliveryStreamEncryptionStatus::Enabling => &"ENABLING",
+            DeliveryStreamEncryptionStatus::EnablingFailed => &"ENABLING_FAILED",
+            DeliveryStreamEncryptionStatus::UnknownVariant(
+                UnknownDeliveryStreamEncryptionStatus { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliveryStreamEncryptionStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DISABLED" => DeliveryStreamEncryptionStatus::Disabled,
+            "DISABLING" => DeliveryStreamEncryptionStatus::Disabling,
+            "DISABLING_FAILED" => DeliveryStreamEncryptionStatus::DisablingFailed,
+            "ENABLED" => DeliveryStreamEncryptionStatus::Enabled,
+            "ENABLING" => DeliveryStreamEncryptionStatus::Enabling,
+            "ENABLING_FAILED" => DeliveryStreamEncryptionStatus::EnablingFailed,
+            _ => DeliveryStreamEncryptionStatus::UnknownVariant(
+                UnknownDeliveryStreamEncryptionStatus {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for DeliveryStreamEncryptionStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DISABLED" => DeliveryStreamEncryptionStatus::Disabled,
+            "DISABLING" => DeliveryStreamEncryptionStatus::Disabling,
+            "DISABLING_FAILED" => DeliveryStreamEncryptionStatus::DisablingFailed,
+            "ENABLED" => DeliveryStreamEncryptionStatus::Enabled,
+            "ENABLING" => DeliveryStreamEncryptionStatus::Enabling,
+            "ENABLING_FAILED" => DeliveryStreamEncryptionStatus::EnablingFailed,
+            _ => DeliveryStreamEncryptionStatus::UnknownVariant(
+                UnknownDeliveryStreamEncryptionStatus { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamEncryptionStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliveryStreamEncryptionStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryStreamEncryptionStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryStreamFailureType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryStreamFailureType {
+    CreateEniFailed,
+    CreateKmsGrantFailed,
+    DeleteEniFailed,
+    DisabledKmsKey,
+    EniAccessDenied,
+    InvalidKmsKey,
+    KmsAccessDenied,
+    KmsKeyNotFound,
+    KmsOptInRequired,
+    RetireKmsGrantFailed,
+    SecurityGroupAccessDenied,
+    SecurityGroupNotFound,
+    SubnetAccessDenied,
+    SubnetNotFound,
+    UnknownError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryStreamFailureType),
+}
+
+impl Default for DeliveryStreamFailureType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryStreamFailureType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryStreamFailureType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryStreamFailureType {
+    fn into(self) -> String {
+        match self {
+            DeliveryStreamFailureType::CreateEniFailed => "CREATE_ENI_FAILED".to_string(),
+            DeliveryStreamFailureType::CreateKmsGrantFailed => {
+                "CREATE_KMS_GRANT_FAILED".to_string()
+            }
+            DeliveryStreamFailureType::DeleteEniFailed => "DELETE_ENI_FAILED".to_string(),
+            DeliveryStreamFailureType::DisabledKmsKey => "DISABLED_KMS_KEY".to_string(),
+            DeliveryStreamFailureType::EniAccessDenied => "ENI_ACCESS_DENIED".to_string(),
+            DeliveryStreamFailureType::InvalidKmsKey => "INVALID_KMS_KEY".to_string(),
+            DeliveryStreamFailureType::KmsAccessDenied => "KMS_ACCESS_DENIED".to_string(),
+            DeliveryStreamFailureType::KmsKeyNotFound => "KMS_KEY_NOT_FOUND".to_string(),
+            DeliveryStreamFailureType::KmsOptInRequired => "KMS_OPT_IN_REQUIRED".to_string(),
+            DeliveryStreamFailureType::RetireKmsGrantFailed => {
+                "RETIRE_KMS_GRANT_FAILED".to_string()
+            }
+            DeliveryStreamFailureType::SecurityGroupAccessDenied => {
+                "SECURITY_GROUP_ACCESS_DENIED".to_string()
+            }
+            DeliveryStreamFailureType::SecurityGroupNotFound => {
+                "SECURITY_GROUP_NOT_FOUND".to_string()
+            }
+            DeliveryStreamFailureType::SubnetAccessDenied => "SUBNET_ACCESS_DENIED".to_string(),
+            DeliveryStreamFailureType::SubnetNotFound => "SUBNET_NOT_FOUND".to_string(),
+            DeliveryStreamFailureType::UnknownError => "UNKNOWN_ERROR".to_string(),
+            DeliveryStreamFailureType::UnknownVariant(UnknownDeliveryStreamFailureType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryStreamFailureType {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryStreamFailureType::CreateEniFailed => &"CREATE_ENI_FAILED",
+            DeliveryStreamFailureType::CreateKmsGrantFailed => &"CREATE_KMS_GRANT_FAILED",
+            DeliveryStreamFailureType::DeleteEniFailed => &"DELETE_ENI_FAILED",
+            DeliveryStreamFailureType::DisabledKmsKey => &"DISABLED_KMS_KEY",
+            DeliveryStreamFailureType::EniAccessDenied => &"ENI_ACCESS_DENIED",
+            DeliveryStreamFailureType::InvalidKmsKey => &"INVALID_KMS_KEY",
+            DeliveryStreamFailureType::KmsAccessDenied => &"KMS_ACCESS_DENIED",
+            DeliveryStreamFailureType::KmsKeyNotFound => &"KMS_KEY_NOT_FOUND",
+            DeliveryStreamFailureType::KmsOptInRequired => &"KMS_OPT_IN_REQUIRED",
+            DeliveryStreamFailureType::RetireKmsGrantFailed => &"RETIRE_KMS_GRANT_FAILED",
+            DeliveryStreamFailureType::SecurityGroupAccessDenied => &"SECURITY_GROUP_ACCESS_DENIED",
+            DeliveryStreamFailureType::SecurityGroupNotFound => &"SECURITY_GROUP_NOT_FOUND",
+            DeliveryStreamFailureType::SubnetAccessDenied => &"SUBNET_ACCESS_DENIED",
+            DeliveryStreamFailureType::SubnetNotFound => &"SUBNET_NOT_FOUND",
+            DeliveryStreamFailureType::UnknownError => &"UNKNOWN_ERROR",
+            DeliveryStreamFailureType::UnknownVariant(UnknownDeliveryStreamFailureType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliveryStreamFailureType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATE_ENI_FAILED" => DeliveryStreamFailureType::CreateEniFailed,
+            "CREATE_KMS_GRANT_FAILED" => DeliveryStreamFailureType::CreateKmsGrantFailed,
+            "DELETE_ENI_FAILED" => DeliveryStreamFailureType::DeleteEniFailed,
+            "DISABLED_KMS_KEY" => DeliveryStreamFailureType::DisabledKmsKey,
+            "ENI_ACCESS_DENIED" => DeliveryStreamFailureType::EniAccessDenied,
+            "INVALID_KMS_KEY" => DeliveryStreamFailureType::InvalidKmsKey,
+            "KMS_ACCESS_DENIED" => DeliveryStreamFailureType::KmsAccessDenied,
+            "KMS_KEY_NOT_FOUND" => DeliveryStreamFailureType::KmsKeyNotFound,
+            "KMS_OPT_IN_REQUIRED" => DeliveryStreamFailureType::KmsOptInRequired,
+            "RETIRE_KMS_GRANT_FAILED" => DeliveryStreamFailureType::RetireKmsGrantFailed,
+            "SECURITY_GROUP_ACCESS_DENIED" => DeliveryStreamFailureType::SecurityGroupAccessDenied,
+            "SECURITY_GROUP_NOT_FOUND" => DeliveryStreamFailureType::SecurityGroupNotFound,
+            "SUBNET_ACCESS_DENIED" => DeliveryStreamFailureType::SubnetAccessDenied,
+            "SUBNET_NOT_FOUND" => DeliveryStreamFailureType::SubnetNotFound,
+            "UNKNOWN_ERROR" => DeliveryStreamFailureType::UnknownError,
+            _ => DeliveryStreamFailureType::UnknownVariant(UnknownDeliveryStreamFailureType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliveryStreamFailureType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATE_ENI_FAILED" => DeliveryStreamFailureType::CreateEniFailed,
+            "CREATE_KMS_GRANT_FAILED" => DeliveryStreamFailureType::CreateKmsGrantFailed,
+            "DELETE_ENI_FAILED" => DeliveryStreamFailureType::DeleteEniFailed,
+            "DISABLED_KMS_KEY" => DeliveryStreamFailureType::DisabledKmsKey,
+            "ENI_ACCESS_DENIED" => DeliveryStreamFailureType::EniAccessDenied,
+            "INVALID_KMS_KEY" => DeliveryStreamFailureType::InvalidKmsKey,
+            "KMS_ACCESS_DENIED" => DeliveryStreamFailureType::KmsAccessDenied,
+            "KMS_KEY_NOT_FOUND" => DeliveryStreamFailureType::KmsKeyNotFound,
+            "KMS_OPT_IN_REQUIRED" => DeliveryStreamFailureType::KmsOptInRequired,
+            "RETIRE_KMS_GRANT_FAILED" => DeliveryStreamFailureType::RetireKmsGrantFailed,
+            "SECURITY_GROUP_ACCESS_DENIED" => DeliveryStreamFailureType::SecurityGroupAccessDenied,
+            "SECURITY_GROUP_NOT_FOUND" => DeliveryStreamFailureType::SecurityGroupNotFound,
+            "SUBNET_ACCESS_DENIED" => DeliveryStreamFailureType::SubnetAccessDenied,
+            "SUBNET_NOT_FOUND" => DeliveryStreamFailureType::SubnetNotFound,
+            "UNKNOWN_ERROR" => DeliveryStreamFailureType::UnknownError,
+            _ => {
+                DeliveryStreamFailureType::UnknownVariant(UnknownDeliveryStreamFailureType { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamFailureType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliveryStreamFailureType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryStreamFailureType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryStreamStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryStreamStatus {
+    Active,
+    Creating,
+    CreatingFailed,
+    Deleting,
+    DeletingFailed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryStreamStatus),
+}
+
+impl Default for DeliveryStreamStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryStreamStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryStreamStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryStreamStatus {
+    fn into(self) -> String {
+        match self {
+            DeliveryStreamStatus::Active => "ACTIVE".to_string(),
+            DeliveryStreamStatus::Creating => "CREATING".to_string(),
+            DeliveryStreamStatus::CreatingFailed => "CREATING_FAILED".to_string(),
+            DeliveryStreamStatus::Deleting => "DELETING".to_string(),
+            DeliveryStreamStatus::DeletingFailed => "DELETING_FAILED".to_string(),
+            DeliveryStreamStatus::UnknownVariant(UnknownDeliveryStreamStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryStreamStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryStreamStatus::Active => &"ACTIVE",
+            DeliveryStreamStatus::Creating => &"CREATING",
+            DeliveryStreamStatus::CreatingFailed => &"CREATING_FAILED",
+            DeliveryStreamStatus::Deleting => &"DELETING",
+            DeliveryStreamStatus::DeletingFailed => &"DELETING_FAILED",
+            DeliveryStreamStatus::UnknownVariant(UnknownDeliveryStreamStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for DeliveryStreamStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DeliveryStreamStatus::Active,
+            "CREATING" => DeliveryStreamStatus::Creating,
+            "CREATING_FAILED" => DeliveryStreamStatus::CreatingFailed,
+            "DELETING" => DeliveryStreamStatus::Deleting,
+            "DELETING_FAILED" => DeliveryStreamStatus::DeletingFailed,
+            _ => DeliveryStreamStatus::UnknownVariant(UnknownDeliveryStreamStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliveryStreamStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DeliveryStreamStatus::Active,
+            "CREATING" => DeliveryStreamStatus::Creating,
+            "CREATING_FAILED" => DeliveryStreamStatus::CreatingFailed,
+            "DELETING" => DeliveryStreamStatus::Deleting,
+            "DELETING_FAILED" => DeliveryStreamStatus::DeletingFailed,
+            _ => DeliveryStreamStatus::UnknownVariant(UnknownDeliveryStreamStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DeliveryStreamStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryStreamStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDeliveryStreamType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DeliveryStreamType {
+    DirectPut,
+    KinesisStreamAsSource,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDeliveryStreamType),
+}
+
+impl Default for DeliveryStreamType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DeliveryStreamType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DeliveryStreamType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DeliveryStreamType {
+    fn into(self) -> String {
+        match self {
+            DeliveryStreamType::DirectPut => "DirectPut".to_string(),
+            DeliveryStreamType::KinesisStreamAsSource => "KinesisStreamAsSource".to_string(),
+            DeliveryStreamType::UnknownVariant(UnknownDeliveryStreamType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DeliveryStreamType {
+    fn into(self) -> &'a str {
+        match self {
+            DeliveryStreamType::DirectPut => &"DirectPut",
+            DeliveryStreamType::KinesisStreamAsSource => &"KinesisStreamAsSource",
+            DeliveryStreamType::UnknownVariant(UnknownDeliveryStreamType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DeliveryStreamType {
+    fn from(name: &str) -> Self {
+        match name {
+            "DirectPut" => DeliveryStreamType::DirectPut,
+            "KinesisStreamAsSource" => DeliveryStreamType::KinesisStreamAsSource,
+            _ => DeliveryStreamType::UnknownVariant(UnknownDeliveryStreamType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DeliveryStreamType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DirectPut" => DeliveryStreamType::DirectPut,
+            "KinesisStreamAsSource" => DeliveryStreamType::KinesisStreamAsSource,
+            _ => DeliveryStreamType::UnknownVariant(UnknownDeliveryStreamType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DeliveryStreamType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for DeliveryStreamType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DeliveryStreamType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -378,7 +1130,7 @@ pub struct ElasticsearchDestinationConfiguration {
     /// <p>The Elasticsearch index rotation period. Index rotation appends a timestamp to the <code>IndexName</code> to facilitate the expiration of old data. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation">Index Rotation for the Amazon ES Destination</a>. The default value is <code>OneDay</code>.</p>
     #[serde(rename = "IndexRotationPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_rotation_period: Option<String>,
+    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
     /// <p>The data processing configuration.</p>
     #[serde(rename = "ProcessingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -393,7 +1145,7 @@ pub struct ElasticsearchDestinationConfiguration {
     /// <p>Defines how documents should be delivered to Amazon S3. When it is set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any documents that could not be indexed to the configured Amazon S3 destination, with <code>elasticsearch-failed/</code> appended to the key prefix. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents with <code>elasticsearch-failed/</code> appended to the prefix. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-s3-backup">Amazon S3 Backup for the Amazon ES Destination</a>. Default value is <code>FailedDocumentsOnly</code>.</p> <p>You can't change this backup mode after you create the delivery stream. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<ElasticsearchS3BackupMode>,
     /// <p>The configuration for the backup Amazon S3 location.</p>
     #[serde(rename = "S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
@@ -434,7 +1186,7 @@ pub struct ElasticsearchDestinationDescription {
     /// <p>The Elasticsearch index rotation period</p>
     #[serde(rename = "IndexRotationPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_rotation_period: Option<String>,
+    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
     /// <p>The data processing configuration.</p>
     #[serde(rename = "ProcessingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -450,7 +1202,7 @@ pub struct ElasticsearchDestinationDescription {
     /// <p>The Amazon S3 backup mode.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<ElasticsearchS3BackupMode>,
     /// <p>The Amazon S3 destination.</p>
     #[serde(rename = "S3DestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -492,7 +1244,7 @@ pub struct ElasticsearchDestinationUpdate {
     /// <p>The Elasticsearch index rotation period. Index rotation appends a timestamp to <code>IndexName</code> to facilitate the expiration of old data. For more information, see <a href="https://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation">Index Rotation for the Amazon ES Destination</a>. Default value is <code>OneDay</code>.</p>
     #[serde(rename = "IndexRotationPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub index_rotation_period: Option<String>,
+    pub index_rotation_period: Option<ElasticsearchIndexRotationPeriod>,
     /// <p>The data processing configuration.</p>
     #[serde(rename = "ProcessingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -515,6 +1267,129 @@ pub struct ElasticsearchDestinationUpdate {
     pub type_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownElasticsearchIndexRotationPeriod {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ElasticsearchIndexRotationPeriod {
+    NoRotation,
+    OneDay,
+    OneHour,
+    OneMonth,
+    OneWeek,
+    #[doc(hidden)]
+    UnknownVariant(UnknownElasticsearchIndexRotationPeriod),
+}
+
+impl Default for ElasticsearchIndexRotationPeriod {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ElasticsearchIndexRotationPeriod {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ElasticsearchIndexRotationPeriod {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ElasticsearchIndexRotationPeriod {
+    fn into(self) -> String {
+        match self {
+            ElasticsearchIndexRotationPeriod::NoRotation => "NoRotation".to_string(),
+            ElasticsearchIndexRotationPeriod::OneDay => "OneDay".to_string(),
+            ElasticsearchIndexRotationPeriod::OneHour => "OneHour".to_string(),
+            ElasticsearchIndexRotationPeriod::OneMonth => "OneMonth".to_string(),
+            ElasticsearchIndexRotationPeriod::OneWeek => "OneWeek".to_string(),
+            ElasticsearchIndexRotationPeriod::UnknownVariant(
+                UnknownElasticsearchIndexRotationPeriod { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ElasticsearchIndexRotationPeriod {
+    fn into(self) -> &'a str {
+        match self {
+            ElasticsearchIndexRotationPeriod::NoRotation => &"NoRotation",
+            ElasticsearchIndexRotationPeriod::OneDay => &"OneDay",
+            ElasticsearchIndexRotationPeriod::OneHour => &"OneHour",
+            ElasticsearchIndexRotationPeriod::OneMonth => &"OneMonth",
+            ElasticsearchIndexRotationPeriod::OneWeek => &"OneWeek",
+            ElasticsearchIndexRotationPeriod::UnknownVariant(
+                UnknownElasticsearchIndexRotationPeriod { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for ElasticsearchIndexRotationPeriod {
+    fn from(name: &str) -> Self {
+        match name {
+            "NoRotation" => ElasticsearchIndexRotationPeriod::NoRotation,
+            "OneDay" => ElasticsearchIndexRotationPeriod::OneDay,
+            "OneHour" => ElasticsearchIndexRotationPeriod::OneHour,
+            "OneMonth" => ElasticsearchIndexRotationPeriod::OneMonth,
+            "OneWeek" => ElasticsearchIndexRotationPeriod::OneWeek,
+            _ => ElasticsearchIndexRotationPeriod::UnknownVariant(
+                UnknownElasticsearchIndexRotationPeriod {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for ElasticsearchIndexRotationPeriod {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NoRotation" => ElasticsearchIndexRotationPeriod::NoRotation,
+            "OneDay" => ElasticsearchIndexRotationPeriod::OneDay,
+            "OneHour" => ElasticsearchIndexRotationPeriod::OneHour,
+            "OneMonth" => ElasticsearchIndexRotationPeriod::OneMonth,
+            "OneWeek" => ElasticsearchIndexRotationPeriod::OneWeek,
+            _ => ElasticsearchIndexRotationPeriod::UnknownVariant(
+                UnknownElasticsearchIndexRotationPeriod { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ElasticsearchIndexRotationPeriod {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ElasticsearchIndexRotationPeriod {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ElasticsearchIndexRotationPeriod {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Configures retry behavior in case Kinesis Data Firehose is unable to deliver documents to Amazon ES.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ElasticsearchRetryOptions {
@@ -522,6 +1397,112 @@ pub struct ElasticsearchRetryOptions {
     #[serde(rename = "DurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_in_seconds: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownElasticsearchS3BackupMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ElasticsearchS3BackupMode {
+    AllDocuments,
+    FailedDocumentsOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownElasticsearchS3BackupMode),
+}
+
+impl Default for ElasticsearchS3BackupMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ElasticsearchS3BackupMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ElasticsearchS3BackupMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ElasticsearchS3BackupMode {
+    fn into(self) -> String {
+        match self {
+            ElasticsearchS3BackupMode::AllDocuments => "AllDocuments".to_string(),
+            ElasticsearchS3BackupMode::FailedDocumentsOnly => "FailedDocumentsOnly".to_string(),
+            ElasticsearchS3BackupMode::UnknownVariant(UnknownElasticsearchS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ElasticsearchS3BackupMode {
+    fn into(self) -> &'a str {
+        match self {
+            ElasticsearchS3BackupMode::AllDocuments => &"AllDocuments",
+            ElasticsearchS3BackupMode::FailedDocumentsOnly => &"FailedDocumentsOnly",
+            ElasticsearchS3BackupMode::UnknownVariant(UnknownElasticsearchS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ElasticsearchS3BackupMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllDocuments" => ElasticsearchS3BackupMode::AllDocuments,
+            "FailedDocumentsOnly" => ElasticsearchS3BackupMode::FailedDocumentsOnly,
+            _ => ElasticsearchS3BackupMode::UnknownVariant(UnknownElasticsearchS3BackupMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ElasticsearchS3BackupMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllDocuments" => ElasticsearchS3BackupMode::AllDocuments,
+            "FailedDocumentsOnly" => ElasticsearchS3BackupMode::FailedDocumentsOnly,
+            _ => {
+                ElasticsearchS3BackupMode::UnknownVariant(UnknownElasticsearchS3BackupMode { name })
+            }
+        }
+    }
+}
+
+impl ::std::str::FromStr for ElasticsearchS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ElasticsearchS3BackupMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ElasticsearchS3BackupMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes the encryption for a destination in Amazon S3.</p>
@@ -534,7 +1515,7 @@ pub struct EncryptionConfiguration {
     /// <p>Specifically override existing encryption information to ensure that no encryption is used.</p>
     #[serde(rename = "NoEncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub no_encryption_config: Option<String>,
+    pub no_encryption_config: Option<NoEncryptionConfig>,
 }
 
 /// <p>Describes the configuration of a destination in Amazon S3.</p>
@@ -555,7 +1536,7 @@ pub struct ExtendedS3DestinationConfiguration {
     /// <p>The compression format. If no value is specified, the default is UNCOMPRESSED.</p>
     #[serde(rename = "CompressionFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_format: Option<String>,
+    pub compression_format: Option<CompressionFormat>,
     /// <p>The serializer, deserializer, and schema for converting data from the JSON format to the Parquet or ORC format before writing it to Amazon S3.</p>
     #[serde(rename = "DataFormatConversionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -586,7 +1567,7 @@ pub struct ExtendedS3DestinationConfiguration {
     /// <p>The Amazon S3 backup mode. After you create a delivery stream, you can update it to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<S3BackupMode>,
 }
 
 /// <p>Describes a destination in Amazon S3.</p>
@@ -605,7 +1586,7 @@ pub struct ExtendedS3DestinationDescription {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     /// <p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p>
     #[serde(rename = "CompressionFormat")]
-    pub compression_format: String,
+    pub compression_format: CompressionFormat,
     /// <p>The serializer, deserializer, and schema for converting data from the JSON format to the Parquet or ORC format before writing it to Amazon S3.</p>
     #[serde(rename = "DataFormatConversionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -635,7 +1616,7 @@ pub struct ExtendedS3DestinationDescription {
     /// <p>The Amazon S3 backup mode.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<S3BackupMode>,
 }
 
 /// <p>Describes an update for a destination in Amazon S3.</p>
@@ -657,7 +1638,7 @@ pub struct ExtendedS3DestinationUpdate {
     /// <p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>. </p>
     #[serde(rename = "CompressionFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_format: Option<String>,
+    pub compression_format: Option<CompressionFormat>,
     /// <p>The serializer, deserializer, and schema for converting data from the JSON format to the Parquet or ORC format before writing it to Amazon S3.</p>
     #[serde(rename = "DataFormatConversionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -685,7 +1666,7 @@ pub struct ExtendedS3DestinationUpdate {
     /// <p>You can update a delivery stream to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<S3BackupMode>,
     /// <p>The Amazon S3 destination for backup.</p>
     #[serde(rename = "S3BackupUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -701,7 +1682,107 @@ pub struct FailureDescription {
     pub details: String,
     /// <p>The type of error that caused the failure.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: DeliveryStreamFailureType,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHECEndpointType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HECEndpointType {
+    Event,
+    Raw,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHECEndpointType),
+}
+
+impl Default for HECEndpointType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HECEndpointType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HECEndpointType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HECEndpointType {
+    fn into(self) -> String {
+        match self {
+            HECEndpointType::Event => "Event".to_string(),
+            HECEndpointType::Raw => "Raw".to_string(),
+            HECEndpointType::UnknownVariant(UnknownHECEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HECEndpointType {
+    fn into(self) -> &'a str {
+        match self {
+            HECEndpointType::Event => &"Event",
+            HECEndpointType::Raw => &"Raw",
+            HECEndpointType::UnknownVariant(UnknownHECEndpointType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for HECEndpointType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Event" => HECEndpointType::Event,
+            "Raw" => HECEndpointType::Raw,
+            _ => HECEndpointType::UnknownVariant(UnknownHECEndpointType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HECEndpointType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Event" => HECEndpointType::Event,
+            "Raw" => HECEndpointType::Raw,
+            _ => HECEndpointType::UnknownVariant(UnknownHECEndpointType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HECEndpointType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HECEndpointType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HECEndpointType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The native Hive / HCatalog JsonSerDe. Used by Kinesis Data Firehose for deserializing data, which means converting it from the JSON format in preparation for serializing it to the Parquet or ORC format. This is one of two deserializers you can choose, depending on which one offers the functionality you need. The other option is the OpenX SerDe.</p>
@@ -800,7 +1881,7 @@ pub struct HttpEndpointDestinationConfiguration {
     /// <p>Describes the S3 bucket backup options for the data that Kinesis Data Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<HttpEndpointS3BackupMode>,
     #[serde(rename = "S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
 }
@@ -838,7 +1919,7 @@ pub struct HttpEndpointDestinationDescription {
     /// <p>Describes the S3 bucket backup options for the data that Kinesis Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<HttpEndpointS3BackupMode>,
     #[serde(rename = "S3DestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_destination_description: Option<S3DestinationDescription>,
@@ -877,7 +1958,7 @@ pub struct HttpEndpointDestinationUpdate {
     /// <p>Describes the S3 bucket backup options for the data that Kinesis Firehose delivers to the HTTP endpoint destination. You can back up all documents (<code>AllData</code>) or only the documents that Kinesis Data Firehose could not deliver to the specified HTTP endpoint destination (<code>FailedDataOnly</code>).</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<HttpEndpointS3BackupMode>,
     #[serde(rename = "S3Update")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_update: Option<S3DestinationUpdate>,
@@ -893,7 +1974,7 @@ pub struct HttpEndpointRequestConfiguration {
     /// <p>Kinesis Data Firehose uses the content encoding to compress the body of a request before sending the request to the destination. For more information, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding">Content-Encoding</a> in MDN Web Docs, the official Mozilla documentation.</p>
     #[serde(rename = "ContentEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_encoding: Option<String>,
+    pub content_encoding: Option<ContentEncoding>,
 }
 
 /// <p>Describes the retry behavior in case Kinesis Data Firehose is unable to deliver data to the specified HTTP endpoint destination, or if it doesn't receive a valid acknowledgment of receipt from the specified HTTP endpoint destination.</p>
@@ -903,6 +1984,110 @@ pub struct HttpEndpointRetryOptions {
     #[serde(rename = "DurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_in_seconds: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownHttpEndpointS3BackupMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum HttpEndpointS3BackupMode {
+    AllData,
+    FailedDataOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownHttpEndpointS3BackupMode),
+}
+
+impl Default for HttpEndpointS3BackupMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for HttpEndpointS3BackupMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for HttpEndpointS3BackupMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for HttpEndpointS3BackupMode {
+    fn into(self) -> String {
+        match self {
+            HttpEndpointS3BackupMode::AllData => "AllData".to_string(),
+            HttpEndpointS3BackupMode::FailedDataOnly => "FailedDataOnly".to_string(),
+            HttpEndpointS3BackupMode::UnknownVariant(UnknownHttpEndpointS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a HttpEndpointS3BackupMode {
+    fn into(self) -> &'a str {
+        match self {
+            HttpEndpointS3BackupMode::AllData => &"AllData",
+            HttpEndpointS3BackupMode::FailedDataOnly => &"FailedDataOnly",
+            HttpEndpointS3BackupMode::UnknownVariant(UnknownHttpEndpointS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for HttpEndpointS3BackupMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllData" => HttpEndpointS3BackupMode::AllData,
+            "FailedDataOnly" => HttpEndpointS3BackupMode::FailedDataOnly,
+            _ => HttpEndpointS3BackupMode::UnknownVariant(UnknownHttpEndpointS3BackupMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for HttpEndpointS3BackupMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllData" => HttpEndpointS3BackupMode::AllData,
+            "FailedDataOnly" => HttpEndpointS3BackupMode::FailedDataOnly,
+            _ => HttpEndpointS3BackupMode::UnknownVariant(UnknownHttpEndpointS3BackupMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for HttpEndpointS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for HttpEndpointS3BackupMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for HttpEndpointS3BackupMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Specifies the deserializer you want to use to convert the format of the input data. This parameter is required if <code>Enabled</code> is set to true.</p>
@@ -920,6 +2105,106 @@ pub struct KMSEncryptionConfig {
     /// <p>The Amazon Resource Name (ARN) of the encryption key. Must belong to the same AWS Region as the destination Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "AWSKMSKeyARN")]
     pub awskms_key_arn: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownKeyType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum KeyType {
+    AwsOwnedCmk,
+    CustomerManagedCmk,
+    #[doc(hidden)]
+    UnknownVariant(UnknownKeyType),
+}
+
+impl Default for KeyType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for KeyType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for KeyType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for KeyType {
+    fn into(self) -> String {
+        match self {
+            KeyType::AwsOwnedCmk => "AWS_OWNED_CMK".to_string(),
+            KeyType::CustomerManagedCmk => "CUSTOMER_MANAGED_CMK".to_string(),
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a KeyType {
+    fn into(self) -> &'a str {
+        match self {
+            KeyType::AwsOwnedCmk => &"AWS_OWNED_CMK",
+            KeyType::CustomerManagedCmk => &"CUSTOMER_MANAGED_CMK",
+            KeyType::UnknownVariant(UnknownKeyType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for KeyType {
+    fn from(name: &str) -> Self {
+        match name {
+            "AWS_OWNED_CMK" => KeyType::AwsOwnedCmk,
+            "CUSTOMER_MANAGED_CMK" => KeyType::CustomerManagedCmk,
+            _ => KeyType::UnknownVariant(UnknownKeyType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for KeyType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AWS_OWNED_CMK" => KeyType::AwsOwnedCmk,
+            "CUSTOMER_MANAGED_CMK" => KeyType::CustomerManagedCmk,
+            _ => KeyType::UnknownVariant(UnknownKeyType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for KeyType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for KeyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for KeyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The stream and role Amazon Resource Names (ARNs) for a Kinesis data stream used as the source for a delivery stream.</p>
@@ -958,7 +2243,7 @@ pub struct ListDeliveryStreamsInput {
     /// <p>The delivery stream type. This can be one of the following values:</p> <ul> <li> <p> <code>DirectPut</code>: Provider applications access the delivery stream directly.</p> </li> <li> <p> <code>KinesisStreamAsSource</code>: The delivery stream uses a Kinesis data stream as a source.</p> </li> </ul> <p>This parameter is optional. If this parameter is omitted, delivery streams of all types are returned.</p>
     #[serde(rename = "DeliveryStreamType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delivery_stream_type: Option<String>,
+    pub delivery_stream_type: Option<DeliveryStreamType>,
     /// <p>The list of delivery streams returned by this call to <code>ListDeliveryStreams</code> will start with the delivery stream whose name comes alphabetically immediately after the name you specify in <code>ExclusiveStartDeliveryStreamName</code>.</p>
     #[serde(rename = "ExclusiveStartDeliveryStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1007,6 +2292,105 @@ pub struct ListTagsForDeliveryStreamOutput {
     pub tags: Vec<Tag>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownNoEncryptionConfig {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum NoEncryptionConfig {
+    NoEncryption,
+    #[doc(hidden)]
+    UnknownVariant(UnknownNoEncryptionConfig),
+}
+
+impl Default for NoEncryptionConfig {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for NoEncryptionConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for NoEncryptionConfig {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for NoEncryptionConfig {
+    fn into(self) -> String {
+        match self {
+            NoEncryptionConfig::NoEncryption => "NoEncryption".to_string(),
+            NoEncryptionConfig::UnknownVariant(UnknownNoEncryptionConfig { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a NoEncryptionConfig {
+    fn into(self) -> &'a str {
+        match self {
+            NoEncryptionConfig::NoEncryption => &"NoEncryption",
+            NoEncryptionConfig::UnknownVariant(UnknownNoEncryptionConfig { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for NoEncryptionConfig {
+    fn from(name: &str) -> Self {
+        match name {
+            "NoEncryption" => NoEncryptionConfig::NoEncryption,
+            _ => NoEncryptionConfig::UnknownVariant(UnknownNoEncryptionConfig {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for NoEncryptionConfig {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NoEncryption" => NoEncryptionConfig::NoEncryption,
+            _ => NoEncryptionConfig::UnknownVariant(UnknownNoEncryptionConfig { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for NoEncryptionConfig {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for NoEncryptionConfig {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for NoEncryptionConfig {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The OpenX SerDe. Used by Kinesis Data Firehose for deserializing data, which means converting it from the JSON format in preparation for serializing it to the Parquet or ORC format. This is one of two deserializers you can choose, depending on which one offers the functionality you need. The other option is the native Hive / HCatalog JsonSerDe.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OpenXJsonSerDe {
@@ -1022,6 +2406,215 @@ pub struct OpenXJsonSerDe {
     #[serde(rename = "ConvertDotsInJsonKeysToUnderscores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub convert_dots_in_json_keys_to_underscores: Option<bool>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrcCompression {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrcCompression {
+    None,
+    Snappy,
+    Zlib,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrcCompression),
+}
+
+impl Default for OrcCompression {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrcCompression {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrcCompression {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrcCompression {
+    fn into(self) -> String {
+        match self {
+            OrcCompression::None => "NONE".to_string(),
+            OrcCompression::Snappy => "SNAPPY".to_string(),
+            OrcCompression::Zlib => "ZLIB".to_string(),
+            OrcCompression::UnknownVariant(UnknownOrcCompression { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrcCompression {
+    fn into(self) -> &'a str {
+        match self {
+            OrcCompression::None => &"NONE",
+            OrcCompression::Snappy => &"SNAPPY",
+            OrcCompression::Zlib => &"ZLIB",
+            OrcCompression::UnknownVariant(UnknownOrcCompression { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrcCompression {
+    fn from(name: &str) -> Self {
+        match name {
+            "NONE" => OrcCompression::None,
+            "SNAPPY" => OrcCompression::Snappy,
+            "ZLIB" => OrcCompression::Zlib,
+            _ => OrcCompression::UnknownVariant(UnknownOrcCompression {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrcCompression {
+    fn from(name: String) -> Self {
+        match &*name {
+            "NONE" => OrcCompression::None,
+            "SNAPPY" => OrcCompression::Snappy,
+            "ZLIB" => OrcCompression::Zlib,
+            _ => OrcCompression::UnknownVariant(UnknownOrcCompression { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrcCompression {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrcCompression {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrcCompression {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrcFormatVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrcFormatVersion {
+    V011,
+    V012,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrcFormatVersion),
+}
+
+impl Default for OrcFormatVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrcFormatVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrcFormatVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrcFormatVersion {
+    fn into(self) -> String {
+        match self {
+            OrcFormatVersion::V011 => "V0_11".to_string(),
+            OrcFormatVersion::V012 => "V0_12".to_string(),
+            OrcFormatVersion::UnknownVariant(UnknownOrcFormatVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrcFormatVersion {
+    fn into(self) -> &'a str {
+        match self {
+            OrcFormatVersion::V011 => &"V0_11",
+            OrcFormatVersion::V012 => &"V0_12",
+            OrcFormatVersion::UnknownVariant(UnknownOrcFormatVersion { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for OrcFormatVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "V0_11" => OrcFormatVersion::V011,
+            "V0_12" => OrcFormatVersion::V012,
+            _ => OrcFormatVersion::UnknownVariant(UnknownOrcFormatVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrcFormatVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V0_11" => OrcFormatVersion::V011,
+            "V0_12" => OrcFormatVersion::V012,
+            _ => OrcFormatVersion::UnknownVariant(UnknownOrcFormatVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrcFormatVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrcFormatVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for OrcFormatVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A serializer to use for converting data to the ORC format before storing it in Amazon S3. For more information, see <a href="https://orc.apache.org/docs/">Apache ORC</a>.</p>
@@ -1042,7 +2635,7 @@ pub struct OrcSerDe {
     /// <p>The compression code to use over data blocks. The default is <code>SNAPPY</code>.</p>
     #[serde(rename = "Compression")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression: Option<String>,
+    pub compression: Option<OrcCompression>,
     /// <p>Represents the fraction of the total number of non-null rows. To turn off dictionary encoding, set this fraction to a number that is less than the number of distinct keys in a dictionary. To always use dictionary encoding, set this threshold to 1.</p>
     #[serde(rename = "DictionaryKeyThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1054,7 +2647,7 @@ pub struct OrcSerDe {
     /// <p>The version of the file to write. The possible values are <code>V0_11</code> and <code>V0_12</code>. The default is <code>V0_12</code>.</p>
     #[serde(rename = "FormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub format_version: Option<String>,
+    pub format_version: Option<OrcFormatVersion>,
     /// <p>A number between 0 and 1 that defines the tolerance for block padding as a decimal fraction of stripe size. The default value is 0.05, which means 5 percent of stripe size.</p> <p>For the default values of 64 MiB ORC stripes and 256 MiB HDFS blocks, the default block padding tolerance of 5 percent reserves a maximum of 3.2 MiB for padding within the 256 MiB block. In such a case, if the available size within the block is more than 3.2 MiB, a new, smaller stripe is inserted to fit within that space. This ensures that no stripe crosses block boundaries and causes remote reads within a node-local task.</p> <p>Kinesis Data Firehose ignores this parameter when <a>OrcSerDe$EnablePadding</a> is <code>false</code>.</p>
     #[serde(rename = "PaddingTolerance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1078,6 +2671,115 @@ pub struct OutputFormatConfiguration {
     pub serializer: Option<Serializer>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParquetCompression {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParquetCompression {
+    Gzip,
+    Snappy,
+    Uncompressed,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParquetCompression),
+}
+
+impl Default for ParquetCompression {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParquetCompression {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParquetCompression {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParquetCompression {
+    fn into(self) -> String {
+        match self {
+            ParquetCompression::Gzip => "GZIP".to_string(),
+            ParquetCompression::Snappy => "SNAPPY".to_string(),
+            ParquetCompression::Uncompressed => "UNCOMPRESSED".to_string(),
+            ParquetCompression::UnknownVariant(UnknownParquetCompression { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParquetCompression {
+    fn into(self) -> &'a str {
+        match self {
+            ParquetCompression::Gzip => &"GZIP",
+            ParquetCompression::Snappy => &"SNAPPY",
+            ParquetCompression::Uncompressed => &"UNCOMPRESSED",
+            ParquetCompression::UnknownVariant(UnknownParquetCompression { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ParquetCompression {
+    fn from(name: &str) -> Self {
+        match name {
+            "GZIP" => ParquetCompression::Gzip,
+            "SNAPPY" => ParquetCompression::Snappy,
+            "UNCOMPRESSED" => ParquetCompression::Uncompressed,
+            _ => ParquetCompression::UnknownVariant(UnknownParquetCompression {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParquetCompression {
+    fn from(name: String) -> Self {
+        match &*name {
+            "GZIP" => ParquetCompression::Gzip,
+            "SNAPPY" => ParquetCompression::Snappy,
+            "UNCOMPRESSED" => ParquetCompression::Uncompressed,
+            _ => ParquetCompression::UnknownVariant(UnknownParquetCompression { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParquetCompression {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParquetCompression {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParquetCompression {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A serializer to use for converting data to the Parquet format before storing it in Amazon S3. For more information, see <a href="https://parquet.apache.org/documentation/latest/">Apache Parquet</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ParquetSerDe {
@@ -1088,7 +2790,7 @@ pub struct ParquetSerDe {
     /// <p>The compression code to use over data blocks. The possible values are <code>UNCOMPRESSED</code>, <code>SNAPPY</code>, and <code>GZIP</code>, with the default being <code>SNAPPY</code>. Use <code>SNAPPY</code> for higher decompression speed. Use <code>GZIP</code> if the compression ratio is more important than speed.</p>
     #[serde(rename = "Compression")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression: Option<String>,
+    pub compression: Option<ParquetCompression>,
     /// <p>Indicates whether to enable dictionary compression.</p>
     #[serde(rename = "EnableDictionaryCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,7 +2806,111 @@ pub struct ParquetSerDe {
     /// <p>Indicates the version of row format to output. The possible values are <code>V1</code> and <code>V2</code>. The default is <code>V1</code>.</p>
     #[serde(rename = "WriterVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub writer_version: Option<String>,
+    pub writer_version: Option<ParquetWriterVersion>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownParquetWriterVersion {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ParquetWriterVersion {
+    V1,
+    V2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownParquetWriterVersion),
+}
+
+impl Default for ParquetWriterVersion {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ParquetWriterVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ParquetWriterVersion {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ParquetWriterVersion {
+    fn into(self) -> String {
+        match self {
+            ParquetWriterVersion::V1 => "V1".to_string(),
+            ParquetWriterVersion::V2 => "V2".to_string(),
+            ParquetWriterVersion::UnknownVariant(UnknownParquetWriterVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ParquetWriterVersion {
+    fn into(self) -> &'a str {
+        match self {
+            ParquetWriterVersion::V1 => &"V1",
+            ParquetWriterVersion::V2 => &"V2",
+            ParquetWriterVersion::UnknownVariant(UnknownParquetWriterVersion {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ParquetWriterVersion {
+    fn from(name: &str) -> Self {
+        match name {
+            "V1" => ParquetWriterVersion::V1,
+            "V2" => ParquetWriterVersion::V2,
+            _ => ParquetWriterVersion::UnknownVariant(UnknownParquetWriterVersion {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ParquetWriterVersion {
+    fn from(name: String) -> Self {
+        match &*name {
+            "V1" => ParquetWriterVersion::V1,
+            "V2" => ParquetWriterVersion::V2,
+            _ => ParquetWriterVersion::UnknownVariant(UnknownParquetWriterVersion { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ParquetWriterVersion {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ParquetWriterVersion {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ParquetWriterVersion {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Describes a data processing configuration.</p>
@@ -1129,7 +2935,7 @@ pub struct Processor {
     pub parameters: Option<Vec<ProcessorParameter>>,
     /// <p>The type of processor.</p>
     #[serde(rename = "Type")]
-    pub type_: String,
+    pub type_: ProcessorType,
 }
 
 /// <p>Describes the processor parameter.</p>
@@ -1137,10 +2943,226 @@ pub struct Processor {
 pub struct ProcessorParameter {
     /// <p>The name of the parameter.</p>
     #[serde(rename = "ParameterName")]
-    pub parameter_name: String,
+    pub parameter_name: ProcessorParameterName,
     /// <p>The parameter value.</p>
     #[serde(rename = "ParameterValue")]
     pub parameter_value: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessorParameterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessorParameterName {
+    BufferIntervalInSeconds,
+    BufferSizeInMBs,
+    LambdaArn,
+    NumberOfRetries,
+    RoleArn,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessorParameterName),
+}
+
+impl Default for ProcessorParameterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessorParameterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessorParameterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessorParameterName {
+    fn into(self) -> String {
+        match self {
+            ProcessorParameterName::BufferIntervalInSeconds => {
+                "BufferIntervalInSeconds".to_string()
+            }
+            ProcessorParameterName::BufferSizeInMBs => "BufferSizeInMBs".to_string(),
+            ProcessorParameterName::LambdaArn => "LambdaArn".to_string(),
+            ProcessorParameterName::NumberOfRetries => "NumberOfRetries".to_string(),
+            ProcessorParameterName::RoleArn => "RoleArn".to_string(),
+            ProcessorParameterName::UnknownVariant(UnknownProcessorParameterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessorParameterName {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessorParameterName::BufferIntervalInSeconds => &"BufferIntervalInSeconds",
+            ProcessorParameterName::BufferSizeInMBs => &"BufferSizeInMBs",
+            ProcessorParameterName::LambdaArn => &"LambdaArn",
+            ProcessorParameterName::NumberOfRetries => &"NumberOfRetries",
+            ProcessorParameterName::RoleArn => &"RoleArn",
+            ProcessorParameterName::UnknownVariant(UnknownProcessorParameterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessorParameterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "BufferIntervalInSeconds" => ProcessorParameterName::BufferIntervalInSeconds,
+            "BufferSizeInMBs" => ProcessorParameterName::BufferSizeInMBs,
+            "LambdaArn" => ProcessorParameterName::LambdaArn,
+            "NumberOfRetries" => ProcessorParameterName::NumberOfRetries,
+            "RoleArn" => ProcessorParameterName::RoleArn,
+            _ => ProcessorParameterName::UnknownVariant(UnknownProcessorParameterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessorParameterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BufferIntervalInSeconds" => ProcessorParameterName::BufferIntervalInSeconds,
+            "BufferSizeInMBs" => ProcessorParameterName::BufferSizeInMBs,
+            "LambdaArn" => ProcessorParameterName::LambdaArn,
+            "NumberOfRetries" => ProcessorParameterName::NumberOfRetries,
+            "RoleArn" => ProcessorParameterName::RoleArn,
+            _ => ProcessorParameterName::UnknownVariant(UnknownProcessorParameterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessorParameterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessorParameterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessorParameterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownProcessorType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ProcessorType {
+    Lambda,
+    #[doc(hidden)]
+    UnknownVariant(UnknownProcessorType),
+}
+
+impl Default for ProcessorType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ProcessorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ProcessorType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ProcessorType {
+    fn into(self) -> String {
+        match self {
+            ProcessorType::Lambda => "Lambda".to_string(),
+            ProcessorType::UnknownVariant(UnknownProcessorType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ProcessorType {
+    fn into(self) -> &'a str {
+        match self {
+            ProcessorType::Lambda => &"Lambda",
+            ProcessorType::UnknownVariant(UnknownProcessorType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ProcessorType {
+    fn from(name: &str) -> Self {
+        match name {
+            "Lambda" => ProcessorType::Lambda,
+            _ => ProcessorType::UnknownVariant(UnknownProcessorType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ProcessorType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Lambda" => ProcessorType::Lambda,
+            _ => ProcessorType::UnknownVariant(UnknownProcessorType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ProcessorType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ProcessorType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ProcessorType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1259,7 +3281,7 @@ pub struct RedshiftDestinationConfiguration {
     /// <p>The Amazon S3 backup mode. After you create a delivery stream, you can update it to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
     /// <p>The configuration for the intermediate Amazon S3 location from which Amazon Redshift obtains data. Restrictions are described in the topic for <a>CreateDeliveryStream</a>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified in <code>RedshiftDestinationConfiguration.S3Configuration</code> because the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket doesn't support these compression formats.</p>
     #[serde(rename = "S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
@@ -1300,7 +3322,7 @@ pub struct RedshiftDestinationDescription {
     /// <p>The Amazon S3 backup mode.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
     /// <p>The Amazon S3 destination.</p>
     #[serde(rename = "S3DestinationDescription")]
     pub s3_destination_description: S3DestinationDescription,
@@ -1344,7 +3366,7 @@ pub struct RedshiftDestinationUpdate {
     /// <p>You can update a delivery stream to enable Amazon S3 backup if it is disabled. If backup is enabled, you can't update the delivery stream to disable it. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<RedshiftS3BackupMode>,
     /// <p>The Amazon S3 destination for backup.</p>
     #[serde(rename = "S3BackupUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1368,6 +3390,210 @@ pub struct RedshiftRetryOptions {
     pub duration_in_seconds: Option<i64>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownRedshiftS3BackupMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum RedshiftS3BackupMode {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownRedshiftS3BackupMode),
+}
+
+impl Default for RedshiftS3BackupMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for RedshiftS3BackupMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for RedshiftS3BackupMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for RedshiftS3BackupMode {
+    fn into(self) -> String {
+        match self {
+            RedshiftS3BackupMode::Disabled => "Disabled".to_string(),
+            RedshiftS3BackupMode::Enabled => "Enabled".to_string(),
+            RedshiftS3BackupMode::UnknownVariant(UnknownRedshiftS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a RedshiftS3BackupMode {
+    fn into(self) -> &'a str {
+        match self {
+            RedshiftS3BackupMode::Disabled => &"Disabled",
+            RedshiftS3BackupMode::Enabled => &"Enabled",
+            RedshiftS3BackupMode::UnknownVariant(UnknownRedshiftS3BackupMode {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for RedshiftS3BackupMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => RedshiftS3BackupMode::Disabled,
+            "Enabled" => RedshiftS3BackupMode::Enabled,
+            _ => RedshiftS3BackupMode::UnknownVariant(UnknownRedshiftS3BackupMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for RedshiftS3BackupMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => RedshiftS3BackupMode::Disabled,
+            "Enabled" => RedshiftS3BackupMode::Enabled,
+            _ => RedshiftS3BackupMode::UnknownVariant(UnknownRedshiftS3BackupMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for RedshiftS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for RedshiftS3BackupMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for RedshiftS3BackupMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownS3BackupMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum S3BackupMode {
+    Disabled,
+    Enabled,
+    #[doc(hidden)]
+    UnknownVariant(UnknownS3BackupMode),
+}
+
+impl Default for S3BackupMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for S3BackupMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for S3BackupMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for S3BackupMode {
+    fn into(self) -> String {
+        match self {
+            S3BackupMode::Disabled => "Disabled".to_string(),
+            S3BackupMode::Enabled => "Enabled".to_string(),
+            S3BackupMode::UnknownVariant(UnknownS3BackupMode { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a S3BackupMode {
+    fn into(self) -> &'a str {
+        match self {
+            S3BackupMode::Disabled => &"Disabled",
+            S3BackupMode::Enabled => &"Enabled",
+            S3BackupMode::UnknownVariant(UnknownS3BackupMode { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for S3BackupMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "Disabled" => S3BackupMode::Disabled,
+            "Enabled" => S3BackupMode::Enabled,
+            _ => S3BackupMode::UnknownVariant(UnknownS3BackupMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for S3BackupMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "Disabled" => S3BackupMode::Disabled,
+            "Enabled" => S3BackupMode::Enabled,
+            _ => S3BackupMode::UnknownVariant(UnknownS3BackupMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for S3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for S3BackupMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for S3BackupMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Describes the configuration of a destination in Amazon S3.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1386,7 +3612,7 @@ pub struct S3DestinationConfiguration {
     /// <p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket.</p>
     #[serde(rename = "CompressionFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_format: Option<String>,
+    pub compression_format: Option<CompressionFormat>,
     /// <p>The encryption configuration. If no value is specified, the default is no encryption.</p>
     #[serde(rename = "EncryptionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1420,7 +3646,7 @@ pub struct S3DestinationDescription {
     pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
     /// <p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p>
     #[serde(rename = "CompressionFormat")]
-    pub compression_format: String,
+    pub compression_format: CompressionFormat,
     /// <p>The encryption configuration. If no value is specified, the default is no encryption.</p>
     #[serde(rename = "EncryptionConfiguration")]
     pub encryption_configuration: EncryptionConfiguration,
@@ -1456,7 +3682,7 @@ pub struct S3DestinationUpdate {
     /// <p>The compression format. If no value is specified, the default is <code>UNCOMPRESSED</code>.</p> <p>The compression formats <code>SNAPPY</code> or <code>ZIP</code> cannot be specified for Amazon Redshift destinations because they are not supported by the Amazon Redshift <code>COPY</code> operation that reads from the S3 bucket.</p>
     #[serde(rename = "CompressionFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub compression_format: Option<String>,
+    pub compression_format: Option<CompressionFormat>,
     /// <p>The encryption configuration. If no value is specified, the default is no encryption.</p>
     #[serde(rename = "EncryptionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1544,7 +3770,7 @@ pub struct SplunkDestinationConfiguration {
     pub hec_endpoint: String,
     /// <p>This type can be either "Raw" or "Event."</p>
     #[serde(rename = "HECEndpointType")]
-    pub hec_endpoint_type: String,
+    pub hec_endpoint_type: HECEndpointType,
     /// <p>This is a GUID that you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
     #[serde(rename = "HECToken")]
     pub hec_token: String,
@@ -1559,7 +3785,7 @@ pub struct SplunkDestinationConfiguration {
     /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedEventsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllEvents</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. The default value is <code>FailedEventsOnly</code>.</p> <p>You can update this backup mode from <code>FailedEventsOnly</code> to <code>AllEvents</code>. You can't update it from <code>AllEvents</code> to <code>FailedEventsOnly</code>.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<SplunkS3BackupMode>,
     /// <p>The configuration for the backup Amazon S3 location.</p>
     #[serde(rename = "S3Configuration")]
     pub s3_configuration: S3DestinationConfiguration,
@@ -1584,7 +3810,7 @@ pub struct SplunkDestinationDescription {
     /// <p>This type can be either "Raw" or "Event."</p>
     #[serde(rename = "HECEndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hec_endpoint_type: Option<String>,
+    pub hec_endpoint_type: Option<HECEndpointType>,
     /// <p>A GUID you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
     #[serde(rename = "HECToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1600,7 +3826,7 @@ pub struct SplunkDestinationDescription {
     /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<SplunkS3BackupMode>,
     /// <p>The Amazon S3 destination.&gt;</p>
     #[serde(rename = "S3DestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1626,7 +3852,7 @@ pub struct SplunkDestinationUpdate {
     /// <p>This type can be either "Raw" or "Event."</p>
     #[serde(rename = "HECEndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub hec_endpoint_type: Option<String>,
+    pub hec_endpoint_type: Option<HECEndpointType>,
     /// <p>A GUID that you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
     #[serde(rename = "HECToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1642,7 +3868,7 @@ pub struct SplunkDestinationUpdate {
     /// <p>Specifies how you want Kinesis Data Firehose to back up documents to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Data Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllEvents</code>, Kinesis Data Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. The default value is <code>FailedEventsOnly</code>.</p> <p>You can update this backup mode from <code>FailedEventsOnly</code> to <code>AllEvents</code>. You can't update it from <code>AllEvents</code> to <code>FailedEventsOnly</code>.</p>
     #[serde(rename = "S3BackupMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_backup_mode: Option<String>,
+    pub s3_backup_mode: Option<SplunkS3BackupMode>,
     /// <p>Your update to the configuration of the backup Amazon S3 location.</p>
     #[serde(rename = "S3Update")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1656,6 +3882,110 @@ pub struct SplunkRetryOptions {
     #[serde(rename = "DurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_in_seconds: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownSplunkS3BackupMode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum SplunkS3BackupMode {
+    AllEvents,
+    FailedEventsOnly,
+    #[doc(hidden)]
+    UnknownVariant(UnknownSplunkS3BackupMode),
+}
+
+impl Default for SplunkS3BackupMode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for SplunkS3BackupMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for SplunkS3BackupMode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for SplunkS3BackupMode {
+    fn into(self) -> String {
+        match self {
+            SplunkS3BackupMode::AllEvents => "AllEvents".to_string(),
+            SplunkS3BackupMode::FailedEventsOnly => "FailedEventsOnly".to_string(),
+            SplunkS3BackupMode::UnknownVariant(UnknownSplunkS3BackupMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a SplunkS3BackupMode {
+    fn into(self) -> &'a str {
+        match self {
+            SplunkS3BackupMode::AllEvents => &"AllEvents",
+            SplunkS3BackupMode::FailedEventsOnly => &"FailedEventsOnly",
+            SplunkS3BackupMode::UnknownVariant(UnknownSplunkS3BackupMode { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for SplunkS3BackupMode {
+    fn from(name: &str) -> Self {
+        match name {
+            "AllEvents" => SplunkS3BackupMode::AllEvents,
+            "FailedEventsOnly" => SplunkS3BackupMode::FailedEventsOnly,
+            _ => SplunkS3BackupMode::UnknownVariant(UnknownSplunkS3BackupMode {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for SplunkS3BackupMode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AllEvents" => SplunkS3BackupMode::AllEvents,
+            "FailedEventsOnly" => SplunkS3BackupMode::FailedEventsOnly,
+            _ => SplunkS3BackupMode::UnknownVariant(UnknownSplunkS3BackupMode { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for SplunkS3BackupMode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for SplunkS3BackupMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for SplunkS3BackupMode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

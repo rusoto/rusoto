@@ -95,7 +95,7 @@ pub struct AgentInfo {
     /// <p>The health of the agent or connector.</p>
     #[serde(rename = "health")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub health: Option<String>,
+    pub health: Option<AgentStatus>,
     /// <p>The name of the host where the agent or connector resides. The host can be a server or virtual machine.</p>
     #[serde(rename = "hostName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,6 +128,127 @@ pub struct AgentNetworkInfo {
     pub mac_address: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownAgentStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum AgentStatus {
+    Blacklisted,
+    Healthy,
+    Running,
+    Shutdown,
+    Unhealthy,
+    Unknown,
+    #[doc(hidden)]
+    UnknownVariant(UnknownAgentStatus),
+}
+
+impl Default for AgentStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for AgentStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for AgentStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for AgentStatus {
+    fn into(self) -> String {
+        match self {
+            AgentStatus::Blacklisted => "BLACKLISTED".to_string(),
+            AgentStatus::Healthy => "HEALTHY".to_string(),
+            AgentStatus::Running => "RUNNING".to_string(),
+            AgentStatus::Shutdown => "SHUTDOWN".to_string(),
+            AgentStatus::Unhealthy => "UNHEALTHY".to_string(),
+            AgentStatus::Unknown => "UNKNOWN".to_string(),
+            AgentStatus::UnknownVariant(UnknownAgentStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a AgentStatus {
+    fn into(self) -> &'a str {
+        match self {
+            AgentStatus::Blacklisted => &"BLACKLISTED",
+            AgentStatus::Healthy => &"HEALTHY",
+            AgentStatus::Running => &"RUNNING",
+            AgentStatus::Shutdown => &"SHUTDOWN",
+            AgentStatus::Unhealthy => &"UNHEALTHY",
+            AgentStatus::Unknown => &"UNKNOWN",
+            AgentStatus::UnknownVariant(UnknownAgentStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for AgentStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "BLACKLISTED" => AgentStatus::Blacklisted,
+            "HEALTHY" => AgentStatus::Healthy,
+            "RUNNING" => AgentStatus::Running,
+            "SHUTDOWN" => AgentStatus::Shutdown,
+            "UNHEALTHY" => AgentStatus::Unhealthy,
+            "UNKNOWN" => AgentStatus::Unknown,
+            _ => AgentStatus::UnknownVariant(UnknownAgentStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for AgentStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "BLACKLISTED" => AgentStatus::Blacklisted,
+            "HEALTHY" => AgentStatus::Healthy,
+            "RUNNING" => AgentStatus::Running,
+            "SHUTDOWN" => AgentStatus::Shutdown,
+            "UNHEALTHY" => AgentStatus::Unhealthy,
+            "UNKNOWN" => AgentStatus::Unknown,
+            _ => AgentStatus::UnknownVariant(UnknownAgentStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for AgentStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for AgentStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for AgentStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateConfigurationItemsToApplicationRequest {
@@ -150,7 +271,7 @@ pub struct DiscoveryBatchDeleteImportDataError {
     /// <p>The type of error that occurred for a specific import task.</p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub error_code: Option<String>,
+    pub error_code: Option<BatchDeleteImportDataErrorCode>,
     /// <p>The description of the error that occurred for a specific import task.</p>
     #[serde(rename = "errorDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -159,6 +280,122 @@ pub struct DiscoveryBatchDeleteImportDataError {
     #[serde(rename = "importTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_task_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownBatchDeleteImportDataErrorCode {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum BatchDeleteImportDataErrorCode {
+    InternalServerError,
+    NotFound,
+    OverLimit,
+    #[doc(hidden)]
+    UnknownVariant(UnknownBatchDeleteImportDataErrorCode),
+}
+
+impl Default for BatchDeleteImportDataErrorCode {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for BatchDeleteImportDataErrorCode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for BatchDeleteImportDataErrorCode {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for BatchDeleteImportDataErrorCode {
+    fn into(self) -> String {
+        match self {
+            BatchDeleteImportDataErrorCode::InternalServerError => {
+                "INTERNAL_SERVER_ERROR".to_string()
+            }
+            BatchDeleteImportDataErrorCode::NotFound => "NOT_FOUND".to_string(),
+            BatchDeleteImportDataErrorCode::OverLimit => "OVER_LIMIT".to_string(),
+            BatchDeleteImportDataErrorCode::UnknownVariant(
+                UnknownBatchDeleteImportDataErrorCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a BatchDeleteImportDataErrorCode {
+    fn into(self) -> &'a str {
+        match self {
+            BatchDeleteImportDataErrorCode::InternalServerError => &"INTERNAL_SERVER_ERROR",
+            BatchDeleteImportDataErrorCode::NotFound => &"NOT_FOUND",
+            BatchDeleteImportDataErrorCode::OverLimit => &"OVER_LIMIT",
+            BatchDeleteImportDataErrorCode::UnknownVariant(
+                UnknownBatchDeleteImportDataErrorCode { name: original },
+            ) => original,
+        }
+    }
+}
+
+impl From<&str> for BatchDeleteImportDataErrorCode {
+    fn from(name: &str) -> Self {
+        match name {
+            "INTERNAL_SERVER_ERROR" => BatchDeleteImportDataErrorCode::InternalServerError,
+            "NOT_FOUND" => BatchDeleteImportDataErrorCode::NotFound,
+            "OVER_LIMIT" => BatchDeleteImportDataErrorCode::OverLimit,
+            _ => BatchDeleteImportDataErrorCode::UnknownVariant(
+                UnknownBatchDeleteImportDataErrorCode {
+                    name: name.to_owned(),
+                },
+            ),
+        }
+    }
+}
+
+impl From<String> for BatchDeleteImportDataErrorCode {
+    fn from(name: String) -> Self {
+        match &*name {
+            "INTERNAL_SERVER_ERROR" => BatchDeleteImportDataErrorCode::InternalServerError,
+            "NOT_FOUND" => BatchDeleteImportDataErrorCode::NotFound,
+            "OVER_LIMIT" => BatchDeleteImportDataErrorCode::OverLimit,
+            _ => BatchDeleteImportDataErrorCode::UnknownVariant(
+                UnknownBatchDeleteImportDataErrorCode { name },
+            ),
+        }
+    }
+}
+
+impl ::std::str::FromStr for BatchDeleteImportDataErrorCode {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for BatchDeleteImportDataErrorCode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for BatchDeleteImportDataErrorCode {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -178,6 +415,120 @@ pub struct BatchDeleteImportDataResponse {
     pub errors: Option<Vec<DiscoveryBatchDeleteImportDataError>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownConfigurationItemType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ConfigurationItemType {
+    Application,
+    Connection,
+    Process,
+    Server,
+    #[doc(hidden)]
+    UnknownVariant(UnknownConfigurationItemType),
+}
+
+impl Default for ConfigurationItemType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ConfigurationItemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ConfigurationItemType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ConfigurationItemType {
+    fn into(self) -> String {
+        match self {
+            ConfigurationItemType::Application => "APPLICATION".to_string(),
+            ConfigurationItemType::Connection => "CONNECTION".to_string(),
+            ConfigurationItemType::Process => "PROCESS".to_string(),
+            ConfigurationItemType::Server => "SERVER".to_string(),
+            ConfigurationItemType::UnknownVariant(UnknownConfigurationItemType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ConfigurationItemType {
+    fn into(self) -> &'a str {
+        match self {
+            ConfigurationItemType::Application => &"APPLICATION",
+            ConfigurationItemType::Connection => &"CONNECTION",
+            ConfigurationItemType::Process => &"PROCESS",
+            ConfigurationItemType::Server => &"SERVER",
+            ConfigurationItemType::UnknownVariant(UnknownConfigurationItemType {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ConfigurationItemType {
+    fn from(name: &str) -> Self {
+        match name {
+            "APPLICATION" => ConfigurationItemType::Application,
+            "CONNECTION" => ConfigurationItemType::Connection,
+            "PROCESS" => ConfigurationItemType::Process,
+            "SERVER" => ConfigurationItemType::Server,
+            _ => ConfigurationItemType::UnknownVariant(UnknownConfigurationItemType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ConfigurationItemType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "APPLICATION" => ConfigurationItemType::Application,
+            "CONNECTION" => ConfigurationItemType::Connection,
+            "PROCESS" => ConfigurationItemType::Process,
+            "SERVER" => ConfigurationItemType::Server,
+            _ => ConfigurationItemType::UnknownVariant(UnknownConfigurationItemType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ConfigurationItemType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ConfigurationItemType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ConfigurationItemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -189,7 +540,7 @@ pub struct ConfigurationTag {
     /// <p>A type of IT asset to tag.</p>
     #[serde(rename = "configurationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_type: Option<String>,
+    pub configuration_type: Option<ConfigurationItemType>,
     /// <p>A type of tag on which to filter. For example, <i>serverType</i>.</p>
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,7 +562,7 @@ pub struct ContinuousExportDescription {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source: Option<String>,
+    pub data_source: Option<DataSource>,
     /// <p>The unique ID assigned to this export.</p>
     #[serde(rename = "exportId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -231,7 +582,7 @@ pub struct ContinuousExportDescription {
     /// <p><p>Describes the status of the export. Can be one of the following values:</p> <ul> <li> <p>START<em>IN</em>PROGRESS - setting up resources to start continuous export.</p> </li> <li> <p>START<em>FAILED - an error occurred setting up continuous export. To recover, call start-continuous-export again.</p> </li> <li> <p>ACTIVE - data is being exported to the customer bucket.</p> </li> <li> <p>ERROR - an error occurred during export. To fix the issue, call stop-continuous-export and start-continuous-export.</p> </li> <li> <p>STOP</em>IN<em>PROGRESS - stopping the export.</p> </li> <li> <p>STOP</em>FAILED - an error occurred stopping the export. To recover, call stop-continuous-export again.</p> </li> <li> <p>INACTIVE - the continuous export has been stopped. Data is no longer being exported to the customer bucket.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ContinuousExportStatus>,
     /// <p><p>Contains information about any errors that have occurred. This data type can have the following values:</p> <ul> <li> <p>ACCESS<em>DENIED - You don’t have permission to start Data Exploration in Amazon Athena. Contact your AWS administrator for help. For more information, see <a href="http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html">Setting Up AWS Application Discovery Service</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>DELIVERY</em>STREAM<em>LIMIT</em>FAILURE - You reached the limit for Amazon Kinesis Data Firehose delivery streams. Reduce the number of streams or request a limit increase and try again. For more information, see <a href="http://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams Limits</a> in the Amazon Kinesis Data Streams Developer Guide.</p> </li> <li> <p>FIREHOSE<em>ROLE</em>MISSING - The Data Exploration feature is in an error state because your IAM User is missing the AWSApplicationDiscoveryServiceFirehose role. Turn on Data Exploration in Amazon Athena and try again. For more information, see <a href="http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html#setting-up-user-policy">Step 3: Provide Application Discovery Service Access to Non-Administrator Users by Attaching Policies</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>FIREHOSE<em>STREAM</em>DOES<em>NOT</em>EXIST - The Data Exploration feature is in an error state because your IAM User is missing one or more of the Kinesis data delivery streams.</p> </li> <li> <p>INTERNAL<em>FAILURE - The Data Exploration feature is in an error state because of an internal failure. Try again later. If this problem persists, contact AWS Support.</p> </li> <li> <p>S3</em>BUCKET<em>LIMIT</em>FAILURE - You reached the limit for Amazon S3 buckets. Reduce the number of Amazon S3 buckets or request a limit increase and try again. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service Developer Guide.</p> </li> <li> <p>S3<em>NOT</em>SIGNED_UP - Your account is not signed up for the Amazon S3 service. You must sign up before you can use Amazon S3. You can sign up at the following URL: <a href="https://aws.amazon.com/s3">https://aws.amazon.com/s3</a>.</p> </li> </ul></p>
     #[serde(rename = "statusDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,6 +591,136 @@ pub struct ContinuousExportDescription {
     #[serde(rename = "stopTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stop_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownContinuousExportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ContinuousExportStatus {
+    Active,
+    Error,
+    Inactive,
+    StartFailed,
+    StartInProgress,
+    StopFailed,
+    StopInProgress,
+    #[doc(hidden)]
+    UnknownVariant(UnknownContinuousExportStatus),
+}
+
+impl Default for ContinuousExportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ContinuousExportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ContinuousExportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ContinuousExportStatus {
+    fn into(self) -> String {
+        match self {
+            ContinuousExportStatus::Active => "ACTIVE".to_string(),
+            ContinuousExportStatus::Error => "ERROR".to_string(),
+            ContinuousExportStatus::Inactive => "INACTIVE".to_string(),
+            ContinuousExportStatus::StartFailed => "START_FAILED".to_string(),
+            ContinuousExportStatus::StartInProgress => "START_IN_PROGRESS".to_string(),
+            ContinuousExportStatus::StopFailed => "STOP_FAILED".to_string(),
+            ContinuousExportStatus::StopInProgress => "STOP_IN_PROGRESS".to_string(),
+            ContinuousExportStatus::UnknownVariant(UnknownContinuousExportStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ContinuousExportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ContinuousExportStatus::Active => &"ACTIVE",
+            ContinuousExportStatus::Error => &"ERROR",
+            ContinuousExportStatus::Inactive => &"INACTIVE",
+            ContinuousExportStatus::StartFailed => &"START_FAILED",
+            ContinuousExportStatus::StartInProgress => &"START_IN_PROGRESS",
+            ContinuousExportStatus::StopFailed => &"STOP_FAILED",
+            ContinuousExportStatus::StopInProgress => &"STOP_IN_PROGRESS",
+            ContinuousExportStatus::UnknownVariant(UnknownContinuousExportStatus {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ContinuousExportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ContinuousExportStatus::Active,
+            "ERROR" => ContinuousExportStatus::Error,
+            "INACTIVE" => ContinuousExportStatus::Inactive,
+            "START_FAILED" => ContinuousExportStatus::StartFailed,
+            "START_IN_PROGRESS" => ContinuousExportStatus::StartInProgress,
+            "STOP_FAILED" => ContinuousExportStatus::StopFailed,
+            "STOP_IN_PROGRESS" => ContinuousExportStatus::StopInProgress,
+            _ => ContinuousExportStatus::UnknownVariant(UnknownContinuousExportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ContinuousExportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ContinuousExportStatus::Active,
+            "ERROR" => ContinuousExportStatus::Error,
+            "INACTIVE" => ContinuousExportStatus::Inactive,
+            "START_FAILED" => ContinuousExportStatus::StartFailed,
+            "START_IN_PROGRESS" => ContinuousExportStatus::StartInProgress,
+            "STOP_FAILED" => ContinuousExportStatus::StopFailed,
+            "STOP_IN_PROGRESS" => ContinuousExportStatus::StopInProgress,
+            _ => ContinuousExportStatus::UnknownVariant(UnknownContinuousExportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ContinuousExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ContinuousExportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ContinuousExportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -330,6 +811,102 @@ pub struct CustomerConnectorInfo {
     /// <p>Number of unknown discovery connectors.</p>
     #[serde(rename = "unknownConnectors")]
     pub unknown_connectors: i64,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDataSource {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DataSource {
+    Agent,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDataSource),
+}
+
+impl Default for DataSource {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DataSource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DataSource {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DataSource {
+    fn into(self) -> String {
+        match self {
+            DataSource::Agent => "AGENT".to_string(),
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DataSource {
+    fn into(self) -> &'a str {
+        match self {
+            DataSource::Agent => &"AGENT",
+            DataSource::UnknownVariant(UnknownDataSource { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DataSource {
+    fn from(name: &str) -> Self {
+        match name {
+            "AGENT" => DataSource::Agent,
+            _ => DataSource::UnknownVariant(UnknownDataSource {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DataSource {
+    fn from(name: String) -> Self {
+        match &*name {
+            "AGENT" => DataSource::Agent,
+            _ => DataSource::UnknownVariant(UnknownDataSource { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DataSource {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DataSource {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DataSource {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -589,6 +1166,111 @@ pub struct ExportConfigurationsResponse {
     pub export_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportDataFormat {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportDataFormat {
+    Csv,
+    Graphml,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportDataFormat),
+}
+
+impl Default for ExportDataFormat {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportDataFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportDataFormat {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportDataFormat {
+    fn into(self) -> String {
+        match self {
+            ExportDataFormat::Csv => "CSV".to_string(),
+            ExportDataFormat::Graphml => "GRAPHML".to_string(),
+            ExportDataFormat::UnknownVariant(UnknownExportDataFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportDataFormat {
+    fn into(self) -> &'a str {
+        match self {
+            ExportDataFormat::Csv => &"CSV",
+            ExportDataFormat::Graphml => &"GRAPHML",
+            ExportDataFormat::UnknownVariant(UnknownExportDataFormat { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ExportDataFormat {
+    fn from(name: &str) -> Self {
+        match name {
+            "CSV" => ExportDataFormat::Csv,
+            "GRAPHML" => ExportDataFormat::Graphml,
+            _ => ExportDataFormat::UnknownVariant(UnknownExportDataFormat {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportDataFormat {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CSV" => ExportDataFormat::Csv,
+            "GRAPHML" => ExportDataFormat::Graphml,
+            _ => ExportDataFormat::UnknownVariant(UnknownExportDataFormat { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportDataFormat {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ExportDataFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ExportDataFormat {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Used to select which agent's data is to be exported. A single agent ID may be selected for export using the <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_StartExportTask.html">StartExportTask</a> action.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -620,7 +1302,7 @@ pub struct ExportInfo {
     pub export_request_time: f64,
     /// <p>The status of the data export job.</p>
     #[serde(rename = "exportStatus")]
-    pub export_status: String,
+    pub export_status: ExportStatus,
     /// <p>If true, the export of agent information exceeded the size limit for a single export and the exported data is incomplete for the requested time range. To address this, select a smaller time range for the export by using <code>startDate</code> and <code>endDate</code>.</p>
     #[serde(rename = "isTruncated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -636,6 +1318,112 @@ pub struct ExportInfo {
     /// <p>A status message provided for API callers.</p>
     #[serde(rename = "statusMessage")]
     pub status_message: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownExportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ExportStatus {
+    Failed,
+    InProgress,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownExportStatus),
+}
+
+impl Default for ExportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ExportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ExportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ExportStatus {
+    fn into(self) -> String {
+        match self {
+            ExportStatus::Failed => "FAILED".to_string(),
+            ExportStatus::InProgress => "IN_PROGRESS".to_string(),
+            ExportStatus::Succeeded => "SUCCEEDED".to_string(),
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ExportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ExportStatus::Failed => &"FAILED",
+            ExportStatus::InProgress => &"IN_PROGRESS",
+            ExportStatus::Succeeded => &"SUCCEEDED",
+            ExportStatus::UnknownVariant(UnknownExportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ExportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            "SUCCEEDED" => ExportStatus::Succeeded,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ExportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "FAILED" => ExportStatus::Failed,
+            "IN_PROGRESS" => ExportStatus::InProgress,
+            "SUCCEEDED" => ExportStatus::Succeeded,
+            _ => ExportStatus::UnknownVariant(UnknownExportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ExportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ExportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ExportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>A filter that can use conditional operators.</p> <p>For more information about filters, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-api-queries.html">Querying Discovered Configuration Items</a> in the <i>AWS Application Discovery Service User Guide</i>. </p>
@@ -684,6 +1472,156 @@ pub struct GetDiscoverySummaryResponse {
     #[serde(rename = "serversMappedtoTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub servers_mappedto_tags: Option<i64>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImportStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImportStatus {
+    DeleteComplete,
+    DeleteFailed,
+    DeleteFailedLimitExceeded,
+    DeleteInProgress,
+    ImportComplete,
+    ImportCompleteWithErrors,
+    ImportFailed,
+    ImportFailedRecordLimitExceeded,
+    ImportFailedServerLimitExceeded,
+    ImportInProgress,
+    InternalError,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImportStatus),
+}
+
+impl Default for ImportStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImportStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImportStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImportStatus {
+    fn into(self) -> String {
+        match self {
+            ImportStatus::DeleteComplete => "DELETE_COMPLETE".to_string(),
+            ImportStatus::DeleteFailed => "DELETE_FAILED".to_string(),
+            ImportStatus::DeleteFailedLimitExceeded => "DELETE_FAILED_LIMIT_EXCEEDED".to_string(),
+            ImportStatus::DeleteInProgress => "DELETE_IN_PROGRESS".to_string(),
+            ImportStatus::ImportComplete => "IMPORT_COMPLETE".to_string(),
+            ImportStatus::ImportCompleteWithErrors => "IMPORT_COMPLETE_WITH_ERRORS".to_string(),
+            ImportStatus::ImportFailed => "IMPORT_FAILED".to_string(),
+            ImportStatus::ImportFailedRecordLimitExceeded => {
+                "IMPORT_FAILED_RECORD_LIMIT_EXCEEDED".to_string()
+            }
+            ImportStatus::ImportFailedServerLimitExceeded => {
+                "IMPORT_FAILED_SERVER_LIMIT_EXCEEDED".to_string()
+            }
+            ImportStatus::ImportInProgress => "IMPORT_IN_PROGRESS".to_string(),
+            ImportStatus::InternalError => "INTERNAL_ERROR".to_string(),
+            ImportStatus::UnknownVariant(UnknownImportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImportStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ImportStatus::DeleteComplete => &"DELETE_COMPLETE",
+            ImportStatus::DeleteFailed => &"DELETE_FAILED",
+            ImportStatus::DeleteFailedLimitExceeded => &"DELETE_FAILED_LIMIT_EXCEEDED",
+            ImportStatus::DeleteInProgress => &"DELETE_IN_PROGRESS",
+            ImportStatus::ImportComplete => &"IMPORT_COMPLETE",
+            ImportStatus::ImportCompleteWithErrors => &"IMPORT_COMPLETE_WITH_ERRORS",
+            ImportStatus::ImportFailed => &"IMPORT_FAILED",
+            ImportStatus::ImportFailedRecordLimitExceeded => &"IMPORT_FAILED_RECORD_LIMIT_EXCEEDED",
+            ImportStatus::ImportFailedServerLimitExceeded => &"IMPORT_FAILED_SERVER_LIMIT_EXCEEDED",
+            ImportStatus::ImportInProgress => &"IMPORT_IN_PROGRESS",
+            ImportStatus::InternalError => &"INTERNAL_ERROR",
+            ImportStatus::UnknownVariant(UnknownImportStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImportStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "DELETE_COMPLETE" => ImportStatus::DeleteComplete,
+            "DELETE_FAILED" => ImportStatus::DeleteFailed,
+            "DELETE_FAILED_LIMIT_EXCEEDED" => ImportStatus::DeleteFailedLimitExceeded,
+            "DELETE_IN_PROGRESS" => ImportStatus::DeleteInProgress,
+            "IMPORT_COMPLETE" => ImportStatus::ImportComplete,
+            "IMPORT_COMPLETE_WITH_ERRORS" => ImportStatus::ImportCompleteWithErrors,
+            "IMPORT_FAILED" => ImportStatus::ImportFailed,
+            "IMPORT_FAILED_RECORD_LIMIT_EXCEEDED" => ImportStatus::ImportFailedRecordLimitExceeded,
+            "IMPORT_FAILED_SERVER_LIMIT_EXCEEDED" => ImportStatus::ImportFailedServerLimitExceeded,
+            "IMPORT_IN_PROGRESS" => ImportStatus::ImportInProgress,
+            "INTERNAL_ERROR" => ImportStatus::InternalError,
+            _ => ImportStatus::UnknownVariant(UnknownImportStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImportStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "DELETE_COMPLETE" => ImportStatus::DeleteComplete,
+            "DELETE_FAILED" => ImportStatus::DeleteFailed,
+            "DELETE_FAILED_LIMIT_EXCEEDED" => ImportStatus::DeleteFailedLimitExceeded,
+            "DELETE_IN_PROGRESS" => ImportStatus::DeleteInProgress,
+            "IMPORT_COMPLETE" => ImportStatus::ImportComplete,
+            "IMPORT_COMPLETE_WITH_ERRORS" => ImportStatus::ImportCompleteWithErrors,
+            "IMPORT_FAILED" => ImportStatus::ImportFailed,
+            "IMPORT_FAILED_RECORD_LIMIT_EXCEEDED" => ImportStatus::ImportFailedRecordLimitExceeded,
+            "IMPORT_FAILED_SERVER_LIMIT_EXCEEDED" => ImportStatus::ImportFailedServerLimitExceeded,
+            "IMPORT_IN_PROGRESS" => ImportStatus::ImportInProgress,
+            "INTERNAL_ERROR" => ImportStatus::InternalError,
+            _ => ImportStatus::UnknownVariant(UnknownImportStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImportStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ImportStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ImportStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An array of information related to the import task request that includes status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
@@ -741,7 +1679,7 @@ pub struct ImportTask {
     /// <p>The status of the import task. An import can have the status of <code>IMPORT_COMPLETE</code> and still have some records fail to import from the overall request. More information can be found in the downloadable archive defined in the <code>errorsAndFailedEntriesZip</code> field, or in the Migration Hub management console.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ImportStatus>,
 }
 
 /// <p><p>A name-values pair of elements you can use to filter the results when querying your import tasks. Currently, wildcards are not supported for filters.</p> <note> <p>When filtering by import status, all other filter values are ignored.</p> </note></p>
@@ -751,11 +1689,121 @@ pub struct ImportTaskFilter {
     /// <p>The name, status, or import task ID for a specific import task.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: Option<ImportTaskFilterName>,
     /// <p>An array of strings that you can provide to match against a specific name, status, or import task ID to filter the results for your import task queries.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownImportTaskFilterName {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ImportTaskFilterName {
+    ImportTaskId,
+    Name,
+    Status,
+    #[doc(hidden)]
+    UnknownVariant(UnknownImportTaskFilterName),
+}
+
+impl Default for ImportTaskFilterName {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ImportTaskFilterName {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ImportTaskFilterName {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ImportTaskFilterName {
+    fn into(self) -> String {
+        match self {
+            ImportTaskFilterName::ImportTaskId => "IMPORT_TASK_ID".to_string(),
+            ImportTaskFilterName::Name => "NAME".to_string(),
+            ImportTaskFilterName::Status => "STATUS".to_string(),
+            ImportTaskFilterName::UnknownVariant(UnknownImportTaskFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ImportTaskFilterName {
+    fn into(self) -> &'a str {
+        match self {
+            ImportTaskFilterName::ImportTaskId => &"IMPORT_TASK_ID",
+            ImportTaskFilterName::Name => &"NAME",
+            ImportTaskFilterName::Status => &"STATUS",
+            ImportTaskFilterName::UnknownVariant(UnknownImportTaskFilterName {
+                name: original,
+            }) => original,
+        }
+    }
+}
+
+impl From<&str> for ImportTaskFilterName {
+    fn from(name: &str) -> Self {
+        match name {
+            "IMPORT_TASK_ID" => ImportTaskFilterName::ImportTaskId,
+            "NAME" => ImportTaskFilterName::Name,
+            "STATUS" => ImportTaskFilterName::Status,
+            _ => ImportTaskFilterName::UnknownVariant(UnknownImportTaskFilterName {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ImportTaskFilterName {
+    fn from(name: String) -> Self {
+        match &*name {
+            "IMPORT_TASK_ID" => ImportTaskFilterName::ImportTaskId,
+            "NAME" => ImportTaskFilterName::Name,
+            "STATUS" => ImportTaskFilterName::Status,
+            _ => ImportTaskFilterName::UnknownVariant(UnknownImportTaskFilterName { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ImportTaskFilterName {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ImportTaskFilterName {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for ImportTaskFilterName {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -763,7 +1811,7 @@ pub struct ImportTaskFilter {
 pub struct ListConfigurationsRequest {
     /// <p>A valid configuration identified by Application Discovery Service. </p>
     #[serde(rename = "configurationType")]
-    pub configuration_type: String,
+    pub configuration_type: ConfigurationItemType,
     /// <p>You can filter the request using various logical operators and a <i>key</i>-<i>value</i> format. For example: </p> <p> <code>{"key": "serverType", "value": "webServer"}</code> </p> <p>For a complete list of filter options and guidance about using them with this action, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-api-queries.html#ListConfigurations">Using the ListConfigurations Action</a> in the <i>AWS Application Discovery Service User Guide</i>.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -868,7 +1916,108 @@ pub struct OrderByElement {
     /// <p>Ordering direction.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_order: Option<String>,
+    pub sort_order: Option<OrderString>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownOrderString {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum OrderString {
+    Asc,
+    Desc,
+    #[doc(hidden)]
+    UnknownVariant(UnknownOrderString),
+}
+
+impl Default for OrderString {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for OrderString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for OrderString {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for OrderString {
+    fn into(self) -> String {
+        match self {
+            OrderString::Asc => "ASC".to_string(),
+            OrderString::Desc => "DESC".to_string(),
+            OrderString::UnknownVariant(UnknownOrderString { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a OrderString {
+    fn into(self) -> &'a str {
+        match self {
+            OrderString::Asc => &"ASC",
+            OrderString::Desc => &"DESC",
+            OrderString::UnknownVariant(UnknownOrderString { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for OrderString {
+    fn from(name: &str) -> Self {
+        match name {
+            "ASC" => OrderString::Asc,
+            "DESC" => OrderString::Desc,
+            _ => OrderString::UnknownVariant(UnknownOrderString {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for OrderString {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ASC" => OrderString::Asc,
+            "DESC" => OrderString::Desc,
+            _ => OrderString::UnknownVariant(UnknownOrderString { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for OrderString {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for OrderString {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+#[cfg(feature = "deserialize_structs")]
+impl<'de> Deserialize<'de> for OrderString {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -881,7 +2030,7 @@ pub struct StartContinuousExportResponse {
     /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
     #[serde(rename = "dataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_source: Option<String>,
+    pub data_source: Option<DataSource>,
     /// <p>The unique ID assigned to this export.</p>
     #[serde(rename = "exportId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -927,7 +2076,7 @@ pub struct StartExportTaskRequest {
     /// <p>The file format for the returned export data. Default value is <code>CSV</code>. <b>Note:</b> <i>The</i> <code>GRAPHML</code> <i>option has been deprecated.</i> </p>
     #[serde(rename = "exportDataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub export_data_format: Option<Vec<String>>,
+    pub export_data_format: Option<Vec<ExportDataFormat>>,
     /// <p>If a filter is present, it selects the single <code>agentId</code> of the Application Discovery Agent for which data is exported. The <code>agentId</code> can be found in the results of the <code>DescribeAgents</code> API or CLI. If no filter is present, <code>startTime</code> and <code>endTime</code> are ignored and exported data includes both Agentless Discovery Connector data and summary data from Application Discovery agents. </p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]

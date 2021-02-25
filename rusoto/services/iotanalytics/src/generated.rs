@@ -124,7 +124,7 @@ pub struct Channel {
     /// <p>The status of the channel.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChannelStatus>,
     /// <p>Where channel data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the channel is created.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,6 +164,112 @@ pub struct ChannelStatistics {
     #[serde(rename = "size")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<EstimatedResourceSize>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownChannelStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ChannelStatus {
+    Active,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownChannelStatus),
+}
+
+impl Default for ChannelStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ChannelStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ChannelStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ChannelStatus {
+    fn into(self) -> String {
+        match self {
+            ChannelStatus::Active => "ACTIVE".to_string(),
+            ChannelStatus::Creating => "CREATING".to_string(),
+            ChannelStatus::Deleting => "DELETING".to_string(),
+            ChannelStatus::UnknownVariant(UnknownChannelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ChannelStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ChannelStatus::Active => &"ACTIVE",
+            ChannelStatus::Creating => &"CREATING",
+            ChannelStatus::Deleting => &"DELETING",
+            ChannelStatus::UnknownVariant(UnknownChannelStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ChannelStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => ChannelStatus::Active,
+            "CREATING" => ChannelStatus::Creating,
+            "DELETING" => ChannelStatus::Deleting,
+            _ => ChannelStatus::UnknownVariant(UnknownChannelStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ChannelStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => ChannelStatus::Active,
+            "CREATING" => ChannelStatus::Creating,
+            "DELETING" => ChannelStatus::Deleting,
+            _ => ChannelStatus::UnknownVariant(UnknownChannelStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ChannelStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ChannelStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ChannelStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Where channel data is stored. You may choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. This cannot be changed after creation of the channel.</p>
@@ -220,7 +326,7 @@ pub struct ChannelSummary {
     /// <p>The status of the channel.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ChannelStatus>,
 }
 
 /// <p>Contains information about a column that stores your data.</p>
@@ -232,6 +338,106 @@ pub struct Column {
     /// <p>The type of data. For more information about the supported data types, see <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html">Common data types</a> in the <i>AWS Glue Developer Guide</i>.</p>
     #[serde(rename = "type")]
     pub type_: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownComputeType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ComputeType {
+    Acu1,
+    Acu2,
+    #[doc(hidden)]
+    UnknownVariant(UnknownComputeType),
+}
+
+impl Default for ComputeType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ComputeType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ComputeType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ComputeType {
+    fn into(self) -> String {
+        match self {
+            ComputeType::Acu1 => "ACU_1".to_string(),
+            ComputeType::Acu2 => "ACU_2".to_string(),
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ComputeType {
+    fn into(self) -> &'a str {
+        match self {
+            ComputeType::Acu1 => &"ACU_1",
+            ComputeType::Acu2 => &"ACU_2",
+            ComputeType::UnknownVariant(UnknownComputeType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for ComputeType {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACU_1" => ComputeType::Acu1,
+            "ACU_2" => ComputeType::Acu2,
+            _ => ComputeType::UnknownVariant(UnknownComputeType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ComputeType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACU_1" => ComputeType::Acu1,
+            "ACU_2" => ComputeType::Acu2,
+            _ => ComputeType::UnknownVariant(UnknownComputeType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ComputeType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for ComputeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ComputeType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Information required to run the <code>containerAction</code> to produce dataset contents.</p>
@@ -536,7 +742,7 @@ pub struct Dataset {
     /// <p>The status of the data set.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DatasetStatus>,
     /// <p>The <code>DatasetTrigger</code> objects that specify when the data set is automatically updated.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -575,7 +781,112 @@ pub struct DatasetActionSummary {
     /// <p>The type of action by which the dataset's contents are automatically created.</p>
     #[serde(rename = "actionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action_type: Option<String>,
+    pub action_type: Option<DatasetActionType>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatasetActionType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatasetActionType {
+    Container,
+    Query,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatasetActionType),
+}
+
+impl Default for DatasetActionType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatasetActionType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatasetActionType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatasetActionType {
+    fn into(self) -> String {
+        match self {
+            DatasetActionType::Container => "CONTAINER".to_string(),
+            DatasetActionType::Query => "QUERY".to_string(),
+            DatasetActionType::UnknownVariant(UnknownDatasetActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatasetActionType {
+    fn into(self) -> &'a str {
+        match self {
+            DatasetActionType::Container => &"CONTAINER",
+            DatasetActionType::Query => &"QUERY",
+            DatasetActionType::UnknownVariant(UnknownDatasetActionType { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DatasetActionType {
+    fn from(name: &str) -> Self {
+        match name {
+            "CONTAINER" => DatasetActionType::Container,
+            "QUERY" => DatasetActionType::Query,
+            _ => DatasetActionType::UnknownVariant(UnknownDatasetActionType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatasetActionType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CONTAINER" => DatasetActionType::Container,
+            "QUERY" => DatasetActionType::Query,
+            _ => DatasetActionType::UnknownVariant(UnknownDatasetActionType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatasetActionType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DatasetActionType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatasetActionType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>The destination to which dataset contents are delivered.</p>
@@ -603,6 +914,116 @@ pub struct DatasetContentDeliveryRule {
     pub entry_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatasetContentState {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatasetContentState {
+    Creating,
+    Failed,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatasetContentState),
+}
+
+impl Default for DatasetContentState {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatasetContentState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatasetContentState {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatasetContentState {
+    fn into(self) -> String {
+        match self {
+            DatasetContentState::Creating => "CREATING".to_string(),
+            DatasetContentState::Failed => "FAILED".to_string(),
+            DatasetContentState::Succeeded => "SUCCEEDED".to_string(),
+            DatasetContentState::UnknownVariant(UnknownDatasetContentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatasetContentState {
+    fn into(self) -> &'a str {
+        match self {
+            DatasetContentState::Creating => &"CREATING",
+            DatasetContentState::Failed => &"FAILED",
+            DatasetContentState::Succeeded => &"SUCCEEDED",
+            DatasetContentState::UnknownVariant(UnknownDatasetContentState { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for DatasetContentState {
+    fn from(name: &str) -> Self {
+        match name {
+            "CREATING" => DatasetContentState::Creating,
+            "FAILED" => DatasetContentState::Failed,
+            "SUCCEEDED" => DatasetContentState::Succeeded,
+            _ => DatasetContentState::UnknownVariant(UnknownDatasetContentState {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatasetContentState {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CREATING" => DatasetContentState::Creating,
+            "FAILED" => DatasetContentState::Failed,
+            "SUCCEEDED" => DatasetContentState::Succeeded,
+            _ => DatasetContentState::UnknownVariant(UnknownDatasetContentState { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatasetContentState {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DatasetContentState {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatasetContentState {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>The state of the data set contents and the reason they are in this state.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -614,7 +1035,7 @@ pub struct DatasetContentStatus {
     /// <p>The state of the data set contents. Can be one of READY, CREATING, SUCCEEDED, or FAILED.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<String>,
+    pub state: Option<DatasetContentState>,
 }
 
 /// <p>Summary information about dataset contents.</p>
@@ -665,6 +1086,112 @@ pub struct DatasetEntry {
     pub entry_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatasetStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatasetStatus {
+    Active,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatasetStatus),
+}
+
+impl Default for DatasetStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatasetStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatasetStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatasetStatus {
+    fn into(self) -> String {
+        match self {
+            DatasetStatus::Active => "ACTIVE".to_string(),
+            DatasetStatus::Creating => "CREATING".to_string(),
+            DatasetStatus::Deleting => "DELETING".to_string(),
+            DatasetStatus::UnknownVariant(UnknownDatasetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatasetStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DatasetStatus::Active => &"ACTIVE",
+            DatasetStatus::Creating => &"CREATING",
+            DatasetStatus::Deleting => &"DELETING",
+            DatasetStatus::UnknownVariant(UnknownDatasetStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DatasetStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DatasetStatus::Active,
+            "CREATING" => DatasetStatus::Creating,
+            "DELETING" => DatasetStatus::Deleting,
+            _ => DatasetStatus::UnknownVariant(UnknownDatasetStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatasetStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DatasetStatus::Active,
+            "CREATING" => DatasetStatus::Creating,
+            "DELETING" => DatasetStatus::Deleting,
+            _ => DatasetStatus::UnknownVariant(UnknownDatasetStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatasetStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DatasetStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatasetStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>A summary of information about a data set.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -688,7 +1215,7 @@ pub struct DatasetSummary {
     /// <p>The status of the data set.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DatasetStatus>,
     /// <p>A list of triggers. A trigger causes data set content to be populated at a specified time interval or when another data set is populated. The list of triggers can be empty or contain up to five <code>DataSetTrigger</code> objects</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -743,7 +1270,7 @@ pub struct Datastore {
     /// <p><p>The status of a data store:</p> <dl> <dt>CREATING</dt> <dd> <p>The data store is being created.</p> </dd> <dt>ACTIVE</dt> <dd> <p>The data store has been created and can be used.</p> </dd> <dt>DELETING</dt> <dd> <p>The data store is being deleted.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DatastoreStatus>,
     /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -769,6 +1296,112 @@ pub struct DatastoreStatistics {
     #[serde(rename = "size")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<EstimatedResourceSize>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownDatastoreStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum DatastoreStatus {
+    Active,
+    Creating,
+    Deleting,
+    #[doc(hidden)]
+    UnknownVariant(UnknownDatastoreStatus),
+}
+
+impl Default for DatastoreStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for DatastoreStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for DatastoreStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for DatastoreStatus {
+    fn into(self) -> String {
+        match self {
+            DatastoreStatus::Active => "ACTIVE".to_string(),
+            DatastoreStatus::Creating => "CREATING".to_string(),
+            DatastoreStatus::Deleting => "DELETING".to_string(),
+            DatastoreStatus::UnknownVariant(UnknownDatastoreStatus { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a DatastoreStatus {
+    fn into(self) -> &'a str {
+        match self {
+            DatastoreStatus::Active => &"ACTIVE",
+            DatastoreStatus::Creating => &"CREATING",
+            DatastoreStatus::Deleting => &"DELETING",
+            DatastoreStatus::UnknownVariant(UnknownDatastoreStatus { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for DatastoreStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "ACTIVE" => DatastoreStatus::Active,
+            "CREATING" => DatastoreStatus::Creating,
+            "DELETING" => DatastoreStatus::Deleting,
+            _ => DatastoreStatus::UnknownVariant(UnknownDatastoreStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for DatastoreStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ACTIVE" => DatastoreStatus::Active,
+            "CREATING" => DatastoreStatus::Creating,
+            "DELETING" => DatastoreStatus::Deleting,
+            _ => DatastoreStatus::UnknownVariant(UnknownDatastoreStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for DatastoreStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for DatastoreStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for DatastoreStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
@@ -817,7 +1450,7 @@ pub struct DatastoreSummary {
     /// <p>The file format of the data in the data store.</p>
     #[serde(rename = "fileFormatType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_format_type: Option<String>,
+    pub file_format_type: Option<FileFormatType>,
     /// <p>The last time when a new message arrived in the data store.</p> <p>AWS IoT Analytics updates this value at most once per minute for one data store. Hence, the <code>lastMessageArrivalTime</code> value is an approximation.</p> <p>This feature only applies to messages that arrived in the data store after October 23, 2020. </p>
     #[serde(rename = "lastMessageArrivalTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -829,7 +1462,7 @@ pub struct DatastoreSummary {
     /// <p>The status of the data store.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<DatastoreStatus>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1059,6 +1692,107 @@ pub struct FileFormatConfiguration {
     #[serde(rename = "parquetConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parquet_configuration: Option<ParquetConfiguration>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownFileFormatType {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum FileFormatType {
+    Json,
+    Parquet,
+    #[doc(hidden)]
+    UnknownVariant(UnknownFileFormatType),
+}
+
+impl Default for FileFormatType {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for FileFormatType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for FileFormatType {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for FileFormatType {
+    fn into(self) -> String {
+        match self {
+            FileFormatType::Json => "JSON".to_string(),
+            FileFormatType::Parquet => "PARQUET".to_string(),
+            FileFormatType::UnknownVariant(UnknownFileFormatType { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a FileFormatType {
+    fn into(self) -> &'a str {
+        match self {
+            FileFormatType::Json => &"JSON",
+            FileFormatType::Parquet => &"PARQUET",
+            FileFormatType::UnknownVariant(UnknownFileFormatType { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for FileFormatType {
+    fn from(name: &str) -> Self {
+        match name {
+            "JSON" => FileFormatType::Json,
+            "PARQUET" => FileFormatType::Parquet,
+            _ => FileFormatType::UnknownVariant(UnknownFileFormatType {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for FileFormatType {
+    fn from(name: String) -> Self {
+        match &*name {
+            "JSON" => FileFormatType::Json,
+            "PARQUET" => FileFormatType::Parquet,
+            _ => FileFormatType::UnknownVariant(UnknownFileFormatType { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for FileFormatType {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for FileFormatType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for FileFormatType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
 }
 
 /// <p>An activity that filters a message based on its attributes.</p>
@@ -1328,6 +2062,101 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownLoggingLevel {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum LoggingLevel {
+    Error,
+    #[doc(hidden)]
+    UnknownVariant(UnknownLoggingLevel),
+}
+
+impl Default for LoggingLevel {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for LoggingLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for LoggingLevel {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for LoggingLevel {
+    fn into(self) -> String {
+        match self {
+            LoggingLevel::Error => "ERROR".to_string(),
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a LoggingLevel {
+    fn into(self) -> &'a str {
+        match self {
+            LoggingLevel::Error => &"ERROR",
+            LoggingLevel::UnknownVariant(UnknownLoggingLevel { name: original }) => original,
+        }
+    }
+}
+
+impl From<&str> for LoggingLevel {
+    fn from(name: &str) -> Self {
+        match name {
+            "ERROR" => LoggingLevel::Error,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for LoggingLevel {
+    fn from(name: String) -> Self {
+        match &*name {
+            "ERROR" => LoggingLevel::Error,
+            _ => LoggingLevel::UnknownVariant(UnknownLoggingLevel { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for LoggingLevel {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+impl Serialize for LoggingLevel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for LoggingLevel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about logging options.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingOptions {
@@ -1336,7 +2165,7 @@ pub struct LoggingOptions {
     pub enabled: bool,
     /// <p>The logging level. Currently, only ERROR is supported.</p>
     #[serde(rename = "level")]
-    pub level: String,
+    pub level: LoggingLevel,
     /// <p>The ARN of the role that grants permission to AWS IoT Analytics to perform logging.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
@@ -1523,6 +2352,121 @@ pub struct RemoveAttributesActivity {
     pub next: Option<String>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct UnknownReprocessingStatus {
+    name: String,
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[non_exhaustive]
+pub enum ReprocessingStatus {
+    Cancelled,
+    Failed,
+    Running,
+    Succeeded,
+    #[doc(hidden)]
+    UnknownVariant(UnknownReprocessingStatus),
+}
+
+impl Default for ReprocessingStatus {
+    fn default() -> Self {
+        "".into()
+    }
+}
+
+impl fmt::Display for ReprocessingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.into())
+    }
+}
+
+impl rusoto_core::param::ToParam for ReprocessingStatus {
+    fn to_param(&self) -> String {
+        self.to_string()
+    }
+}
+
+impl Into<String> for ReprocessingStatus {
+    fn into(self) -> String {
+        match self {
+            ReprocessingStatus::Cancelled => "CANCELLED".to_string(),
+            ReprocessingStatus::Failed => "FAILED".to_string(),
+            ReprocessingStatus::Running => "RUNNING".to_string(),
+            ReprocessingStatus::Succeeded => "SUCCEEDED".to_string(),
+            ReprocessingStatus::UnknownVariant(UnknownReprocessingStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl<'a> Into<&'a str> for &'a ReprocessingStatus {
+    fn into(self) -> &'a str {
+        match self {
+            ReprocessingStatus::Cancelled => &"CANCELLED",
+            ReprocessingStatus::Failed => &"FAILED",
+            ReprocessingStatus::Running => &"RUNNING",
+            ReprocessingStatus::Succeeded => &"SUCCEEDED",
+            ReprocessingStatus::UnknownVariant(UnknownReprocessingStatus { name: original }) => {
+                original
+            }
+        }
+    }
+}
+
+impl From<&str> for ReprocessingStatus {
+    fn from(name: &str) -> Self {
+        match name {
+            "CANCELLED" => ReprocessingStatus::Cancelled,
+            "FAILED" => ReprocessingStatus::Failed,
+            "RUNNING" => ReprocessingStatus::Running,
+            "SUCCEEDED" => ReprocessingStatus::Succeeded,
+            _ => ReprocessingStatus::UnknownVariant(UnknownReprocessingStatus {
+                name: name.to_owned(),
+            }),
+        }
+    }
+}
+
+impl From<String> for ReprocessingStatus {
+    fn from(name: String) -> Self {
+        match &*name {
+            "CANCELLED" => ReprocessingStatus::Cancelled,
+            "FAILED" => ReprocessingStatus::Failed,
+            "RUNNING" => ReprocessingStatus::Running,
+            "SUCCEEDED" => ReprocessingStatus::Succeeded,
+            _ => ReprocessingStatus::UnknownVariant(UnknownReprocessingStatus { name }),
+        }
+    }
+}
+
+impl ::std::str::FromStr for ReprocessingStatus {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(s.into())
+    }
+}
+
+#[cfg(any(test, feature = "serialize_structs"))]
+impl Serialize for ReprocessingStatus {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.into())
+    }
+}
+
+impl<'de> Deserialize<'de> for ReprocessingStatus {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        Ok(String::deserialize(deserializer)?.into())
+    }
+}
+
 /// <p>Information about pipeline reprocessing.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1538,7 +2482,7 @@ pub struct ReprocessingSummary {
     /// <p>The status of the pipeline reprocessing.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: Option<ReprocessingStatus>,
 }
 
 /// <p>The configuration of the resource used to execute the <code>containerAction</code>.</p>
@@ -1546,7 +2490,7 @@ pub struct ReprocessingSummary {
 pub struct ResourceConfiguration {
     /// <p>The type of the compute resource used to execute the <code>containerAction</code>. Possible values are: <code>ACU_1</code> (vCPU=4, memory=16 GiB) or <code>ACU_2</code> (vCPU=8, memory=32 GiB).</p>
     #[serde(rename = "computeType")]
-    pub compute_type: String,
+    pub compute_type: ComputeType,
     /// <p>The size, in GB, of the persistent storage available to the resource instance used to execute the <code>containerAction</code> (min: 1, max: 50).</p>
     #[serde(rename = "volumeSizeInGB")]
     pub volume_size_in_gb: i64,
