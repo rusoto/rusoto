@@ -28,7 +28,7 @@ use serde::{Deserialize, Serialize};
 impl TimestreamWriteClient {
     fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
         let mut request = SignedRequest::new(http_method, "timestream", &self.region, request_uri);
-        request.set_endpoint_prefix("ingest.timestream".to_string());
+        request.set_endpoint_prefix("ingest-cell1.timestream".to_string());
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
 
