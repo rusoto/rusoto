@@ -217,7 +217,7 @@ async fn delete_preset() {
     let preset = response.preset.unwrap();
     let id = preset.id.unwrap();
 
-    tokio::time::delay_for(std::time::Duration::from_secs(2)).await;
+    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
 
     let request = DeletePresetRequest { id: id.clone() };
     let response = client.delete_preset(request).await;

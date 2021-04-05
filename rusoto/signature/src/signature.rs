@@ -19,16 +19,17 @@ use std::time::Duration;
 
 use base64;
 use bytes::Bytes;
+use chrono::{DateTime, Utc, NaiveDate};
+use digest::Digest;
 use hex;
 use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
-use md5;
+use md5::Md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
-use sha2::{Digest, Sha256};
-use time::{Date, OffsetDateTime};
+use sha2::Sha256;
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
@@ -150,17 +151,15 @@ impl SignedRequest {
 
     /// Computes and sets the Content-MD5 header based on the current payload.
     ///
-    /// Has no effect if the payload is not set, or is not a buffer.
-    pub fn set_content_md5_header(&mut self) {
-        let digest;
-        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
-            digest = Some(md5::compute(payload));
-        } else {
-            digest = None;
+    /// Has no effect if the payload is not set, or is not a buffer. Will not
+    /// override an existing value for the `Content-MD5` header.
+    pub fn maybe_set_content_md5_header(&mut self) {
+        if self.headers.contains_key("Content-MD5") {
+            return;
         }
-        if let Some(digest) = digest {
-            // need to deref digest and then pass that reference:
-            self.add_header("Content-MD5", &base64::encode(&(*digest)));
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            let digest = Md5::digest(payload);
+            self.add_header("Content-MD5", &base64::encode(&*digest));
         }
     }
 
@@ -288,7 +287,7 @@ impl SignedRequest {
         self.sign(creds);
         let hostname = self.hostname();
 
-        let current_time = OffsetDateTime::now_utc();
+        let current_time = Utc::now();
         let current_time_fmted = current_time.format("%Y%m%dT%H%M%SZ");
         let current_date = current_time.format("%Y%m%d");
 
@@ -334,7 +333,7 @@ impl SignedRequest {
             .insert("X-Amz-SignedHeaders".into(), Some(signed_headers.clone()));
 
         self.params
-            .insert("X-Amz-Date".into(), current_time_fmted.into());
+            .insert("X-Amz-Date".into(), Some(current_time_fmted.to_string()));
 
         self.canonical_query_string = build_canonical_query_string(&self.params);
 
@@ -389,7 +388,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            current_time.date(),
+            current_time.date().naive_utc(),
             &self.region.name(),
             &self.service,
         );
@@ -438,9 +437,9 @@ impl SignedRequest {
     /// Authorization header uses AWS4-HMAC-SHA256 for signing.
     pub fn sign(&mut self, creds: &AwsCredentials) {
         self.complement();
-        let date = OffsetDateTime::now_utc();
+        let date = Utc::now();
         self.remove_header("x-amz-date");
-        self.add_header("x-amz-date", &date.format("%Y%m%dT%H%M%SZ"));
+        self.add_header("x-amz-date", &date.format("%Y%m%dT%H%M%SZ").to_string());
 
         if let Some(ref token) = *creds.token() {
             self.remove_header("X-Amz-Security-Token");
@@ -494,7 +493,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            date.date(),
+            date.date().naive_utc(),
             &self.region_for_service(),
             &self.service,
         );
@@ -596,11 +595,11 @@ fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
 fn sign_string(
     string_to_sign: &str,
     secret: &str,
-    date: Date,
+    date: NaiveDate,
     region: &str,
     service: &str,
 ) -> String {
-    let date_str = date.format("%Y%m%d");
+    let date_str = date.format("%Y%m%d").to_string();
     let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
         .finalize()
         .into_bytes();
@@ -621,7 +620,7 @@ fn sign_string(
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(date: OffsetDateTime, hashed_canonical_request: &str, scope: &str) -> String {
+pub fn string_to_sign(date: DateTime<Utc>, hashed_canonical_request: &str, scope: &str) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
         date.format("%Y%m%dT%H%M%SZ"),
@@ -846,7 +845,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use time::Date;
+    use chrono::NaiveDate;
 
     #[test]
     fn get_hostname_none_present() {
@@ -960,7 +959,7 @@ mod tests {
 
     #[test]
     fn signature_generation() {
-        let date = Date::try_from_ymd(0, 1, 1).unwrap();
+        let date = NaiveDate::from_ymd(0, 1, 1);
         let signature_foo = super::sign_string(
             "foo",
             "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",

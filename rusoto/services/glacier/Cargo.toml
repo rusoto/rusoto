@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_glacier"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.45.0"
+version = "0.46.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -18,7 +18,7 @@ targets = []
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.5"
+bytes = "1.0"
 serde = "1.0.2"
 serde_derive = "1.0.2"
 serde_json = "1.0"
@@ -27,15 +27,15 @@ serde_json = "1.0"
 version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.45.0"
+version = "0.46.0"
 path = "../../core"
 default-features = false
 
 [dev-dependencies]
-tokio = "0.2"
+tokio = "1.0"
 
 [dev-dependencies.rusoto_mock]
-version = "0.45.0"
+version = "0.46.0"
 path = "../../../mock"
 default-features = false
 

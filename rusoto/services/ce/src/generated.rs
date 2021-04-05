@@ -50,6 +50,135 @@ impl CostExplorerClient {
 }
 
 use serde_json;
+/// <p> An unusual cost pattern. This consists of the detailed metadata and the current status of the anomaly object. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Anomaly {
+    /// <p> The last day the anomaly is detected. </p>
+    #[serde(rename = "AnomalyEndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub anomaly_end_date: Option<String>,
+    /// <p> The unique identifier for the anomaly. </p>
+    #[serde(rename = "AnomalyId")]
+    pub anomaly_id: String,
+    /// <p> The latest and maximum score for the anomaly. </p>
+    #[serde(rename = "AnomalyScore")]
+    pub anomaly_score: AnomalyScore,
+    /// <p> The first day the anomaly is detected. </p>
+    #[serde(rename = "AnomalyStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub anomaly_start_date: Option<String>,
+    /// <p> The dimension for the anomaly. For example, an AWS service in a service monitor. </p>
+    #[serde(rename = "DimensionValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_value: Option<String>,
+    /// <p> The feedback value. </p>
+    #[serde(rename = "Feedback")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback: Option<String>,
+    /// <p> The dollar impact for the anomaly. </p>
+    #[serde(rename = "Impact")]
+    pub impact: Impact,
+    /// <p> The Amazon Resource Name (ARN) for the cost monitor that generated this anomaly. </p>
+    #[serde(rename = "MonitorArn")]
+    pub monitor_arn: String,
+    /// <p> The list of identified root causes for the anomaly. </p>
+    #[serde(rename = "RootCauses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_causes: Option<Vec<RootCause>>,
+}
+
+/// <p> The time period for an anomaly. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AnomalyDateInterval {
+    /// <p> The last date an anomaly was observed. </p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
+    /// <p> The first date an anomaly was observed. </p>
+    #[serde(rename = "StartDate")]
+    pub start_date: String,
+}
+
+/// <p> This object continuously inspects your account's cost data for anomalies, based on <code>MonitorType</code> and <code>MonitorSpecification</code>. The content consists of detailed metadata and the current status of the monitor object. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AnomalyMonitor {
+    /// <p> The date when the monitor was created. </p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<String>,
+    /// <p> The value for evaluated dimensions. </p>
+    #[serde(rename = "DimensionalValueCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensional_value_count: Option<i64>,
+    /// <p> The date when the monitor last evaluated for anomalies. </p>
+    #[serde(rename = "LastEvaluatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_evaluated_date: Option<String>,
+    /// <p> The date when the monitor was last updated. </p>
+    #[serde(rename = "LastUpdatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date: Option<String>,
+    /// <p> The Amazon Resource Name (ARN) value. </p>
+    #[serde(rename = "MonitorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_arn: Option<String>,
+    /// <p> The dimensions to evaluate. </p>
+    #[serde(rename = "MonitorDimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_dimension: Option<String>,
+    /// <p> The name of the monitor. </p>
+    #[serde(rename = "MonitorName")]
+    pub monitor_name: String,
+    #[serde(rename = "MonitorSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_specification: Option<Expression>,
+    /// <p> The possible type values. </p>
+    #[serde(rename = "MonitorType")]
+    pub monitor_type: String,
+}
+
+/// <p> Quantifies the anomaly. The higher score means that it is more anomalous. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AnomalyScore {
+    /// <p> The last observed score. </p>
+    #[serde(rename = "CurrentScore")]
+    pub current_score: f64,
+    /// <p> The maximum score observed during the <code>AnomalyDateInterval</code>. </p>
+    #[serde(rename = "MaxScore")]
+    pub max_score: f64,
+}
+
+/// <p> The association between a monitor, threshold, and list of subscribers used to deliver notifications about anomalies detected by a monitor that exceeds a threshold. The content consists of the detailed metadata and the current status of the <code>AnomalySubscription</code> object. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AnomalySubscription {
+    /// <p> Your unique account identifier. </p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p> The frequency at which anomaly reports are sent over email. </p>
+    #[serde(rename = "Frequency")]
+    pub frequency: String,
+    /// <p> A list of cost anomaly monitors. </p>
+    #[serde(rename = "MonitorArnList")]
+    pub monitor_arn_list: Vec<String>,
+    /// <p> A list of subscribers to notify. </p>
+    #[serde(rename = "Subscribers")]
+    pub subscribers: Vec<Subscriber>,
+    /// <p> The <code>AnomalySubscription</code> Amazon Resource Name (ARN). </p>
+    #[serde(rename = "SubscriptionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_arn: Option<String>,
+    /// <p> The name for the subscription. </p>
+    #[serde(rename = "SubscriptionName")]
+    pub subscription_name: String,
+    /// <p> The dollar value that triggers a notification if the threshold is exceeded. </p>
+    #[serde(rename = "Threshold")]
+    pub threshold: f64,
+}
+
 /// <p>The structure of Cost Categories. This includes detailed metadata and the set of rules for the <code>CostCategory</code> object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -66,11 +195,29 @@ pub struct CostCategory {
     pub effective_start: String,
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p> The list of processing statuses for Cost Management products for a specific cost category. </p>
+    #[serde(rename = "ProcessingStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_status: Option<Vec<CostCategoryProcessingStatus>>,
     #[serde(rename = "RuleVersion")]
     pub rule_version: String,
     /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
     #[serde(rename = "Rules")]
     pub rules: Vec<CostCategoryRule>,
+}
+
+/// <p> The list of processing statuses for Cost Management products for a specific cost category. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CostCategoryProcessingStatus {
+    /// <p> The Cost Management product name of the applied status. </p>
+    #[serde(rename = "Component")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub component: Option<String>,
+    /// <p> The process status for a specific cost category. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>A reference to a Cost Category containing only enough information to identify the Cost Category.</p> <p>You can use this information to retrieve the full Cost Category information using <code>DescribeCostCategory</code>.</p>
@@ -96,12 +243,20 @@ pub struct CostCategoryReference {
     #[serde(rename = "NumberOfRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_rules: Option<i64>,
+    /// <p> The list of processing statuses for Cost Management products for a specific cost category. </p>
+    #[serde(rename = "ProcessingStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_status: Option<Vec<CostCategoryProcessingStatus>>,
+    /// <p> A list of unique cost category values in a specific cost category. </p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
 }
 
 /// <p>Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CostCategoryRule {
-    /// <p>An <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object used to categorize costs. This supports dimensions, Tags, and nested expressions. Currently the only dimensions supported are <code>LINKED_ACCOUNT</code>, <code>SERVICE_CODE</code>, <code>RECORD_TYPE</code>, and <code>LINKED_ACCOUNT_NAME</code>.</p> <p>Root level <code>OR</code> is not supported. We recommend that you create a separate rule instead.</p> <p> <code>RECORD_TYPE</code> is a dimension used for Cost Explorer APIs, and is also supported for Cost Category expressions. This dimension uses different terms, depending on whether you're using the console or API/JSON editor. For a detailed comparison, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-cost-categories.html#cost-categories-terms">Term Comparisons</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
+    /// <p>An <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object used to categorize costs. This supports dimensions, tags, and nested expressions. Currently the only dimensions supported are <code>LINKED_ACCOUNT</code>, <code>SERVICE_CODE</code>, <code>RECORD_TYPE</code>, and <code>LINKED_ACCOUNT_NAME</code>.</p> <p>Root level <code>OR</code> is not supported. We recommend that you create a separate rule instead.</p> <p> <code>RECORD_TYPE</code> is a dimension used for Cost Explorer APIs, and is also supported for Cost Category expressions. This dimension uses different terms, depending on whether you're using the console or API/JSON editor. For a detailed comparison, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-cost-categories.html#cost-categories-terms">Term Comparisons</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[serde(rename = "Rule")]
     pub rule: Expression,
     #[serde(rename = "Value")]
@@ -114,6 +269,10 @@ pub struct CostCategoryValues {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
+    /// <p> The match options that you can use to filter your results. MatchOptions is only applicable for only applicable for actions related to cost category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>. </p>
+    #[serde(rename = "MatchOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub match_options: Option<Vec<String>>,
     /// <p>The specific value of the Cost Category.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -212,6 +371,38 @@ pub struct CoverageNormalizedUnits {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAnomalyMonitorRequest {
+    /// <p> The cost anomaly detection monitor object that you want to create.</p>
+    #[serde(rename = "AnomalyMonitor")]
+    pub anomaly_monitor: AnomalyMonitor,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAnomalyMonitorResponse {
+    /// <p> The unique identifier of your newly created cost anomaly detection monitor.</p>
+    #[serde(rename = "MonitorArn")]
+    pub monitor_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAnomalySubscriptionRequest {
+    /// <p> The cost anomaly subscription object that you want to create. </p>
+    #[serde(rename = "AnomalySubscription")]
+    pub anomaly_subscription: AnomalySubscription,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAnomalySubscriptionResponse {
+    /// <p> The unique identifier of your newly created cost anomaly subscription. </p>
+    #[serde(rename = "SubscriptionArn")]
+    pub subscription_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCostCategoryDefinitionRequest {
     #[serde(rename = "Name")]
     pub name: String,
@@ -239,7 +430,7 @@ pub struct CreateCostCategoryDefinitionResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CurrentInstance {
-    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    /// <p> The currency code that AWS used to calculate the costs for this instance.</p>
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
@@ -247,11 +438,11 @@ pub struct CurrentInstance {
     #[serde(rename = "InstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_name: Option<String>,
-    /// <p> Current On Demand cost of operating this instance on a monthly basis.</p>
+    /// <p> Current On-Demand cost of operating this instance on a monthly basis.</p>
     #[serde(rename = "MonthlyCost")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monthly_cost: Option<String>,
-    /// <p> Number of hours during the lookback period billed at On Demand rates.</p>
+    /// <p> Number of hours during the lookback period billed at On-Demand rates.</p>
     #[serde(rename = "OnDemandHoursInLookbackPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_demand_hours_in_lookback_period: Option<String>,
@@ -295,6 +486,30 @@ pub struct DateInterval {
     #[serde(rename = "Start")]
     pub start: String,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAnomalyMonitorRequest {
+    /// <p> The unique identifier of the cost anomaly monitor that you want to delete. </p>
+    #[serde(rename = "MonitorArn")]
+    pub monitor_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAnomalyMonitorResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAnomalySubscriptionRequest {
+    /// <p> The unique identifier of the cost anomaly subscription that you want to delete. </p>
+    #[serde(rename = "SubscriptionArn")]
+    pub subscription_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAnomalySubscriptionResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -344,7 +559,7 @@ pub struct DimensionValues {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
+    /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> are <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub match_options: Option<Vec<String>>,
@@ -366,6 +581,28 @@ pub struct DimensionValuesWithAttributes {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p> The EBS field that contains a list of EBS metrics associated with the current instance. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EBSResourceUtilization {
+    /// <p> The maximum size of read operations per second </p>
+    #[serde(rename = "EbsReadBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_read_bytes_per_second: Option<String>,
+    /// <p> The maximum number of read operations per second. </p>
+    #[serde(rename = "EbsReadOpsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_read_ops_per_second: Option<String>,
+    /// <p> The maximum size of write operations per second. </p>
+    #[serde(rename = "EbsWriteBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_write_bytes_per_second: Option<String>,
+    /// <p> The maximum number of write operations per second. </p>
+    #[serde(rename = "EbsWriteOpsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_write_ops_per_second: Option<String>,
 }
 
 /// <p>Details about the Amazon EC2 instances that AWS recommends that you purchase.</p>
@@ -410,27 +647,27 @@ pub struct EC2InstanceDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EC2ResourceDetails {
-    /// <p> Hourly public On Demand rate for the instance type.</p>
+    /// <p> Hourly public On-Demand rate for the instance type.</p>
     #[serde(rename = "HourlyOnDemandRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hourly_on_demand_rate: Option<String>,
-    /// <p> The type of Amazon Web Services instance.</p>
+    /// <p> The type of AWS instance.</p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p> Memory capacity of Amazon Web Services instance.</p>
+    /// <p> Memory capacity of the AWS instance.</p>
     #[serde(rename = "Memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory: Option<String>,
-    /// <p> Network performance capacity of the Amazon Web Services instance.</p>
+    /// <p> Network performance capacity of the AWS instance.</p>
     #[serde(rename = "NetworkPerformance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_performance: Option<String>,
-    /// <p> The platform of the Amazon Web Services instance. The platform is the specific combination of operating system, license model, and software on an instance.</p>
+    /// <p> The platform of the AWS instance. The platform is the specific combination of operating system, license model, and software on an instance.</p>
     #[serde(rename = "Platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p> The Amazon Web Services Region of the instance.</p>
+    /// <p> The AWS Region of the instance.</p>
     #[serde(rename = "Region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
@@ -438,11 +675,11 @@ pub struct EC2ResourceDetails {
     #[serde(rename = "Sku")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sku: Option<String>,
-    /// <p> The disk storage of the Amazon Web Services instance (Not EBS storage).</p>
+    /// <p> The disk storage of the AWS instance (not EBS storage).</p>
     #[serde(rename = "Storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<String>,
-    /// <p> Number of VCPU cores in the Amazon Web Services instance type.</p>
+    /// <p> Number of VCPU cores in the AWS instance type.</p>
     #[serde(rename = "Vcpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vcpu: Option<String>,
@@ -452,6 +689,10 @@ pub struct EC2ResourceDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EC2ResourceUtilization {
+    /// <p> The EBS field that contains a list of EBS metrics associated with the current instance. </p>
+    #[serde(rename = "EBSResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_resource_utilization: Option<EBSResourceUtilization>,
     /// <p> Maximum observed or expected CPU utilization of the instance.</p>
     #[serde(rename = "MaxCpuUtilizationPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -531,7 +772,7 @@ pub struct ElastiCacheInstanceDetails {
     pub size_flex_eligible: Option<bool>,
 }
 
-/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimensions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
+/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. For <code>GetRightsizingRecommendation</code>, the Region is a full name (for example, <code>REGION==US East (N. Virginia)</code>. The <code>Expression</code> example looks like:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimensions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Expression {
     /// <p>Return results that match both <code>Dimension</code> objects.</p>
@@ -584,6 +825,108 @@ pub struct ForecastResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAnomaliesRequest {
+    /// <p>Assigns the start and end dates for retrieving cost anomalies. The returned anomaly object will have an <code>AnomalyEndDate</code> in the specified time range. </p>
+    #[serde(rename = "DateInterval")]
+    pub date_interval: AnomalyDateInterval,
+    /// <p>Filters anomaly results by the feedback field on the anomaly object. </p>
+    #[serde(rename = "Feedback")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback: Option<String>,
+    /// <p> The number of entries a paginated response contains. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Retrieves all of the cost anomalies detected for a specific cost anomaly monitor Amazon Resource Name (ARN). </p>
+    #[serde(rename = "MonitorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_arn: Option<String>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Filters anomaly results by the total impact field on the anomaly object. For example, you can filter anomalies <code>GREATER_THAN 200.00</code> to retrieve anomalies, with an estimated dollar impact greater than 200. </p>
+    #[serde(rename = "TotalImpact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_impact: Option<TotalImpactFilter>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAnomaliesResponse {
+    /// <p> A list of cost anomalies. </p>
+    #[serde(rename = "Anomalies")]
+    pub anomalies: Vec<Anomaly>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAnomalyMonitorsRequest {
+    /// <p> The number of entries a paginated response contains. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> A list of cost anomaly monitor ARNs. </p>
+    #[serde(rename = "MonitorArnList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_arn_list: Option<Vec<String>>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAnomalyMonitorsResponse {
+    /// <p> A list of cost anomaly monitors that includes the detailed metadata for each monitor. </p>
+    #[serde(rename = "AnomalyMonitors")]
+    pub anomaly_monitors: Vec<AnomalyMonitor>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAnomalySubscriptionsRequest {
+    /// <p> The number of entries a paginated response contains. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Cost anomaly monitor ARNs. </p>
+    #[serde(rename = "MonitorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_arn: Option<String>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p> A list of cost anomaly subscription ARNs. </p>
+    #[serde(rename = "SubscriptionArnList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_arn_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAnomalySubscriptionsResponse {
+    /// <p> A list of cost anomaly subscriptions that includes the detailed metadata for each one. </p>
+    #[serde(rename = "AnomalySubscriptions")]
+    pub anomaly_subscriptions: Vec<AnomalySubscription>,
+    /// <p> The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size. </p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageRequest {
     /// <p>Filters AWS costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p>
     #[serde(rename = "Filter")]
@@ -593,14 +936,13 @@ pub struct GetCostAndUsageRequest {
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub granularity: Option<String>,
-    /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, or both.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, <code>RECORD_TYPE</code>, and <code>USAGE_TYPE</code>.</p>
+    /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, cost categories, or any two group by types.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, <code>RECORD_TYPE</code>, and <code>USAGE_TYPE</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
     /// <p>Which metrics are returned in the query. For more information about blended and unblended rates, see <a href="http://aws.amazon.com/premiumsupport/knowledge-center/blended-rates-intro/">Why does the "blended" annotation appear on some line items in my bill?</a>. </p> <p>Valid values are <code>AmortizedCost</code>, <code>BlendedCost</code>, <code>NetAmortizedCost</code>, <code>NetUnblendedCost</code>, <code>NormalizedUsageAmount</code>, <code>UnblendedCost</code>, and <code>UsageQuantity</code>. </p> <note> <p>If you return the <code>UsageQuantity</code> metric, the service aggregates all usage numbers without taking into account the units. For example, if you aggregate <code>usageQuantity</code> across all of Amazon EC2, the results aren't meaningful because Amazon EC2 compute hours and data transfer are measured in different units (for example, hours vs. GB). To get more meaningful <code>UsageQuantity</code> metrics, filter by <code>UsageType</code> or <code>UsageTypeGroups</code>. </p> </note> <p> <code>Metrics</code> is required for <code>GetCostAndUsage</code> requests.</p>
     #[serde(rename = "Metrics")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub metrics: Option<Vec<String>>,
+    pub metrics: Vec<String>,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -630,15 +972,14 @@ pub struct GetCostAndUsageResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostAndUsageWithResourcesRequest {
-    /// <p>Filters Amazon Web Services costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p> <p>The <code>GetCostAndUsageWithResources</code> operation requires that you either group by or filter by a <code>ResourceId</code>.</p>
+    /// <p>Filters Amazon Web Services costs by different dimensions. For example, you can specify <code>SERVICE</code> and <code>LINKED_ACCOUNT</code> and get the costs that are associated with that account's usage of that service. You can nest <code>Expression</code> objects to define any combination of dimension filters. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a>. </p> <p>The <code>GetCostAndUsageWithResources</code> operation requires that you either group by or filter by a <code>ResourceId</code>. It requires the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> <code>"SERVICE = Amazon Elastic Compute Cloud - Compute"</code> in the filter.</p>
     #[serde(rename = "Filter")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter: Option<Expression>,
+    pub filter: Expression,
     /// <p>Sets the AWS cost granularity to <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub granularity: Option<String>,
-    /// <p>You can group Amazon Web Services costs using up to two different groups: either dimensions, tag keys, or both.</p>
+    /// <p>You can group Amazon Web Services costs using up to two different groups: <code>DIMENSION</code>, <code>TAG</code>, <code>COST_CATEGORY</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
@@ -689,7 +1030,7 @@ pub struct GetCostForecastRequest {
     #[serde(rename = "PredictionIntervalLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prediction_interval_level: Option<i64>,
-    /// <p>The period of time that you want the forecast to cover.</p>
+    /// <p>The period of time that you want the forecast to cover. The start date must be equal to or no later than the current date to avoid a validation error.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
 }
@@ -710,7 +1051,7 @@ pub struct GetCostForecastResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDimensionValuesRequest {
-    /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
+    /// <p><p>The context for the call to <code>GetDimensionValues</code>. This can be <code>RESERVATIONS</code> or <code>COST<em>AND</em>USAGE</code>. The default value is <code>COST<em>AND</em>USAGE</code>. If the context is set to <code>RESERVATIONS</code>, the resulting dimension values can be used in the <code>GetReservationUtilization</code> operation. If the context is set to <code>COST<em>AND</em>USAGE</code>, the resulting dimension values can be used in the <code>GetCostAndUsage</code> operation.</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is Amazon EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> <li> <p>RESOURCE</em>ID - The unique identifier of the resource. ResourceId is an opt-in feature only available for last 14 days for EC2-Compute Service.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE<em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT</em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE<em>TYPE - The type of Amazon EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED</em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The Amazon EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul> <p>If you set the context to <code>SAVINGS<em>PLANS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>SAVINGS</em>PLANS<em>TYPE - Type of Savings Plans (EC2 Instance or Compute)</p> </li> <li> <p>PAYMENT</em>OPTION - Payment option for the given Savings Plans (for example, All Upfront)</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>INSTANCE<em>TYPE</em>FAMILY - The family of instances (For example, <code>m5</code>)</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>SAVINGS</em>PLAN_ARN - The unique identifier for your Savings Plan</p> </li> </ul></p>
     #[serde(rename = "Context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<String>,
@@ -800,7 +1141,7 @@ pub struct GetReservationPurchaseRecommendationRequest {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the payer account and linked accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual linked accounts only.</p>
+    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_scope: Option<String>,
@@ -985,7 +1326,7 @@ pub struct GetSavingsPlansCoverageResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansPurchaseRecommendationRequest {
-    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the payer account and linked accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual linked accounts only.</p>
+    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_scope: Option<String>,
@@ -1153,7 +1494,7 @@ pub struct GetUsageForecastRequest {
     #[serde(rename = "PredictionIntervalLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prediction_interval_level: Option<i64>,
-    /// <p>The start and end dates of the period that you want to retrieve usage forecast for. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>.</p>
+    /// <p>The start and end dates of the period that you want to retrieve usage forecast for. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>. The start date must be equal to or later than the current date to avoid a validation error.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
 }
@@ -1196,6 +1537,19 @@ pub struct GroupDefinition {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p> The anomaly's dollar value. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Impact {
+    /// <p> The maximum dollar value observed for an anomaly. </p>
+    #[serde(rename = "MaxImpact")]
+    pub max_impact: f64,
+    /// <p> The cumulative dollar value observed for an anomaly. </p>
+    #[serde(rename = "TotalImpact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_impact: Option<f64>,
 }
 
 /// <p>Details about the instances that AWS recommends that you purchase.</p>
@@ -1272,10 +1626,29 @@ pub struct MetricValue {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyRecommendationDetail {
-    /// <p>Identifies whether this instance type is the Amazon Web Services default recommendation.</p>
+    /// <p>Identifies whether this instance type is the AWS default recommendation.</p>
     #[serde(rename = "TargetInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_instances: Option<Vec<TargetInstance>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ProvideAnomalyFeedbackRequest {
+    /// <p> A cost anomaly ID. </p>
+    #[serde(rename = "AnomalyId")]
+    pub anomaly_id: String,
+    /// <p>Describes whether the cost anomaly was a planned activity or you considered it an anomaly. </p>
+    #[serde(rename = "Feedback")]
+    pub feedback: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProvideAnomalyFeedbackResponse {
+    /// <p> The ID of the modified cost anomaly. </p>
+    #[serde(rename = "AnomalyId")]
+    pub anomaly_id: String,
 }
 
 /// <p>Details about the Amazon RDS instances that AWS recommends that you purchase.</p>
@@ -1606,7 +1979,7 @@ pub struct ResourceDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceUtilization {
-    /// <p>Utilization of current Amazon EC2 Instance </p>
+    /// <p>Utilization of current Amazon EC2 instance. </p>
     #[serde(rename = "EC2ResourceUtilization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_resource_utilization: Option<EC2ResourceUtilization>,
@@ -1675,11 +2048,15 @@ pub struct RightsizingRecommendationConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RightsizingRecommendationMetadata {
-    /// <p> The timestamp for when Amazon Web Services made this recommendation.</p>
+    /// <p>Additional metadata that may be applicable to the recommendation.</p>
+    #[serde(rename = "AdditionalMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metadata: Option<String>,
+    /// <p> The timestamp for when AWS made this recommendation.</p>
     #[serde(rename = "GenerationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_timestamp: Option<String>,
-    /// <p> How many days of previous usage that Amazon Web Services considers when making this recommendation.</p>
+    /// <p> How many days of previous usage that AWS considers when making this recommendation.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lookback_period_in_days: Option<String>,
@@ -1697,7 +2074,7 @@ pub struct RightsizingRecommendationSummary {
     #[serde(rename = "EstimatedTotalMonthlySavingsAmount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_total_monthly_savings_amount: Option<String>,
-    /// <p> The currency code that Amazon Web Services used to calculate the savings.</p>
+    /// <p> The currency code that AWS used to calculate the savings.</p>
     #[serde(rename = "SavingsCurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub savings_currency_code: Option<String>,
@@ -1709,6 +2086,28 @@ pub struct RightsizingRecommendationSummary {
     #[serde(rename = "TotalRecommendationCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_recommendation_count: Option<String>,
+}
+
+/// <p> The combination of AWS service, linked account, Region, and usage type where a cost anomaly is observed. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RootCause {
+    /// <p> The linked account value associated with the cost anomaly. </p>
+    #[serde(rename = "LinkedAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linked_account: Option<String>,
+    /// <p> The AWS Region associated with the cost anomaly. </p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p> The AWS service name associated with the cost anomaly. </p>
+    #[serde(rename = "Service")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service: Option<String>,
+    /// <p> The <code>UsageType</code> value associated with the cost anomaly. </p>
+    #[serde(rename = "UsageType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_type: Option<String>,
 }
 
 /// <p>The amortized amount of Savings Plans purchased in a specific account during a specific time interval.</p>
@@ -1754,15 +2153,15 @@ pub struct SavingsPlansCoverageData {
     #[serde(rename = "CoveragePercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub coverage_percentage: Option<String>,
-    /// <p>The cost of your Amazon Web Services usage at the public On-Demand rate.</p>
+    /// <p>The cost of your AWS usage at the public On-Demand rate.</p>
     #[serde(rename = "OnDemandCost")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_demand_cost: Option<String>,
-    /// <p>The amount of your Amazon Web Services usage that is covered by a Savings Plans.</p>
+    /// <p>The amount of your AWS usage that is covered by a Savings Plans.</p>
     #[serde(rename = "SpendCoveredBySavingsPlans")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spend_covered_by_savings_plans: Option<String>,
-    /// <p>The total cost of your Amazon Web Services usage, regardless of your purchase option.</p>
+    /// <p>The total cost of your AWS usage, regardless of your purchase option.</p>
     #[serde(rename = "TotalCost")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_cost: Option<String>,
@@ -1790,7 +2189,7 @@ pub struct SavingsPlansDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlansPurchaseRecommendation {
-    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the payer account and linked accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual linked accounts only.</p>
+    /// <p>The account scope that you want your recommendations for. Amazon Web Services calculates recommendations including the management account and member accounts if the value is set to <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for individual member accounts only.</p>
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_scope: Option<String>,
@@ -1830,7 +2229,7 @@ pub struct SavingsPlansPurchaseRecommendationDetail {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>The currency code Amazon Web Services used to generate the recommendations and present potential savings.</p>
+    /// <p>The currency code AWS used to generate the recommendations and present potential savings.</p>
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
@@ -1896,6 +2295,10 @@ pub struct SavingsPlansPurchaseRecommendationDetail {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlansPurchaseRecommendationMetadata {
+    /// <p>Additional metadata that may be applicable to the recommendation.</p>
+    #[serde(rename = "AdditionalMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metadata: Option<String>,
     /// <p>The timestamp showing when the recommendations were generated.</p>
     #[serde(rename = "GenerationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1910,7 +2313,7 @@ pub struct SavingsPlansPurchaseRecommendationMetadata {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlansPurchaseRecommendationSummary {
-    /// <p>The currency code Amazon Web Services used to generate the recommendations and present potential savings.</p>
+    /// <p>The currency code AWS used to generate the recommendations and present potential savings.</p>
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
@@ -2028,7 +2431,7 @@ pub struct SavingsPlansUtilizationByTime {
     pub utilization: SavingsPlansUtilization,
 }
 
-/// <p>A single daily or monthly Savings Plans utilization rate, and details for your account. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> to determine the possible dimension values. </p>
+/// <p>A single daily or monthly Savings Plans utilization rate, and details for your account. A management account in an organization have access to member accounts. You can use <code>GetDimensionValues</code> to determine the possible dimension values. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SavingsPlansUtilizationDetail {
@@ -2063,6 +2466,23 @@ pub struct ServiceSpecification {
     pub ec2_specification: Option<EC2Specification>,
 }
 
+/// <p> The recipient of <code>AnomalySubscription</code> notifications. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Subscriber {
+    /// <p> The email address or SNS Amazon Resource Name (ARN), depending on the <code>Type</code>. </p>
+    #[serde(rename = "Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<String>,
+    /// <p> Indicates if the subscriber accepts the notifications. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The notification delivery channel. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>The values that are available for a tag.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagValues {
@@ -2070,7 +2490,7 @@ pub struct TagValues {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
+    /// <p>The match options that you can use to filter your results. <code>MatchOptions</code> is only applicable for actions related to Cost Category. The default values for <code>MatchOptions</code> are <code>EQUALS</code> and <code>CASE_SENSITIVE</code>.</p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub match_options: Option<Vec<String>>,
@@ -2084,11 +2504,11 @@ pub struct TagValues {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TargetInstance {
-    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    /// <p> The currency code that AWS used to calculate the costs for this instance.</p>
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
-    /// <p> Indicates whether or not this recommendation is the defaulted Amazon Web Services recommendation.</p>
+    /// <p> Indicates whether this recommendation is the defaulted AWS recommendation.</p>
     #[serde(rename = "DefaultTargetInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_target_instance: Option<bool>,
@@ -2114,7 +2534,7 @@ pub struct TargetInstance {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateRecommendationDetail {
-    /// <p> The currency code that Amazon Web Services used to calculate the costs for this instance.</p>
+    /// <p> The currency code that AWS used to calculate the costs for this instance.</p>
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
@@ -2122,6 +2542,78 @@ pub struct TerminateRecommendationDetail {
     #[serde(rename = "EstimatedMonthlySavings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_monthly_savings: Option<String>,
+}
+
+/// <p> Filters cost anomalies based on the total impact. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TotalImpactFilter {
+    /// <p> The upper bound dollar value used in the filter. </p>
+    #[serde(rename = "EndValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_value: Option<f64>,
+    /// <p> The comparing value used in the filter. </p>
+    #[serde(rename = "NumericOperator")]
+    pub numeric_operator: String,
+    /// <p> The lower bound dollar value used in the filter. </p>
+    #[serde(rename = "StartValue")]
+    pub start_value: f64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAnomalyMonitorRequest {
+    /// <p> Cost anomaly monitor Amazon Resource Names (ARNs). </p>
+    #[serde(rename = "MonitorArn")]
+    pub monitor_arn: String,
+    /// <p> The new name for the cost anomaly monitor. </p>
+    #[serde(rename = "MonitorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAnomalyMonitorResponse {
+    /// <p> A cost anomaly monitor ARN. </p>
+    #[serde(rename = "MonitorArn")]
+    pub monitor_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAnomalySubscriptionRequest {
+    /// <p> The update to the frequency value at which subscribers will receive notifications. </p>
+    #[serde(rename = "Frequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frequency: Option<String>,
+    /// <p> A list of cost anomaly monitor ARNs. </p>
+    #[serde(rename = "MonitorArnList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitor_arn_list: Option<Vec<String>>,
+    /// <p> The update to the subscriber list. </p>
+    #[serde(rename = "Subscribers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscribers: Option<Vec<Subscriber>>,
+    /// <p> A cost anomaly subscription Amazon Resource Name (ARN). </p>
+    #[serde(rename = "SubscriptionArn")]
+    pub subscription_arn: String,
+    /// <p> The subscription's new name. </p>
+    #[serde(rename = "SubscriptionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_name: Option<String>,
+    /// <p> The update to the threshold value for receiving notifications. </p>
+    #[serde(rename = "Threshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threshold: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAnomalySubscriptionResponse {
+    /// <p> A cost anomaly subscription ARN. </p>
+    #[serde(rename = "SubscriptionArn")]
+    pub subscription_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2168,12 +2660,82 @@ pub struct UtilizationByTime {
     pub total: Option<ReservationAggregates>,
 }
 
+/// Errors returned by CreateAnomalyMonitor
+#[derive(Debug, PartialEq)]
+pub enum CreateAnomalyMonitorError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl CreateAnomalyMonitorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnomalyMonitorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateAnomalyMonitorError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAnomalyMonitorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAnomalyMonitorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAnomalyMonitorError {}
+/// Errors returned by CreateAnomalySubscription
+#[derive(Debug, PartialEq)]
+pub enum CreateAnomalySubscriptionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly monitor does not exist for the account. </p>
+    UnknownMonitor(String),
+}
+
+impl CreateAnomalySubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAnomalySubscriptionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateAnomalySubscriptionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnknownMonitorException" => {
+                    return RusotoError::Service(CreateAnomalySubscriptionError::UnknownMonitor(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAnomalySubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAnomalySubscriptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAnomalySubscriptionError::UnknownMonitor(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAnomalySubscriptionError {}
 /// Errors returned by CreateCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum CreateCostCategoryDefinitionError {
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resources. </p>
+    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resource. </p>
     ServiceQuotaExceeded(String),
 }
 
@@ -2212,6 +2774,84 @@ impl fmt::Display for CreateCostCategoryDefinitionError {
     }
 }
 impl Error for CreateCostCategoryDefinitionError {}
+/// Errors returned by DeleteAnomalyMonitor
+#[derive(Debug, PartialEq)]
+pub enum DeleteAnomalyMonitorError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly monitor does not exist for the account. </p>
+    UnknownMonitor(String),
+}
+
+impl DeleteAnomalyMonitorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnomalyMonitorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteAnomalyMonitorError::LimitExceeded(err.msg))
+                }
+                "UnknownMonitorException" => {
+                    return RusotoError::Service(DeleteAnomalyMonitorError::UnknownMonitor(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAnomalyMonitorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAnomalyMonitorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalyMonitorError::UnknownMonitor(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAnomalyMonitorError {}
+/// Errors returned by DeleteAnomalySubscription
+#[derive(Debug, PartialEq)]
+pub enum DeleteAnomalySubscriptionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly subscription does not exist for the account. </p>
+    UnknownSubscription(String),
+}
+
+impl DeleteAnomalySubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnomalySubscriptionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteAnomalySubscriptionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnknownSubscriptionException" => {
+                    return RusotoError::Service(
+                        DeleteAnomalySubscriptionError::UnknownSubscription(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAnomalySubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAnomalySubscriptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAnomalySubscriptionError::UnknownSubscription(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteAnomalySubscriptionError {}
 /// Errors returned by DeleteCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteCostCategoryDefinitionError {
@@ -2300,6 +2940,132 @@ impl fmt::Display for DescribeCostCategoryDefinitionError {
     }
 }
 impl Error for DescribeCostCategoryDefinitionError {}
+/// Errors returned by GetAnomalies
+#[derive(Debug, PartialEq)]
+pub enum GetAnomaliesError {
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl GetAnomaliesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomaliesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(GetAnomaliesError::InvalidNextToken(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetAnomaliesError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAnomaliesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAnomaliesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetAnomaliesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAnomaliesError {}
+/// Errors returned by GetAnomalyMonitors
+#[derive(Debug, PartialEq)]
+pub enum GetAnomalyMonitorsError {
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly monitor does not exist for the account. </p>
+    UnknownMonitor(String),
+}
+
+impl GetAnomalyMonitorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomalyMonitorsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(GetAnomalyMonitorsError::InvalidNextToken(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetAnomalyMonitorsError::LimitExceeded(err.msg))
+                }
+                "UnknownMonitorException" => {
+                    return RusotoError::Service(GetAnomalyMonitorsError::UnknownMonitor(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAnomalyMonitorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAnomalyMonitorsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetAnomalyMonitorsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetAnomalyMonitorsError::UnknownMonitor(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAnomalyMonitorsError {}
+/// Errors returned by GetAnomalySubscriptions
+#[derive(Debug, PartialEq)]
+pub enum GetAnomalySubscriptionsError {
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly subscription does not exist for the account. </p>
+    UnknownSubscription(String),
+}
+
+impl GetAnomalySubscriptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAnomalySubscriptionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(GetAnomalySubscriptionsError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetAnomalySubscriptionsError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnknownSubscriptionException" => {
+                    return RusotoError::Service(GetAnomalySubscriptionsError::UnknownSubscription(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAnomalySubscriptionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAnomalySubscriptionsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetAnomalySubscriptionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetAnomalySubscriptionsError::UnknownSubscription(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAnomalySubscriptionsError {}
 /// Errors returned by GetCostAndUsage
 #[derive(Debug, PartialEq)]
 pub enum GetCostAndUsageError {
@@ -3032,6 +3798,124 @@ impl fmt::Display for ListCostCategoryDefinitionsError {
     }
 }
 impl Error for ListCostCategoryDefinitionsError {}
+/// Errors returned by ProvideAnomalyFeedback
+#[derive(Debug, PartialEq)]
+pub enum ProvideAnomalyFeedbackError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+}
+
+impl ProvideAnomalyFeedbackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ProvideAnomalyFeedbackError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(ProvideAnomalyFeedbackError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ProvideAnomalyFeedbackError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ProvideAnomalyFeedbackError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ProvideAnomalyFeedbackError {}
+/// Errors returned by UpdateAnomalyMonitor
+#[derive(Debug, PartialEq)]
+pub enum UpdateAnomalyMonitorError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly monitor does not exist for the account. </p>
+    UnknownMonitor(String),
+}
+
+impl UpdateAnomalyMonitorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnomalyMonitorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateAnomalyMonitorError::LimitExceeded(err.msg))
+                }
+                "UnknownMonitorException" => {
+                    return RusotoError::Service(UpdateAnomalyMonitorError::UnknownMonitor(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAnomalyMonitorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAnomalyMonitorError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAnomalyMonitorError::UnknownMonitor(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAnomalyMonitorError {}
+/// Errors returned by UpdateAnomalySubscription
+#[derive(Debug, PartialEq)]
+pub enum UpdateAnomalySubscriptionError {
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>The cost anomaly monitor does not exist for the account. </p>
+    UnknownMonitor(String),
+    /// <p>The cost anomaly subscription does not exist for the account. </p>
+    UnknownSubscription(String),
+}
+
+impl UpdateAnomalySubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAnomalySubscriptionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateAnomalySubscriptionError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnknownMonitorException" => {
+                    return RusotoError::Service(UpdateAnomalySubscriptionError::UnknownMonitor(
+                        err.msg,
+                    ))
+                }
+                "UnknownSubscriptionException" => {
+                    return RusotoError::Service(
+                        UpdateAnomalySubscriptionError::UnknownSubscription(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAnomalySubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAnomalySubscriptionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateAnomalySubscriptionError::UnknownMonitor(ref cause) => write!(f, "{}", cause),
+            UpdateAnomalySubscriptionError::UnknownSubscription(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateAnomalySubscriptionError {}
 /// Errors returned by UpdateCostCategoryDefinition
 #[derive(Debug, PartialEq)]
 pub enum UpdateCostCategoryDefinitionError {
@@ -3039,7 +3923,7 @@ pub enum UpdateCostCategoryDefinitionError {
     LimitExceeded(String),
     /// <p> The specified ARN in the request doesn't exist. </p>
     ResourceNotFound(String),
-    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resources. </p>
+    /// <p> You've reached the limit on the number of resources you can create, or exceeded the size of an individual resource. </p>
     ServiceQuotaExceeded(String),
 }
 
@@ -3089,11 +3973,35 @@ impl Error for UpdateCostCategoryDefinitionError {}
 /// Trait representing the capabilities of the AWS Cost Explorer API. AWS Cost Explorer clients implement this trait.
 #[async_trait]
 pub trait CostExplorer {
+    /// <p>Creates a new cost anomaly detection monitor with the requested type and monitor specification. </p>
+    async fn create_anomaly_monitor(
+        &self,
+        input: CreateAnomalyMonitorRequest,
+    ) -> Result<CreateAnomalyMonitorResponse, RusotoError<CreateAnomalyMonitorError>>;
+
+    /// <p>Adds a subscription to a cost anomaly detection monitor. You can use each subscription to define subscribers with email or SNS notifications. Email subscribers can set a dollar threshold and a time frequency for receiving notifications. </p>
+    async fn create_anomaly_subscription(
+        &self,
+        input: CreateAnomalySubscriptionRequest,
+    ) -> Result<CreateAnomalySubscriptionResponse, RusotoError<CreateAnomalySubscriptionError>>;
+
     /// <p>Creates a new Cost Category with the requested name and rules.</p>
     async fn create_cost_category_definition(
         &self,
         input: CreateCostCategoryDefinitionRequest,
     ) -> Result<CreateCostCategoryDefinitionResponse, RusotoError<CreateCostCategoryDefinitionError>>;
+
+    /// <p>Deletes a cost anomaly monitor. </p>
+    async fn delete_anomaly_monitor(
+        &self,
+        input: DeleteAnomalyMonitorRequest,
+    ) -> Result<DeleteAnomalyMonitorResponse, RusotoError<DeleteAnomalyMonitorError>>;
+
+    /// <p>Deletes a cost anomaly subscription. </p>
+    async fn delete_anomaly_subscription(
+        &self,
+        input: DeleteAnomalySubscriptionRequest,
+    ) -> Result<DeleteAnomalySubscriptionResponse, RusotoError<DeleteAnomalySubscriptionError>>;
 
     /// <p>Deletes a Cost Category. Expenses from this month going forward will no longer be categorized with this Cost Category.</p>
     async fn delete_cost_category_definition(
@@ -3110,13 +4018,31 @@ pub trait CostExplorer {
         RusotoError<DescribeCostCategoryDefinitionError>,
     >;
 
-    /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
+    /// <p>Retrieves all of the cost anomalies detected on your account, during the time period specified by the <code>DateInterval</code> object. </p>
+    async fn get_anomalies(
+        &self,
+        input: GetAnomaliesRequest,
+    ) -> Result<GetAnomaliesResponse, RusotoError<GetAnomaliesError>>;
+
+    /// <p>Retrieves the cost anomaly monitor definitions for your account. You can filter using a list of cost anomaly monitor Amazon Resource Names (ARNs). </p>
+    async fn get_anomaly_monitors(
+        &self,
+        input: GetAnomalyMonitorsRequest,
+    ) -> Result<GetAnomalyMonitorsResponse, RusotoError<GetAnomalyMonitorsError>>;
+
+    /// <p>Retrieves the cost anomaly subscription objects for your account. You can filter using a list of cost anomaly monitor Amazon Resource Names (ARNs). </p>
+    async fn get_anomaly_subscriptions(
+        &self,
+        input: GetAnomalySubscriptionsRequest,
+    ) -> Result<GetAnomalySubscriptionsResponse, RusotoError<GetAnomalySubscriptionsError>>;
+
+    /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Management account in an organization in AWS Organizations have access to all member accounts.</p> <p>For information about filter limitations, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-limits.html">Quotas and restrictions</a> in the <i>Billing and Cost Management User Guide</i>.</p>
     async fn get_cost_and_usage(
         &self,
         input: GetCostAndUsageRequest,
     ) -> Result<GetCostAndUsageResponse, RusotoError<GetCostAndUsageError>>;
 
-    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
+    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Management account in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
     async fn get_cost_and_usage_with_resources(
         &self,
         input: GetCostAndUsageWithResourcesRequest,
@@ -3134,7 +4060,7 @@ pub trait CostExplorer {
         input: GetDimensionValuesRequest,
     ) -> Result<GetDimensionValuesResponse, RusotoError<GetDimensionValuesError>>;
 
-    /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
+    /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's management account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
     async fn get_reservation_coverage(
         &self,
         input: GetReservationCoverageRequest,
@@ -3149,7 +4075,7 @@ pub trait CostExplorer {
         RusotoError<GetReservationPurchaseRecommendationError>,
     >;
 
-    /// <p>Retrieves the reservation utilization for your account. Master accounts in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
+    /// <p>Retrieves the reservation utilization for your account. Management account in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
     async fn get_reservation_utilization(
         &self,
         input: GetReservationUtilizationRequest,
@@ -3161,7 +4087,7 @@ pub trait CostExplorer {
         input: GetRightsizingRecommendationRequest,
     ) -> Result<GetRightsizingRecommendationResponse, RusotoError<GetRightsizingRecommendationError>>;
 
-    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
+    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s management account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
     async fn get_savings_plans_coverage(
         &self,
         input: GetSavingsPlansCoverageRequest,
@@ -3176,7 +4102,7 @@ pub trait CostExplorer {
         RusotoError<GetSavingsPlansPurchaseRecommendationError>,
     >;
 
-    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
+    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Management account in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
     async fn get_savings_plans_utilization(
         &self,
         input: GetSavingsPlansUtilizationRequest,
@@ -3208,6 +4134,24 @@ pub trait CostExplorer {
         &self,
         input: ListCostCategoryDefinitionsRequest,
     ) -> Result<ListCostCategoryDefinitionsResponse, RusotoError<ListCostCategoryDefinitionsError>>;
+
+    /// <p>Modifies the feedback property of a given cost anomaly. </p>
+    async fn provide_anomaly_feedback(
+        &self,
+        input: ProvideAnomalyFeedbackRequest,
+    ) -> Result<ProvideAnomalyFeedbackResponse, RusotoError<ProvideAnomalyFeedbackError>>;
+
+    /// <p>Updates an existing cost anomaly monitor. The changes made are applied going forward, and does not change anomalies detected in the past. </p>
+    async fn update_anomaly_monitor(
+        &self,
+        input: UpdateAnomalyMonitorRequest,
+    ) -> Result<UpdateAnomalyMonitorResponse, RusotoError<UpdateAnomalyMonitorError>>;
+
+    /// <p> Updates an existing cost anomaly monitor subscription. </p>
+    async fn update_anomaly_subscription(
+        &self,
+        input: UpdateAnomalySubscriptionRequest,
+    ) -> Result<UpdateAnomalySubscriptionResponse, RusotoError<UpdateAnomalySubscriptionError>>;
 
     /// <p>Updates an existing Cost Category. Changes made to the Cost Category rules will be used to categorize the current month’s expenses and future expenses. This won’t change categorization for the previous months.</p>
     async fn update_cost_category_definition(
@@ -3255,6 +4199,51 @@ impl CostExplorerClient {
 
 #[async_trait]
 impl CostExplorer for CostExplorerClient {
+    /// <p>Creates a new cost anomaly detection monitor with the requested type and monitor specification. </p>
+    async fn create_anomaly_monitor(
+        &self,
+        input: CreateAnomalyMonitorRequest,
+    ) -> Result<CreateAnomalyMonitorResponse, RusotoError<CreateAnomalyMonitorError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.CreateAnomalyMonitor",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateAnomalyMonitorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAnomalyMonitorResponse, _>()
+    }
+
+    /// <p>Adds a subscription to a cost anomaly detection monitor. You can use each subscription to define subscribers with email or SNS notifications. Email subscribers can set a dollar threshold and a time frequency for receiving notifications. </p>
+    async fn create_anomaly_subscription(
+        &self,
+        input: CreateAnomalySubscriptionRequest,
+    ) -> Result<CreateAnomalySubscriptionResponse, RusotoError<CreateAnomalySubscriptionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.CreateAnomalySubscription",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateAnomalySubscriptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAnomalySubscriptionResponse, _>()
+    }
+
     /// <p>Creates a new Cost Category with the requested name and rules.</p>
     async fn create_cost_category_definition(
         &self,
@@ -3276,6 +4265,51 @@ impl CostExplorer for CostExplorerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<CreateCostCategoryDefinitionResponse, _>()
+    }
+
+    /// <p>Deletes a cost anomaly monitor. </p>
+    async fn delete_anomaly_monitor(
+        &self,
+        input: DeleteAnomalyMonitorRequest,
+    ) -> Result<DeleteAnomalyMonitorResponse, RusotoError<DeleteAnomalyMonitorError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.DeleteAnomalyMonitor",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAnomalyMonitorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteAnomalyMonitorResponse, _>()
+    }
+
+    /// <p>Deletes a cost anomaly subscription. </p>
+    async fn delete_anomaly_subscription(
+        &self,
+        input: DeleteAnomalySubscriptionRequest,
+    ) -> Result<DeleteAnomalySubscriptionResponse, RusotoError<DeleteAnomalySubscriptionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.DeleteAnomalySubscription",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAnomalySubscriptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteAnomalySubscriptionResponse, _>()
     }
 
     /// <p>Deletes a Cost Category. Expenses from this month going forward will no longer be categorized with this Cost Category.</p>
@@ -3326,7 +4360,65 @@ impl CostExplorer for CostExplorerClient {
             .deserialize::<DescribeCostCategoryDefinitionResponse, _>()
     }
 
-    /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
+    /// <p>Retrieves all of the cost anomalies detected on your account, during the time period specified by the <code>DateInterval</code> object. </p>
+    async fn get_anomalies(
+        &self,
+        input: GetAnomaliesRequest,
+    ) -> Result<GetAnomaliesResponse, RusotoError<GetAnomaliesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSInsightsIndexService.GetAnomalies");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAnomaliesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAnomaliesResponse, _>()
+    }
+
+    /// <p>Retrieves the cost anomaly monitor definitions for your account. You can filter using a list of cost anomaly monitor Amazon Resource Names (ARNs). </p>
+    async fn get_anomaly_monitors(
+        &self,
+        input: GetAnomalyMonitorsRequest,
+    ) -> Result<GetAnomalyMonitorsResponse, RusotoError<GetAnomalyMonitorsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSInsightsIndexService.GetAnomalyMonitors");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAnomalyMonitorsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAnomalyMonitorsResponse, _>()
+    }
+
+    /// <p>Retrieves the cost anomaly subscription objects for your account. You can filter using a list of cost anomaly monitor Amazon Resource Names (ARNs). </p>
+    async fn get_anomaly_subscriptions(
+        &self,
+        input: GetAnomalySubscriptionsRequest,
+    ) -> Result<GetAnomalySubscriptionsResponse, RusotoError<GetAnomalySubscriptionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.GetAnomalySubscriptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAnomalySubscriptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAnomalySubscriptionsResponse, _>()
+    }
+
+    /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Management account in an organization in AWS Organizations have access to all member accounts.</p> <p>For information about filter limitations, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-limits.html">Quotas and restrictions</a> in the <i>Billing and Cost Management User Guide</i>.</p>
     async fn get_cost_and_usage(
         &self,
         input: GetCostAndUsageRequest,
@@ -3344,7 +4436,7 @@ impl CostExplorer for CostExplorerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetCostAndUsageResponse, _>()
     }
 
-    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
+    /// <p><p>Retrieves cost and usage metrics with resources for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Management account in an organization in AWS Organizations have access to all member accounts. This API is currently available for the Amazon Elastic Compute Cloud – Compute service only.</p> <note> <p>This is an opt-in only feature. You can enable this feature from the Cost Explorer Settings page. For information on how to access the Settings page, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-access.html">Controlling Access for Cost Explorer</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> </note></p>
     async fn get_cost_and_usage_with_resources(
         &self,
         input: GetCostAndUsageWithResourcesRequest,
@@ -3403,7 +4495,7 @@ impl CostExplorer for CostExplorerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetDimensionValuesResponse, _>()
     }
 
-    /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
+    /// <p>Retrieves the reservation coverage for your account. This enables you to see how much of your Amazon Elastic Compute Cloud, Amazon ElastiCache, Amazon Relational Database Service, or Amazon Redshift usage is covered by a reservation. An organization's management account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data about reservation usage by the following dimensions:</p> <ul> <li> <p>AZ</p> </li> <li> <p>CACHE_ENGINE</p> </li> <li> <p>DATABASE_ENGINE</p> </li> <li> <p>DEPLOYMENT_OPTION</p> </li> <li> <p>INSTANCE_TYPE</p> </li> <li> <p>LINKED_ACCOUNT</p> </li> <li> <p>OPERATING_SYSTEM</p> </li> <li> <p>PLATFORM</p> </li> <li> <p>REGION</p> </li> <li> <p>SERVICE</p> </li> <li> <p>TAG</p> </li> <li> <p>TENANCY</p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation. </p>
     async fn get_reservation_coverage(
         &self,
         input: GetReservationCoverageRequest,
@@ -3453,7 +4545,7 @@ impl CostExplorer for CostExplorerClient {
             .deserialize::<GetReservationPurchaseRecommendationResponse, _>()
     }
 
-    /// <p>Retrieves the reservation utilization for your account. Master accounts in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
+    /// <p>Retrieves the reservation utilization for your account. Management account in an organization have access to member accounts. You can filter data by dimensions in a time period. You can use <code>GetDimensionValues</code> to determine the possible dimension values. Currently, you can group only by <code>SUBSCRIPTION_ID</code>. </p>
     async fn get_reservation_utilization(
         &self,
         input: GetReservationUtilizationRequest,
@@ -3499,7 +4591,7 @@ impl CostExplorer for CostExplorerClient {
             .deserialize::<GetRightsizingRecommendationResponse, _>()
     }
 
-    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s master account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
+    /// <p>Retrieves the Savings Plans covered for your account. This enables you to see how much of your cost is covered by a Savings Plan. An organization’s management account can see the coverage of the associated member accounts. This supports dimensions, Cost Categories, and nested expressions. For any time period, you can filter data for Savings Plans usage with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>INSTANCE_FAMILY</code> </p> </li> </ul> <p>To determine valid values for a dimension, use the <code>GetDimensionValues</code> operation.</p>
     async fn get_savings_plans_coverage(
         &self,
         input: GetSavingsPlansCoverageRequest,
@@ -3549,7 +4641,7 @@ impl CostExplorer for CostExplorerClient {
             .deserialize::<GetSavingsPlansPurchaseRecommendationResponse, _>()
     }
 
-    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Master accounts in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
+    /// <p><p>Retrieves the Savings Plans utilization for your account across date ranges with daily or monthly granularity. Management account in an organization have access to member accounts. You can use <code>GetDimensionValues</code> in <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p> <note> <p>You cannot group by any dimension values for <code>GetSavingsPlansUtilization</code>.</p> </note></p>
     async fn get_savings_plans_utilization(
         &self,
         input: GetSavingsPlansUtilizationRequest,
@@ -3657,6 +4749,73 @@ impl CostExplorer for CostExplorerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListCostCategoryDefinitionsResponse, _>()
+    }
+
+    /// <p>Modifies the feedback property of a given cost anomaly. </p>
+    async fn provide_anomaly_feedback(
+        &self,
+        input: ProvideAnomalyFeedbackRequest,
+    ) -> Result<ProvideAnomalyFeedbackResponse, RusotoError<ProvideAnomalyFeedbackError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.ProvideAnomalyFeedback",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ProvideAnomalyFeedbackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ProvideAnomalyFeedbackResponse, _>()
+    }
+
+    /// <p>Updates an existing cost anomaly monitor. The changes made are applied going forward, and does not change anomalies detected in the past. </p>
+    async fn update_anomaly_monitor(
+        &self,
+        input: UpdateAnomalyMonitorRequest,
+    ) -> Result<UpdateAnomalyMonitorResponse, RusotoError<UpdateAnomalyMonitorError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.UpdateAnomalyMonitor",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateAnomalyMonitorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateAnomalyMonitorResponse, _>()
+    }
+
+    /// <p> Updates an existing cost anomaly monitor subscription. </p>
+    async fn update_anomaly_subscription(
+        &self,
+        input: UpdateAnomalySubscriptionRequest,
+    ) -> Result<UpdateAnomalySubscriptionResponse, RusotoError<UpdateAnomalySubscriptionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSInsightsIndexService.UpdateAnomalySubscription",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateAnomalySubscriptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateAnomalySubscriptionResponse, _>()
     }
 
     /// <p>Updates an existing Cost Category. Changes made to the Cost Category rules will be used to categorize the current month’s expenses and future expenses. This won’t change categorization for the previous months.</p>

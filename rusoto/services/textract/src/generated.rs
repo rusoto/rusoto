@@ -142,6 +142,10 @@ pub struct Block {
     #[serde(rename = "Text")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
+    /// <p>The kind of text that Amazon Textract has detected. Can check for handwritten text and printed text.</p>
+    #[serde(rename = "TextType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_type: Option<String>,
 }
 
 /// <p>The bounding box around the detected page, text, key-value pair, table, table cell, or selection element on a document page. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates that represent the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall document page size. For example, if the input image is 700 x 200 pixels, and the top-left coordinate of the bounding box is 350 x 50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall document page dimension. For example, if the document page size is 700 x 200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p>
@@ -283,7 +287,7 @@ pub struct GetDocumentAnalysisResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The current status of an asynchronous document-analysis operation.</p>
+    /// <p>Returns if the detection job could not be completed. Contains explanation for what error occured.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
@@ -332,7 +336,7 @@ pub struct GetDocumentTextDetectionResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The current status of an asynchronous text-detection operation for the document. </p>
+    /// <p>Returns if the detection job could not be completed. Contains explanation for what error occured. </p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
@@ -398,6 +402,19 @@ pub struct NotificationChannel {
     pub sns_topic_arn: String,
 }
 
+/// <p>Sets whether or not your output will go to a user created bucket. Used to set the name of the bucket, and the prefix on the output file.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OutputConfig {
+    /// <p>The name of the bucket your output will go to.</p>
+    #[serde(rename = "S3Bucket")]
+    pub s3_bucket: String,
+    /// <p>The prefix of the object key that the output will be saved to. When not enabled, the prefix will be “textract_output".</p>
+    #[serde(rename = "S3Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_prefix: Option<String>,
+}
+
 /// <p>The X and Y coordinates of a point on a document page. The X and Y values that are returned are ratios of the overall document page size. For example, if the input document is 700 x 200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the document page.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectDocumentText</a>. <code>Polygon</code> represents a fine-grained polygon around detected text. For more information, see Geometry in the Amazon Textract Developer Guide. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -420,7 +437,7 @@ pub struct Relationship {
     #[serde(rename = "Ids")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ids: Option<Vec<String>>,
-    /// <p>The type of relationship that the blocks in the IDs array have with the current block. The relationship can be <code>VALUE</code> or <code>CHILD</code>. A relationship of type VALUE is a list that contains the ID of the VALUE block that's associated with the KEY of a key-value pair. A relationship of type CHILD is a list of IDs that identify WORD blocks.</p>
+    /// <p>The type of relationship that the blocks in the IDs array have with the current block. The relationship can be <code>VALUE</code> or <code>CHILD</code>. A relationship of type VALUE is a list that contains the ID of the VALUE block that's associated with the KEY of a key-value pair. A relationship of type CHILD is a list of IDs that identify WORD blocks in the case of lines Cell blocks in the case of Tables, and WORD blocks in the case of Selection Elements.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -461,10 +478,18 @@ pub struct StartDocumentAnalysisRequest {
     #[serde(rename = "JobTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_tag: Option<String>,
+    /// <p>The KMS key used to encrypt the inference results. This can be in either Key ID or Key Alias format. When a KMS key is provided, the KMS key will be used for server-side encryption of the objects in the customer bucket. When this parameter is not enabled, the result will be encrypted server side,using SSE-S3.</p>
+    #[serde(rename = "KMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The Amazon SNS topic ARN that you want Amazon Textract to publish the completion status of the operation to. </p>
     #[serde(rename = "NotificationChannel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_channel: Option<NotificationChannel>,
+    /// <p>Sets if the output will go to a customer defined bucket. By default, Amazon Textract will save the results internally to be accessed by the GetDocumentAnalysis operation.</p>
+    #[serde(rename = "OutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_config: Option<OutputConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -490,10 +515,18 @@ pub struct StartDocumentTextDetectionRequest {
     #[serde(rename = "JobTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_tag: Option<String>,
+    /// <p>The KMS key used to encrypt the inference results. This can be in either Key ID or Key Alias format. When a KMS key is provided, the KMS key will be used for server-side encryption of the objects in the customer bucket. When this parameter is not enabled, the result will be encrypted server side,using SSE-S3.</p>
+    #[serde(rename = "KMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The Amazon SNS topic ARN that you want Amazon Textract to publish the completion status of the operation to. </p>
     #[serde(rename = "NotificationChannel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_channel: Option<NotificationChannel>,
+    /// <p>Sets if the output will go to a customer defined bucket. By default Amazon Textract will save the results internally to be accessed with the GetDocumentTextDetection operation.</p>
+    #[serde(rename = "OutputConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_config: Option<OutputConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -522,11 +555,11 @@ pub struct Warning {
 /// Errors returned by AnalyzeDocument
 #[derive(Debug, PartialEq)]
 pub enum AnalyzeDocumentError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
-    /// <p>Amazon Textract isn't able to read the document.</p>
+    /// <p>Amazon Textract isn't able to read the document. For more information on the document limits in Amazon Textract, see <a>limits</a>.</p>
     BadDocument(String),
-    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 5 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
+    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 10 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
     DocumentTooLarge(String),
     /// <p>Indicates you have exceeded the maximum number of active human in the loop workflows available</p>
     HumanLoopQuotaExceeded(String),
@@ -534,7 +567,7 @@ pub enum AnalyzeDocumentError {
     InternalServerError(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request.</p>
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
     InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Textract.</p>
     ProvisionedThroughputExceeded(String),
@@ -612,17 +645,17 @@ impl Error for AnalyzeDocumentError {}
 /// Errors returned by DetectDocumentText
 #[derive(Debug, PartialEq)]
 pub enum DetectDocumentTextError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
-    /// <p>Amazon Textract isn't able to read the document.</p>
+    /// <p>Amazon Textract isn't able to read the document. For more information on the document limits in Amazon Textract, see <a>limits</a>.</p>
     BadDocument(String),
-    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 5 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
+    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 10 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
     DocumentTooLarge(String),
     /// <p>Amazon Textract experienced a service issue. Try your call again.</p>
     InternalServerError(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request.</p>
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
     InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Textract.</p>
     ProvisionedThroughputExceeded(String),
@@ -698,7 +731,7 @@ impl Error for DetectDocumentTextError {}
 /// Errors returned by GetDocumentAnalysis
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentAnalysisError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
     /// <p>Amazon Textract experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -706,6 +739,8 @@ pub enum GetDocumentAnalysisError {
     InvalidJobId(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
+    InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Textract.</p>
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Textract is temporarily unable to process the request. Try your call again.</p>
@@ -732,6 +767,9 @@ impl GetDocumentAnalysisError {
                         err.msg,
                     ))
                 }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(GetDocumentAnalysisError::InvalidS3Object(err.msg))
+                }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetDocumentAnalysisError::ProvisionedThroughputExceeded(err.msg),
@@ -755,6 +793,7 @@ impl fmt::Display for GetDocumentAnalysisError {
             GetDocumentAnalysisError::InternalServerError(ref cause) => write!(f, "{}", cause),
             GetDocumentAnalysisError::InvalidJobId(ref cause) => write!(f, "{}", cause),
             GetDocumentAnalysisError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDocumentAnalysisError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
             GetDocumentAnalysisError::ProvisionedThroughputExceeded(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -766,7 +805,7 @@ impl Error for GetDocumentAnalysisError {}
 /// Errors returned by GetDocumentTextDetection
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentTextDetectionError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
     /// <p>Amazon Textract experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -774,6 +813,8 @@ pub enum GetDocumentTextDetectionError {
     InvalidJobId(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
+    InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Textract.</p>
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Textract is temporarily unable to process the request. Try your call again.</p>
@@ -804,6 +845,11 @@ impl GetDocumentTextDetectionError {
                         err.msg,
                     ))
                 }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(GetDocumentTextDetectionError::InvalidS3Object(
+                        err.msg,
+                    ))
+                }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetDocumentTextDetectionError::ProvisionedThroughputExceeded(err.msg),
@@ -827,6 +873,7 @@ impl fmt::Display for GetDocumentTextDetectionError {
             GetDocumentTextDetectionError::InternalServerError(ref cause) => write!(f, "{}", cause),
             GetDocumentTextDetectionError::InvalidJobId(ref cause) => write!(f, "{}", cause),
             GetDocumentTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetDocumentTextDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
             GetDocumentTextDetectionError::ProvisionedThroughputExceeded(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -838,19 +885,21 @@ impl Error for GetDocumentTextDetectionError {}
 /// Errors returned by StartDocumentAnalysis
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentAnalysisError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
-    /// <p>Amazon Textract isn't able to read the document.</p>
+    /// <p>Amazon Textract isn't able to read the document. For more information on the document limits in Amazon Textract, see <a>limits</a>.</p>
     BadDocument(String),
-    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 5 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
+    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 10 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
     DocumentTooLarge(String),
     /// <p>A <code>ClientRequestToken</code> input parameter was reused with an operation, but at least one of the other input parameters is different from the previous call to the operation. </p>
     IdempotentParameterMismatch(String),
     /// <p>Amazon Textract experienced a service issue. Try your call again.</p>
     InternalServerError(String),
+    /// <p> Indicates you do not have decrypt permissions with the KMS key entered, or the KMS key was entered incorrectly. </p>
+    InvalidKMSKey(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request.</p>
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
     InvalidS3Object(String),
     /// <p>An Amazon Textract service limit was exceeded. For example, if you start too many asynchronous jobs concurrently, calls to start operations (<code>StartDocumentTextDetection</code>, for example) raise a LimitExceededException exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Textract service limit. </p>
     LimitExceeded(String),
@@ -886,6 +935,9 @@ impl StartDocumentAnalysisError {
                     return RusotoError::Service(StartDocumentAnalysisError::InternalServerError(
                         err.msg,
                     ))
+                }
+                "InvalidKMSKeyException" => {
+                    return RusotoError::Service(StartDocumentAnalysisError::InvalidKMSKey(err.msg))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartDocumentAnalysisError::InvalidParameter(
@@ -931,6 +983,7 @@ impl fmt::Display for StartDocumentAnalysisError {
                 write!(f, "{}", cause)
             }
             StartDocumentAnalysisError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            StartDocumentAnalysisError::InvalidKMSKey(ref cause) => write!(f, "{}", cause),
             StartDocumentAnalysisError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             StartDocumentAnalysisError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
             StartDocumentAnalysisError::LimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -946,19 +999,21 @@ impl Error for StartDocumentAnalysisError {}
 /// Errors returned by StartDocumentTextDetection
 #[derive(Debug, PartialEq)]
 pub enum StartDocumentTextDetectionError {
-    /// <p>You aren't authorized to perform the action.</p>
+    /// <p>You aren't authorized to perform the action. Use the Amazon Resource Name (ARN) of an authorized user or IAM role to perform the operation.</p>
     AccessDenied(String),
-    /// <p>Amazon Textract isn't able to read the document.</p>
+    /// <p>Amazon Textract isn't able to read the document. For more information on the document limits in Amazon Textract, see <a>limits</a>.</p>
     BadDocument(String),
-    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 5 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
+    /// <p>The document can't be processed because it's too large. The maximum document size for synchronous operations 10 MB. The maximum document size for asynchronous operations is 500 MB for PDF files.</p>
     DocumentTooLarge(String),
     /// <p>A <code>ClientRequestToken</code> input parameter was reused with an operation, but at least one of the other input parameters is different from the previous call to the operation. </p>
     IdempotentParameterMismatch(String),
     /// <p>Amazon Textract experienced a service issue. Try your call again.</p>
     InternalServerError(String),
+    /// <p> Indicates you do not have decrypt permissions with the KMS key entered, or the KMS key was entered incorrectly. </p>
+    InvalidKMSKey(String),
     /// <p>An input parameter violated a constraint. For example, in synchronous operations, an <code>InvalidParameterException</code> exception occurs when neither of the <code>S3Object</code> or <code>Bytes</code> values are supplied in the <code>Document</code> request parameter. Validate your parameter before calling the API operation again.</p>
     InvalidParameter(String),
-    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request.</p>
+    /// <p>Amazon Textract is unable to access the S3 object that's specified in the request. for more information, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Configure Access to Amazon S3</a> For troubleshooting information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html">Troubleshooting Amazon S3</a> </p>
     InvalidS3Object(String),
     /// <p>An Amazon Textract service limit was exceeded. For example, if you start too many asynchronous jobs concurrently, calls to start operations (<code>StartDocumentTextDetection</code>, for example) raise a LimitExceededException exception (HTTP status code: 400) until the number of concurrently running jobs is below the Amazon Textract service limit. </p>
     LimitExceeded(String),
@@ -1000,6 +1055,11 @@ impl StartDocumentTextDetectionError {
                     return RusotoError::Service(
                         StartDocumentTextDetectionError::InternalServerError(err.msg),
                     )
+                }
+                "InvalidKMSKeyException" => {
+                    return RusotoError::Service(StartDocumentTextDetectionError::InvalidKMSKey(
+                        err.msg,
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartDocumentTextDetectionError::InvalidParameter(
@@ -1051,6 +1111,7 @@ impl fmt::Display for StartDocumentTextDetectionError {
             StartDocumentTextDetectionError::InternalServerError(ref cause) => {
                 write!(f, "{}", cause)
             }
+            StartDocumentTextDetectionError::InvalidKMSKey(ref cause) => write!(f, "{}", cause),
             StartDocumentTextDetectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             StartDocumentTextDetectionError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
             StartDocumentTextDetectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),

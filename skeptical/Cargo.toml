@@ -1,6 +1,6 @@
 [package]
 name = "skeptical"
-version = "0.45.0"
+version = "0.46.0"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 edition = "2018"
 publish = false
@@ -14,7 +14,7 @@ rusoto_sts = { path = "../rusoto/services/sts" }
 
 doc-comment = "0.3"
 env_logger = "0.5"
-tokio = "0.2"
+tokio = "1.0"
 
 [build-dependencies]
 glob = "0.3"

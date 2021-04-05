@@ -106,6 +106,10 @@ pub struct AdvancedSecurityOptions {
     #[serde(rename = "InternalUserDatabaseEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_user_database_enabled: Option<bool>,
+    /// <p>Describes the SAML application configured for a domain.</p>
+    #[serde(rename = "SAMLOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_options: Option<SAMLOptionsOutput>,
 }
 
 /// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled, master username and password (if internal database is enabled), and master user ARN (if IAM is enabled).</p>
@@ -124,6 +128,10 @@ pub struct AdvancedSecurityOptionsInput {
     #[serde(rename = "MasterUserOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_user_options: Option<MasterUserOptions>,
+    /// <p>Specifies the SAML application configuration for the domain.</p>
+    #[serde(rename = "SAMLOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_options: Option<SAMLOptionsInput>,
 }
 
 /// <p> Specifies the status of advanced security options for the specified Elasticsearch domain.</p>
@@ -719,6 +727,18 @@ pub struct DissociatePackageResponse {
 /// <p>Options to configure endpoint for the Elasticsearch domain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DomainEndpointOptions {
+    /// <p>Specify the fully qualified domain for your custom endpoint.</p>
+    #[serde(rename = "CustomEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint: Option<String>,
+    /// <p>Specify ACM certificate ARN for your custom endpoint.</p>
+    #[serde(rename = "CustomEndpointCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint_certificate_arn: Option<String>,
+    /// <p>Specify if custom endpoint should be enabled for the Elasticsearch domain.</p>
+    #[serde(rename = "CustomEndpointEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint_enabled: Option<bool>,
     /// <p>Specify if only HTTPS endpoint should be enabled for the Elasticsearch domain.</p>
     #[serde(rename = "EnforceHTTPS")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -794,6 +814,9 @@ pub struct DomainPackageDetails {
     #[serde(rename = "PackageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub package_type: Option<String>,
+    #[serde(rename = "PackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_version: Option<String>,
     /// <p>The relative path on Amazon ES nodes, which can be used as synonym_path when the package is synonym file.</p>
     #[serde(rename = "ReferencePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1120,6 +1143,39 @@ pub struct GetCompatibleElasticsearchVersionsResponse {
     #[serde(rename = "CompatibleElasticsearchVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible_elasticsearch_versions: Option<Vec<CompatibleVersionsMap>>,
+}
+
+/// <p> Container for request parameters to <code> <a>GetPackageVersionHistory</a> </code> operation. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPackageVersionHistoryRequest {
+    /// <p>Limits results to a maximum number of versions.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Used for pagination. Only necessary if a previous API call includes a non-null NextToken value. If provided, returns results for the next page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns an audit history of versions of the package.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+}
+
+/// <p> Container for response returned by <code> <a>GetPackageVersionHistory</a> </code> operation. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPackageVersionHistoryResponse {
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "PackageID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_id: Option<String>,
+    /// <p>List of <code>PackageVersionHistory</code> objects.</p>
+    #[serde(rename = "PackageVersionHistoryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_version_history_list: Option<Vec<PackageVersionHistory>>,
 }
 
 /// <p> Container for request parameters to <code> <a>GetUpgradeHistory</a> </code> operation. </p>
@@ -1532,6 +1588,9 @@ pub struct OutboundCrossClusterSearchConnectionStatus {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackageDetails {
+    #[serde(rename = "AvailablePackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub available_package_version: Option<String>,
     /// <p>Timestamp which tells creation date of the package.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1540,6 +1599,9 @@ pub struct PackageDetails {
     #[serde(rename = "ErrorDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_details: Option<ErrorDetails>,
+    #[serde(rename = "LastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
     /// <p>User-specified description of the package.</p>
     #[serde(rename = "PackageDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1574,6 +1636,24 @@ pub struct PackageSource {
     #[serde(rename = "S3Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key: Option<String>,
+}
+
+/// <p>Details of a package version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PackageVersionHistory {
+    /// <p>A message associated with the version.</p>
+    #[serde(rename = "CommitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_message: Option<String>,
+    /// <p>Timestamp which tells creation time of the package version.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>Version of the package.</p>
+    #[serde(rename = "PackageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_version: Option<String>,
 }
 
 /// <p>Container for parameters to <code>PurchaseReservedElasticsearchInstanceOffering</code></p>
@@ -1745,6 +1825,77 @@ pub struct ReservedElasticsearchInstanceOffering {
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
+}
+
+/// <p>Specifies the SAML Identity Provider's information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SAMLIdp {
+    /// <p>The unique Entity ID of the application in SAML Identity Provider.</p>
+    #[serde(rename = "EntityId")]
+    pub entity_id: String,
+    /// <p>The Metadata of the SAML application in xml format.</p>
+    #[serde(rename = "MetadataContent")]
+    pub metadata_content: String,
+}
+
+/// <p>Specifies the SAML application configuration for the domain.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SAMLOptionsInput {
+    /// <p>True if SAML is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Specifies the SAML Identity Provider's information.</p>
+    #[serde(rename = "Idp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idp: Option<SAMLIdp>,
+    /// <p>The backend role to which the SAML master user is mapped to.</p>
+    #[serde(rename = "MasterBackendRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_backend_role: Option<String>,
+    /// <p>The SAML master username, which is stored in the Amazon Elasticsearch Service domain's internal database.</p>
+    #[serde(rename = "MasterUserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_name: Option<String>,
+    /// <p>The key to use for matching the SAML Roles attribute.</p>
+    #[serde(rename = "RolesKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roles_key: Option<String>,
+    /// <p>The duration, in minutes, after which a user session becomes inactive. Acceptable values are between 1 and 1440, and the default value is 60.</p>
+    #[serde(rename = "SessionTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_timeout_minutes: Option<i64>,
+    /// <p>The key to use for matching the SAML Subject attribute.</p>
+    #[serde(rename = "SubjectKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_key: Option<String>,
+}
+
+/// <p>Describes the SAML application configured for the domain.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SAMLOptionsOutput {
+    /// <p>True if SAML is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Describes the SAML Identity Provider's information.</p>
+    #[serde(rename = "Idp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idp: Option<SAMLIdp>,
+    /// <p>The key used for matching the SAML Roles attribute.</p>
+    #[serde(rename = "RolesKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roles_key: Option<String>,
+    /// <p>The duration, in minutes, after which a user session becomes inactive.</p>
+    #[serde(rename = "SessionTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_timeout_minutes: Option<i64>,
+    /// <p>The key used for matching the SAML Subject attribute.</p>
+    #[serde(rename = "SubjectKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_key: Option<String>,
 }
 
 /// <p>The current options of an Elasticsearch domain service software options.</p>
@@ -1922,6 +2073,35 @@ pub struct UpdateElasticsearchDomainConfigResponse {
     /// <p>The status of the updated Elasticsearch domain. </p>
     #[serde(rename = "DomainConfig")]
     pub domain_config: ElasticsearchDomainConfig,
+}
+
+/// <p> Container for request parameters to <code> <a>UpdatePackage</a> </code> operation. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePackageRequest {
+    /// <p>An info message for the new version which will be shown as part of <code>GetPackageVersionHistoryResponse</code>.</p>
+    #[serde(rename = "CommitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_message: Option<String>,
+    /// <p>New description of the package.</p>
+    #[serde(rename = "PackageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_description: Option<String>,
+    /// <p>Unique identifier for the package.</p>
+    #[serde(rename = "PackageID")]
+    pub package_id: String,
+    #[serde(rename = "PackageSource")]
+    pub package_source: PackageSource,
+}
+
+/// <p> Container for response returned by <code> <a>UpdatePackage</a> </code> operation. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdatePackageResponse {
+    /// <p>Information about the package <code>PackageDetails</code>.</p>
+    #[serde(rename = "PackageDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_details: Option<PackageDetails>,
 }
 
 /// <p> Container for request parameters to <code> <a>UpgradeElasticsearchDomain</a> </code> operation. </p>
@@ -3281,6 +3461,58 @@ impl fmt::Display for GetCompatibleElasticsearchVersionsError {
     }
 }
 impl Error for GetCompatibleElasticsearchVersionsError {}
+/// Errors returned by GetPackageVersionHistory
+#[derive(Debug, PartialEq)]
+pub enum GetPackageVersionHistoryError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl GetPackageVersionHistoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPackageVersionHistoryError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetPackageVersionHistoryError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "BaseException" => {
+                    return RusotoError::Service(GetPackageVersionHistoryError::Base(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(GetPackageVersionHistoryError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetPackageVersionHistoryError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPackageVersionHistoryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPackageVersionHistoryError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetPackageVersionHistoryError::Base(ref cause) => write!(f, "{}", cause),
+            GetPackageVersionHistoryError::Internal(ref cause) => write!(f, "{}", cause),
+            GetPackageVersionHistoryError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPackageVersionHistoryError {}
 /// Errors returned by GetUpgradeHistory
 #[derive(Debug, PartialEq)]
 pub enum GetUpgradeHistoryError {
@@ -3927,6 +4159,58 @@ impl fmt::Display for UpdateElasticsearchDomainConfigError {
     }
 }
 impl Error for UpdateElasticsearchDomainConfigError {}
+/// Errors returned by UpdatePackage
+#[derive(Debug, PartialEq)]
+pub enum UpdatePackageError {
+    /// <p>An error occurred because user does not have permissions to access the resource. Returns HTTP status code 403.</p>
+    AccessDenied(String),
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdatePackageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePackageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdatePackageError::AccessDenied(err.msg))
+                }
+                "BaseException" => return RusotoError::Service(UpdatePackageError::Base(err.msg)),
+                "InternalException" => {
+                    return RusotoError::Service(UpdatePackageError::Internal(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdatePackageError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdatePackageError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdatePackageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePackageError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdatePackageError::Base(ref cause) => write!(f, "{}", cause),
+            UpdatePackageError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdatePackageError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdatePackageError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdatePackageError {}
 /// Errors returned by UpgradeElasticsearchDomain
 #[derive(Debug, PartialEq)]
 pub enum UpgradeElasticsearchDomainError {
@@ -4164,6 +4448,12 @@ pub trait Es {
         RusotoError<GetCompatibleElasticsearchVersionsError>,
     >;
 
+    /// <p>Returns a list of versions of the package, along with their creation time and commit message.</p>
+    async fn get_package_version_history(
+        &self,
+        input: GetPackageVersionHistoryRequest,
+    ) -> Result<GetPackageVersionHistoryResponse, RusotoError<GetPackageVersionHistoryError>>;
+
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
     async fn get_upgrade_history(
         &self,
@@ -4255,6 +4545,12 @@ pub trait Es {
         UpdateElasticsearchDomainConfigResponse,
         RusotoError<UpdateElasticsearchDomainConfigError>,
     >;
+
+    /// <p>Updates a package for use with Amazon ES domains.</p>
+    async fn update_package(
+        &self,
+        input: UpdatePackageRequest,
+    ) -> Result<UpdatePackageResponse, RusotoError<UpdatePackageError>>;
 
     /// <p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>
     async fn upgrade_elasticsearch_domain(
@@ -5087,6 +5383,46 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Returns a list of versions of the package, along with their creation time and commit message.</p>
+    #[allow(unused_mut)]
+    async fn get_package_version_history(
+        &self,
+        input: GetPackageVersionHistoryRequest,
+    ) -> Result<GetPackageVersionHistoryResponse, RusotoError<GetPackageVersionHistoryError>> {
+        let request_uri = format!(
+            "/2015-01-01/packages/{package_id}/history",
+            package_id = input.package_id
+        );
+
+        let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetPackageVersionHistoryResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetPackageVersionHistoryError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
     #[allow(unused_mut)]
     async fn get_upgrade_history(
@@ -5552,6 +5888,37 @@ impl Es for EsClient {
             Err(UpdateElasticsearchDomainConfigError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Updates a package for use with Amazon ES domains.</p>
+    #[allow(unused_mut)]
+    async fn update_package(
+        &self,
+        input: UpdatePackageRequest,
+    ) -> Result<UpdatePackageResponse, RusotoError<UpdatePackageError>> {
+        let request_uri = "/2015-01-01/packages/update";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdatePackageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePackageError::from_response(response))
         }
     }
 

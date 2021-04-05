@@ -11,16 +11,12 @@ keywords = ["AWS", "Amazon", "mock", "testing"]
 license = "MIT"
 name = "rusoto_mock"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.45.0"
+version = "0.46.0"
 homepage = "https://www.rusoto.org/"
 categories = [
   "development-tools::testing"
 ]
 edition = "2018"
-
-[badges]
-appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
-azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [dependencies]
 async-trait = "0.1"
@@ -32,7 +28,7 @@ serde_json = "1.0"
 
 [dependencies.rusoto_core]
 path = "../rusoto/core"
-version = "0.45.0"
+version = "0.46.0"
 default_features = false
 
 [features]

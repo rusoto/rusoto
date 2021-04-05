@@ -13,7 +13,7 @@ use futures::FutureExt;
 use futures::stream::StreamExt;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
-use tokio::time::{delay_for, timeout};
+use tokio::time::{sleep, timeout};
 
 use rusoto_core::Region;
 use rusoto_kinesis::{Kinesis, KinesisClient, ListStreamsInput};
@@ -115,7 +115,7 @@ async fn should_listen_for_shard_events() {
 
             if steam_desc_result.stream_description.stream_status == "CREATING" {
                 println!("Stream {} still initializing, waiting...", stream.name);
-                delay_for(std::time::Duration::from_secs(2)).await;
+                sleep(std::time::Duration::from_secs(2)).await;
                 continue;
             } else {
                 break
@@ -132,7 +132,7 @@ async fn should_listen_for_shard_events() {
             .unwrap();
         }
 
-        tokio::time::delay_for(Duration::from_secs(10)).await;
+        tokio::time::sleep(Duration::from_secs(10)).await;
 
         let consumer_result = client
             .register_stream_consumer(rusoto_kinesis::RegisterStreamConsumerInput {
@@ -152,7 +152,7 @@ async fn should_listen_for_shard_events() {
 
             if consumer_desc_result.consumer_description.consumer_status == "CREATING" {
                 println!("Consumer for stream {} still initializing, waiting...", stream.name);
-                delay_for(std::time::Duration::from_secs(2)).await;
+                sleep(std::time::Duration::from_secs(2)).await;
                 continue;
             } else {
                 break

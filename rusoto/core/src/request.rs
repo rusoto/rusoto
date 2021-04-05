@@ -213,7 +213,8 @@ impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
     inner: HyperClient<C, Body>,
-    local_agent: Option<String>,
+    local_agent_prepend: Option<String>,
+    local_agent_append: Option<String>,
 }
 
 impl HttpClient {
@@ -223,7 +224,7 @@ impl HttpClient {
         let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new();
+        let connector = HttpsConnector::with_native_roots();
 
         Ok(Self::from_connector(connector))
     }
@@ -234,15 +235,26 @@ impl HttpClient {
         let connector = HttpsConnector::new();
 
         #[cfg(feature = "rustls")]
-        let connector = HttpsConnector::new();
+        let connector = HttpsConnector::with_native_roots();
 
         Ok(Self::from_connector_with_config(connector, config))
     }
 
+    /// An alias for [`local_agent_prepend`] for backwards compatibility
+    pub fn local_agent(&mut self, local_agent: String) {
+        self.local_agent_prepend(local_agent)
+    }
+
     /// Sets a local agent that is prepended to the default HTTP
     /// `User-Agent` used by Rusoto.
-    pub fn local_agent(&mut self, local_agent: String) {
-        self.local_agent = Some(local_agent)
+    pub fn local_agent_prepend(&mut self, local_agent: String) {
+        self.local_agent_prepend = Some(local_agent)
+    }
+
+    /// Sets a local agent that is appended to the default HTTP
+    /// `User-Agent` used by Rusoto.
+    pub fn local_agent_append(&mut self, local_agent: String) {
+        self.local_agent_append = Some(local_agent)
     }
 }
 
@@ -255,7 +267,8 @@ where
         let inner = HyperClient::builder().build(connector);
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 
@@ -266,11 +279,15 @@ where
         config
             .read_buf_size
             .map(|sz| builder.http1_read_buf_exact_size(sz));
+        config
+            .pool_idle_timeout
+            .map(|t| builder.pool_idle_timeout(t));
         let inner = builder.build(connector);
 
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 
@@ -279,7 +296,8 @@ where
         let inner = builder.build(connector);
         HttpClient {
             inner,
-            local_agent: None,
+            local_agent_prepend: None,
+            local_agent_append: None,
         }
     }
 }
@@ -287,6 +305,7 @@ where
 /// Configuration options for the HTTP Client
 pub struct HttpConfig {
     read_buf_size: Option<usize>,
+    pool_idle_timeout: Option<Duration>,
 }
 
 impl HttpConfig {
@@ -294,6 +313,7 @@ impl HttpConfig {
     pub fn new() -> HttpConfig {
         HttpConfig {
             read_buf_size: None,
+            pool_idle_timeout: None,
         }
     }
     /// Sets the size of the read buffer for inbound data
@@ -301,6 +321,17 @@ impl HttpConfig {
     /// by requiring fewer copies out of the socket buffer.
     pub fn read_buf_size(&mut self, sz: usize) {
         self.read_buf_size = Some(sz);
+    }
+
+    /// Set an timeout for idle sockets being kept-alive.
+    /// Some AWS services, [like S3](https://aws.amazon.com/premiumsupport/knowledge-center/s3-socket-connection-timeout-error/)
+    /// require this value to match the one configured at the server's level
+    /// in order to avoid connection closed errors.
+    pub fn pool_idle_timeout<D>(&mut self, timeout: D)
+    where
+        D: Into<Option<Duration>>,
+    {
+        self.pool_idle_timeout = timeout.into();
     }
 }
 
@@ -326,6 +357,7 @@ where
         "DELETE" => Method::DELETE,
         "GET" => Method::GET,
         "HEAD" => Method::HEAD,
+        "PATCH" => Method::PATCH,
         v => {
             return Err(HttpDispatchError {
                 message: format!("Unsupported HTTP verb {}", v),
@@ -424,15 +456,23 @@ where
         request: SignedRequest,
         timeout: Option<Duration>,
     ) -> DispatchSignedRequestFuture {
-        let user_agent = self
-            .local_agent
-            .as_ref()
-            .map(|agent| format!("{} {}", agent, *DEFAULT_USER_AGENT).parse())
-            .unwrap_or_else(|| DEFAULT_USER_AGENT.parse())
-            .expect("failed to parse user-agent string");
-
+        let user_agent = build_user_agent(&self.local_agent_prepend, &self.local_agent_append);
         http_client_dispatch::<C>(self.inner.clone(), request, timeout, user_agent).boxed()
     }
+}
+
+/// Builds a [`HeaderValue`] using [`DEFAULT_USER_AGENT`] as a base string and,
+/// optionally, prepending/appending additional strings, taking care to trim
+/// whitespace.
+fn build_user_agent(prepend: &Option<String>, append: &Option<String>) -> HeaderValue {
+    let (pre, post) = (
+        prepend.as_deref().unwrap_or(""),
+        append.as_deref().unwrap_or(""),
+    );
+    let agent = format!("{} {} {}", pre, *DEFAULT_USER_AGENT, post)
+        .trim()
+        .parse();
+    agent.unwrap_or_else(|_| DEFAULT_USER_AGENT.parse().unwrap())
 }
 
 #[derive(Debug, PartialEq)]
@@ -511,5 +551,22 @@ mod tests {
         let io_error = ::std::io::Error::new(::std::io::ErrorKind::Other, "my error message");
         let error = HttpDispatchError::from(io_error);
         assert_eq!(error.to_string(), "my error message")
+    }
+
+    #[test]
+    fn building_user_agents() {
+        let base = format!("{}", *DEFAULT_USER_AGENT);
+        assert_eq!(
+            base.parse::<HeaderValue>().unwrap(),
+            build_user_agent(&None, &None)
+        );
+        assert_eq!(
+            format!("before {}", base).parse::<HeaderValue>().unwrap(),
+            build_user_agent(&Some("before".to_string()), &None)
+        );
+        assert_eq!(
+            format!("{} after", base).parse::<HeaderValue>().unwrap(),
+            build_user_agent(&None, &Some("after".to_string()))
+        );
     }
 }

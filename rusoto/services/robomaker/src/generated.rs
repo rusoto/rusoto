@@ -27,6 +27,23 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchDeleteWorldsRequest {
+    /// <p>A list of Amazon Resource Names (arns) that correspond to worlds to delete.</p>
+    #[serde(rename = "worlds")]
+    pub worlds: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchDeleteWorldsResponse {
+    /// <p>A list of unprocessed worlds associated with the call. These worlds were not deleted.</p>
+    #[serde(rename = "unprocessedWorlds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_worlds: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeSimulationJobRequest {
     /// <p>A list of Amazon Resource Names (ARNs) of simulation jobs to describe.</p>
     #[serde(rename = "jobs")]
@@ -95,10 +112,34 @@ pub struct CancelSimulationJobRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelWorldExportJobRequest {
+    /// <p>The Amazon Resource Name (arn) of the world export job to cancel.</p>
+    #[serde(rename = "job")]
+    pub job: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelWorldExportJobResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelWorldGenerationJobRequest {
+    /// <p>The Amazon Resource Name (arn) of the world generator job to cancel.</p>
+    #[serde(rename = "job")]
+    pub job: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelWorldGenerationJobResponse {}
+
 /// <p>Compute information for the simulation job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Compute {
-    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
+    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. The default is 15. </p>
     #[serde(rename = "simulationUnitLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub simulation_unit_limit: Option<i64>,
@@ -108,7 +149,7 @@ pub struct Compute {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComputeResponse {
-    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
+    /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. The default is 15. </p>
     #[serde(rename = "simulationUnitLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub simulation_unit_limit: Option<i64>,
@@ -608,6 +649,177 @@ pub struct CreateSimulationJobResponse {
     pub vpc_config: Option<VPCConfigResponse>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateWorldExportJobRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The IAM role that the world export process uses to access the Amazon S3 bucket and put the export.</p>
+    #[serde(rename = "iamRole")]
+    pub iam_role: String,
+    #[serde(rename = "outputLocation")]
+    pub output_location: OutputLocation,
+    /// <p>A map that contains tag keys and tag values that are attached to the world export job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of Amazon Resource Names (arns) that correspond to worlds to export.</p>
+    #[serde(rename = "worlds")]
+    pub worlds: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWorldExportJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world export job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world export job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> <dt>AllWorldGenerationFailed</dt> <dd> <p>All of the worlds in the world generation job failed. This can happen if your <code>worldCount</code> is greater than 50 or less than 1. </p> </dd> </dl> <p>For more information about troubleshooting WorldForge, see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/troubleshooting-worldforge.html">Troubleshooting Simulation WorldForge</a>. </p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The IAM role that the world export process uses to access the Amazon S3 bucket and put the export. </p>
+    #[serde(rename = "iamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role: Option<String>,
+    #[serde(rename = "outputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
+    /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world export job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateWorldGenerationJobRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world generator job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Amazon Resource Name (arn) of the world template describing the worlds you want to create.</p>
+    #[serde(rename = "template")]
+    pub template: String,
+    /// <p>Information about the world count.</p>
+    #[serde(rename = "worldCount")]
+    pub world_count: WorldCount,
+    /// <p>A map that contains tag keys and tag values that are attached to the generated worlds.</p>
+    #[serde(rename = "worldTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWorldGenerationJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world generator job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world generator job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p><p>The failure code of the world generator job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p><p>The status of the world generator job.</p> <dl> <dt>Pending</dt> <dd> <p>The world generator job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generator job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generator job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generator job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generator job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generator job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world generator job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+    /// <p>Information about the world count. </p>
+    #[serde(rename = "worldCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_count: Option<WorldCount>,
+    /// <p>A map that contains tag keys and tag values that are attached to the generated worlds.</p>
+    #[serde(rename = "worldTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateWorldTemplateRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the world template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world template.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The world template body.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p>The location of the world template.</p>
+    #[serde(rename = "templateLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_location: Option<TemplateLocation>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWorldTemplateResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world template.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The name of the world template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world template.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Information about a data source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -695,6 +907,18 @@ pub struct DeleteSimulationApplicationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSimulationApplicationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteWorldTemplateRequest {
+    /// <p>The Amazon Resource Name (arn) of the world template you want to delete.</p>
+    #[serde(rename = "template")]
+    pub template: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteWorldTemplateResponse {}
 
 /// <p>Information about a deployment application configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -1231,6 +1455,185 @@ pub struct DescribeSimulationJobResponse {
     pub vpc_config: Option<VPCConfigResponse>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWorldExportJobRequest {
+    /// <p>The Amazon Resource Name (arn) of the world export job to describe.</p>
+    #[serde(rename = "job")]
+    pub job: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeWorldExportJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world export job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world export job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p><p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The reason why the world export job failed.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The IAM role that the world export process uses to access the Amazon S3 bucket and put the export.</p>
+    #[serde(rename = "iamRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role: Option<String>,
+    #[serde(rename = "outputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
+    /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> and <code>failureReason</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world export job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of Amazon Resource Names (arns) that correspond to worlds to be exported.</p>
+    #[serde(rename = "worlds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worlds: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWorldGenerationJobRequest {
+    /// <p>The Amazon Resource Name (arn) of the world generation job to describe.</p>
+    #[serde(rename = "job")]
+    pub job: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeWorldGenerationJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world generation job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world generation job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p><p>The failure code of the world generation job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The reason why the world generation job failed.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>Summary information about finished worlds.</p>
+    #[serde(rename = "finishedWorldsSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finished_worlds_summary: Option<FinishedWorldsSummary>,
+    /// <p><p>The status of the world generation job:</p> <dl> <dt>Pending</dt> <dd> <p>The world generation job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generation job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generation job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generation job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generation job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generation job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world generation job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+    /// <p>Information about the world count.</p>
+    #[serde(rename = "worldCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_count: Option<WorldCount>,
+    /// <p>A map that contains tag keys and tag values that are attached to the generated worlds.</p>
+    #[serde(rename = "worldTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWorldRequest {
+    /// <p>The Amazon Resource Name (arn) of the world you want to describe.</p>
+    #[serde(rename = "world")]
+    pub world: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeWorldResponse {
+    /// <p>The Amazon Resource Name (arn) of the world.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The Amazon Resource Name (arn) of the world generation job that generated the world.</p>
+    #[serde(rename = "generationJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_job: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWorldTemplateRequest {
+    /// <p>The Amazon Resource Name (arn) of the world template you want to describe.</p>
+    #[serde(rename = "template")]
+    pub template: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeWorldTemplateResponse {
+    /// <p>The Amazon Resource Name (ARN) of the world template.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the world template was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The name of the world template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A map that contains tag keys and tag values that are attached to the world template.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Information about a failed create simulation job request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1253,6 +1656,20 @@ pub struct FailedCreateSimulationJobRequest {
     pub request: Option<SimulationJobRequest>,
 }
 
+/// <p>Information about worlds that failed.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FailureSummary {
+    /// <p>The worlds that failed.</p>
+    #[serde(rename = "failures")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failures: Option<Vec<WorldFailure>>,
+    /// <p>The total number of failures.</p>
+    #[serde(rename = "totalFailureCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_failure_count: Option<i64>,
+}
+
 /// <p>Information about a filter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1265,6 +1682,24 @@ pub struct Filter {
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p>Information about worlds that finished.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FinishedWorldsSummary {
+    /// <p>Information about worlds that failed.</p>
+    #[serde(rename = "failureSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_summary: Option<FailureSummary>,
+    /// <p>The total number of finished worlds.</p>
+    #[serde(rename = "finishedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finished_count: Option<i64>,
+    /// <p>A list of worlds that succeeded.</p>
+    #[serde(rename = "succeededWorlds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub succeeded_worlds: Option<Vec<String>>,
 }
 
 /// <p>Information about a fleet.</p>
@@ -1295,6 +1730,28 @@ pub struct Fleet {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetWorldTemplateBodyRequest {
+    /// <p>The Amazon Resource Name (arn) of the world generator job.</p>
+    #[serde(rename = "generationJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_job: Option<String>,
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetWorldTemplateBodyResponse {
+    /// <p>The world template body.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
 }
 
 /// <p>Information about a launch configuration.</p>
@@ -1331,7 +1788,7 @@ pub struct ListDeploymentJobsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListDeploymentJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListDeploymentJobs</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1344,7 +1801,7 @@ pub struct ListDeploymentJobsResponse {
     #[serde(rename = "deploymentJobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_jobs: Option<Vec<DeploymentJob>>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListDeploymentJobs</code> request. When the results of a <code>ListDeploymentJobs</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListDeploymentJobs</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1361,7 +1818,7 @@ pub struct ListFleetsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListFleets</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>If the previous paginated request did not return all of the remaining results, the response object&#39;s <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListFleets</code> again and assign that token to the request object&#39;s <code>nextToken</code> parameter. If there are no remaining results, the previous response object&#39;s NextToken parameter is set to null. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1374,7 +1831,7 @@ pub struct ListFleetsResponse {
     #[serde(rename = "fleetDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_details: Option<Vec<Fleet>>,
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListDeploymentJobs</code> request. When the results of a <code>ListFleets</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListFleets</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1391,7 +1848,7 @@ pub struct ListRobotApplicationsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobotApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListRobotApplications</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1404,7 +1861,7 @@ pub struct ListRobotApplicationsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotApplicationsResponse {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListRobotApplications</code> request. When the results of a <code>ListRobotApplications</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListRobotApplications</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1425,7 +1882,7 @@ pub struct ListRobotsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListRobots</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListRobots</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1434,7 +1891,7 @@ pub struct ListRobotsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotsResponse {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListRobots</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListRobots</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1455,7 +1912,7 @@ pub struct ListSimulationApplicationsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationApplications</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationApplications</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1468,7 +1925,7 @@ pub struct ListSimulationApplicationsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationApplicationsResponse {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationApplications</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationApplications</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1489,7 +1946,7 @@ pub struct ListSimulationJobBatchesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationJobBatches</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationJobBatches</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1498,7 +1955,7 @@ pub struct ListSimulationJobBatchesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobBatchesResponse {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationJobBatches</code> request. When the results of a <code>ListSimulationJobBatches</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationJobBatches</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1519,7 +1976,7 @@ pub struct ListSimulationJobsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListSimulationJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. </p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationJobs</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1528,7 +1985,7 @@ pub struct ListSimulationJobsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobsResponse {
-    /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationJobs</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListSimulationJobs</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1552,6 +2009,120 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListWorldExportJobsRequest {
+    /// <p>Optional filters to limit results. You can use <code>generationJobId</code> and <code>templateId</code>.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>When this parameter is used, <code>ListWorldExportJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListWorldExportJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListWorldExportJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldExportJobs</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWorldExportJobsResponse {
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldExportJobsRequest</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Summary information for world export jobs.</p>
+    #[serde(rename = "worldExportJobSummaries")]
+    pub world_export_job_summaries: Vec<WorldExportJobSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListWorldGenerationJobsRequest {
+    /// <p>Optional filters to limit results. You can use <code>status</code> and <code>templateId</code>.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>When this parameter is used, <code>ListWorldGeneratorJobs</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListWorldGeneratorJobs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListWorldGeneratorJobs</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldGenerationJobsRequest</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWorldGenerationJobsResponse {
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldGeneratorJobsRequest</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Summary information for world generator jobs.</p>
+    #[serde(rename = "worldGenerationJobSummaries")]
+    pub world_generation_job_summaries: Vec<WorldGenerationJobSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListWorldTemplatesRequest {
+    /// <p>When this parameter is used, <code>ListWorldTemplates</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListWorldTemplates</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListWorldTemplates</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldTemplates</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWorldTemplatesResponse {
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorldTemplates</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Summary information for templates.</p>
+    #[serde(rename = "templateSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_summaries: Option<Vec<TemplateSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListWorldsRequest {
+    /// <p>Optional filters to limit results. You can use <code>status</code>.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>When this parameter is used, <code>ListWorlds</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListWorlds</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListWorlds</code> returns up to 100 results and a <code>nextToken</code> value if applicable. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorlds</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWorldsResponse {
+    /// <p>If the previous paginated request did not return all of the remaining results, the response object's <code>nextToken</code> parameter value is set to a token. To retrieve the next set of results, call <code>ListWorlds</code> again and assign that token to the request object's <code>nextToken</code> parameter. If there are no remaining results, the previous response object's NextToken parameter is set to null. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Summary information for worlds.</p>
+    #[serde(rename = "worldSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_summaries: Option<Vec<WorldSummary>>,
 }
 
 /// <p>The logging configuration.</p>
@@ -1860,6 +2431,10 @@ pub struct SimulationApplicationConfig {
     /// <p>The launch configuration for the simulation application.</p>
     #[serde(rename = "launchConfig")]
     pub launch_config: LaunchConfig,
+    /// <p>A list of world configurations.</p>
+    #[serde(rename = "worldConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_configs: Option<Vec<WorldConfig>>,
 }
 
 /// <p>Summary information for a simulation application.</p>
@@ -2284,6 +2859,40 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// <p>Information about a template location.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TemplateLocation {
+    /// <p>The Amazon S3 bucket name.</p>
+    #[serde(rename = "s3Bucket")]
+    pub s_3_bucket: String,
+    /// <p>The list of S3 keys identifying the data source files.</p>
+    #[serde(rename = "s3Key")]
+    pub s_3_key: String,
+}
+
+/// <p>Summary information for a template.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TemplateSummary {
+    /// <p>The Amazon Resource Name (ARN) of the template.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the template was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The name of the template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -2416,6 +3025,47 @@ pub struct UpdateSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateWorldTemplateRequest {
+    /// <p>The name of the template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Amazon Resource Name (arn) of the world template to update.</p>
+    #[serde(rename = "template")]
+    pub template: String,
+    /// <p>The world template body.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+    /// <p>The location of the world template.</p>
+    #[serde(rename = "templateLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_location: Option<TemplateLocation>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateWorldTemplateResponse {
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the world template was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The name of the world template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>If your simulation job accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and two subnet IDs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VPCConfig {
@@ -2454,6 +3104,166 @@ pub struct VPCConfigResponse {
     pub vpc_id: Option<String>,
 }
 
+/// <p>Configuration information for a world.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WorldConfig {
+    /// <p>The world generated by Simulation WorldForge.</p>
+    #[serde(rename = "world")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world: Option<String>,
+}
+
+/// <p>The number of worlds that will be created. You can configure the number of unique floorplans and the number of unique interiors for each floor plan. For example, if you want 1 world with 20 unique interiors, you set <code>floorplanCount = 1</code> and <code>interiorCountPerFloorplan = 20</code>. This will result in 20 worlds (<code>floorplanCount</code> * <code>interiorCountPerFloorplan)</code>. </p> <p>If you set <code>floorplanCount = 4</code> and <code>interiorCountPerFloorplan = 5</code>, there will be 20 worlds with 5 unique floor plans. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WorldCount {
+    /// <p>The number of unique floorplans.</p>
+    #[serde(rename = "floorplanCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub floorplan_count: Option<i64>,
+    /// <p>The number of unique interiors per floorplan.</p>
+    #[serde(rename = "interiorCountPerFloorplan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interior_count_per_floorplan: Option<i64>,
+}
+
+/// <p>Information about a world export job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WorldExportJobSummary {
+    /// <p>The Amazon Resource Name (ARN) of the world export job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world export job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p><p>The status of the world export job.</p> <dl> <dt>Pending</dt> <dd> <p>The world export job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world export job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world export job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world export job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>Canceled</dt> <dd> <p>The world export job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world export job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A list of worlds.</p>
+    #[serde(rename = "worlds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worlds: Option<Vec<String>>,
+}
+
+/// <p>Information about a failed world.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WorldFailure {
+    /// <p><p>The failure code of the world export job if it failed:</p> <dl> <dt>InternalServiceError</dt> <dd> <p>Internal service error.</p> </dd> <dt>LimitExceeded</dt> <dd> <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p> </dd> <dt>ResourceNotFound</dt> <dd> <p>The specified resource could not be found. </p> </dd> <dt>RequestThrottled</dt> <dd> <p>The request was throttled.</p> </dd> <dt>InvalidInput</dt> <dd> <p>An input parameter in the request is not valid.</p> </dd> </dl></p>
+    #[serde(rename = "failureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The number of failed worlds.</p>
+    #[serde(rename = "failureCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_count: Option<i64>,
+    /// <p>The sample reason why the world failed. World errors are aggregated. A sample is used as the <code>sampleFailureReason</code>. </p>
+    #[serde(rename = "sampleFailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_failure_reason: Option<String>,
+}
+
+/// <p>Information about a world generator job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WorldGenerationJobSummary {
+    /// <p>The Amazon Resource Name (ARN) of the world generator job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world generator job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The number of worlds that failed.</p>
+    #[serde(rename = "failedWorldCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_world_count: Option<i64>,
+    /// <p><p>The status of the world generator job:</p> <dl> <dt>Pending</dt> <dd> <p>The world generator job request is pending.</p> </dd> <dt>Running</dt> <dd> <p>The world generator job is running. </p> </dd> <dt>Completed</dt> <dd> <p>The world generator job completed. </p> </dd> <dt>Failed</dt> <dd> <p>The world generator job failed. See <code>failureCode</code> for more information. </p> </dd> <dt>PartialFailed</dt> <dd> <p>Some worlds did not generate.</p> </dd> <dt>Canceled</dt> <dd> <p>The world generator job was cancelled.</p> </dd> <dt>Canceling</dt> <dd> <p>The world generator job is being cancelled.</p> </dd> </dl></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The number of worlds that were generated.</p>
+    #[serde(rename = "succeededWorldCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub succeeded_world_count: Option<i64>,
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+    /// <p>Information about the world count.</p>
+    #[serde(rename = "worldCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub world_count: Option<WorldCount>,
+}
+
+/// <p>Information about a world.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WorldSummary {
+    /// <p>The Amazon Resource Name (ARN) of the world.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the world was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The Amazon Resource Name (arn) of the world generation job.</p>
+    #[serde(rename = "generationJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_job: Option<String>,
+    /// <p>The Amazon Resource Name (arn) of the world template.</p>
+    #[serde(rename = "template")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template: Option<String>,
+}
+
+/// Errors returned by BatchDeleteWorlds
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteWorldsError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl BatchDeleteWorldsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteWorldsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(BatchDeleteWorldsError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(BatchDeleteWorldsError::InvalidParameter(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(BatchDeleteWorldsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchDeleteWorldsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchDeleteWorldsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchDeleteWorldsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            BatchDeleteWorldsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchDeleteWorldsError {}
 /// Errors returned by BatchDescribeSimulationJob
 #[derive(Debug, PartialEq)]
 pub enum BatchDescribeSimulationJobError {
@@ -2670,6 +3480,112 @@ impl fmt::Display for CancelSimulationJobBatchError {
     }
 }
 impl Error for CancelSimulationJobBatchError {}
+/// Errors returned by CancelWorldExportJob
+#[derive(Debug, PartialEq)]
+pub enum CancelWorldExportJobError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CancelWorldExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelWorldExportJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CancelWorldExportJobError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CancelWorldExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelWorldExportJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CancelWorldExportJobError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelWorldExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelWorldExportJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CancelWorldExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelWorldExportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelWorldExportJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelWorldExportJobError {}
+/// Errors returned by CancelWorldGenerationJob
+#[derive(Debug, PartialEq)]
+pub enum CancelWorldGenerationJobError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CancelWorldGenerationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelWorldGenerationJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CancelWorldGenerationJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CancelWorldGenerationJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelWorldGenerationJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CancelWorldGenerationJobError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelWorldGenerationJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelWorldGenerationJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CancelWorldGenerationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CancelWorldGenerationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CancelWorldGenerationJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelWorldGenerationJobError {}
 /// Errors returned by CreateDeploymentJob
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentJobError {
@@ -3222,6 +4138,222 @@ impl fmt::Display for CreateSimulationJobError {
     }
 }
 impl Error for CreateSimulationJobError {}
+/// Errors returned by CreateWorldExportJob
+#[derive(Debug, PartialEq)]
+pub enum CreateWorldExportJobError {
+    /// <p>The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical. </p>
+    IdempotentParameterMismatch(String),
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CreateWorldExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldExportJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        CreateWorldExportJobError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateWorldExportJobError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateWorldExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateWorldExportJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateWorldExportJobError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateWorldExportJobError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateWorldExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateWorldExportJobError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateWorldExportJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateWorldExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateWorldExportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateWorldExportJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateWorldExportJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateWorldExportJobError {}
+/// Errors returned by CreateWorldGenerationJob
+#[derive(Debug, PartialEq)]
+pub enum CreateWorldGenerationJobError {
+    /// <p>The request uses the same client token as a previous, but non-identical request. Do not reuse a client token with different requests, unless the requests are identical. </p>
+    IdempotentParameterMismatch(String),
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CreateWorldGenerationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldGenerationJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        CreateWorldGenerationJobError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateWorldGenerationJobError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateWorldGenerationJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateWorldGenerationJobError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateWorldGenerationJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateWorldGenerationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateWorldGenerationJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWorldGenerationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateWorldGenerationJobError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateWorldGenerationJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateWorldGenerationJobError {}
+/// Errors returned by CreateWorldTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateWorldTemplateError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl CreateWorldTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorldTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateWorldTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateWorldTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateWorldTemplateError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreateWorldTemplateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateWorldTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWorldTemplateError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateWorldTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateWorldTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateWorldTemplateError {}
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
@@ -3402,6 +4534,58 @@ impl fmt::Display for DeleteSimulationApplicationError {
     }
 }
 impl Error for DeleteSimulationApplicationError {}
+/// Errors returned by DeleteWorldTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorldTemplateError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DeleteWorldTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorldTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteWorldTemplateError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteWorldTemplateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteWorldTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteWorldTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteWorldTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteWorldTemplateError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteWorldTemplateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteWorldTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteWorldTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteWorldTemplateError {}
 /// Errors returned by DeregisterRobot
 #[derive(Debug, PartialEq)]
 pub enum DeregisterRobotError {
@@ -3820,6 +5004,272 @@ impl fmt::Display for DescribeSimulationJobBatchError {
     }
 }
 impl Error for DescribeSimulationJobBatchError {}
+/// Errors returned by DescribeWorld
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorldError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeWorldError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeWorldError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeWorldError::InvalidParameter(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeWorldError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeWorldError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeWorldError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWorldError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeWorldError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeWorldError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeWorldError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeWorldError {}
+/// Errors returned by DescribeWorldExportJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorldExportJobError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeWorldExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldExportJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeWorldExportJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeWorldExportJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeWorldExportJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeWorldExportJobError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeWorldExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWorldExportJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeWorldExportJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeWorldExportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeWorldExportJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeWorldExportJobError {}
+/// Errors returned by DescribeWorldGenerationJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorldGenerationJobError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeWorldGenerationJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeWorldGenerationJobError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeWorldGenerationJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeWorldGenerationJobError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeWorldGenerationJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeWorldGenerationJobError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeWorldGenerationJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWorldGenerationJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeWorldGenerationJobError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeWorldGenerationJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeWorldGenerationJobError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeWorldGenerationJobError {}
+/// Errors returned by DescribeWorldTemplate
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorldTemplateError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DescribeWorldTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorldTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DescribeWorldTemplateError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeWorldTemplateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeWorldTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeWorldTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeWorldTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWorldTemplateError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DescribeWorldTemplateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeWorldTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeWorldTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeWorldTemplateError {}
+/// Errors returned by GetWorldTemplateBody
+#[derive(Debug, PartialEq)]
+pub enum GetWorldTemplateBodyError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl GetWorldTemplateBodyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorldTemplateBodyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetWorldTemplateBodyError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetWorldTemplateBodyError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetWorldTemplateBodyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetWorldTemplateBodyError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetWorldTemplateBodyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetWorldTemplateBodyError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetWorldTemplateBodyError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetWorldTemplateBodyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetWorldTemplateBodyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetWorldTemplateBodyError {}
 /// Errors returned by ListDeploymentJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentJobsError {
@@ -4194,6 +5644,180 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by ListWorldExportJobs
+#[derive(Debug, PartialEq)]
+pub enum ListWorldExportJobsError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl ListWorldExportJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldExportJobsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListWorldExportJobsError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListWorldExportJobsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListWorldExportJobsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListWorldExportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListWorldExportJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListWorldExportJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListWorldExportJobsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListWorldExportJobsError {}
+/// Errors returned by ListWorldGenerationJobs
+#[derive(Debug, PartialEq)]
+pub enum ListWorldGenerationJobsError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl ListWorldGenerationJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldGenerationJobsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListWorldGenerationJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListWorldGenerationJobsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListWorldGenerationJobsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListWorldGenerationJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListWorldGenerationJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListWorldGenerationJobsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListWorldGenerationJobsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListWorldGenerationJobsError {}
+/// Errors returned by ListWorldTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListWorldTemplatesError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl ListWorldTemplatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldTemplatesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListWorldTemplatesError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListWorldTemplatesError::InvalidParameter(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListWorldTemplatesError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListWorldTemplatesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListWorldTemplatesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListWorldTemplatesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListWorldTemplatesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListWorldTemplatesError {}
+/// Errors returned by ListWorlds
+#[derive(Debug, PartialEq)]
+pub enum ListWorldsError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl ListWorldsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorldsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListWorldsError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListWorldsError::InvalidParameter(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListWorldsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListWorldsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListWorldsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListWorldsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListWorldsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListWorldsError {}
 /// Errors returned by RegisterRobot
 #[derive(Debug, PartialEq)]
 pub enum RegisterRobotError {
@@ -4666,9 +6290,67 @@ impl fmt::Display for UpdateSimulationApplicationError {
     }
 }
 impl Error for UpdateSimulationApplicationError {}
+/// Errors returned by UpdateWorldTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorldTemplateError {
+    /// <p>AWS RoboMaker experienced a service issue. Try your call again.</p>
+    InternalServer(String),
+    /// <p>A parameter specified in a request is not valid, is unsupported, or cannot be used. The returned message provides an explanation of the error value.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>AWS RoboMaker is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl UpdateWorldTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorldTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateWorldTemplateError::InternalServer(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateWorldTemplateError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateWorldTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateWorldTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateWorldTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateWorldTemplateError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateWorldTemplateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateWorldTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateWorldTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateWorldTemplateError {}
 /// Trait representing the capabilities of the RoboMaker API. RoboMaker clients implement this trait.
 #[async_trait]
 pub trait Robomaker {
+    /// <p>Deletes one or more worlds in a batch operation.</p>
+    async fn batch_delete_worlds(
+        &self,
+        input: BatchDeleteWorldsRequest,
+    ) -> Result<BatchDeleteWorldsResponse, RusotoError<BatchDeleteWorldsError>>;
+
     /// <p>Describes one or more simulation jobs.</p>
     async fn batch_describe_simulation_job(
         &self,
@@ -4692,6 +6374,18 @@ pub trait Robomaker {
         &self,
         input: CancelSimulationJobBatchRequest,
     ) -> Result<CancelSimulationJobBatchResponse, RusotoError<CancelSimulationJobBatchError>>;
+
+    /// <p>Cancels the specified export job.</p>
+    async fn cancel_world_export_job(
+        &self,
+        input: CancelWorldExportJobRequest,
+    ) -> Result<CancelWorldExportJobResponse, RusotoError<CancelWorldExportJobError>>;
+
+    /// <p>Cancels the specified world generator job.</p>
+    async fn cancel_world_generation_job(
+        &self,
+        input: CancelWorldGenerationJobRequest,
+    ) -> Result<CancelWorldGenerationJobResponse, RusotoError<CancelWorldGenerationJobError>>;
 
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
     async fn create_deployment_job(
@@ -4747,6 +6441,24 @@ pub trait Robomaker {
         input: CreateSimulationJobRequest,
     ) -> Result<CreateSimulationJobResponse, RusotoError<CreateSimulationJobError>>;
 
+    /// <p>Creates a world export job.</p>
+    async fn create_world_export_job(
+        &self,
+        input: CreateWorldExportJobRequest,
+    ) -> Result<CreateWorldExportJobResponse, RusotoError<CreateWorldExportJobError>>;
+
+    /// <p>Creates worlds using the specified template.</p>
+    async fn create_world_generation_job(
+        &self,
+        input: CreateWorldGenerationJobRequest,
+    ) -> Result<CreateWorldGenerationJobResponse, RusotoError<CreateWorldGenerationJobError>>;
+
+    /// <p>Creates a world template.</p>
+    async fn create_world_template(
+        &self,
+        input: CreateWorldTemplateRequest,
+    ) -> Result<CreateWorldTemplateResponse, RusotoError<CreateWorldTemplateError>>;
+
     /// <p>Deletes a fleet.</p>
     async fn delete_fleet(
         &self,
@@ -4770,6 +6482,12 @@ pub trait Robomaker {
         &self,
         input: DeleteSimulationApplicationRequest,
     ) -> Result<DeleteSimulationApplicationResponse, RusotoError<DeleteSimulationApplicationError>>;
+
+    /// <p>Deletes a world template.</p>
+    async fn delete_world_template(
+        &self,
+        input: DeleteWorldTemplateRequest,
+    ) -> Result<DeleteWorldTemplateResponse, RusotoError<DeleteWorldTemplateError>>;
 
     /// <p>Deregisters a robot.</p>
     async fn deregister_robot(
@@ -4822,6 +6540,36 @@ pub trait Robomaker {
         input: DescribeSimulationJobBatchRequest,
     ) -> Result<DescribeSimulationJobBatchResponse, RusotoError<DescribeSimulationJobBatchError>>;
 
+    /// <p>Describes a world.</p>
+    async fn describe_world(
+        &self,
+        input: DescribeWorldRequest,
+    ) -> Result<DescribeWorldResponse, RusotoError<DescribeWorldError>>;
+
+    /// <p>Describes a world export job.</p>
+    async fn describe_world_export_job(
+        &self,
+        input: DescribeWorldExportJobRequest,
+    ) -> Result<DescribeWorldExportJobResponse, RusotoError<DescribeWorldExportJobError>>;
+
+    /// <p>Describes a world generation job.</p>
+    async fn describe_world_generation_job(
+        &self,
+        input: DescribeWorldGenerationJobRequest,
+    ) -> Result<DescribeWorldGenerationJobResponse, RusotoError<DescribeWorldGenerationJobError>>;
+
+    /// <p>Describes a world template.</p>
+    async fn describe_world_template(
+        &self,
+        input: DescribeWorldTemplateRequest,
+    ) -> Result<DescribeWorldTemplateResponse, RusotoError<DescribeWorldTemplateError>>;
+
+    /// <p>Gets the world template body.</p>
+    async fn get_world_template_body(
+        &self,
+        input: GetWorldTemplateBodyRequest,
+    ) -> Result<GetWorldTemplateBodyResponse, RusotoError<GetWorldTemplateBodyError>>;
+
     /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
     async fn list_deployment_jobs(
         &self,
@@ -4870,6 +6618,30 @@ pub trait Robomaker {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// <p>Lists world export jobs.</p>
+    async fn list_world_export_jobs(
+        &self,
+        input: ListWorldExportJobsRequest,
+    ) -> Result<ListWorldExportJobsResponse, RusotoError<ListWorldExportJobsError>>;
+
+    /// <p>Lists world generator jobs.</p>
+    async fn list_world_generation_jobs(
+        &self,
+        input: ListWorldGenerationJobsRequest,
+    ) -> Result<ListWorldGenerationJobsResponse, RusotoError<ListWorldGenerationJobsError>>;
+
+    /// <p>Lists world templates.</p>
+    async fn list_world_templates(
+        &self,
+        input: ListWorldTemplatesRequest,
+    ) -> Result<ListWorldTemplatesResponse, RusotoError<ListWorldTemplatesError>>;
+
+    /// <p>Lists worlds.</p>
+    async fn list_worlds(
+        &self,
+        input: ListWorldsRequest,
+    ) -> Result<ListWorldsResponse, RusotoError<ListWorldsError>>;
+
     /// <p>Registers a robot with a fleet.</p>
     async fn register_robot(
         &self,
@@ -4917,6 +6689,12 @@ pub trait Robomaker {
         &self,
         input: UpdateSimulationApplicationRequest,
     ) -> Result<UpdateSimulationApplicationResponse, RusotoError<UpdateSimulationApplicationError>>;
+
+    /// <p>Updates a world template.</p>
+    async fn update_world_template(
+        &self,
+        input: UpdateWorldTemplateRequest,
+    ) -> Result<UpdateWorldTemplateResponse, RusotoError<UpdateWorldTemplateError>>;
 }
 /// A client for the RoboMaker API.
 #[derive(Clone)]
@@ -4958,6 +6736,37 @@ impl RobomakerClient {
 
 #[async_trait]
 impl Robomaker for RobomakerClient {
+    /// <p>Deletes one or more worlds in a batch operation.</p>
+    #[allow(unused_mut)]
+    async fn batch_delete_worlds(
+        &self,
+        input: BatchDeleteWorldsRequest,
+    ) -> Result<BatchDeleteWorldsResponse, RusotoError<BatchDeleteWorldsError>> {
+        let request_uri = "/batchDeleteWorlds";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeleteWorldsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeleteWorldsError::from_response(response))
+        }
+    }
+
     /// <p>Describes one or more simulation jobs.</p>
     #[allow(unused_mut)]
     async fn batch_describe_simulation_job(
@@ -5080,6 +6889,68 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CancelSimulationJobBatchError::from_response(response))
+        }
+    }
+
+    /// <p>Cancels the specified export job.</p>
+    #[allow(unused_mut)]
+    async fn cancel_world_export_job(
+        &self,
+        input: CancelWorldExportJobRequest,
+    ) -> Result<CancelWorldExportJobResponse, RusotoError<CancelWorldExportJobError>> {
+        let request_uri = "/cancelWorldExportJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelWorldExportJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelWorldExportJobError::from_response(response))
+        }
+    }
+
+    /// <p>Cancels the specified world generator job.</p>
+    #[allow(unused_mut)]
+    async fn cancel_world_generation_job(
+        &self,
+        input: CancelWorldGenerationJobRequest,
+    ) -> Result<CancelWorldGenerationJobResponse, RusotoError<CancelWorldGenerationJobError>> {
+        let request_uri = "/cancelWorldGenerationJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelWorldGenerationJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelWorldGenerationJobError::from_response(response))
         }
     }
 
@@ -5340,6 +7211,99 @@ impl Robomaker for RobomakerClient {
         }
     }
 
+    /// <p>Creates a world export job.</p>
+    #[allow(unused_mut)]
+    async fn create_world_export_job(
+        &self,
+        input: CreateWorldExportJobRequest,
+    ) -> Result<CreateWorldExportJobResponse, RusotoError<CreateWorldExportJobError>> {
+        let request_uri = "/createWorldExportJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateWorldExportJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateWorldExportJobError::from_response(response))
+        }
+    }
+
+    /// <p>Creates worlds using the specified template.</p>
+    #[allow(unused_mut)]
+    async fn create_world_generation_job(
+        &self,
+        input: CreateWorldGenerationJobRequest,
+    ) -> Result<CreateWorldGenerationJobResponse, RusotoError<CreateWorldGenerationJobError>> {
+        let request_uri = "/createWorldGenerationJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateWorldGenerationJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateWorldGenerationJobError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a world template.</p>
+    #[allow(unused_mut)]
+    async fn create_world_template(
+        &self,
+        input: CreateWorldTemplateRequest,
+    ) -> Result<CreateWorldTemplateResponse, RusotoError<CreateWorldTemplateError>> {
+        let request_uri = "/createWorldTemplate";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateWorldTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateWorldTemplateError::from_response(response))
+        }
+    }
+
     /// <p>Deletes a fleet.</p>
     #[allow(unused_mut)]
     async fn delete_fleet(
@@ -5462,6 +7426,37 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteSimulationApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a world template.</p>
+    #[allow(unused_mut)]
+    async fn delete_world_template(
+        &self,
+        input: DeleteWorldTemplateRequest,
+    ) -> Result<DeleteWorldTemplateResponse, RusotoError<DeleteWorldTemplateError>> {
+        let request_uri = "/deleteWorldTemplate";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteWorldTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteWorldTemplateError::from_response(response))
         }
     }
 
@@ -5717,6 +7712,162 @@ impl Robomaker for RobomakerClient {
         }
     }
 
+    /// <p>Describes a world.</p>
+    #[allow(unused_mut)]
+    async fn describe_world(
+        &self,
+        input: DescribeWorldRequest,
+    ) -> Result<DescribeWorldResponse, RusotoError<DescribeWorldError>> {
+        let request_uri = "/describeWorld";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorldResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorldError::from_response(response))
+        }
+    }
+
+    /// <p>Describes a world export job.</p>
+    #[allow(unused_mut)]
+    async fn describe_world_export_job(
+        &self,
+        input: DescribeWorldExportJobRequest,
+    ) -> Result<DescribeWorldExportJobResponse, RusotoError<DescribeWorldExportJobError>> {
+        let request_uri = "/describeWorldExportJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorldExportJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorldExportJobError::from_response(response))
+        }
+    }
+
+    /// <p>Describes a world generation job.</p>
+    #[allow(unused_mut)]
+    async fn describe_world_generation_job(
+        &self,
+        input: DescribeWorldGenerationJobRequest,
+    ) -> Result<DescribeWorldGenerationJobResponse, RusotoError<DescribeWorldGenerationJobError>>
+    {
+        let request_uri = "/describeWorldGenerationJob";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorldGenerationJobResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorldGenerationJobError::from_response(response))
+        }
+    }
+
+    /// <p>Describes a world template.</p>
+    #[allow(unused_mut)]
+    async fn describe_world_template(
+        &self,
+        input: DescribeWorldTemplateRequest,
+    ) -> Result<DescribeWorldTemplateResponse, RusotoError<DescribeWorldTemplateError>> {
+        let request_uri = "/describeWorldTemplate";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeWorldTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeWorldTemplateError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the world template body.</p>
+    #[allow(unused_mut)]
+    async fn get_world_template_body(
+        &self,
+        input: GetWorldTemplateBodyRequest,
+    ) -> Result<GetWorldTemplateBodyResponse, RusotoError<GetWorldTemplateBodyError>> {
+        let request_uri = "/getWorldTemplateBody";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetWorldTemplateBodyResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetWorldTemplateBodyError::from_response(response))
+        }
+    }
+
     /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
     #[allow(unused_mut)]
     async fn list_deployment_jobs(
@@ -5960,6 +8111,130 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Lists world export jobs.</p>
+    #[allow(unused_mut)]
+    async fn list_world_export_jobs(
+        &self,
+        input: ListWorldExportJobsRequest,
+    ) -> Result<ListWorldExportJobsResponse, RusotoError<ListWorldExportJobsError>> {
+        let request_uri = "/listWorldExportJobs";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWorldExportJobsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWorldExportJobsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists world generator jobs.</p>
+    #[allow(unused_mut)]
+    async fn list_world_generation_jobs(
+        &self,
+        input: ListWorldGenerationJobsRequest,
+    ) -> Result<ListWorldGenerationJobsResponse, RusotoError<ListWorldGenerationJobsError>> {
+        let request_uri = "/listWorldGenerationJobs";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWorldGenerationJobsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWorldGenerationJobsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists world templates.</p>
+    #[allow(unused_mut)]
+    async fn list_world_templates(
+        &self,
+        input: ListWorldTemplatesRequest,
+    ) -> Result<ListWorldTemplatesResponse, RusotoError<ListWorldTemplatesError>> {
+        let request_uri = "/listWorldTemplates";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWorldTemplatesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWorldTemplatesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists worlds.</p>
+    #[allow(unused_mut)]
+    async fn list_worlds(
+        &self,
+        input: ListWorldsRequest,
+    ) -> Result<ListWorldsResponse, RusotoError<ListWorldsError>> {
+        let request_uri = "/listWorlds";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListWorldsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListWorldsError::from_response(response))
         }
     }
 
@@ -6212,6 +8487,37 @@ impl Robomaker for RobomakerClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateSimulationApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a world template.</p>
+    #[allow(unused_mut)]
+    async fn update_world_template(
+        &self,
+        input: UpdateWorldTemplateRequest,
+    ) -> Result<UpdateWorldTemplateResponse, RusotoError<UpdateWorldTemplateError>> {
+        let request_uri = "/updateWorldTemplate";
+
+        let mut request = SignedRequest::new("POST", "robomaker", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateWorldTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateWorldTemplateError::from_response(response))
         }
     }
 }

@@ -84,3 +84,11 @@ bench_s3: ## run S3 benchmarks
 .PHONY: credential_integration_test
 credential_integration_test: ## Run credentials integration tests
 	(cd rusoto/credential_service_mock && ./run-and-test.sh )
+
+.PHONY: serialize_structs_limited_test
+serialize_structs_limited_test:
+	(cd rusoto/services && ./test-select-features.sh)
+
+.PHONY: serialize_structs_full_test
+serialize_structs_full_test:
+	(cd rusoto/services && ./test-features.sh)

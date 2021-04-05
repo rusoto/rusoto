@@ -63,10 +63,23 @@ pub struct ApplicationComponent {
     #[serde(rename = "ComponentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_name: Option<String>,
+    /// <p> If logging is supported for the resource type, indicates whether the component has configured logs to be monitored. </p>
+    #[serde(rename = "ComponentRemarks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub component_remarks: Option<String>,
+    /// <p> Workloads detected in the application component. </p>
+    #[serde(rename = "DetectedWorkload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detected_workload:
+        Option<::std::collections::HashMap<String, ::std::collections::HashMap<String, String>>>,
     /// <p>Indicates whether the application component is monitored. </p>
     #[serde(rename = "Monitor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monitor: Option<bool>,
+    /// <p> The operating system of the component. </p>
+    #[serde(rename = "OsType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub os_type: Option<String>,
     /// <p>The resource type. Supported resource types include EC2 instances, Auto Scaling group, Classic ELB, Application ELB, and SQS Queue.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -191,7 +204,7 @@ pub struct CreateComponentResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLogPatternRequest {
-    /// <p>The log pattern.</p>
+    /// <p>The log pattern. The pattern must be DFA compatible. Patterns that utilize forward lookahead or backreference constructions are not supported.</p>
     #[serde(rename = "Pattern")]
     pub pattern: String,
     /// <p>The name of the log pattern.</p>
@@ -200,7 +213,7 @@ pub struct CreateLogPatternRequest {
     /// <p>The name of the log pattern set.</p>
     #[serde(rename = "PatternSetName")]
     pub pattern_set_name: String,
-    /// <p>Rank of the log pattern.</p>
+    /// <p>Rank of the log pattern. Must be a value between <code>1</code> and <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be last to get matched. When you configure custom log patterns from the console, a <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for AWS-provided patterns. </p>
     #[serde(rename = "Rank")]
     pub rank: i64,
     /// <p>The name of the resource group.</p>
@@ -661,19 +674,19 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogPattern {
-    /// <p>A regular expression that defines the log pattern. A log pattern can contains at many as 50 characters, and it cannot be empty.</p>
+    /// <p>A regular expression that defines the log pattern. A log pattern can contain as many as 50 characters, and it cannot be empty. The pattern must be DFA compatible. Patterns that utilize forward lookahead or backreference constructions are not supported.</p>
     #[serde(rename = "Pattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pattern: Option<String>,
-    /// <p>The name of the log pattern. A log pattern name can contains at many as 50 characters, and it cannot be empty. The characters can be Unicode letters, digits or one of the following symbols: period, dash, underscore.</p>
+    /// <p>The name of the log pattern. A log pattern name can contain as many as 50 characters, and it cannot be empty. The characters can be Unicode letters, digits, or one of the following symbols: period, dash, underscore.</p>
     #[serde(rename = "PatternName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pattern_name: Option<String>,
-    /// <p>The name of the log pattern. A log pattern name can contains at many as 30 characters, and it cannot be empty. The characters can be Unicode letters, digits or one of the following symbols: period, dash, underscore.</p>
+    /// <p>The name of the log pattern. A log pattern name can contain as many as 30 characters, and it cannot be empty. The characters can be Unicode letters, digits, or one of the following symbols: period, dash, underscore.</p>
     #[serde(rename = "PatternSetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pattern_set_name: Option<String>,
-    /// <p>Rank of the log pattern.</p>
+    /// <p>Rank of the log pattern. Must be a value between <code>1</code> and <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be last to get matched. When you configure custom log patterns from the console, a <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for AWS-provided patterns. </p>
     #[serde(rename = "Rank")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rank: Option<i64>,
@@ -715,6 +728,22 @@ pub struct Observation {
     #[serde(rename = "CodeDeployState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_deploy_state: Option<String>,
+    /// <p> The cause of an EBS CloudWatch event. </p>
+    #[serde(rename = "EbsCause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_cause: Option<String>,
+    /// <p> The type of EBS CloudWatch event, such as <code>createVolume</code>, <code>deleteVolume</code> or <code>attachVolume</code>. </p>
+    #[serde(rename = "EbsEvent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_event: Option<String>,
+    /// <p> The request ID of an EBS CloudWatch event. </p>
+    #[serde(rename = "EbsRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_request_id: Option<String>,
+    /// <p> The result of an EBS CloudWatch event, such as <code>failed</code> or <code>succeeded</code>. </p>
+    #[serde(rename = "EbsResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebs_result: Option<String>,
     /// <p> The state of the instance, such as <code>STOPPING</code> or <code>TERMINATING</code>. </p>
     #[serde(rename = "Ec2State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -771,6 +800,18 @@ pub struct Observation {
     #[serde(rename = "MetricNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_namespace: Option<String>,
+    /// <p> The category of an RDS event. </p>
+    #[serde(rename = "RdsEventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rds_event_categories: Option<String>,
+    /// <p> The message of an RDS event. </p>
+    #[serde(rename = "RdsEventMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rds_event_message: Option<String>,
+    /// <p> The name of the S3 CloudWatch Event-based observation. </p>
+    #[serde(rename = "S3EventName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_event_name: Option<String>,
     /// <p>The source resource ARN of the observation.</p>
     #[serde(rename = "SourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -783,6 +824,22 @@ pub struct Observation {
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+    /// <p> The Amazon Resource Name (ARN) of the step function-based observation. </p>
+    #[serde(rename = "StatesArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub states_arn: Option<String>,
+    /// <p> The Amazon Resource Name (ARN) of the step function execution-based observation. </p>
+    #[serde(rename = "StatesExecutionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub states_execution_arn: Option<String>,
+    /// <p> The input to the step function-based observation. </p>
+    #[serde(rename = "StatesInput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub states_input: Option<String>,
+    /// <p> The status of the step function-related observation. </p>
+    #[serde(rename = "StatesStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub states_status: Option<String>,
     /// <p>The unit of the source observation metric.</p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1004,7 +1061,7 @@ pub struct UpdateComponentResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLogPatternRequest {
-    /// <p>The log pattern.</p>
+    /// <p>The log pattern. The pattern must be DFA compatible. Patterns that utilize forward lookahead or backreference constructions are not supported.</p>
     #[serde(rename = "Pattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pattern: Option<String>,
@@ -1014,7 +1071,7 @@ pub struct UpdateLogPatternRequest {
     /// <p>The name of the log pattern set.</p>
     #[serde(rename = "PatternSetName")]
     pub pattern_set_name: String,
-    /// <p>Rank of the log pattern.</p>
+    /// <p>Rank of the log pattern. Must be a value between <code>1</code> and <code>1,000,000</code>. The patterns are sorted by rank, so we recommend that you set your highest priority patterns with the lowest rank. A pattern of rank <code>1</code> will be the first to get matched to a log line. A pattern of rank <code>1,000,000</code> will be last to get matched. When you configure custom log patterns from the console, a <code>Low</code> severity pattern translates to a <code>750,000</code> rank. A <code>Medium</code> severity pattern translates to a <code>500,000</code> rank. And a <code>High</code> severity pattern translates to a <code>250,000</code> rank. Rank values less than <code>1</code> or greater than <code>1,000,000</code> are reserved for AWS-provided patterns. </p>
     #[serde(rename = "Rank")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rank: Option<i64>,
@@ -1039,6 +1096,8 @@ pub struct UpdateLogPatternResponse {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
+    /// <p> User does not have permissions to perform this action. </p>
+    AccessDenied(String),
     /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
     /// <p>The resource is already created or in use.</p>
@@ -1053,6 +1112,9 @@ impl CreateApplicationError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateApplicationError::AccessDenied(err.msg))
+                }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateApplicationError::InternalServer(err.msg))
                 }
@@ -1076,6 +1138,7 @@ impl fmt::Display for CreateApplicationError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateApplicationError::AccessDenied(ref cause) => write!(f, "{}", cause),
             CreateApplicationError::InternalServer(ref cause) => write!(f, "{}", cause),
             CreateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),

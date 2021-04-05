@@ -51,7 +51,7 @@ impl CloudHsmv2Client {
 }
 
 use serde_json;
-/// <p>Contains information about a backup of an AWS CloudHSM cluster. All backup objects contain the BackupId, BackupState, ClusterId, and CreateTimestamp parameters. Backups that were copied into a destination region additionally contain the CopyTimestamp, SourceBackup, SourceCluster, and SourceRegion paramters. A backup that is pending deletion will include the DeleteTimestamp parameter.</p>
+/// <p>Contains information about a backup of an AWS CloudHSM cluster. All backup objects contain the <code>BackupId</code>, <code>BackupState</code>, <code>ClusterId</code>, and <code>CreateTimestamp</code> parameters. Backups that were copied into a destination region additionally contain the <code>CopyTimestamp</code>, <code>SourceBackup</code>, <code>SourceCluster</code>, and <code>SourceRegion</code> parameters. A backup that is pending deletion will include the <code>DeleteTimestamp</code> parameter.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Backup {
@@ -78,6 +78,10 @@ pub struct Backup {
     #[serde(rename = "DeleteTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_timestamp: Option<f64>,
+    /// <p>Specifies whether the service should exempt a backup from the retention policy for the cluster. <code>True</code> exempts a backup from the retention policy. <code>False</code> means the service applies the backup retention policy defined at the cluster.</p>
+    #[serde(rename = "NeverExpires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub never_expires: Option<bool>,
     /// <p>The identifier (ID) of the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -94,6 +98,19 @@ pub struct Backup {
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
+}
+
+/// <p>A policy that defines the number of days to retain backups.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BackupRetentionPolicy {
+    /// <p>The type of backup retention policy. For the <code>DAYS</code> type, the value is the number of days to retain backups.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>Use a value between 7 - 379.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
@@ -130,6 +147,10 @@ pub struct Cluster {
     #[serde(rename = "BackupPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_policy: Option<String>,
+    /// <p>A policy that defines how the service retains backups.</p>
+    #[serde(rename = "BackupRetentionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_policy: Option<BackupRetentionPolicy>,
     /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
     #[serde(rename = "Certificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,6 +232,10 @@ pub struct CopyBackupToRegionResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
+    /// <p>A policy that defines how the service retains backups.</p>
+    #[serde(rename = "BackupRetentionPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_policy: Option<BackupRetentionPolicy>,
     /// <p>The type of HSM to use in the cluster. Currently the only allowed value is <code>hsm1.medium</code>.</p>
     #[serde(rename = "HsmType")]
     pub hsm_type: String,
@@ -326,7 +351,7 @@ pub struct DeleteHsmResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupsRequest {
-    /// <p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>backupIds</code> filter to return only the specified backups. Specify backups by their backup identifier (ID).</p> <p>Use the <code>sourceBackupIds</code> filter to return only the backups created from a source backup. The <code>sourceBackupID</code> of a source backup is returned by the <a>CopyBackupToRegion</a> operation.</p> <p>Use the <code>clusterIds</code> filter to return only the backups for the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>states</code> filter to return only backups that match the specified state.</p>
+    /// <p>One or more filters to limit the items returned in the response.</p> <p>Use the <code>backupIds</code> filter to return only the specified backups. Specify backups by their backup identifier (ID).</p> <p>Use the <code>sourceBackupIds</code> filter to return only the backups created from a source backup. The <code>sourceBackupID</code> of a source backup is returned by the <a>CopyBackupToRegion</a> operation.</p> <p>Use the <code>clusterIds</code> filter to return only the backups for the specified clusters. Specify clusters by their cluster identifier (ID).</p> <p>Use the <code>states</code> filter to return only backups that match the specified state.</p> <p>Use the <code>neverExpires</code> filter to return backups filtered by the value in the <code>neverExpires</code> parameter. <code>True</code> returns all backups exempt from the backup retention policy. <code>False</code> returns all backups with a backup retention policy defined at the cluster.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
@@ -499,6 +524,44 @@ pub struct ListTagsResponse {
     /// <p>A list of tags.</p>
     #[serde(rename = "TagList")]
     pub tag_list: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyBackupAttributesRequest {
+    /// <p>The identifier (ID) of the backup to modify. To find the ID of a backup, use the <a>DescribeBackups</a> operation.</p>
+    #[serde(rename = "BackupId")]
+    pub backup_id: String,
+    /// <p>Specifies whether the service should exempt a backup from the retention policy for the cluster. <code>True</code> exempts a backup from the retention policy. <code>False</code> means the service applies the backup retention policy defined at the cluster.</p>
+    #[serde(rename = "NeverExpires")]
+    pub never_expires: bool,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModifyBackupAttributesResponse {
+    #[serde(rename = "Backup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup: Option<Backup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyClusterRequest {
+    /// <p>A policy that defines how the service retains backups.</p>
+    #[serde(rename = "BackupRetentionPolicy")]
+    pub backup_retention_policy: BackupRetentionPolicy,
+    /// <p>The identifier (ID) of the cluster that you want to modify. To find the cluster ID, use <a>DescribeClusters</a>.</p>
+    #[serde(rename = "ClusterId")]
+    pub cluster_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ModifyClusterResponse {
+    #[serde(rename = "Cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster: Option<Cluster>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1175,6 +1238,136 @@ impl fmt::Display for ListTagsError {
     }
 }
 impl Error for ListTagsError {}
+/// Errors returned by ModifyBackupAttributes
+#[derive(Debug, PartialEq)]
+pub enum ModifyBackupAttributesError {
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    CloudHsmAccessDenied(String),
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    CloudHsmInternalFailure(String),
+    /// <p>The request was rejected because it is not a valid request.</p>
+    CloudHsmInvalidRequest(String),
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
+    CloudHsmResourceNotFound(String),
+    /// <p>The request was rejected because an error occurred.</p>
+    CloudHsmService(String),
+}
+
+impl ModifyBackupAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyBackupAttributesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CloudHsmAccessDeniedException" => {
+                    return RusotoError::Service(ModifyBackupAttributesError::CloudHsmAccessDenied(
+                        err.msg,
+                    ))
+                }
+                "CloudHsmInternalFailureException" => {
+                    return RusotoError::Service(
+                        ModifyBackupAttributesError::CloudHsmInternalFailure(err.msg),
+                    )
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return RusotoError::Service(
+                        ModifyBackupAttributesError::CloudHsmInvalidRequest(err.msg),
+                    )
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ModifyBackupAttributesError::CloudHsmResourceNotFound(err.msg),
+                    )
+                }
+                "CloudHsmServiceException" => {
+                    return RusotoError::Service(ModifyBackupAttributesError::CloudHsmService(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ModifyBackupAttributesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyBackupAttributesError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyBackupAttributesError::CloudHsmInternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyBackupAttributesError::CloudHsmInvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyBackupAttributesError::CloudHsmResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyBackupAttributesError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyBackupAttributesError {}
+/// Errors returned by ModifyCluster
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterError {
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    CloudHsmAccessDenied(String),
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    CloudHsmInternalFailure(String),
+    /// <p>The request was rejected because it is not a valid request.</p>
+    CloudHsmInvalidRequest(String),
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
+    CloudHsmResourceNotFound(String),
+    /// <p>The request was rejected because an error occurred.</p>
+    CloudHsmService(String),
+}
+
+impl ModifyClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CloudHsmAccessDeniedException" => {
+                    return RusotoError::Service(ModifyClusterError::CloudHsmAccessDenied(err.msg))
+                }
+                "CloudHsmInternalFailureException" => {
+                    return RusotoError::Service(ModifyClusterError::CloudHsmInternalFailure(
+                        err.msg,
+                    ))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return RusotoError::Service(ModifyClusterError::CloudHsmInvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return RusotoError::Service(ModifyClusterError::CloudHsmResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "CloudHsmServiceException" => {
+                    return RusotoError::Service(ModifyClusterError::CloudHsmService(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ModifyClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyClusterError::CloudHsmAccessDenied(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::CloudHsmInternalFailure(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::CloudHsmInvalidRequest(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::CloudHsmResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ModifyClusterError::CloudHsmService(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyClusterError {}
 /// Errors returned by RestoreBackup
 #[derive(Debug, PartialEq)]
 pub enum RestoreBackupError {
@@ -1426,6 +1619,18 @@ pub trait CloudHsmv2 {
         input: ListTagsRequest,
     ) -> Result<ListTagsResponse, RusotoError<ListTagsError>>;
 
+    /// <p>Modifies attributes for AWS CloudHSM backup.</p>
+    async fn modify_backup_attributes(
+        &self,
+        input: ModifyBackupAttributesRequest,
+    ) -> Result<ModifyBackupAttributesResponse, RusotoError<ModifyBackupAttributesError>>;
+
+    /// <p>Modifies AWS CloudHSM cluster.</p>
+    async fn modify_cluster(
+        &self,
+        input: ModifyClusterRequest,
+    ) -> Result<ModifyClusterResponse, RusotoError<ModifyClusterError>>;
+
     /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For mor information on deleting a backup, see <a>DeleteBackup</a>.</p>
     async fn restore_backup(
         &self,
@@ -1662,6 +1867,43 @@ impl CloudHsmv2 for CloudHsmv2Client {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResponse, _>()
+    }
+
+    /// <p>Modifies attributes for AWS CloudHSM backup.</p>
+    async fn modify_backup_attributes(
+        &self,
+        input: ModifyBackupAttributesRequest,
+    ) -> Result<ModifyBackupAttributesResponse, RusotoError<ModifyBackupAttributesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "BaldrApiService.ModifyBackupAttributes");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ModifyBackupAttributesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyBackupAttributesResponse, _>()
+    }
+
+    /// <p>Modifies AWS CloudHSM cluster.</p>
+    async fn modify_cluster(
+        &self,
+        input: ModifyClusterRequest,
+    ) -> Result<ModifyClusterResponse, RusotoError<ModifyClusterError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "BaldrApiService.ModifyCluster");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ModifyClusterResponse, _>()
     }
 
     /// <p>Restores a specified AWS CloudHSM backup that is in the <code>PENDING_DELETION</code> state. For mor information on deleting a backup, see <a>DeleteBackup</a>.</p>

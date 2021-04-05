@@ -64,7 +64,7 @@ pub struct AgeRange {
     pub low: Option<i64>,
 }
 
-/// <p>Assets are the images that you use to train and evaluate a model version. Assets are referenced by Sagemaker GroundTruth manifest files. </p>
+/// <p>Assets are the images that you use to train and evaluate a model version. Assets can also contain validation information that you use to debug a failed model training. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Asset {
     #[serde(rename = "GroundTruthManifest")]
@@ -84,7 +84,7 @@ pub struct AudioMetadata {
     #[serde(rename = "DurationMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_millis: Option<i64>,
-    /// <p>The number of audio channels in the segement.</p>
+    /// <p>The number of audio channels in the segment.</p>
     #[serde(rename = "NumberOfChannels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_channels: Option<i64>,
@@ -108,7 +108,7 @@ pub struct Beard {
     pub value: Option<bool>,
 }
 
-/// <p><p>Identifies the bounding box around the label, face, or text. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
+/// <p><p>Identifies the bounding box around the label, face, text or personal protective equipment. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BoundingBox {
     /// <p>Height of the bounding box as a ratio of the overall image height.</p>
@@ -309,6 +309,20 @@ pub struct ContentModerationDetection {
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
+}
+
+/// <p>Information about an item of Personal Protective Equipment covering a corresponding body part. For more information, see <a>DetectProtectiveEquipment</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CoversBodyPart {
+    /// <p>The confidence that Amazon Rekognition has in the value of <code>Value</code>.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>True if the PPE covers the corresponding body part, otherwise false.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -771,6 +785,35 @@ pub struct DetectModerationLabelsResponse {
     pub moderation_model_version: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DetectProtectiveEquipmentRequest {
+    /// <p>The image in which you want to detect PPE on detected persons. The image can be passed as image bytes or you can reference an image stored in an Amazon S3 bucket. </p>
+    #[serde(rename = "Image")]
+    pub image: Image,
+    /// <p>An array of PPE types that you want to summarize.</p>
+    #[serde(rename = "SummarizationAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summarization_attributes: Option<ProtectiveEquipmentSummarizationAttributes>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetectProtectiveEquipmentResponse {
+    /// <p>An array of persons detected in the image (including persons not wearing PPE).</p>
+    #[serde(rename = "Persons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub persons: Option<Vec<ProtectiveEquipmentPerson>>,
+    /// <p>The version number of the PPE detection model used to detect PPE in the image.</p>
+    #[serde(rename = "ProtectiveEquipmentModelVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protective_equipment_model_version: Option<String>,
+    /// <p>Summary information for the types of PPE specified in the <code>SummarizationAttributes</code> input parameter.</p>
+    #[serde(rename = "Summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<ProtectiveEquipmentSummary>,
+}
+
 /// <p>A set of optional parameters that you can use to set the criteria that the text must meet to be included in your response. <code>WordFilter</code> looks at a word’s height, width, and minimum confidence. <code>RegionOfInterest</code> lets you set a specific region of the image to look for text in. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -836,6 +879,28 @@ pub struct Emotion {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f32>,
     /// <p>Type of emotion detected.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information about an item of Personal Protective Equipment (PPE) detected by <a>DetectProtectiveEquipment</a>. For more information, see <a>DetectProtectiveEquipment</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EquipmentDetection {
+    /// <p>A bounding box surrounding the item of detected PPE.</p>
+    #[serde(rename = "BoundingBox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bounding_box: Option<BoundingBox>,
+    /// <p>The confidence that Amazon Rekognition has that the bounding box (<code>BoundingBox</code>) contains an item of PPE.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>Information about the body part covered by the detected PPE.</p>
+    #[serde(rename = "CoversBodyPart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub covers_body_part: Option<CoversBodyPart>,
+    /// <p>The type of detected PPE.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1384,7 +1449,7 @@ pub struct GetSegmentDetectionResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An array of segments detected in a video.</p>
+    /// <p>An array of segments detected in a video. The array is sorted by the segment types (TECHNICAL_CUE or SHOT) specified in the <code>SegmentTypes</code> input parameter of <code>StartSegmentDetection</code>. Within each segment type the array is sorted by timestamp values.</p>
     #[serde(rename = "Segments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segments: Option<Vec<SegmentDetection>>,
@@ -1446,7 +1511,7 @@ pub struct GetTextDetectionResponse {
     pub video_metadata: Option<VideoMetadata>,
 }
 
-/// <p>The S3 bucket that contains the Ground Truth manifest file.</p>
+/// <p>The S3 bucket that contains an Amazon Sagemaker Ground Truth format manifest file. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GroundTruthManifest {
     #[serde(rename = "S3Object")]
@@ -1655,11 +1720,11 @@ pub struct Landmark {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The x-coordinate from the top left of the landmark expressed as the ratio of the width of the image. For example, if the image is 700 x 200 and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>
+    /// <p>The x-coordinate of the landmark expressed as a ratio of the width of the image. The x-coordinate is measured from the left-side of the image. For example, if the image is 700 pixels wide and the x-coordinate of the landmark is at 350 pixels, this value is 0.5. </p>
     #[serde(rename = "X")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub x: Option<f32>,
-    /// <p>The y-coordinate from the top left of the landmark expressed as the ratio of the height of the image. For example, if the image is 700 x 200 and the y-coordinate of the landmark is at 100 pixels, this value is 0.5.</p>
+    /// <p>The y-coordinate of the landmark expressed as a ratio of the height of the image. The y-coordinate is measured from the top of the image. For example, if the image height is 200 pixels and the y-coordinate of the landmark is at 50 pixels, this value is 0.25.</p>
     #[serde(rename = "Y")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub y: Option<f32>,
@@ -1951,6 +2016,10 @@ pub struct ProjectVersionDescription {
     #[serde(rename = "EvaluationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_result: Option<EvaluationResult>,
+    /// <p>The location of the summary manifest. The summary manifest provides aggregate data validation results for the training and test datasets.</p>
+    #[serde(rename = "ManifestSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_summary: Option<GroundTruthManifest>,
     /// <p>The minimum number of inference units used by the model. For more information, see <a>StartProjectVersion</a>.</p>
     #[serde(rename = "MinInferenceUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1971,11 +2040,11 @@ pub struct ProjectVersionDescription {
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>The manifest file that represents the testing results.</p>
+    /// <p>Contains information about the testing results.</p>
     #[serde(rename = "TestingDataResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub testing_data_result: Option<TestingDataResult>,
-    /// <p>The manifest file that represents the training results.</p>
+    /// <p>Contains information about the training results.</p>
     #[serde(rename = "TrainingDataResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_data_result: Option<TrainingDataResult>,
@@ -1983,6 +2052,76 @@ pub struct ProjectVersionDescription {
     #[serde(rename = "TrainingEndTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_end_timestamp: Option<f64>,
+}
+
+/// <p>Information about a body part detected by <a>DetectProtectiveEquipment</a> that contains PPE. An array of <code>ProtectiveEquipmentBodyPart</code> objects is returned for each person detected by <code>DetectProtectiveEquipment</code>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectiveEquipmentBodyPart {
+    /// <p>The confidence that Amazon Rekognition has in the detection accuracy of the detected body part. </p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>An array of Personal Protective Equipment items detected around a body part.</p>
+    #[serde(rename = "EquipmentDetections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub equipment_detections: Option<Vec<EquipmentDetection>>,
+    /// <p>The detected body part.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A person detected by a call to <a>DetectProtectiveEquipment</a>. The API returns all persons detected in the input image in an array of <code>ProtectiveEquipmentPerson</code> objects.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectiveEquipmentPerson {
+    /// <p>An array of body parts detected on a person's body (including body parts without PPE). </p>
+    #[serde(rename = "BodyParts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub body_parts: Option<Vec<ProtectiveEquipmentBodyPart>>,
+    /// <p>A bounding box around the detected person.</p>
+    #[serde(rename = "BoundingBox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bounding_box: Option<BoundingBox>,
+    /// <p>The confidence that Amazon Rekognition has that the bounding box contains a person.</p>
+    #[serde(rename = "Confidence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub confidence: Option<f32>,
+    /// <p>The identifier for the detected person. The identifier is only unique for a single call to <code>DetectProtectiveEquipment</code>.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+}
+
+/// <p>Specifies summary attributes to return from a call to <a>DetectProtectiveEquipment</a>. You can specify which types of PPE to summarize. You can also specify a minimum confidence value for detections. Summary information is returned in the <code>Summary</code> (<a>ProtectiveEquipmentSummary</a>) field of the response from <code>DetectProtectiveEquipment</code>. The summary includes which persons in an image were detected wearing the requested types of person protective equipment (PPE), which persons were detected as not wearing PPE, and the persons in which a determination could not be made. For more information, see <a>ProtectiveEquipmentSummary</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ProtectiveEquipmentSummarizationAttributes {
+    /// <p>The minimum confidence level for which you want summary information. The confidence level applies to person detection, body part detection, equipment detection, and body part coverage. Amazon Rekognition doesn't return summary information with a confidence than this specified value. There isn't a default value.</p> <p>Specify a <code>MinConfidence</code> value that is between 50-100% as <code>DetectProtectiveEquipment</code> returns predictions only where the detection confidence is between 50% - 100%. If you specify a value that is less than 50%, the results are the same specifying a value of 50%.</p> <p> </p>
+    #[serde(rename = "MinConfidence")]
+    pub min_confidence: f32,
+    /// <p>An array of personal protective equipment types for which you want summary information. If a person is detected wearing a required requipment type, the person's ID is added to the <code>PersonsWithRequiredEquipment</code> array field returned in <a>ProtectiveEquipmentSummary</a> by <code>DetectProtectiveEquipment</code>. </p>
+    #[serde(rename = "RequiredEquipmentTypes")]
+    pub required_equipment_types: Vec<String>,
+}
+
+/// <p>Summary information for required items of personal protective equipment (PPE) detected on persons by a call to <a>DetectProtectiveEquipment</a>. You specify the required type of PPE in the <code>SummarizationAttributes</code> (<a>ProtectiveEquipmentSummarizationAttributes</a>) input parameter. The summary includes which persons were detected wearing the required personal protective equipment (<code>PersonsWithRequiredEquipment</code>), which persons were detected as not wearing the required PPE (<code>PersonsWithoutRequiredEquipment</code>), and the persons in which a determination could not be made (<code>PersonsIndeterminate</code>).</p> <p>To get a total for each category, use the size of the field array. For example, to find out how many people were detected as wearing the specified PPE, use the size of the <code>PersonsWithRequiredEquipment</code> array. If you want to find out more about a person, such as the location (<a>BoundingBox</a>) of the person on the image, use the person ID in each array element. Each person ID matches the ID field of a <a>ProtectiveEquipmentPerson</a> object returned in the <code>Persons</code> array by <code>DetectProtectiveEquipment</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtectiveEquipmentSummary {
+    /// <p>An array of IDs for persons where it was not possible to determine if they are wearing personal protective equipment. </p>
+    #[serde(rename = "PersonsIndeterminate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub persons_indeterminate: Option<Vec<i64>>,
+    /// <p>An array of IDs for persons who are wearing detected personal protective equipment. </p>
+    #[serde(rename = "PersonsWithRequiredEquipment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub persons_with_required_equipment: Option<Vec<i64>>,
+    /// <p>An array of IDs for persons who are not wearing all of the types of PPE specified in the RequiredEquipmentTypes field of the detected personal protective equipment. </p>
+    #[serde(rename = "PersonsWithoutRequiredEquipment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub persons_without_required_equipment: Option<Vec<i64>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1996,7 +2135,7 @@ pub struct RecognizeCelebritiesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecognizeCelebritiesResponse {
-    /// <p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 15 celebrities in an image.</p>
+    /// <p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 64 celebrities in an image.</p>
     #[serde(rename = "CelebrityFaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub celebrity_faces: Option<Vec<Celebrity>>,
@@ -2133,7 +2272,7 @@ pub struct SegmentDetection {
     #[serde(rename = "EndTimecodeSMPTE")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_timecode_smpte: Option<String>,
-    /// <p>The end time of the detected segment, in milliseconds, from the start of the video.</p>
+    /// <p>The end time of the detected segment, in milliseconds, from the start of the video. This value is rounded down.</p>
     #[serde(rename = "EndTimestampMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_timestamp_millis: Option<i64>,
@@ -2145,7 +2284,7 @@ pub struct SegmentDetection {
     #[serde(rename = "StartTimecodeSMPTE")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timecode_smpte: Option<String>,
-    /// <p>The start time of the detected segment in milliseconds from the start of the video.</p>
+    /// <p>The start time of the detected segment in milliseconds from the start of the video. This value is rounded down. For example, if the actual timestamp is 100.6667 milliseconds, Amazon Rekognition Video returns a value of 100 millis.</p>
     #[serde(rename = "StartTimestampMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timestamp_millis: Option<i64>,
@@ -2181,7 +2320,7 @@ pub struct ShotSegment {
     #[serde(rename = "Confidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confidence: Option<f32>,
-    /// <p>An Identifier for a shot detection segment detected in a video </p>
+    /// <p>An Identifier for a shot detection segment detected in a video. </p>
     #[serde(rename = "Index")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index: Option<i64>,
@@ -2660,7 +2799,7 @@ pub struct TestingData {
     pub auto_create: Option<bool>,
 }
 
-/// <p>A Sagemaker Groundtruth format manifest file representing the dataset used for testing.</p>
+/// <p>Sagemaker Groundtruth format manifest files for the input, output and validation datasets that are used and created during testing.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestingDataResult {
@@ -2672,6 +2811,10 @@ pub struct TestingDataResult {
     #[serde(rename = "Output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<TestingData>,
+    /// <p>The location of the data validation manifest. The data validation manifest is created for the test dataset during model training.</p>
+    #[serde(rename = "Validation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation: Option<ValidationData>,
 }
 
 /// <p>Information about a word or line of text detected by <a>DetectText</a>.</p> <p>The <code>DetectedText</code> field contains the text that Amazon Rekognition detected in the image. </p> <p>Every word and line has an identifier (<code>Id</code>). Each word belongs to a line and has a parent identifier (<code>ParentId</code>) that identifies the line of text in which the word appears. The word <code>Id</code> is also an index for the word within a line of words. </p> <p>For more information, see Detecting Text in the Amazon Rekognition Developer Guide.</p>
@@ -2727,7 +2870,7 @@ pub struct TrainingData {
     pub assets: Option<Vec<Asset>>,
 }
 
-/// <p>A Sagemaker Groundtruth format manifest file that represents the dataset used for training.</p>
+/// <p>Sagemaker Groundtruth format manifest files for the input, output and validation datasets that are used and created during testing.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrainingDataResult {
@@ -2739,6 +2882,10 @@ pub struct TrainingDataResult {
     #[serde(rename = "Output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<TrainingData>,
+    /// <p>The location of the data validation manifest. The data validation manifest is created for the training dataset during model training.</p>
+    #[serde(rename = "Validation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation: Option<ValidationData>,
 }
 
 /// <p>A face that <a>IndexFaces</a> detected, but didn't index. Use the <code>Reasons</code> response attribute to determine why a face wasn't indexed.</p>
@@ -2753,6 +2900,16 @@ pub struct UnindexedFace {
     #[serde(rename = "Reasons")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reasons: Option<Vec<String>>,
+}
+
+/// <p>Contains the Amazon S3 bucket location of the validation data for a model training job. </p> <p>The validation data includes error information for individual JSON lines in the dataset. For more information, see Debugging a Failed Model Training in the Amazon Rekognition Custom Labels Developer Guide. </p> <p>You get the <code>ValidationData</code> object for the training dataset (<a>TrainingDataResult</a>) and the test dataset (<a>TestingDataResult</a>) by calling <a>DescribeProjectVersions</a>. </p> <p>The assets array contains a single <a>Asset</a> object. The <a>GroundTruthManifest</a> field of the Asset object contains the S3 bucket location of the validation data. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ValidationData {
+    /// <p>The assets that comprise the validation data. </p>
+    #[serde(rename = "Assets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assets: Option<Vec<Asset>>,
 }
 
 /// <p>Video file stored in an Amazon S3 bucket. Amazon Rekognition video start operations such as <a>StartLabelDetection</a> use <code>Video</code> to specify a video for analysis. The supported file formats are .mp4, .mov and .avi.</p>
@@ -4139,6 +4296,98 @@ impl fmt::Display for DetectModerationLabelsError {
     }
 }
 impl Error for DetectModerationLabelsError {}
+/// Errors returned by DetectProtectiveEquipment
+#[derive(Debug, PartialEq)]
+pub enum DetectProtectiveEquipmentError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    ImageTooLarge(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>The provided image format is not supported. </p>
+    InvalidImageFormat(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>Amazon Rekognition is unable to access the S3 object specified in the request.</p>
+    InvalidS3Object(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl DetectProtectiveEquipmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectProtectiveEquipmentError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DetectProtectiveEquipmentError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ImageTooLargeException" => {
+                    return RusotoError::Service(DetectProtectiveEquipmentError::ImageTooLarge(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DetectProtectiveEquipmentError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidImageFormatException" => {
+                    return RusotoError::Service(
+                        DetectProtectiveEquipmentError::InvalidImageFormat(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DetectProtectiveEquipmentError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(DetectProtectiveEquipmentError::InvalidS3Object(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DetectProtectiveEquipmentError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DetectProtectiveEquipmentError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DetectProtectiveEquipmentError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DetectProtectiveEquipmentError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DetectProtectiveEquipmentError::ImageTooLarge(ref cause) => write!(f, "{}", cause),
+            DetectProtectiveEquipmentError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectProtectiveEquipmentError::InvalidImageFormat(ref cause) => write!(f, "{}", cause),
+            DetectProtectiveEquipmentError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DetectProtectiveEquipmentError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
+            DetectProtectiveEquipmentError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetectProtectiveEquipmentError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DetectProtectiveEquipmentError {}
 /// Errors returned by DetectText
 #[derive(Debug, PartialEq)]
 pub enum DetectTextError {
@@ -4902,6 +5151,8 @@ pub enum IndexFacesError {
     ProvisionedThroughputExceeded(String),
     /// <p>The collection specified in the request cannot be found.</p>
     ResourceNotFound(String),
+    /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
+    ServiceQuotaExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
 }
@@ -4936,6 +5187,9 @@ impl IndexFacesError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(IndexFacesError::ResourceNotFound(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(IndexFacesError::ServiceQuotaExceeded(err.msg))
+                }
                 "ThrottlingException" => {
                     return RusotoError::Service(IndexFacesError::Throttling(err.msg))
                 }
@@ -4958,6 +5212,7 @@ impl fmt::Display for IndexFacesError {
             IndexFacesError::InvalidS3Object(ref cause) => write!(f, "{}", cause),
             IndexFacesError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
             IndexFacesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            IndexFacesError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             IndexFacesError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -6450,7 +6705,7 @@ impl Error for StopStreamProcessorError {}
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 #[async_trait]
 pub trait Rekognition {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     async fn compare_faces(
         &self,
         input: CompareFacesRequest,
@@ -6558,6 +6813,12 @@ pub trait Rekognition {
         input: DetectModerationLabelsRequest,
     ) -> Result<DetectModerationLabelsResponse, RusotoError<DetectModerationLabelsError>>;
 
+    /// <p>Detects Personal Protective Equipment (PPE) worn by people detected in an image. Amazon Rekognition can detect the following types of PPE.</p> <ul> <li> <p>Face cover</p> </li> <li> <p>Hand cover</p> </li> <li> <p>Head cover</p> </li> </ul> <p>You pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPG formatted file. </p> <p> <code>DetectProtectiveEquipment</code> detects PPE worn by up to 15 persons detected in an image.</p> <p>For each person detected in the image the API returns an array of body parts (face, head, left-hand, right-hand). For each body part, an array of detected items of PPE is returned, including an indicator of whether or not the PPE covers the body part. The API returns the confidence it has in each detection (person, PPE, body part and body part coverage). It also returns a bounding box (<a>BoundingBox</a>) for each detected person and each detected item of PPE. </p> <p>You can optionally request a summary of detected PPE items with the <code>SummarizationAttributes</code> input parameter. The summary provides the following information. </p> <ul> <li> <p>The persons detected as wearing all of the types of PPE that you specify.</p> </li> <li> <p>The persons detected as not wearing all of the types PPE that you specify.</p> </li> <li> <p>The persons detected where PPE adornment could not be determined. </p> </li> </ul> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectProtectiveEquipment</code> action. </p>
+    async fn detect_protective_equipment(
+        &self,
+        input: DetectProtectiveEquipmentRequest,
+    ) -> Result<DetectProtectiveEquipmentResponse, RusotoError<DetectProtectiveEquipmentError>>;
+
     /// <p>Detects text in the input image and converts it into machine-readable text.</p> <p>Pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, you must pass it as a reference to an image in an Amazon S3 bucket. For the AWS CLI, passing image bytes is not supported. The image must be either a .png or .jpeg formatted file. </p> <p>The <code>DetectText</code> operation returns text in an array of <a>TextDetection</a> elements, <code>TextDetections</code>. Each <code>TextDetection</code> element provides information about a single word or line of text that was detected in the image. </p> <p>A word is one or more ISO basic latin script characters that are not separated by spaces. <code>DetectText</code> can detect up to 50 words in an image.</p> <p>A line is a string of equally spaced words. A line isn't necessarily a complete sentence. For example, a driver's license number is detected as a line. A line ends when there is no aligned text after it. Also, a line ends when there is a large gap between words, relative to the length of the words. This means, depending on the gap between words, Amazon Rekognition may detect multiple lines in text aligned in the same direction. Periods don't represent the end of a line. If a sentence spans multiple lines, the <code>DetectText</code> operation returns multiple lines.</p> <p>To determine whether a <code>TextDetection</code> element is a line of text or a word, use the <code>TextDetection</code> object <code>Type</code> field. </p> <p>To be detected, text must be within +/- 90 degrees orientation of the horizontal axis.</p> <p>For more information, see DetectText in the Amazon Rekognition Developer Guide.</p>
     async fn detect_text(
         &self,
@@ -6642,7 +6903,7 @@ pub trait Rekognition {
         input: ListStreamProcessorsRequest,
     ) -> Result<ListStreamProcessorsResponse, RusotoError<ListStreamProcessorsError>>;
 
-    /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 100 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 100 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
+    /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     async fn recognize_celebrities(
         &self,
         input: RecognizeCelebritiesRequest,
@@ -6772,7 +7033,7 @@ impl RekognitionClient {
 
 #[async_trait]
 impl Rekognition for RekognitionClient {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     async fn compare_faces(
         &self,
         input: CompareFacesRequest,
@@ -7103,6 +7364,29 @@ impl Rekognition for RekognitionClient {
             .deserialize::<DetectModerationLabelsResponse, _>()
     }
 
+    /// <p>Detects Personal Protective Equipment (PPE) worn by people detected in an image. Amazon Rekognition can detect the following types of PPE.</p> <ul> <li> <p>Face cover</p> </li> <li> <p>Hand cover</p> </li> <li> <p>Head cover</p> </li> </ul> <p>You pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. The image must be either a PNG or JPG formatted file. </p> <p> <code>DetectProtectiveEquipment</code> detects PPE worn by up to 15 persons detected in an image.</p> <p>For each person detected in the image the API returns an array of body parts (face, head, left-hand, right-hand). For each body part, an array of detected items of PPE is returned, including an indicator of whether or not the PPE covers the body part. The API returns the confidence it has in each detection (person, PPE, body part and body part coverage). It also returns a bounding box (<a>BoundingBox</a>) for each detected person and each detected item of PPE. </p> <p>You can optionally request a summary of detected PPE items with the <code>SummarizationAttributes</code> input parameter. The summary provides the following information. </p> <ul> <li> <p>The persons detected as wearing all of the types of PPE that you specify.</p> </li> <li> <p>The persons detected as not wearing all of the types PPE that you specify.</p> </li> <li> <p>The persons detected where PPE adornment could not be determined. </p> </li> </ul> <p>This is a stateless API operation. That is, the operation does not persist any data.</p> <p>This operation requires permissions to perform the <code>rekognition:DetectProtectiveEquipment</code> action. </p>
+    async fn detect_protective_equipment(
+        &self,
+        input: DetectProtectiveEquipmentRequest,
+    ) -> Result<DetectProtectiveEquipmentResponse, RusotoError<DetectProtectiveEquipmentError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "RekognitionService.DetectProtectiveEquipment",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DetectProtectiveEquipmentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DetectProtectiveEquipmentResponse, _>()
+    }
+
     /// <p>Detects text in the input image and converts it into machine-readable text.</p> <p>Pass the input image as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, you must pass it as a reference to an image in an Amazon S3 bucket. For the AWS CLI, passing image bytes is not supported. The image must be either a .png or .jpeg formatted file. </p> <p>The <code>DetectText</code> operation returns text in an array of <a>TextDetection</a> elements, <code>TextDetections</code>. Each <code>TextDetection</code> element provides information about a single word or line of text that was detected in the image. </p> <p>A word is one or more ISO basic latin script characters that are not separated by spaces. <code>DetectText</code> can detect up to 50 words in an image.</p> <p>A line is a string of equally spaced words. A line isn't necessarily a complete sentence. For example, a driver's license number is detected as a line. A line ends when there is no aligned text after it. Also, a line ends when there is a large gap between words, relative to the length of the words. This means, depending on the gap between words, Amazon Rekognition may detect multiple lines in text aligned in the same direction. Periods don't represent the end of a line. If a sentence spans multiple lines, the <code>DetectText</code> operation returns multiple lines.</p> <p>To determine whether a <code>TextDetection</code> element is a line of text or a word, use the <code>TextDetection</code> object <code>Type</code> field. </p> <p>To be detected, text must be within +/- 90 degrees orientation of the horizontal axis.</p> <p>For more information, see DetectText in the Amazon Rekognition Developer Guide.</p>
     async fn detect_text(
         &self,
@@ -7358,7 +7642,7 @@ impl Rekognition for RekognitionClient {
             .deserialize::<ListStreamProcessorsResponse, _>()
     }
 
-    /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 100 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 100 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
+    /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     async fn recognize_celebrities(
         &self,
         input: RecognizeCelebritiesRequest,

@@ -88,6 +88,10 @@ pub struct ChangeSetSummaryListItem {
     #[serde(rename = "EntityIdList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_id_list: Option<Vec<String>>,
+    /// <p>Returned if the change set is in <code>FAILED</code> status. Can be either <code>CLIENT_ERROR</code>, which means that there are issues with the request (see the <code>ErrorDetailList</code> of <code>DescribeChangeSet</code>), or <code>SERVER_FAULT</code>, which means that there is a problem in the system, and you should retry your request.</p>
+    #[serde(rename = "FailureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
     /// <p>The time, in ISO 8601 format (2018-02-27T13:45:22Z), when the change set was started.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -154,6 +158,10 @@ pub struct DescribeChangeSetResponse {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<String>,
+    /// <p>Returned if the change set is in <code>FAILED</code> status. Can be either <code>CLIENT_ERROR</code>, which means that there are issues with the request (see the <code>ErrorDetailList</code>), or <code>SERVER_FAULT</code>, which means that there is a problem in the system, and you should retry your request.</p>
+    #[serde(rename = "FailureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
     /// <p>Returned if there is a failure on the change set, but that failure is not related to any of the changes in the request.</p>
     #[serde(rename = "FailureDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]

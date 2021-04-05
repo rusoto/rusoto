@@ -407,6 +407,43 @@ pub struct DiscovererSummary {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportSchemaRequest {
+    /// <p>The name of the registry.</p>
+    #[serde(rename = "RegistryName")]
+    pub registry_name: String,
+    /// <p>The name of the schema.</p>
+    #[serde(rename = "SchemaName")]
+    pub schema_name: String,
+    /// <p>Specifying this limits the results to only this schema version.</p>
+    #[serde(rename = "SchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version: Option<String>,
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportSchemaResponse {
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
+    #[serde(rename = "SchemaName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_name: Option<String>,
+    #[serde(rename = "SchemaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_version: Option<String>,
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCodeBindingSourceRequest {
     /// <p>The language of the code binding.</p>
     #[serde(rename = "Language")]
@@ -742,6 +779,10 @@ pub struct SchemaVersionSummary {
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
+    /// <p>The type of schema.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -776,6 +817,10 @@ pub struct SearchSchemaVersionSummary {
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
+    /// <p>The type of schema.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1728,6 +1773,71 @@ impl fmt::Display for DescribeSchemaError {
     }
 }
 impl Error for DescribeSchemaError {}
+/// Errors returned by ExportSchema
+#[derive(Debug, PartialEq)]
+pub enum ExportSchemaError {
+    BadRequest(String),
+
+    Forbidden(String),
+
+    InternalServerError(String),
+
+    NotFound(String),
+
+    ServiceUnavailable(String),
+
+    TooManyRequests(String),
+
+    Unauthorized(String),
+}
+
+impl ExportSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportSchemaError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ExportSchemaError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ExportSchemaError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ExportSchemaError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ExportSchemaError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ExportSchemaError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ExportSchemaError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ExportSchemaError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportSchemaError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportSchemaError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::NotFound(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ExportSchemaError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExportSchemaError {}
 /// Errors returned by GetCodeBindingSource
 #[derive(Debug, PartialEq)]
 pub enum GetCodeBindingSourceError {
@@ -2829,6 +2939,11 @@ pub trait Schemas {
         input: DescribeSchemaRequest,
     ) -> Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>>;
 
+    async fn export_schema(
+        &self,
+        input: ExportSchemaRequest,
+    ) -> Result<ExportSchemaResponse, RusotoError<ExportSchemaError>>;
+
     /// <p>Get the code binding source URI.</p>
     async fn get_code_binding_source(
         &self,
@@ -3364,6 +3479,44 @@ impl Schemas for SchemasClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeSchemaError::from_response(response))
+        }
+    }
+
+    #[allow(unused_mut)]
+    async fn export_schema(
+        &self,
+        input: ExportSchemaRequest,
+    ) -> Result<ExportSchemaResponse, RusotoError<ExportSchemaError>> {
+        let request_uri = format!(
+            "/v1/registries/name/{registry_name}/schemas/name/{schema_name}/export",
+            registry_name = input.registry_name,
+            schema_name = input.schema_name
+        );
+
+        let mut request = SignedRequest::new("GET", "schemas", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.schema_version {
+            params.put("schemaVersion", x);
+        }
+        params.put("type", &input.type_);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ExportSchemaResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ExportSchemaError::from_response(response))
         }
     }
 

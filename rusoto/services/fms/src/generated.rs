@@ -50,12 +50,129 @@ impl FmsClient {
 }
 
 use serde_json;
+/// <p>An individual AWS Firewall Manager application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct App {
+    /// <p>The application's name.</p>
+    #[serde(rename = "AppName")]
+    pub app_name: String,
+    /// <p>The application's port number, for example <code>80</code>.</p>
+    #[serde(rename = "Port")]
+    pub port: i64,
+    /// <p>The IP protocol name or number. The name can be one of <code>tcp</code>, <code>udp</code>, or <code>icmp</code>. For information on possible numbers, see <a href="https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>.</p>
+    #[serde(rename = "Protocol")]
+    pub protocol: String,
+}
+
+/// <p>An AWS Firewall Manager applications list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AppsListData {
+    /// <p>An array of applications in the AWS Firewall Manager applications list.</p>
+    #[serde(rename = "AppsList")]
+    pub apps_list: Vec<App>,
+    /// <p>The time that the AWS Firewall Manager applications list was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The time that the AWS Firewall Manager applications list was last updated.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The ID of the AWS Firewall Manager applications list.</p>
+    #[serde(rename = "ListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_id: Option<String>,
+    /// <p>The name of the AWS Firewall Manager applications list.</p>
+    #[serde(rename = "ListName")]
+    pub list_name: String,
+    /// <p>A unique identifier for each update to the list. When you update the list, the update token must match the token of the current version of the application list. You can retrieve the update token by getting the list. </p>
+    #[serde(rename = "ListUpdateToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_update_token: Option<String>,
+    /// <p>A map of previous version numbers to their corresponding <code>App</code> object arrays.</p>
+    #[serde(rename = "PreviousAppsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_apps_list: Option<::std::collections::HashMap<String, Vec<App>>>,
+}
+
+/// <p>Details of the AWS Firewall Manager applications list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppsListDataSummary {
+    /// <p>An array of <code>App</code> objects in the AWS Firewall Manager applications list.</p>
+    #[serde(rename = "AppsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_list: Option<Vec<App>>,
+    /// <p>The Amazon Resource Name (ARN) of the applications list.</p>
+    #[serde(rename = "ListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_arn: Option<String>,
+    /// <p>The ID of the applications list.</p>
+    #[serde(rename = "ListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_id: Option<String>,
+    /// <p>The name of the applications list.</p>
+    #[serde(rename = "ListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_name: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateAdminAccountRequest {
     /// <p>The AWS account ID to associate with AWS Firewall Manager as the AWS Firewall Manager administrator account. This can be an AWS Organizations master account or a member account. For more information about AWS Organizations and master accounts, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts.html">Managing the AWS Accounts in Your Organization</a>. </p>
     #[serde(rename = "AdminAccount")]
     pub admin_account: String,
+}
+
+/// <p>Violations for an EC2 instance resource.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AwsEc2InstanceViolation {
+    /// <p>Violations for network interfaces associated with the EC2 instance.</p>
+    #[serde(rename = "AwsEc2NetworkInterfaceViolations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_network_interface_violations: Option<Vec<AwsEc2NetworkInterfaceViolation>>,
+    /// <p>The resource ID of the EC2 instance.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>Violations for network interfaces associated with an EC2 instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AwsEc2NetworkInterfaceViolation {
+    /// <p>List of security groups that violate the rules specified in the master security group of the AWS Firewall Manager policy.</p>
+    #[serde(rename = "ViolatingSecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violating_security_groups: Option<Vec<String>>,
+    /// <p>The resource ID of the network interface.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>Details of the rule violation in a security group when compared to the master security group of the AWS Firewall Manager policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AwsVPCSecurityGroupViolation {
+    /// <p>List of rules specified in the security group of the AWS Firewall Manager policy that partially match the <code>ViolationTarget</code> rule.</p>
+    #[serde(rename = "PartialMatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partial_matches: Option<Vec<PartialMatch>>,
+    /// <p>Remediation options for the rule specified in the <code>ViolationTarget</code>.</p>
+    #[serde(rename = "PossibleSecurityGroupRemediationActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub possible_security_group_remediation_actions: Option<Vec<SecurityGroupRemediationAction>>,
+    /// <p>The security group rule that is being evaluated.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+    /// <p>A description of the security group that violates the policy.</p>
+    #[serde(rename = "ViolationTargetDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target_description: Option<String>,
 }
 
 /// <p>Details of the resource that is not protected by the policy.</p>
@@ -66,7 +183,7 @@ pub struct ComplianceViolator {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>The resource type. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For example: <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
+    /// <p>The resource type. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For example: <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code>, <code>AWS::CloudFront::Distribution</code>, or <code>AWS::NetworkFirewall::FirewallPolicy</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -74,6 +191,14 @@ pub struct ComplianceViolator {
     #[serde(rename = "ViolationReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub violation_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppsListRequest {
+    /// <p>The ID of the applications list that you want to delete. You can retrieve this ID from <code>PutAppsList</code>, <code>ListAppsLists</code>, and <code>GetAppsList</code>.</p>
+    #[serde(rename = "ListId")]
+    pub list_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -87,9 +212,17 @@ pub struct DeletePolicyRequest {
     #[serde(rename = "DeleteAllPolicyResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_all_policy_resources: Option<bool>,
-    /// <p>The ID of the policy that you want to delete. <code>PolicyId</code> is returned by <code>PutPolicy</code> and by <code>ListPolicies</code>.</p>
+    /// <p>The ID of the policy that you want to delete. You can retrieve this ID from <code>PutPolicy</code> and <code>ListPolicies</code>.</p>
     #[serde(rename = "PolicyId")]
     pub policy_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteProtocolsListRequest {
+    /// <p>The ID of the protocols list that you want to delete. You can retrieve this ID from <code>PutProtocolsList</code>, <code>ListProtocolsLists</code>, and <code>GetProtocolsLost</code>.</p>
+    #[serde(rename = "ListId")]
+    pub list_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -129,6 +262,31 @@ pub struct GetAdminAccountResponse {
     #[serde(rename = "RoleStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAppsListRequest {
+    /// <p>Specifies whether the list to retrieve is a default list owned by AWS Firewall Manager.</p>
+    #[serde(rename = "DefaultList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_list: Option<bool>,
+    /// <p>The ID of the AWS Firewall Manager applications list that you want the details for.</p>
+    #[serde(rename = "ListId")]
+    pub list_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAppsListResponse {
+    /// <p>Information about the specified AWS Firewall Manager applications list.</p>
+    #[serde(rename = "AppsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_list: Option<AppsListData>,
+    /// <p>The Amazon Resource Name (ARN) of the applications list.</p>
+    #[serde(rename = "AppsListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_list_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -240,6 +398,86 @@ pub struct GetProtectionStatusResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetProtocolsListRequest {
+    /// <p>Specifies whether the list to retrieve is a default list owned by AWS Firewall Manager.</p>
+    #[serde(rename = "DefaultList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_list: Option<bool>,
+    /// <p>The ID of the AWS Firewall Manager protocols list that you want the details for.</p>
+    #[serde(rename = "ListId")]
+    pub list_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetProtocolsListResponse {
+    /// <p>Information about the specified AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ProtocolsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_list: Option<ProtocolsListData>,
+    /// <p>The Amazon Resource Name (ARN) of the specified protocols list.</p>
+    #[serde(rename = "ProtocolsListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_list_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetViolationDetailsRequest {
+    /// <p>The AWS account ID that you want the details for.</p>
+    #[serde(rename = "MemberAccount")]
+    pub member_account: String,
+    /// <p>The ID of the AWS Firewall Manager policy that you want the details for. This currently only supports security group content audit policies.</p>
+    #[serde(rename = "PolicyId")]
+    pub policy_id: String,
+    /// <p>The ID of the resource that has violations.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The resource type. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. Supported resource types are: <code>AWS::EC2::Instance</code>, <code>AWS::EC2::NetworkInterface</code>, <code>AWS::EC2::SecurityGroup</code>, <code>AWS::NetworkFirewall::FirewallPolicy</code>, and <code>AWS::EC2::Subnet</code>. </p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetViolationDetailsResponse {
+    /// <p>Violation detail for a resource.</p>
+    #[serde(rename = "ViolationDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_detail: Option<ViolationDetail>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAppsListsRequest {
+    /// <p>Specifies whether the lists to retrieve are default lists owned by AWS Firewall Manager.</p>
+    #[serde(rename = "DefaultLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_lists: Option<bool>,
+    /// <p>The maximum number of objects that you want AWS Firewall Manager to return for this request. If more objects are available, in the response, AWS Firewall Manager provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify this, AWS Firewall Manager returns all available objects.</p>
+    #[serde(rename = "MaxResults")]
+    pub max_results: i64,
+    /// <p>If you specify a value for <code>MaxResults</code> in your list request, and you have more objects than the maximum, AWS Firewall Manager returns this token in the response. For all but the first request, you provide the token returned by the prior request in the request parameters, to retrieve the next batch of objects.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAppsListsResponse {
+    /// <p>An array of <code>AppsListDataSummary</code> objects.</p>
+    #[serde(rename = "AppsLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_lists: Option<Vec<AppsListDataSummary>>,
+    /// <p>If you specify a value for <code>MaxResults</code> in your list request, and you have more objects than the maximum, AWS Firewall Manager returns this token in the response. You can use this token in subsequent requests to retrieve the next batch of objects.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComplianceStatusRequest {
     /// <p>Specifies the number of <code>PolicyComplianceStatus</code> objects that you want AWS Firewall Manager to return for this request. If you have more <code>PolicyComplianceStatus</code> objects than the number that you specify for <code>MaxResults</code>, the response includes a <code>NextToken</code> value that you can use to get another batch of <code>PolicyComplianceStatus</code> objects.</p>
     #[serde(rename = "MaxResults")]
@@ -321,8 +559,37 @@ pub struct ListPoliciesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListProtocolsListsRequest {
+    /// <p>Specifies whether the lists to retrieve are default lists owned by AWS Firewall Manager.</p>
+    #[serde(rename = "DefaultLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_lists: Option<bool>,
+    /// <p>The maximum number of objects that you want AWS Firewall Manager to return for this request. If more objects are available, in the response, AWS Firewall Manager provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify this, AWS Firewall Manager returns all available objects.</p>
+    #[serde(rename = "MaxResults")]
+    pub max_results: i64,
+    /// <p>If you specify a value for <code>MaxResults</code> in your list request, and you have more objects than the maximum, AWS Firewall Manager returns this token in the response. For all but the first request, you provide the token returned by the prior request in the request parameters, to retrieve the next batch of objects.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListProtocolsListsResponse {
+    /// <p>If you specify a value for <code>MaxResults</code> in your list request, and you have more objects than the maximum, AWS Firewall Manager returns this token in the response. You can use this token in subsequent requests to retrieve the next batch of objects.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>ProtocolsListDataSummary</code> objects.</p>
+    #[serde(rename = "ProtocolsLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_lists: Option<Vec<ProtocolsListDataSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource to return tags for. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN..</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource to return tags for. The AWS Firewall Manager resources that support tagging are policies, applications lists, and protocols lists. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -334,6 +601,134 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
+}
+
+/// <p>Violation details for AWS Network Firewall for a subnet that's not associated to the expected Firewall Manager managed route table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkFirewallMissingExpectedRTViolation {
+    /// <p>The Availability Zone of a violating subnet. </p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The resource ID of the current route table that's associated with the subnet, if one is available.</p>
+    #[serde(rename = "CurrentRouteTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_route_table: Option<String>,
+    /// <p>The resource ID of the route table that should be associated with the subnet.</p>
+    #[serde(rename = "ExpectedRouteTable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_route_table: Option<String>,
+    /// <p>The resource ID of the VPC associated with a violating subnet.</p>
+    #[serde(rename = "VPC")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<String>,
+    /// <p>The ID of the AWS Network Firewall or VPC resource that's in violation.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>Violation details for AWS Network Firewall for a subnet that doesn't have a Firewall Manager managed firewall in its VPC. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkFirewallMissingFirewallViolation {
+    /// <p>The Availability Zone of a violating subnet. </p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The reason the resource has this violation, if one is available. </p>
+    #[serde(rename = "TargetViolationReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_violation_reason: Option<String>,
+    /// <p>The resource ID of the VPC associated with a violating subnet.</p>
+    #[serde(rename = "VPC")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<String>,
+    /// <p>The ID of the AWS Network Firewall or VPC resource that's in violation.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>Violation details for AWS Network Firewall for an Availability Zone that's missing the expected Firewall Manager managed subnet.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkFirewallMissingSubnetViolation {
+    /// <p>The Availability Zone of a violating subnet. </p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The reason the resource has this violation, if one is available. </p>
+    #[serde(rename = "TargetViolationReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_violation_reason: Option<String>,
+    /// <p>The resource ID of the VPC associated with a violating subnet.</p>
+    #[serde(rename = "VPC")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<String>,
+    /// <p>The ID of the AWS Network Firewall or VPC resource that's in violation.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>The definition of the AWS Network Firewall firewall policy.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkFirewallPolicyDescription {
+    /// <p>The stateful rule groups that are used in the Network Firewall firewall policy. </p>
+    #[serde(rename = "StatefulRuleGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stateful_rule_groups: Option<Vec<StatefulRuleGroup>>,
+    /// <p>Names of custom actions that are available for use in the stateless default actions settings.</p>
+    #[serde(rename = "StatelessCustomActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stateless_custom_actions: Option<Vec<String>>,
+    /// <p>The actions to take on packets that don't match any of the stateless rule groups. </p>
+    #[serde(rename = "StatelessDefaultActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stateless_default_actions: Option<Vec<String>>,
+    /// <p>The actions to take on packet fragments that don't match any of the stateless rule groups. </p>
+    #[serde(rename = "StatelessFragmentDefaultActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stateless_fragment_default_actions: Option<Vec<String>>,
+    /// <p>The stateless rule groups that are used in the Network Firewall firewall policy. </p>
+    #[serde(rename = "StatelessRuleGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stateless_rule_groups: Option<Vec<StatelessRuleGroup>>,
+}
+
+/// <p>Violation details for AWS Network Firewall for a firewall policy that has a different <a>NetworkFirewallPolicyDescription</a> than is required by the Firewall Manager policy. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkFirewallPolicyModifiedViolation {
+    /// <p>The policy that's currently in use in the individual account. </p>
+    #[serde(rename = "CurrentPolicyDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_policy_description: Option<NetworkFirewallPolicyDescription>,
+    /// <p>The policy that should be in use in the individual account in order to be compliant. </p>
+    #[serde(rename = "ExpectedPolicyDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_policy_description: Option<NetworkFirewallPolicyDescription>,
+    /// <p>The ID of the AWS Network Firewall or VPC resource that's in violation.</p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+}
+
+/// <p>The reference rule that partially matches the <code>ViolationTarget</code> rule and violation reason.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PartialMatch {
+    /// <p>The reference rule from the master security group of the AWS Firewall Manager policy.</p>
+    #[serde(rename = "Reference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference: Option<String>,
+    /// <p>The violation reason.</p>
+    #[serde(rename = "TargetViolationReasons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_violation_reasons: Option<Vec<String>>,
 }
 
 /// <p>An AWS Firewall Manager policy.</p>
@@ -354,7 +749,7 @@ pub struct Policy {
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_id: Option<String>,
-    /// <p>The friendly name of the AWS Firewall Manager policy.</p>
+    /// <p>The name of the AWS Firewall Manager policy.</p>
     #[serde(rename = "PolicyName")]
     pub policy_name: String,
     /// <p>A unique identifier for each update to the policy. When issuing a <code>PutPolicy</code> request, the <code>PolicyUpdateToken</code> in the request must match the <code>PolicyUpdateToken</code> of the current policy version. To get the <code>PolicyUpdateToken</code> of the current policy version, use a <code>GetPolicy</code> request.</p>
@@ -368,7 +763,7 @@ pub struct Policy {
     #[serde(rename = "ResourceTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tags: Option<Vec<ResourceTag>>,
-    /// <p>The type of resource protected by or in scope of the policy. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For AWS WAF and Shield Advanced, examples include <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> and <code>AWS::CloudFront::Distribution</code>. For a security group common policy, valid values are <code>AWS::EC2::NetworkInterface</code> and <code>AWS::EC2::Instance</code>. For a security group content audit policy, valid values are <code>AWS::EC2::SecurityGroup</code>, <code>AWS::EC2::NetworkInterface</code>, and <code>AWS::EC2::Instance</code>. For a security group usage audit policy, the value is <code>AWS::EC2::SecurityGroup</code>. </p>
+    /// <p>The type of resource protected by or in scope of the policy. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For AWS WAF and Shield Advanced, examples include <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> and <code>AWS::CloudFront::Distribution</code>. For a security group common policy, valid values are <code>AWS::EC2::NetworkInterface</code> and <code>AWS::EC2::Instance</code>. For a security group content audit policy, valid values are <code>AWS::EC2::SecurityGroup</code>, <code>AWS::EC2::NetworkInterface</code>, and <code>AWS::EC2::Instance</code>. For a security group usage audit policy, the value is <code>AWS::EC2::SecurityGroup</code>. For an AWS Network Firewall policy, the value is <code>AWS::EC2::VPC</code>.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p>An array of <code>ResourceType</code>.</p>
@@ -438,7 +833,7 @@ pub struct PolicyComplianceStatus {
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_id: Option<String>,
-    /// <p>The friendly name of the AWS Firewall Manager policy.</p>
+    /// <p>The name of the AWS Firewall Manager policy.</p>
     #[serde(rename = "PolicyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
@@ -460,7 +855,7 @@ pub struct PolicySummary {
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_id: Option<String>,
-    /// <p>The friendly name of the specified policy.</p>
+    /// <p>The name of the specified policy.</p>
     #[serde(rename = "PolicyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
@@ -468,7 +863,7 @@ pub struct PolicySummary {
     #[serde(rename = "RemediationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remediation_enabled: Option<bool>,
-    /// <p>The type of resource protected by or in scope of the policy. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For AWS WAF and Shield Advanced, examples include <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> and <code>AWS::CloudFront::Distribution</code>. For a security group common policy, valid values are <code>AWS::EC2::NetworkInterface</code> and <code>AWS::EC2::Instance</code>. For a security group content audit policy, valid values are <code>AWS::EC2::SecurityGroup</code>, <code>AWS::EC2::NetworkInterface</code>, and <code>AWS::EC2::Instance</code>. For a security group usage audit policy, the value is <code>AWS::EC2::SecurityGroup</code>. </p>
+    /// <p>The type of resource protected by or in scope of the policy. This is in the format shown in the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For AWS WAF and Shield Advanced, examples include <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> and <code>AWS::CloudFront::Distribution</code>. For a security group common policy, valid values are <code>AWS::EC2::NetworkInterface</code> and <code>AWS::EC2::Instance</code>. For a security group content audit policy, valid values are <code>AWS::EC2::SecurityGroup</code>, <code>AWS::EC2::NetworkInterface</code>, and <code>AWS::EC2::Instance</code>. For a security group usage audit policy, the value is <code>AWS::EC2::SecurityGroup</code>. For an AWS Network Firewall policy, the value is <code>AWS::EC2::VPC</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -476,6 +871,84 @@ pub struct PolicySummary {
     #[serde(rename = "SecurityServiceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_service_type: Option<String>,
+}
+
+/// <p>An AWS Firewall Manager protocols list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProtocolsListData {
+    /// <p>The time that the AWS Firewall Manager protocols list was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The time that the AWS Firewall Manager protocols list was last updated.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The ID of the AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_id: Option<String>,
+    /// <p>The name of the AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ListName")]
+    pub list_name: String,
+    /// <p>A unique identifier for each update to the list. When you update the list, the update token must match the token of the current version of the application list. You can retrieve the update token by getting the list. </p>
+    #[serde(rename = "ListUpdateToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_update_token: Option<String>,
+    /// <p>A map of previous version numbers to their corresponding protocol arrays.</p>
+    #[serde(rename = "PreviousProtocolsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_protocols_list: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>An array of protocols in the AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ProtocolsList")]
+    pub protocols_list: Vec<String>,
+}
+
+/// <p>Details of the AWS Firewall Manager protocols list.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProtocolsListDataSummary {
+    /// <p>The Amazon Resource Name (ARN) of the specified protocols list.</p>
+    #[serde(rename = "ListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_arn: Option<String>,
+    /// <p>The ID of the specified protocols list.</p>
+    #[serde(rename = "ListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_id: Option<String>,
+    /// <p>The name of the specified protocols list.</p>
+    #[serde(rename = "ListName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub list_name: Option<String>,
+    /// <p>An array of protocols in the AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ProtocolsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAppsListRequest {
+    /// <p>The details of the AWS Firewall Manager applications list to be created.</p>
+    #[serde(rename = "AppsList")]
+    pub apps_list: AppsListData,
+    /// <p>The tags associated with the resource.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAppsListResponse {
+    /// <p>The details of the AWS Firewall Manager applications list.</p>
+    #[serde(rename = "AppsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_list: Option<AppsListData>,
+    /// <p>The Amazon Resource Name (ARN) of the applications list.</p>
+    #[serde(rename = "AppsListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apps_list_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -504,14 +977,39 @@ pub struct PutPolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutPolicyResponse {
-    /// <p>The details of the AWS Firewall Manager policy that was created.</p>
+    /// <p>The details of the AWS Firewall Manager policy.</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<Policy>,
-    /// <p>The Amazon Resource Name (ARN) of the policy that was created.</p>
+    /// <p>The Amazon Resource Name (ARN) of the policy.</p>
     #[serde(rename = "PolicyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutProtocolsListRequest {
+    /// <p>The details of the AWS Firewall Manager protocols list to be created.</p>
+    #[serde(rename = "ProtocolsList")]
+    pub protocols_list: ProtocolsListData,
+    /// <p>The tags associated with the resource.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutProtocolsListResponse {
+    /// <p>The details of the AWS Firewall Manager protocols list.</p>
+    #[serde(rename = "ProtocolsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_list: Option<ProtocolsListData>,
+    /// <p>The Amazon Resource Name (ARN) of the protocols list.</p>
+    #[serde(rename = "ProtocolsListArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocols_list_arn: Option<String>,
 }
 
 /// <p>The resource tags that AWS Firewall Manager uses to determine if a particular resource should be included or excluded from the AWS Firewall Manager policy. Tags enable you to categorize your AWS resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value. Firewall Manager combines the tags with "AND" so that, if you add more than one tag to a policy scope, a resource must have all the specified tags to be included or excluded. For more information, see <a href="https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html">Working with Tag Editor</a>.</p>
@@ -526,16 +1024,136 @@ pub struct ResourceTag {
     pub value: Option<String>,
 }
 
+/// <p>Violation detail based on resource type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceViolation {
+    /// <p>Violation details for an EC2 instance.</p>
+    #[serde(rename = "AwsEc2InstanceViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_instance_violation: Option<AwsEc2InstanceViolation>,
+    /// <p>Violation details for network interface.</p>
+    #[serde(rename = "AwsEc2NetworkInterfaceViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_ec_2_network_interface_violation: Option<AwsEc2NetworkInterfaceViolation>,
+    /// <p>Violation details for security groups.</p>
+    #[serde(rename = "AwsVPCSecurityGroupViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_vpc_security_group_violation: Option<AwsVPCSecurityGroupViolation>,
+    /// <p>Violation detail for an Network Firewall policy that indicates that a subnet is not associated with the expected Firewall Manager managed route table. </p>
+    #[serde(rename = "NetworkFirewallMissingExpectedRTViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_firewall_missing_expected_rt_violation:
+        Option<NetworkFirewallMissingExpectedRTViolation>,
+    /// <p>Violation detail for an Network Firewall policy that indicates that a subnet has no Firewall Manager managed firewall in its VPC. </p>
+    #[serde(rename = "NetworkFirewallMissingFirewallViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_firewall_missing_firewall_violation:
+        Option<NetworkFirewallMissingFirewallViolation>,
+    /// <p>Violation detail for an Network Firewall policy that indicates that an Availability Zone is missing the expected Firewall Manager managed subnet.</p>
+    #[serde(rename = "NetworkFirewallMissingSubnetViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_firewall_missing_subnet_violation: Option<NetworkFirewallMissingSubnetViolation>,
+    /// <p>Violation detail for an Network Firewall policy that indicates that a firewall policy in an individual account has been modified in a way that makes it noncompliant. For example, the individual account owner might have deleted a rule group, changed the priority of a stateless rule group, or changed a policy default action.</p>
+    #[serde(rename = "NetworkFirewallPolicyModifiedViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_firewall_policy_modified_violation: Option<NetworkFirewallPolicyModifiedViolation>,
+}
+
+/// <p>Remediation option for the rule specified in the <code>ViolationTarget</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SecurityGroupRemediationAction {
+    /// <p>Brief description of the action that will be performed.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Indicates if the current action is the default action.</p>
+    #[serde(rename = "IsDefaultAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default_action: Option<bool>,
+    /// <p>The remediation action that will be performed.</p>
+    #[serde(rename = "RemediationActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remediation_action_type: Option<String>,
+    /// <p>The final state of the rule specified in the <code>ViolationTarget</code> after it is remediated.</p>
+    #[serde(rename = "RemediationResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remediation_result: Option<SecurityGroupRuleDescription>,
+}
+
+/// <p>Describes a set of permissions for a security group rule.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SecurityGroupRuleDescription {
+    /// <p>The start of the port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types.</p>
+    #[serde(rename = "FromPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_port: Option<i64>,
+    /// <p>The IPv4 ranges for the security group rule.</p>
+    #[serde(rename = "IPV4Range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv4_range: Option<String>,
+    /// <p>The IPv6 ranges for the security group rule.</p>
+    #[serde(rename = "IPV6Range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv6_range: Option<String>,
+    /// <p>The ID of the prefix list for the security group rule.</p>
+    #[serde(rename = "PrefixListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix_list_id: Option<String>,
+    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>, <code>icmpv6</code>) or number.</p>
+    #[serde(rename = "Protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>The end of the port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes.</p>
+    #[serde(rename = "ToPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to_port: Option<i64>,
+}
+
 /// <p>Details about the security service that is being used to protect the resources.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SecurityServicePolicyData {
-    /// <p><p>Details about the service that are specific to the service type, in JSON format. For service type <code>SHIELD<em>ADVANCED</code>, this is an empty string.</p> <ul> <li> <p>Example: <code>WAFV2</code> </p> <p> <code>&quot;ManagedServiceData&quot;: &quot;{&quot;type&quot;:&quot;WAFV2&quot;,&quot;defaultAction&quot;:{&quot;type&quot;:&quot;ALLOW&quot;},&quot;preProcessRuleGroups&quot;:[{&quot;managedRuleGroupIdentifier&quot;:null,&quot;ruleGroupArn&quot;:&quot;rulegrouparn&quot;,&quot;overrideAction&quot;:{&quot;type&quot;:&quot;COUNT&quot;},&quot;excludedRules&quot;:[{&quot;name&quot;:&quot;EntityName&quot;}],&quot;ruleGroupType&quot;:&quot;RuleGroup&quot;}],&quot;postProcessRuleGroups&quot;:[{&quot;managedRuleGroupIdentifier&quot;:{&quot;managedRuleGroupName&quot;:&quot;AWSManagedRulesAdminProtectionRuleSet&quot;,&quot;vendor&quot;:&quot;AWS&quot;},&quot;ruleGroupArn&quot;:&quot;rulegrouparn&quot;,&quot;overrideAction&quot;:{&quot;type&quot;:&quot;NONE&quot;},&quot;excludedRules&quot;:[],&quot;ruleGroupType&quot;:&quot;ManagedRuleGroup&quot;}],&quot;overrideCustomerWebACLAssociation&quot;:false}&quot;</code> </p> </li> <li> <p>Example: <code>WAF Classic</code> </p> <p> <code>&quot;ManagedServiceData&quot;: &quot;{&quot;type&quot;: &quot;WAF&quot;, &quot;ruleGroups&quot;: [{&quot;id&quot;: &quot;12345678-1bcd-9012-efga-0987654321ab&quot;, &quot;overrideAction&quot; : {&quot;type&quot;: &quot;COUNT&quot;}}], &quot;defaultAction&quot;: {&quot;type&quot;: &quot;BLOCK&quot;}}</code> </p> </li> <li> <p>Example: <code>SECURITY</em>GROUPS<em>COMMON</code> </p> <p> <code>&quot;SecurityServicePolicyData&quot;:{&quot;Type&quot;:&quot;SECURITY</em>GROUPS<em>COMMON&quot;,&quot;ManagedServiceData&quot;:&quot;{&quot;type&quot;:&quot;SECURITY</em>GROUPS<em>COMMON&quot;,&quot;revertManualSecurityGroupChanges&quot;:false,&quot;exclusiveResourceSecurityGroupManagement&quot;:false, &quot;applyToAllEC2InstanceENIs&quot;:false,&quot;securityGroups&quot;:[{&quot;id&quot;:&quot; sg-000e55995d61a06bd&quot;}]}&quot;},&quot;RemediationEnabled&quot;:false,&quot;ResourceType&quot;:&quot;AWS::EC2::NetworkInterface&quot;}</code> </p> </li> <li> <p>Example: <code>SECURITY</em>GROUPS<em>CONTENT</em>AUDIT</code> </p> <p> <code>&quot;SecurityServicePolicyData&quot;:{&quot;Type&quot;:&quot;SECURITY<em>GROUPS</em>CONTENT<em>AUDIT&quot;,&quot;ManagedServiceData&quot;:&quot;{&quot;type&quot;:&quot;SECURITY</em>GROUPS<em>CONTENT</em>AUDIT&quot;,&quot;securityGroups&quot;:[{&quot;id&quot;:&quot; sg-000e55995d61a06bd &quot;}],&quot;securityGroupAction&quot;:{&quot;type&quot;:&quot;ALLOW&quot;}}&quot;},&quot;RemediationEnabled&quot;:false,&quot;ResourceType&quot;:&quot;AWS::EC2::NetworkInterface&quot;}</code> </p> <p>The security group action for content audit can be <code>ALLOW</code> or <code>DENY</code>. For <code>ALLOW</code>, all in-scope security group rules must be within the allowed range of the policy&#39;s security group rules. For <code>DENY</code>, all in-scope security group rules must not contain a value or a range that matches a rule value or range in the policy security group.</p> </li> <li> <p>Example: <code>SECURITY<em>GROUPS</em>USAGE<em>AUDIT</code> </p> <p> <code>&quot;SecurityServicePolicyData&quot;:{&quot;Type&quot;:&quot;SECURITY</em>GROUPS<em>USAGE</em>AUDIT&quot;,&quot;ManagedServiceData&quot;:&quot;{&quot;type&quot;:&quot;SECURITY<em>GROUPS</em>USAGE_AUDIT&quot;,&quot;deleteUnusedSecurityGroups&quot;:true,&quot;coalesceRedundantSecurityGroups&quot;:true}&quot;},&quot;RemediationEnabled&quot;:false,&quot;Resou rceType&quot;:&quot;AWS::EC2::SecurityGroup&quot;}</code> </p> </li> </ul></p>
+    /// <p><p>Details about the service that are specific to the service type, in JSON format. For service type <code>SHIELD<em>ADVANCED</code>, this is an empty string.</p> <ul> <li> <p>Example: <code>NETWORK</em>FIREWALL</code> </p> <p> <code>&quot;{&quot;type&quot;:&quot;NETWORK<em>FIREWALL&quot;,&quot;networkFirewallStatelessRuleGroupReferences&quot;:[{&quot;resourceARN&quot;:&quot;arn:aws:network-firewall:us-west-1:1234567891011:stateless-rulegroup/rulegroup2&quot;,&quot;priority&quot;:10}],&quot;networkFirewallStatelessDefaultActions&quot;:[&quot;aws:pass&quot;,&quot;custom1&quot;],&quot;networkFirewallStatelessFragmentDefaultActions&quot;:[&quot;custom2&quot;,&quot;aws:pass&quot;],&quot;networkFirewallStatelessCustomActions&quot;:[{&quot;actionName&quot;:&quot;custom1&quot;,&quot;actionDefinition&quot;:{&quot;publishMetricAction&quot;:{&quot;dimensions&quot;:[{&quot;value&quot;:&quot;dimension1&quot;}]}}},{&quot;actionName&quot;:&quot;custom2&quot;,&quot;actionDefinition&quot;:{&quot;publishMetricAction&quot;:{&quot;dimensions&quot;:[{&quot;value&quot;:&quot;dimension2&quot;}]}}}],&quot;networkFirewallStatefulRuleGroupReferences&quot;:[{&quot;resourceARN&quot;:&quot;arn:aws:network-firewall:us-west-1:1234567891011:stateful-rulegroup/rulegroup1&quot;}],&quot;networkFirewallOrchestrationConfig&quot;:{&quot;singleFirewallEndpointPerVPC&quot;:true,&quot;allowedIPV4CidrList&quot;:[&quot;10.24.34.0/28&quot;]} }&quot;</code> </p> </li> <li> <p>Example: <code>WAFV2</code> </p> <p> <code>&quot;{&quot;type&quot;:&quot;WAFV2&quot;,&quot;preProcessRuleGroups&quot;:[{&quot;ruleGroupArn&quot;:null,&quot;overrideAction&quot;:{&quot;type&quot;:&quot;NONE&quot;},&quot;managedRuleGroupIdentifier&quot;:{&quot;version&quot;:null,&quot;vendorName&quot;:&quot;AWS&quot;,&quot;managedRuleGroupName&quot;:&quot;AWSManagedRulesAmazonIpReputationList&quot;},&quot;ruleGroupType&quot;:&quot;ManagedRuleGroup&quot;,&quot;excludeRules&quot;:[]}],&quot;postProcessRuleGroups&quot;:[],&quot;defaultAction&quot;:{&quot;type&quot;:&quot;ALLOW&quot;},&quot;overrideCustomerWebACLAssociation&quot;:false,&quot;loggingConfiguration&quot;:{&quot;logDestinationConfigs&quot;:[&quot;arn:aws:firehose:us-west-2:12345678912:deliverystream/aws-waf-logs-fms-admin-destination&quot;],&quot;redactedFields&quot;:[{&quot;redactedFieldType&quot;:&quot;SingleHeader&quot;,&quot;redactedFieldValue&quot;:&quot;Cookies&quot;},{&quot;redactedFieldType&quot;:&quot;Method&quot;}]}}&quot;</code> </p> <p>In the <code>loggingConfiguration</code>, you can specify one <code>logDestinationConfigs</code>, you can optionally provide up to 20 <code>redactedFields</code>, and the <code>RedactedFieldType</code> must be one of <code>URI</code>, <code>QUERY</em>STRING</code>, <code>HEADER</code>, or <code>METHOD</code>.</p> </li> <li> <p>Example: <code>WAF Classic</code> </p> <p> <code>&quot;{&quot;type&quot;: &quot;WAF&quot;, &quot;ruleGroups&quot;: [{&quot;id&quot;:&quot;12345678-1bcd-9012-efga-0987654321ab&quot;, &quot;overrideAction&quot; : {&quot;type&quot;: &quot;COUNT&quot;}}], &quot;defaultAction&quot;: {&quot;type&quot;: &quot;BLOCK&quot;}}&quot;</code> </p> </li> <li> <p>Example: <code>SECURITY<em>GROUPS</em>COMMON</code> </p> <p> <code>&quot;{&quot;type&quot;:&quot;SECURITY<em>GROUPS</em>COMMON&quot;,&quot;revertManualSecurityGroupChanges&quot;:false,&quot;exclusiveResourceSecurityGroupManagement&quot;:false, &quot;applyToAllEC2InstanceENIs&quot;:false,&quot;securityGroups&quot;:[{&quot;id&quot;:&quot; sg-000e55995d61a06bd&quot;}]}&quot;</code> </p> </li> <li> <p>Example: <code>SECURITY<em>GROUPS</em>CONTENT<em>AUDIT</code> </p> <p> <code>&quot;{&quot;type&quot;:&quot;SECURITY</em>GROUPS<em>CONTENT</em>AUDIT&quot;,&quot;securityGroups&quot;:[{&quot;id&quot;:&quot;sg-000e55995d61a06bd&quot;}],&quot;securityGroupAction&quot;:{&quot;type&quot;:&quot;ALLOW&quot;}}&quot;</code> </p> <p>The security group action for content audit can be <code>ALLOW</code> or <code>DENY</code>. For <code>ALLOW</code>, all in-scope security group rules must be within the allowed range of the policy&#39;s security group rules. For <code>DENY</code>, all in-scope security group rules must not contain a value or a range that matches a rule value or range in the policy security group.</p> </li> <li> <p>Example: <code>SECURITY<em>GROUPS</em>USAGE<em>AUDIT</code> </p> <p> <code>&quot;{&quot;type&quot;:&quot;SECURITY</em>GROUPS<em>USAGE</em>AUDIT&quot;,&quot;deleteUnusedSecurityGroups&quot;:true,&quot;coalesceRedundantSecurityGroups&quot;:true}&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "ManagedServiceData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub managed_service_data: Option<String>,
     /// <p>The service that the policy is using to protect the resources. This specifies the type of policy that is created, either an AWS WAF policy, a Shield Advanced policy, or a security group policy. For security group policies, Firewall Manager supports one security group for each common policy and for each content audit policy. This is an adjustable limit that you can increase by contacting AWS Support.</p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+/// <p>AWS Network Firewall stateful rule group, used in a <a>NetworkFirewallPolicyDescription</a>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StatefulRuleGroup {
+    /// <p>The resource ID of the rule group.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The name of the rule group.</p>
+    #[serde(rename = "RuleGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_group_name: Option<String>,
+}
+
+/// <p>AWS Network Firewall stateless rule group, used in a <a>NetworkFirewallPolicyDescription</a>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StatelessRuleGroup {
+    /// <p>The priority of the rule group. AWS Network Firewall evaluates the stateless rule groups in a firewall policy starting from the lowest priority setting. </p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The resource ID of the rule group.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The name of the rule group.</p>
+    #[serde(rename = "RuleGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_group_name: Option<String>,
 }
 
 /// <p>A collection of key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. </p>
@@ -552,7 +1170,7 @@ pub struct Tag {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource to return tags for. The AWS Firewall Manager resources that support tagging are policies, applications lists, and protocols lists. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The tags to add to the resource.</p>
@@ -567,7 +1185,7 @@ pub struct TagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource. The Firewall Manager policy is the only AWS resource that supports tagging, so this ARN is a policy ARN.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource to return tags for. The AWS Firewall Manager resources that support tagging are policies, applications lists, and protocols lists. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The keys of the tags to remove from the resource. </p>
@@ -579,6 +1197,35 @@ pub struct UntagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+/// <p>Violations for a resource based on the specified AWS Firewall Manager policy and AWS account.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ViolationDetail {
+    /// <p>The AWS account that the violation details were requested for.</p>
+    #[serde(rename = "MemberAccount")]
+    pub member_account: String,
+    /// <p>The ID of the AWS Firewall Manager policy that the violation details were requested for.</p>
+    #[serde(rename = "PolicyId")]
+    pub policy_id: String,
+    /// <p>Brief description for the requested resource.</p>
+    #[serde(rename = "ResourceDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_description: Option<String>,
+    /// <p>The resource ID that the violation details were requested for.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The <code>ResourceTag</code> objects associated with the resource.</p>
+    #[serde(rename = "ResourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<Vec<Tag>>,
+    /// <p>The resource type that the violation details were requested for.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+    /// <p>List of violations for the requested resource.</p>
+    #[serde(rename = "ResourceViolations")]
+    pub resource_violations: Vec<ResourceViolation>,
+}
+
 /// Errors returned by AssociateAdminAccount
 #[derive(Debug, PartialEq)]
 pub enum AssociateAdminAccountError {
@@ -586,7 +1233,7 @@ pub enum AssociateAdminAccountError {
     InternalError(String),
     /// <p>The parameters of the request were invalid.</p>
     InvalidInput(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -631,12 +1278,54 @@ impl fmt::Display for AssociateAdminAccountError {
     }
 }
 impl Error for AssociateAdminAccountError {}
+/// Errors returned by DeleteAppsList
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteAppsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DeleteAppsListError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(DeleteAppsListError::InvalidOperation(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteAppsListError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteAppsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteAppsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAppsListError {}
 /// Errors returned by DeleteNotificationChannel
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationChannelError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -684,8 +1373,12 @@ impl Error for DeleteNotificationChannelError {}
 pub enum DeletePolicyError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -697,8 +1390,14 @@ impl DeletePolicyError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeletePolicyError::InternalError(err.msg))
                 }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeletePolicyError::InvalidInput(err.msg))
+                }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeletePolicyError::InvalidOperation(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeletePolicyError::LimitExceeded(err.msg))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePolicyError::ResourceNotFound(err.msg))
@@ -715,18 +1414,66 @@ impl fmt::Display for DeletePolicyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeletePolicyError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::InvalidInput(ref cause) => write!(f, "{}", cause),
             DeletePolicyError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeletePolicyError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             DeletePolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for DeletePolicyError {}
+/// Errors returned by DeleteProtocolsList
+#[derive(Debug, PartialEq)]
+pub enum DeleteProtocolsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteProtocolsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProtocolsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DeleteProtocolsListError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(DeleteProtocolsListError::InvalidOperation(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteProtocolsListError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteProtocolsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteProtocolsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteProtocolsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DeleteProtocolsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteProtocolsListError {}
 /// Errors returned by DisassociateAdminAccount
 #[derive(Debug, PartialEq)]
 pub enum DisassociateAdminAccountError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -774,7 +1521,7 @@ impl Error for DisassociateAdminAccountError {}
 pub enum GetAdminAccountError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -811,11 +1558,57 @@ impl fmt::Display for GetAdminAccountError {
     }
 }
 impl Error for GetAdminAccountError {}
+/// Errors returned by GetAppsList
+#[derive(Debug, PartialEq)]
+pub enum GetAppsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetAppsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(GetAppsListError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(GetAppsListError::InvalidOperation(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetAppsListError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAppsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAppsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetAppsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            GetAppsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAppsListError {}
 /// Errors returned by GetComplianceDetail
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -826,6 +1619,14 @@ impl GetComplianceDetailError {
             match err.typ.as_str() {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetComplianceDetailError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetComplianceDetailError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(GetComplianceDetailError::InvalidOperation(
+                        err.msg,
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetComplianceDetailError::ResourceNotFound(
@@ -844,6 +1645,8 @@ impl fmt::Display for GetComplianceDetailError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetComplianceDetailError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetComplianceDetailError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetComplianceDetailError::InvalidOperation(ref cause) => write!(f, "{}", cause),
             GetComplianceDetailError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -854,7 +1657,7 @@ impl Error for GetComplianceDetailError {}
 pub enum GetNotificationChannelError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -902,7 +1705,7 @@ impl Error for GetNotificationChannelError {}
 pub enum GetPolicyError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The value of the <code>Type</code> parameter is invalid.</p>
     InvalidType(String),
@@ -989,6 +1792,140 @@ impl fmt::Display for GetProtectionStatusError {
     }
 }
 impl Error for GetProtectionStatusError {}
+/// Errors returned by GetProtocolsList
+#[derive(Debug, PartialEq)]
+pub enum GetProtocolsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetProtocolsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProtocolsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(GetProtocolsListError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(GetProtocolsListError::InvalidOperation(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetProtocolsListError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetProtocolsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetProtocolsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetProtocolsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            GetProtocolsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetProtocolsListError {}
+/// Errors returned by GetViolationDetails
+#[derive(Debug, PartialEq)]
+pub enum GetViolationDetailsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetViolationDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetViolationDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(GetViolationDetailsError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetViolationDetailsError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetViolationDetailsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetViolationDetailsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetViolationDetailsError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetViolationDetailsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetViolationDetailsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetViolationDetailsError {}
+/// Errors returned by ListAppsLists
+#[derive(Debug, PartialEq)]
+pub enum ListAppsListsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListAppsListsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsListsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListAppsListsError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(ListAppsListsError::InvalidOperation(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListAppsListsError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListAppsListsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAppsListsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAppsListsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListAppsListsError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            ListAppsListsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListAppsListsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAppsListsError {}
 /// Errors returned by ListComplianceStatus
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceStatusError {
@@ -1068,7 +2005,7 @@ impl Error for ListMemberAccountsError {}
 pub enum ListPoliciesError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     LimitExceeded(String),
@@ -1111,6 +2048,48 @@ impl fmt::Display for ListPoliciesError {
     }
 }
 impl Error for ListPoliciesError {}
+/// Errors returned by ListProtocolsLists
+#[derive(Debug, PartialEq)]
+pub enum ListProtocolsListsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListProtocolsListsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProtocolsListsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListProtocolsListsError::InternalError(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(ListProtocolsListsError::InvalidOperation(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListProtocolsListsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListProtocolsListsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListProtocolsListsError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListProtocolsListsError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            ListProtocolsListsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListProtocolsListsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -1118,7 +2097,7 @@ pub enum ListTagsForResourceError {
     InternalError(String),
     /// <p>The parameters of the request were invalid.</p>
     InvalidInput(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1163,12 +2142,66 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by PutAppsList
+#[derive(Debug, PartialEq)]
+pub enum PutAppsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl PutAppsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAppsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(PutAppsListError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutAppsListError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(PutAppsListError::InvalidOperation(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(PutAppsListError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutAppsListError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAppsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAppsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutAppsListError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutAppsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            PutAppsListError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutAppsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutAppsListError {}
 /// Errors returned by PutNotificationChannel
 #[derive(Debug, PartialEq)]
 pub enum PutNotificationChannelError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     InternalError(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1218,7 +2251,7 @@ pub enum PutPolicyError {
     InternalError(String),
     /// <p>The parameters of the request were invalid.</p>
     InvalidInput(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The value of the <code>Type</code> parameter is invalid.</p>
     InvalidType(String),
@@ -1271,6 +2304,60 @@ impl fmt::Display for PutPolicyError {
     }
 }
 impl Error for PutPolicyError {}
+/// Errors returned by PutProtocolsList
+#[derive(Debug, PartialEq)]
+pub enum PutProtocolsListError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
+    InvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl PutProtocolsListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutProtocolsListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(PutProtocolsListError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(PutProtocolsListError::InvalidInput(err.msg))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(PutProtocolsListError::InvalidOperation(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(PutProtocolsListError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutProtocolsListError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutProtocolsListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutProtocolsListError::InternalError(ref cause) => write!(f, "{}", cause),
+            PutProtocolsListError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            PutProtocolsListError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            PutProtocolsListError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutProtocolsListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutProtocolsListError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -1278,7 +2365,7 @@ pub enum TagResourceError {
     InternalError(String),
     /// <p>The parameters of the request were invalid.</p>
     InvalidInput(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     LimitExceeded(String),
@@ -1332,7 +2419,7 @@ pub enum UntagResourceError {
     InternalError(String),
     /// <p>The parameters of the request were invalid.</p>
     InvalidInput(String),
-    /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
+    /// <p>The operation failed because there was nothing to do or the operation wasn't possible. For example, you might have submitted an <code>AssociateAdminAccount</code> request for an account ID that was already set as the AWS Firewall Manager administrator. Or you might have tried to access a Region that's disabled by default, and that you need to enable for the Firewall Manager administrator account and for AWS Organizations before you can access it.</p>
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1382,6 +2469,12 @@ pub trait Fms {
         input: AssociateAdminAccountRequest,
     ) -> Result<(), RusotoError<AssociateAdminAccountError>>;
 
+    /// <p>Permanently deletes an AWS Firewall Manager applications list.</p>
+    async fn delete_apps_list(
+        &self,
+        input: DeleteAppsListRequest,
+    ) -> Result<(), RusotoError<DeleteAppsListError>>;
+
     /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
     async fn delete_notification_channel(
         &self,
@@ -1393,6 +2486,12 @@ pub trait Fms {
         input: DeletePolicyRequest,
     ) -> Result<(), RusotoError<DeletePolicyError>>;
 
+    /// <p>Permanently deletes an AWS Firewall Manager protocols list.</p>
+    async fn delete_protocols_list(
+        &self,
+        input: DeleteProtocolsListRequest,
+    ) -> Result<(), RusotoError<DeleteProtocolsListError>>;
+
     /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request.</p>
     async fn disassociate_admin_account(
         &self,
@@ -1403,7 +2502,13 @@ pub trait Fms {
         &self,
     ) -> Result<GetAdminAccountResponse, RusotoError<GetAdminAccountError>>;
 
-    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered noncompliant for AWS WAF and Shield Advanced policies if the specified policy has not been applied to them. Resources are considered noncompliant for security group policies if they are in scope of the policy, they violate one or more of the policy rules, and remediation is disabled or not possible. </p>
+    /// <p>Returns information about the specified AWS Firewall Manager applications list.</p>
+    async fn get_apps_list(
+        &self,
+        input: GetAppsListRequest,
+    ) -> Result<GetAppsListResponse, RusotoError<GetAppsListError>>;
+
+    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered noncompliant for AWS WAF and Shield Advanced policies if the specified policy has not been applied to them. Resources are considered noncompliant for security group policies if they are in scope of the policy, they violate one or more of the policy rules, and remediation is disabled or not possible. Resources are considered noncompliant for Network Firewall policies if a firewall is missing in the VPC, if the firewall endpoint isn't set up in an expected Availability Zone and subnet, if a subnet created by the Firewall Manager doesn't have the expected route table, and for modifications to a firewall policy that violate the Firewall Manager policy's rules. </p>
     async fn get_compliance_detail(
         &self,
         input: GetComplianceDetailRequest,
@@ -1426,7 +2531,25 @@ pub trait Fms {
         input: GetProtectionStatusRequest,
     ) -> Result<GetProtectionStatusResponse, RusotoError<GetProtectionStatusError>>;
 
-    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
+    /// <p>Returns information about the specified AWS Firewall Manager protocols list.</p>
+    async fn get_protocols_list(
+        &self,
+        input: GetProtocolsListRequest,
+    ) -> Result<GetProtocolsListResponse, RusotoError<GetProtocolsListError>>;
+
+    /// <p>Retrieves violations for a resource based on the specified AWS Firewall Manager policy and AWS account.</p>
+    async fn get_violation_details(
+        &self,
+        input: GetViolationDetailsRequest,
+    ) -> Result<GetViolationDetailsResponse, RusotoError<GetViolationDetailsError>>;
+
+    /// <p>Returns an array of <code>AppsListDataSummary</code> objects.</p>
+    async fn list_apps_lists(
+        &self,
+        input: ListAppsListsRequest,
+    ) -> Result<ListAppsListsResponse, RusotoError<ListAppsListsError>>;
+
+    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
     async fn list_compliance_status(
         &self,
         input: ListComplianceStatusRequest,
@@ -1438,11 +2561,17 @@ pub trait Fms {
         input: ListMemberAccountsRequest,
     ) -> Result<ListMemberAccountsResponse, RusotoError<ListMemberAccountsError>>;
 
-    /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
+    /// <p>Returns an array of <code>PolicySummary</code> objects.</p>
     async fn list_policies(
         &self,
         input: ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, RusotoError<ListPoliciesError>>;
+
+    /// <p>Returns an array of <code>ProtocolsListDataSummary</code> objects.</p>
+    async fn list_protocols_lists(
+        &self,
+        input: ListProtocolsListsRequest,
+    ) -> Result<ListProtocolsListsResponse, RusotoError<ListProtocolsListsError>>;
 
     /// <p>Retrieves the list of tags for the specified AWS resource. </p>
     async fn list_tags_for_resource(
@@ -1450,17 +2579,29 @@ pub trait Fms {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
+    /// <p>Creates an AWS Firewall Manager applications list.</p>
+    async fn put_apps_list(
+        &self,
+        input: PutAppsListRequest,
+    ) -> Result<PutAppsListResponse, RusotoError<PutAppsListError>>;
+
+    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p> <p>To perform this action outside of the console, you must configure the SNS topic to allow the Firewall Manager role <code>AWSServiceRoleForFMS</code> to publish SNS logs. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-api-permissions-ref.html">Firewall Manager required permissions for API actions</a> in the <i>AWS Firewall Manager Developer Guide</i>.</p>
     async fn put_notification_channel(
         &self,
         input: PutNotificationChannelRequest,
     ) -> Result<(), RusotoError<PutNotificationChannelError>>;
 
-    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides the following types of policies: </p> <ul> <li> <p>A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources</p> </li> <li> <p>An AWS WAF policy (type WAFV2), which defines rule groups to run first in the corresponding AWS WAF web ACL and rule groups to run last in the web ACL.</p> </li> <li> <p>An AWS WAF Classic policy (type WAF), which defines a rule group. </p> </li> <li> <p>A security group policy, which manages VPC security groups across your AWS organization. </p> </li> </ul> <p>Each policy is specific to one of the types. If you want to enforce more than one policy type across accounts, create multiple policies. You can create multiple policies for each type.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information about subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
+    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides the following types of policies: </p> <ul> <li> <p>An AWS WAF policy (type WAFV2), which defines rule groups to run first in the corresponding AWS WAF web ACL and rule groups to run last in the web ACL.</p> </li> <li> <p>An AWS WAF Classic policy (type WAF), which defines a rule group. </p> </li> <li> <p>A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources.</p> </li> <li> <p>A security group policy, which manages VPC security groups across your AWS organization. </p> </li> <li> <p>An AWS Network Firewall policy, which provides firewall rules to filter network traffic in specified Amazon VPCs.</p> </li> </ul> <p>Each policy is specific to one of the types. If you want to enforce more than one policy type across accounts, create multiple policies. You can create multiple policies for each type.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information about subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
     async fn put_policy(
         &self,
         input: PutPolicyRequest,
     ) -> Result<PutPolicyResponse, RusotoError<PutPolicyError>>;
+
+    /// <p>Creates an AWS Firewall Manager protocols list.</p>
+    async fn put_protocols_list(
+        &self,
+        input: PutProtocolsListRequest,
+    ) -> Result<PutProtocolsListResponse, RusotoError<PutProtocolsListError>>;
 
     /// <p>Adds one or more tags to an AWS resource.</p>
     async fn tag_resource(
@@ -1531,6 +2672,23 @@ impl Fms for FmsClient {
         Ok(())
     }
 
+    /// <p>Permanently deletes an AWS Firewall Manager applications list.</p>
+    async fn delete_apps_list(
+        &self,
+        input: DeleteAppsListRequest,
+    ) -> Result<(), RusotoError<DeleteAppsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.DeleteAppsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAppsListError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
     async fn delete_notification_channel(
         &self,
@@ -1558,6 +2716,23 @@ impl Fms for FmsClient {
 
         let response = self
             .sign_and_dispatch(request, DeletePolicyError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Permanently deletes an AWS Firewall Manager protocols list.</p>
+    async fn delete_protocols_list(
+        &self,
+        input: DeleteProtocolsListRequest,
+    ) -> Result<(), RusotoError<DeleteProtocolsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.DeleteProtocolsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteProtocolsListError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -1594,7 +2769,25 @@ impl Fms for FmsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetAdminAccountResponse, _>()
     }
 
-    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered noncompliant for AWS WAF and Shield Advanced policies if the specified policy has not been applied to them. Resources are considered noncompliant for security group policies if they are in scope of the policy, they violate one or more of the policy rules, and remediation is disabled or not possible. </p>
+    /// <p>Returns information about the specified AWS Firewall Manager applications list.</p>
+    async fn get_apps_list(
+        &self,
+        input: GetAppsListRequest,
+    ) -> Result<GetAppsListResponse, RusotoError<GetAppsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.GetAppsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetAppsListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAppsListResponse, _>()
+    }
+
+    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered noncompliant for AWS WAF and Shield Advanced policies if the specified policy has not been applied to them. Resources are considered noncompliant for security group policies if they are in scope of the policy, they violate one or more of the policy rules, and remediation is disabled or not possible. Resources are considered noncompliant for Network Firewall policies if a firewall is missing in the VPC, if the firewall endpoint isn't set up in an expected Availability Zone and subnet, if a subnet created by the Firewall Manager doesn't have the expected route table, and for modifications to a firewall policy that violate the Firewall Manager policy's rules. </p>
     async fn get_compliance_detail(
         &self,
         input: GetComplianceDetailRequest,
@@ -1665,7 +2858,61 @@ impl Fms for FmsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetProtectionStatusResponse, _>()
     }
 
-    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
+    /// <p>Returns information about the specified AWS Firewall Manager protocols list.</p>
+    async fn get_protocols_list(
+        &self,
+        input: GetProtocolsListRequest,
+    ) -> Result<GetProtocolsListResponse, RusotoError<GetProtocolsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.GetProtocolsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetProtocolsListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetProtocolsListResponse, _>()
+    }
+
+    /// <p>Retrieves violations for a resource based on the specified AWS Firewall Manager policy and AWS account.</p>
+    async fn get_violation_details(
+        &self,
+        input: GetViolationDetailsRequest,
+    ) -> Result<GetViolationDetailsResponse, RusotoError<GetViolationDetailsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.GetViolationDetails");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetViolationDetailsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetViolationDetailsResponse, _>()
+    }
+
+    /// <p>Returns an array of <code>AppsListDataSummary</code> objects.</p>
+    async fn list_apps_lists(
+        &self,
+        input: ListAppsListsRequest,
+    ) -> Result<ListAppsListsResponse, RusotoError<ListAppsListsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.ListAppsLists");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListAppsListsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAppsListsResponse, _>()
+    }
+
+    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
     async fn list_compliance_status(
         &self,
         input: ListComplianceStatusRequest,
@@ -1702,7 +2949,7 @@ impl Fms for FmsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListMemberAccountsResponse, _>()
     }
 
-    /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
+    /// <p>Returns an array of <code>PolicySummary</code> objects.</p>
     async fn list_policies(
         &self,
         input: ListPoliciesRequest,
@@ -1718,6 +2965,24 @@ impl Fms for FmsClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListPoliciesResponse, _>()
+    }
+
+    /// <p>Returns an array of <code>ProtocolsListDataSummary</code> objects.</p>
+    async fn list_protocols_lists(
+        &self,
+        input: ListProtocolsListsRequest,
+    ) -> Result<ListProtocolsListsResponse, RusotoError<ListProtocolsListsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.ListProtocolsLists");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListProtocolsListsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListProtocolsListsResponse, _>()
     }
 
     /// <p>Retrieves the list of tags for the specified AWS resource. </p>
@@ -1738,7 +3003,25 @@ impl Fms for FmsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
-    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
+    /// <p>Creates an AWS Firewall Manager applications list.</p>
+    async fn put_apps_list(
+        &self,
+        input: PutAppsListRequest,
+    ) -> Result<PutAppsListResponse, RusotoError<PutAppsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.PutAppsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutAppsListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutAppsListResponse, _>()
+    }
+
+    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p> <p>To perform this action outside of the console, you must configure the SNS topic to allow the Firewall Manager role <code>AWSServiceRoleForFMS</code> to publish SNS logs. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-api-permissions-ref.html">Firewall Manager required permissions for API actions</a> in the <i>AWS Firewall Manager Developer Guide</i>.</p>
     async fn put_notification_channel(
         &self,
         input: PutNotificationChannelRequest,
@@ -1755,7 +3038,7 @@ impl Fms for FmsClient {
         Ok(())
     }
 
-    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides the following types of policies: </p> <ul> <li> <p>A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources</p> </li> <li> <p>An AWS WAF policy (type WAFV2), which defines rule groups to run first in the corresponding AWS WAF web ACL and rule groups to run last in the web ACL.</p> </li> <li> <p>An AWS WAF Classic policy (type WAF), which defines a rule group. </p> </li> <li> <p>A security group policy, which manages VPC security groups across your AWS organization. </p> </li> </ul> <p>Each policy is specific to one of the types. If you want to enforce more than one policy type across accounts, create multiple policies. You can create multiple policies for each type.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information about subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
+    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides the following types of policies: </p> <ul> <li> <p>An AWS WAF policy (type WAFV2), which defines rule groups to run first in the corresponding AWS WAF web ACL and rule groups to run last in the web ACL.</p> </li> <li> <p>An AWS WAF Classic policy (type WAF), which defines a rule group. </p> </li> <li> <p>A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources.</p> </li> <li> <p>A security group policy, which manages VPC security groups across your AWS organization. </p> </li> <li> <p>An AWS Network Firewall policy, which provides firewall rules to filter network traffic in specified Amazon VPCs.</p> </li> </ul> <p>Each policy is specific to one of the types. If you want to enforce more than one policy type across accounts, create multiple policies. You can create multiple policies for each type.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information about subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
     async fn put_policy(
         &self,
         input: PutPolicyRequest,
@@ -1771,6 +3054,24 @@ impl Fms for FmsClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<PutPolicyResponse, _>()
+    }
+
+    /// <p>Creates an AWS Firewall Manager protocols list.</p>
+    async fn put_protocols_list(
+        &self,
+        input: PutProtocolsListRequest,
+    ) -> Result<PutProtocolsListResponse, RusotoError<PutProtocolsListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSFMS_20180101.PutProtocolsList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutProtocolsListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutProtocolsListResponse, _>()
     }
 
     /// <p>Adds one or more tags to an AWS resource.</p>

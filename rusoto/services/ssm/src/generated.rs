@@ -178,7 +178,7 @@ pub struct Association {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationDescription {
-    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -262,6 +262,10 @@ pub struct AssociationDescription {
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_compliance: Option<String>,
+    /// <p>The combination of AWS Regions and AWS accounts where you want to run the association.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
     /// <p>The instances targeted by the request. </p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -379,7 +383,7 @@ pub struct AssociationExecutionTargetsFilter {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociationFilter {
-    /// <p>The name of the filter.</p>
+    /// <p><p>The name of the filter.</p> <note> <p> <code>InstanceId</code> has been deprecated.</p> </note></p>
     #[serde(rename = "key")]
     pub key: String,
     /// <p>The filter value.</p>
@@ -427,7 +431,7 @@ pub struct AssociationStatus {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociationVersionInfo {
-    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -483,6 +487,10 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_compliance: Option<String>,
+    /// <p>The combination of AWS Regions and AWS accounts where you wanted to run the association when this association version was created.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
     /// <p>The targets specified for the association when the association version was created. </p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -537,7 +545,7 @@ pub struct AttachmentsSource {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The value of a key-value pair that identifies the location of an attachment to a document. The format for <b>Value</b> depends on the type of key you specify.</p> <ul> <li> <p>For the key <i>SourceUrl</i>, the value is an S3 bucket location. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;s3://my-bucket/my-folder&quot; ]</code> </p> </li> <li> <p>For the key <i>S3FileUrl</i>, the value is a file in an S3 bucket. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;s3://my-bucket/my-folder/my-file.py&quot; ]</code> </p> </li> <li> <p>For the key <i>AttachmentReference</i>, the value is constructed from the name of another SSM document in your account, a version number of that document, and a file attached to that document version that you want to reuse. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;MyOtherDocument/3/my-other-file.py&quot; ]</code> </p> <p>However, if the SSM document is shared with you from another account, the full SSM document ARN must be specified instead of the document name only. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;arn:aws:ssm:us-east-2:111122223333:document/OtherAccountDocument/3/their-file.py&quot; ]</code> </p> </li> </ul></p>
+    /// <p><p>The value of a key-value pair that identifies the location of an attachment to a document. The format for <b>Value</b> depends on the type of key you specify.</p> <ul> <li> <p>For the key <i>SourceUrl</i>, the value is an S3 bucket location. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;s3://doc-example-bucket/my-folder&quot; ]</code> </p> </li> <li> <p>For the key <i>S3FileUrl</i>, the value is a file in an S3 bucket. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;s3://doc-example-bucket/my-folder/my-file.py&quot; ]</code> </p> </li> <li> <p>For the key <i>AttachmentReference</i>, the value is constructed from the name of another SSM document in your account, a version number of that document, and a file attached to that document version that you want to reuse. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;MyOtherDocument/3/my-other-file.py&quot; ]</code> </p> <p>However, if the SSM document is shared with you from another account, the full SSM document ARN must be specified instead of the document name only. For example:</p> <p> <code>&quot;Values&quot;: [ &quot;arn:aws:ssm:us-east-2:111122223333:document/OtherAccountDocument/3/their-file.py&quot; ]</code> </p> </li> </ul></p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -547,6 +555,10 @@ pub struct AttachmentsSource {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutomationExecution {
+    /// <p>The ID of a State Manager association used in the Automation operation.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -555,6 +567,14 @@ pub struct AutomationExecution {
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
+    /// <p>The subtype of the Automation operation. Currently, the only supported value is <code>ChangeRequest</code>.</p>
+    #[serde(rename = "AutomationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_subtype: Option<String>,
+    /// <p>The name of the Change Manager change request.</p>
+    #[serde(rename = "ChangeRequestName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_request_name: Option<String>,
     /// <p>The action of the step that is currently running.</p>
     #[serde(rename = "CurrentAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -599,6 +619,10 @@ pub struct AutomationExecution {
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
+    /// <p>The ID of an OpsItem that is created to represent a Change Manager change request.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
     /// <p>The list of execution outputs as defined in the automation document.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -619,6 +643,14 @@ pub struct AutomationExecution {
     #[serde(rename = "ResolvedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolved_targets: Option<ResolvedTargets>,
+    /// <p><p>Information about the Automation runbooks (Automation documents) that are run as part of a runbook workflow.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
+    #[serde(rename = "Runbooks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runbooks: Option<Vec<Runbook>>,
+    /// <p>The date and time the Automation operation is scheduled to start.</p>
+    #[serde(rename = "ScheduledTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_time: Option<f64>,
     /// <p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are run in order.</p>
     #[serde(rename = "StepExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,7 +685,7 @@ pub struct AutomationExecution {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutomationExecutionFilter {
-    /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter.</p>
+    /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter, TargetResourceGroup.</p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>The values used to limit the execution information associated with the filter's key.</p>
@@ -665,6 +697,10 @@ pub struct AutomationExecutionFilter {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutomationExecutionMetadata {
+    /// <p>The ID of a State Manager association used in the Automation operation.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
     /// <p>The execution ID.</p>
     #[serde(rename = "AutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -673,10 +709,18 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
+    /// <p>The subtype of the Automation operation. Currently, the only supported value is <code>ChangeRequest</code>.</p>
+    #[serde(rename = "AutomationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_subtype: Option<String>,
     /// <p>Use this filter with <a>DescribeAutomationExecutions</a>. Specify either Local or CrossAccount. CrossAccount is an Automation that runs in multiple AWS Regions and accounts. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation-multiple-accounts-and-regions.html">Running Automation workflows in multiple AWS Regions and accounts</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     #[serde(rename = "AutomationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_type: Option<String>,
+    /// <p>The name of the Change Manager change request.</p>
+    #[serde(rename = "ChangeRequestName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_request_name: Option<String>,
     /// <p>The action of the step that is currently running.</p>
     #[serde(rename = "CurrentAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -725,6 +769,10 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
+    /// <p>The ID of an OpsItem that is created to represent a Change Manager change request.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
     /// <p>The list of execution outputs as defined in the Automation document.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -737,6 +785,14 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "ResolvedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolved_targets: Option<ResolvedTargets>,
+    /// <p><p>Information about the Automation runbooks (Automation documents) that are run during a runbook workflow in Change Manager.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
+    #[serde(rename = "Runbooks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runbooks: Option<Vec<Runbook>>,
+    /// <p>The date and time the Automation operation is scheduled to start.</p>
+    #[serde(rename = "ScheduledTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_time: Option<f64>,
     /// <p>The list of execution outputs as defined in the Automation document.</p>
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -905,7 +961,7 @@ pub struct Command {
     pub timeout_seconds: Option<i64>,
 }
 
-/// <p>Describes a command filter.</p>
+/// <p><p>Describes a command filter.</p> <note> <p>An instance ID can&#39;t be specified when a command status is <code>Pending</code> because the command hasn&#39;t run on the instance yet.</p> </note></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommandFilter {
@@ -998,11 +1054,11 @@ pub struct CommandPlugin {
     #[serde(rename = "Output")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output: Option<String>,
-    /// <p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the S3 bucket;</p> <p>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
+    /// <p>The S3 bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p>doc-example-bucket/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-02573cafcfEXAMPLE/awsrunShellScript </p> <p>doc-example-bucket is the name of the S3 bucket;</p> <p>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-02573cafcfEXAMPLE is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
     #[serde(rename = "OutputS3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_bucket_name: Option<String>,
-    /// <p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p> test_folder/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-1234567876543/awsrunShellScript </p> <p>test_folder is the name of the S3 bucket;</p> <p>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-1234567876543 is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
+    /// <p>The S3 directory path inside the bucket where the responses to the command executions should be stored. This was requested when issuing the command. For example, in the following response:</p> <p>doc-example-bucket/ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix/i-02573cafcfEXAMPLE/awsrunShellScript </p> <p>doc-example-bucket is the name of the S3 bucket;</p> <p>ab19cb99-a030-46dd-9dfc-8eSAMPLEPre-Fix is the name of the S3 prefix;</p> <p>i-02573cafcfEXAMPLE is the instance ID;</p> <p>awsrunShellScript is the name of the plugin.</p>
     #[serde(rename = "OutputS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
@@ -1088,7 +1144,7 @@ pub struct ComplianceItem {
     #[serde(rename = "Severity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub severity: Option<String>,
-    /// <p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>
+    /// <p>The status of the compliance item. An item is either COMPLIANT, NON_COMPLIANT, or an empty string (for Windows patches that aren't applicable).</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1224,7 +1280,7 @@ pub struct CreateAssociationBatchRequest {
 /// <p>Describes the association of a Systems Manager SSM document and an instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateAssociationBatchRequestEntry {
-    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -1275,6 +1331,10 @@ pub struct CreateAssociationBatchRequestEntry {
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_compliance: Option<String>,
+    /// <p>Use this action to create an association in multiple Regions and multiple accounts.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
     /// <p>The instances targeted by the request.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1297,7 +1357,7 @@ pub struct CreateAssociationBatchResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationRequest {
-    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it.</p>
+    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -1348,6 +1408,10 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_compliance: Option<String>,
+    /// <p>A location is a combination of AWS Regions and AWS accounts where you want to run the association. Use this action to create an association in multiple Regions and multiple accounts.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
     /// <p>The targets for the association. You can target instances by using tags, AWS Resource Groups, all instances in an AWS account, or individual instance IDs. For more information about choosing targets for an association, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state-manager-targets-and-rate-controls.html">Using targets and rate controls with State Manager associations</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1441,11 +1505,11 @@ pub struct CreateMaintenanceWindowRequest {
     /// <p>The schedule of the maintenance window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     pub schedule: String,
-    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run on the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(0 30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
+    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run on the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
     #[serde(rename = "ScheduleOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_offset: Option<i64>,
-    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
@@ -1471,6 +1535,14 @@ pub struct CreateMaintenanceWindowResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOpsItemRequest {
+    /// <p>The time a runbook workflow ended. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_end_time: Option<f64>,
+    /// <p>The time a runbook workflow started. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_start_time: Option<f64>,
     /// <p>Specify a category to assign to an OpsItem. </p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1486,6 +1558,18 @@ pub struct CreateOpsItemRequest {
     #[serde(rename = "OperationalData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operational_data: Option<::std::collections::HashMap<String, OpsItemDataValue>>,
+    /// <p>The type of OpsItem to create. Currently, the only valid values are <code>/aws/changerequest</code> and <code>/aws/issue</code>.</p>
+    #[serde(rename = "OpsItemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_type: Option<String>,
+    /// <p>The time specified in a change request for a runbook workflow to end. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_end_time: Option<f64>,
+    /// <p>The time specified in a change request for a runbook workflow to start. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_start_time: Option<f64>,
     /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1517,6 +1601,27 @@ pub struct CreateOpsItemResponse {
     #[serde(rename = "OpsItemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ops_item_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateOpsMetadataRequest {
+    /// <p>Metadata for a new Application Manager application. </p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<::std::collections::HashMap<String, MetadataValue>>,
+    /// <p>A resource ID for a new Application Manager application.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateOpsMetadataResult {
+    /// <p>The Amazon Resource Name (ARN) of the OpsMetadata Object or blob created by the call.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_metadata_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1680,7 +1785,7 @@ pub struct DeleteInventoryRequest {
     #[serde(rename = "SchemaDeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_delete_option: Option<String>,
-    /// <p>The name of the custom inventory type for which you want to delete either all previously collected data, or the inventory type itself. </p>
+    /// <p>The name of the custom inventory type for which you want to delete either all previously collected data or the inventory type itself. </p>
     #[serde(rename = "TypeName")]
     pub type_name: String,
 }
@@ -1718,6 +1823,18 @@ pub struct DeleteMaintenanceWindowResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOpsMetadataRequest {
+    /// <p>The Amazon Resource Name (ARN) of an OpsMetadata Object to delete.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    pub ops_metadata_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteOpsMetadataResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2827,7 +2944,7 @@ pub struct DescribePatchGroupStateResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePatchGroupsRequest {
-    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    /// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <p>For <code>DescribePatchGroups</code>,valid filter keys include the following:</p> <ul> <li> <p> <code>NAME<em>PREFIX</code>: The name of the patch group. Wildcards (*) are accepted.</p> </li> <li> <p> <code>OPERATING</em>SYSTEM</code>: The supported operating system type to return results for. For valid operating system values, see <a>GetDefaultPatchBaselineRequest$OperatingSystem</a> in <a>CreatePatchBaseline</a>.</p> <p>Examples:</p> <ul> <li> <p> <code>--filters Key=NAME<em>PREFIX,Values=MyPatchGroup*</code> </p> </li> <li> <p> <code>--filters Key=OPERATING</em>SYSTEM,Values=AMAZON<em>LINUX</em>2</code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PatchOrchestratorFilter>>,
@@ -2868,7 +2985,7 @@ pub struct DescribePatchPropertiesRequest {
     /// <p>The operating system type for which to list patches.</p>
     #[serde(rename = "OperatingSystem")]
     pub operating_system: String,
-    /// <p>Indicates whether to list patches for the Windows operating system or for Microsoft applications. Not applicable for Linux operating systems.</p>
+    /// <p>Indicates whether to list patches for the Windows operating system or for Microsoft applications. Not applicable for the Linux or macOS operating systems.</p>
     #[serde(rename = "PatchSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_set: Option<String>,
@@ -2945,10 +3062,18 @@ pub struct DocumentDefaultVersionDescription {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentDescription {
+    /// <p>The version of the document currently approved for use in the organization.</p>
+    #[serde(rename = "ApprovedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_version: Option<String>,
     /// <p>Details about the document attachments, including names, locations, sizes, and so on.</p>
     #[serde(rename = "AttachmentsInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments_information: Option<Vec<AttachmentInformation>>,
+    /// <p>The user in your organization who created the document.</p>
+    #[serde(rename = "Author")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author: Option<String>,
     /// <p>The date when the document was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2997,6 +3122,10 @@ pub struct DocumentDescription {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<DocumentParameter>>,
+    /// <p>The version of the document that is currently under review.</p>
+    #[serde(rename = "PendingReviewVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_review_version: Option<String>,
     /// <p>The list of OS platforms compatible with this Systems Manager document. </p>
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3005,6 +3134,14 @@ pub struct DocumentDescription {
     #[serde(rename = "Requires")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires: Option<Vec<DocumentRequires>>,
+    /// <p>Details about the review of a document.</p>
+    #[serde(rename = "ReviewInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_information: Option<Vec<ReviewInformation>>,
+    /// <p>The current status of the review.</p>
+    #[serde(rename = "ReviewStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_status: Option<String>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3051,6 +3188,10 @@ pub struct DocumentFilter {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentIdentifier {
+    /// <p>The user in your organization who created the document.</p>
+    #[serde(rename = "Author")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author: Option<String>,
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3079,6 +3220,10 @@ pub struct DocumentIdentifier {
     #[serde(rename = "Requires")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires: Option<Vec<DocumentRequires>>,
+    /// <p>The current status of a document review.</p>
+    #[serde(rename = "ReviewStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_status: Option<String>,
     /// <p>The schema version.</p>
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3097,7 +3242,7 @@ pub struct DocumentIdentifier {
     pub version_name: Option<String>,
 }
 
-/// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include <code>Owner</code>, <code>Name</code>, <code>PlatformTypes</code>, <code>DocumentType</code>, and <code>TargetType</code>.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
+/// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>You can also use AWS-provided keys, some of which have specific allowed values. These keys and their associated values are as follows:</p> <dl> <dt>DocumentType</dt> <dd> <ul> <li> <p>ApplicationConfiguration</p> </li> <li> <p>ApplicationConfigurationSchema</p> </li> <li> <p>Automation</p> </li> <li> <p>ChangeCalendar</p> </li> <li> <p>Command</p> </li> <li> <p>DeploymentStrategy</p> </li> <li> <p>Package</p> </li> <li> <p>Policy</p> </li> <li> <p>Session</p> </li> </ul> </dd> <dt>Owner</dt> <dd> <p>Note that only one <code>Owner</code> can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <ul> <li> <p>Amazon</p> </li> <li> <p>Private</p> </li> <li> <p>Public</p> </li> <li> <p>Self</p> </li> <li> <p>ThirdParty</p> </li> </ul> </dd> <dt>PlatformTypes</dt> <dd> <ul> <li> <p>Linux</p> </li> <li> <p>Windows</p> </li> </ul> </dd> </dl> <p> <code>Name</code> is another AWS-provided key. If you use <code>Name</code> as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>You can also use the <code>TargetType</code> AWS-provided key. For a list of valid resource type values that can be used with this key, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p> <p>For example, if you created a key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentKeyValuesFilter {
@@ -3109,6 +3254,16 @@ pub struct DocumentKeyValuesFilter {
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p>Details about the response to a document review request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DocumentMetadataResponseInfo {
+    /// <p>Details about a reviewer's response to a document review request.</p>
+    #[serde(rename = "ReviewerResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reviewer_response: Option<Vec<DocumentReviewerResponseSource>>,
 }
 
 /// <p>Parameters specified in a System Manager document that run on the server when the command is run. </p>
@@ -3145,6 +3300,58 @@ pub struct DocumentRequires {
     pub version: Option<String>,
 }
 
+/// <p>Information about comments added to a document review request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DocumentReviewCommentSource {
+    /// <p>The content of a comment entered by a user who requests a review of a new document version, or who reviews the new version.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The type of information added to a review request. Currently, only the value <code>Comment</code> is supported.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Information about a reviewer's response to a document review request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DocumentReviewerResponseSource {
+    /// <p>The comment entered by a reviewer as part of their document review response.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Vec<DocumentReviewCommentSource>>,
+    /// <p>The date and time that a reviewer entered a response to a document review request.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The current review status of a new custom SSM document created by a member of your organization, or of the latest version of an existing SSM document.</p> <p>Only one version of a document can be in the APPROVED state at a time. When a new version is approved, the status of the previous version changes to REJECTED.</p> <p>Only one version of a document can be in review, or PENDING, at a time.</p>
+    #[serde(rename = "ReviewStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_status: Option<String>,
+    /// <p>The user in your organization assigned to review a document request.</p>
+    #[serde(rename = "Reviewer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reviewer: Option<String>,
+    /// <p>The date and time that a reviewer last updated a response to a document review request.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<f64>,
+}
+
+/// <p>Information about a document approval review.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DocumentReviews {
+    /// <p>The action to take on a document approval review request.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>A comment entered by a user in your organization about the document review request.</p>
+    #[serde(rename = "Comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Vec<DocumentReviewCommentSource>>,
+}
+
 /// <p>Version information about the document.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3169,6 +3376,10 @@ pub struct DocumentVersionInfo {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The current status of the approval review for the latest version of the document.</p>
+    #[serde(rename = "ReviewStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_status: Option<String>,
     /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3288,7 +3499,7 @@ pub struct GetCommandInvocationRequest {
     /// <p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p>
+    /// <p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p> <p>Plugin names are also referred to as step names in Systems Manager documents.</p>
     #[serde(rename = "PluginName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_name: Option<String>,
@@ -3493,6 +3704,10 @@ pub struct GetDocumentResult {
     #[serde(rename = "Requires")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires: Option<Vec<DocumentRequires>>,
+    /// <p>The current review status of a new custom Systems Manager document (SSM document) created by a member of your organization, or of the latest version of an existing SSM document.</p> <p>Only one version of an SSM document can be in the APPROVED state at a time. When a new version is approved, the status of the previous version changes to REJECTED.</p> <p>Only one version of an SSM document can be in review, or PENDING, at a time.</p>
+    #[serde(rename = "ReviewStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub review_status: Option<String>,
     /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Updating</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3816,7 +4031,7 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename = "ScheduleOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_offset: Option<i64>,
-    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
@@ -3852,11 +4067,11 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    /// <p>The maximum number of targets allowed to run this task in parallel.</p>
+    /// <p><p>The maximum number of targets allowed to run this task in parallel.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. This value does not affect the running of your task and can be ignored.</p> </note></p>
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed before the task stops being scheduled.</p>
+    /// <p><p>The maximum number of errors allowed before the task stops being scheduled.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. This value does not affect the running of your task and can be ignored.</p> </note></p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -3922,6 +4137,39 @@ pub struct GetOpsItemResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetOpsMetadataRequest {
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an OpsMetadata Object to view.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    pub ops_metadata_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetOpsMetadataResult {
+    /// <p>OpsMetadata for an Application Manager application.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<::std::collections::HashMap<String, MetadataValue>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The resource ID of the Application Manager application.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOpsSummaryRequest {
     /// <p>Optional aggregators that return counts of OpsItems based on one or more expressions.</p>
     #[serde(rename = "Aggregators")]
@@ -3969,7 +4217,7 @@ pub struct GetParameterHistoryRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The name of a parameter you want to query.</p>
+    /// <p>The name of the parameter for which you want to review history.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
@@ -4027,7 +4275,7 @@ pub struct GetParametersByPathRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Filters to limit the request results.</p>
+    /// <p><p>Filters to limit the request results.</p> <note> <p>For <code>GetParametersByPath</code>, the following filter <code>Key</code> names are supported: <code>Type</code>, <code>KeyId</code>, <code>Label</code>, and <code>DataType</code>.</p> <p>The following <code>Key</code> values are not supported for <code>GetParametersByPath</code>: <code>tag</code>, <code>Name</code>, <code>Path</code>, and <code>Tier</code>.</p> </note></p>
     #[serde(rename = "ParameterFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
@@ -4341,7 +4589,7 @@ pub struct InstanceInformation {
     #[serde(rename = "IPAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    /// <p>The Amazon Identity and Access Management (IAM) role assigned to the on-premises Systems Manager managed instances. This call does not return the IAM role for EC2 instances. </p>
+    /// <p>The Amazon Identity and Access Management (IAM) role assigned to the on-premises Systems Manager managed instance. This call does not return the IAM role for EC2 instances. To retrieve the IAM role for an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
     #[serde(rename = "IamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role: Option<String>,
@@ -4357,7 +4605,7 @@ pub struct InstanceInformation {
     #[serde(rename = "LastAssociationExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_association_execution_date: Option<f64>,
-    /// <p>The date and time when agent last pinged Systems Manager service. </p>
+    /// <p>The date and time when the agent last pinged the Systems Manager service. </p>
     #[serde(rename = "LastPingDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_ping_date_time: Option<f64>,
@@ -4365,11 +4613,11 @@ pub struct InstanceInformation {
     #[serde(rename = "LastSuccessfulAssociationExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_association_execution_date: Option<f64>,
-    /// <p>The name of the managed instance.</p>
+    /// <p>The name assigned to an on-premises server or virtual machine (VM) when it is activated as a Systems Manager managed instance. The name is specified as the <code>DefaultInstanceName</code> property using the <a>CreateActivation</a> command. It is applied to the managed instance by specifying the Activation Code and Activation ID when you install SSM Agent on the instance, as explained in <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-linux.html">Install SSM Agent for a hybrid environment (Linux)</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-win.html">Install SSM Agent for a hybrid environment (Windows)</a>. To retrieve the Name tag of an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Connection status of SSM Agent. </p>
+    /// <p><p>Connection status of SSM Agent. </p> <note> <p>The status <code>Inactive</code> has been deprecated and is no longer in use.</p> </note></p>
     #[serde(rename = "PingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ping_status: Option<String>,
@@ -4446,7 +4694,7 @@ pub struct InstancePatchState {
     #[serde(rename = "InstalledPendingRebootCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_pending_reboot_count: Option<i64>,
-    /// <p><p>The number of instances with patches installed that are specified in a RejectedPatches list. Patches with a status of <i>InstalledRejected</i> were typically installed before they were added to a RejectedPatches list.</p> <note> <p>If ALLOW<em>AS</em>DEPENDENCY is the specified option for RejectedPatchesAction, the value of InstalledRejectedCount will always be 0 (zero).</p> </note></p>
+    /// <p><p>The number of patches installed on an instance that are specified in a <code>RejectedPatches</code> list. Patches with a status of <i>InstalledRejected</i> were typically installed before they were added to a <code>RejectedPatches</code> list.</p> <note> <p>If <code>ALLOW<em>AS</em>DEPENDENCY</code> is the specified option for <code>RejectedPatchesAction</code>, the value of <code>InstalledRejectedCount</code> will always be <code>0</code> (zero).</p> </note></p>
     #[serde(rename = "InstalledRejectedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_rejected_count: Option<i64>,
@@ -4465,7 +4713,7 @@ pub struct InstancePatchState {
     #[serde(rename = "NotApplicableCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_applicable_count: Option<i64>,
-    /// <p>The type of patching operation that was performed: SCAN (assess patch compliance state) or INSTALL (install missing patches).</p>
+    /// <p>The type of patching operation that was performed: <code>SCAN</code> (assess patch compliance state) or <code>INSTALL</code> (install missing patches).</p>
     #[serde(rename = "Operation")]
     pub operation: String,
     /// <p>The time the most recent patching operation completed on the instance.</p>
@@ -4495,7 +4743,7 @@ pub struct InstancePatchState {
     pub unreported_not_applicable_count: Option<i64>,
 }
 
-/// <p>Defines a filter used in DescribeInstancePatchStatesForPatchGroup used to scope down the information returned by the API.</p>
+/// <p>Defines a filter used in <a>DescribeInstancePatchStatesForPatchGroup</a> used to scope down the information returned by the API.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstancePatchStateFilter {
@@ -4782,7 +5030,7 @@ pub struct ListAssociationVersionsResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociationsRequest {
-    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    /// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <note> <p>Filtering associations using the <code>InstanceID</code> attribute only returns legacy associations created using the <code>InstanceID</code> attribute. Associations targeting the instance that are part of the Target Attributes <code>ResourceGroup</code> or <code>Tags</code> are not returned.</p> </note></p>
     #[serde(rename = "AssociationFilterList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_filter_list: Option<Vec<AssociationFilter>>,
@@ -4862,7 +5110,7 @@ pub struct ListCommandsRequest {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<CommandFilter>>,
-    /// <p>(Optional) Lists commands issued against this instance ID.</p>
+    /// <p><p>(Optional) Lists commands issued against this instance ID.</p> <note> <p>You can&#39;t specify an instance ID in the same command that you specify <code>Status</code> = <code>Pending</code>. This is because the command has not reached the instance yet.</p> </note></p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
@@ -4952,6 +5200,54 @@ pub struct ListComplianceSummariesResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary_items: Option<Vec<ComplianceSummaryItem>>,
     /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDocumentMetadataHistoryRequest {
+    /// <p>The version of the document.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The type of data for which details are being requested. Currently, the only supported value is <code>DocumentReviews</code>.</p>
+    #[serde(rename = "Metadata")]
+    pub metadata: String,
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDocumentMetadataHistoryResponse {
+    /// <p>The user ID of the person in the organization who requested the document review.</p>
+    #[serde(rename = "Author")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author: Option<String>,
+    /// <p>The version of the document.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>Information about the response to the document approval request.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<DocumentMetadataResponseInfo>,
+    /// <p>The name of the document.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5074,6 +5370,66 @@ pub struct ListInventoryEntriesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOpsItemEventsRequest {
+    /// <p>One or more OpsItem filters. Use a filter to return a more specific list of results. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<OpsItemEventFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListOpsItemEventsResponse {
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of event information for the specified OpsItems.</p>
+    #[serde(rename = "Summaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summaries: Option<Vec<OpsItemEventSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOpsMetadataRequest {
+    /// <p>One or more filters to limit the number of OpsMetadata objects returned by the call.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<OpsMetadataFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListOpsMetadataResult {
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a list of OpsMetadata objects.</p>
+    #[serde(rename = "OpsMetadataList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_metadata_list: Option<Vec<OpsMetadata>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceComplianceSummariesRequest {
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
@@ -5113,7 +5469,7 @@ pub struct ListResourceDataSyncRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>View a list of resource data syncs according to the sync type. Specify <code>SyncToDestination</code> to view resource data syncs that synchronize data to an Amazon S3 buckets. Specify <code>SyncFromSource</code> to view resource data syncs from AWS Organizations or from multiple AWS Regions. </p>
+    /// <p>View a list of resource data syncs according to the sync type. Specify <code>SyncToDestination</code> to view resource data syncs that synchronize data to an Amazon S3 bucket. Specify <code>SyncFromSource</code> to view resource data syncs from AWS Organizations or from multiple AWS Regions.</p>
     #[serde(rename = "SyncType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_type: Option<String>,
@@ -5590,6 +5946,15 @@ pub struct MaintenanceWindowTaskParameterValueExpression {
     pub values: Option<Vec<String>>,
 }
 
+/// <p>Metadata to assign to an Application Manager application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MetadataValue {
+    /// <p>Metadata value to assign to an Application Manager application.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDocumentPermissionRequest {
@@ -5726,6 +6091,14 @@ pub struct OpsFilter {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItem {
+    /// <p>The time a runbook workflow ended. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_end_time: Option<f64>,
+    /// <p>The time a runbook workflow started. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_start_time: Option<f64>,
     /// <p>An OpsItem category. Category options include: Availability, Cost, Performance, Recovery, Security.</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5762,6 +6135,18 @@ pub struct OpsItem {
     #[serde(rename = "OpsItemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ops_item_id: Option<String>,
+    /// <p>The type of OpsItem. Currently, the only valid values are <code>/aws/changerequest</code> and <code>/aws/issue</code>.</p>
+    #[serde(rename = "OpsItemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_type: Option<String>,
+    /// <p>The time specified in a change request for a runbook workflow to end. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_end_time: Option<f64>,
+    /// <p>The time specified in a change request for a runbook workflow to start. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_start_time: Option<f64>,
     /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5805,6 +6190,55 @@ pub struct OpsItemDataValue {
     pub value: Option<String>,
 }
 
+/// <p>Describes a filter for a specific list of OpsItem events. You can filter event information by using tags. You specify tags by using a key-value pair mapping. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OpsItemEventFilter {
+    /// <p>The name of the filter key. Currently, the only supported value is <code>OpsItemId</code>.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The operator used by the filter call. Currently, the only supported value is <code>Equal</code>.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The values for the filter, consisting of one or more OpsItem IDs.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
+}
+
+/// <p>Summary information about an OpsItem event.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OpsItemEventSummary {
+    /// <p>Information about the user or resource that created the OpsItem event.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<OpsItemIdentity>,
+    /// <p>The date and time the OpsItem event was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>Specific information about the OpsItem event.</p>
+    #[serde(rename = "Detail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail: Option<String>,
+    /// <p>The type of information provided as a detail.</p>
+    #[serde(rename = "DetailType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detail_type: Option<String>,
+    /// <p>The ID of the OpsItem event.</p>
+    #[serde(rename = "EventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_id: Option<String>,
+    /// <p>The ID of the OpsItem.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
+    /// <p>The source of the OpsItem event.</p>
+    #[serde(rename = "Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
+}
+
 /// <p>Describes an OpsItem filter.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5820,6 +6254,16 @@ pub struct OpsItemFilter {
     pub values: Vec<String>,
 }
 
+/// <p>Information about the user or resource that created an OpsItem event.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OpsItemIdentity {
+    /// <p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem event.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
 /// <p>A notification about the OpsItem.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OpsItemNotification {
@@ -5833,6 +6277,14 @@ pub struct OpsItemNotification {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItemSummary {
+    /// <p>The time a runbook workflow ended. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_end_time: Option<f64>,
+    /// <p>The time a runbook workflow started. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_start_time: Option<f64>,
     /// <p>A list of OpsItems by category.</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5861,6 +6313,18 @@ pub struct OpsItemSummary {
     #[serde(rename = "OpsItemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ops_item_id: Option<String>,
+    /// <p>The type of OpsItem. Currently, the only valid values are <code>/aws/changerequest</code> and <code>/aws/issue</code>.</p>
+    #[serde(rename = "OpsItemType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_type: Option<String>,
+    /// <p>The time specified in a change request for a runbook workflow to end. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_end_time: Option<f64>,
+    /// <p>The time specified in a change request for a runbook workflow to start. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_start_time: Option<f64>,
     /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5881,6 +6345,44 @@ pub struct OpsItemSummary {
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+}
+
+/// <p>Operational metadata for an application in Application Manager.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OpsMetadata {
+    /// <p>The date the OpsMetadata objects was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The date the OpsMetadata object was last updated.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The user name who last updated the OpsMetadata object.</p>
+    #[serde(rename = "LastModifiedUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_user: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the OpsMetadata Object or blob.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_metadata_arn: Option<String>,
+    /// <p>The ID of the Application Manager application.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+/// <p>A filter to limit the number of OpsMetadata objects displayed.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OpsMetadataFilter {
+    /// <p>A filter key.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>A filter value.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>The OpsItem data type to return.</p>
@@ -6074,14 +6576,14 @@ pub struct ParameterMetadata {
     pub version: Option<i64>,
 }
 
-/// <p><p>One or more filters. Use a filter to return a more specific list of results.</p> <important> <p>The <code>ParameterStringFilter</code> object is used by the <a>DescribeParameters</a> and <a>GetParametersByPath</a> API actions. However, not all of the pattern values listed for <code>Key</code> can be used with both actions.</p> <p>For <code>DescribeActions</code>, all of the listed patterns are valid, with the exception of <code>Label</code>.</p> <p>For <code>GetParametersByPath</code>, the following patterns listed for <code>Key</code> are not valid: <code>Name</code>, <code>Path</code>, and <code>Tier</code>.</p> <p>For examples of CLI commands demonstrating valid parameter filter constructions, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-search.html">Searching for Systems Manager parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> </important></p>
+/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterStringFilter {
-    /// <p>The name of the filter.</p>
+    /// <p><p>The name of the filter.</p> <note> <p>The <code>ParameterStringFilter</code> object is used by the <a>DescribeParameters</a> and <a>GetParametersByPath</a> API actions. However, not all of the pattern values listed for <code>Key</code> can be used with both actions.</p> <p>For <code>DescribeActions</code>, all of the listed patterns are valid, with the exception of <code>Label</code>.</p> <p>For <code>GetParametersByPath</code>, the following patterns listed for <code>Key</code> are not valid: <code>tag</code>, <code>Name</code>, <code>Path</code>, and <code>Tier</code>.</p> <p>For examples of CLI commands demonstrating valid parameter filter constructions, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-search.html">Searching for Systems Manager parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>For all filters used with <a>DescribeParameters</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. The <code>Name</code> filter additionally supports the <code>Contains</code> option. (Exception: For filters using the key <code>Path</code>, valid options include <code>Recursive</code> and <code>OneLevel</code>.)</p> <p>For filters used with <a>GetParametersByPath</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. (Exception: For filters using the key <code>Label</code>, the only valid option is <code>Equals</code>.)</p>
+    /// <p>For all filters used with <a>DescribeParameters</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. The <code>Name</code> filter additionally supports the <code>Contains</code> option. (Exception: For filters using the key <code>Path</code>, valid options include <code>Recursive</code> and <code>OneLevel</code>.)</p> <p>For filters used with <a>GetParametersByPath</a>, valid options include <code>Equals</code> and <code>BeginsWith</code>. (Exception: For filters using <code>Label</code> as the Key name, the only valid option is <code>Equals</code>.)</p>
     #[serde(rename = "Option")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub option: Option<String>,
@@ -6107,7 +6609,23 @@ pub struct ParametersFilter {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Patch {
-    /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
+    /// <p>The Advisory ID of the patch. For example, <code>RHSA-2020:3779</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "AdvisoryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub advisory_ids: Option<Vec<String>>,
+    /// <p>The architecture of the patch. For example, in <code>example-pkg-0.710.10-2.7.abcd.x86_64</code>, the architecture is indicated by <code>x86_64</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Arch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arch: Option<String>,
+    /// <p>The Bugzilla ID of the patch. For example, <code>1600646</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "BugzillaIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bugzilla_ids: Option<Vec<String>>,
+    /// <p>The Common Vulnerabilities and Exposures (CVE) ID of the patch. For example, <code>CVE-2011-3192</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "CVEIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cve_ids: Option<Vec<String>>,
+    /// <p>The classification of the patch. For example, <code>SecurityUpdates</code>, <code>Updates</code>, or <code>CriticalUpdates</code>.</p>
     #[serde(rename = "Classification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classification: Option<String>,
@@ -6119,11 +6637,15 @@ pub struct Patch {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The ID of the patch (this is different than the Microsoft Knowledge Base ID).</p>
+    /// <p>The epoch of the patch. For example in <code>pkg-example-EE-20180914-2.2.amzn1.noarch</code>, the epoch value is <code>20180914-2</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Epoch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub epoch: Option<i64>,
+    /// <p><p>The ID of the patch. Applies to Windows patches only.</p> <note> <p>This ID is not the same as the Microsoft Knowledge Base ID.</p> </note></p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The Microsoft Knowledge Base ID of the patch.</p>
+    /// <p>The Microsoft Knowledge Base ID of the patch. Applies to Windows patches only.</p>
     #[serde(rename = "KbNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kb_number: Option<String>,
@@ -6131,26 +6653,42 @@ pub struct Patch {
     #[serde(rename = "Language")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-    /// <p>The ID of the MSRC bulletin the patch is related to.</p>
+    /// <p>The ID of the Microsoft Security Response Center (MSRC) bulletin the patch is related to. For example, <code>MS14-045</code>. Applies to Windows patches only.</p>
     #[serde(rename = "MsrcNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msrc_number: Option<String>,
-    /// <p>The severity of the patch (for example Critical, Important, Moderate).</p>
+    /// <p>The severity of the patch, such as <code>Critical</code>, <code>Important</code>, or <code>Moderate</code>. Applies to Windows patches only.</p>
     #[serde(rename = "MsrcSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub msrc_severity: Option<String>,
-    /// <p>The specific product the patch is applicable for (for example, WindowsServer2016).</p>
+    /// <p>The name of the patch. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The specific product the patch is applicable for. For example, <code>WindowsServer2016</code> or <code>AmazonLinux2018.03</code>.</p>
     #[serde(rename = "Product")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<String>,
-    /// <p>The product family the patch is applicable for (for example, Windows).</p>
+    /// <p>The product family the patch is applicable for. For example, <code>Windows</code> or <code>Amazon Linux 2</code>.</p>
     #[serde(rename = "ProductFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_family: Option<String>,
+    /// <p>The particular release of a patch. For example, in <code>pkg-example-EE-20180914-2.2.amzn1.noarch</code>, the release is <code>2.amaz1</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Release")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release: Option<String>,
     /// <p>The date the patch was released.</p>
     #[serde(rename = "ReleaseDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub release_date: Option<f64>,
+    /// <p>The source patch repository for the operating system and version, such as <code>trusty-security</code> for Ubuntu Server 14.04 LTE and <code>focal-security</code> for Ubuntu Server 20.04 LTE. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Repository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository: Option<String>,
+    /// <p>The severity level of the patch. For example, <code>CRITICAL</code> or <code>MODERATE</code>.</p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
     /// <p>The title of the patch.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6159,6 +6697,10 @@ pub struct Patch {
     #[serde(rename = "Vendor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vendor: Option<String>,
+    /// <p>The version number of the patch. For example, in <code>example-pkg-1.710.10-2.7.abcd.x86_64</code>, the version number is indicated by <code>-1</code>. Applies to Linux-based instances only.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>Defines the basic information about a patch baseline.</p>
@@ -6191,6 +6733,10 @@ pub struct PatchBaselineIdentity {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PatchComplianceData {
+    /// <p>The IDs of one or more Common Vulnerabilities and Exposure (CVE) issues that are resolved by the patch.</p>
+    #[serde(rename = "CVEIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cve_ids: Option<String>,
     /// <p>The classification of the patch (for example, SecurityUpdates, Updates, CriticalUpdates).</p>
     #[serde(rename = "Classification")]
     pub classification: String,
@@ -6438,11 +6984,11 @@ pub struct PutParameterRequest {
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
-    /// <p><p>The type of parameter that you want to add to the system.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates or in the China Regions.</p> </note> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <important> <p>Specifying a parameter type is not required when updating a parameter. You must specify a parameter type when creating a parameter.</p> </important></p>
+    /// <p><p>The type of parameter that you want to add to the system.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates.</p> </note> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <important> <p>Specifying a parameter type is not required when updating a parameter. You must specify a parameter type when creating a parameter.</p> </important></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>The parameter value that you want to add to the system. Standard parameters have a value limit of 4 KB. Advanced parameters have a value limit of 8 KB.</p>
+    /// <p><p>The parameter value that you want to add to the system. Standard parameters have a value limit of 4 KB. Advanced parameters have a value limit of 8 KB.</p> <note> <p>Parameters can&#39;t be referenced or nested in the values of other parameters. You can&#39;t include <code>{{}}</code> or <code>{{ssm:<i>parameter-name</i>}}</code> in a parameter value.</p> </note></p>
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -6555,12 +7101,14 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    /// <p>The maximum number of targets this task can be run for in parallel.</p>
+    /// <p><p>The maximum number of targets this task can be run for in parallel.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>. This value does not affect the running of your task.</p> </note></p>
     #[serde(rename = "MaxConcurrency")]
-    pub max_concurrency: String,
-    /// <p>The maximum number of errors allowed before this task stops being scheduled.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p><p>The maximum number of errors allowed before this task stops being scheduled.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>. This value does not affect the running of your task.</p> </note></p>
     #[serde(rename = "MaxErrors")]
-    pub max_errors: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>An optional name for the task.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6573,9 +7121,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or maintenance window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
+    /// <p>The targets (either instances or maintenance window targets).</p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
-    pub targets: Vec<Target>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
     /// <p>The ARN of the task to run.</p>
     #[serde(rename = "TaskArn")]
     pub task_arn: String,
@@ -6884,6 +7433,60 @@ pub struct ResumeSessionResponse {
     pub token_value: Option<String>,
 }
 
+/// <p>Information about the result of a document review request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReviewInformation {
+    /// <p>The time that the reviewer took action on the document review request.</p>
+    #[serde(rename = "ReviewedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reviewed_time: Option<f64>,
+    /// <p>The reviewer assigned to take action on the document review request.</p>
+    #[serde(rename = "Reviewer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reviewer: Option<String>,
+    /// <p>The current status of the document review request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p>Information about an Automation runbook (Automation document) used in a runbook workflow in Change Manager.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Runbook {
+    /// <p>The name of the Automation runbook (Automation document) used in a runbook workflow.</p>
+    #[serde(rename = "DocumentName")]
+    pub document_name: String,
+    /// <p>The version of the Automation runbook (Automation document) used in a runbook workflow.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>The <code>MaxConcurrency</code> value specified by the user when the operation started, indicating the maximum number of resources that the runbook operation can run on at the same time.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The <code>MaxErrors</code> value specified by the user when the execution started, indicating the maximum number of errors that can occur during the operation before the updates are stopped or rolled back.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
+    /// <p>The key-value map of execution parameters, which were supplied when calling <code>StartChangeRequestExecution</code>.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>Information about the AWS Regions and accounts targeted by the current Runbook operation.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
+    /// <p>The name of the parameter used as the target resource for the rate-controlled runbook workflow. Required if you specify <code>Targets</code>. </p>
+    #[serde(rename = "TargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_parameter_name: Option<String>,
+    /// <p>A key-value mapping to target resources that the Runbook operation performs tasks on. Required if you specify <code>TargetParameterName</code>.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+}
+
 /// <p>An S3 bucket where you want to store the results of this request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3OutputLocation {
@@ -6974,7 +7577,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The instance IDs where the command should run. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Using targets and rate controls to send commands to a fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The IDs of the instances where the command should run. Specifying instance IDs is most useful when you are targeting a limited number of instances, though you can specify up to 50 IDs.</p> <p>To target a larger number of instances, or if you prefer not to list individual instance IDs, we recommend using the <code>Targets</code> option instead. Using <code>Targets</code>, which accepts tag key-value pairs to identify the instances to send commands to, you can a send command to tens, hundreds, or thousands of instances at once.</p> <p>For more information about how to use targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Using targets and rate controls to send commands to a fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "InstanceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
@@ -7010,7 +7613,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending commands to a fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>An array of search criteria that targets instances using a <code>Key,Value</code> combination that you specify. Specifying targets is most useful when you want to send a command to a large number of instances at once. Using <code>Targets</code>, which accepts tag key-value pairs to identify instances, you can send a command to tens, hundreds, or thousands of instances at once.</p> <p>To send a command to a smaller number of instances, you can use the <code>InstanceIds</code> option instead.</p> <p>For more information about how to use targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending commands to a fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -7108,7 +7711,7 @@ pub struct SessionFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p>InvokedAfter: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started August 29, 2018, and later.</p> </li> <li> <p>InvokedBefore: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started before August 29, 2018.</p> </li> <li> <p>Target: Specify an instance to which session connections have been made.</p> </li> <li> <p>Owner: Specify an AWS user account to see a list of sessions started by that user.</p> </li> <li> <p>Status: Specify a valid session status to see a list of all sessions with that status. Status values you can specify include:</p> <ul> <li> <p>Connected</p> </li> <li> <p>Connecting</p> </li> <li> <p>Disconnected</p> </li> <li> <p>Terminated</p> </li> <li> <p>Terminating</p> </li> <li> <p>Failed</p> </li> </ul> </li> </ul></p>
+    /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p>InvokedAfter: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started August 29, 2018, and later.</p> </li> <li> <p>InvokedBefore: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started before August 29, 2018.</p> </li> <li> <p>Target: Specify an instance to which session connections have been made.</p> </li> <li> <p>Owner: Specify an AWS user account to see a list of sessions started by that user.</p> </li> <li> <p>Status: Specify a valid session status to see a list of all sessions with that status. Status values you can specify include:</p> <ul> <li> <p>Connected</p> </li> <li> <p>Connecting</p> </li> <li> <p>Disconnected</p> </li> <li> <p>Terminated</p> </li> <li> <p>Terminating</p> </li> <li> <p>Failed</p> </li> </ul> </li> <li> <p>SessionId: Specify a session ID to return details about the session.</p> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: String,
 }
@@ -7225,6 +7828,50 @@ pub struct StartAutomationExecutionRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAutomationExecutionResult {
     /// <p>The unique ID of a newly scheduled automation execution.</p>
+    #[serde(rename = "AutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_execution_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartChangeRequestExecutionRequest {
+    /// <p>The name of the change request associated with the runbook workflow to be run.</p>
+    #[serde(rename = "ChangeRequestName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_request_name: Option<String>,
+    /// <p>The user-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The name of the change template document to run during the runbook workflow.</p>
+    #[serde(rename = "DocumentName")]
+    pub document_name: String,
+    /// <p>The version of the change template document to run during the runbook workflow.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>A key-value map of parameters that match the declared parameters in the change template document.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p><p>Information about the Automation runbooks (Automation documents) that are run during the runbook workflow.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
+    #[serde(rename = "Runbooks")]
+    pub runbooks: Vec<Runbook>,
+    /// <p><p>The date and time specified in the change request to run the Automation runbooks.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
+    #[serde(rename = "ScheduledTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_time: Option<f64>,
+    /// <p><p>Optional metadata that you assign to a resource. You can specify a maximum of five tags for a change request. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a change request to identify an environment or target AWS Region. In this case, you could specify the following key-value pairs:</p> <ul> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> <li> <p> <code>Key=Region,Value=us-east-2</code> </p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartChangeRequestExecutionResult {
+    /// <p>The unique ID of a runbook workflow operation. (A runbook workflow is a type of Automation operation.) </p>
     #[serde(rename = "AutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
@@ -7396,7 +8043,7 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> <p>This example demonstrates how to target all resources in the resource group <b>ProductionResourceGroup</b> in your maintenance window.</p> </li> <li> <p>(Maintenance window targets only) <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> <p>This example demonstrates how to target only EC2 instances and VPCs in your maintenance window.</p> </li> <li> <p>(State Manager association targets only) <code>Key=InstanceIds,Values=<i>*</i> </code> </p> <p>This example demonstrates how to target all managed instances in the AWS Region where the association was created.</p> </li> </ul> <p>For information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Targeting multiple instances</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <note> <p> One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup;Values=<i>resource-group-name</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> <p>This example demonstrates how to target all resources in the resource group <b>ProductionResourceGroup</b> in your maintenance window.</p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> <p>This example demonstrates how to target only EC2 instances and VPCs in your maintenance window.</p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup,Values=MyResourceGroup</code> </p> </li> <li> <p> <b>State Manager association targets only</b>: <code>Key=InstanceIds,Values=<i>*</i> </code> </p> <p>This example demonstrates how to target all managed instances in the AWS Region where the association was created.</p> </li> </ul> <p>For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Targeting multiple instances</a> in the <i>AWS Systems Manager User Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Target {
     /// <p>User-defined criteria for sending commands that target instances that meet the criteria.</p>
@@ -7416,7 +8063,7 @@ pub struct TargetLocation {
     #[serde(rename = "Accounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<String>>,
-    /// <p>The Automation execution role used by the currently running Automation.</p>
+    /// <p>The Automation execution role used by the currently running Automation. If not specified, the default value is <code>AWS-SystemsManager-AutomationExecutionRole</code>.</p>
     #[serde(rename = "ExecutionRoleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_role_name: Option<String>,
@@ -7424,11 +8071,11 @@ pub struct TargetLocation {
     #[serde(rename = "Regions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regions: Option<Vec<String>>,
-    /// <p>The maximum number of AWS accounts and AWS regions allowed to run the Automation concurrently </p>
+    /// <p>The maximum number of AWS accounts and AWS regions allowed to run the Automation concurrently.</p>
     #[serde(rename = "TargetLocationMaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_location_max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation. </p>
+    /// <p>The maximum number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation.</p>
     #[serde(rename = "TargetLocationMaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_location_max_errors: Option<String>,
@@ -7454,7 +8101,7 @@ pub struct TerminateSessionResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationRequest {
-    /// <p>By default, when you update an association, the system runs it immediately after it is updated and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you update it.</p> <p>Also, if you specified this option when you created the association, you can reset it. To do so, specify the <code>no-apply-only-at-cron-interval</code> parameter when you update the association from the command line. This parameter forces the association to run immediately after updating it and according to the interval specified.</p>
+    /// <p>By default, when you update an association, the system runs it immediately after it is updated and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you update it. This parameter is not supported for rate expressions.</p> <p>Also, if you specified this option when you created the association, you can reset it. To do so, specify the <code>no-apply-only-at-cron-interval</code> parameter when you update the association from the command line. This parameter forces the association to run immediately after updating it and according to the interval specified.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -7509,6 +8156,10 @@ pub struct UpdateAssociationRequest {
     #[serde(rename = "SyncCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_compliance: Option<String>,
+    /// <p>A location is a combination of AWS Regions and AWS accounts where you want to run the association. Use this action to update an association in multiple Regions and multiple accounts.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
     /// <p>The targets of the association.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7566,6 +8217,25 @@ pub struct UpdateDocumentDefaultVersionResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<DocumentDefaultVersionDescription>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDocumentMetadataRequest {
+    /// <p>The document review details to update.</p>
+    #[serde(rename = "DocumentReviews")]
+    pub document_reviews: DocumentReviews,
+    /// <p>The version of a document to update.</p>
+    #[serde(rename = "DocumentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_version: Option<String>,
+    /// <p>The name of the document for which a version is to be updated.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDocumentMetadataResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7646,15 +8316,15 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(0 30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
+    /// <p>The number of days to wait after the date and time specified by a CRON expression before running the maintenance window.</p> <p>For example, the following cron expression schedules a maintenance window to run the third Tuesday of every month at 11:30 PM.</p> <p> <code>cron(30 23 ? * TUE#3 *)</code> </p> <p>If the schedule offset is <code>2</code>, the maintenance window won't run until two days later.</p>
     #[serde(rename = "ScheduleOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_offset: Option<i64>,
-    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
-    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "StartDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date: Option<String>,
@@ -7702,7 +8372,7 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename = "ScheduleOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_offset: Option<i64>,
-    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    /// <p>The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
     #[serde(rename = "ScheduleTimezone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_timezone: Option<String>,
@@ -7787,11 +8457,11 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
-    /// <p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p>
+    /// <p><p>The new <code>MaxConcurrency</code> value you want to specify. <code>MaxConcurrency</code> is the number of targets that are allowed to run this task in parallel.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. This value does not affect the running of your task and can be ignored.</p> </note></p>
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p>
+    /// <p><p>The new <code>MaxErrors</code> value to specify. <code>MaxErrors</code> is the maximum number of errors that are allowed before the task stops being scheduled.</p> <note> <p>For maintenance window tasks without a target specified, you cannot supply a value for this option. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. This value does not affect the running of your task and can be ignored.</p> </note></p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -7803,7 +8473,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWndow action are also required for this API request. Optional fields that are not specified are set to null.</p>
+    /// <p>If True, then all fields that are required by the RegisterTaskWithMaintenanceWindow action are also required for this API request. Optional fields that are not specified are set to null.</p>
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
@@ -7811,7 +8481,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID_1,instanceID_2. Tags are specified using Key=tag_name,Values=tag_value. </p>
+    /// <p><p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID<em>1,instanceID</em>2. Tags are specified using Key=tag<em>name,Values=tag</em>value. </p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -7819,7 +8489,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    /// <p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p>
+    /// <p><p>The parameters that the task should use during execution. Populate only the fields that match the task type. All other fields should be empty.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
@@ -7912,6 +8582,14 @@ pub struct UpdateManagedInstanceRoleResult {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOpsItemRequest {
+    /// <p>The time a runbook workflow ended. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_end_time: Option<f64>,
+    /// <p>The time a runbook workflow started. Currently reported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "ActualStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_start_time: Option<f64>,
     /// <p>Specify a new category for an OpsItem.</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7935,6 +8613,14 @@ pub struct UpdateOpsItemRequest {
     /// <p>The ID of the OpsItem.</p>
     #[serde(rename = "OpsItemId")]
     pub ops_item_id: String,
+    /// <p>The time specified in a change request for a runbook workflow to end. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_end_time: Option<f64>,
+    /// <p>The time specified in a change request for a runbook workflow to start. Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p>
+    #[serde(rename = "PlannedStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub planned_start_time: Option<f64>,
     /// <p>The importance of this OpsItem in relation to other OpsItems in the system.</p>
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7960,6 +8646,31 @@ pub struct UpdateOpsItemRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOpsItemResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateOpsMetadataRequest {
+    /// <p>The metadata keys to delete from the OpsMetadata object. </p>
+    #[serde(rename = "KeysToDelete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub keys_to_delete: Option<Vec<String>>,
+    /// <p>Metadata to add to an OpsMetadata object.</p>
+    #[serde(rename = "MetadataToUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_to_update: Option<::std::collections::HashMap<String, MetadataValue>>,
+    /// <p>The Amazon Resoure Name (ARN) of the OpsMetadata Object to update.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    pub ops_metadata_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateOpsMetadataResult {
+    /// <p>The Amazon Resource Name (ARN) of the OpsMetadata Object that was updated.</p>
+    #[serde(rename = "OpsMetadataArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_metadata_arn: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -8685,6 +9396,70 @@ impl fmt::Display for CreateOpsItemError {
     }
 }
 impl Error for CreateOpsItemError {}
+/// Errors returned by CreateOpsMetadata
+#[derive(Debug, PartialEq)]
+pub enum CreateOpsMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>An OpsMetadata object already exists for the selected resource.</p>
+    OpsMetadataAlreadyExists(String),
+    /// <p>One of the arguments passed is invalid. </p>
+    OpsMetadataInvalidArgument(String),
+    /// <p>Your account reached the maximum number of OpsMetadata objects allowed by Application Manager. The maximum is 200 OpsMetadata objects. Delete one or more OpsMetadata object and try again.</p>
+    OpsMetadataLimitExceeded(String),
+    /// <p>The system is processing too many concurrent updates. Wait a few moments and try again.</p>
+    OpsMetadataTooManyUpdates(String),
+}
+
+impl CreateOpsMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOpsMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(CreateOpsMetadataError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataAlreadyExistsException" => {
+                    return RusotoError::Service(CreateOpsMetadataError::OpsMetadataAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataInvalidArgumentException" => {
+                    return RusotoError::Service(
+                        CreateOpsMetadataError::OpsMetadataInvalidArgument(err.msg),
+                    )
+                }
+                "OpsMetadataLimitExceededException" => {
+                    return RusotoError::Service(CreateOpsMetadataError::OpsMetadataLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataTooManyUpdatesException" => {
+                    return RusotoError::Service(CreateOpsMetadataError::OpsMetadataTooManyUpdates(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateOpsMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateOpsMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreateOpsMetadataError::OpsMetadataAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateOpsMetadataError::OpsMetadataInvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateOpsMetadataError::OpsMetadataLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateOpsMetadataError::OpsMetadataTooManyUpdates(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateOpsMetadataError {}
 /// Errors returned by CreatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum CreatePatchBaselineError {
@@ -9049,6 +9824,54 @@ impl fmt::Display for DeleteMaintenanceWindowError {
     }
 }
 impl Error for DeleteMaintenanceWindowError {}
+/// Errors returned by DeleteOpsMetadata
+#[derive(Debug, PartialEq)]
+pub enum DeleteOpsMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>One of the arguments passed is invalid. </p>
+    OpsMetadataInvalidArgument(String),
+    /// <p>The OpsMetadata object does not exist. </p>
+    OpsMetadataNotFound(String),
+}
+
+impl DeleteOpsMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOpsMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(DeleteOpsMetadataError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataInvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DeleteOpsMetadataError::OpsMetadataInvalidArgument(err.msg),
+                    )
+                }
+                "OpsMetadataNotFoundException" => {
+                    return RusotoError::Service(DeleteOpsMetadataError::OpsMetadataNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteOpsMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOpsMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteOpsMetadataError::OpsMetadataInvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteOpsMetadataError::OpsMetadataNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteOpsMetadataError {}
 /// Errors returned by DeleteParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteParameterError {
@@ -9970,7 +10793,7 @@ pub enum DescribeEffectivePatchesForPatchBaselineError {
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system.</p>
     UnsupportedOperatingSystem(String),
 }
 
@@ -11210,7 +12033,7 @@ pub enum GetDeployablePatchSnapshotForInstanceError {
     InternalServerError(String),
     /// <p>Microsoft application patching is only available on EC2 instances and advanced instances. To patch Microsoft applications on on-premises servers and VMs, you must enable advanced instances. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances-advanced.html">Using the advanced-instances tier</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     UnsupportedFeatureRequired(String),
-    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system.</p>
     UnsupportedOperatingSystem(String),
 }
 
@@ -11667,6 +12490,50 @@ impl fmt::Display for GetOpsItemError {
     }
 }
 impl Error for GetOpsItemError {}
+/// Errors returned by GetOpsMetadata
+#[derive(Debug, PartialEq)]
+pub enum GetOpsMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>One of the arguments passed is invalid. </p>
+    OpsMetadataInvalidArgument(String),
+    /// <p>The OpsMetadata object does not exist. </p>
+    OpsMetadataNotFound(String),
+}
+
+impl GetOpsMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpsMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(GetOpsMetadataError::InternalServerError(err.msg))
+                }
+                "OpsMetadataInvalidArgumentException" => {
+                    return RusotoError::Service(GetOpsMetadataError::OpsMetadataInvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataNotFoundException" => {
+                    return RusotoError::Service(GetOpsMetadataError::OpsMetadataNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetOpsMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetOpsMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            GetOpsMetadataError::OpsMetadataInvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetOpsMetadataError::OpsMetadataNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetOpsMetadataError {}
 /// Errors returned by GetOpsSummary
 #[derive(Debug, PartialEq)]
 pub enum GetOpsSummaryError {
@@ -12443,6 +13310,68 @@ impl fmt::Display for ListComplianceSummariesError {
     }
 }
 impl Error for ListComplianceSummariesError {}
+/// Errors returned by ListDocumentMetadataHistory
+#[derive(Debug, PartialEq)]
+pub enum ListDocumentMetadataHistoryError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified document does not exist.</p>
+    InvalidDocument(String),
+    /// <p>The document version is not valid or does not exist.</p>
+    InvalidDocumentVersion(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+}
+
+impl ListDocumentMetadataHistoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDocumentMetadataHistoryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        ListDocumentMetadataHistoryError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidDocument" => {
+                    return RusotoError::Service(ListDocumentMetadataHistoryError::InvalidDocument(
+                        err.msg,
+                    ))
+                }
+                "InvalidDocumentVersion" => {
+                    return RusotoError::Service(
+                        ListDocumentMetadataHistoryError::InvalidDocumentVersion(err.msg),
+                    )
+                }
+                "InvalidNextToken" => {
+                    return RusotoError::Service(
+                        ListDocumentMetadataHistoryError::InvalidNextToken(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDocumentMetadataHistoryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDocumentMetadataHistoryError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentMetadataHistoryError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            ListDocumentMetadataHistoryError::InvalidDocumentVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDocumentMetadataHistoryError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDocumentMetadataHistoryError {}
 /// Errors returned by ListDocumentVersions
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentVersionsError {
@@ -12595,6 +13524,98 @@ impl fmt::Display for ListInventoryEntriesError {
     }
 }
 impl Error for ListInventoryEntriesError {}
+/// Errors returned by ListOpsItemEvents
+#[derive(Debug, PartialEq)]
+pub enum ListOpsItemEventsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+    /// <p>The request caused OpsItems to exceed one or more quotas. For information about OpsItem quotas, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
+    OpsItemLimitExceeded(String),
+    /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
+    OpsItemNotFound(String),
+}
+
+impl ListOpsItemEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOpsItemEventsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListOpsItemEventsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(ListOpsItemEventsError::OpsItemInvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OpsItemLimitExceededException" => {
+                    return RusotoError::Service(ListOpsItemEventsError::OpsItemLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "OpsItemNotFoundException" => {
+                    return RusotoError::Service(ListOpsItemEventsError::OpsItemNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListOpsItemEventsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOpsItemEventsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOpsItemEventsError::OpsItemInvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListOpsItemEventsError::OpsItemLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListOpsItemEventsError::OpsItemNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListOpsItemEventsError {}
+/// Errors returned by ListOpsMetadata
+#[derive(Debug, PartialEq)]
+pub enum ListOpsMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>One of the arguments passed is invalid. </p>
+    OpsMetadataInvalidArgument(String),
+}
+
+impl ListOpsMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOpsMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListOpsMetadataError::InternalServerError(err.msg))
+                }
+                "OpsMetadataInvalidArgumentException" => {
+                    return RusotoError::Service(ListOpsMetadataError::OpsMetadataInvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListOpsMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOpsMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOpsMetadataError::OpsMetadataInvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListOpsMetadataError {}
 /// Errors returned by ListResourceComplianceSummaries
 #[derive(Debug, PartialEq)]
 pub enum ListResourceComplianceSummariesError {
@@ -13032,7 +14053,7 @@ pub enum PutParameterError {
     ParameterAlreadyExists(String),
     /// <p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
     ParameterLimitExceeded(String),
-    /// <p>The parameter exceeded the maximum number of allowed versions.</p>
+    /// <p>Parameter Store retains the 100 most recently created versions of a parameter. After this number of versions has been created, Parameter Store deletes the oldest version when a new one is created. However, if the oldest version has a <i>label</i> attached to it, Parameter Store will not delete the version and instead presents this error message:</p> <p> <code>An error occurred (ParameterMaxVersionLimitExceeded) when calling the PutParameter operation: You attempted to create a new version of <i>parameter-name</i> by calling the PutParameter API with the overwrite flag. Version <i>version-number</i>, the oldest version, can't be deleted because it has a label associated with it. Move the label to another version of the parameter, and try again.</code> </p> <p>This safeguard is to prevent parameter versions with mission critical labels assigned to them from being deleted. To continue creating new parameters, first move the label from the oldest version of the parameter to a newer one for use in your operations. For information about moving parameter labels, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-console-move">Move a parameter label (console)</a> or <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-cli-move">Move a parameter label (CLI) </a> in the <i>AWS Systems Manager User Guide</i>. </p>
     ParameterMaxVersionLimitExceeded(String),
     /// <p>The parameter name is not valid.</p>
     ParameterPatternMismatch(String),
@@ -13831,6 +14852,106 @@ impl fmt::Display for StartAutomationExecutionError {
     }
 }
 impl Error for StartAutomationExecutionError {}
+/// Errors returned by StartChangeRequestExecution
+#[derive(Debug, PartialEq)]
+pub enum StartChangeRequestExecutionError {
+    /// <p>Indicates that the Change Manager change template used in the change request was rejected or is still in a pending state.</p>
+    AutomationDefinitionNotApproved(String),
+    /// <p>An Automation document with the specified name could not be found.</p>
+    AutomationDefinitionNotFound(String),
+    /// <p>An Automation document with the specified name and version could not be found.</p>
+    AutomationDefinitionVersionNotFound(String),
+    /// <p>The number of simultaneously running Automation executions exceeded the allowable limit.</p>
+    AutomationExecutionLimitExceeded(String),
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    IdempotentParameterMismatch(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The supplied parameters for invoking the specified Automation document are incorrect. For example, they may not match the set of parameters permitted for the specified Automation document.</p>
+    InvalidAutomationExecutionParameters(String),
+}
+
+impl StartChangeRequestExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartChangeRequestExecutionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AutomationDefinitionNotApprovedException" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::AutomationDefinitionNotApproved(err.msg),
+                    )
+                }
+                "AutomationDefinitionNotFoundException" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::AutomationDefinitionNotFound(err.msg),
+                    )
+                }
+                "AutomationDefinitionVersionNotFoundException" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::AutomationDefinitionVersionNotFound(
+                            err.msg,
+                        ),
+                    )
+                }
+                "AutomationExecutionLimitExceededException" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::AutomationExecutionLimitExceeded(err.msg),
+                    )
+                }
+                "IdempotentParameterMismatch" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::IdempotentParameterMismatch(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidAutomationExecutionParametersException" => {
+                    return RusotoError::Service(
+                        StartChangeRequestExecutionError::InvalidAutomationExecutionParameters(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartChangeRequestExecutionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartChangeRequestExecutionError::AutomationDefinitionNotApproved(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::AutomationDefinitionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::AutomationDefinitionVersionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::AutomationExecutionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::IdempotentParameterMismatch(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            StartChangeRequestExecutionError::InvalidAutomationExecutionParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for StartChangeRequestExecutionError {}
 /// Errors returned by StartSession
 #[derive(Debug, PartialEq)]
 pub enum StartSessionError {
@@ -13838,7 +14959,7 @@ pub enum StartSessionError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    /// <p>The specified target instance for the session is not fully configured for use with Session Manager. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started.html">Getting started with Session Manager</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The specified target instance for the session is not fully configured for use with Session Manager. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started.html">Getting started with Session Manager</a> in the <i>AWS Systems Manager User Guide</i>. This error is also returned if you attempt to start a session on an instance that is located in a different account or Region</p>
     TargetNotConnected(String),
 }
 
@@ -14311,6 +15432,66 @@ impl fmt::Display for UpdateDocumentDefaultVersionError {
     }
 }
 impl Error for UpdateDocumentDefaultVersionError {}
+/// Errors returned by UpdateDocumentMetadata
+#[derive(Debug, PartialEq)]
+pub enum UpdateDocumentMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified document does not exist.</p>
+    InvalidDocument(String),
+    /// <p>You attempted to delete a document while it is still shared. You must stop sharing the document before you can delete it.</p>
+    InvalidDocumentOperation(String),
+    /// <p>The document version is not valid or does not exist.</p>
+    InvalidDocumentVersion(String),
+}
+
+impl UpdateDocumentMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(UpdateDocumentMetadataError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidDocument" => {
+                    return RusotoError::Service(UpdateDocumentMetadataError::InvalidDocument(
+                        err.msg,
+                    ))
+                }
+                "InvalidDocumentOperation" => {
+                    return RusotoError::Service(
+                        UpdateDocumentMetadataError::InvalidDocumentOperation(err.msg),
+                    )
+                }
+                "InvalidDocumentVersion" => {
+                    return RusotoError::Service(
+                        UpdateDocumentMetadataError::InvalidDocumentVersion(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDocumentMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDocumentMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentMetadataError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            UpdateDocumentMetadataError::InvalidDocumentOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateDocumentMetadataError::InvalidDocumentVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateDocumentMetadataError {}
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
@@ -14537,6 +15718,72 @@ impl fmt::Display for UpdateOpsItemError {
     }
 }
 impl Error for UpdateOpsItemError {}
+/// Errors returned by UpdateOpsMetadata
+#[derive(Debug, PartialEq)]
+pub enum UpdateOpsMetadataError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>One of the arguments passed is invalid. </p>
+    OpsMetadataInvalidArgument(String),
+    /// <p>The OpsMetadata object exceeds the maximum number of OpsMetadata keys that you can assign to an application in Application Manager.</p>
+    OpsMetadataKeyLimitExceeded(String),
+    /// <p>The OpsMetadata object does not exist. </p>
+    OpsMetadataNotFound(String),
+    /// <p>The system is processing too many concurrent updates. Wait a few moments and try again.</p>
+    OpsMetadataTooManyUpdates(String),
+}
+
+impl UpdateOpsMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOpsMetadataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(UpdateOpsMetadataError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataInvalidArgumentException" => {
+                    return RusotoError::Service(
+                        UpdateOpsMetadataError::OpsMetadataInvalidArgument(err.msg),
+                    )
+                }
+                "OpsMetadataKeyLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateOpsMetadataError::OpsMetadataKeyLimitExceeded(err.msg),
+                    )
+                }
+                "OpsMetadataNotFoundException" => {
+                    return RusotoError::Service(UpdateOpsMetadataError::OpsMetadataNotFound(
+                        err.msg,
+                    ))
+                }
+                "OpsMetadataTooManyUpdatesException" => {
+                    return RusotoError::Service(UpdateOpsMetadataError::OpsMetadataTooManyUpdates(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateOpsMetadataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateOpsMetadataError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateOpsMetadataError::OpsMetadataInvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateOpsMetadataError::OpsMetadataKeyLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOpsMetadataError::OpsMetadataNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateOpsMetadataError::OpsMetadataTooManyUpdates(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateOpsMetadataError {}
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
@@ -14743,6 +15990,12 @@ pub trait Ssm {
         input: CreateOpsItemRequest,
     ) -> Result<CreateOpsItemResponse, RusotoError<CreateOpsItemError>>;
 
+    /// <p>If you create a new application in Application Manager, Systems Manager calls this API action to specify information about the new application, including the application type.</p>
+    async fn create_ops_metadata(
+        &self,
+        input: CreateOpsMetadataRequest,
+    ) -> Result<CreateOpsMetadataResult, RusotoError<CreateOpsMetadataError>>;
+
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     async fn create_patch_baseline(
         &self,
@@ -14773,7 +16026,7 @@ pub trait Ssm {
         input: DeleteDocumentRequest,
     ) -> Result<DeleteDocumentResult, RusotoError<DeleteDocumentError>>;
 
-    /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
+    /// <p>Delete a custom inventory type or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
     async fn delete_inventory(
         &self,
         input: DeleteInventoryRequest,
@@ -14784,6 +16037,12 @@ pub trait Ssm {
         &self,
         input: DeleteMaintenanceWindowRequest,
     ) -> Result<DeleteMaintenanceWindowResult, RusotoError<DeleteMaintenanceWindowError>>;
+
+    /// <p>Delete OpsMetadata related to an application.</p>
+    async fn delete_ops_metadata(
+        &self,
+        input: DeleteOpsMetadataRequest,
+    ) -> Result<DeleteOpsMetadataResult, RusotoError<DeleteOpsMetadataError>>;
 
     /// <p>Delete a parameter from the system.</p>
     async fn delete_parameter(
@@ -15007,7 +16266,7 @@ pub trait Ssm {
         RusotoError<DescribeMaintenanceWindowTargetsError>,
     >;
 
-    /// <p>Lists the tasks in a maintenance window.</p>
+    /// <p><p>Lists the tasks in a maintenance window.</p> <note> <p>For maintenance window tasks without a specified target, you cannot supply values for <code>--max-errors</code> and <code>--max-concurrency</code>. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. These values do not affect the running of your task and can be ignored.</p> </note></p>
     async fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
@@ -15061,7 +16320,7 @@ pub trait Ssm {
         input: DescribePatchGroupsRequest,
     ) -> Result<DescribePatchGroupsResult, RusotoError<DescribePatchGroupsError>>;
 
-    /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU </dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>REDHAT</em>ENTERPRISE_LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> </dl></p>
+    /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>DEBIAN</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>MACOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION</p> </dd> <dt>ORACLE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>REDHAT<em>ENTERPRISE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> </dl></p>
     async fn describe_patch_properties(
         &self,
         input: DescribePatchPropertiesRequest,
@@ -15079,7 +16338,7 @@ pub trait Ssm {
         input: GetAutomationExecutionRequest,
     ) -> Result<GetAutomationExecutionResult, RusotoError<GetAutomationExecutionError>>;
 
-    /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>. For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>.</p> <p>If you specify more than one calendar in a request, the command returns the status of <code>OPEN</code> only if all calendars in the request are open. If one or more calendars in the request are closed, the status returned is <code>CLOSED</code>.</p> <p>For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     async fn get_calendar_state(
         &self,
         input: GetCalendarStateRequest,
@@ -15160,7 +16419,7 @@ pub trait Ssm {
         RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>,
     >;
 
-    /// <p>Lists the tasks in a maintenance window.</p>
+    /// <p><p>Lists the tasks in a maintenance window.</p> <note> <p>For maintenance window tasks without a specified target, you cannot supply values for <code>--max-errors</code> and <code>--max-concurrency</code>. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. These values do not affect the running of your task and can be ignored.</p> </note></p>
     async fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
@@ -15171,6 +16430,12 @@ pub trait Ssm {
         &self,
         input: GetOpsItemRequest,
     ) -> Result<GetOpsItemResponse, RusotoError<GetOpsItemError>>;
+
+    /// <p>View operational metadata related to an application in Application Manager.</p>
+    async fn get_ops_metadata(
+        &self,
+        input: GetOpsMetadataRequest,
+    ) -> Result<GetOpsMetadataResult, RusotoError<GetOpsMetadataError>>;
 
     /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
     async fn get_ops_summary(
@@ -15184,7 +16449,7 @@ pub trait Ssm {
         input: GetParameterRequest,
     ) -> Result<GetParameterResult, RusotoError<GetParameterError>>;
 
-    /// <p>Query a list of all parameters used by the AWS account.</p>
+    /// <p>Retrieves the history of all changes to a parameter.</p>
     async fn get_parameter_history(
         &self,
         input: GetParameterHistoryRequest,
@@ -15262,6 +16527,12 @@ pub trait Ssm {
         input: ListComplianceSummariesRequest,
     ) -> Result<ListComplianceSummariesResult, RusotoError<ListComplianceSummariesError>>;
 
+    /// <p>Information about approval reviews for a version of an SSM document.</p>
+    async fn list_document_metadata_history(
+        &self,
+        input: ListDocumentMetadataHistoryRequest,
+    ) -> Result<ListDocumentMetadataHistoryResponse, RusotoError<ListDocumentMetadataHistoryError>>;
+
     /// <p>List all versions for a document.</p>
     async fn list_document_versions(
         &self,
@@ -15279,6 +16550,18 @@ pub trait Ssm {
         &self,
         input: ListInventoryEntriesRequest,
     ) -> Result<ListInventoryEntriesResult, RusotoError<ListInventoryEntriesError>>;
+
+    /// <p>Returns a list of all OpsItem events in the current AWS account and Region. You can limit the results to events associated with specific OpsItems by specifying a filter.</p>
+    async fn list_ops_item_events(
+        &self,
+        input: ListOpsItemEventsRequest,
+    ) -> Result<ListOpsItemEventsResponse, RusotoError<ListOpsItemEventsError>>;
+
+    /// <p>Systems Manager calls this API action when displaying all Application Manager OpsMetadata objects or blobs.</p>
+    async fn list_ops_metadata(
+        &self,
+        input: ListOpsMetadataRequest,
+    ) -> Result<ListOpsMetadataResult, RusotoError<ListOpsMetadataError>>;
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     async fn list_resource_compliance_summaries(
@@ -15400,6 +16683,12 @@ pub trait Ssm {
         input: StartAutomationExecutionRequest,
     ) -> Result<StartAutomationExecutionResult, RusotoError<StartAutomationExecutionError>>;
 
+    /// <p>Creates a change request for Change Manager. The runbooks (Automation documents) specified in the change request run only after all required approvals for the change request have been received.</p>
+    async fn start_change_request_execution(
+        &self,
+        input: StartChangeRequestExecutionRequest,
+    ) -> Result<StartChangeRequestExecutionResult, RusotoError<StartChangeRequestExecutionError>>;
+
     /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">Install the Session Manager plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
     async fn start_session(
         &self,
@@ -15442,6 +16731,12 @@ pub trait Ssm {
         input: UpdateDocumentDefaultVersionRequest,
     ) -> Result<UpdateDocumentDefaultVersionResult, RusotoError<UpdateDocumentDefaultVersionError>>;
 
+    /// <p>Updates information related to approval reviews for a specific version of a document.</p>
+    async fn update_document_metadata(
+        &self,
+        input: UpdateDocumentMetadataRequest,
+    ) -> Result<UpdateDocumentMetadataResponse, RusotoError<UpdateDocumentMetadataError>>;
+
     /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     async fn update_maintenance_window(
         &self,
@@ -15454,7 +16749,7 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowTargetRequest,
     ) -> Result<UpdateMaintenanceWindowTargetResult, RusotoError<UpdateMaintenanceWindowTargetError>>;
 
-    /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
     async fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
@@ -15471,6 +16766,12 @@ pub trait Ssm {
         &self,
         input: UpdateOpsItemRequest,
     ) -> Result<UpdateOpsItemResponse, RusotoError<UpdateOpsItemError>>;
+
+    /// <p>Systems Manager calls this API action when you edit OpsMetadata in Application Manager.</p>
+    async fn update_ops_metadata(
+        &self,
+        input: UpdateOpsMetadataRequest,
+    ) -> Result<UpdateOpsMetadataResult, RusotoError<UpdateOpsMetadataError>>;
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     async fn update_patch_baseline(
@@ -15701,6 +17002,24 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateOpsItemResponse, _>()
     }
 
+    /// <p>If you create a new application in Application Manager, Systems Manager calls this API action to specify information about the new application, including the application type.</p>
+    async fn create_ops_metadata(
+        &self,
+        input: CreateOpsMetadataRequest,
+    ) -> Result<CreateOpsMetadataResult, RusotoError<CreateOpsMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.CreateOpsMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateOpsMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateOpsMetadataResult, _>()
+    }
+
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     async fn create_patch_baseline(
         &self,
@@ -15792,7 +17111,7 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDocumentResult, _>()
     }
 
-    /// <p>Delete a custom inventory type, or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
+    /// <p>Delete a custom inventory type or the data associated with a custom Inventory type. Deleting a custom inventory type is also referred to as deleting a custom inventory schema.</p>
     async fn delete_inventory(
         &self,
         input: DeleteInventoryRequest,
@@ -15827,6 +17146,24 @@ impl Ssm for SsmClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteMaintenanceWindowResult, _>()
+    }
+
+    /// <p>Delete OpsMetadata related to an application.</p>
+    async fn delete_ops_metadata(
+        &self,
+        input: DeleteOpsMetadataRequest,
+    ) -> Result<DeleteOpsMetadataResult, RusotoError<DeleteOpsMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.DeleteOpsMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteOpsMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteOpsMetadataResult, _>()
     }
 
     /// <p>Delete a parameter from the system.</p>
@@ -16519,7 +17856,7 @@ impl Ssm for SsmClient {
             .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
     }
 
-    /// <p>Lists the tasks in a maintenance window.</p>
+    /// <p><p>Lists the tasks in a maintenance window.</p> <note> <p>For maintenance window tasks without a specified target, you cannot supply values for <code>--max-errors</code> and <code>--max-concurrency</code>. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. These values do not affect the running of your task and can be ignored.</p> </note></p>
     async fn describe_maintenance_window_tasks(
         &self,
         input: DescribeMaintenanceWindowTasksRequest,
@@ -16681,7 +18018,7 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribePatchGroupsResult, _>()
     }
 
-    /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU </dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>REDHAT</em>ENTERPRISE_LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> </dl></p>
+    /// <p><p>Lists the properties of available patches organized by product, product family, classification, severity, and other properties of available patches. You can use the reported properties in the filters you specify in requests for actions such as <a>CreatePatchBaseline</a>, <a>UpdatePatchBaseline</a>, <a>DescribeAvailablePatches</a>, and <a>DescribePatchBaselines</a>.</p> <p>The following section lists the properties that can be used in filters for each major operating system type:</p> <dl> <dt>AMAZON<em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>AMAZON</em>LINUX<em>2</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>CENTOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>DEBIAN</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>MACOS</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION</p> </dd> <dt>ORACLE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>REDHAT<em>ENTERPRISE</em>LINUX</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>SUSE</dt> <dd> <p>Valid properties: PRODUCT, CLASSIFICATION, SEVERITY</p> </dd> <dt>UBUNTU</dt> <dd> <p>Valid properties: PRODUCT, PRIORITY</p> </dd> <dt>WINDOWS</dt> <dd> <p>Valid properties: PRODUCT, PRODUCT<em>FAMILY, CLASSIFICATION, MSRC</em>SEVERITY</p> </dd> </dl></p>
     async fn describe_patch_properties(
         &self,
         input: DescribePatchPropertiesRequest,
@@ -16737,7 +18074,7 @@ impl Ssm for SsmClient {
             .deserialize::<GetAutomationExecutionResult, _>()
     }
 
-    /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>. For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>Gets the state of the AWS Systems Manager Change Calendar at an optional, specified time. If you specify a time, <code>GetCalendarState</code> returns the state of the calendar at a specific time, and returns the next time that the Change Calendar state will transition. If you do not specify a time, <code>GetCalendarState</code> assumes the current time. Change Calendar entries have two possible states: <code>OPEN</code> or <code>CLOSED</code>.</p> <p>If you specify more than one calendar in a request, the command returns the status of <code>OPEN</code> only if all calendars in the request are open. If one or more calendars in the request are closed, the status returned is <code>CLOSED</code>.</p> <p>For more information about Systems Manager Change Calendar, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar.html">AWS Systems Manager Change Calendar</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     async fn get_calendar_state(
         &self,
         input: GetCalendarStateRequest,
@@ -16986,7 +18323,7 @@ impl Ssm for SsmClient {
             .deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
     }
 
-    /// <p>Lists the tasks in a maintenance window.</p>
+    /// <p><p>Lists the tasks in a maintenance window.</p> <note> <p>For maintenance window tasks without a specified target, you cannot supply values for <code>--max-errors</code> and <code>--max-concurrency</code>. Instead, the system inserts a placeholder value of <code>1</code>, which may be reported in the response to this command. These values do not affect the running of your task and can be ignored.</p> </note></p>
     async fn get_maintenance_window_task(
         &self,
         input: GetMaintenanceWindowTaskRequest,
@@ -17021,6 +18358,24 @@ impl Ssm for SsmClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetOpsItemResponse, _>()
+    }
+
+    /// <p>View operational metadata related to an application in Application Manager.</p>
+    async fn get_ops_metadata(
+        &self,
+        input: GetOpsMetadataRequest,
+    ) -> Result<GetOpsMetadataResult, RusotoError<GetOpsMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.GetOpsMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetOpsMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOpsMetadataResult, _>()
     }
 
     /// <p>View a summary of OpsItems based on specified filters and aggregators.</p>
@@ -17059,7 +18414,7 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetParameterResult, _>()
     }
 
-    /// <p>Query a list of all parameters used by the AWS account.</p>
+    /// <p>Retrieves the history of all changes to a parameter.</p>
     async fn get_parameter_history(
         &self,
         input: GetParameterHistoryRequest,
@@ -17298,6 +18653,26 @@ impl Ssm for SsmClient {
             .deserialize::<ListComplianceSummariesResult, _>()
     }
 
+    /// <p>Information about approval reviews for a version of an SSM document.</p>
+    async fn list_document_metadata_history(
+        &self,
+        input: ListDocumentMetadataHistoryRequest,
+    ) -> Result<ListDocumentMetadataHistoryResponse, RusotoError<ListDocumentMetadataHistoryError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.ListDocumentMetadataHistory");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListDocumentMetadataHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDocumentMetadataHistoryResponse, _>()
+    }
+
     /// <p>List all versions for a document.</p>
     async fn list_document_versions(
         &self,
@@ -17350,6 +18725,42 @@ impl Ssm for SsmClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListInventoryEntriesResult, _>()
+    }
+
+    /// <p>Returns a list of all OpsItem events in the current AWS account and Region. You can limit the results to events associated with specific OpsItems by specifying a filter.</p>
+    async fn list_ops_item_events(
+        &self,
+        input: ListOpsItemEventsRequest,
+    ) -> Result<ListOpsItemEventsResponse, RusotoError<ListOpsItemEventsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.ListOpsItemEvents");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListOpsItemEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListOpsItemEventsResponse, _>()
+    }
+
+    /// <p>Systems Manager calls this API action when displaying all Application Manager OpsMetadata objects or blobs.</p>
+    async fn list_ops_metadata(
+        &self,
+        input: ListOpsMetadataRequest,
+    ) -> Result<ListOpsMetadataResult, RusotoError<ListOpsMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.ListOpsMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListOpsMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListOpsMetadataResult, _>()
     }
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
@@ -17715,6 +19126,26 @@ impl Ssm for SsmClient {
             .deserialize::<StartAutomationExecutionResult, _>()
     }
 
+    /// <p>Creates a change request for Change Manager. The runbooks (Automation documents) specified in the change request run only after all required approvals for the change request have been received.</p>
+    async fn start_change_request_execution(
+        &self,
+        input: StartChangeRequestExecutionRequest,
+    ) -> Result<StartChangeRequestExecutionResult, RusotoError<StartChangeRequestExecutionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.StartChangeRequestExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartChangeRequestExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartChangeRequestExecutionResult, _>()
+    }
+
     /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html">Install the Session Manager plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>AWS Tools for PowerShell usage: Start-SSMSession is not currently supported by AWS Tools for PowerShell on Windows local machines.</p> </note></p>
     async fn start_session(
         &self,
@@ -17845,6 +19276,25 @@ impl Ssm for SsmClient {
             .deserialize::<UpdateDocumentDefaultVersionResult, _>()
     }
 
+    /// <p>Updates information related to approval reviews for a specific version of a document.</p>
+    async fn update_document_metadata(
+        &self,
+        input: UpdateDocumentMetadataRequest,
+    ) -> Result<UpdateDocumentMetadataResponse, RusotoError<UpdateDocumentMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.UpdateDocumentMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateDocumentMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateDocumentMetadataResponse, _>()
+    }
+
     /// <p><p>Updates an existing maintenance window. Only specified parameters are modified.</p> <note> <p>The value you specify for <code>Duration</code> determines the specific end time for the maintenance window based on the time it begins. No maintenance window tasks are permitted to start after the resulting endtime minus the number of hours you specify for <code>Cutoff</code>. For example, if the maintenance window starts at 3 PM, the duration is three hours, and the value you specify for <code>Cutoff</code> is one hour, no maintenance window tasks can start after 5 PM.</p> </note></p>
     async fn update_maintenance_window(
         &self,
@@ -17884,7 +19334,7 @@ impl Ssm for SsmClient {
             .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
     }
 
-    /// <p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
     async fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
@@ -17939,6 +19389,24 @@ impl Ssm for SsmClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateOpsItemResponse, _>()
+    }
+
+    /// <p>Systems Manager calls this API action when you edit OpsMetadata in Application Manager.</p>
+    async fn update_ops_metadata(
+        &self,
+        input: UpdateOpsMetadataRequest,
+    ) -> Result<UpdateOpsMetadataResult, RusotoError<UpdateOpsMetadataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.UpdateOpsMetadata");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateOpsMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateOpsMetadataResult, _>()
     }
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>

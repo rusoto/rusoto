@@ -86,6 +86,156 @@ pub struct AlexaForBusinessMetadata {
     pub is_alexa_for_business_enabled: Option<bool>,
 }
 
+/// <p>An instance of a Chime messaging application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstance {
+    /// <p>The ARN of the messaging instance. </p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+    /// <p>The time at which an app instance was created. In epoch milliseconds.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The time an app instance was last updated. In epoch milliseconds.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The metadata of an app instance.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name of an app instance.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Promotes a user to the administrator role for the duration of an app instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceAdmin {
+    /// <p>The name and metadata of the app instance administrator.</p>
+    #[serde(rename = "Admin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin: Option<Identity>,
+    /// <p>The ARN of the app instance administrator.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+    /// <p>The time at which an administrator was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+}
+
+/// <p>The identity and metadata of an administrator.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceAdminSummary {
+    /// <p>The name and metadata of the app instance administrator.</p>
+    #[serde(rename = "Admin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin: Option<Identity>,
+}
+
+/// <p>The length of time in days to retain messages.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AppInstanceRetentionSettings {
+    /// <p>The length of time in days to retain a channel.</p>
+    #[serde(rename = "ChannelRetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_retention_settings: Option<ChannelRetentionSettings>,
+}
+
+/// <p>The streaming configuration of an app instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AppInstanceStreamingConfiguration {
+    /// <p>The data type of the app instance.</p>
+    #[serde(rename = "AppInstanceDataType")]
+    pub app_instance_data_type: String,
+    /// <p>The resource ARN.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+/// <p>The summary data for an app instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceSummary {
+    /// <p>The app instance ARN.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+    /// <p>The metadata of the app instance summary.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name of the app instance summary.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>The app instance user.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceUser {
+    /// <p>The ARN of the app instance user.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
+    /// <p>The time at which the app instance user was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The time at which the app instance user was last updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The metadata of the app instance user.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name of the app instance user.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Lists the channels to which app instance users belong.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceUserMembershipSummary {
+    /// <p>The time at which a summary was last read.</p>
+    #[serde(rename = "ReadMarkerTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_marker_timestamp: Option<f64>,
+    /// <p>The type of channel summary, </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The app instance user summary data .</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AppInstanceUserSummary {
+    /// <p>The ARN of the app instance user.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
+    /// <p>The metadata in an app instance user summary.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name in an app instance user summary.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumberWithUserRequest {
@@ -175,7 +325,7 @@ pub struct Attendee {
     #[serde(rename = "AttendeeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attendee_id: Option<String>,
-    /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
     #[serde(rename = "ExternalUserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_user_id: Option<String>,
@@ -377,6 +527,302 @@ pub struct BusinessCallingSettings {
     pub cdr_bucket: Option<String>,
 }
 
+/// <p>Creates a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Channel {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The administrator who created the channel.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<Identity>,
+    /// <p>The time at which the administrator created the channel.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The time at which a member sent the last message in a session.</p>
+    #[serde(rename = "LastMessageTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_timestamp: Option<f64>,
+    /// <p>The time at which a channel was last updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The metadata of the channel.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The mode of the channel.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>The name of the channel.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The channel's privacy setting, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
+    #[serde(rename = "Privacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<String>,
+}
+
+/// <p>Bans a user from a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelBan {
+    /// <p>The ARN of the channel from which a member is being banned.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The parameter of the action.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<Identity>,
+    /// <p>The time at which the ban was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The member being banned from the channel.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+}
+
+/// <p>The summary data for the channel ban.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelBanSummary {
+    /// <p>The member being banned from a channel.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+}
+
+/// <p>Creates a channel member.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelMembership {
+    /// <p>The ARN of the member's channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The time at which the channel membership was created. </p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The identifier of the member who invited another member. Taken from the message header.</p>
+    #[serde(rename = "InvitedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invited_by: Option<Identity>,
+    /// <p>The time at which a channel membership was last updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The data of the channel member.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+    /// <p>The membership type set for the channel member.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Returns the channel membership summary data for an app instance.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelMembershipForAppInstanceUserSummary {
+    /// <p>Returns the channel membership data for an app instance.</p>
+    #[serde(rename = "AppInstanceUserMembershipSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_membership_summary: Option<AppInstanceUserMembershipSummary>,
+    #[serde(rename = "ChannelSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_summary: Option<ChannelSummary>,
+}
+
+/// <p>The summary data of a channel membership.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelMembershipSummary {
+    /// <p>A member's summary data.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+}
+
+/// <p>Creates a message in a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelMessage {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The message content.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The time at which the message was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The time at which a message was edited.</p>
+    #[serde(rename = "LastEditedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_edited_timestamp: Option<f64>,
+    /// <p>The time at which a message was updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The ID of a message.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+    /// <p>The message metadata.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    #[serde(rename = "Persistence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub persistence: Option<String>,
+    /// <p>Hides the content of a message. The message still exists on the back end, but this action only returns metadata.</p>
+    #[serde(rename = "Redacted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redacted: Option<bool>,
+    /// <p>The message sender.</p>
+    #[serde(rename = "Sender")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<Identity>,
+    /// <p>The message type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>A summary of the messages in a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelMessageSummary {
+    /// <p>The content of the message summary.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The time at which the message summary was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    #[serde(rename = "LastEditedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_edited_timestamp: Option<f64>,
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The ID of the message summary.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+    /// <p>The metadata of the message summary.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>Redacts the content of a message summary.</p>
+    #[serde(rename = "Redacted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redacted: Option<bool>,
+    /// <p>The sender of the message summary.</p>
+    #[serde(rename = "Sender")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sender: Option<Identity>,
+    /// <p>The type of message summary.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Returns the summary data for a moderated channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelModeratedByAppInstanceUserSummary {
+    #[serde(rename = "ChannelSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_summary: Option<ChannelSummary>,
+}
+
+/// <p>Creates a moderator on a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelModerator {
+    /// <p>The ARN of the moderator's channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The member who created the moderator.</p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<Identity>,
+    /// <p>The time at which the moderator was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The moderator's data.</p>
+    #[serde(rename = "Moderator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub moderator: Option<Identity>,
+}
+
+/// <p>Summary data of the moderators in a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelModeratorSummary {
+    /// <p>The data for a moderator.</p>
+    #[serde(rename = "Moderator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub moderator: Option<Identity>,
+}
+
+/// <p>The retention settings for a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ChannelRetentionSettings {
+    /// <p>The time in days to retain a channel.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+}
+
+/// <p>The summary data for a channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChannelSummary {
+    /// <p>The ARN of the channel summary.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The time at which the last message in a channel was sent.</p>
+    #[serde(rename = "LastMessageTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_timestamp: Option<f64>,
+    /// <p>The metadata of the channel summary.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The summary mode of the channel.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>The parameter of the action.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The privacy setting of the channel being summarized, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
+    #[serde(rename = "Privacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<String>,
+}
+
 /// <p>The retention settings that determine how long to retain chat conversation messages for an Amazon Chime Enterprise account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConversationRetentionSettings {
@@ -397,10 +843,87 @@ pub struct CreateAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountResponse {
-    /// <p>The Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAppInstanceAdminRequest {
+    /// <p>The ARN of the administrator of the current app instance.</p>
+    #[serde(rename = "AppInstanceAdminArn")]
+    pub app_instance_admin_arn: String,
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAppInstanceAdminResponse {
+    /// <p>The name and ARN of the admin for the app instance.</p>
+    #[serde(rename = "AppInstanceAdmin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_admin: Option<Identity>,
+    /// <p>The ARN of the of the admin for the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAppInstanceRequest {
+    /// <p>The <code>ClientRequestToken</code> of the app instance.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The metadata of the app instance. Limited to a 1KB string in UTF-8.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name of the app instance.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAppInstanceResponse {
+    /// <p>The Amazon Resource Number (ARN) of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAppInstanceUserRequest {
+    /// <p>The ARN of the app instance request.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The user ID of the app instance.</p>
+    #[serde(rename = "AppInstanceUserId")]
+    pub app_instance_user_id: String,
+    /// <p>The token assigned to the user requesting an app instance.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The request's metadata. Limited to a 1KB string in UTF-8.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The user's name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAppInstanceUserResponse {
+    /// <p>The user's ARN.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
 }
 
 /// <p>The list of errors returned when errors are encountered during the BatchCreateAttendee and CreateAttendee actions. This includes external user IDs, error codes, and error messages.</p>
@@ -415,7 +938,7 @@ pub struct ChimeCreateAttendeeError {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
     #[serde(rename = "ExternalUserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_user_id: Option<String>,
@@ -424,7 +947,7 @@ pub struct ChimeCreateAttendeeError {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequest {
-    /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
     #[serde(rename = "ExternalUserId")]
     pub external_user_id: String,
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -440,7 +963,7 @@ pub struct CreateAttendeeRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequestItem {
-    /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p> <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     pub external_user_id: String,
     /// <p>The tag key-value pairs.</p>
@@ -484,6 +1007,145 @@ pub struct CreateBotResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateChannelBanRequest {
+    /// <p>The ARN of the ban request.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the member being banned.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateChannelBanResponse {
+    /// <p>The ARN of the response to the ban request.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The <code>ChannelArn</code> and <code>BannedIdentity</code> of the member in the ban response.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateChannelMembershipRequest {
+    /// <p>The ARN of the channel to which you're adding users.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the member you want to add to the channel.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+    /// <p>The membership type of a user, <code>DEFAULT</code> or <code>HIDDEN</code>. Default members are always returned as part of <code>ListChannelMemberships</code>. Hidden members are only returned if the type filter in <code>ListChannelMemberships</code> equals <code>HIDDEN</code>. Otherwise hidden members are not returned. This is only supported by moderators.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateChannelMembershipResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The ARN and metadata of the member being added.</p>
+    #[serde(rename = "Member")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member: Option<Identity>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateChannelModeratorRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the moderator.</p>
+    #[serde(rename = "ChannelModeratorArn")]
+    pub channel_moderator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateChannelModeratorResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The ARNs of the channel and the moderator.</p>
+    #[serde(rename = "ChannelModerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_moderator: Option<Identity>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateChannelRequest {
+    /// <p>The ARN of the channel request.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The client token for the request. An <code>Idempotency</code> token.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The metadata of the creation request. Limited to 1KB and UTF-8.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The channel mode: <code>UNRESTRICTED</code> or <code>RESTRICTED</code>. Administrators, moderators, and channel members can add themselves and other members to unrestricted channels. Only administrators and moderators can add members to restricted channels.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>The name of the channel.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The channel's privacy level: <code>PUBLIC</code> or <code>PRIVATE</code>. Private channels aren't discoverable by users outside the channel. Public channels are discoverable by anyone in the app instance.</p>
+    #[serde(rename = "Privacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateChannelResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMeetingDialOutRequest {
+    /// <p>Phone number used as the caller ID when the remote party receives a call.</p>
+    #[serde(rename = "FromPhoneNumber")]
+    pub from_phone_number: String,
+    /// <p>Token used by the Amazon Chime SDK attendee. Call the <a href="https://docs.aws.amazon.com/https:/docs.aws.amazon.com/chime/latest/APIReference/API_Attendee.html"> CreateAttendee API</a> to get a join token. </p>
+    #[serde(rename = "JoinToken")]
+    pub join_token: String,
+    /// <p>The Amazon Chime SDK meeting ID.</p> <p>Type: String</p> <p>Pattern: [a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}</p> <p>Required: No</p>
+    #[serde(rename = "MeetingId")]
+    pub meeting_id: String,
+    /// <p>Phone number called when inviting someone to a meeting.</p>
+    #[serde(rename = "ToPhoneNumber")]
+    pub to_phone_number: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMeetingDialOutResponse {
+    /// <p>Unique ID that tracks API calls.</p>
+    #[serde(rename = "TransactionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transaction_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -492,7 +1154,7 @@ pub struct CreateMeetingRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -533,7 +1195,7 @@ pub struct CreateMeetingWithAttendeesRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -682,6 +1344,85 @@ pub struct CreateRoomResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSipMediaApplicationCallRequest {
+    /// <p>The phone number that a user calls from.</p>
+    #[serde(rename = "FromPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_phone_number: Option<String>,
+    /// <p>The ID of the SIP media application.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+    /// <p>The phone number that the user dials in order to connect to a meeting</p>
+    #[serde(rename = "ToPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub to_phone_number: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateSipMediaApplicationCallResponse {
+    /// <p>The actual call.</p>
+    #[serde(rename = "SipMediaApplicationCall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_call: Option<SipMediaApplicationCall>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSipMediaApplicationRequest {
+    /// <p>AWS Region assigned to the SIP media application.</p>
+    #[serde(rename = "AwsRegion")]
+    pub aws_region: String,
+    /// <p>List of endpoints (Lambda Amazon Resource Names) specified for the SIP media application. Currently, only one endpoint is supported.</p>
+    #[serde(rename = "Endpoints")]
+    pub endpoints: Vec<SipMediaApplicationEndpoint>,
+    /// <p>The SIP media application name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateSipMediaApplicationResponse {
+    /// <p>The Sip media application details.</p>
+    #[serde(rename = "SipMediaApplication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application: Option<SipMediaApplication>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSipRuleRequest {
+    /// <p>Enables or disables a rule. You must disable rules before you can delete them.</p>
+    #[serde(rename = "Disabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// <p>The name of the SIP rule.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>List of SIP media applications with priority and AWS Region. Only one SIP application per AWS Region can be used.</p>
+    #[serde(rename = "TargetApplications")]
+    pub target_applications: Vec<SipRuleTargetApplication>,
+    /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>. Allowed trigger values are <code>RequestUriHostname</code> and <code>ToPhoneNumber</code>.</p>
+    #[serde(rename = "TriggerType")]
+    pub trigger_type: String,
+    /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code> then the value can be the outbound host name of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code> then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a If <code>TriggerType</code> is <code>RequestUriHostname</code>, then the value can be the outbound hostname of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a <code>ToPhoneNumber</code> value matches the incoming SIP request.</p>
+    #[serde(rename = "TriggerValue")]
+    pub trigger_value: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateSipRuleResponse {
+    /// <p>Returns the SIP rule information, including the rule ID, triggers, and target applications.</p>
+    #[serde(rename = "SipRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_rule: Option<SipRule>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -796,6 +1537,41 @@ pub struct DeleteAccountResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppInstanceAdminRequest {
+    /// <p>The ARN of the app instance's administrator.</p>
+    #[serde(rename = "AppInstanceAdminArn")]
+    pub app_instance_admin_arn: String,
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppInstanceRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppInstanceStreamingConfigurationsRequest {
+    /// <p>The ARN of the streaming configurations being deleted.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAppInstanceUserRequest {
+    /// <p>The ARN of the user request being deleted.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    pub app_instance_user_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
     #[serde(rename = "AttendeeId")]
@@ -803,6 +1579,58 @@ pub struct DeleteAttendeeRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
     #[serde(rename = "MeetingId")]
     pub meeting_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteChannelBanRequest {
+    /// <p>The ARN of the channel from which the app instance user was banned.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the app instance user that you want to reinstate.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteChannelMembershipRequest {
+    /// <p>The ARN of the channel from which you want to remove the user.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the member that you're removing from the channel.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteChannelMessageRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ID of the message being deleted.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteChannelModeratorRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the moderator being deleted.</p>
+    #[serde(rename = "ChannelModeratorArn")]
+    pub channel_moderator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteChannelRequest {
+    /// <p>The ARN of the channel being deleted.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -870,6 +1698,22 @@ pub struct DeleteRoomRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSipMediaApplicationRequest {
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSipRuleRequest {
+    /// <p>The SIP rule ID.</p>
+    #[serde(rename = "SipRuleId")]
+    pub sip_rule_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorEmergencyCallingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
@@ -933,6 +1777,177 @@ pub struct DeleteVoiceConnectorTerminationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAppInstanceAdminRequest {
+    /// <p>The ARN of the app instance administrator.</p>
+    #[serde(rename = "AppInstanceAdminArn")]
+    pub app_instance_admin_arn: String,
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAppInstanceAdminResponse {
+    /// <p>The ARN and name of the app instance user, the ARN of the app instance, and the created and last-updated timestamps. All timestamps use epoch milliseconds.</p>
+    #[serde(rename = "AppInstanceAdmin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_admin: Option<AppInstanceAdmin>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAppInstanceRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAppInstanceResponse {
+    /// <p>The ARN, metadata, created and last-updated timestamps, and the name of the app instance. All timestamps use epoch milliseconds.</p>
+    #[serde(rename = "AppInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance: Option<AppInstance>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAppInstanceUserRequest {
+    /// <p>The ARN of the app instance user.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    pub app_instance_user_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAppInstanceUserResponse {
+    /// <p>The name of the app instance user.</p>
+    #[serde(rename = "AppInstanceUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user: Option<AppInstanceUser>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelBanRequest {
+    /// <p>The ARN of the channel from which the user is banned.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the member being banned.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelBanResponse {
+    /// <p>The the details of the ban.</p>
+    #[serde(rename = "ChannelBan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_ban: Option<ChannelBan>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelMembershipForAppInstanceUserRequest {
+    /// <p>The ARN of the user in a channel.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    pub app_instance_user_arn: String,
+    /// <p>The ARN of the channel to which the user belongs.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelMembershipForAppInstanceUserResponse {
+    /// <p>The channel to which a user belongs.</p>
+    #[serde(rename = "ChannelMembership")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_membership: Option<ChannelMembershipForAppInstanceUserSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelMembershipRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the member.</p>
+    #[serde(rename = "MemberArn")]
+    pub member_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelMembershipResponse {
+    /// <p>The details of the membership.</p>
+    #[serde(rename = "ChannelMembership")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_membership: Option<ChannelMembership>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelModeratedByAppInstanceUserRequest {
+    /// <p>The ARN of the app instance user in the moderated channel.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    pub app_instance_user_arn: String,
+    /// <p>The ARN of the moderated channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelModeratedByAppInstanceUserResponse {
+    /// <p>The moderated channel.</p>
+    #[serde(rename = "Channel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<ChannelModeratedByAppInstanceUserSummary>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelModeratorRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ARN of the channel moderator.</p>
+    #[serde(rename = "ChannelModeratorArn")]
+    pub channel_moderator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelModeratorResponse {
+    /// <p>The details of the channel moderator.</p>
+    #[serde(rename = "ChannelModerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_moderator: Option<ChannelModerator>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeChannelRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeChannelResponse {
+    /// <p>The channel details.</p>
+    #[serde(rename = "Channel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<Channel>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1054,7 +2069,6 @@ pub struct GetAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
-    /// <p>The Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
@@ -1075,6 +2089,44 @@ pub struct GetAccountSettingsResponse {
     #[serde(rename = "AccountSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_settings: Option<AccountSettings>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAppInstanceRetentionSettingsRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAppInstanceRetentionSettingsResponse {
+    /// <p>The retention settings for the app instance.</p>
+    #[serde(rename = "AppInstanceRetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_retention_settings: Option<AppInstanceRetentionSettings>,
+    /// <p>The timestamp representing the time at which the specified items are retained, in Epoch Seconds.</p>
+    #[serde(rename = "InitiateDeletionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initiate_deletion_timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAppInstanceStreamingConfigurationsRequest {
+    /// <p>The ARN of the app instance. </p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAppInstanceStreamingConfigurationsResponse {
+    /// <p>The streaming settings.</p>
+    #[serde(rename = "AppInstanceStreamingConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_streaming_configurations: Option<Vec<AppInstanceStreamingConfiguration>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1115,6 +2167,26 @@ pub struct GetBotResponse {
     #[serde(rename = "Bot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bot: Option<Bot>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetChannelMessageRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ID of the message.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetChannelMessageResponse {
+    /// <p>The details of and content in the message.</p>
+    #[serde(rename = "ChannelMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_message: Option<ChannelMessage>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1165,6 +2237,19 @@ pub struct GetMeetingResponse {
     #[serde(rename = "Meeting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting: Option<Meeting>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMessagingSessionEndpointRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetMessagingSessionEndpointResponse {
+    /// <p>The endpoint returned in the response.</p>
+    #[serde(rename = "Endpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint: Option<MessagingSessionEndpoint>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1273,6 +2358,58 @@ pub struct GetRoomResponse {
     #[serde(rename = "Room")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room: Option<Room>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSipMediaApplicationLoggingConfigurationRequest {
+    /// <p>The ID of the SIP media application.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSipMediaApplicationLoggingConfigurationResponse {
+    /// <p>The actual logging configuration.</p>
+    #[serde(rename = "SipMediaApplicationLoggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_logging_configuration:
+        Option<SipMediaApplicationLoggingConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSipMediaApplicationRequest {
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSipMediaApplicationResponse {
+    /// <p>The SIP media application details.</p>
+    #[serde(rename = "SipMediaApplication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application: Option<SipMediaApplication>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSipRuleRequest {
+    /// <p>The SIP rule ID.</p>
+    #[serde(rename = "SipRuleId")]
+    pub sip_rule_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetSipRuleResponse {
+    /// <p>The SIP rule details.</p>
+    #[serde(rename = "SipRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_rule: Option<SipRule>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1468,6 +2605,20 @@ pub struct GetVoiceConnectorTerminationResponse {
     pub termination: Option<Termination>,
 }
 
+/// <p>The ARN and name of a user.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Identity {
+    /// <p>The ARN in an Identity.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The name in an Identity.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>Invitation object returned after emailing users to invite them to join the Amazon Chime <code>Team</code> account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1538,11 +2689,103 @@ pub struct ListAccountsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
-    /// <p>List of Amazon Chime accounts and account details.</p>
+    /// <p>The list of accounts.</p>
     #[serde(rename = "Accounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<Account>>,
-    /// <p>The token to use to retrieve the next page of results.</p>
+    /// <p>The account's user token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAppInstanceAdminsRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The maximum number of administrators that you want to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token returned from previous API requests until the number of administrators is reached.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAppInstanceAdminsResponse {
+    /// <p>The information for each administrator.</p>
+    #[serde(rename = "AppInstanceAdmins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_admins: Option<Vec<AppInstanceAdminSummary>>,
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+    /// <p>The token returned from previous API requests until the number of administrators is reached.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAppInstanceUsersRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The maximum number of requests that you want returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested users are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAppInstanceUsersResponse {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+    /// <p>The information for each of the requested app instance users.</p>
+    #[serde(rename = "AppInstanceUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_users: Option<Vec<AppInstanceUserSummary>>,
+    /// <p>The token passed by previous API calls until all requested users are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAppInstancesRequest {
+    /// <p>The maximum number of app instances that you want to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API requests until you reach the maximum number of app instances.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAppInstancesResponse {
+    /// <p>The information for each app instance.</p>
+    #[serde(rename = "AppInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instances: Option<Vec<AppInstanceSummary>>,
+    /// <p>The token passed by previous API requests until the maximum number of app instances is reached.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1621,6 +2864,247 @@ pub struct ListBotsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bots: Option<Vec<Bot>>,
     /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelBansRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The maximum number of bans that you want returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested bans are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelBansResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The information for each requested ban.</p>
+    #[serde(rename = "ChannelBans")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_bans: Option<Vec<ChannelBanSummary>>,
+    /// <p>The token passed by previous API calls until all requested bans are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelMembershipsForAppInstanceUserRequest {
+    /// <p>The ARN of the app instance users</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
+    /// <p>The maximum number of users that you want returned. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token returned from previous API requests until the number of channel memberships is reached.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelMembershipsForAppInstanceUserResponse {
+    /// <p>The token passed by previous API calls until all requested users are returned.</p>
+    #[serde(rename = "ChannelMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_memberships: Option<Vec<ChannelMembershipForAppInstanceUserSummary>>,
+    /// <p>The token passed by previous API calls until all requested users are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelMembershipsRequest {
+    /// <p>The maximum number of channel memberships that you want returned.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The maximum number of channel memberships that you want returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested channel memberships are returned..</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The membership type of a user, <code>DEFAULT</code> or <code>HIDDEN</code>. Default members are always returned as part of <code>ListChannelMemberships</code>. Hidden members are only returned if the type filter in <code>ListChannelMemberships</code> equals <code>HIDDEN</code>. Otherwise hidden members are not returned.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelMembershipsResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The information for the requested channel memberships.</p>
+    #[serde(rename = "ChannelMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_memberships: Option<Vec<ChannelMembershipSummary>>,
+    /// <p>The token passed by previous API calls until all requested channel memberships are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelMessagesRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The maximum number of messages that you want returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested messages are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The final or ending time stamp for your requested messages.</p>
+    #[serde(rename = "NotAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<f64>,
+    /// <p>The initial or starting time stamp for your requested messages. </p>
+    #[serde(rename = "NotBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<f64>,
+    /// <p>The order in which you want messages sorted. Default is Descending, based on time created.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelMessagesResponse {
+    /// <p>The ARN of the channel containing the requested messages.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The information about and content of each requested message.</p>
+    #[serde(rename = "ChannelMessages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_messages: Option<Vec<ChannelMessageSummary>>,
+    /// <p>The token passed by previous API calls until all requested messages are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelModeratorsRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The maximum number of moderators that you want returned.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested moderators are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelModeratorsResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The information about and names of each moderator.</p>
+    #[serde(rename = "ChannelModerators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_moderators: Option<Vec<ChannelModeratorSummary>>,
+    /// <p>The token passed by previous API calls until all requested moderators are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelsModeratedByAppInstanceUserRequest {
+    /// <p>The ARN of the user in the moderated channel.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
+    /// <p>The maximum number of channels in the request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token returned from previous API requests until the number of channels moderated by the user is reached.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelsModeratedByAppInstanceUserResponse {
+    /// <p>The moderated channels in the request.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<Vec<ChannelModeratedByAppInstanceUserSummary>>,
+    /// <p>The token returned from previous API requests until the number of channels moderated by the user is reached.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListChannelsRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The maximum number of channels that you want to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token passed by previous API calls until all requested channels are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The privacy setting. <code>PUBLIC</code> retrieves all the public channels. <code>PRIVATE</code> retrieves private channels. Only an app instance administrator can retrieve private channels.</p>
+    #[serde(rename = "Privacy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListChannelsResponse {
+    /// <p>The information about each channel.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<Vec<ChannelSummary>>,
+    /// <p>The token returned from previous API requests until the number of channels is reached.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1837,6 +3321,62 @@ pub struct ListRoomsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSipMediaApplicationsRequest {
+    /// <p>The maximum number of results to return in a single call. Defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSipMediaApplicationsResponse {
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>List of SIP media applications and application details.</p>
+    #[serde(rename = "SipMediaApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_applications: Option<Vec<SipMediaApplication>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSipRulesRequest {
+    /// <p>The maximum number of results to return in a single call. Defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSipRulesResponse {
+    /// <p>The token to use to retrieve the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>List of SIP rules and rule details.</p>
+    #[serde(rename = "SipRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_rules: Option<Vec<SipRule>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ARN.</p>
     #[serde(rename = "ResourceARN")]
@@ -2028,7 +3568,7 @@ pub struct Meeting {
     #[serde(rename = "MediaPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_placement: Option<MediaPlacement>,
-    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -2108,6 +3648,16 @@ pub struct MembershipItem {
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
+}
+
+/// <p>The endpoint of a meeting session.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MessagingSessionEndpoint {
+    /// <p>The URL of a meeting session endpoint.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 /// <p>A phone number for which an order has been placed.</p>
@@ -2408,6 +3958,50 @@ pub struct ProxySession {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAppInstanceRetentionSettingsRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The time in days to retain data. Data type: number.</p>
+    #[serde(rename = "AppInstanceRetentionSettings")]
+    pub app_instance_retention_settings: AppInstanceRetentionSettings,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAppInstanceRetentionSettingsResponse {
+    /// <p>The time in days to retain data. Data type: number.</p>
+    #[serde(rename = "AppInstanceRetentionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_retention_settings: Option<AppInstanceRetentionSettings>,
+    /// <p>The time at which the API deletes data.</p>
+    #[serde(rename = "InitiateDeletionTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initiate_deletion_timestamp: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAppInstanceStreamingConfigurationsRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The streaming configurations set for an app instance.</p>
+    #[serde(rename = "AppInstanceStreamingConfigurations")]
+    pub app_instance_streaming_configurations: Vec<AppInstanceStreamingConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutAppInstanceStreamingConfigurationsResponse {
+    /// <p>The streaming configurations of an app instance.</p>
+    #[serde(rename = "AppInstanceStreamingConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_streaming_configurations: Option<Vec<AppInstanceStreamingConfiguration>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
@@ -2455,6 +4049,29 @@ pub struct PutRetentionSettingsResponse {
     #[serde(rename = "RetentionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_settings: Option<RetentionSettings>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutSipMediaApplicationLoggingConfigurationRequest {
+    /// <p>The ID of the specified SIP media application</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+    /// <p>The actual logging configuration.</p>
+    #[serde(rename = "SipMediaApplicationLoggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_logging_configuration:
+        Option<SipMediaApplicationLoggingConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutSipMediaApplicationLoggingConfigurationResponse {
+    /// <p>The actual logging configuration.</p>
+    #[serde(rename = "SipMediaApplicationLoggingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_logging_configuration:
+        Option<SipMediaApplicationLoggingConfiguration>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2598,6 +4215,30 @@ pub struct PutVoiceConnectorTerminationResponse {
     #[serde(rename = "Termination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub termination: Option<Termination>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RedactChannelMessageRequest {
+    /// <p>The ARN of the channel containing the messages that you want to redact.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The ID of the message being redacted.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RedactChannelMessageResponse {
+    /// <p>The ARN of the channel containing the messages that you want to redact.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The ID of the message being redacted.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2811,6 +4452,43 @@ pub struct SearchAvailablePhoneNumbersResponse {
     pub e164_phone_numbers: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SendChannelMessageRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The <code>Idempotency</code> token for each client request.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The content of the message.</p>
+    #[serde(rename = "Content")]
+    pub content: String,
+    /// <p>The optional metadata for each message. </p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>Boolean that controls whether the message is persisted on the back end. Required.</p>
+    #[serde(rename = "Persistence")]
+    pub persistence: String,
+    /// <p>The type of message, <code>STANDARD</code> or <code>CONTROL</code>.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SendChannelMessageResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The ID string assigned to each message. </p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+}
+
 /// <p>An Active Directory (AD) group whose members are granted permission to act as delegates.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigninDelegateGroup {
@@ -2818,6 +4496,119 @@ pub struct SigninDelegateGroup {
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
+}
+
+/// <p>The SIP media application details, including name and endpoints. An AWS account can have multiple SIP media applications.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SipMediaApplication {
+    /// <p>The AWS Region in which the SIP media application is created.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The SIP media application creation timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>List of endpoints for SIP media application. Currently, only one endpoint per SIP media application is permitted.</p>
+    #[serde(rename = "Endpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoints: Option<Vec<SipMediaApplicationEndpoint>>,
+    /// <p>The name of the SIP media application.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_id: Option<String>,
+    /// <p>The SIP media application updated timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "UpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_timestamp: Option<f64>,
+}
+
+/// <p>A <code>Call</code> instance for a SIP media application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SipMediaApplicationCall {
+    /// <p>The transaction ID of a call.</p>
+    #[serde(rename = "TransactionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transaction_id: Option<String>,
+}
+
+/// <p>Endpoints to specify as part of a SIP media application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SipMediaApplicationEndpoint {
+    /// <p>Valid Amazon Resource Name (ARN) of the Lambda function of the same AWS Region where the SIP media application is created.</p>
+    #[serde(rename = "LambdaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_arn: Option<String>,
+}
+
+/// <p>Logging configuration of the SIP media application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SipMediaApplicationLoggingConfiguration {
+    /// <p>Enables application message logs for the SIP media application.</p>
+    #[serde(rename = "EnableSipMediaApplicationMessageLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_sip_media_application_message_logs: Option<bool>,
+}
+
+/// <p>The SIP rule details, including name, triggers, and target applications. An AWS account can have multiple SIP rules.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SipRule {
+    /// <p>The SIP rule created timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>Indicates if the SIP rule is enabled or disabled. You must disable a rule before you can delete it.</p>
+    #[serde(rename = "Disabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// <p>The name of the SIP rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The SIP rule ID.</p>
+    #[serde(rename = "SipRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_rule_id: Option<String>,
+    /// <p>List of SIP media applications with priority and AWS Region. You can only use one SIP application per AWS Region and priority combination.</p>
+    #[serde(rename = "TargetApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_applications: Option<Vec<SipRuleTargetApplication>>,
+    /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>.</p>
+    #[serde(rename = "TriggerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_type: Option<String>,
+    /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code>, then the value can be the outbound host name of the Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered when a SIP rule requests host name or <code>ToPhoneNumber</code> matches in the incoming SIP request.</p>
+    #[serde(rename = "TriggerValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_value: Option<String>,
+    /// <p>The SIP rule updated timestamp, in ISO 8601 format.</p>
+    #[serde(rename = "UpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_timestamp: Option<f64>,
+}
+
+/// <p>Target SIP media application along with other details like priority and AWS Region to be specified in the SIP rule. Only one SIP rule per AWS Region can be provided.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SipRuleTargetApplication {
+    /// <p>AWS Region of target application.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>Priority of the SIP media application in the target list.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_id: Option<String>,
 }
 
 /// <p>The streaming configuration associated with an Amazon Chime Voice Connector. Specifies whether media streaming is enabled for sending to Amazon Kinesis, and shows the retention period for the Amazon Kinesis data, in hours.</p>
@@ -2995,7 +4786,6 @@ pub struct UpdateAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountResponse {
-    /// <p>The updated Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
@@ -3015,6 +4805,54 @@ pub struct UpdateAccountSettingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountSettingsResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAppInstanceRequest {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    pub app_instance_arn: String,
+    /// <p>The metadata that you want to change.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name that you want to change.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAppInstanceResponse {
+    /// <p>The ARN of the app instance.</p>
+    #[serde(rename = "AppInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAppInstanceUserRequest {
+    /// <p>The ARN of the app instance user.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    pub app_instance_user_arn: String,
+    /// <p>The metadata of the app instance user.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The name of the app instance user.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAppInstanceUserResponse {
+    /// <p>The ARN of the app instance user.</p>
+    #[serde(rename = "AppInstanceUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_instance_user_arn: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3038,6 +4876,82 @@ pub struct UpdateBotResponse {
     #[serde(rename = "Bot")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bot: Option<Bot>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateChannelMessageRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The content of the message being updated.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The ID string of the message being updated.</p>
+    #[serde(rename = "MessageId")]
+    pub message_id: String,
+    /// <p>The metadata of the message being updated.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateChannelMessageResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    /// <p>The ID string of the message being updated.</p>
+    #[serde(rename = "MessageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateChannelReadMarkerRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateChannelReadMarkerResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateChannelRequest {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The metadata of the channel.</p>
+    #[serde(rename = "Metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<String>,
+    /// <p>The mode of the update request.</p>
+    #[serde(rename = "Mode")]
+    pub mode: String,
+    /// <p>The name of the channel.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateChannelResponse {
+    /// <p>The ARN of the channel.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3177,6 +5091,59 @@ pub struct UpdateRoomResponse {
     #[serde(rename = "Room")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room: Option<Room>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSipMediaApplicationRequest {
+    /// <p>The new set of endpoints for the specified SIP media application.</p>
+    #[serde(rename = "Endpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoints: Option<Vec<SipMediaApplicationEndpoint>>,
+    /// <p>The new name for the specified SIP media application.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The SIP media application ID.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSipMediaApplicationResponse {
+    /// <p>The updated SIP media application details.</p>
+    #[serde(rename = "SipMediaApplication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application: Option<SipMediaApplication>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSipRuleRequest {
+    /// <p>The new value specified to indicate whether the rule is disabled.</p>
+    #[serde(rename = "Disabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// <p>The new name for the specified SIP rule.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The SIP rule ID.</p>
+    #[serde(rename = "SipRuleId")]
+    pub sip_rule_id: String,
+    /// <p>The new value of the list of target applications.</p>
+    #[serde(rename = "TargetApplications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_applications: Option<Vec<SipRuleTargetApplication>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSipRuleResponse {
+    /// <p>Updated SIP rule details.</p>
+    #[serde(rename = "SipRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_rule: Option<SipRule>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3462,7 +5429,7 @@ pub enum AssociatePhoneNumberWithUserError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -3556,7 +5523,7 @@ pub enum AssociatePhoneNumbersWithVoiceConnectorError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -3662,7 +5629,7 @@ pub enum AssociatePhoneNumbersWithVoiceConnectorGroupError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -3770,7 +5737,7 @@ impl Error for AssociatePhoneNumbersWithVoiceConnectorGroupError {}
 pub enum AssociateSigninDelegateGroupsWithAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -3866,7 +5833,7 @@ impl Error for AssociateSigninDelegateGroupsWithAccountError {}
 pub enum BatchCreateAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -3944,7 +5911,7 @@ impl Error for BatchCreateAttendeeError {}
 pub enum BatchCreateRoomMembershipError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4020,7 +5987,7 @@ impl Error for BatchCreateRoomMembershipError {}
 pub enum BatchDeletePhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4094,7 +6061,7 @@ impl Error for BatchDeletePhoneNumberError {}
 pub enum BatchSuspendUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4160,7 +6127,7 @@ impl Error for BatchSuspendUserError {}
 pub enum BatchUnsuspendUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4230,7 +6197,7 @@ impl Error for BatchUnsuspendUserError {}
 pub enum BatchUpdatePhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4304,7 +6271,7 @@ impl Error for BatchUpdatePhoneNumberError {}
 pub enum BatchUpdateUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4370,7 +6337,7 @@ impl Error for BatchUpdateUserError {}
 pub enum CreateAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4431,12 +6398,254 @@ impl fmt::Display for CreateAccountError {
     }
 }
 impl Error for CreateAccountError {}
+/// Errors returned by CreateAppInstance
+#[derive(Debug, PartialEq)]
+pub enum CreateAppInstanceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateAppInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateAppInstanceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateAppInstanceError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateAppInstanceError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateAppInstanceError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateAppInstanceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateAppInstanceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateAppInstanceError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateAppInstanceError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAppInstanceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAppInstanceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAppInstanceError {}
+/// Errors returned by CreateAppInstanceAdmin
+#[derive(Debug, PartialEq)]
+pub enum CreateAppInstanceAdminError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateAppInstanceAdminError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceAdminError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateAppInstanceAdminError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateAppInstanceAdminError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAppInstanceAdminError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAppInstanceAdminError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceAdminError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAppInstanceAdminError {}
+/// Errors returned by CreateAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum CreateAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateAppInstanceUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateAppInstanceUserError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAppInstanceUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateAppInstanceUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAppInstanceUserError {}
 /// Errors returned by CreateAttendee
 #[derive(Debug, PartialEq)]
 pub enum CreateAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4510,7 +6719,7 @@ impl Error for CreateAttendeeError {}
 pub enum CreateBotError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4577,12 +6786,324 @@ impl fmt::Display for CreateBotError {
     }
 }
 impl Error for CreateBotError {}
+/// Errors returned by CreateChannel
+#[derive(Debug, PartialEq)]
+pub enum CreateChannelError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateChannelError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateChannelError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateChannelError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateChannelError::ResourceLimitExceeded(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateChannelError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateChannelError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateChannelError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateChannelError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateChannelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateChannelError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateChannelError {}
+/// Errors returned by CreateChannelBan
+#[derive(Debug, PartialEq)]
+pub enum CreateChannelBanError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateChannelBanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelBanError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateChannelBanError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateChannelBanError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateChannelBanError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateChannelBanError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateChannelBanError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateChannelBanError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateChannelBanError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateChannelBanError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateChannelBanError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateChannelBanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateChannelBanError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateChannelBanError {}
+/// Errors returned by CreateChannelMembership
+#[derive(Debug, PartialEq)]
+pub enum CreateChannelMembershipError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateChannelMembershipError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateChannelMembershipError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateChannelMembershipError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateChannelMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateChannelMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateChannelMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateChannelMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateChannelMembershipError {}
+/// Errors returned by CreateChannelModerator
+#[derive(Debug, PartialEq)]
+pub enum CreateChannelModeratorError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateChannelModeratorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelModeratorError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateChannelModeratorError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateChannelModeratorError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateChannelModeratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateChannelModeratorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateChannelModeratorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateChannelModeratorError {}
 /// Errors returned by CreateMeeting
 #[derive(Debug, PartialEq)]
 pub enum CreateMeetingError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -4643,12 +7164,86 @@ impl fmt::Display for CreateMeetingError {
     }
 }
 impl Error for CreateMeetingError {}
+/// Errors returned by CreateMeetingDialOut
+#[derive(Debug, PartialEq)]
+pub enum CreateMeetingDialOutError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateMeetingDialOutError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMeetingDialOutError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateMeetingDialOutError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateMeetingDialOutError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMeetingDialOutError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateMeetingDialOutError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateMeetingDialOutError {}
 /// Errors returned by CreateMeetingWithAttendees
 #[derive(Debug, PartialEq)]
 pub enum CreateMeetingWithAttendeesError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -4738,7 +7333,7 @@ pub enum CreatePhoneNumberOrderError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -4818,7 +7413,7 @@ impl Error for CreatePhoneNumberOrderError {}
 pub enum CreateProxySessionError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4888,7 +7483,7 @@ impl Error for CreateProxySessionError {}
 pub enum CreateRoomError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -4962,7 +7557,7 @@ pub enum CreateRoomMembershipError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5041,6 +7636,268 @@ impl fmt::Display for CreateRoomMembershipError {
     }
 }
 impl Error for CreateRoomMembershipError {}
+/// Errors returned by CreateSipMediaApplication
+#[derive(Debug, PartialEq)]
+pub enum CreateSipMediaApplicationError {
+    /// <p>You don't have permissions to perform the requested operation.</p>
+    AccessDenied(String),
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateSipMediaApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSipMediaApplicationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateSipMediaApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSipMediaApplicationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSipMediaApplicationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateSipMediaApplicationError {}
+/// Errors returned by CreateSipMediaApplicationCall
+#[derive(Debug, PartialEq)]
+pub enum CreateSipMediaApplicationCallError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateSipMediaApplicationCallError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateSipMediaApplicationCallError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationCallError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateSipMediaApplicationCallError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationCallError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationCallError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationCallError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationCallError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        CreateSipMediaApplicationCallError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateSipMediaApplicationCallError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSipMediaApplicationCallError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationCallError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationCallError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSipMediaApplicationCallError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateSipMediaApplicationCallError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSipMediaApplicationCallError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSipMediaApplicationCallError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateSipMediaApplicationCallError {}
+/// Errors returned by CreateSipRule
+#[derive(Debug, PartialEq)]
+pub enum CreateSipRuleError {
+    /// <p>You don't have permissions to perform the requested operation.</p>
+    AccessDenied(String),
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateSipRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSipRuleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateSipRuleError::AccessDenied(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateSipRuleError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateSipRuleError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateSipRuleError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateSipRuleError::ResourceLimitExceeded(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateSipRuleError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateSipRuleError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateSipRuleError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(CreateSipRuleError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateSipRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSipRuleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateSipRuleError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateSipRuleError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -5048,7 +7905,7 @@ pub enum CreateUserError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5120,7 +7977,7 @@ pub enum CreateVoiceConnectorError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -5200,7 +8057,7 @@ pub enum CreateVoiceConnectorGroupError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -5286,7 +8143,7 @@ impl Error for CreateVoiceConnectorGroupError {}
 pub enum DeleteAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5353,12 +8210,322 @@ impl fmt::Display for DeleteAccountError {
     }
 }
 impl Error for DeleteAccountError {}
+/// Errors returned by DeleteAppInstance
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppInstanceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteAppInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppInstanceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppInstanceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAppInstanceError {}
+/// Errors returned by DeleteAppInstanceAdmin
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppInstanceAdminError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteAppInstanceAdminError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceAdminError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceAdminError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceAdminError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppInstanceAdminError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppInstanceAdminError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceAdminError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAppInstanceAdminError {}
+/// Errors returned by DeleteAppInstanceStreamingConfigurations
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppInstanceStreamingConfigurationsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteAppInstanceStreamingConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAppInstanceStreamingConfigurationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DeleteAppInstanceStreamingConfigurationsError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppInstanceStreamingConfigurationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppInstanceStreamingConfigurationsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteAppInstanceStreamingConfigurationsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteAppInstanceStreamingConfigurationsError {}
+/// Errors returned by DeleteAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum DeleteAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteAppInstanceUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteAppInstanceUserError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAppInstanceUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteAppInstanceUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAppInstanceUserError {}
 /// Errors returned by DeleteAttendee
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5419,12 +8586,334 @@ impl fmt::Display for DeleteAttendeeError {
     }
 }
 impl Error for DeleteAttendeeError {}
+/// Errors returned by DeleteChannel
+#[derive(Debug, PartialEq)]
+pub enum DeleteChannelError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteChannelError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteChannelError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteChannelError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteChannelError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteChannelError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteChannelError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteChannelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteChannelError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteChannelError {}
+/// Errors returned by DeleteChannelBan
+#[derive(Debug, PartialEq)]
+pub enum DeleteChannelBanError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteChannelBanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelBanError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteChannelBanError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteChannelBanError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteChannelBanError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteChannelBanError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteChannelBanError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteChannelBanError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteChannelBanError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteChannelBanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelBanError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelBanError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelBanError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelBanError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteChannelBanError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteChannelBanError {}
+/// Errors returned by DeleteChannelMembership
+#[derive(Debug, PartialEq)]
+pub enum DeleteChannelMembershipError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteChannelMembershipError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteChannelMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteChannelMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteChannelMembershipError {}
+/// Errors returned by DeleteChannelMessage
+#[derive(Debug, PartialEq)]
+pub enum DeleteChannelMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteChannelMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteChannelMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteChannelMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteChannelMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteChannelMessageError {}
+/// Errors returned by DeleteChannelModerator
+#[derive(Debug, PartialEq)]
+pub enum DeleteChannelModeratorError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteChannelModeratorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelModeratorError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteChannelModeratorError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteChannelModeratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteChannelModeratorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelModeratorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteChannelModeratorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteChannelModeratorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteChannelModeratorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteChannelModeratorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteChannelModeratorError {}
 /// Errors returned by DeleteEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventsConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The request exceeds the resource limit.</p>
     ResourceLimitExceeded(String),
@@ -5496,7 +8985,7 @@ impl Error for DeleteEventsConfigurationError {}
 pub enum DeleteMeetingError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5562,7 +9051,7 @@ impl Error for DeleteMeetingError {}
 pub enum DeletePhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5632,7 +9121,7 @@ impl Error for DeletePhoneNumberError {}
 pub enum DeleteProxySessionError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5702,7 +9191,7 @@ impl Error for DeleteProxySessionError {}
 pub enum DeleteRoomError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5768,7 +9257,7 @@ impl Error for DeleteRoomError {}
 pub enum DeleteRoomMembershipError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5835,6 +9324,160 @@ impl fmt::Display for DeleteRoomMembershipError {
     }
 }
 impl Error for DeleteRoomMembershipError {}
+/// Errors returned by DeleteSipMediaApplication
+#[derive(Debug, PartialEq)]
+pub enum DeleteSipMediaApplicationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteSipMediaApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSipMediaApplicationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteSipMediaApplicationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteSipMediaApplicationError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DeleteSipMediaApplicationError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteSipMediaApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSipMediaApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteSipMediaApplicationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSipMediaApplicationError {}
+/// Errors returned by DeleteSipRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteSipRuleError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteSipRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSipRuleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteSipRuleError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteSipRuleError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteSipRuleError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteSipRuleError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DeleteSipRuleError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteSipRuleError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DeleteSipRuleError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DeleteSipRuleError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteSipRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSipRuleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DeleteSipRuleError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSipRuleError {}
 /// Errors returned by DeleteVoiceConnector
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorError {
@@ -5842,7 +9485,7 @@ pub enum DeleteVoiceConnectorError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -5918,7 +9561,7 @@ impl Error for DeleteVoiceConnectorError {}
 pub enum DeleteVoiceConnectorEmergencyCallingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6024,7 +9667,7 @@ pub enum DeleteVoiceConnectorGroupError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6104,7 +9747,7 @@ impl Error for DeleteVoiceConnectorGroupError {}
 pub enum DeleteVoiceConnectorOriginationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6194,7 +9837,7 @@ impl Error for DeleteVoiceConnectorOriginationError {}
 pub enum DeleteVoiceConnectorProxyError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6270,7 +9913,7 @@ impl Error for DeleteVoiceConnectorProxyError {}
 pub enum DeleteVoiceConnectorStreamingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6370,7 +10013,7 @@ impl Error for DeleteVoiceConnectorStreamingConfigurationError {}
 pub enum DeleteVoiceConnectorTerminationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6460,7 +10103,7 @@ impl Error for DeleteVoiceConnectorTerminationError {}
 pub enum DeleteVoiceConnectorTerminationCredentialsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6555,12 +10198,668 @@ impl fmt::Display for DeleteVoiceConnectorTerminationCredentialsError {
     }
 }
 impl Error for DeleteVoiceConnectorTerminationCredentialsError {}
+/// Errors returned by DescribeAppInstance
+#[derive(Debug, PartialEq)]
+pub enum DescribeAppInstanceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeAppInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAppInstanceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAppInstanceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAppInstanceError {}
+/// Errors returned by DescribeAppInstanceAdmin
+#[derive(Debug, PartialEq)]
+pub enum DescribeAppInstanceAdminError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeAppInstanceAdminError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceAdminError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceAdminError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAppInstanceAdminError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAppInstanceAdminError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceAdminError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceAdminError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceAdminError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceAdminError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceAdminError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAppInstanceAdminError {}
+/// Errors returned by DescribeAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum DescribeAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeAppInstanceUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeAppInstanceUserError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAppInstanceUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeAppInstanceUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAppInstanceUserError {}
+/// Errors returned by DescribeChannel
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeChannelError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeChannelError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeChannelError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeChannelError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeChannelError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeChannelError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeChannelError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeChannelError {}
+/// Errors returned by DescribeChannelBan
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelBanError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelBanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelBanError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeChannelBanError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeChannelBanError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeChannelBanError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeChannelBanError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeChannelBanError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeChannelBanError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeChannelBanError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelBanError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelBanError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeChannelBanError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeChannelBanError {}
+/// Errors returned by DescribeChannelMembership
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelMembershipError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelMembershipError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeChannelMembershipError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeChannelMembershipError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeChannelMembershipError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeChannelMembershipError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeChannelMembershipError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeChannelMembershipError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeChannelMembershipError {}
+/// Errors returned by DescribeChannelMembershipForAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelMembershipForAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelMembershipForAppInstanceUserError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeChannelMembershipForAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::Forbidden(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DescribeChannelMembershipForAppInstanceUserError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelMembershipForAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelMembershipForAppInstanceUserError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelMembershipForAppInstanceUserError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelMembershipForAppInstanceUserError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelMembershipForAppInstanceUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelMembershipForAppInstanceUserError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelMembershipForAppInstanceUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeChannelMembershipForAppInstanceUserError {}
+/// Errors returned by DescribeChannelModeratedByAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelModeratedByAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelModeratedByAppInstanceUserError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeChannelModeratedByAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::Forbidden(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DescribeChannelModeratedByAppInstanceUserError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelModeratedByAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelModeratedByAppInstanceUserError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelModeratedByAppInstanceUserError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelModeratedByAppInstanceUserError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelModeratedByAppInstanceUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelModeratedByAppInstanceUserError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeChannelModeratedByAppInstanceUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeChannelModeratedByAppInstanceUserError {}
+/// Errors returned by DescribeChannelModerator
+#[derive(Debug, PartialEq)]
+pub enum DescribeChannelModeratorError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DescribeChannelModeratorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelModeratorError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(DescribeChannelModeratorError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeChannelModeratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeChannelModeratorError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            DescribeChannelModeratorError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeChannelModeratorError {}
 /// Errors returned by DisassociatePhoneNumberFromUser
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePhoneNumberFromUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6650,7 +10949,7 @@ impl Error for DisassociatePhoneNumberFromUserError {}
 pub enum DisassociatePhoneNumbersFromVoiceConnectorError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6750,7 +11049,7 @@ impl Error for DisassociatePhoneNumbersFromVoiceConnectorError {}
 pub enum DisassociatePhoneNumbersFromVoiceConnectorGroupError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6854,7 +11153,7 @@ impl Error for DisassociatePhoneNumbersFromVoiceConnectorGroupError {}
 pub enum DisassociateSigninDelegateGroupsFromAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -6954,7 +11253,7 @@ impl Error for DisassociateSigninDelegateGroupsFromAccountError {}
 pub enum GetAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7020,7 +11319,7 @@ impl Error for GetAccountError {}
 pub enum GetAccountSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7085,12 +11384,198 @@ impl fmt::Display for GetAccountSettingsError {
     }
 }
 impl Error for GetAccountSettingsError {}
+/// Errors returned by GetAppInstanceRetentionSettings
+#[derive(Debug, PartialEq)]
+pub enum GetAppInstanceRetentionSettingsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetAppInstanceRetentionSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAppInstanceRetentionSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetAppInstanceRetentionSettingsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetAppInstanceRetentionSettingsError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetAppInstanceRetentionSettingsError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceRetentionSettingsError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceRetentionSettingsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceRetentionSettingsError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceRetentionSettingsError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAppInstanceRetentionSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAppInstanceRetentionSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetAppInstanceRetentionSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetAppInstanceRetentionSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetAppInstanceRetentionSettingsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceRetentionSettingsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceRetentionSettingsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceRetentionSettingsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetAppInstanceRetentionSettingsError {}
+/// Errors returned by GetAppInstanceStreamingConfigurations
+#[derive(Debug, PartialEq)]
+pub enum GetAppInstanceStreamingConfigurationsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetAppInstanceStreamingConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAppInstanceStreamingConfigurationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetAppInstanceStreamingConfigurationsError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAppInstanceStreamingConfigurationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAppInstanceStreamingConfigurationsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAppInstanceStreamingConfigurationsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetAppInstanceStreamingConfigurationsError {}
 /// Errors returned by GetAttendee
 #[derive(Debug, PartialEq)]
 pub enum GetAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7156,7 +11641,7 @@ impl Error for GetAttendeeError {}
 pub enum GetBotError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7215,12 +11700,82 @@ impl fmt::Display for GetBotError {
     }
 }
 impl Error for GetBotError {}
+/// Errors returned by GetChannelMessage
+#[derive(Debug, PartialEq)]
+pub enum GetChannelMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetChannelMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChannelMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetChannelMessageError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetChannelMessageError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetChannelMessageError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetChannelMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetChannelMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetChannelMessageError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetChannelMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetChannelMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetChannelMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetChannelMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetChannelMessageError {}
 /// Errors returned by GetEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetEventsConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7294,7 +11849,7 @@ impl Error for GetEventsConfigurationError {}
 pub enum GetGlobalSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -7358,7 +11913,7 @@ impl Error for GetGlobalSettingsError {}
 pub enum GetMeetingError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7419,12 +11974,82 @@ impl fmt::Display for GetMeetingError {
     }
 }
 impl Error for GetMeetingError {}
+/// Errors returned by GetMessagingSessionEndpoint
+#[derive(Debug, PartialEq)]
+pub enum GetMessagingSessionEndpointError {
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetMessagingSessionEndpointError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetMessagingSessionEndpointError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetMessagingSessionEndpointError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetMessagingSessionEndpointError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetMessagingSessionEndpointError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetMessagingSessionEndpointError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetMessagingSessionEndpointError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetMessagingSessionEndpointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMessagingSessionEndpointError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetMessagingSessionEndpointError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetMessagingSessionEndpointError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMessagingSessionEndpointError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetMessagingSessionEndpointError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetMessagingSessionEndpointError {}
 /// Errors returned by GetPhoneNumber
 #[derive(Debug, PartialEq)]
 pub enum GetPhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7490,7 +12115,7 @@ impl Error for GetPhoneNumberError {}
 pub enum GetPhoneNumberOrderError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7560,7 +12185,7 @@ impl Error for GetPhoneNumberOrderError {}
 pub enum GetPhoneNumberSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -7628,7 +12253,7 @@ impl Error for GetPhoneNumberSettingsError {}
 pub enum GetProxySessionError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7694,7 +12319,7 @@ impl Error for GetProxySessionError {}
 pub enum GetRetentionSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7766,7 +12391,7 @@ impl Error for GetRetentionSettingsError {}
 pub enum GetRoomError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7827,12 +12452,252 @@ impl fmt::Display for GetRoomError {
     }
 }
 impl Error for GetRoomError {}
+/// Errors returned by GetSipMediaApplication
+#[derive(Debug, PartialEq)]
+pub enum GetSipMediaApplicationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetSipMediaApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSipMediaApplicationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetSipMediaApplicationError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSipMediaApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSipMediaApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetSipMediaApplicationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSipMediaApplicationError {}
+/// Errors returned by GetSipMediaApplicationLoggingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetSipMediaApplicationLoggingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetSipMediaApplicationLoggingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSipMediaApplicationLoggingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetSipMediaApplicationLoggingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSipMediaApplicationLoggingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSipMediaApplicationLoggingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSipMediaApplicationLoggingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetSipMediaApplicationLoggingConfigurationError {}
+/// Errors returned by GetSipRule
+#[derive(Debug, PartialEq)]
+pub enum GetSipRuleError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetSipRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSipRuleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetSipRuleError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetSipRuleError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetSipRuleError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(GetSipRuleError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetSipRuleError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(GetSipRuleError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(GetSipRuleError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetSipRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSipRuleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            GetSipRuleError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSipRuleError {}
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7898,7 +12763,7 @@ impl Error for GetUserError {}
 pub enum GetUserSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -7964,7 +12829,7 @@ impl Error for GetUserSettingsError {}
 pub enum GetVoiceConnectorError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8034,7 +12899,7 @@ impl Error for GetVoiceConnectorError {}
 pub enum GetVoiceConnectorEmergencyCallingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8138,7 +13003,7 @@ impl Error for GetVoiceConnectorEmergencyCallingConfigurationError {}
 pub enum GetVoiceConnectorGroupError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8212,7 +13077,7 @@ impl Error for GetVoiceConnectorGroupError {}
 pub enum GetVoiceConnectorLoggingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8308,7 +13173,7 @@ impl Error for GetVoiceConnectorLoggingConfigurationError {}
 pub enum GetVoiceConnectorOriginationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8394,7 +13259,7 @@ impl Error for GetVoiceConnectorOriginationError {}
 pub enum GetVoiceConnectorProxyError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8468,7 +13333,7 @@ impl Error for GetVoiceConnectorProxyError {}
 pub enum GetVoiceConnectorStreamingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8564,7 +13429,7 @@ impl Error for GetVoiceConnectorStreamingConfigurationError {}
 pub enum GetVoiceConnectorTerminationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8650,7 +13515,7 @@ impl Error for GetVoiceConnectorTerminationError {}
 pub enum GetVoiceConnectorTerminationHealthError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8742,7 +13607,7 @@ impl Error for GetVoiceConnectorTerminationHealthError {}
 pub enum InviteUsersError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8808,7 +13673,7 @@ impl Error for InviteUsersError {}
 pub enum ListAccountsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8869,12 +13734,214 @@ impl fmt::Display for ListAccountsError {
     }
 }
 impl Error for ListAccountsError {}
+/// Errors returned by ListAppInstanceAdmins
+#[derive(Debug, PartialEq)]
+pub enum ListAppInstanceAdminsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListAppInstanceAdminsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstanceAdminsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::Forbidden(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListAppInstanceAdminsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAppInstanceAdminsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAppInstanceAdminsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceAdminsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAppInstanceAdminsError {}
+/// Errors returned by ListAppInstanceUsers
+#[derive(Debug, PartialEq)]
+pub enum ListAppInstanceUsersError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListAppInstanceUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstanceUsersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListAppInstanceUsersError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAppInstanceUsersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAppInstanceUsersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceUsersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceUsersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceUsersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceUsersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAppInstanceUsersError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAppInstanceUsersError {}
+/// Errors returned by ListAppInstances
+#[derive(Debug, PartialEq)]
+pub enum ListAppInstancesError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListAppInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppInstancesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListAppInstancesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListAppInstancesError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListAppInstancesError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListAppInstancesError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListAppInstancesError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListAppInstancesError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAppInstancesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAppInstancesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListAppInstancesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListAppInstancesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListAppInstancesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListAppInstancesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListAppInstancesError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAppInstancesError {}
 /// Errors returned by ListAttendeeTags
 #[derive(Debug, PartialEq)]
 pub enum ListAttendeeTagsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -8940,7 +14007,7 @@ impl Error for ListAttendeeTagsError {}
 pub enum ListAttendeesError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9006,7 +14073,7 @@ impl Error for ListAttendeesError {}
 pub enum ListBotsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9067,12 +14134,504 @@ impl fmt::Display for ListBotsError {
     }
 }
 impl Error for ListBotsError {}
+/// Errors returned by ListChannelBans
+#[derive(Debug, PartialEq)]
+pub enum ListChannelBansError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelBansError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelBansError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListChannelBansError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListChannelBansError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListChannelBansError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListChannelBansError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListChannelBansError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListChannelBansError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelBansError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelBansError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelBansError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelBansError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelBansError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelBansError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListChannelBansError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListChannelBansError {}
+/// Errors returned by ListChannelMemberships
+#[derive(Debug, PartialEq)]
+pub enum ListChannelMembershipsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelMembershipsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelMembershipsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListChannelMembershipsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelMembershipsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelMembershipsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelMembershipsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelMembershipsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelMembershipsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelMembershipsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListChannelMembershipsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListChannelMembershipsError {}
+/// Errors returned by ListChannelMembershipsForAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum ListChannelMembershipsForAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelMembershipsForAppInstanceUserError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListChannelMembershipsForAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::Forbidden(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        ListChannelMembershipsForAppInstanceUserError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelMembershipsForAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelMembershipsForAppInstanceUserError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelMembershipsForAppInstanceUserError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelMembershipsForAppInstanceUserError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelMembershipsForAppInstanceUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelMembershipsForAppInstanceUserError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelMembershipsForAppInstanceUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListChannelMembershipsForAppInstanceUserError {}
+/// Errors returned by ListChannelMessages
+#[derive(Debug, PartialEq)]
+pub enum ListChannelMessagesError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelMessagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelMessagesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListChannelMessagesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListChannelMessagesError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListChannelMessagesError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListChannelMessagesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListChannelMessagesError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListChannelMessagesError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelMessagesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelMessagesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelMessagesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelMessagesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelMessagesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelMessagesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListChannelMessagesError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListChannelMessagesError {}
+/// Errors returned by ListChannelModerators
+#[derive(Debug, PartialEq)]
+pub enum ListChannelModeratorsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelModeratorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelModeratorsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListChannelModeratorsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelModeratorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelModeratorsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelModeratorsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelModeratorsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelModeratorsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelModeratorsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListChannelModeratorsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListChannelModeratorsError {}
+/// Errors returned by ListChannels
+#[derive(Debug, PartialEq)]
+pub enum ListChannelsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListChannelsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListChannelsError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListChannelsError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListChannelsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListChannelsError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListChannelsError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListChannelsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListChannelsError {}
+/// Errors returned by ListChannelsModeratedByAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum ListChannelsModeratedByAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListChannelsModeratedByAppInstanceUserError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListChannelsModeratedByAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::Forbidden(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        ListChannelsModeratedByAppInstanceUserError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListChannelsModeratedByAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListChannelsModeratedByAppInstanceUserError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelsModeratedByAppInstanceUserError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelsModeratedByAppInstanceUserError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelsModeratedByAppInstanceUserError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelsModeratedByAppInstanceUserError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListChannelsModeratedByAppInstanceUserError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListChannelsModeratedByAppInstanceUserError {}
 /// Errors returned by ListMeetingTags
 #[derive(Debug, PartialEq)]
 pub enum ListMeetingTagsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9138,7 +14697,7 @@ impl Error for ListMeetingTagsError {}
 pub enum ListMeetingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -9198,7 +14757,7 @@ impl Error for ListMeetingsError {}
 pub enum ListPhoneNumberOrdersError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -9266,7 +14825,7 @@ impl Error for ListPhoneNumberOrdersError {}
 pub enum ListPhoneNumbersError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -9326,7 +14885,7 @@ impl Error for ListPhoneNumbersError {}
 pub enum ListProxySessionsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9396,7 +14955,7 @@ impl Error for ListProxySessionsError {}
 pub enum ListRoomMembershipsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9466,7 +15025,7 @@ impl Error for ListRoomMembershipsError {}
 pub enum ListRoomsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9527,12 +15086,140 @@ impl fmt::Display for ListRoomsError {
     }
 }
 impl Error for ListRoomsError {}
+/// Errors returned by ListSipMediaApplications
+#[derive(Debug, PartialEq)]
+pub enum ListSipMediaApplicationsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListSipMediaApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSipMediaApplicationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListSipMediaApplicationsError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSipMediaApplicationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSipMediaApplicationsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListSipMediaApplicationsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListSipMediaApplicationsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListSipMediaApplicationsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListSipMediaApplicationsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListSipMediaApplicationsError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSipMediaApplicationsError {}
+/// Errors returned by ListSipRules
+#[derive(Debug, PartialEq)]
+pub enum ListSipRulesError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListSipRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSipRulesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListSipRulesError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListSipRulesError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(ListSipRulesError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListSipRulesError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(ListSipRulesError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(ListSipRulesError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSipRulesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSipRulesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListSipRulesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListSipRulesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            ListSipRulesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListSipRulesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            ListSipRulesError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSipRulesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9596,7 +15283,7 @@ impl Error for ListTagsForResourceError {}
 pub enum ListUsersError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9662,7 +15349,7 @@ impl Error for ListUsersError {}
 pub enum ListVoiceConnectorGroupsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -9730,7 +15417,7 @@ impl Error for ListVoiceConnectorGroupsError {}
 pub enum ListVoiceConnectorTerminationCredentialsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9826,7 +15513,7 @@ impl Error for ListVoiceConnectorTerminationCredentialsError {}
 pub enum ListVoiceConnectorsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -9890,7 +15577,7 @@ impl Error for ListVoiceConnectorsError {}
 pub enum LogoutUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -9951,12 +15638,206 @@ impl fmt::Display for LogoutUserError {
     }
 }
 impl Error for LogoutUserError {}
+/// Errors returned by PutAppInstanceRetentionSettings
+#[derive(Debug, PartialEq)]
+pub enum PutAppInstanceRetentionSettingsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutAppInstanceRetentionSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutAppInstanceRetentionSettingsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PutAppInstanceRetentionSettingsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(PutAppInstanceRetentionSettingsError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutAppInstanceRetentionSettingsError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutAppInstanceRetentionSettingsError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceRetentionSettingsError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceRetentionSettingsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceRetentionSettingsError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceRetentionSettingsError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAppInstanceRetentionSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAppInstanceRetentionSettingsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutAppInstanceRetentionSettingsError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutAppInstanceRetentionSettingsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutAppInstanceRetentionSettingsError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutAppInstanceRetentionSettingsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceRetentionSettingsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceRetentionSettingsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceRetentionSettingsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutAppInstanceRetentionSettingsError {}
+/// Errors returned by PutAppInstanceStreamingConfigurations
+#[derive(Debug, PartialEq)]
+pub enum PutAppInstanceStreamingConfigurationsError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutAppInstanceStreamingConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutAppInstanceStreamingConfigurationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        PutAppInstanceStreamingConfigurationsError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAppInstanceStreamingConfigurationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAppInstanceStreamingConfigurationsError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutAppInstanceStreamingConfigurationsError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutAppInstanceStreamingConfigurationsError {}
 /// Errors returned by PutEventsConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutEventsConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10032,7 +15913,7 @@ pub enum PutRetentionSettingsError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10103,12 +15984,112 @@ impl fmt::Display for PutRetentionSettingsError {
     }
 }
 impl Error for PutRetentionSettingsError {}
+/// Errors returned by PutSipMediaApplicationLoggingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutSipMediaApplicationLoggingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutSipMediaApplicationLoggingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutSipMediaApplicationLoggingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        PutSipMediaApplicationLoggingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutSipMediaApplicationLoggingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutSipMediaApplicationLoggingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutSipMediaApplicationLoggingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutSipMediaApplicationLoggingConfigurationError {}
 /// Errors returned by PutVoiceConnectorEmergencyCallingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorEmergencyCallingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10212,7 +16193,7 @@ impl Error for PutVoiceConnectorEmergencyCallingConfigurationError {}
 pub enum PutVoiceConnectorLoggingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10308,7 +16289,7 @@ impl Error for PutVoiceConnectorLoggingConfigurationError {}
 pub enum PutVoiceConnectorOriginationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10396,7 +16377,7 @@ pub enum PutVoiceConnectorProxyError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10474,7 +16455,7 @@ impl Error for PutVoiceConnectorProxyError {}
 pub enum PutVoiceConnectorStreamingConfigurationError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10572,7 +16553,7 @@ pub enum PutVoiceConnectorTerminationError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10664,7 +16645,7 @@ impl Error for PutVoiceConnectorTerminationError {}
 pub enum PutVoiceConnectorTerminationCredentialsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10755,12 +16736,78 @@ impl fmt::Display for PutVoiceConnectorTerminationCredentialsError {
     }
 }
 impl Error for PutVoiceConnectorTerminationCredentialsError {}
+/// Errors returned by RedactChannelMessage
+#[derive(Debug, PartialEq)]
+pub enum RedactChannelMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl RedactChannelMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RedactChannelMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RedactChannelMessageError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RedactChannelMessageError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(RedactChannelMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RedactChannelMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(RedactChannelMessageError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(RedactChannelMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RedactChannelMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RedactChannelMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RedactChannelMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RedactChannelMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            RedactChannelMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RedactChannelMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            RedactChannelMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RedactChannelMessageError {}
 /// Errors returned by RedactConversationMessage
 #[derive(Debug, PartialEq)]
 pub enum RedactConversationMessageError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10836,7 +16883,7 @@ impl Error for RedactConversationMessageError {}
 pub enum RedactRoomMessageError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10906,7 +16953,7 @@ impl Error for RedactRoomMessageError {}
 pub enum RegenerateSecurityTokenError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -10980,7 +17027,7 @@ impl Error for RegenerateSecurityTokenError {}
 pub enum ResetPersonalPINError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11046,7 +17093,7 @@ impl Error for ResetPersonalPINError {}
 pub enum RestorePhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11126,7 +17173,7 @@ pub enum SearchAvailablePhoneNumbersError {
     AccessDenied(String),
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -11205,12 +17252,82 @@ impl fmt::Display for SearchAvailablePhoneNumbersError {
     }
 }
 impl Error for SearchAvailablePhoneNumbersError {}
+/// Errors returned by SendChannelMessage
+#[derive(Debug, PartialEq)]
+pub enum SendChannelMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl SendChannelMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendChannelMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(SendChannelMessageError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(SendChannelMessageError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(SendChannelMessageError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(SendChannelMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(SendChannelMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(SendChannelMessageError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(SendChannelMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SendChannelMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SendChannelMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::Conflict(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            SendChannelMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SendChannelMessageError {}
 /// Errors returned by TagAttendee
 #[derive(Debug, PartialEq)]
 pub enum TagAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11282,7 +17399,7 @@ impl Error for TagAttendeeError {}
 pub enum TagMeetingError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11354,7 +17471,7 @@ impl Error for TagMeetingError {}
 pub enum TagResourceError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11414,7 +17531,7 @@ impl Error for TagResourceError {}
 pub enum UntagAttendeeError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11480,7 +17597,7 @@ impl Error for UntagAttendeeError {}
 pub enum UntagMeetingError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11546,7 +17663,7 @@ impl Error for UntagMeetingError {}
 pub enum UntagResourceError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11606,7 +17723,7 @@ impl Error for UntagResourceError {}
 pub enum UpdateAccountError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11674,7 +17791,7 @@ pub enum UpdateAccountSettingsError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11747,12 +17864,156 @@ impl fmt::Display for UpdateAccountSettingsError {
     }
 }
 impl Error for UpdateAccountSettingsError {}
+/// Errors returned by UpdateAppInstance
+#[derive(Debug, PartialEq)]
+pub enum UpdateAppInstanceError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateAppInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppInstanceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateAppInstanceError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAppInstanceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAppInstanceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAppInstanceError {}
+/// Errors returned by UpdateAppInstanceUser
+#[derive(Debug, PartialEq)]
+pub enum UpdateAppInstanceUserError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateAppInstanceUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppInstanceUserError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateAppInstanceUserError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAppInstanceUserError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAppInstanceUserError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateAppInstanceUserError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAppInstanceUserError {}
 /// Errors returned by UpdateBot
 #[derive(Debug, PartialEq)]
 pub enum UpdateBotError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11813,12 +18074,224 @@ impl fmt::Display for UpdateBotError {
     }
 }
 impl Error for UpdateBotError {}
+/// Errors returned by UpdateChannel
+#[derive(Debug, PartialEq)]
+pub enum UpdateChannelError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateChannelError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateChannelError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateChannelError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateChannelError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateChannelError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateChannelError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateChannelError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateChannelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateChannelError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateChannelError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateChannelError {}
+/// Errors returned by UpdateChannelMessage
+#[derive(Debug, PartialEq)]
+pub enum UpdateChannelMessageError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateChannelMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelMessageError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateChannelMessageError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateChannelMessageError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateChannelMessageError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateChannelMessageError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateChannelMessageError {}
+/// Errors returned by UpdateChannelReadMarker
+#[derive(Debug, PartialEq)]
+pub enum UpdateChannelReadMarkerError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateChannelReadMarkerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelReadMarkerError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::Forbidden(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateChannelReadMarkerError::UnauthorizedClient(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateChannelReadMarkerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateChannelReadMarkerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateChannelReadMarkerError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateChannelReadMarkerError {}
 /// Errors returned by UpdateGlobalSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateGlobalSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -11884,7 +18357,7 @@ impl Error for UpdateGlobalSettingsError {}
 pub enum UpdatePhoneNumberError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -11954,7 +18427,7 @@ impl Error for UpdatePhoneNumberError {}
 pub enum UpdatePhoneNumberSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
@@ -12024,7 +18497,7 @@ impl Error for UpdatePhoneNumberSettingsError {}
 pub enum UpdateProxySessionError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12094,7 +18567,7 @@ impl Error for UpdateProxySessionError {}
 pub enum UpdateRoomError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12160,7 +18633,7 @@ impl Error for UpdateRoomError {}
 pub enum UpdateRoomMembershipError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12227,12 +18700,172 @@ impl fmt::Display for UpdateRoomMembershipError {
     }
 }
 impl Error for UpdateRoomMembershipError {}
+/// Errors returned by UpdateSipMediaApplication
+#[derive(Debug, PartialEq)]
+pub enum UpdateSipMediaApplicationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateSipMediaApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSipMediaApplicationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::NotFound(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSipMediaApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSipMediaApplicationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateSipMediaApplicationError {}
+/// Errors returned by UpdateSipRule
+#[derive(Debug, PartialEq)]
+pub enum UpdateSipRuleError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateSipRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSipRuleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateSipRuleError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateSipRuleError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateSipRuleError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateSipRuleError::NotFound(err.msg))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(UpdateSipRuleError::ResourceLimitExceeded(err.msg))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(UpdateSipRuleError::ServiceFailure(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateSipRuleError::ServiceUnavailable(err.msg))
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(UpdateSipRuleError::ThrottledClient(err.msg))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(UpdateSipRuleError::UnauthorizedClient(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSipRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSipRuleError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            UpdateSipRuleError::UnauthorizedClient(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateSipRuleError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12298,7 +18931,7 @@ impl Error for UpdateUserError {}
 pub enum UpdateUserSettingsError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12368,7 +19001,7 @@ impl Error for UpdateUserSettingsError {}
 pub enum UpdateVoiceConnectorError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12442,7 +19075,7 @@ pub enum UpdateVoiceConnectorGroupError {
     BadRequest(String),
     /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
     Conflict(String),
-    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>One or more of the resources in the request does not exist in the system.</p>
     NotFound(String),
@@ -12601,6 +19234,24 @@ pub trait Chime {
         input: CreateAccountRequest,
     ) -> Result<CreateAccountResponse, RusotoError<CreateAccountError>>;
 
+    /// <p>Creates an Amazon Chime Messaging SDK <code>AppInstance</code> under an AWS Account. Only Messaging SDK customers use this API. <code>CreateAppInstance</code> supports <code>idempotency</code> behavior as described in the AWS API Standard.</p>
+    async fn create_app_instance(
+        &self,
+        input: CreateAppInstanceRequest,
+    ) -> Result<CreateAppInstanceResponse, RusotoError<CreateAppInstanceError>>;
+
+    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the app instance.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
+    async fn create_app_instance_admin(
+        &self,
+        input: CreateAppInstanceAdminRequest,
+    ) -> Result<CreateAppInstanceAdminResponse, RusotoError<CreateAppInstanceAdminError>>;
+
+    /// <p>Creates a user under an Amazon Chime <code>AppInstance</code>. The request consists of a unique <code>appInstanceUserId</code> and <code>Name</code> for that user.</p>
+    async fn create_app_instance_user(
+        &self,
+        input: CreateAppInstanceUserRequest,
+    ) -> Result<CreateAppInstanceUserResponse, RusotoError<CreateAppInstanceUserError>>;
+
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_attendee(
         &self,
@@ -12613,11 +19264,41 @@ pub trait Chime {
         input: CreateBotRequest,
     ) -> Result<CreateBotResponse, RusotoError<CreateBotError>>;
 
+    /// <p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    async fn create_channel(
+        &self,
+        input: CreateChannelRequest,
+    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
+
+    /// <p>Permanently bans a member from a channel. Moderators can't add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels. </p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p>
+    async fn create_channel_ban(
+        &self,
+        input: CreateChannelBanRequest,
+    ) -> Result<CreateChannelBanResponse, RusotoError<CreateChannelBanError>>;
+
+    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul></p>
+    async fn create_channel_membership(
+        &self,
+        input: CreateChannelMembershipRequest,
+    ) -> Result<CreateChannelMembershipResponse, RusotoError<CreateChannelMembershipError>>;
+
+    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul></p>
+    async fn create_channel_moderator(
+        &self,
+        input: CreateChannelModeratorRequest,
+    ) -> Result<CreateChannelModeratorResponse, RusotoError<CreateChannelModeratorError>>;
+
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
     ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>>;
+
+    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and joins them into Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> API with the corresponding SIP media application ID.</p>
+    async fn create_meeting_dial_out(
+        &self,
+        input: CreateMeetingDialOutRequest,
+    ) -> Result<CreateMeetingDialOutResponse, RusotoError<CreateMeetingDialOutError>>;
 
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_meeting_with_attendees(
@@ -12649,6 +19330,27 @@ pub trait Chime {
         input: CreateRoomMembershipRequest,
     ) -> Result<CreateRoomMembershipResponse, RusotoError<CreateRoomMembershipError>>;
 
+    /// <p>Creates a SIP media application.</p>
+    async fn create_sip_media_application(
+        &self,
+        input: CreateSipMediaApplicationRequest,
+    ) -> Result<CreateSipMediaApplicationResponse, RusotoError<CreateSipMediaApplicationError>>;
+
+    /// <p>Creates an outbound call to a phone number from the phone number specified in the request, and it invokes the endpoint of the specified <code>sipMediaApplicationId</code>.</p>
+    async fn create_sip_media_application_call(
+        &self,
+        input: CreateSipMediaApplicationCallRequest,
+    ) -> Result<
+        CreateSipMediaApplicationCallResponse,
+        RusotoError<CreateSipMediaApplicationCallError>,
+    >;
+
+    /// <p>Creates a SIP rule which can be used to run a SIP media application as a target for a specific trigger type.</p>
+    async fn create_sip_rule(
+        &self,
+        input: CreateSipRuleRequest,
+    ) -> Result<CreateSipRuleResponse, RusotoError<CreateSipRuleError>>;
+
     /// <p>Creates a user under the specified Amazon Chime account.</p>
     async fn create_user(
         &self,
@@ -12673,11 +19375,65 @@ pub trait Chime {
         input: DeleteAccountRequest,
     ) -> Result<DeleteAccountResponse, RusotoError<DeleteAccountError>>;
 
+    /// <p>Deletes an <code>AppInstance</code> and all associated data asynchronously.</p>
+    async fn delete_app_instance(
+        &self,
+        input: DeleteAppInstanceRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceError>>;
+
+    /// <p>Demotes an <code>AppInstanceAdmin</code> to an <code>AppInstanceUser</code>. This action does not delete the user.</p>
+    async fn delete_app_instance_admin(
+        &self,
+        input: DeleteAppInstanceAdminRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceAdminError>>;
+
+    /// <p>Deletes the streaming configurations of an app instance.</p>
+    async fn delete_app_instance_streaming_configurations(
+        &self,
+        input: DeleteAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceStreamingConfigurationsError>>;
+
+    /// <p>Deletes an <code>AppInstanceUser</code>.</p>
+    async fn delete_app_instance_user(
+        &self,
+        input: DeleteAppInstanceUserRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceUserError>>;
+
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn delete_attendee(
         &self,
         input: DeleteAttendeeRequest,
     ) -> Result<(), RusotoError<DeleteAttendeeError>>;
+
+    /// <p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p>
+    async fn delete_channel(
+        &self,
+        input: DeleteChannelRequest,
+    ) -> Result<(), RusotoError<DeleteChannelError>>;
+
+    /// <p>Removes a user from a channel's ban list.</p>
+    async fn delete_channel_ban(
+        &self,
+        input: DeleteChannelBanRequest,
+    ) -> Result<(), RusotoError<DeleteChannelBanError>>;
+
+    /// <p>Removes a member from a channel.</p>
+    async fn delete_channel_membership(
+        &self,
+        input: DeleteChannelMembershipRequest,
+    ) -> Result<(), RusotoError<DeleteChannelMembershipError>>;
+
+    /// <p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p>
+    async fn delete_channel_message(
+        &self,
+        input: DeleteChannelMessageRequest,
+    ) -> Result<(), RusotoError<DeleteChannelMessageError>>;
+
+    /// <p>Deletes a channel moderator.</p>
+    async fn delete_channel_moderator(
+        &self,
+        input: DeleteChannelModeratorRequest,
+    ) -> Result<(), RusotoError<DeleteChannelModeratorError>>;
 
     /// <p>Deletes the events configuration that allows a bot to receive outgoing events.</p>
     async fn delete_events_configuration(
@@ -12714,6 +19470,18 @@ pub trait Chime {
         &self,
         input: DeleteRoomMembershipRequest,
     ) -> Result<(), RusotoError<DeleteRoomMembershipError>>;
+
+    /// <p>Deletes a SIP media application.</p>
+    async fn delete_sip_media_application(
+        &self,
+        input: DeleteSipMediaApplicationRequest,
+    ) -> Result<(), RusotoError<DeleteSipMediaApplicationError>>;
+
+    /// <p>Deletes a SIP rule. You must disable a SIP rule before you can delete it.</p>
+    async fn delete_sip_rule(
+        &self,
+        input: DeleteSipRuleRequest,
+    ) -> Result<(), RusotoError<DeleteSipRuleError>>;
 
     /// <p>Deletes the specified Amazon Chime Voice Connector. Any phone numbers associated with the Amazon Chime Voice Connector must be disassociated from it before it can be deleted.</p>
     async fn delete_voice_connector(
@@ -12763,6 +19531,66 @@ pub trait Chime {
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorTerminationCredentialsError>>;
 
+    /// <p>Returns the full details of an <code>AppInstance</code>.</p>
+    async fn describe_app_instance(
+        &self,
+        input: DescribeAppInstanceRequest,
+    ) -> Result<DescribeAppInstanceResponse, RusotoError<DescribeAppInstanceError>>;
+
+    /// <p>Returns the full details of an <code>AppInstanceAdmin</code>.</p>
+    async fn describe_app_instance_admin(
+        &self,
+        input: DescribeAppInstanceAdminRequest,
+    ) -> Result<DescribeAppInstanceAdminResponse, RusotoError<DescribeAppInstanceAdminError>>;
+
+    /// <p>Returns the full details of an <code>AppInstanceUser</code>.</p>
+    async fn describe_app_instance_user(
+        &self,
+        input: DescribeAppInstanceUserRequest,
+    ) -> Result<DescribeAppInstanceUserResponse, RusotoError<DescribeAppInstanceUserError>>;
+
+    /// <p>Returns the full details of a channel in an Amazon Chime app instance.</p>
+    async fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
+
+    /// <p>Returns the full details of a channel ban.</p>
+    async fn describe_channel_ban(
+        &self,
+        input: DescribeChannelBanRequest,
+    ) -> Result<DescribeChannelBanResponse, RusotoError<DescribeChannelBanError>>;
+
+    /// <p>Returns the full details of a user's channel membership.</p>
+    async fn describe_channel_membership(
+        &self,
+        input: DescribeChannelMembershipRequest,
+    ) -> Result<DescribeChannelMembershipResponse, RusotoError<DescribeChannelMembershipError>>;
+
+    /// <p>Returns the details of a channel based on the membership of the <code>AppInstanceUser</code> specified.</p>
+    async fn describe_channel_membership_for_app_instance_user(
+        &self,
+        input: DescribeChannelMembershipForAppInstanceUserRequest,
+    ) -> Result<
+        DescribeChannelMembershipForAppInstanceUserResponse,
+        RusotoError<DescribeChannelMembershipForAppInstanceUserError>,
+    >;
+
+    /// <p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p>
+    async fn describe_channel_moderated_by_app_instance_user(
+        &self,
+        input: DescribeChannelModeratedByAppInstanceUserRequest,
+    ) -> Result<
+        DescribeChannelModeratedByAppInstanceUserResponse,
+        RusotoError<DescribeChannelModeratedByAppInstanceUserError>,
+    >;
+
+    /// <p>Returns the full details of a single ChannelModerator.</p>
+    async fn describe_channel_moderator(
+        &self,
+        input: DescribeChannelModeratorRequest,
+    ) -> Result<DescribeChannelModeratorResponse, RusotoError<DescribeChannelModeratorError>>;
+
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
     async fn disassociate_phone_number_from_user(
         &self,
@@ -12811,6 +19639,24 @@ pub trait Chime {
         input: GetAccountSettingsRequest,
     ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>>;
 
+    /// <p>Gets the retention settings for an app instance.</p>
+    async fn get_app_instance_retention_settings(
+        &self,
+        input: GetAppInstanceRetentionSettingsRequest,
+    ) -> Result<
+        GetAppInstanceRetentionSettingsResponse,
+        RusotoError<GetAppInstanceRetentionSettingsError>,
+    >;
+
+    /// <p>Gets the streaming settings for an app instance.</p>
+    async fn get_app_instance_streaming_configurations(
+        &self,
+        input: GetAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<
+        GetAppInstanceStreamingConfigurationsResponse,
+        RusotoError<GetAppInstanceStreamingConfigurationsError>,
+    >;
+
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn get_attendee(
         &self,
@@ -12822,6 +19668,12 @@ pub trait Chime {
         &self,
         input: GetBotRequest,
     ) -> Result<GetBotResponse, RusotoError<GetBotError>>;
+
+    /// <p>Gets the full details of a channel message.</p>
+    async fn get_channel_message(
+        &self,
+        input: GetChannelMessageRequest,
+    ) -> Result<GetChannelMessageResponse, RusotoError<GetChannelMessageError>>;
 
     /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
     async fn get_events_configuration(
@@ -12839,6 +19691,11 @@ pub trait Chime {
         &self,
         input: GetMeetingRequest,
     ) -> Result<GetMeetingResponse, RusotoError<GetMeetingError>>;
+
+    /// <p>The endpoint for the messaging session.</p>
+    async fn get_messaging_session_endpoint(
+        &self,
+    ) -> Result<GetMessagingSessionEndpointResponse, RusotoError<GetMessagingSessionEndpointError>>;
 
     /// <p>Retrieves details for the specified phone number ID, such as associations, capabilities, and product type.</p>
     async fn get_phone_number(
@@ -12875,6 +19732,27 @@ pub trait Chime {
         input: GetRoomRequest,
     ) -> Result<GetRoomResponse, RusotoError<GetRoomError>>;
 
+    /// <p>Retrieves the information for a SIP media application, including name, AWS Region, and endpoints.</p>
+    async fn get_sip_media_application(
+        &self,
+        input: GetSipMediaApplicationRequest,
+    ) -> Result<GetSipMediaApplicationResponse, RusotoError<GetSipMediaApplicationError>>;
+
+    /// <p>Returns the logging configuration for the specified SIP media application.</p>
+    async fn get_sip_media_application_logging_configuration(
+        &self,
+        input: GetSipMediaApplicationLoggingConfigurationRequest,
+    ) -> Result<
+        GetSipMediaApplicationLoggingConfigurationResponse,
+        RusotoError<GetSipMediaApplicationLoggingConfigurationError>,
+    >;
+
+    /// <p>Retrieves the details of a SIP rule, such as the rule ID, name, triggers, and target endpoints.</p>
+    async fn get_sip_rule(
+        &self,
+        input: GetSipRuleRequest,
+    ) -> Result<GetSipRuleResponse, RusotoError<GetSipRuleError>>;
+
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
     async fn get_user(
         &self,
@@ -12908,7 +19786,7 @@ pub trait Chime {
         input: GetVoiceConnectorGroupRequest,
     ) -> Result<GetVoiceConnectorGroupResponse, RusotoError<GetVoiceConnectorGroupError>>;
 
-    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch.</p>
     async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
@@ -12965,6 +19843,24 @@ pub trait Chime {
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
+    /// <p>Returns a list of the administrators in the app instance.</p>
+    async fn list_app_instance_admins(
+        &self,
+        input: ListAppInstanceAdminsRequest,
+    ) -> Result<ListAppInstanceAdminsResponse, RusotoError<ListAppInstanceAdminsError>>;
+
+    /// <p>List all <code>AppInstanceUsers</code> created under a single app instance.</p>
+    async fn list_app_instance_users(
+        &self,
+        input: ListAppInstanceUsersRequest,
+    ) -> Result<ListAppInstanceUsersResponse, RusotoError<ListAppInstanceUsersError>>;
+
+    /// <p>Lists all Amazon Chime app instances created under a single AWS account.</p>
+    async fn list_app_instances(
+        &self,
+        input: ListAppInstancesRequest,
+    ) -> Result<ListAppInstancesResponse, RusotoError<ListAppInstancesError>>;
+
     /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
     async fn list_attendee_tags(
         &self,
@@ -12982,6 +19878,54 @@ pub trait Chime {
         &self,
         input: ListBotsRequest,
     ) -> Result<ListBotsResponse, RusotoError<ListBotsError>>;
+
+    /// <p>Lists all the users banned from a particular channel.</p>
+    async fn list_channel_bans(
+        &self,
+        input: ListChannelBansRequest,
+    ) -> Result<ListChannelBansResponse, RusotoError<ListChannelBansError>>;
+
+    /// <p>Lists all channel memberships in a channel.</p>
+    async fn list_channel_memberships(
+        &self,
+        input: ListChannelMembershipsRequest,
+    ) -> Result<ListChannelMembershipsResponse, RusotoError<ListChannelMembershipsError>>;
+
+    /// <p>Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own.</p>
+    async fn list_channel_memberships_for_app_instance_user(
+        &self,
+        input: ListChannelMembershipsForAppInstanceUserRequest,
+    ) -> Result<
+        ListChannelMembershipsForAppInstanceUserResponse,
+        RusotoError<ListChannelMembershipsForAppInstanceUserError>,
+    >;
+
+    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. Sorted in descending order by default, based on the creation timestamp.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> </note></p>
+    async fn list_channel_messages(
+        &self,
+        input: ListChannelMessagesRequest,
+    ) -> Result<ListChannelMessagesResponse, RusotoError<ListChannelMessagesError>>;
+
+    /// <p>Lists all the moderators for a channel.</p>
+    async fn list_channel_moderators(
+        &self,
+        input: ListChannelModeratorsRequest,
+    ) -> Result<ListChannelModeratorsResponse, RusotoError<ListChannelModeratorsError>>;
+
+    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul></p>
+    async fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
+
+    /// <p>A list of the channels moderated by an app instance user.</p>
+    async fn list_channels_moderated_by_app_instance_user(
+        &self,
+        input: ListChannelsModeratedByAppInstanceUserRequest,
+    ) -> Result<
+        ListChannelsModeratedByAppInstanceUserResponse,
+        RusotoError<ListChannelsModeratedByAppInstanceUserError>,
+    >;
 
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
     async fn list_meeting_tags(
@@ -13025,6 +19969,18 @@ pub trait Chime {
         input: ListRoomsRequest,
     ) -> Result<ListRoomsResponse, RusotoError<ListRoomsError>>;
 
+    /// <p>Lists the SIP media applications under the administrator's AWS account.</p>
+    async fn list_sip_media_applications(
+        &self,
+        input: ListSipMediaApplicationsRequest,
+    ) -> Result<ListSipMediaApplicationsResponse, RusotoError<ListSipMediaApplicationsError>>;
+
+    /// <p>Lists the SIP rules under the administrator's AWS account.</p>
+    async fn list_sip_rules(
+        &self,
+        input: ListSipRulesRequest,
+    ) -> Result<ListSipRulesResponse, RusotoError<ListSipRulesError>>;
+
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
     async fn list_tags_for_resource(
         &self,
@@ -13064,6 +20020,24 @@ pub trait Chime {
         input: LogoutUserRequest,
     ) -> Result<LogoutUserResponse, RusotoError<LogoutUserError>>;
 
+    /// <p>Sets the amount of time in days that a given app instance retains data.</p>
+    async fn put_app_instance_retention_settings(
+        &self,
+        input: PutAppInstanceRetentionSettingsRequest,
+    ) -> Result<
+        PutAppInstanceRetentionSettingsResponse,
+        RusotoError<PutAppInstanceRetentionSettingsError>,
+    >;
+
+    /// <p>The data streaming configurations of an app instance.</p>
+    async fn put_app_instance_streaming_configurations(
+        &self,
+        input: PutAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<
+        PutAppInstanceStreamingConfigurationsResponse,
+        RusotoError<PutAppInstanceStreamingConfigurationsError>,
+    >;
+
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
     async fn put_events_configuration(
         &self,
@@ -13075,6 +20049,15 @@ pub trait Chime {
         &self,
         input: PutRetentionSettingsRequest,
     ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>>;
+
+    /// <p>Updates the logging configuration for the specified SIP media application.</p>
+    async fn put_sip_media_application_logging_configuration(
+        &self,
+        input: PutSipMediaApplicationLoggingConfigurationRequest,
+    ) -> Result<
+        PutSipMediaApplicationLoggingConfigurationResponse,
+        RusotoError<PutSipMediaApplicationLoggingConfigurationError>,
+    >;
 
     /// <p>Puts emergency calling configuration details to the specified Amazon Chime Voice Connector, such as emergency phone numbers and calling countries. Origination and termination settings must be enabled for the Amazon Chime Voice Connector before emergency calling can be configured.</p>
     async fn put_voice_connector_emergency_calling_configuration(
@@ -13127,13 +20110,19 @@ pub trait Chime {
         input: PutVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>>;
 
+    /// <p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p>
+    async fn redact_channel_message(
+        &self,
+        input: RedactChannelMessageRequest,
+    ) -> Result<RedactChannelMessageResponse, RusotoError<RedactChannelMessageError>>;
+
     /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
     async fn redact_conversation_message(
         &self,
         input: RedactConversationMessageRequest,
     ) -> Result<RedactConversationMessageResponse, RusotoError<RedactConversationMessageError>>;
 
-    /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    /// <p>Redacts the specified message from the specified Amazon Chime channel.</p>
     async fn redact_room_message(
         &self,
         input: RedactRoomMessageRequest,
@@ -13162,6 +20151,12 @@ pub trait Chime {
         &self,
         input: SearchAvailablePhoneNumbersRequest,
     ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>;
+
+    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p> <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
+    async fn send_channel_message(
+        &self,
+        input: SendChannelMessageRequest,
+    ) -> Result<SendChannelMessageResponse, RusotoError<SendChannelMessageError>>;
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK attendee.</p>
     async fn tag_attendee(
@@ -13211,11 +20206,41 @@ pub trait Chime {
         input: UpdateAccountSettingsRequest,
     ) -> Result<UpdateAccountSettingsResponse, RusotoError<UpdateAccountSettingsError>>;
 
+    /// <p>Updates <code>AppInstance</code> metadata.</p>
+    async fn update_app_instance(
+        &self,
+        input: UpdateAppInstanceRequest,
+    ) -> Result<UpdateAppInstanceResponse, RusotoError<UpdateAppInstanceError>>;
+
+    /// <p>Updates the details for an <code>AppInstanceUser</code>. You can update names and metadata.</p>
+    async fn update_app_instance_user(
+        &self,
+        input: UpdateAppInstanceUserRequest,
+    ) -> Result<UpdateAppInstanceUserResponse, RusotoError<UpdateAppInstanceUserError>>;
+
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
     async fn update_bot(
         &self,
         input: UpdateBotRequest,
     ) -> Result<UpdateBotResponse, RusotoError<UpdateBotError>>;
+
+    /// <p>Update a channel's attributes.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    async fn update_channel(
+        &self,
+        input: UpdateChannelRequest,
+    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>;
+
+    /// <p>Updates the content of a message.</p>
+    async fn update_channel_message(
+        &self,
+        input: UpdateChannelMessageRequest,
+    ) -> Result<UpdateChannelMessageResponse, RusotoError<UpdateChannelMessageError>>;
+
+    /// <p>Sets the timestamp to the point when a user last read messages in a channel.</p>
+    async fn update_channel_read_marker(
+        &self,
+        input: UpdateChannelReadMarkerRequest,
+    ) -> Result<UpdateChannelReadMarkerResponse, RusotoError<UpdateChannelReadMarkerError>>;
 
     /// <p>Updates global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
     async fn update_global_settings(
@@ -13252,6 +20277,18 @@ pub trait Chime {
         &self,
         input: UpdateRoomMembershipRequest,
     ) -> Result<UpdateRoomMembershipResponse, RusotoError<UpdateRoomMembershipError>>;
+
+    /// <p>Updates the details for the specified SIP media application.</p>
+    async fn update_sip_media_application(
+        &self,
+        input: UpdateSipMediaApplicationRequest,
+    ) -> Result<UpdateSipMediaApplicationResponse, RusotoError<UpdateSipMediaApplicationError>>;
+
+    /// <p>Updates the details for the specified SIP rule.</p>
+    async fn update_sip_rule(
+        &self,
+        input: UpdateSipRuleRequest,
+    ) -> Result<UpdateSipRuleResponse, RusotoError<UpdateSipRuleError>>;
 
     /// <p>Updates user details for a specified user ID. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
     async fn update_user(
@@ -13769,6 +20806,102 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Creates an Amazon Chime Messaging SDK <code>AppInstance</code> under an AWS Account. Only Messaging SDK customers use this API. <code>CreateAppInstance</code> supports <code>idempotency</code> behavior as described in the AWS API Standard.</p>
+    #[allow(unused_mut)]
+    async fn create_app_instance(
+        &self,
+        input: CreateAppInstanceRequest,
+    ) -> Result<CreateAppInstanceResponse, RusotoError<CreateAppInstanceError>> {
+        let request_uri = "/app-instances";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAppInstanceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAppInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the app instance.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
+    #[allow(unused_mut)]
+    async fn create_app_instance_admin(
+        &self,
+        input: CreateAppInstanceAdminRequest,
+    ) -> Result<CreateAppInstanceAdminResponse, RusotoError<CreateAppInstanceAdminError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/admins",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAppInstanceAdminResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAppInstanceAdminError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a user under an Amazon Chime <code>AppInstance</code>. The request consists of a unique <code>appInstanceUserId</code> and <code>Name</code> for that user.</p>
+    #[allow(unused_mut)]
+    async fn create_app_instance_user(
+        &self,
+        input: CreateAppInstanceUserRequest,
+    ) -> Result<CreateAppInstanceUserResponse, RusotoError<CreateAppInstanceUserError>> {
+        let request_uri = "/app-instance-users";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAppInstanceUserError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn create_attendee(
@@ -13834,6 +20967,139 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    #[allow(unused_mut)]
+    async fn create_channel(
+        &self,
+        input: CreateChannelRequest,
+    ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>> {
+        let request_uri = "/channels";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateChannelResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateChannelError::from_response(response))
+        }
+    }
+
+    /// <p>Permanently bans a member from a channel. Moderators can't add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels. </p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p>
+    #[allow(unused_mut)]
+    async fn create_channel_ban(
+        &self,
+        input: CreateChannelBanRequest,
+    ) -> Result<CreateChannelBanResponse, RusotoError<CreateChannelBanError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/bans",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateChannelBanResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateChannelBanError::from_response(response))
+        }
+    }
+
+    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn create_channel_membership(
+        &self,
+        input: CreateChannelMembershipRequest,
+    ) -> Result<CreateChannelMembershipResponse, RusotoError<CreateChannelMembershipError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/memberships",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateChannelMembershipResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateChannelMembershipError::from_response(response))
+        }
+    }
+
+    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn create_channel_moderator(
+        &self,
+        input: CreateChannelModeratorRequest,
+    ) -> Result<CreateChannelModeratorResponse, RusotoError<CreateChannelModeratorError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/moderators",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateChannelModeratorResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateChannelModeratorError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn create_meeting(
@@ -13862,6 +21128,40 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateMeetingError::from_response(response))
+        }
+    }
+
+    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and joins them into Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> API with the corresponding SIP media application ID.</p>
+    #[allow(unused_mut)]
+    async fn create_meeting_dial_out(
+        &self,
+        input: CreateMeetingDialOutRequest,
+    ) -> Result<CreateMeetingDialOutResponse, RusotoError<CreateMeetingDialOutError>> {
+        let request_uri = format!(
+            "/meetings/{meeting_id}/dial-outs",
+            meeting_id = input.meeting_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMeetingDialOutResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMeetingDialOutError::from_response(response))
         }
     }
 
@@ -14035,6 +21335,106 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Creates a SIP media application.</p>
+    #[allow(unused_mut)]
+    async fn create_sip_media_application(
+        &self,
+        input: CreateSipMediaApplicationRequest,
+    ) -> Result<CreateSipMediaApplicationResponse, RusotoError<CreateSipMediaApplicationError>>
+    {
+        let request_uri = "/sip-media-applications";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSipMediaApplicationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSipMediaApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an outbound call to a phone number from the phone number specified in the request, and it invokes the endpoint of the specified <code>sipMediaApplicationId</code>.</p>
+    #[allow(unused_mut)]
+    async fn create_sip_media_application_call(
+        &self,
+        input: CreateSipMediaApplicationCallRequest,
+    ) -> Result<
+        CreateSipMediaApplicationCallResponse,
+        RusotoError<CreateSipMediaApplicationCallError>,
+    > {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}/calls",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSipMediaApplicationCallResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSipMediaApplicationCallError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a SIP rule which can be used to run a SIP media application as a target for a specific trigger type.</p>
+    #[allow(unused_mut)]
+    async fn create_sip_rule(
+        &self,
+        input: CreateSipRuleRequest,
+    ) -> Result<CreateSipRuleResponse, RusotoError<CreateSipRuleError>> {
+        let request_uri = "/sip-rules";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateSipRuleResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateSipRuleError::from_response(response))
+        }
+    }
+
     /// <p>Creates a user under the specified Amazon Chime account.</p>
     #[allow(unused_mut)]
     async fn create_user(
@@ -14164,6 +21564,127 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Deletes an <code>AppInstance</code> and all associated data asynchronously.</p>
+    #[allow(unused_mut)]
+    async fn delete_app_instance(
+        &self,
+        input: DeleteAppInstanceRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAppInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Demotes an <code>AppInstanceAdmin</code> to an <code>AppInstanceUser</code>. This action does not delete the user.</p>
+    #[allow(unused_mut)]
+    async fn delete_app_instance_admin(
+        &self,
+        input: DeleteAppInstanceAdminRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceAdminError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/admins/{app_instance_admin_arn}",
+            app_instance_admin_arn = input.app_instance_admin_arn,
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAppInstanceAdminError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the streaming configurations of an app instance.</p>
+    #[allow(unused_mut)]
+    async fn delete_app_instance_streaming_configurations(
+        &self,
+        input: DeleteAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceStreamingConfigurationsError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/streaming-configurations",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAppInstanceStreamingConfigurationsError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an <code>AppInstanceUser</code>.</p>
+    #[allow(unused_mut)]
+    async fn delete_app_instance_user(
+        &self,
+        input: DeleteAppInstanceUserRequest,
+    ) -> Result<(), RusotoError<DeleteAppInstanceUserError>> {
+        let request_uri = format!(
+            "/app-instance-users/{app_instance_user_arn}",
+            app_instance_user_arn = input.app_instance_user_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAppInstanceUserError::from_response(response))
+        }
+    }
+
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn delete_attendee(
@@ -14192,6 +21713,157 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteAttendeeError::from_response(response))
+        }
+    }
+
+    /// <p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p>
+    #[allow(unused_mut)]
+    async fn delete_channel(
+        &self,
+        input: DeleteChannelRequest,
+    ) -> Result<(), RusotoError<DeleteChannelError>> {
+        let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChannelError::from_response(response))
+        }
+    }
+
+    /// <p>Removes a user from a channel's ban list.</p>
+    #[allow(unused_mut)]
+    async fn delete_channel_ban(
+        &self,
+        input: DeleteChannelBanRequest,
+    ) -> Result<(), RusotoError<DeleteChannelBanError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/bans/{member_arn}",
+            channel_arn = input.channel_arn,
+            member_arn = input.member_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChannelBanError::from_response(response))
+        }
+    }
+
+    /// <p>Removes a member from a channel.</p>
+    #[allow(unused_mut)]
+    async fn delete_channel_membership(
+        &self,
+        input: DeleteChannelMembershipRequest,
+    ) -> Result<(), RusotoError<DeleteChannelMembershipError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/memberships/{member_arn}",
+            channel_arn = input.channel_arn,
+            member_arn = input.member_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChannelMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p>
+    #[allow(unused_mut)]
+    async fn delete_channel_message(
+        &self,
+        input: DeleteChannelMessageRequest,
+    ) -> Result<(), RusotoError<DeleteChannelMessageError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages/{message_id}",
+            channel_arn = input.channel_arn,
+            message_id = input.message_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChannelMessageError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a channel moderator.</p>
+    #[allow(unused_mut)]
+    async fn delete_channel_moderator(
+        &self,
+        input: DeleteChannelModeratorRequest,
+    ) -> Result<(), RusotoError<DeleteChannelModeratorError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/moderators/{channel_moderator_arn}",
+            channel_arn = input.channel_arn,
+            channel_moderator_arn = input.channel_moderator_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteChannelModeratorError::from_response(response))
         }
     }
 
@@ -14374,6 +22046,63 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteRoomMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a SIP media application.</p>
+    #[allow(unused_mut)]
+    async fn delete_sip_media_application(
+        &self,
+        input: DeleteSipMediaApplicationRequest,
+    ) -> Result<(), RusotoError<DeleteSipMediaApplicationError>> {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSipMediaApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes a SIP rule. You must disable a SIP rule before you can delete it.</p>
+    #[allow(unused_mut)]
+    async fn delete_sip_rule(
+        &self,
+        input: DeleteSipRuleRequest,
+    ) -> Result<(), RusotoError<DeleteSipRuleError>> {
+        let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteSipRuleError::from_response(response))
         }
     }
 
@@ -14628,6 +22357,297 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Returns the full details of an <code>AppInstance</code>.</p>
+    #[allow(unused_mut)]
+    async fn describe_app_instance(
+        &self,
+        input: DescribeAppInstanceRequest,
+    ) -> Result<DescribeAppInstanceResponse, RusotoError<DescribeAppInstanceError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAppInstanceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAppInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of an <code>AppInstanceAdmin</code>.</p>
+    #[allow(unused_mut)]
+    async fn describe_app_instance_admin(
+        &self,
+        input: DescribeAppInstanceAdminRequest,
+    ) -> Result<DescribeAppInstanceAdminResponse, RusotoError<DescribeAppInstanceAdminError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/admins/{app_instance_admin_arn}",
+            app_instance_admin_arn = input.app_instance_admin_arn,
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAppInstanceAdminResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAppInstanceAdminError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of an <code>AppInstanceUser</code>.</p>
+    #[allow(unused_mut)]
+    async fn describe_app_instance_user(
+        &self,
+        input: DescribeAppInstanceUserRequest,
+    ) -> Result<DescribeAppInstanceUserResponse, RusotoError<DescribeAppInstanceUserError>> {
+        let request_uri = format!(
+            "/app-instance-users/{app_instance_user_arn}",
+            app_instance_user_arn = input.app_instance_user_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAppInstanceUserError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of a channel in an Amazon Chime app instance.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel(
+        &self,
+        input: DescribeChannelRequest,
+    ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>> {
+        let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of a channel ban.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel_ban(
+        &self,
+        input: DescribeChannelBanRequest,
+    ) -> Result<DescribeChannelBanResponse, RusotoError<DescribeChannelBanError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/bans/{member_arn}",
+            channel_arn = input.channel_arn,
+            member_arn = input.member_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelBanResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelBanError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of a user's channel membership.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel_membership(
+        &self,
+        input: DescribeChannelMembershipRequest,
+    ) -> Result<DescribeChannelMembershipResponse, RusotoError<DescribeChannelMembershipError>>
+    {
+        let request_uri = format!(
+            "/channels/{channel_arn}/memberships/{member_arn}",
+            channel_arn = input.channel_arn,
+            member_arn = input.member_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelMembershipResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the details of a channel based on the membership of the <code>AppInstanceUser</code> specified.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel_membership_for_app_instance_user(
+        &self,
+        input: DescribeChannelMembershipForAppInstanceUserRequest,
+    ) -> Result<
+        DescribeChannelMembershipForAppInstanceUserResponse,
+        RusotoError<DescribeChannelMembershipForAppInstanceUserError>,
+    > {
+        let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("app-instance-user-arn", &input.app_instance_user_arn);
+        params.put("scope", "app-instance-user-membership");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelMembershipForAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelMembershipForAppInstanceUserError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel_moderated_by_app_instance_user(
+        &self,
+        input: DescribeChannelModeratedByAppInstanceUserRequest,
+    ) -> Result<
+        DescribeChannelModeratedByAppInstanceUserResponse,
+        RusotoError<DescribeChannelModeratedByAppInstanceUserError>,
+    > {
+        let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("app-instance-user-arn", &input.app_instance_user_arn);
+        params.put("scope", "app-instance-user-moderated-channel");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelModeratedByAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelModeratedByAppInstanceUserError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the full details of a single ChannelModerator.</p>
+    #[allow(unused_mut)]
+    async fn describe_channel_moderator(
+        &self,
+        input: DescribeChannelModeratorRequest,
+    ) -> Result<DescribeChannelModeratorResponse, RusotoError<DescribeChannelModeratorError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/moderators/{channel_moderator_arn}",
+            channel_arn = input.channel_arn,
+            channel_moderator_arn = input.channel_moderator_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeChannelModeratorResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeChannelModeratorError::from_response(response))
+        }
+    }
+
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
     #[allow(unused_mut)]
     async fn disassociate_phone_number_from_user(
@@ -14849,6 +22869,78 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Gets the retention settings for an app instance.</p>
+    #[allow(unused_mut)]
+    async fn get_app_instance_retention_settings(
+        &self,
+        input: GetAppInstanceRetentionSettingsRequest,
+    ) -> Result<
+        GetAppInstanceRetentionSettingsResponse,
+        RusotoError<GetAppInstanceRetentionSettingsError>,
+    > {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/retention-settings",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAppInstanceRetentionSettingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAppInstanceRetentionSettingsError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Gets the streaming settings for an app instance.</p>
+    #[allow(unused_mut)]
+    async fn get_app_instance_streaming_configurations(
+        &self,
+        input: GetAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<
+        GetAppInstanceStreamingConfigurationsResponse,
+        RusotoError<GetAppInstanceStreamingConfigurationsError>,
+    > {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/streaming-configurations",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetAppInstanceStreamingConfigurationsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetAppInstanceStreamingConfigurationsError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn get_attendee(
@@ -14910,6 +23002,38 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetBotError::from_response(response))
+        }
+    }
+
+    /// <p>Gets the full details of a channel message.</p>
+    #[allow(unused_mut)]
+    async fn get_channel_message(
+        &self,
+        input: GetChannelMessageRequest,
+    ) -> Result<GetChannelMessageResponse, RusotoError<GetChannelMessageError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages/{message_id}",
+            channel_arn = input.channel_arn,
+            message_id = input.message_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetChannelMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetChannelMessageError::from_response(response))
         }
     }
 
@@ -14997,6 +23121,34 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetMeetingError::from_response(response))
+        }
+    }
+
+    /// <p>The endpoint for the messaging session.</p>
+    #[allow(unused_mut)]
+    async fn get_messaging_session_endpoint(
+        &self,
+    ) -> Result<GetMessagingSessionEndpointResponse, RusotoError<GetMessagingSessionEndpointError>>
+    {
+        let request_uri = "/endpoints/messaging-session";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetMessagingSessionEndpointResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetMessagingSessionEndpointError::from_response(response))
         }
     }
 
@@ -15184,6 +23336,99 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Retrieves the information for a SIP media application, including name, AWS Region, and endpoints.</p>
+    #[allow(unused_mut)]
+    async fn get_sip_media_application(
+        &self,
+        input: GetSipMediaApplicationRequest,
+    ) -> Result<GetSipMediaApplicationResponse, RusotoError<GetSipMediaApplicationError>> {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSipMediaApplicationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSipMediaApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Returns the logging configuration for the specified SIP media application.</p>
+    #[allow(unused_mut)]
+    async fn get_sip_media_application_logging_configuration(
+        &self,
+        input: GetSipMediaApplicationLoggingConfigurationRequest,
+    ) -> Result<
+        GetSipMediaApplicationLoggingConfigurationResponse,
+        RusotoError<GetSipMediaApplicationLoggingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}/logging-configuration",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSipMediaApplicationLoggingConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSipMediaApplicationLoggingConfigurationError::from_response(response))
+        }
+    }
+
+    /// <p>Retrieves the details of a SIP rule, such as the rule ID, name, triggers, and target endpoints.</p>
+    #[allow(unused_mut)]
+    async fn get_sip_rule(
+        &self,
+        input: GetSipRuleRequest,
+    ) -> Result<GetSipRuleResponse, RusotoError<GetSipRuleError>> {
+        let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetSipRuleResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetSipRuleError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
     #[allow(unused_mut)]
     async fn get_user(
@@ -15345,7 +23590,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch.</p>
     #[allow(unused_mut)]
     async fn get_voice_connector_logging_configuration(
         &self,
@@ -15629,6 +23874,121 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Returns a list of the administrators in the app instance.</p>
+    #[allow(unused_mut)]
+    async fn list_app_instance_admins(
+        &self,
+        input: ListAppInstanceAdminsRequest,
+    ) -> Result<ListAppInstanceAdminsResponse, RusotoError<ListAppInstanceAdminsError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/admins",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAppInstanceAdminsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAppInstanceAdminsError::from_response(response))
+        }
+    }
+
+    /// <p>List all <code>AppInstanceUsers</code> created under a single app instance.</p>
+    #[allow(unused_mut)]
+    async fn list_app_instance_users(
+        &self,
+        input: ListAppInstanceUsersRequest,
+    ) -> Result<ListAppInstanceUsersResponse, RusotoError<ListAppInstanceUsersError>> {
+        let request_uri = "/app-instance-users";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("app-instance-arn", &input.app_instance_arn);
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAppInstanceUsersResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAppInstanceUsersError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all Amazon Chime app instances created under a single AWS account.</p>
+    #[allow(unused_mut)]
+    async fn list_app_instances(
+        &self,
+        input: ListAppInstancesRequest,
+    ) -> Result<ListAppInstancesResponse, RusotoError<ListAppInstancesError>> {
+        let request_uri = "/app-instances";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAppInstancesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAppInstancesError::from_response(response))
+        }
+    }
+
     /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
     #[allow(unused_mut)]
     async fn list_attendee_tags(
@@ -15735,6 +24095,309 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListBotsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the users banned from a particular channel.</p>
+    #[allow(unused_mut)]
+    async fn list_channel_bans(
+        &self,
+        input: ListChannelBansRequest,
+    ) -> Result<ListChannelBansResponse, RusotoError<ListChannelBansError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/bans",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelBansResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelBansError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all channel memberships in a channel.</p>
+    #[allow(unused_mut)]
+    async fn list_channel_memberships(
+        &self,
+        input: ListChannelMembershipsRequest,
+    ) -> Result<ListChannelMembershipsResponse, RusotoError<ListChannelMembershipsError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/memberships",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.type_ {
+            params.put("type", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelMembershipsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelMembershipsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own.</p>
+    #[allow(unused_mut)]
+    async fn list_channel_memberships_for_app_instance_user(
+        &self,
+        input: ListChannelMembershipsForAppInstanceUserRequest,
+    ) -> Result<
+        ListChannelMembershipsForAppInstanceUserResponse,
+        RusotoError<ListChannelMembershipsForAppInstanceUserError>,
+    > {
+        let request_uri = "/channels";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.app_instance_user_arn {
+            params.put("app-instance-user-arn", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        params.put("scope", "app-instance-user-memberships");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelMembershipsForAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelMembershipsForAppInstanceUserError::from_response(response))
+        }
+    }
+
+    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. Sorted in descending order by default, based on the creation timestamp.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> </note></p>
+    #[allow(unused_mut)]
+    async fn list_channel_messages(
+        &self,
+        input: ListChannelMessagesRequest,
+    ) -> Result<ListChannelMessagesResponse, RusotoError<ListChannelMessagesError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.not_after {
+            params.put("not-after", x);
+        }
+        if let Some(ref x) = input.not_before {
+            params.put("not-before", x);
+        }
+        if let Some(ref x) = input.sort_order {
+            params.put("sort-order", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelMessagesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelMessagesError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the moderators for a channel.</p>
+    #[allow(unused_mut)]
+    async fn list_channel_moderators(
+        &self,
+        input: ListChannelModeratorsRequest,
+    ) -> Result<ListChannelModeratorsResponse, RusotoError<ListChannelModeratorsError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/moderators",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelModeratorsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelModeratorsError::from_response(response))
+        }
+    }
+
+    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn list_channels(
+        &self,
+        input: ListChannelsRequest,
+    ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>> {
+        let request_uri = "/channels";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("app-instance-arn", &input.app_instance_arn);
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.privacy {
+            params.put("privacy", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelsError::from_response(response))
+        }
+    }
+
+    /// <p>A list of the channels moderated by an app instance user.</p>
+    #[allow(unused_mut)]
+    async fn list_channels_moderated_by_app_instance_user(
+        &self,
+        input: ListChannelsModeratedByAppInstanceUserRequest,
+    ) -> Result<
+        ListChannelsModeratedByAppInstanceUserResponse,
+        RusotoError<ListChannelsModeratedByAppInstanceUserError>,
+    > {
+        let request_uri = "/channels";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.app_instance_user_arn {
+            params.put("app-instance-user-arn", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        params.put("scope", "app-instance-user-moderated-channels");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListChannelsModeratedByAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListChannelsModeratedByAppInstanceUserError::from_response(
+                response,
+            ))
         }
     }
 
@@ -16016,6 +24679,83 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Lists the SIP media applications under the administrator's AWS account.</p>
+    #[allow(unused_mut)]
+    async fn list_sip_media_applications(
+        &self,
+        input: ListSipMediaApplicationsRequest,
+    ) -> Result<ListSipMediaApplicationsResponse, RusotoError<ListSipMediaApplicationsError>> {
+        let request_uri = "/sip-media-applications";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSipMediaApplicationsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSipMediaApplicationsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the SIP rules under the administrator's AWS account.</p>
+    #[allow(unused_mut)]
+    async fn list_sip_rules(
+        &self,
+        input: ListSipRulesRequest,
+    ) -> Result<ListSipRulesResponse, RusotoError<ListSipRulesError>> {
+        let request_uri = "/sip-rules";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        if let Some(ref x) = input.sip_media_application_id {
+            params.put("sip-media-application", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSipRulesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSipRulesError::from_response(response))
+        }
+    }
+
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
@@ -16238,6 +24978,84 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Sets the amount of time in days that a given app instance retains data.</p>
+    #[allow(unused_mut)]
+    async fn put_app_instance_retention_settings(
+        &self,
+        input: PutAppInstanceRetentionSettingsRequest,
+    ) -> Result<
+        PutAppInstanceRetentionSettingsResponse,
+        RusotoError<PutAppInstanceRetentionSettingsError>,
+    > {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/retention-settings",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutAppInstanceRetentionSettingsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAppInstanceRetentionSettingsError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>The data streaming configurations of an app instance.</p>
+    #[allow(unused_mut)]
+    async fn put_app_instance_streaming_configurations(
+        &self,
+        input: PutAppInstanceStreamingConfigurationsRequest,
+    ) -> Result<
+        PutAppInstanceStreamingConfigurationsResponse,
+        RusotoError<PutAppInstanceStreamingConfigurationsError>,
+    > {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}/streaming-configurations",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutAppInstanceStreamingConfigurationsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutAppInstanceStreamingConfigurationsError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
     #[allow(unused_mut)]
     async fn put_events_configuration(
@@ -16304,6 +25122,43 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PutRetentionSettingsError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the logging configuration for the specified SIP media application.</p>
+    #[allow(unused_mut)]
+    async fn put_sip_media_application_logging_configuration(
+        &self,
+        input: PutSipMediaApplicationLoggingConfigurationRequest,
+    ) -> Result<
+        PutSipMediaApplicationLoggingConfigurationResponse,
+        RusotoError<PutSipMediaApplicationLoggingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}/logging-configuration",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutSipMediaApplicationLoggingConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutSipMediaApplicationLoggingConfigurationError::from_response(response))
         }
     }
 
@@ -16566,6 +25421,42 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p>
+    #[allow(unused_mut)]
+    async fn redact_channel_message(
+        &self,
+        input: RedactChannelMessageRequest,
+    ) -> Result<RedactChannelMessageResponse, RusotoError<RedactChannelMessageError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages/{message_id}",
+            channel_arn = input.channel_arn,
+            message_id = input.message_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("operation", "redact");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RedactChannelMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RedactChannelMessageError::from_response(response))
+        }
+    }
+
     /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
     #[allow(unused_mut)]
     async fn redact_conversation_message(
@@ -16604,7 +25495,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    /// <p>Redacts the specified message from the specified Amazon Chime channel.</p>
     #[allow(unused_mut)]
     async fn redact_room_message(
         &self,
@@ -16799,6 +25690,40 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(SearchAvailablePhoneNumbersError::from_response(response))
+        }
+    }
+
+    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p> <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
+    #[allow(unused_mut)]
+    async fn send_channel_message(
+        &self,
+        input: SendChannelMessageRequest,
+    ) -> Result<SendChannelMessageResponse, RusotoError<SendChannelMessageError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SendChannelMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SendChannelMessageError::from_response(response))
         }
     }
 
@@ -17079,6 +26004,74 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Updates <code>AppInstance</code> metadata.</p>
+    #[allow(unused_mut)]
+    async fn update_app_instance(
+        &self,
+        input: UpdateAppInstanceRequest,
+    ) -> Result<UpdateAppInstanceResponse, RusotoError<UpdateAppInstanceError>> {
+        let request_uri = format!(
+            "/app-instances/{app_instance_arn}",
+            app_instance_arn = input.app_instance_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAppInstanceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAppInstanceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the details for an <code>AppInstanceUser</code>. You can update names and metadata.</p>
+    #[allow(unused_mut)]
+    async fn update_app_instance_user(
+        &self,
+        input: UpdateAppInstanceUserRequest,
+    ) -> Result<UpdateAppInstanceUserResponse, RusotoError<UpdateAppInstanceUserError>> {
+        let request_uri = format!(
+            "/app-instance-users/{app_instance_user_arn}",
+            app_instance_user_arn = input.app_instance_user_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAppInstanceUserResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAppInstanceUserError::from_response(response))
+        }
+    }
+
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
     #[allow(unused_mut)]
     async fn update_bot(
@@ -17111,6 +26104,103 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateBotError::from_response(response))
+        }
+    }
+
+    /// <p>Update a channel's attributes.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    #[allow(unused_mut)]
+    async fn update_channel(
+        &self,
+        input: UpdateChannelRequest,
+    ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>> {
+        let request_uri = format!("/channels/{channel_arn}", channel_arn = input.channel_arn);
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateChannelResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateChannelError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the content of a message.</p>
+    #[allow(unused_mut)]
+    async fn update_channel_message(
+        &self,
+        input: UpdateChannelMessageRequest,
+    ) -> Result<UpdateChannelMessageResponse, RusotoError<UpdateChannelMessageError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/messages/{message_id}",
+            channel_arn = input.channel_arn,
+            message_id = input.message_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateChannelMessageResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateChannelMessageError::from_response(response))
+        }
+    }
+
+    /// <p>Sets the timestamp to the point when a user last read messages in a channel.</p>
+    #[allow(unused_mut)]
+    async fn update_channel_read_marker(
+        &self,
+        input: UpdateChannelReadMarkerRequest,
+    ) -> Result<UpdateChannelReadMarkerResponse, RusotoError<UpdateChannelReadMarkerError>> {
+        let request_uri = format!(
+            "/channels/{channel_arn}/readMarker",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateChannelReadMarkerResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateChannelReadMarkerError::from_response(response))
         }
     }
 
@@ -17311,6 +26401,72 @@ impl Chime for ChimeClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateRoomMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the details for the specified SIP media application.</p>
+    #[allow(unused_mut)]
+    async fn update_sip_media_application(
+        &self,
+        input: UpdateSipMediaApplicationRequest,
+    ) -> Result<UpdateSipMediaApplicationResponse, RusotoError<UpdateSipMediaApplicationError>>
+    {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}",
+            sip_media_application_id = input.sip_media_application_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSipMediaApplicationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSipMediaApplicationError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the details for the specified SIP rule.</p>
+    #[allow(unused_mut)]
+    async fn update_sip_rule(
+        &self,
+        input: UpdateSipRuleRequest,
+    ) -> Result<UpdateSipRuleResponse, RusotoError<UpdateSipRuleError>> {
+        let request_uri = format!("/sip-rules/{sip_rule_id}", sip_rule_id = input.sip_rule_id);
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSipRuleResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSipRuleError::from_response(response))
         }
     }
 

@@ -25,6 +25,116 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>An Amazon EKS add-on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Addon {
+    /// <p>The Amazon Resource Name (ARN) of the add-on.</p>
+    #[serde(rename = "addonArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_arn: Option<String>,
+    /// <p>The name of the add-on.</p>
+    #[serde(rename = "addonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_name: Option<String>,
+    /// <p>The version of the add-on.</p>
+    #[serde(rename = "addonVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_version: Option<String>,
+    /// <p>The name of the cluster.</p>
+    #[serde(rename = "clusterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_name: Option<String>,
+    /// <p>The date and time that the add-on was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>An object that represents the health of the add-on.</p>
+    #[serde(rename = "health")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health: Option<AddonHealth>,
+    /// <p>The date and time that the add-on was last modified.</p>
+    #[serde(rename = "modifiedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_at: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that is bound to the Kubernetes service account used by the add-on.</p>
+    #[serde(rename = "serviceAccountRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_role_arn: Option<String>,
+    /// <p>The status of the add-on.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags do not propagate to any other resources associated with the cluster. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The health of the add-on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddonHealth {
+    /// <p>An object that represents the add-on's health issues.</p>
+    #[serde(rename = "issues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issues: Option<Vec<AddonIssue>>,
+}
+
+/// <p>Information about an add-on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddonInfo {
+    /// <p>The name of the add-on.</p>
+    #[serde(rename = "addonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_name: Option<String>,
+    /// <p>An object that represents information about available add-on versions and compatible Kubernetes versions.</p>
+    #[serde(rename = "addonVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_versions: Option<Vec<AddonVersionInfo>>,
+    /// <p>The type of the add-on.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>An issue related to an add-on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddonIssue {
+    /// <p>A code that describes the type of issue.</p>
+    #[serde(rename = "code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>A message that provides details about the issue and what might cause it.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The resource IDs of the issue.</p>
+    #[serde(rename = "resourceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_ids: Option<Vec<String>>,
+}
+
+/// <p>Information about an add-on version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddonVersionInfo {
+    /// <p>The version of the add-on.</p>
+    #[serde(rename = "addonVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_version: Option<String>,
+    /// <p>The architectures that the version supports.</p>
+    #[serde(rename = "architecture")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub architecture: Option<Vec<String>>,
+    /// <p>An object that represents the compatibilities of a version.</p>
+    #[serde(rename = "compatibilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatibilities: Option<Vec<Compatibility>>,
+}
+
 /// <p>An Auto Scaling group that is associated with an Amazon EKS managed node group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -77,6 +187,10 @@ pub struct Cluster {
     #[serde(rename = "identity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity: Option<Identity>,
+    /// <p>The Kubernetes network configuration for the cluster.</p>
+    #[serde(rename = "kubernetesNetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kubernetes_network_config: Option<KubernetesNetworkConfigResponse>,
     /// <p>The logging configuration for your cluster.</p>
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -111,6 +225,63 @@ pub struct Cluster {
     pub version: Option<String>,
 }
 
+/// <p>Compatibility information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Compatibility {
+    /// <p>The supported Kubernetes version of the cluster.</p>
+    #[serde(rename = "clusterVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_version: Option<String>,
+    /// <p>The supported default version.</p>
+    #[serde(rename = "defaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version: Option<bool>,
+    /// <p>The supported compute platform.</p>
+    #[serde(rename = "platformVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_versions: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAddonRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    pub addon_name: String,
+    /// <p>The version of the add-on. The version must match one of the versions returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeAddonVersions.html"> <code>DescribeAddonVersions</code> </a>.</p>
+    #[serde(rename = "addonVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_version: Option<String>,
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the cluster to create the add-on for.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>How to resolve parameter value conflicts when migrating an existing add-on to an Amazon EKS add-on.</p>
+    #[serde(rename = "resolveConflicts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolve_conflicts: Option<String>,
+    /// <p><p>The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on&#39;s service account. The role must be assigned the IAM permissions required by the add-on. If you don&#39;t specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html">Amazon EKS node IAM role</a> in the <i>Amazon EKS User Guide</i>.</p> <note> <p>To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC) provider created for your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html">Enabling IAM roles for service accounts on your cluster</a> in the <i>Amazon EKS User Guide</i>.</p> </note></p>
+    #[serde(rename = "serviceAccountRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_role_arn: Option<String>,
+    /// <p>The metadata to apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAddonResponse {
+    #[serde(rename = "addon")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon: Option<Addon>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
@@ -122,6 +293,10 @@ pub struct CreateClusterRequest {
     #[serde(rename = "encryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_config: Option<Vec<EncryptionConfig>>,
+    /// <p>The Kubernetes network configuration for the cluster.</p>
+    #[serde(rename = "kubernetesNetworkConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kubernetes_network_config: Option<KubernetesNetworkConfigRequest>,
     /// <p><p>Enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren&#39;t exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note></p>
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,7 +307,7 @@ pub struct CreateClusterRequest {
     /// <p>The VPC configuration used by the cluster control plane. Amazon EKS VPC resources have specific requirements to work properly with Kubernetes. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html">Cluster VPC Considerations</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html">Cluster Security Group Considerations</a> in the <i>Amazon EKS User Guide</i>. You must specify at least two subnets. You can specify up to five security groups, but we recommend that you use a dedicated security group for your cluster control plane.</p>
     #[serde(rename = "resourcesVpcConfig")]
     pub resources_vpc_config: VpcConfigRequest,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role that provides permissions for Amazon EKS to make calls to other AWS API operations on your behalf. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html">Amazon EKS Service IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html">Amazon EKS Service IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
     /// <p>The metadata to apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define.</p>
@@ -196,10 +371,14 @@ pub struct CreateFargateProfileResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNodegroupRequest {
-    /// <p>The AMI type for your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
+    /// <p>The AMI type for your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type. Arm instances should use the <code>AL2_ARM_64</code> AMI type. All types use the Amazon EKS optimized Amazon Linux 2 AMI. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>amiType</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_type: Option<String>,
+    /// <p>The capacity type for your node group.</p>
+    #[serde(rename = "capacityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_type: Option<String>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -207,11 +386,11 @@ pub struct CreateNodegroupRequest {
     /// <p>The name of the cluster to create the node group in.</p>
     #[serde(rename = "clusterName")]
     pub cluster_name: String,
-    /// <p>The root device disk size (in GiB) for your node group instances. The default disk size is 20 GiB.</p>
+    /// <p>The root device disk size (in GiB) for your node group instances. The default disk size is 20 GiB. If you specify <code>launchTemplate</code>, then don't specify <code>diskSize</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "diskSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_size: Option<i64>,
-    /// <p>The instance type to use for your node group. Currently, you can specify a single instance type for a node group. The default value for this parameter is <code>t3.medium</code>. If you choose a GPU instance type, be sure to specify the <code>AL2_x86_64_GPU</code> with the <code>amiType</code> parameter.</p>
+    /// <p>Specify the instance types for a node group. If you specify a GPU instance type, be sure to specify <code>AL2_x86_64_GPU</code> with the <code>amiType</code> parameter. If you specify <code>launchTemplate</code>, then you can specify zero or one instance type in your launch template <i>or</i> you can specify 0-20 instance types for <code>instanceTypes</code>. If however, you specify an instance type in your launch template <i>and</i> specify any <code>instanceTypes</code>, the node group deployment will fail. If you don't specify an instance type in a launch template or for <code>instanceTypes</code>, then <code>t3.medium</code> is used, by default. If you specify <code>Spot</code> for <code>capacityType</code>, then we recommend specifying multiple values for <code>instanceTypes</code>. For more information, see <a href="https://docs.aws.amazon.com/managed-node-groups.html#managed-node-group-capacity-types">Managed node group capacity types</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the <i>Amazon EKS User Guide</i>.</p>
     #[serde(rename = "instanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_types: Option<Vec<String>>,
@@ -219,17 +398,21 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>An object representing a node group's launch template specification. If specified, then do not specify <code>instanceTypes</code>, <code>diskSize</code>, or <code>remoteAccess</code> and make sure that the launch template meets the requirements in <code>launchTemplateSpecification</code>.</p>
+    #[serde(rename = "launchTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template: Option<LaunchTemplateSpecification>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html"> <code>IamInstanceProfile</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "nodeRole")]
     pub node_role: String,
     /// <p>The unique name to give your node group.</p>
     #[serde(rename = "nodegroupName")]
     pub nodegroup_name: String,
-    /// <p>The AMI version of the Amazon EKS-optimized AMI to use with your node group. By default, the latest available AMI version for the node group's current Kubernetes version is used. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS-Optimized Linux AMI Versions</a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>The AMI version of the Amazon EKS optimized AMI to use with your node group. By default, the latest available AMI version for the node group's current Kubernetes version is used. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS optimized Amazon Linux 2 AMI versions</a> in the <i>Amazon EKS User Guide</i>. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>releaseVersion</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "releaseVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub release_version: Option<String>,
-    /// <p>The remote access (SSH) configuration to use with your node group.</p>
+    /// <p>The remote access (SSH) configuration to use with your node group. If you specify <code>launchTemplate</code>, then don't specify <code>remoteAccess</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "remoteAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access: Option<RemoteAccessConfig>,
@@ -237,14 +420,14 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
-    /// <p>The subnets to use for the Auto Scaling group that is created for your node group. These subnets must have the tag key <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
+    /// <p>The subnets to use for the Auto Scaling group that is created for your node group. These subnets must have the tag key <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html"> <code>SubnetId</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>The metadata to apply to the node group to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Node group tags do not propagate to any other resources associated with the node group, such as the Amazon EC2 instances or subnets.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The Kubernetes version to use for your managed nodes. By default, the Kubernetes version of the cluster is used, and this is the only accepted specified value.</p>
+    /// <p>The Kubernetes version to use for your managed nodes. By default, the Kubernetes version of the cluster is used, and this is the only accepted specified value. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>version</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -257,6 +440,25 @@ pub struct CreateNodegroupResponse {
     #[serde(rename = "nodegroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nodegroup: Option<Nodegroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAddonRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    pub addon_name: String,
+    /// <p>The name of the cluster to delete the add-on from.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteAddonResponse {
+    #[serde(rename = "addon")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon: Option<Addon>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -314,6 +516,59 @@ pub struct DeleteNodegroupResponse {
     #[serde(rename = "nodegroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nodegroup: Option<Nodegroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAddonRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    pub addon_name: String,
+    /// <p>The name of the cluster.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAddonResponse {
+    #[serde(rename = "addon")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon: Option<Addon>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAddonVersionsRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_name: Option<String>,
+    /// <p>The Kubernetes versions that the add-on can be used with.</p>
+    #[serde(rename = "kubernetesVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kubernetes_version: Option<String>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeAddonVersionsRequest</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is used only to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAddonVersionsResponse {
+    /// <p>The list of available versions with Kubernetes version compatibility.</p>
+    #[serde(rename = "addons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addons: Option<Vec<AddonInfo>>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeAddonVersionsResponse</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is used only to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -376,6 +631,10 @@ pub struct DescribeNodegroupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUpdateRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_name: Option<String>,
     /// <p>The name of the Amazon EKS cluster associated with the update.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -497,7 +756,7 @@ pub struct Identity {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Issue {
-    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">worker node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is unable to communicate with your cluster API server.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> </ul></p>
+    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is failing to authenticate or authorize with your Kubernetes cluster API server.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>ClusterUnreachable</b>: Amazon EKS or one or more of your managed nodes is unable to to communicate with your Kubernetes cluster API server. This can happen if there are network disruptions or if API servers are timing out processing requests. </p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SubnetInvalidConfiguration</b>: One or more Amazon EC2 subnets specified for a node group do not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable the <code>auto-assign public IP address</code> setting for the subnet. See <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip">Modifying the public IPv4 addressing attribute for your subnet</a> in the Amazon VPC User Guide.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">worker node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -509,6 +768,72 @@ pub struct Issue {
     #[serde(rename = "resourceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_ids: Option<Vec<String>>,
+}
+
+/// <p>The Kubernetes network configuration for the cluster.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct KubernetesNetworkConfigRequest {
+    /// <p><p>The CIDR block to assign Kubernetes service IP addresses from. If you don&#39;t specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that does not overlap with resources in other networks that are peered or connected to your VPC. The block must meet the following requirements:</p> <ul> <li> <p>Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0.0/12, or 192.168.0.0/16.</p> </li> <li> <p>Doesn&#39;t overlap with any CIDR block assigned to the VPC that you selected for VPC.</p> </li> <li> <p>Between /24 and /12.</p> </li> </ul> <important> <p>You can only specify a custom CIDR block when you create a cluster and can&#39;t change this value once the cluster is created.</p> </important></p>
+    #[serde(rename = "serviceIpv4Cidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_ipv_4_cidr: Option<String>,
+}
+
+/// <p>The Kubernetes network configuration for the cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KubernetesNetworkConfigResponse {
+    /// <p>The CIDR block that Kubernetes service IP addresses are assigned from. If you didn't specify a CIDR block when you created the cluster, then Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks. If this was specified, then it was specified when the cluster was created and it cannot be changed.</p>
+    #[serde(rename = "serviceIpv4Cidr")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_ipv_4_cidr: Option<String>,
+}
+
+/// <p>An object representing a node group launch template specification. The launch template cannot include <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html"> <code>SubnetId</code> </a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html"> <code>IamInstanceProfile</code> </a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html"> <code>RequestSpotInstances</code> </a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_HibernationOptionsRequest.html"> <code>HibernationOptions</code> </a>, or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_TerminateInstances.html"> <code>TerminateInstances</code> </a>, or the node group deployment or update will fail. For more information about launch templates, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html"> <code>CreateLaunchTemplate</code> </a> in the Amazon EC2 API Reference. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p> <p>Specify either <code>name</code> or <code>id</code>, but not both.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LaunchTemplateSpecification {
+    /// <p>The ID of the launch template.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The version of the launch template to use. If no version is specified, then the template's default version is used.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAddonsRequest {
+    /// <p>The name of the cluster.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The maximum number of add-on results returned by <code>ListAddonsRequest</code> in paginated output. When you use this parameter, <code>ListAddonsRequest</code> returns only <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListAddonsRequest</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListAddonsRequest</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAddonsRequest</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is used only to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAddonsResponse {
+    /// <p>A list of available add-ons.</p>
+    #[serde(rename = "addons")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addons: Option<Vec<String>>,
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListAddonsResponse</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p> <note> <p>This token should be treated as an opaque identifier that is used only to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -615,6 +940,10 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUpdatesRequest {
+    /// <p>The names of the installed add-ons that have available updates.</p>
+    #[serde(rename = "addonName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_name: Option<String>,
     /// <p>The maximum number of update results returned by <code>ListUpdates</code> in paginated output. When you use this parameter, <code>ListUpdates</code> returns only <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListUpdates</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListUpdates</code> returns up to 100 results and a <code>nextToken</code> value if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -671,10 +1000,14 @@ pub struct Logging {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Nodegroup {
-    /// <p>The AMI type associated with your node group. GPU instance types should use the <code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support. Non-GPU instances should use the <code>AL2_x86_64</code> AMI type, which uses the Amazon EKS-optimized Linux AMI.</p>
+    /// <p>If the node group was deployed using a launch template with a custom AMI, then this is <code>CUSTOM</code>. For node groups that weren't deployed using a launch template, this is the AMI type that was specified in the node group configuration.</p>
     #[serde(rename = "amiType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_type: Option<String>,
+    /// <p>The capacity type of your managed node group.</p>
+    #[serde(rename = "capacityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_type: Option<String>,
     /// <p>The name of the cluster that the managed node group resides in.</p>
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,7 +1016,7 @@ pub struct Nodegroup {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p>The root device disk size (in GiB) for your node group instances. The default disk size is 20 GiB.</p>
+    /// <p>If the node group wasn't deployed with a launch template, then this is the disk size in the node group configuration. If the node group was deployed with a launch template, then this is <code>null</code>.</p>
     #[serde(rename = "diskSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_size: Option<i64>,
@@ -691,7 +1024,7 @@ pub struct Nodegroup {
     #[serde(rename = "health")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health: Option<NodegroupHealth>,
-    /// <p>The instance types associated with your node group.</p>
+    /// <p>If the node group wasn't deployed with a launch template, then this is the instance type that is associated with the node group. If the node group was deployed with a launch template, then this is <code>null</code>.</p>
     #[serde(rename = "instanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_types: Option<Vec<String>>,
@@ -699,11 +1032,15 @@ pub struct Nodegroup {
     #[serde(rename = "labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<::std::collections::HashMap<String, String>>,
+    /// <p>If a launch template was used to create the node group, then this is the launch template that was used.</p>
+    #[serde(rename = "launchTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>The Unix epoch timestamp in seconds for when the managed node group was last modified.</p>
     #[serde(rename = "modifiedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_at: Option<f64>,
-    /// <p>The IAM role associated with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>The IAM role associated with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies.</p>
     #[serde(rename = "nodeRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_role: Option<String>,
@@ -715,11 +1052,11 @@ pub struct Nodegroup {
     #[serde(rename = "nodegroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nodegroup_name: Option<String>,
-    /// <p>The AMI version of the managed node group. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS-Optimized Linux AMI Versions </a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>If the node group was deployed using a launch template with a custom AMI, then this is the AMI ID that was specified in the launch template. For node groups that weren't deployed using a launch template, this is the version of the Amazon EKS optimized AMI that the node group was deployed with.</p>
     #[serde(rename = "releaseVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub release_version: Option<String>,
-    /// <p>The remote access (SSH) configuration that is associated with the node group.</p>
+    /// <p>If the node group wasn't deployed with a launch template, then this is the remote access configuration that is associated with the node group. If the node group was deployed with a launch template, then this is <code>null</code>.</p>
     #[serde(rename = "remoteAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access: Option<RemoteAccessConfig>,
@@ -735,7 +1072,7 @@ pub struct Nodegroup {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The subnets allowed for the Auto Scaling group that is associated with your node group. These subnets must have the following tag: <code>kubernetes.io/cluster/CLUSTER_NAME</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p>
+    /// <p>The subnets that were specified for the Auto Scaling group that is associated with your node group.</p>
     #[serde(rename = "subnets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnets: Option<Vec<String>>,
@@ -773,7 +1110,7 @@ pub struct NodegroupResources {
     pub remote_access_security_group: Option<String>,
 }
 
-/// <p>An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group.</p>
+/// <p>An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group. If you specify a value for any property, then you must specify values for all of the properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodegroupScalingConfig {
     /// <p>The current number of worker nodes that the managed node group should maintain.</p>
@@ -880,6 +1217,41 @@ pub struct Update {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAddonRequest {
+    /// <p>The name of the add-on. The name must match one of the names returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html"> <code>ListAddons</code> </a>.</p>
+    #[serde(rename = "addonName")]
+    pub addon_name: String,
+    /// <p>The version of the add-on. The version must match one of the versions returned by <a href="https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeAddonVersions.html"> <code>DescribeAddonVersions</code> </a>.</p>
+    #[serde(rename = "addonVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub addon_version: Option<String>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the cluster.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>How to resolve parameter value conflicts when applying the new version of the add-on to the cluster.</p>
+    #[serde(rename = "resolveConflicts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolve_conflicts: Option<String>,
+    /// <p><p>The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on&#39;s service account. The role must be assigned the IAM permissions required by the add-on. If you don&#39;t specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html">Amazon EKS node IAM role</a> in the <i>Amazon EKS User Guide</i>.</p> <note> <p>To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC) provider created for your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html">Enabling IAM roles for service accounts on your cluster</a> in the <i>Amazon EKS User Guide</i>.</p> </note></p>
+    #[serde(rename = "serviceAccountRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_role_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAddonResponse {
+    #[serde(rename = "update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<Update>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -992,14 +1364,18 @@ pub struct UpdateNodegroupVersionRequest {
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
+    /// <p>An object representing a node group's launch template specification. You can only update a node group using a launch template if the node group was originally deployed with a launch template.</p>
+    #[serde(rename = "launchTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>The name of the managed node group to update.</p>
     #[serde(rename = "nodegroupName")]
     pub nodegroup_name: String,
-    /// <p>The AMI version of the Amazon EKS-optimized AMI to use for the update. By default, the latest available AMI version for the node group's Kubernetes version is used. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS-Optimized Linux AMI Versions </a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>The AMI version of the Amazon EKS optimized AMI to use for the update. By default, the latest available AMI version for the node group's Kubernetes version is used. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS optimized Amazon Linux 2 AMI versions </a> in the <i>Amazon EKS User Guide</i>. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>releaseVersion</code>, or the node group update will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "releaseVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub release_version: Option<String>,
-    /// <p>The Kubernetes version to update to. If no version is specified, then the Kubernetes version of the node group does not change. You can specify the Kubernetes version of the cluster to update the node group to the latest AMI version of the cluster's Kubernetes version.</p>
+    /// <p>The Kubernetes version to update to. If no version is specified, then the Kubernetes version of the node group does not change. You can specify the Kubernetes version of the cluster to update the node group to the latest AMI version of the cluster's Kubernetes version. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>version</code>, or the node group update will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -1043,7 +1419,7 @@ pub struct VpcConfigRequest {
     #[serde(rename = "publicAccessCidrs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_access_cidrs: Option<Vec<String>>,
-    /// <p>Specify one or more security groups for the cross-account elastic network interfaces that Amazon EKS creates to use to allow communication between your worker nodes and the Kubernetes control plane. If you don't specify a security group, the default security group for your VPC is used.</p>
+    /// <p>Specify one or more security groups for the cross-account elastic network interfaces that Amazon EKS creates to use to allow communication between your worker nodes and the Kubernetes control plane. If you don't specify any security groups, then familiarize yourself with the difference between Amazon EKS defaults for clusters deployed with Kubernetes:</p> <ul> <li> <p>1.14 Amazon EKS platform version <code>eks.2</code> and earlier</p> </li> <li> <p>1.14 Amazon EKS platform version <code>eks.3</code> and later </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html">Amazon EKS security group considerations</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
@@ -1087,6 +1463,66 @@ pub struct VpcConfigResponse {
     pub vpc_id: Option<String>,
 }
 
+/// Errors returned by CreateAddon
+#[derive(Debug, PartialEq)]
+pub enum CreateAddonError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl CreateAddonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddonError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(CreateAddonError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateAddonError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateAddonError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateAddonError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateAddonError::ResourceNotFound(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(CreateAddonError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAddonError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAddonError::Client(ref cause) => write!(f, "{}", cause),
+            CreateAddonError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateAddonError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAddonError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateAddonError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAddonError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAddonError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -1291,6 +1727,60 @@ impl fmt::Display for CreateNodegroupError {
     }
 }
 impl Error for CreateNodegroupError {}
+/// Errors returned by DeleteAddon
+#[derive(Debug, PartialEq)]
+pub enum DeleteAddonError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DeleteAddonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAddonError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DeleteAddonError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteAddonError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteAddonError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteAddonError::ResourceNotFound(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DeleteAddonError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAddonError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAddonError::Client(ref cause) => write!(f, "{}", cause),
+            DeleteAddonError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteAddonError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAddonError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAddonError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAddonError {}
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
@@ -1457,6 +1947,106 @@ impl fmt::Display for DeleteNodegroupError {
     }
 }
 impl Error for DeleteNodegroupError {}
+/// Errors returned by DescribeAddon
+#[derive(Debug, PartialEq)]
+pub enum DescribeAddonError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DescribeAddonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddonError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DescribeAddonError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeAddonError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeAddonError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAddonError::ResourceNotFound(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeAddonError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAddonError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAddonError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeAddonError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeAddonError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAddonError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAddonError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAddonError {}
+/// Errors returned by DescribeAddonVersions
+#[derive(Debug, PartialEq)]
+pub enum DescribeAddonVersionsError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DescribeAddonVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddonVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeAddonVersionsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAddonVersionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeAddonVersionsError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAddonVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAddonVersionsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeAddonVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAddonVersionsError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAddonVersionsError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -1661,6 +2251,56 @@ impl fmt::Display for DescribeUpdateError {
     }
 }
 impl Error for DescribeUpdateError {}
+/// Errors returned by ListAddons
+#[derive(Debug, PartialEq)]
+pub enum ListAddonsError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl ListAddonsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAddonsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => return RusotoError::Service(ListAddonsError::Client(err.msg)),
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListAddonsError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListAddonsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListAddonsError::ResourceNotFound(err.msg))
+                }
+                "ServerException" => return RusotoError::Service(ListAddonsError::Server(err.msg)),
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAddonsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAddonsError::Client(ref cause) => write!(f, "{}", cause),
+            ListAddonsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListAddonsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAddonsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAddonsError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAddonsError {}
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
@@ -1971,6 +2611,66 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateAddon
+#[derive(Debug, PartialEq)]
+pub enum UpdateAddonError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl UpdateAddonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAddonError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(UpdateAddonError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateAddonError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateAddonError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(UpdateAddonError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAddonError::ResourceNotFound(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(UpdateAddonError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAddonError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAddonError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateAddonError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateAddonError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAddonError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            UpdateAddonError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAddonError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAddonError {}
 /// Errors returned by UpdateClusterConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterConfigError {
@@ -2236,6 +2936,12 @@ impl Error for UpdateNodegroupVersionError {}
 /// Trait representing the capabilities of the Amazon EKS API. Amazon EKS clients implement this trait.
 #[async_trait]
 pub trait Eks {
+    /// <p>Creates an Amazon EKS add-on.</p> <p>Amazon EKS add-ons help to automate the provisioning and lifecycle management of common operational software for Amazon EKS clusters. Amazon EKS add-ons can only be used with Amazon EKS clusters running version 1.18 with platform version <code>eks.3</code> or later because add-ons rely on the Server-side Apply Kubernetes feature, which is only available in Kubernetes 1.18 and later.</p>
+    async fn create_addon(
+        &self,
+        input: CreateAddonRequest,
+    ) -> Result<CreateAddonResponse, RusotoError<CreateAddonError>>;
+
     /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code> parameters to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <p>You can use the <code>logging</code> parameter to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>Cluster creation typically takes between 10 and 15 minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
     async fn create_cluster(
         &self,
@@ -2248,11 +2954,17 @@ pub trait Eks {
         input: CreateFargateProfileRequest,
     ) -> Result<CreateFargateProfileResponse, RusotoError<CreateFargateProfileError>>;
 
-    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS-optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
+    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     async fn create_nodegroup(
         &self,
         input: CreateNodegroupRequest,
     ) -> Result<CreateNodegroupResponse, RusotoError<CreateNodegroupError>>;
+
+    /// <p>Delete an Amazon EKS add-on.</p> <p>When you remove the add-on, it will also be deleted from the cluster. You can always manually start an add-on on the cluster using the Kubernetes API.</p>
+    async fn delete_addon(
+        &self,
+        input: DeleteAddonRequest,
+    ) -> Result<DeleteAddonResponse, RusotoError<DeleteAddonError>>;
 
     /// <p>Deletes the Amazon EKS cluster control plane.</p> <p>If you have active services in your cluster that are associated with a load balancer, you must delete those services before deleting the cluster so that the load balancers are deleted properly. Otherwise, you can have orphaned resources in your VPC that prevent you from being able to delete the VPC. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html">Deleting a Cluster</a> in the <i>Amazon EKS User Guide</i>.</p> <p>If you have managed node groups or Fargate profiles attached to the cluster, you must delete them first. For more information, see <a>DeleteNodegroup</a> and <a>DeleteFargateProfile</a>.</p>
     async fn delete_cluster(
@@ -2271,6 +2983,18 @@ pub trait Eks {
         &self,
         input: DeleteNodegroupRequest,
     ) -> Result<DeleteNodegroupResponse, RusotoError<DeleteNodegroupError>>;
+
+    /// <p>Describes an Amazon EKS add-on.</p>
+    async fn describe_addon(
+        &self,
+        input: DescribeAddonRequest,
+    ) -> Result<DescribeAddonResponse, RusotoError<DescribeAddonError>>;
+
+    /// <p>Describes the Kubernetes versions that the add-on can be used with.</p>
+    async fn describe_addon_versions(
+        &self,
+        input: DescribeAddonVersionsRequest,
+    ) -> Result<DescribeAddonVersionsResponse, RusotoError<DescribeAddonVersionsError>>;
 
     /// <p><p>Returns descriptive information about an Amazon EKS cluster.</p> <p>The API server endpoint and certificate authority data returned by this operation are required for <code>kubelet</code> and <code>kubectl</code> to communicate with your Kubernetes API server. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html">Create a kubeconfig for Amazon EKS</a>.</p> <note> <p>The API server endpoint and certificate authority data aren&#39;t available until the cluster reaches the <code>ACTIVE</code> state.</p> </note></p>
     async fn describe_cluster(
@@ -2295,6 +3019,12 @@ pub trait Eks {
         &self,
         input: DescribeUpdateRequest,
     ) -> Result<DescribeUpdateResponse, RusotoError<DescribeUpdateError>>;
+
+    /// <p>Lists the available add-ons.</p>
+    async fn list_addons(
+        &self,
+        input: ListAddonsRequest,
+    ) -> Result<ListAddonsResponse, RusotoError<ListAddonsError>>;
 
     /// <p>Lists the Amazon EKS clusters in your AWS account in the specified Region.</p>
     async fn list_clusters(
@@ -2338,6 +3068,12 @@ pub trait Eks {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
+    /// <p>Updates an Amazon EKS add-on.</p>
+    async fn update_addon(
+        &self,
+        input: UpdateAddonRequest,
+    ) -> Result<UpdateAddonResponse, RusotoError<UpdateAddonError>>;
+
     /// <p>Updates an Amazon EKS cluster configuration. Your cluster continues to function during the update. The response output includes an update ID that you can use to track the status of your cluster update with the <a>DescribeUpdate</a> API operation.</p> <p>You can use this API operation to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>You can also use this API operation to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <important> <p>At this time, you can not update the subnets or security group IDs for an existing cluster.</p> </important> <p>Cluster updates are asynchronous, and they should finish within a few minutes. During an update, the cluster status moves to <code>UPDATING</code> (this status transition is eventually consistent). When the update is complete (either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
     async fn update_cluster_config(
         &self,
@@ -2356,7 +3092,7 @@ pub trait Eks {
         input: UpdateNodegroupConfigRequest,
     ) -> Result<UpdateNodegroupConfigResponse, RusotoError<UpdateNodegroupConfigError>>;
 
-    /// <p>Updates the Kubernetes version or AMI version of an Amazon EKS managed node group.</p> <p>You can update to the latest available AMI version of a node group's current Kubernetes version by not specifying a Kubernetes version in the request. You can update to the latest AMI version of your cluster's current Kubernetes version by specifying your cluster's Kubernetes version in the request. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS-Optimized Linux AMI Versions</a> in the <i>Amazon EKS User Guide</i>.</p> <p>You cannot roll back a node group to an earlier Kubernetes version or AMI version.</p> <p>When a node in a managed node group is terminated due to a scaling action or update, the pods in that node are drained first. Amazon EKS attempts to drain the nodes gracefully and will fail if it is unable to do so. You can <code>force</code> the update if Amazon EKS is unable to drain the nodes as a result of a pod disruption budget issue.</p>
+    /// <p>Updates the Kubernetes version or AMI version of an Amazon EKS managed node group.</p> <p>You can update a node group using a launch template only if the node group was originally deployed with a launch template. If you need to update a custom AMI in a node group that was deployed with a launch template, then update your custom AMI, specify the new ID in a new version of the launch template, and then update the node group to the new version of the launch template.</p> <p>If you update without a launch template, then you can update to the latest available AMI version of a node group's current Kubernetes version by not specifying a Kubernetes version in the request. You can update to the latest AMI version of your cluster's current Kubernetes version by specifying your cluster's Kubernetes version in the request. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS optimized Amazon Linux 2 AMI versions</a> in the <i>Amazon EKS User Guide</i>.</p> <p>You cannot roll back a node group to an earlier Kubernetes version or AMI version.</p> <p>When a node in a managed node group is terminated due to a scaling action or update, the pods in that node are drained first. Amazon EKS attempts to drain the nodes gracefully and will fail if it is unable to do so. You can <code>force</code> the update if Amazon EKS is unable to drain the nodes as a result of a pod disruption budget issue.</p>
     async fn update_nodegroup_version(
         &self,
         input: UpdateNodegroupVersionRequest,
@@ -2402,6 +3138,37 @@ impl EksClient {
 
 #[async_trait]
 impl Eks for EksClient {
+    /// <p>Creates an Amazon EKS add-on.</p> <p>Amazon EKS add-ons help to automate the provisioning and lifecycle management of common operational software for Amazon EKS clusters. Amazon EKS add-ons can only be used with Amazon EKS clusters running version 1.18 with platform version <code>eks.3</code> or later because add-ons rely on the Server-side Apply Kubernetes feature, which is only available in Kubernetes 1.18 and later.</p>
+    #[allow(unused_mut)]
+    async fn create_addon(
+        &self,
+        input: CreateAddonRequest,
+    ) -> Result<CreateAddonResponse, RusotoError<CreateAddonError>> {
+        let request_uri = format!("/clusters/{name}/addons", name = input.cluster_name);
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateAddonResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateAddonError::from_response(response))
+        }
+    }
+
     /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code> parameters to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <p>You can use the <code>logging</code> parameter to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>Cluster creation typically takes between 10 and 15 minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
     #[allow(unused_mut)]
     async fn create_cluster(
@@ -2467,7 +3234,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS-optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
+    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     #[allow(unused_mut)]
     async fn create_nodegroup(
         &self,
@@ -2495,6 +3262,38 @@ impl Eks for EksClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateNodegroupError::from_response(response))
+        }
+    }
+
+    /// <p>Delete an Amazon EKS add-on.</p> <p>When you remove the add-on, it will also be deleted from the cluster. You can always manually start an add-on on the cluster using the Kubernetes API.</p>
+    #[allow(unused_mut)]
+    async fn delete_addon(
+        &self,
+        input: DeleteAddonRequest,
+    ) -> Result<DeleteAddonResponse, RusotoError<DeleteAddonError>> {
+        let request_uri = format!(
+            "/clusters/{name}/addons/{addon_name}",
+            addon_name = input.addon_name,
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteAddonResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteAddonError::from_response(response))
         }
     }
 
@@ -2587,6 +3386,81 @@ impl Eks for EksClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteNodegroupError::from_response(response))
+        }
+    }
+
+    /// <p>Describes an Amazon EKS add-on.</p>
+    #[allow(unused_mut)]
+    async fn describe_addon(
+        &self,
+        input: DescribeAddonRequest,
+    ) -> Result<DescribeAddonResponse, RusotoError<DescribeAddonError>> {
+        let request_uri = format!(
+            "/clusters/{name}/addons/{addon_name}",
+            addon_name = input.addon_name,
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAddonResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAddonError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the Kubernetes versions that the add-on can be used with.</p>
+    #[allow(unused_mut)]
+    async fn describe_addon_versions(
+        &self,
+        input: DescribeAddonVersionsRequest,
+    ) -> Result<DescribeAddonVersionsResponse, RusotoError<DescribeAddonVersionsError>> {
+        let request_uri = "/addons/supported-versions";
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.addon_name {
+            params.put("addonName", x);
+        }
+        if let Some(ref x) = input.kubernetes_version {
+            params.put("kubernetesVersion", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeAddonVersionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeAddonVersionsError::from_response(response))
         }
     }
 
@@ -2698,6 +3572,9 @@ impl Eks for EksClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.addon_name {
+            params.put("addonName", x);
+        }
         if let Some(ref x) = input.nodegroup_name {
             params.put("nodegroupName", x);
         }
@@ -2717,6 +3594,43 @@ impl Eks for EksClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeUpdateError::from_response(response))
+        }
+    }
+
+    /// <p>Lists the available add-ons.</p>
+    #[allow(unused_mut)]
+    async fn list_addons(
+        &self,
+        input: ListAddonsRequest,
+    ) -> Result<ListAddonsResponse, RusotoError<ListAddonsError>> {
+        let request_uri = format!("/clusters/{name}/addons", name = input.cluster_name);
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListAddonsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListAddonsError::from_response(response))
         }
     }
 
@@ -2874,6 +3788,9 @@ impl Eks for EksClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.addon_name {
+            params.put("addonName", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -2964,6 +3881,41 @@ impl Eks for EksClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an Amazon EKS add-on.</p>
+    #[allow(unused_mut)]
+    async fn update_addon(
+        &self,
+        input: UpdateAddonRequest,
+    ) -> Result<UpdateAddonResponse, RusotoError<UpdateAddonError>> {
+        let request_uri = format!(
+            "/clusters/{name}/addons/{addon_name}/update",
+            addon_name = input.addon_name,
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateAddonResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateAddonError::from_response(response))
         }
     }
 
@@ -3064,7 +4016,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Updates the Kubernetes version or AMI version of an Amazon EKS managed node group.</p> <p>You can update to the latest available AMI version of a node group's current Kubernetes version by not specifying a Kubernetes version in the request. You can update to the latest AMI version of your cluster's current Kubernetes version by specifying your cluster's Kubernetes version in the request. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS-Optimized Linux AMI Versions</a> in the <i>Amazon EKS User Guide</i>.</p> <p>You cannot roll back a node group to an earlier Kubernetes version or AMI version.</p> <p>When a node in a managed node group is terminated due to a scaling action or update, the pods in that node are drained first. Amazon EKS attempts to drain the nodes gracefully and will fail if it is unable to do so. You can <code>force</code> the update if Amazon EKS is unable to drain the nodes as a result of a pod disruption budget issue.</p>
+    /// <p>Updates the Kubernetes version or AMI version of an Amazon EKS managed node group.</p> <p>You can update a node group using a launch template only if the node group was originally deployed with a launch template. If you need to update a custom AMI in a node group that was deployed with a launch template, then update your custom AMI, specify the new ID in a new version of the launch template, and then update the node group to the new version of the launch template.</p> <p>If you update without a launch template, then you can update to the latest available AMI version of a node group's current Kubernetes version by not specifying a Kubernetes version in the request. You can update to the latest AMI version of your cluster's current Kubernetes version by specifying your cluster's Kubernetes version in the request. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html">Amazon EKS optimized Amazon Linux 2 AMI versions</a> in the <i>Amazon EKS User Guide</i>.</p> <p>You cannot roll back a node group to an earlier Kubernetes version or AMI version.</p> <p>When a node in a managed node group is terminated due to a scaling action or update, the pods in that node are drained first. Amazon EKS attempts to drain the nodes gracefully and will fail if it is unable to do so. You can <code>force</code> the update if Amazon EKS is unable to drain the nodes as a result of a pod disruption budget issue.</p>
     #[allow(unused_mut)]
     async fn update_nodegroup_version(
         &self,

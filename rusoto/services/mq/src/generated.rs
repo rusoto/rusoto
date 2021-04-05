@@ -53,7 +53,7 @@ pub struct BrokerEngineType {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BrokerInstance {
-    /// <p>The URL of the broker&#39;s ActiveMQ Web Console.</p>
+    /// <p>The URL of the broker&#39;s Web Console.</p>
     #[serde(rename = "ConsoleURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub console_url: Option<String>,
@@ -61,7 +61,7 @@ pub struct BrokerInstance {
     #[serde(rename = "Endpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoints: Option<Vec<String>>,
-    /// <p>The IP address of the Elastic Network Interface (ENI) attached to the broker.</p>
+    /// <p>The IP address of the Elastic Network Interface (ENI) attached to the broker. Does not apply to RabbitMQ brokers</p>
     #[serde(rename = "IpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
@@ -125,6 +125,10 @@ pub struct BrokerSummary {
     #[serde(rename = "DeploymentMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_mode: Option<String>,
+    /// <p>Required. The type of broker engine.</p>
+    #[serde(rename = "EngineType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_type: Option<String>,
     /// <p>The broker&#39;s instance type.</p>
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,6 +143,10 @@ pub struct Configuration {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The authentication strategy associated with the configuration.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Required. The date and time of the configuration revision.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -147,7 +155,7 @@ pub struct Configuration {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
+    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
@@ -173,7 +181,7 @@ pub struct Configuration {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>A list of information about the configuration.</p>
+/// <p>A list of information about the configuration. <important>Does not apply to RabbitMQ brokers.</important></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigurationId {
     /// <p>Required. The unique ID that Amazon MQ generates for the configuration.</p>
@@ -226,6 +234,10 @@ pub struct Configurations {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBrokerRequest {
+    /// <p>The authentication strategy used to secure the broker.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -250,7 +262,7 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "EncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_options: Option<EncryptionOptions>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
+    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
@@ -262,6 +274,10 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+    #[serde(rename = "LdapServerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldap_server_metadata: Option<LdapServerMetadataInput>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -282,7 +298,7 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
-    /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
+    /// <p>The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER<em>MULTI</em>AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -290,7 +306,7 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Required. The list of ActiveMQ users (persons or applications) who can access queues and topics. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
+    /// <p>Required. The list of broker users (persons or applications) who can access queues and topics. For RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ Web Console. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<User>>,
@@ -313,7 +329,11 @@ pub struct CreateBrokerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationRequest {
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
+    /// <p>The authentication strategy associated with the configuration.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
+    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
@@ -338,6 +358,10 @@ pub struct CreateConfigurationResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The authentication strategy associated with the configuration.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Required. The date and time of the configuration.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -400,7 +424,7 @@ pub struct CreateUserResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBrokerRequest {
-    /// <p>The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.</p>
+    /// <p>The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
     pub broker_id: String,
 }
@@ -527,6 +551,10 @@ pub struct DescribeBrokerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBrokerResponse {
+    /// <p>The authentication strategy used to secure the broker.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -567,7 +595,7 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "EncryptionOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_options: Option<EncryptionOptions>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
+    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
@@ -579,6 +607,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+    #[serde(rename = "LdapServerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldap_server_metadata: Option<LdapServerMetadataOutput>,
     /// <p>The list of information about logs currently enabled and pending to be deployed for the specified broker.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -587,6 +619,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "MaintenanceWindowStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintenance_window_start_time: Option<WeeklyStartTime>,
+    /// <p>The authentication strategy that will be applied when the broker is rebooted.</p>
+    #[serde(rename = "PendingAuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_authentication_strategy: Option<String>,
     /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "PendingEngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -595,6 +631,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "PendingHostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_host_instance_type: Option<String>,
+    /// <p>The metadata of the LDAP server that will be used to authenticate and authorize connections to the broker once it is rebooted.</p>
+    #[serde(rename = "PendingLdapServerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_ldap_server_metadata: Option<LdapServerMetadataOutput>,
     /// <p>The list of pending security groups to authorize connections to brokers.</p>
     #[serde(rename = "PendingSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -611,7 +651,7 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
-    /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
+    /// <p>The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER<em>MULTI</em>AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -619,7 +659,7 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The list of all ActiveMQ usernames for the specified broker.</p>
+    /// <p>The list of all broker usernames for the specified broker.</p>
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserSummary>>,
@@ -640,6 +680,10 @@ pub struct DescribeConfigurationResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The authentication strategy associated with the configuration.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Required. The date and time of the configuration revision.</p>
     #[serde(rename = "Created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -648,7 +692,7 @@ pub struct DescribeConfigurationResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
+    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p>
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
@@ -745,7 +789,7 @@ pub struct DescribeUserResponse {
 /// <p>Encryption options for the broker.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionOptions {
-    /// <p>The customer master key (CMK) to use for the AWS Key Management Service (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.</p>
+    /// <p>The symmetric customer master key (CMK) to use for the AWS Key Management Service (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -762,6 +806,102 @@ pub struct EngineVersion {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct LdapServerMetadataInput {
+    /// <p>Fully qualified domain name of the LDAP server. Optional failover server.</p>
+    #[serde(rename = "Hosts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosts: Option<Vec<String>>,
+    /// <p>Fully qualified name of the directory to search for a user’s groups.</p>
+    #[serde(rename = "RoleBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_base: Option<String>,
+    /// <p>Specifies the LDAP attribute that identifies the group name attribute in the object returned from the group membership query.</p>
+    #[serde(rename = "RoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+    /// <p>The search criteria for groups.</p>
+    #[serde(rename = "RoleSearchMatching")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_search_matching: Option<String>,
+    /// <p>The directory search scope for the role. If set to true, scope is to search the entire sub-tree.</p>
+    #[serde(rename = "RoleSearchSubtree")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_search_subtree: Option<bool>,
+    /// <p>Service account password.</p>
+    #[serde(rename = "ServiceAccountPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_password: Option<String>,
+    /// <p>Service account username.</p>
+    #[serde(rename = "ServiceAccountUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_username: Option<String>,
+    /// <p>Fully qualified name of the directory where you want to search for users.</p>
+    #[serde(rename = "UserBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_base: Option<String>,
+    /// <p>Specifies the name of the LDAP attribute for the user group membership.</p>
+    #[serde(rename = "UserRoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_role_name: Option<String>,
+    /// <p>The search criteria for users.</p>
+    #[serde(rename = "UserSearchMatching")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_search_matching: Option<String>,
+    /// <p>The directory search scope for the user. If set to true, scope is to search the entire sub-tree.</p>
+    #[serde(rename = "UserSearchSubtree")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_search_subtree: Option<bool>,
+}
+
+/// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LdapServerMetadataOutput {
+    /// <p>Fully qualified domain name of the LDAP server. Optional failover server.</p>
+    #[serde(rename = "Hosts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosts: Option<Vec<String>>,
+    /// <p>Fully qualified name of the directory to search for a user’s groups.</p>
+    #[serde(rename = "RoleBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_base: Option<String>,
+    /// <p>Specifies the LDAP attribute that identifies the group name attribute in the object returned from the group membership query.</p>
+    #[serde(rename = "RoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_name: Option<String>,
+    /// <p>The search criteria for groups.</p>
+    #[serde(rename = "RoleSearchMatching")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_search_matching: Option<String>,
+    /// <p>The directory search scope for the role. If set to true, scope is to search the entire sub-tree.</p>
+    #[serde(rename = "RoleSearchSubtree")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_search_subtree: Option<bool>,
+    /// <p>Service account username.</p>
+    #[serde(rename = "ServiceAccountUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_account_username: Option<String>,
+    /// <p>Fully qualified name of the directory where you want to search for users.</p>
+    #[serde(rename = "UserBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_base: Option<String>,
+    /// <p>Specifies the name of the LDAP attribute for the user group membership.</p>
+    #[serde(rename = "UserRoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_role_name: Option<String>,
+    /// <p>The search criteria for users.</p>
+    #[serde(rename = "UserSearchMatching")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_search_matching: Option<String>,
+    /// <p>The directory search scope for the user. If set to true, scope is to search the entire sub-tree.</p>
+    #[serde(rename = "UserSearchSubtree")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_search_subtree: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -914,7 +1054,7 @@ pub struct ListUsersResponse {
 /// <p>The list of information about logs to be enabled for the specified broker.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Logs {
-    /// <p>Enables audit logging. Every user management action made using JMX or the ActiveMQ Web Console is logged.</p>
+    /// <p>Enables audit logging. Every user management action made using JMX or the ActiveMQ Web Console is logged. Does not apply to RabbitMQ brokers.</p>
     #[serde(rename = "Audit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit: Option<bool>,
@@ -998,11 +1138,15 @@ pub struct SanitizationWarning {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerRequest {
+    /// <p>The authentication strategy used to secure the broker.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.</p>
+    /// <p>The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
     pub broker_id: String,
     /// <p>A list of information about the configuration.</p>
@@ -1017,6 +1161,10 @@ pub struct UpdateBrokerRequest {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+    #[serde(rename = "LdapServerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldap_server_metadata: Option<LdapServerMetadataInput>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1030,6 +1178,10 @@ pub struct UpdateBrokerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerResponse {
+    /// <p>The authentication strategy used to secure the broker.</p>
+    #[serde(rename = "AuthenticationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_strategy: Option<String>,
     /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1050,6 +1202,10 @@ pub struct UpdateBrokerResponse {
     #[serde(rename = "HostInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_instance_type: Option<String>,
+    /// <p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p>
+    #[serde(rename = "LdapServerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ldap_server_metadata: Option<LdapServerMetadataOutput>,
     /// <p>The list of information about logs to be enabled for the specified broker.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1134,11 +1290,11 @@ pub struct UpdateUserRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {}
 
-/// <p>An ActiveMQ user associated with the broker.</p>
+/// <p>A user associated with the broker.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct User {
-    /// <p>Enables access to the the ActiveMQ Web Console for the ActiveMQ user.</p>
+    /// <p>Enables access to the ActiveMQ Web Console for the ActiveMQ user (Does not apply to RabbitMQ brokers).</p>
     #[serde(rename = "ConsoleAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub console_access: Option<bool>,
@@ -1146,11 +1302,11 @@ pub struct User {
     #[serde(rename = "Groups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groups: Option<Vec<String>>,
-    /// <p>Required. The password of the ActiveMQ user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas.</p>
+    /// <p>Required. The password of the broker user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
-    /// <p>Required. The username of the ActiveMQ user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
+    /// <p>Required. The username of the broker user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
@@ -1174,15 +1330,15 @@ pub struct UserPendingChanges {
     pub pending_change: Option<String>,
 }
 
-/// <p>Returns a list of all ActiveMQ users.</p>
+/// <p>Returns a list of all broker users.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserSummary {
-    /// <p>The type of change pending for the ActiveMQ user.</p>
+    /// <p>The type of change pending for the broker user.</p>
     #[serde(rename = "PendingChange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_change: Option<String>,
-    /// <p>Required. The username of the ActiveMQ user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
+    /// <p>Required. The username of the broker user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,

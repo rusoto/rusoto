@@ -28,10 +28,10 @@ use serde_json;
 /// <p>An activity that adds other attributes based on existing attributes in the message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AddAttributesActivity {
-    /// <p><p>A list of 1-50 &quot;AttributeNameMapping&quot; objects that map an existing attribute to a new attribute.</p> <note> <p>The existing attributes remain in the message, so if you want to remove the originals, use &quot;RemoveAttributeActivity&quot;.</p> </note></p>
+    /// <p><p>A list of 1-50 <code>AttributeNameMapping</code> objects that map an existing attribute to a new attribute.</p> <note> <p>The existing attributes remain in the message, so if you want to remove the originals, use <code>RemoveAttributeActivity</code>.</p> </note></p>
     #[serde(rename = "attributes")]
     pub attributes: ::std::collections::HashMap<String, String>,
-    /// <p>The name of the 'addAttributes' activity.</p>
+    /// <p>The name of the addAttributes activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -52,7 +52,7 @@ pub struct BatchPutMessageErrorEntry {
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    /// <p>The ID of the message that caused the error. (See the value corresponding to the "messageId" key in the message object.)</p>
+    /// <p>The ID of the message that caused the error. See the value corresponding to the <code>messageId</code> key in the message object.</p>
     #[serde(rename = "messageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
@@ -64,7 +64,7 @@ pub struct BatchPutMessageRequest {
     /// <p>The name of the channel where the messages are sent.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>The list of messages to be sent. Each message has format: '{ "messageId": "string", "payload": "string"}'.</p> <p>Note that the field names of message payloads (data) that you send to AWS IoT Analytics:</p> <ul> <li> <p>Must contain only alphanumeric characters and undescores (_); no other special characters are allowed.</p> </li> <li> <p>Must begin with an alphabetic character or single underscore (_).</p> </li> <li> <p>Cannot contain hyphens (-).</p> </li> <li> <p>In regular expression terms: "^[A-Za-z_]([A-Za-z0-9]*|[A-Za-z0-9][A-Za-z0-9_]*)$". </p> </li> <li> <p>Cannot be greater than 255 characters.</p> </li> <li> <p>Are case-insensitive. (Fields named "foo" and "FOO" in the same payload are considered duplicates.)</p> </li> </ul> <p>For example, {"temp_01": 29} or {"_temp_01": 29} are valid, but {"temp-01": 29}, {"01_temp": 29} or {"__temp_01": 29} are invalid in message payloads. </p>
+    /// <p>The list of messages to be sent. Each message has the format: { "messageId": "string", "payload": "string"}.</p> <p>The field names of message payloads (data) that you send to AWS IoT Analytics:</p> <ul> <li> <p>Must contain only alphanumeric characters and undescores (_). No other special characters are allowed.</p> </li> <li> <p>Must begin with an alphabetic character or single underscore (_).</p> </li> <li> <p>Cannot contain hyphens (-).</p> </li> <li> <p>In regular expression terms: "^[A-Za-z_]([A-Za-z0-9]*|[A-Za-z0-9][A-Za-z0-9_]*)$". </p> </li> <li> <p>Cannot be more than 255 characters.</p> </li> <li> <p>Are case insensitive. (Fields named foo and FOO in the same payload are considered duplicates.)</p> </li> </ul> <p>For example, {"temp_01": 29} or {"_temp_01": 29} are valid, but {"temp-01": 29}, {"01_temp": 29} or {"__temp_01": 29} are invalid in message payloads. </p>
     #[serde(rename = "messages")]
     pub messages: Vec<Message>,
 }
@@ -84,7 +84,7 @@ pub struct CancelPipelineReprocessingRequest {
     /// <p>The name of pipeline for which data reprocessing is canceled.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
-    /// <p>The ID of the reprocessing task (returned by "StartPipelineReprocessing").</p>
+    /// <p>The ID of the reprocessing task (returned by <code>StartPipelineReprocessing</code>).</p>
     #[serde(rename = "reprocessingId")]
     pub reprocessing_id: String,
 }
@@ -105,6 +105,10 @@ pub struct Channel {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    /// <p>The last time when a new message arrived in the channel.</p> <p>AWS IoT Analytics updates this value at most once per minute for one channel. Hence, the <code>lastMessageArrivalTime</code> value is an approximation.</p> <p>This feature only applies to messages that arrived in the data store after October 23, 2020. </p>
+    #[serde(rename = "lastMessageArrivalTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_arrival_time: Option<f64>,
     /// <p>When the channel was last updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,7 +125,7 @@ pub struct Channel {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
+    /// <p>Where channel data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the channel is created.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<ChannelStorage>,
@@ -133,13 +137,23 @@ pub struct ChannelActivity {
     /// <p>The name of the channel from which the messages are processed.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>The name of the 'channel' activity.</p>
+    /// <p>The name of the channel activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
     #[serde(rename = "next")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next: Option<String>,
+}
+
+/// <p>Specifies one or more sets of channel messages.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ChannelMessages {
+    /// <p>Specifies one or more keys that identify the Amazon Simple Storage Service (Amazon S3) objects that save your channel messages.</p>
+    #[serde(rename = "s3Paths")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_paths: Option<Vec<String>>,
 }
 
 /// <p>Statistics information about the channel.</p>
@@ -152,14 +166,14 @@ pub struct ChannelStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
-/// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
+/// <p>Where channel data is stored. You may choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. This cannot be changed after creation of the channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ChannelStorage {
-    /// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
+    /// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the <code>retentionPeriod</code> parameter is ignored. You cannot change the choice of service-managed or customer-managed S3 storage after the channel is created.</p>
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedChannelS3Storage>,
-    /// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
+    /// <p>Use this to store channel data in an S3 bucket managed by AWS IoT Analytics. You cannot change the choice of service-managed or customer-managed S3 storage after the channel is created.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedChannelS3Storage>,
@@ -173,7 +187,7 @@ pub struct ChannelStorageSummary {
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedChannelS3StorageSummary>,
-    /// <p>Used to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    /// <p>Used to store channel data in an S3 bucket managed by AWS IoT Analytics.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedChannelS3StorageSummary>,
@@ -195,6 +209,10 @@ pub struct ChannelSummary {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    /// <p>The last time when a new message arrived in the channel.</p> <p>AWS IoT Analytics updates this value at most once per minute for one channel. Hence, the <code>lastMessageArrivalTime</code> value is an approximation.</p> <p>This feature only applies to messages that arrived in the data store after October 23, 2020. </p>
+    #[serde(rename = "lastMessageArrivalTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_arrival_time: Option<f64>,
     /// <p>The last time the channel was updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -205,19 +223,30 @@ pub struct ChannelSummary {
     pub status: Option<String>,
 }
 
-/// <p>Information needed to run the "containerAction" to produce data set contents.</p>
+/// <p>Contains information about a column that stores your data.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Column {
+    /// <p>The name of the column.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The type of data. For more information about the supported data types, see <a href="https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html">Common data types</a> in the <i>AWS Glue Developer Guide</i>.</p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+/// <p>Information required to run the <code>containerAction</code> to produce dataset contents.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContainerDatasetAction {
-    /// <p>The ARN of the role which gives permission to the system to access needed resources in order to run the "containerAction". This includes, at minimum, permission to retrieve the data set contents which are the input to the containerized application.</p>
+    /// <p>The ARN of the role that gives permission to the system to access required resources to run the <code>containerAction</code>. This includes, at minimum, permission to retrieve the dataset contents that are the input to the containerized application.</p>
     #[serde(rename = "executionRoleArn")]
     pub execution_role_arn: String,
-    /// <p>The ARN of the Docker container stored in your account. The Docker container contains an application and needed support libraries and is used to generate data set contents.</p>
+    /// <p>The ARN of the Docker container stored in your account. The Docker container contains an application and required support libraries and is used to generate dataset contents.</p>
     #[serde(rename = "image")]
     pub image: String,
-    /// <p>Configuration of the resource which executes the "containerAction".</p>
+    /// <p>Configuration of the resource that executes the <code>containerAction</code>.</p>
     #[serde(rename = "resourceConfiguration")]
     pub resource_configuration: ResourceConfiguration,
-    /// <p>The values of variables used within the context of the execution of the containerized application (basically, parameters passed to the application). Each variable must have a name and a value given by one of "stringValue", "datasetContentVersionValue", or "outputFileUriValue".</p>
+    /// <p>The values of variables used in the context of the execution of the containerized application (basically, parameters passed to the application). Each variable must have a name and a value given by one of <code>stringValue</code>, <code>datasetContentVersionValue</code>, or <code>outputFileUriValue</code>.</p>
     #[serde(rename = "variables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub variables: Option<Vec<Variable>>,
@@ -229,11 +258,11 @@ pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
+    /// <p>Where channel data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the channel is created.</p>
     #[serde(rename = "channelStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_storage: Option<ChannelStorage>,
-    /// <p>How long, in days, message data is kept for the channel. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
+    /// <p>How long, in days, message data is kept for the channel. When <code>customerManagedS3</code> storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -263,15 +292,19 @@ pub struct CreateChannelResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetContentRequest {
-    /// <p>The name of the data set.</p>
+    /// <p>The name of the dataset.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
+    /// <p>The version ID of the dataset content. To specify <code>versionId</code> for a dataset content, the dataset must use a <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html">DeltaTimer</a> filter.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetContentResponse {
-    /// <p>The version ID of the data set contents which are being created.</p>
+    /// <p>The version ID of the dataset contents that are being created.</p>
     #[serde(rename = "versionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -283,14 +316,18 @@ pub struct CreateDatasetRequest {
     /// <p>A list of actions that create the data set contents.</p>
     #[serde(rename = "actions")]
     pub actions: Vec<DatasetAction>,
-    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    /// <p>When dataset contents are created, they are delivered to destinations specified here.</p>
     #[serde(rename = "contentDeliveryRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
     /// <p>The name of the data set.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
-    /// <p>[Optional] How long, in days, versions of data set contents are kept for the data set. If not specified or set to null, versions of data set contents are retained for at most 90 days. The number of versions of data set contents retained is determined by the <code>versioningConfiguration</code> parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    /// <p>A list of data rules that send notifications to Amazon CloudWatch, when data arrives late. To specify <code>lateDataRules</code>, the dataset must use a <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html">DeltaTimer</a> filter.</p>
+    #[serde(rename = "lateDataRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub late_data_rules: Option<Vec<LateDataRule>>,
+    /// <p>Optional. How long, in days, versions of dataset contents are kept for the dataset. If not specified or set to <code>null</code>, versions of dataset contents are retained for at most 90 days. The number of versions of dataset contents retained is determined by the <code>versioningConfiguration</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions">Keeping Multiple Versions of AWS IoT Analytics Data Sets</a> in the <i>AWS IoT Analytics User Guide</i>.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -298,11 +335,11 @@ pub struct CreateDatasetRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>A list of triggers. A trigger causes data set contents to be populated at a specified time interval or when another data set's contents are created. The list of triggers can be empty or contain up to five <b>DataSetTrigger</b> objects.</p>
+    /// <p>A list of triggers. A trigger causes data set contents to be populated at a specified time interval or when another data set's contents are created. The list of triggers can be empty or contain up to five <code>DataSetTrigger</code> objects.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
-    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    /// <p>Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the <code>retentionPeriod</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions">Keeping Multiple Versions of AWS IoT Analytics Data Sets</a> in the <i>AWS IoT Analytics User Guide</i>.</p>
     #[serde(rename = "versioningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub versioning_configuration: Option<VersioningConfiguration>,
@@ -311,15 +348,15 @@ pub struct CreateDatasetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
-    /// <p>The ARN of the data set.</p>
+    /// <p>The ARN of the dataset.</p>
     #[serde(rename = "datasetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_arn: Option<String>,
-    /// <p>The name of the data set.</p>
+    /// <p>The name of the dataset.</p>
     #[serde(rename = "datasetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_name: Option<String>,
-    /// <p>How long, in days, data set contents are kept for the data set.</p>
+    /// <p>How long, in days, dataset contents are kept for the dataset.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -331,11 +368,15 @@ pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
+    /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_storage: Option<DatastoreStorage>,
-    /// <p>How long, in days, message data is kept for the data store. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
+    /// <p>Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and <a href="https://parquet.apache.org/">Parquet</a>.</p> <p>The default file format is JSON. You can specify only one format.</p> <p>You can't change the file format after you create the data store.</p>
+    #[serde(rename = "fileFormatConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format_configuration: Option<FileFormatConfiguration>,
+    /// <p>How long, in days, message data is kept for the data store. When <code>customerManagedS3</code> storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -365,7 +406,7 @@ pub struct CreateDatastoreResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePipelineRequest {
-    /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
+    /// <p>A list of <code>PipelineActivity</code> objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <code>PipelineActivity</code> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity. For example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
     pub pipeline_activities: Vec<PipelineActivity>,
     /// <p>The name of the pipeline.</p>
@@ -390,17 +431,17 @@ pub struct CreatePipelineResponse {
     pub pipeline_name: Option<String>,
 }
 
-/// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
+/// <p>Use this to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the <code>retentionPeriod</code> parameter is ignored. You cannot change the choice of service-managed or customer-managed S3 storage after the channel is created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomerManagedChannelS3Storage {
-    /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
+    /// <p>The name of the S3 bucket in which channel data is stored.</p>
     #[serde(rename = "bucket")]
     pub bucket: String,
-    /// <p>[Optional] The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
+    /// <p>Optional. The prefix used to create the keys of the channel data objects. Each object in an S3 bucket has a key that is its unique identifier in the bucket. Each object in a bucket has exactly one key. The prefix must end with a forward slash (/).</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
@@ -409,31 +450,31 @@ pub struct CustomerManagedChannelS3Storage {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerManagedChannelS3StorageSummary {
-    /// <p>The name of the Amazon S3 bucket in which channel data is stored.</p>
+    /// <p>The name of the S3 bucket in which channel data is stored.</p>
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>[Optional] The prefix used to create the keys of the channel data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
+    /// <p>Optional. The prefix used to create the keys of the channel data objects. Each object in an S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a forward slash (/).</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
 
-/// <p>Use this to store data store data in an S3 bucket that you manage. When customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
+/// <p>Use this to store data store data in an S3 bucket that you manage. When customer-managed storage is selected, the <code>retentionPeriod</code> parameter is ignored. You cannot change the choice of service-managed or customer-managed S3 storage after the data store is created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomerManagedDatastoreS3Storage {
-    /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
+    /// <p>The name of the S3 bucket in which data store data is stored.</p>
     #[serde(rename = "bucket")]
     pub bucket: String,
-    /// <p>[Optional] The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
+    /// <p>Optional. The prefix used to create the keys of the data store data objects. Each object in an S3 bucket has a key that is its unique identifier in the bucket. Each object in a bucket has exactly one key. The prefix must end with a forward slash (/).</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
@@ -442,15 +483,15 @@ pub struct CustomerManagedDatastoreS3Storage {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerManagedDatastoreS3StorageSummary {
-    /// <p>The name of the Amazon S3 bucket in which data store data is stored.</p>
+    /// <p>The name of the S3 bucket in which data store data is stored.</p>
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>[Optional] The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a '/'.</p>
+    /// <p>Optional. The prefix used to create the keys of the data store data objects. Each object in an S3 bucket has a key that is its unique identifier in the bucket. Each object in a bucket has exactly one key. The prefix must end with a forward slash (/).</p>
     #[serde(rename = "keyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_prefix: Option<String>,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
@@ -460,7 +501,7 @@ pub struct CustomerManagedDatastoreS3StorageSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dataset {
-    /// <p>The "DatasetAction" objects that automatically create the data set contents.</p>
+    /// <p>The <code>DatasetAction</code> objects that automatically create the data set contents.</p>
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<DatasetAction>>,
@@ -468,7 +509,7 @@ pub struct Dataset {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    /// <p>When dataset contents are created they are delivered to destinations specified here.</p>
     #[serde(rename = "contentDeliveryRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
@@ -480,11 +521,15 @@ pub struct Dataset {
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_time: Option<f64>,
+    /// <p>A list of data rules that send notifications to Amazon CloudWatch, when data arrives late. To specify <code>lateDataRules</code>, the dataset must use a <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html">DeltaTimer</a> filter.</p>
+    #[serde(rename = "lateDataRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub late_data_rules: Option<Vec<LateDataRule>>,
     /// <p>The name of the data set.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>[Optional] How long, in days, message data is kept for the data set.</p>
+    /// <p>Optional. How long, in days, message data is kept for the data set.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -492,67 +537,67 @@ pub struct Dataset {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The "DatasetTrigger" objects that specify when the data set is automatically updated.</p>
+    /// <p>The <code>DatasetTrigger</code> objects that specify when the data set is automatically updated.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
-    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    /// <p>Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the <code>retentionPeriod</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions">Keeping Multiple Versions of AWS IoT Analytics Data Sets</a> in the <i>AWS IoT Analytics User Guide</i>.</p>
     #[serde(rename = "versioningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
-/// <p>A "DatasetAction" object that specifies how data set contents are automatically created.</p>
+/// <p>A <code>DatasetAction</code> object that specifies how data set contents are automatically created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatasetAction {
     /// <p>The name of the data set action by which data set contents are automatically created.</p>
     #[serde(rename = "actionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_name: Option<String>,
-    /// <p>Information which allows the system to run a containerized application in order to create the data set contents. The application must be in a Docker container along with any needed support libraries.</p>
+    /// <p>Information that allows the system to run a containerized application to create the dataset contents. The application must be in a Docker container along with any required support libraries.</p>
     #[serde(rename = "containerAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_action: Option<ContainerDatasetAction>,
-    /// <p>An "SqlQueryDatasetAction" object that uses an SQL query to automatically create data set contents.</p>
+    /// <p>An <code>SqlQueryDatasetAction</code> object that uses an SQL query to automatically create data set contents.</p>
     #[serde(rename = "queryAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_action: Option<SqlQueryDatasetAction>,
 }
 
-/// <p>Information about the action which automatically creates the data set's contents.</p>
+/// <p>Information about the action that automatically creates the dataset's contents.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetActionSummary {
-    /// <p>The name of the action which automatically creates the data set's contents.</p>
+    /// <p>The name of the action that automatically creates the dataset's contents.</p>
     #[serde(rename = "actionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_name: Option<String>,
-    /// <p>The type of action by which the data set's contents are automatically created.</p>
+    /// <p>The type of action by which the dataset's contents are automatically created.</p>
     #[serde(rename = "actionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type: Option<String>,
 }
 
-/// <p>The destination to which data set contents are delivered.</p>
+/// <p>The destination to which dataset contents are delivered.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatasetContentDeliveryDestination {
-    /// <p>Configuration information for delivery of data set contents to AWS IoT Events.</p>
+    /// <p>Configuration information for delivery of dataset contents to AWS IoT Events.</p>
     #[serde(rename = "iotEventsDestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_events_destination_configuration: Option<IotEventsDestinationConfiguration>,
-    /// <p>Configuration information for delivery of data set contents to Amazon S3.</p>
+    /// <p>Configuration information for delivery of dataset contents to Amazon S3.</p>
     #[serde(rename = "s3DestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_destination_configuration: Option<S3DestinationConfiguration>,
 }
 
-/// <p>When data set contents are created they are delivered to destination specified here.</p>
+/// <p>When dataset contents are created, they are delivered to destination specified here.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatasetContentDeliveryRule {
-    /// <p>The destination to which data set contents are delivered.</p>
+    /// <p>The destination to which dataset contents are delivered.</p>
     #[serde(rename = "destination")]
     pub destination: DatasetContentDeliveryDestination,
-    /// <p>The name of the data set content delivery rules entry.</p>
+    /// <p>The name of the dataset content delivery rules entry.</p>
     #[serde(rename = "entryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entry_name: Option<String>,
@@ -566,13 +611,13 @@ pub struct DatasetContentStatus {
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-    /// <p>The state of the data set contents. Can be one of "READY", "CREATING", "SUCCEEDED" or "FAILED".</p>
+    /// <p>The state of the data set contents. Can be one of READY, CREATING, SUCCEEDED, or FAILED.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
 }
 
-/// <p>Summary information about data set contents.</p>
+/// <p>Summary information about dataset contents.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetContentSummary {
@@ -580,11 +625,11 @@ pub struct DatasetContentSummary {
     #[serde(rename = "completionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<f64>,
-    /// <p>The actual time the creation of the data set contents was started.</p>
+    /// <p>The actual time the creation of the dataset contents was started.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The time the creation of the data set contents was scheduled to start.</p>
+    /// <p>The time the creation of the dataset contents was scheduled to start.</p>
     #[serde(rename = "scheduleTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_time: Option<f64>,
@@ -592,16 +637,16 @@ pub struct DatasetContentSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<DatasetContentStatus>,
-    /// <p>The version of the data set contents.</p>
+    /// <p>The version of the dataset contents.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
 
-/// <p>The data set whose latest contents are used as input to the notebook or application.</p>
+/// <p>The dataset whose latest contents are used as input to the notebook or application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatasetContentVersionValue {
-    /// <p>The name of the data set whose latest contents are used as input to the notebook or application.</p>
+    /// <p>The name of the dataset whose latest contents are used as input to the notebook or application.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
 }
@@ -610,7 +655,7 @@ pub struct DatasetContentVersionValue {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetEntry {
-    /// <p>The pre-signed URI of the data set item.</p>
+    /// <p>The presigned URI of the data set item.</p>
     #[serde(rename = "dataURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_uri: Option<String>,
@@ -624,7 +669,7 @@ pub struct DatasetEntry {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSummary {
-    /// <p>A list of "DataActionSummary" objects.</p>
+    /// <p>A list of <code>DataActionSummary</code> objects.</p>
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<DatasetActionSummary>>,
@@ -644,20 +689,20 @@ pub struct DatasetSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A list of triggers. A trigger causes data set content to be populated at a specified time interval or when another data set is populated. The list of triggers can be empty or contain up to five DataSetTrigger objects</p>
+    /// <p>A list of triggers. A trigger causes data set content to be populated at a specified time interval or when another data set is populated. The list of triggers can be empty or contain up to five <code>DataSetTrigger</code> objects</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
 }
 
-/// <p>The "DatasetTrigger" that specifies when the data set is automatically updated.</p>
+/// <p>The <code>DatasetTrigger</code> that specifies when the data set is automatically updated.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatasetTrigger {
     /// <p>The data set whose content creation triggers the creation of this data set's contents.</p>
     #[serde(rename = "dataset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset: Option<TriggeringDataset>,
-    /// <p>The "Schedule" when the trigger is initiated.</p>
+    /// <p>The Schedule when the trigger is initiated.</p>
     #[serde(rename = "schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
@@ -675,6 +720,14 @@ pub struct Datastore {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    /// <p>Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and <a href="https://parquet.apache.org/">Parquet</a>.</p> <p>The default file format is JSON. You can specify only one format.</p> <p>You can't change the file format after you create the data store.</p>
+    #[serde(rename = "fileFormatConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format_configuration: Option<FileFormatConfiguration>,
+    /// <p>The last time when a new message arrived in the data store.</p> <p>AWS IoT Analytics updates this value at most once per minute for one data store. Hence, the <code>lastMessageArrivalTime</code> value is an approximation.</p> <p>This feature only applies to messages that arrived in the data store after October 23, 2020. </p>
+    #[serde(rename = "lastMessageArrivalTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_arrival_time: Option<f64>,
     /// <p>The last time the data store was updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,7 +736,7 @@ pub struct Datastore {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>How long, in days, message data is kept for the data store. When "customerManagedS3" storage is selected, this parameter is ignored.</p>
+    /// <p>How long, in days, message data is kept for the data store. When <code>customerManagedS3</code> storage is selected, this parameter is ignored.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -691,19 +744,19 @@ pub struct Datastore {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
+    /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
     #[serde(rename = "storage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage: Option<DatastoreStorage>,
 }
 
-/// <p>The 'datastore' activity that specifies where to store the processed data.</p>
+/// <p>The datastore activity that specifies where to store the processed data.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatastoreActivity {
     /// <p>The name of the data store where processed messages are stored.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>The name of the 'datastore' activity.</p>
+    /// <p>The name of the datastore activity.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -718,14 +771,14 @@ pub struct DatastoreStatistics {
     pub size: Option<EstimatedResourceSize>,
 }
 
-/// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
+/// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatastoreStorage {
-    /// <p>Use this to store data store data in an S3 bucket that you manage. When customer managed storage is selected, the "retentionPeriod" parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
+    /// <p>Use this to store data store data in an S3 bucket that you manage. When customer managed storage is selected, the <code>retentionPeriod</code> parameter is ignored. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedDatastoreS3Storage>,
-    /// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
+    /// <p>Use this to store data store data in an S3 bucket managed by AWS IoT Analytics. You cannot change the choice of service-managed or customer-managed S3 storage after the data store is created.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedDatastoreS3Storage>,
@@ -739,7 +792,7 @@ pub struct DatastoreStorageSummary {
     #[serde(rename = "customerManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_managed_s3: Option<CustomerManagedDatastoreS3StorageSummary>,
-    /// <p>Used to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+    /// <p>Used to store data store data in an S3 bucket managed by AWS IoT Analytics.</p>
     #[serde(rename = "serviceManagedS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_managed_s3: Option<ServiceManagedDatastoreS3StorageSummary>,
@@ -761,6 +814,14 @@ pub struct DatastoreSummary {
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_storage: Option<DatastoreStorageSummary>,
+    /// <p>The file format of the data in the data store.</p>
+    #[serde(rename = "fileFormatType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format_type: Option<String>,
+    /// <p>The last time when a new message arrived in the data store.</p> <p>AWS IoT Analytics updates this value at most once per minute for one data store. Hence, the <code>lastMessageArrivalTime</code> value is an approximation.</p> <p>This feature only applies to messages that arrived in the data store after October 23, 2020. </p>
+    #[serde(rename = "lastMessageArrivalTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_message_arrival_time: Option<f64>,
     /// <p>The last time the data store was updated.</p>
     #[serde(rename = "lastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -782,10 +843,10 @@ pub struct DeleteChannelRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetContentRequest {
-    /// <p>The name of the data set whose content is deleted.</p>
+    /// <p>The name of the dataset whose content is deleted.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
-    /// <p>The version of the data set whose content is deleted. You can also use the strings "$LATEST" or "$LATEST_SUCCEEDED" to delete the latest or latest successfully completed data set. If not specified, "$LATEST_SUCCEEDED" is the default.</p>
+    /// <p>The version of the dataset whose content is deleted. You can also use the strings "$LATEST" or "$LATEST_SUCCEEDED" to delete the latest or latest successfully completed data set. If not specified, "$LATEST_SUCCEEDED" is the default.</p>
     #[serde(rename = "versionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -818,12 +879,20 @@ pub struct DeletePipelineRequest {
 /// <p>Used to limit data to that which has arrived since the last execution of the action.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeltaTime {
-    /// <p>The number of seconds of estimated "in flight" lag time of message data. When you create data set contents using message data from a specified time frame, some message data may still be "in flight" when processing begins, and so will not arrive in time to be processed. Use this field to make allowances for the "in flight" time of your message data, so that data not processed from a previous time frame will be included with the next time frame. Without this, missed message data would be excluded from processing during the next time frame as well, because its timestamp places it within the previous time frame.</p>
+    /// <p>The number of seconds of estimated in-flight lag time of message data. When you create dataset contents using message data from a specified timeframe, some message data might still be in flight when processing begins, and so do not arrive in time to be processed. Use this field to make allowances for the in flight time of your message data, so that data not processed from a previous timeframe is included with the next timeframe. Otherwise, missed message data would be excluded from processing during the next timeframe too, because its timestamp places it within the previous timeframe.</p>
     #[serde(rename = "offsetSeconds")]
     pub offset_seconds: i64,
-    /// <p>An expression by which the time of the message data may be determined. This may be the name of a timestamp field, or a SQL expression which is used to derive the time the message data was generated.</p>
+    /// <p>An expression by which the time of the message data might be determined. This can be the name of a timestamp field or a SQL expression that is used to derive the time the message data was generated.</p>
     #[serde(rename = "timeExpression")]
     pub time_expression: String,
+}
+
+/// <p>A structure that contains the configuration information of a delta time session window.</p> <p> <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html"> <code>DeltaTime</code> </a> specifies a time interval. You can use <code>DeltaTime</code> to create dataset contents with data that has arrived in the data store since the last execution. For an example of <code>DeltaTime</code>, see <a href="https://docs.aws.amazon.com/iotanalytics/latest/userguide/automate-create-dataset.html#automate-example6"> Creating a SQL dataset with a delta window (CLI)</a> in the <i>AWS IoT Analytics User Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DeltaTimeSessionWindowConfiguration {
+    /// <p>A time interval. You can use <code>timeoutInMinutes</code> so that AWS IoT Analytics can batch up late data notifications that have been generated since the last execution. AWS IoT Analytics sends one batch of notifications to Amazon CloudWatch Events at one time.</p> <p>For more information about how to write a timestamp expression, see <a href="https://prestodb.io/docs/0.172/functions/datetime.html">Date and Time Functions and Operators</a>, in the <i>Presto 0.172 Documentation</i>.</p>
+    #[serde(rename = "timeoutInMinutes")]
+    pub timeout_in_minutes: i64,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -845,7 +914,7 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
-    /// <p>Statistics about the channel. Included if the 'includeStatistics' parameter is set to true in the request.</p>
+    /// <p>Statistics about the channel. Included if the <code>includeStatistics</code> parameter is set to <code>true</code> in the request.</p>
     #[serde(rename = "statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<ChannelStatistics>,
@@ -887,7 +956,7 @@ pub struct DescribeDatastoreResponse {
     #[serde(rename = "datastore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore: Option<Datastore>,
-    /// <p>Additional statistical information about the data store. Included if the 'includeStatistics' parameter is set to true in the request.</p>
+    /// <p>Additional statistical information about the data store. Included if the <code>includeStatistics</code> parameter is set to <code>true</code> in the request.</p>
     #[serde(rename = "statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<DatastoreStatistics>,
@@ -917,7 +986,7 @@ pub struct DescribePipelineRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePipelineResponse {
-    /// <p>A "Pipeline" object that contains information about the pipeline.</p>
+    /// <p>A <code>Pipeline</code> object that contains information about the pipeline.</p>
     #[serde(rename = "pipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline: Option<Pipeline>,
@@ -929,7 +998,7 @@ pub struct DeviceRegistryEnrichActivity {
     /// <p>The name of the attribute that is added to the message.</p>
     #[serde(rename = "attribute")]
     pub attribute: String,
-    /// <p>The name of the 'deviceRegistryEnrich' activity.</p>
+    /// <p>The name of the <code>deviceRegistryEnrich</code> activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -944,13 +1013,13 @@ pub struct DeviceRegistryEnrichActivity {
     pub thing_name: String,
 }
 
-/// <p>An activity that adds information from the AWS IoT Device Shadows service to a message.</p>
+/// <p>An activity that adds information from the AWS IoT Device Shadow service to a message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceShadowEnrichActivity {
     /// <p>The name of the attribute that is added to the message.</p>
     #[serde(rename = "attribute")]
     pub attribute: String,
-    /// <p>The name of the 'deviceShadowEnrich' activity.</p>
+    /// <p>The name of the <code>deviceShadowEnrich</code> activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -973,19 +1042,32 @@ pub struct EstimatedResourceSize {
     #[serde(rename = "estimatedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_on: Option<f64>,
-    /// <p>The estimated size of the resource in bytes.</p>
+    /// <p>The estimated size of the resource, in bytes.</p>
     #[serde(rename = "estimatedSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_size_in_bytes: Option<f64>,
 }
 
+/// <p>Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and <a href="https://parquet.apache.org/">Parquet</a>.</p> <p>The default file format is JSON. You can specify only one format.</p> <p>You can't change the file format after you create the data store.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FileFormatConfiguration {
+    /// <p>Contains the configuration information of the JSON format.</p>
+    #[serde(rename = "jsonConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_configuration: Option<JsonConfiguration>,
+    /// <p>Contains the configuration information of the Parquet format.</p>
+    #[serde(rename = "parquetConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parquet_configuration: Option<ParquetConfiguration>,
+}
+
 /// <p>An activity that filters a message based on its attributes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FilterActivity {
-    /// <p>An expression that looks like a SQL WHERE clause that must return a Boolean value.</p>
+    /// <p>An expression that looks like a SQL WHERE clause that must return a Boolean value. Messages that satisfy the condition are passed to the next activity. </p>
     #[serde(rename = "filter")]
     pub filter: String,
-    /// <p>The name of the 'filter' activity.</p>
+    /// <p>The name of the filter activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -1009,7 +1091,7 @@ pub struct GetDatasetContentRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDatasetContentResponse {
-    /// <p>A list of "DatasetEntry" objects.</p>
+    /// <p>A list of <code>DatasetEntry</code> objects.</p>
     #[serde(rename = "entries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entries: Option<Vec<DatasetEntry>>,
@@ -1023,44 +1105,69 @@ pub struct GetDatasetContentResponse {
     pub timestamp: Option<f64>,
 }
 
-/// <p>Configuration information for coordination with the AWS Glue ETL (extract, transform and load) service.</p>
+/// <p>Configuration information for coordination with AWS Glue, a fully managed extract, transform and load (ETL) service.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GlueConfiguration {
-    /// <p>The name of the database in your AWS Glue Data Catalog in which the table is located. (An AWS Glue Data Catalog database contains Glue Data tables.)</p>
+    /// <p>The name of the database in your AWS Glue Data Catalog in which the table is located. An AWS Glue Data Catalog database contains metadata tables.</p>
     #[serde(rename = "databaseName")]
     pub database_name: String,
-    /// <p>The name of the table in your AWS Glue Data Catalog which is used to perform the ETL (extract, transform and load) operations. (An AWS Glue Data Catalog table contains partitioned data and descriptions of data sources and targets.)</p>
+    /// <p>The name of the table in your AWS Glue Data Catalog that is used to perform the ETL operations. An AWS Glue Data Catalog table contains partitioned data and descriptions of data sources and targets.</p>
     #[serde(rename = "tableName")]
     pub table_name: String,
 }
 
-/// <p>Configuration information for delivery of data set contents to AWS IoT Events.</p>
+/// <p>Configuration information for delivery of dataset contents to AWS IoT Events.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotEventsDestinationConfiguration {
-    /// <p>The name of the AWS IoT Events input to which data set contents are delivered.</p>
+    /// <p>The name of the AWS IoT Events input to which dataset contents are delivered.</p>
     #[serde(rename = "inputName")]
     pub input_name: String,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to deliver data set contents to an AWS IoT Events input.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to deliver dataset contents to an AWS IoT Events input.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
 
+/// <p>Contains the configuration information of the JSON format.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct JsonConfiguration {}
+
 /// <p>An activity that runs a Lambda function to modify the message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LambdaActivity {
-    /// <p>The number of messages passed to the Lambda function for processing.</p> <p>The AWS Lambda function must be able to process all of these messages within five minutes, which is the maximum timeout duration for Lambda functions.</p>
+    /// <p>The number of messages passed to the Lambda function for processing.</p> <p>The Lambda function must be able to process all of these messages within five minutes, which is the maximum timeout duration for Lambda functions.</p>
     #[serde(rename = "batchSize")]
     pub batch_size: i64,
     /// <p>The name of the Lambda function that is run on the message.</p>
     #[serde(rename = "lambdaName")]
     pub lambda_name: String,
-    /// <p>The name of the 'lambda' activity.</p>
+    /// <p>The name of the lambda activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
     #[serde(rename = "next")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next: Option<String>,
+}
+
+/// <p>A structure that contains the name and configuration information of a late data rule.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LateDataRule {
+    /// <p>The information needed to configure the late data rule.</p>
+    #[serde(rename = "ruleConfiguration")]
+    pub rule_configuration: LateDataRuleConfiguration,
+    /// <p>The name of the late data rule.</p>
+    #[serde(rename = "ruleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+}
+
+/// <p>The information needed to configure a delta time session window.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LateDataRuleConfiguration {
+    /// <p>The information needed to configure a delta time session window.</p>
+    #[serde(rename = "deltaTimeSessionWindowConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delta_time_session_window_configuration: Option<DeltaTimeSessionWindowConfiguration>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1079,7 +1186,7 @@ pub struct ListChannelsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
-    /// <p>A list of "ChannelSummary" objects.</p>
+    /// <p>A list of <code>ChannelSummary</code> objects.</p>
     #[serde(rename = "channelSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_summaries: Option<Vec<ChannelSummary>>,
@@ -1103,11 +1210,11 @@ pub struct ListDatasetContentsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A filter to limit results to those data set contents whose creation is scheduled before the given time. See the field <code>triggers.schedule</code> in the CreateDataset request. (timestamp)</p>
+    /// <p>A filter to limit results to those data set contents whose creation is scheduled before the given time. See the field <code>triggers.schedule</code> in the <code>CreateDataset</code> request. (timestamp)</p>
     #[serde(rename = "scheduledBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_before: Option<f64>,
-    /// <p>A filter to limit results to those data set contents whose creation is scheduled on or after the given time. See the field <code>triggers.schedule</code> in the CreateDataset request. (timestamp)</p>
+    /// <p>A filter to limit results to those data set contents whose creation is scheduled on or after the given time. See the field <code>triggers.schedule</code> in the <code>CreateDataset</code> request. (timestamp)</p>
     #[serde(rename = "scheduledOnOrAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduled_on_or_after: Option<f64>,
@@ -1142,7 +1249,7 @@ pub struct ListDatasetsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
-    /// <p>A list of "DatasetSummary" objects.</p>
+    /// <p>A list of <code>DatasetSummary</code> objects.</p>
     #[serde(rename = "datasetSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_summaries: Option<Vec<DatasetSummary>>,
@@ -1168,7 +1275,7 @@ pub struct ListDatastoresRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatastoresResponse {
-    /// <p>A list of "DatastoreSummary" objects.</p>
+    /// <p>A list of <code>DatastoreSummary</code> objects.</p>
     #[serde(rename = "datastoreSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_summaries: Option<Vec<DatastoreSummary>>,
@@ -1198,7 +1305,7 @@ pub struct ListPipelinesResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of "PipelineSummary" objects.</p>
+    /// <p>A list of <code>PipelineSummary</code> objects.</p>
     #[serde(rename = "pipelineSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_summaries: Option<Vec<PipelineSummary>>,
@@ -1215,7 +1322,7 @@ pub struct ListTagsForResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The tags (metadata) which you have assigned to the resource.</p>
+    /// <p>The tags (metadata) that you have assigned to the resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1227,7 +1334,7 @@ pub struct LoggingOptions {
     /// <p>If true, logging is enabled for AWS IoT Analytics.</p>
     #[serde(rename = "enabled")]
     pub enabled: bool,
-    /// <p>The logging level. Currently, only "ERROR" is supported.</p>
+    /// <p>The logging level. Currently, only ERROR is supported.</p>
     #[serde(rename = "level")]
     pub level: String,
     /// <p>The ARN of the role that grants permission to AWS IoT Analytics to perform logging.</p>
@@ -1244,7 +1351,7 @@ pub struct MathActivity {
     /// <p>An expression that uses one or more existing attributes and must return an integer value.</p>
     #[serde(rename = "math")]
     pub math: String,
-    /// <p>The name of the 'math' activity.</p>
+    /// <p>The name of the math activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -1257,10 +1364,10 @@ pub struct MathActivity {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Message {
-    /// <p>The ID you wish to assign to the message. Each "messageId" must be unique within each batch sent.</p>
+    /// <p>The ID you want to assign to the message. Each <code>messageId</code> must be unique within each batch sent.</p>
     #[serde(rename = "messageId")]
     pub message_id: String,
-    /// <p>The payload of the message. This may be a JSON string or a Base64-encoded string representing binary data (in which case you must decode it by means of a pipeline activity).</p>
+    /// <p>The payload of the message. This can be a JSON string or a base64-encoded string representing binary data, in which case you must decode it by means of a pipeline activity.</p>
     #[serde(rename = "payload")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -1273,9 +1380,18 @@ pub struct Message {
 /// <p>The value of the variable as a structure that specifies an output file URI.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputFileUriValue {
-    /// <p>The URI of the location where data set contents are stored, usually the URI of a file in an S3 bucket.</p>
+    /// <p>The URI of the location where dataset contents are stored, usually the URI of a file in an S3 bucket.</p>
     #[serde(rename = "fileName")]
     pub file_name: String,
+}
+
+/// <p>Contains the configuration information of the Parquet format.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ParquetConfiguration {
+    /// <p>Information needed to define a schema.</p>
+    #[serde(rename = "schemaDefinition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_definition: Option<SchemaDefinition>,
 }
 
 /// <p>Contains information about a pipeline.</p>
@@ -1327,7 +1443,7 @@ pub struct PipelineActivity {
     #[serde(rename = "deviceRegistryEnrich")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_registry_enrich: Option<DeviceRegistryEnrichActivity>,
-    /// <p>Adds information from the AWS IoT Device Shadows service to a message.</p>
+    /// <p>Adds information from the AWS IoT Device Shadow service to a message.</p>
     #[serde(rename = "deviceShadowEnrich")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_shadow_enrich: Option<DeviceShadowEnrichActivity>,
@@ -1383,7 +1499,7 @@ pub struct PutLoggingOptionsRequest {
     pub logging_options: LoggingOptions,
 }
 
-/// <p>Information which is used to filter message data, to segregate it according to the time frame in which it arrives.</p>
+/// <p>Information that is used to filter message data, to segregate it according to the timeframe in which it arrives.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct QueryFilter {
     /// <p>Used to limit data to that which has arrived since the last execution of the action.</p>
@@ -1398,7 +1514,7 @@ pub struct RemoveAttributesActivity {
     /// <p>A list of 1-50 attributes to remove from the message.</p>
     #[serde(rename = "attributes")]
     pub attributes: Vec<String>,
-    /// <p>The name of the 'removeAttributes' activity.</p>
+    /// <p>The name of the <code>removeAttributes</code> activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -1415,7 +1531,7 @@ pub struct ReprocessingSummary {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The 'reprocessingId' returned by "StartPipelineReprocessing".</p>
+    /// <p>The <code>reprocessingId</code> returned by <code>StartPipelineReprocessing</code>.</p>
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -1425,13 +1541,13 @@ pub struct ReprocessingSummary {
     pub status: Option<String>,
 }
 
-/// <p>The configuration of the resource used to execute the "containerAction".</p>
+/// <p>The configuration of the resource used to execute the <code>containerAction</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceConfiguration {
-    /// <p>The type of the compute resource used to execute the "containerAction". Possible values are: ACU_1 (vCPU=4, memory=16GiB) or ACU_2 (vCPU=8, memory=32GiB).</p>
+    /// <p>The type of the compute resource used to execute the <code>containerAction</code>. Possible values are: <code>ACU_1</code> (vCPU=4, memory=16 GiB) or <code>ACU_2</code> (vCPU=8, memory=32 GiB).</p>
     #[serde(rename = "computeType")]
     pub compute_type: String,
-    /// <p>The size (in GB) of the persistent storage available to the resource instance used to execute the "containerAction" (min: 1, max: 50).</p>
+    /// <p>The size, in GB, of the persistent storage available to the resource instance used to execute the <code>containerAction</code> (min: 1, max: 50).</p>
     #[serde(rename = "volumeSizeInGB")]
     pub volume_size_in_gb: i64,
 }
@@ -1439,7 +1555,7 @@ pub struct ResourceConfiguration {
 /// <p>How long, in days, message data is kept.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RetentionPeriod {
-    /// <p>The number of days that message data is kept. The "unlimited" parameter must be false.</p>
+    /// <p>The number of days that message data is kept. The <code>unlimited</code> parameter must be false.</p>
     #[serde(rename = "numberOfDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_days: Option<i64>,
@@ -1460,7 +1576,7 @@ pub struct RunPipelineActivityRequest {
         default
     )]
     pub payloads: Vec<bytes::Bytes>,
-    /// <p>The pipeline activity that is run. This must not be a 'channel' activity or a 'datastore' activity because these activities are used in a pipeline only to load the original message and to store the (possibly) transformed message. If a 'lambda' activity is specified, only short-running Lambda functions (those with a timeout of less than 30 seconds or less) can be used.</p>
+    /// <p>The pipeline activity that is run. This must not be a channel activity or a datastore activity because these activities are used in a pipeline only to load the original message and to store the (possibly) transformed message. If a lambda activity is specified, only short-running Lambda functions (those with a timeout of less than 30 seconds or less) can be used.</p>
     #[serde(rename = "pipelineActivity")]
     pub pipeline_activity: PipelineActivity,
 }
@@ -1483,20 +1599,20 @@ pub struct RunPipelineActivityResponse {
     pub payloads: Option<Vec<bytes::Bytes>>,
 }
 
-/// <p>Configuration information for delivery of data set contents to Amazon S3.</p>
+/// <p>Configuration information for delivery of dataset contents to Amazon Simple Storage Service (Amazon S3).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3DestinationConfiguration {
-    /// <p>The name of the Amazon S3 bucket to which data set contents are delivered.</p>
+    /// <p>The name of the S3 bucket to which dataset contents are delivered.</p>
     #[serde(rename = "bucket")]
     pub bucket: String,
-    /// <p>Configuration information for coordination with the AWS Glue ETL (extract, transform and load) service.</p>
+    /// <p>Configuration information for coordination with AWS Glue, a fully managed extract, transform and load (ETL) service.</p>
     #[serde(rename = "glueConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub glue_configuration: Option<GlueConfiguration>,
-    /// <p>The key of the data set contents object. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). To produce a unique key, you can use "!{iotanalytics:scheduledTime}" to insert the time of the scheduled SQL query run, or "!{iotanalytics:versioned} to insert a unique hash identifying the data set, for example: "/DataSet/!{iotanalytics:scheduledTime}/!{iotanalytics:versioned}.csv".</p>
+    /// <p><p>The key of the dataset contents object in an S3 bucket. Each object has a key that is a unique identifier. Each object has exactly one key.</p> <p>You can create a unique key with the following options:</p> <ul> <li> <p>Use <code>!{iotanalytics:scheduleTime}</code> to insert the time of a scheduled SQL query run.</p> </li> <li> <p>Use <code>!{iotanalytics:versionId}</code> to insert a unique hash that identifies a dataset content.</p> </li> <li> <p>Use <code>!{iotanalytics:creationTime}</code> to insert the creation time of a dataset content.</p> </li> </ul> <p>The following example creates a unique key for a CSV file: <code>dataset/mydataset/!{iotanalytics:scheduleTime}/!{iotanalytics:versionId}.csv</code> </p> <note> <p>If you don&#39;t use <code>!{iotanalytics:versionId}</code> to specify the key, you might get duplicate keys. For example, you might have two dataset contents with the same <code>scheduleTime</code> but different <code>versionId</code>s. This means that one dataset content overwrites the other. </p> </note></p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.</p>
+    /// <p>The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
 }
@@ -1511,7 +1627,7 @@ pub struct SampleChannelDataRequest {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The number of sample messages to be retrieved. The limit is 10, the default is also 10.</p>
+    /// <p>The number of sample messages to be retrieved. The limit is 10. The default is also 10.</p>
     #[serde(rename = "maxMessages")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_messages: Option<i64>,
@@ -1538,10 +1654,19 @@ pub struct SampleChannelDataResponse {
 /// <p>The schedule for when to trigger an update.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
-    /// <p>The expression that defines when to trigger an update. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html"> Schedule Expressions for Rules</a> in the Amazon CloudWatch Events User Guide.</p>
+    /// <p>The expression that defines when to trigger an update. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">Schedule Expressions for Rules</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
     #[serde(rename = "expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
+}
+
+/// <p>Information needed to define a schema.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SchemaDefinition {
+    /// <p>Specifies one or more columns that store your data.</p> <p>Each schema can have up to 100 columns. Each column can have up to 100 nested types</p>
+    #[serde(rename = "columns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub columns: Option<Vec<Column>>,
 }
 
 /// <p>Creates a new message using only the specified attributes from the original message.</p>
@@ -1550,7 +1675,7 @@ pub struct SelectAttributesActivity {
     /// <p>A list of the attributes to select from the message.</p>
     #[serde(rename = "attributes")]
     pub attributes: Vec<String>,
-    /// <p>The name of the 'selectAttributes' activity.</p>
+    /// <p>The name of the <code>selectAttributes</code> activity.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The next activity in the pipeline.</p>
@@ -1559,20 +1684,20 @@ pub struct SelectAttributesActivity {
     pub next: Option<String>,
 }
 
-/// <p>Use this to store channel data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the channel.</p>
+/// <p>Use this to store channel data in an S3 bucket managed by AWS IoT Analytics. You cannot change the choice of service-managed or customer-managed S3 storage after the channel is created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceManagedChannelS3Storage {}
 
-/// <p>Used to store channel data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+/// <p>Used to store channel data in an S3 bucket managed by AWS IoT Analytics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceManagedChannelS3StorageSummary {}
 
-/// <p>Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.</p>
+/// <p>Use this to store data store data in an S3 bucket managed by AWS IoT Analytics. You cannot change the choice of service-managed or customer-managed S3 storage after the data store is created.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceManagedDatastoreS3Storage {}
 
-/// <p>Used to store data store data in an S3 bucket managed by the AWS IoT Analytics service.</p>
+/// <p>Used to store data store data in an S3 bucket managed by AWS IoT Analytics.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceManagedDatastoreS3StorageSummary {}
@@ -1580,7 +1705,7 @@ pub struct ServiceManagedDatastoreS3StorageSummary {}
 /// <p>The SQL query to modify the message.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SqlQueryDatasetAction {
-    /// <p>Pre-filters applied to message data.</p>
+    /// <p>Prefilters applied to message data.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<QueryFilter>>,
@@ -1592,14 +1717,18 @@ pub struct SqlQueryDatasetAction {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPipelineReprocessingRequest {
-    /// <p>The end time (exclusive) of raw message data that is reprocessed.</p>
+    /// <p>Specifies one or more sets of channel messages that you want to reprocess.</p> <p>If you use the <code>channelMessages</code> object, you must not specify a value for <code>startTime</code> and <code>endTime</code>.</p>
+    #[serde(rename = "channelMessages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_messages: Option<ChannelMessages>,
+    /// <p>The end time (exclusive) of raw message data that is reprocessed.</p> <p>If you specify a value for the <code>endTime</code> parameter, you must not use the <code>channelMessages</code> object.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
     /// <p>The name of the pipeline on which to start reprocessing.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
-    /// <p>The start time (inclusive) of raw message data that is reprocessed.</p>
+    /// <p>The start time (inclusive) of raw message data that is reprocessed.</p> <p>If you specify a value for the <code>startTime</code> parameter, you must not use the <code>channelMessages</code> object.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -1614,7 +1743,7 @@ pub struct StartPipelineReprocessingResponse {
     pub reprocessing_id: Option<String>,
 }
 
-/// <p>A set of key/value pairs which are used to manage the resource.</p>
+/// <p>A set of key-value pairs that are used to manage the resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
@@ -1640,10 +1769,10 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p>Information about the data set whose content generation triggers the new data set content generation.</p>
+/// <p>Information about the dataset whose content generation triggers the new dataset content generation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TriggeringDataset {
-    /// <p>The name of the data set whose content generation triggers the new data set content generation.</p>
+    /// <p>The name of the dataset whose content generation triggers the new dataset content generation.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -1669,7 +1798,7 @@ pub struct UpdateChannelRequest {
     /// <p>The name of the channel to be updated.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>Where channel data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after creation of the channel.</p>
+    /// <p>Where channel data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the channel is created.</p>
     #[serde(rename = "channelStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_storage: Option<ChannelStorage>,
@@ -1682,25 +1811,29 @@ pub struct UpdateChannelRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDatasetRequest {
-    /// <p>A list of "DatasetAction" objects.</p>
+    /// <p>A list of <code>DatasetAction</code> objects.</p>
     #[serde(rename = "actions")]
     pub actions: Vec<DatasetAction>,
-    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    /// <p>When dataset contents are created, they are delivered to destinations specified here.</p>
     #[serde(rename = "contentDeliveryRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
     /// <p>The name of the data set to update.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
-    /// <p>How long, in days, data set contents are kept for the data set.</p>
+    /// <p>A list of data rules that send notifications to Amazon CloudWatch, when data arrives late. To specify <code>lateDataRules</code>, the dataset must use a <a href="https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html">DeltaTimer</a> filter.</p>
+    #[serde(rename = "lateDataRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub late_data_rules: Option<Vec<LateDataRule>>,
+    /// <p>How long, in days, dataset contents are kept for the dataset.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
-    /// <p>A list of "DatasetTrigger" objects. The list can be empty or can contain up to five <b>DataSetTrigger</b> objects.</p>
+    /// <p>A list of <code>DatasetTrigger</code> objects. The list can be empty or can contain up to five <code>DatasetTrigger</code> objects.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
-    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    /// <p>Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the <code>retentionPeriod</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions">Keeping Multiple Versions of AWS IoT Analytics Data Sets</a> in the <i>AWS IoT Analytics User Guide</i>.</p>
     #[serde(rename = "versioningConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub versioning_configuration: Option<VersioningConfiguration>,
@@ -1712,10 +1845,14 @@ pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>Where data store data is stored. You may choose one of "serviceManagedS3" or "customerManagedS3" storage. If not specified, the default is "serviceManagedS3". This cannot be changed after the data store is created.</p>
+    /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is<code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_storage: Option<DatastoreStorage>,
+    /// <p>Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and <a href="https://parquet.apache.org/">Parquet</a>.</p> <p>The default file format is JSON. You can specify only one format.</p> <p>You can't change the file format after you create the data store.</p>
+    #[serde(rename = "fileFormatConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format_configuration: Option<FileFormatConfiguration>,
     /// <p>How long, in days, message data is kept for the data store. The retention period cannot be updated if the data store's S3 storage is customer-managed.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1725,7 +1862,7 @@ pub struct UpdateDatastoreRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePipelineRequest {
-    /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
+    /// <p>A list of <code>PipelineActivity</code> objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <code>PipelineActivity</code> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity. For example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
     pub pipeline_activities: Vec<PipelineActivity>,
     /// <p>The name of the pipeline to update.</p>
@@ -1733,10 +1870,10 @@ pub struct UpdatePipelineRequest {
     pub pipeline_name: String,
 }
 
-/// <p>An instance of a variable to be passed to the "containerAction" execution. Each variable must have a name and a value given by one of "stringValue", "datasetContentVersionValue", or "outputFileUriValue".</p>
+/// <p>An instance of a variable to be passed to the <code>containerAction</code> execution. Each variable must have a name and a value given by one of <code>stringValue</code>, <code>datasetContentVersionValue</code>, or <code>outputFileUriValue</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Variable {
-    /// <p>The value of the variable as a structure that specifies a data set content version.</p>
+    /// <p>The value of the variable as a structure that specifies a dataset content version.</p>
     #[serde(rename = "datasetContentVersionValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_content_version_value: Option<DatasetContentVersionValue>,
@@ -1757,14 +1894,14 @@ pub struct Variable {
     pub string_value: Option<String>,
 }
 
-/// <p>Information about the versioning of data set contents.</p>
+/// <p>Information about the versioning of dataset contents.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VersioningConfiguration {
-    /// <p>How many versions of data set contents will be kept. The "unlimited" parameter must be false.</p>
+    /// <p>How many versions of dataset contents are kept. The <code>unlimited</code> parameter must be <code>false</code>.</p>
     #[serde(rename = "maxVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_versions: Option<i64>,
-    /// <p>If true, unlimited versions of data set contents will be kept.</p>
+    /// <p>If true, unlimited versions of dataset contents are kept.</p>
     #[serde(rename = "unlimited")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unlimited: Option<bool>,
@@ -3715,13 +3852,13 @@ pub trait IotAnalytics {
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
 
-    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
+    /// <p>Creates a dataset. A dataset stores data retrieved from a data store by applying a <code>queryAction</code> (a SQL query) or a <code>containerAction</code> (executing a containerized application). This operation creates the skeleton of a dataset. The dataset can be populated manually by calling <code>CreateDatasetContent</code> or automatically according to a trigger you specify.</p>
     async fn create_dataset(
         &self,
         input: CreateDatasetRequest,
     ) -> Result<CreateDatasetResponse, RusotoError<CreateDatasetError>>;
 
-    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
+    /// <p>Creates the content of a data set by applying a <code>queryAction</code> (a SQL query) or a <code>containerAction</code> (executing a containerized application).</p>
     async fn create_dataset_content(
         &self,
         input: CreateDatasetContentRequest,
@@ -3745,13 +3882,13 @@ pub trait IotAnalytics {
         input: DeleteChannelRequest,
     ) -> Result<(), RusotoError<DeleteChannelError>>;
 
-    /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
+    /// <p>Deletes the specified dataset.</p> <p>You do not have to delete the content of the dataset before you perform this operation.</p>
     async fn delete_dataset(
         &self,
         input: DeleteDatasetRequest,
     ) -> Result<(), RusotoError<DeleteDatasetError>>;
 
-    /// <p>Deletes the content of the specified data set.</p>
+    /// <p>Deletes the content of the specified dataset.</p>
     async fn delete_dataset_content(
         &self,
         input: DeleteDatasetContentRequest,
@@ -3775,7 +3912,7 @@ pub trait IotAnalytics {
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
 
-    /// <p>Retrieves information about a data set.</p>
+    /// <p>Retrieves information about a dataset.</p>
     async fn describe_dataset(
         &self,
         input: DescribeDatasetRequest,
@@ -3798,7 +3935,7 @@ pub trait IotAnalytics {
         input: DescribePipelineRequest,
     ) -> Result<DescribePipelineResponse, RusotoError<DescribePipelineError>>;
 
-    /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
+    /// <p>Retrieves the contents of a data set as presigned URIs.</p>
     async fn get_dataset_content(
         &self,
         input: GetDatasetContentRequest,
@@ -3834,13 +3971,13 @@ pub trait IotAnalytics {
         input: ListPipelinesRequest,
     ) -> Result<ListPipelinesResponse, RusotoError<ListPipelinesError>>;
 
-    /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
+    /// <p>Lists the tags (metadata) that you have assigned to the resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
+    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>If you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the <code>roleArn</code> field (for example, to correct an invalid policy), it takes up to five minutes for that change to take effect. </p>
     async fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
@@ -3864,7 +4001,7 @@ pub trait IotAnalytics {
         input: StartPipelineReprocessingRequest,
     ) -> Result<StartPipelineReprocessingResponse, RusotoError<StartPipelineReprocessingError>>;
 
-    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -4035,7 +4172,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
+    /// <p>Creates a dataset. A dataset stores data retrieved from a data store by applying a <code>queryAction</code> (a SQL query) or a <code>containerAction</code> (executing a containerized application). This operation creates the skeleton of a dataset. The dataset can be populated manually by calling <code>CreateDatasetContent</code> or automatically according to a trigger you specify.</p>
     #[allow(unused_mut)]
     async fn create_dataset(
         &self,
@@ -4066,7 +4203,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
+    /// <p>Creates the content of a data set by applying a <code>queryAction</code> (a SQL query) or a <code>containerAction</code> (executing a containerized application).</p>
     #[allow(unused_mut)]
     async fn create_dataset_content(
         &self,
@@ -4079,6 +4216,9 @@ impl IotAnalytics for IotAnalyticsClient {
 
         let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
 
         let mut response = self
             .client
@@ -4189,7 +4329,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
+    /// <p>Deletes the specified dataset.</p> <p>You do not have to delete the content of the dataset before you perform this operation.</p>
     #[allow(unused_mut)]
     async fn delete_dataset(
         &self,
@@ -4219,7 +4359,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Deletes the content of the specified data set.</p>
+    /// <p>Deletes the content of the specified dataset.</p>
     #[allow(unused_mut)]
     async fn delete_dataset_content(
         &self,
@@ -4352,7 +4492,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Retrieves information about a data set.</p>
+    /// <p>Retrieves information about a dataset.</p>
     #[allow(unused_mut)]
     async fn describe_dataset(
         &self,
@@ -4478,7 +4618,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
+    /// <p>Retrieves the contents of a data set as presigned URIs.</p>
     #[allow(unused_mut)]
     async fn get_dataset_content(
         &self,
@@ -4709,7 +4849,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
+    /// <p>Lists the tags (metadata) that you have assigned to the resource.</p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
@@ -4741,7 +4881,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
+    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>If you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the <code>roleArn</code> field (for example, to correct an invalid policy), it takes up to five minutes for that change to take effect. </p>
     #[allow(unused_mut)]
     async fn put_logging_options(
         &self,
@@ -4880,7 +5020,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,

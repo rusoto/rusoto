@@ -25,6 +25,66 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <pre><code>        &lt;p&gt;Associates sasl scram secrets to cluster.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchAssociateScramSecretRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster to be updated.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;List of AWS Secrets Manager secret ARNs.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SecretArnList")]
+    pub secret_arn_list: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchAssociateScramSecretResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;List of errors when associating secrets to cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "UnprocessedScramSecrets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_scram_secrets: Option<Vec<UnprocessedScramSecret>>,
+}
+
+/// <pre><code>        &lt;p&gt;Disassociates sasl scram secrets to cluster.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchDisassociateScramSecretRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster to be updated.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;List of AWS Secrets Manager secret ARNs.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SecretArnList")]
+    pub secret_arn_list: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchDisassociateScramSecretResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;List of errors when disassociating secrets to cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "UnprocessedScramSecrets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_scram_secrets: Option<Vec<UnprocessedScramSecret>>,
+}
+
 /// <pre><code>        &lt;p&gt;Specifies the EBS volume upgrade information. The broker identifier must be set to the keyword ALL. This means the changes apply to all the brokers in the cluster.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -147,6 +207,11 @@ pub struct BrokerSoftwareInfo {
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientAuthentication {
+    /// <pre><code>        &lt;p&gt;Details for ClientAuthentication using SASL.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Sasl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sasl: Option<Sasl>,
     /// <pre><code>        &lt;p&gt;Details for ClientAuthentication using TLS.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Tls")]
@@ -213,7 +278,7 @@ pub struct ClusterInfo {
     #[serde(rename = "EncryptionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_info: Option<EncryptionInfo>,
-    /// <pre><code>        &lt;p&gt;Specifies which metrics are gathered for the MSK cluster. This property has three possible values: DEFAULT, PER_BROKER, and PER_TOPIC_PER_BROKER. For a list of the metrics associated with each of these three levels of monitoring, see &lt;a href=&quot;https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html&quot;&gt;Monitoring&lt;/a&gt;.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;Specifies which metrics are gathered for the MSK cluster. This property has the following possible values: DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER, and PER_TOPIC_PER_PARTITION. For a list of the metrics associated with each of these levels of monitoring, see &lt;a href=&quot;https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html&quot;&gt;Monitoring&lt;/a&gt;.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -231,7 +296,7 @@ pub struct ClusterInfo {
     #[serde(rename = "OpenMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_monitoring: Option<OpenMonitoring>,
-    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are ACTIVE, CREATING, DELETING, FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -249,6 +314,11 @@ pub struct ClusterInfo {
     #[serde(rename = "ZookeeperConnectString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zookeeper_connect_string: Option<String>,
+    /// <pre><code>        &lt;p&gt;The connection string to use to connect to zookeeper cluster on Tls port.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ZookeeperConnectStringTls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zookeeper_connect_string_tls: Option<String>,
 }
 
 /// <pre><code>        &lt;p&gt;Returns information about a cluster operation.&lt;/p&gt;
@@ -388,6 +458,10 @@ pub struct Configuration {
     /// </code></pre>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <pre><code>        &lt;p&gt;The state of the configuration. The possible states are ACTIVE, DELETING, and DELETE_FAILED. &lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "State")]
+    pub state: String,
 }
 
 /// <pre><code>        &lt;p&gt;Specifies the configuration to use for the brokers.&lt;/p&gt;
@@ -450,7 +524,7 @@ pub struct CreateClusterRequest {
     #[serde(rename = "EncryptionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_info: Option<EncryptionInfo>,
-    /// <pre><code>        &lt;p&gt;Specifies the level of monitoring for the MSK cluster. The possible values are DEFAULT, PER_BROKER, and PER_TOPIC_PER_BROKER.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;Specifies the level of monitoring for the MSK cluster. The possible values are DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER, and PER_TOPIC_PER_PARTITION.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -491,7 +565,7 @@ pub struct CreateClusterResponse {
     #[serde(rename = "ClusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
-    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are ACTIVE, CREATING, DELETING, FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -550,6 +624,11 @@ pub struct CreateConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <pre><code>        &lt;p&gt;The state of the configuration. The possible states are ACTIVE, DELETING, and DELETE_FAILED. &lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -574,7 +653,31 @@ pub struct DeleteClusterResponse {
     #[serde(rename = "ClusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_arn: Option<String>,
-    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.&lt;/p&gt;
+    /// <pre><code>        &lt;p&gt;The state of the cluster. The possible states are ACTIVE, CREATING, DELETING, FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConfigurationRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteConfigurationResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The state of the configuration. The possible states are ACTIVE, DELETING, and DELETE_FAILED. &lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -661,6 +764,11 @@ pub struct DescribeConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <pre><code>        &lt;p&gt;The state of the configuration. The possible states are ACTIVE, DELETING, and DELETE_FAILED. &lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -816,6 +924,11 @@ pub struct GetBootstrapBrokersResponse {
     #[serde(rename = "BootstrapBrokerString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bootstrap_broker_string: Option<String>,
+    /// <pre><code>        &lt;p&gt;A string containing one or more DNS names (or IP) and Sasl Scram port pairs.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "BootstrapBrokerStringSaslScram")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bootstrap_broker_string_sasl_scram: Option<String>,
     /// <pre><code>        &lt;p&gt;A string containing one or more DNS names (or IP) and TLS port pairs.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "BootstrapBrokerStringTls")]
@@ -1079,6 +1192,40 @@ pub struct ListNodesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListScramSecretsRequest {
+    /// <pre><code>        &lt;p&gt;The arn of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The maxResults of the query.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <pre><code>        &lt;p&gt;The nextToken of the query.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListScramSecretsResponse {
+    /// <pre><code>        &lt;p&gt;Paginated results marker.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <pre><code>        &lt;p&gt;The list of scram secrets associated with the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SecretArnList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_arn_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the resource that&#39;s associated with the tags.&lt;/p&gt;
     /// </code></pre>
@@ -1257,6 +1404,35 @@ pub struct PrometheusInfo {
     pub node_exporter: Option<NodeExporterInfo>,
 }
 
+/// <p>Reboots a node.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RebootBrokerRequest {
+    /// <pre><code>        &lt;p&gt;The list of broker IDs to be rebooted. The reboot-broker operation supports rebooting one broker at a time.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "BrokerIds")]
+    pub broker_ids: Vec<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster to be updated.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RebootBrokerResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3 {
     #[serde(rename = "Bucket")]
@@ -1267,6 +1443,28 @@ pub struct S3 {
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
+}
+
+/// <pre><code>        &lt;p&gt;Details for client authentication using SASL.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Sasl {
+    /// <pre><code>        &lt;p&gt;Details for SASL/SCRAM client authentication.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Scram")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scram: Option<Scram>,
+}
+
+/// <pre><code>        &lt;p&gt;Details for SASL/SCRAM client authentication.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Scram {
+    /// <pre><code>        &lt;p&gt;SASL/SCRAM authentication is enabled or not.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1313,6 +1511,28 @@ pub struct Tls {
     #[serde(rename = "CertificateAuthorityArnList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority_arn_list: Option<Vec<String>>,
+}
+
+/// <pre><code>        &lt;p&gt;Error info for scram secret associate/disassociate failure.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UnprocessedScramSecret {
+    /// <pre><code>        &lt;p&gt;Error code for associate/disassociate failure.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <pre><code>        &lt;p&gt;Error message for associate/disassociate failure.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <pre><code>        &lt;p&gt;AWS Secrets Manager secret ARN.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SecretArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1480,6 +1700,45 @@ pub struct UpdateClusterKafkaVersionResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConfigurationRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <pre><code>        &lt;p&gt;The description of the configuration revision.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <pre><code>        &lt;p&gt;Contents of the &lt;filename&gt;server.properties&lt;/filename&gt; file. When using the API, you must ensure that the contents of the file are base64 encoded.
+    /// When using the AWS Management Console, the SDK, or the AWS CLI, the contents of &lt;filename&gt;server.properties&lt;/filename&gt; can be in plaintext.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ServerProperties")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub server_properties: bytes::Bytes,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateConfigurationResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;Latest revision of the configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "LatestRevision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_revision: Option<ConfigurationRevision>,
+}
+
 /// <p>Request body for UpdateMonitoring.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1554,6 +1813,184 @@ pub struct ZookeeperNodeInfo {
     pub zookeeper_version: Option<String>,
 }
 
+/// Errors returned by BatchAssociateScramSecret
+#[derive(Debug, PartialEq)]
+pub enum BatchAssociateScramSecretError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl BatchAssociateScramSecretError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchAssociateScramSecretError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchAssociateScramSecretError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchAssociateScramSecretError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        BatchAssociateScramSecretError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(BatchAssociateScramSecretError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        BatchAssociateScramSecretError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(BatchAssociateScramSecretError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(BatchAssociateScramSecretError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchAssociateScramSecretError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchAssociateScramSecretError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchAssociateScramSecretError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchAssociateScramSecretError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchAssociateScramSecretError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchAssociateScramSecretError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            BatchAssociateScramSecretError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            BatchAssociateScramSecretError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchAssociateScramSecretError {}
+/// Errors returned by BatchDisassociateScramSecret
+#[derive(Debug, PartialEq)]
+pub enum BatchDisassociateScramSecretError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl BatchDisassociateScramSecretError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchDisassociateScramSecretError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchDisassociateScramSecretError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchDisassociateScramSecretError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        BatchDisassociateScramSecretError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(BatchDisassociateScramSecretError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        BatchDisassociateScramSecretError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        BatchDisassociateScramSecretError::TooManyRequests(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(BatchDisassociateScramSecretError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchDisassociateScramSecretError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchDisassociateScramSecretError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchDisassociateScramSecretError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchDisassociateScramSecretError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDisassociateScramSecretError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchDisassociateScramSecretError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchDisassociateScramSecretError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            BatchDisassociateScramSecretError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchDisassociateScramSecretError {}
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
@@ -1756,6 +2193,60 @@ impl fmt::Display for DeleteClusterError {
     }
 }
 impl Error for DeleteClusterError {}
+/// Errors returned by DeleteConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteConfigurationError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+}
+
+impl DeleteConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteConfigurationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteConfigurationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteConfigurationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteConfigurationError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DeleteConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DeleteConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConfigurationError {}
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
@@ -2541,6 +3032,81 @@ impl fmt::Display for ListNodesError {
     }
 }
 impl Error for ListNodesError {}
+/// Errors returned by ListScramSecrets
+#[derive(Debug, PartialEq)]
+pub enum ListScramSecretsError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl ListScramSecretsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListScramSecretsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListScramSecretsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListScramSecretsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListScramSecretsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListScramSecretsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListScramSecretsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListScramSecretsError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListScramSecretsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListScramSecretsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListScramSecretsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListScramSecretsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListScramSecretsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2588,6 +3154,79 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by RebootBroker
+#[derive(Debug, PartialEq)]
+pub enum RebootBrokerError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl RebootBrokerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootBrokerError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RebootBrokerError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RebootBrokerError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RebootBrokerError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RebootBrokerError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RebootBrokerError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RebootBrokerError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(RebootBrokerError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RebootBrokerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RebootBrokerError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::NotFound(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RebootBrokerError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RebootBrokerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2971,6 +3610,76 @@ impl fmt::Display for UpdateClusterKafkaVersionError {
     }
 }
 impl Error for UpdateClusterKafkaVersionError {}
+/// Errors returned by UpdateConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateConfigurationError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateConfigurationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateConfigurationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateConfigurationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateConfigurationError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateConfigurationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateConfigurationError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateConfigurationError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateConfigurationError {}
 /// Errors returned by UpdateMonitoring
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringError {
@@ -3035,6 +3744,20 @@ impl Error for UpdateMonitoringError {}
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 #[async_trait]
 pub trait Kafka {
+    /// <pre><code>        &lt;p&gt;Associates one or more Scram Secrets with an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn batch_associate_scram_secret(
+        &self,
+        input: BatchAssociateScramSecretRequest,
+    ) -> Result<BatchAssociateScramSecretResponse, RusotoError<BatchAssociateScramSecretError>>;
+
+    /// <pre><code>        &lt;p&gt;Disassociates one or more Scram Secrets from an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn batch_disassociate_scram_secret(
+        &self,
+        input: BatchDisassociateScramSecretRequest,
+    ) -> Result<BatchDisassociateScramSecretResponse, RusotoError<BatchDisassociateScramSecretError>>;
+
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
     async fn create_cluster(
@@ -3055,6 +3778,13 @@ pub trait Kafka {
         &self,
         input: DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, RusotoError<DeleteClusterError>>;
+
+    /// <pre><code>        &lt;p&gt;Deletes an MSK Configuration.&lt;/p&gt;
+    /// </code></pre>
+    async fn delete_configuration(
+        &self,
+        input: DeleteConfigurationRequest,
+    ) -> Result<DeleteConfigurationResponse, RusotoError<DeleteConfigurationError>>;
 
     /// <pre><code>        &lt;p&gt;Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.&lt;/p&gt;
     /// </code></pre>
@@ -3143,12 +3873,25 @@ pub trait Kafka {
         input: ListNodesRequest,
     ) -> Result<ListNodesResponse, RusotoError<ListNodesError>>;
 
+    /// <pre><code>        &lt;p&gt;Returns a list of the Scram Secrets associated with an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn list_scram_secrets(
+        &self,
+        input: ListScramSecretsRequest,
+    ) -> Result<ListScramSecretsResponse, RusotoError<ListScramSecretsError>>;
+
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Reboots brokers.</p>
+    async fn reboot_broker(
+        &self,
+        input: RebootBrokerRequest,
+    ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>>;
 
     /// <pre><code>        &lt;p&gt;Adds tags to the specified MSK resource.&lt;/p&gt;
     /// </code></pre>
@@ -3191,6 +3934,13 @@ pub trait Kafka {
         &self,
         input: UpdateClusterKafkaVersionRequest,
     ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>;
+
+    /// <pre><code>        &lt;p&gt;Updates an MSK configuration.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_configuration(
+        &self,
+        input: UpdateConfigurationRequest,
+    ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
     /// </code></pre>
@@ -3239,6 +3989,78 @@ impl KafkaClient {
 
 #[async_trait]
 impl Kafka for KafkaClient {
+    /// <pre><code>        &lt;p&gt;Associates one or more Scram Secrets with an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn batch_associate_scram_secret(
+        &self,
+        input: BatchAssociateScramSecretRequest,
+    ) -> Result<BatchAssociateScramSecretResponse, RusotoError<BatchAssociateScramSecretError>>
+    {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/scram-secrets",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchAssociateScramSecretResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchAssociateScramSecretError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Disassociates one or more Scram Secrets from an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn batch_disassociate_scram_secret(
+        &self,
+        input: BatchDisassociateScramSecretRequest,
+    ) -> Result<BatchDisassociateScramSecretResponse, RusotoError<BatchDisassociateScramSecretError>>
+    {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/scram-secrets",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PATCH", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDisassociateScramSecretResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDisassociateScramSecretError::from_response(response))
+        }
+    }
+
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
     #[allow(unused_mut)]
@@ -3338,6 +4160,35 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteClusterError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Deletes an MSK Configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn delete_configuration(
+        &self,
+        input: DeleteConfigurationRequest,
+    ) -> Result<DeleteConfigurationResponse, RusotoError<DeleteConfigurationError>> {
+        let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
+
+        let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteConfigurationError::from_response(response))
         }
     }
 
@@ -3776,6 +4627,47 @@ impl Kafka for KafkaClient {
         }
     }
 
+    /// <pre><code>        &lt;p&gt;Returns a list of the Scram Secrets associated with an Amazon MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn list_scram_secrets(
+        &self,
+        input: ListScramSecretsRequest,
+    ) -> Result<ListScramSecretsResponse, RusotoError<ListScramSecretsError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/scram-secrets",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListScramSecretsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListScramSecretsError::from_response(response))
+        }
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
     #[allow(unused_mut)]
@@ -3802,6 +4694,40 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Reboots brokers.</p>
+    #[allow(unused_mut)]
+    async fn reboot_broker(
+        &self,
+        input: RebootBrokerRequest,
+    ) -> Result<RebootBrokerResponse, RusotoError<RebootBrokerError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/reboot-broker",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RebootBrokerResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RebootBrokerError::from_response(response))
         }
     }
 
@@ -4009,6 +4935,38 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateClusterKafkaVersionError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Updates an MSK configuration.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn update_configuration(
+        &self,
+        input: UpdateConfigurationRequest,
+    ) -> Result<UpdateConfigurationResponse, RusotoError<UpdateConfigurationError>> {
+        let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateConfigurationError::from_response(response))
         }
     }
 

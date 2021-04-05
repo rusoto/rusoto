@@ -52,15 +52,54 @@ impl CloudFrontClient {
         Ok(response)
     }
 }
-/// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>A list of key groups, and the public keys in each key group, that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ActiveTrustedKeyGroups {
+    /// <p>This field is <code>true</code> if any of the key groups have public keys that CloudFront can use to verify the signatures of signed URLs and signed cookies. If not, this field is <code>false</code>.</p>
+    pub enabled: bool,
+    /// <p>A list of key groups, including the identifiers of the public keys in each key group that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
+    pub items: Option<Vec<KGKeyPairIds>>,
+    /// <p>The number of key groups in the list.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct ActiveTrustedKeyGroupsDeserializer;
+impl ActiveTrustedKeyGroupsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ActiveTrustedKeyGroups, XmlParseError> {
+        deserialize_elements::<_, ActiveTrustedKeyGroups, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Enabled" => {
+                    obj.enabled = BooleanDeserializer::deserialize("Enabled", stack)?;
+                }
+                "Items" => {
+                    obj.items
+                        .get_or_insert(vec![])
+                        .extend(KGKeyPairIdsListDeserializer::deserialize("Items", stack)?);
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A list of AWS accounts and the active CloudFront key pairs in each account that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActiveTrustedSigners {
-    /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p>
+    /// <p>This field is <code>true</code> if any of the AWS accounts in the list have active CloudFront key pairs that CloudFront can use to verify the signatures of signed URLs and signed cookies. If not, this field is <code>false</code>.</p>
     pub enabled: bool,
-    /// <p>A complex type that contains one <code>Signer</code> complex type for each trusted signer that is specified in the <code>TrustedSigners</code> complex type.</p>
+    /// <p>A list of AWS accounts and the identifiers of active CloudFront key pairs in each account that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
     pub items: Option<Vec<Signer>>,
-    /// <p>The number of trusted signers specified in the <code>TrustedSigners</code> complex type.</p>
+    /// <p>The number of AWS accounts in the list.</p>
     pub quantity: i64,
 }
 
@@ -374,28 +413,28 @@ impl BooleanSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
+    /// <p>The unique identifier of the cache policy that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub cache_policy_id: Option<String>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
-    /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    pub default_ttl: Option<i64>,
     /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for this cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
-    /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
-    pub forwarded_values: ForwardedValues,
     /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
-    /// <p>The maximum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    pub max_ttl: Option<i64>,
-    /// <p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html"> Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>
-    pub min_ttl: i64,
+    /// <p>The unique identifier of the origin request policy that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">Using the managed origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub origin_request_policy_id: Option<String>,
     /// <p>The pattern (for example, <code>images/*.jpg</code>) that specifies which requests to apply the behavior to. When CloudFront receives a viewer request, the requested path is compared with path patterns in the order in which cache behaviors are listed in the distribution.</p> <note> <p>You can optionally include a slash (<code>/</code>) at the beginning of the path pattern. For example, <code>/images/*.jpg</code>. CloudFront behavior is the same with or without the leading <code>/</code>.</p> </note> <p>The path pattern for the default cache behavior is <code>*</code> and cannot be changed. If the request for an object does not match the path pattern for any cache behaviors, CloudFront applies the behavior in the default cache behavior.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern">Path Pattern</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>
     pub path_pattern: String,
+    /// <p>The Amazon Resource Name (ARN) of the real-time log configuration that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html">Real-time logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub realtime_log_config_arn: Option<String>,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
     /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they match this cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>. </p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
-    pub trusted_signers: TrustedSigners,
+    /// <p>A list of key groups that CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted key groups, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with a private key whose corresponding public key is in the key group. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub trusted_key_groups: Option<TrustedKeyGroups>,
+    /// <p><important> <p>We recommend using <code>TrustedKeyGroups</code> instead of <code>TrustedSigners</code>.</p> </important> <p>A list of AWS account IDs whose public keys CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted signers, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with the private key of a CloudFront key pair in the trusted signer’s AWS account. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p></p>
+    pub trusted_signers: Option<TrustedSigners>,
     /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
@@ -416,21 +455,18 @@ impl CacheBehaviorDeserializer {
                         stack,
                     )?);
                 }
+                "CachePolicyId" => {
+                    obj.cache_policy_id =
+                        Some(StringDeserializer::deserialize("CachePolicyId", stack)?);
+                }
                 "Compress" => {
                     obj.compress = Some(BooleanDeserializer::deserialize("Compress", stack)?);
-                }
-                "DefaultTTL" => {
-                    obj.default_ttl = Some(LongDeserializer::deserialize("DefaultTTL", stack)?);
                 }
                 "FieldLevelEncryptionId" => {
                     obj.field_level_encryption_id = Some(StringDeserializer::deserialize(
                         "FieldLevelEncryptionId",
                         stack,
                     )?);
-                }
-                "ForwardedValues" => {
-                    obj.forwarded_values =
-                        ForwardedValuesDeserializer::deserialize("ForwardedValues", stack)?;
                 }
                 "LambdaFunctionAssociations" => {
                     obj.lambda_function_associations =
@@ -439,14 +475,20 @@ impl CacheBehaviorDeserializer {
                             stack,
                         )?);
                 }
-                "MaxTTL" => {
-                    obj.max_ttl = Some(LongDeserializer::deserialize("MaxTTL", stack)?);
-                }
-                "MinTTL" => {
-                    obj.min_ttl = LongDeserializer::deserialize("MinTTL", stack)?;
+                "OriginRequestPolicyId" => {
+                    obj.origin_request_policy_id = Some(StringDeserializer::deserialize(
+                        "OriginRequestPolicyId",
+                        stack,
+                    )?);
                 }
                 "PathPattern" => {
                     obj.path_pattern = StringDeserializer::deserialize("PathPattern", stack)?;
+                }
+                "RealtimeLogConfigArn" => {
+                    obj.realtime_log_config_arn = Some(StringDeserializer::deserialize(
+                        "RealtimeLogConfigArn",
+                        stack,
+                    )?);
                 }
                 "SmoothStreaming" => {
                     obj.smooth_streaming =
@@ -456,9 +498,17 @@ impl CacheBehaviorDeserializer {
                     obj.target_origin_id =
                         StringDeserializer::deserialize("TargetOriginId", stack)?;
                 }
+                "TrustedKeyGroups" => {
+                    obj.trusted_key_groups = Some(TrustedKeyGroupsDeserializer::deserialize(
+                        "TrustedKeyGroups",
+                        stack,
+                    )?);
+                }
                 "TrustedSigners" => {
-                    obj.trusted_signers =
-                        TrustedSignersDeserializer::deserialize("TrustedSigners", stack)?;
+                    obj.trusted_signers = Some(TrustedSignersDeserializer::deserialize(
+                        "TrustedSigners",
+                        stack,
+                    )?);
                 }
                 "ViewerProtocolPolicy" => {
                     obj.viewer_protocol_policy = ViewerProtocolPolicyDeserializer::deserialize(
@@ -488,20 +538,15 @@ impl CacheBehaviorSerializer {
         if let Some(ref value) = obj.allowed_methods {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
+        if let Some(ref value) = obj.cache_policy_id {
+            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+        }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
-        }
-        if let Some(ref value) = obj.default_ttl {
-            write_characters_element(writer, "DefaultTTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
             write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
         }
-        ForwardedValuesSerializer::serialize(
-            &mut writer,
-            "ForwardedValues",
-            &obj.forwarded_values,
-        )?;
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
                 &mut writer,
@@ -509,16 +554,23 @@ impl CacheBehaviorSerializer {
                 value,
             )?;
         }
-        if let Some(ref value) = obj.max_ttl {
-            write_characters_element(writer, "MaxTTL", &value.to_string())?;
+        if let Some(ref value) = obj.origin_request_policy_id {
+            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
         }
-        write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
         write_characters_element(writer, "PathPattern", &obj.path_pattern.to_string())?;
+        if let Some(ref value) = obj.realtime_log_config_arn {
+            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+        }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
         write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
-        TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
+        if let Some(ref value) = obj.trusted_key_groups {
+            &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
+        }
+        if let Some(ref value) = obj.trusted_signers {
+            &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
+        }
         write_characters_element(
             writer,
             "ViewerProtocolPolicy",
@@ -623,6 +675,521 @@ impl CacheBehaviorsSerializer {
         }
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A cache policy.</p> <p>When it’s attached to a cache behavior, the cache policy determines the following:</p> <ul> <li> <p>The values that CloudFront includes in the cache key. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> </li> <li> <p>The default, minimum, and maximum time to live (TTL) values that you want objects to stay in the CloudFront cache.</p> </li> </ul> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find a valid object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CachePolicy {
+    /// <p>The cache policy configuration.</p>
+    pub cache_policy_config: CachePolicyConfig,
+    /// <p>The unique identifier for the cache policy.</p>
+    pub id: String,
+    /// <p>The date and time when the cache policy was last modified.</p>
+    pub last_modified_time: String,
+}
+
+#[allow(dead_code)]
+struct CachePolicyDeserializer;
+impl CachePolicyDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicy, XmlParseError> {
+        deserialize_elements::<_, CachePolicy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CachePolicyConfig" => {
+                    obj.cache_policy_config =
+                        CachePolicyConfigDeserializer::deserialize("CachePolicyConfig", stack)?;
+                }
+                "Id" => {
+                    obj.id = StringDeserializer::deserialize("Id", stack)?;
+                }
+                "LastModifiedTime" => {
+                    obj.last_modified_time =
+                        TimestampDeserializer::deserialize("LastModifiedTime", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A cache policy configuration.</p> <p>This configuration determines the following:</p> <ul> <li> <p>The values that CloudFront includes in the cache key. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> </li> <li> <p>The default, minimum, and maximum time to live (TTL) values that you want objects to stay in the CloudFront cache.</p> </li> </ul> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find a valid object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CachePolicyConfig {
+    /// <p>A comment to describe the cache policy.</p>
+    pub comment: Option<String>,
+    /// <p>The default amount of time, in seconds, that you want objects to stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. CloudFront uses this value as the object’s time to live (TTL) only when the origin does <i>not</i> send <code>Cache-Control</code> or <code>Expires</code> headers with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>The default value for this field is 86400 seconds (one day). If the value of <code>MinTTL</code> is more than 86400 seconds, then the default value for this field is the same as the value of <code>MinTTL</code>.</p>
+    pub default_ttl: Option<i64>,
+    /// <p>The maximum amount of time, in seconds, that objects stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. CloudFront uses this value only when the origin sends <code>Cache-Control</code> or <code>Expires</code> headers with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>The default value for this field is 31536000 seconds (one year). If the value of <code>MinTTL</code> or <code>DefaultTTL</code> is more than 31536000 seconds, then the default value for this field is the same as the value of <code>DefaultTTL</code>.</p>
+    pub max_ttl: Option<i64>,
+    /// <p>The minimum amount of time, in seconds, that you want objects to stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub min_ttl: i64,
+    /// <p>A unique name to identify the cache policy.</p>
+    pub name: String,
+    /// <p>The HTTP headers, cookies, and URL query strings to include in the cache key. The values included in the cache key are automatically included in requests that CloudFront sends to the origin.</p>
+    pub parameters_in_cache_key_and_forwarded_to_origin:
+        Option<ParametersInCacheKeyAndForwardedToOrigin>,
+}
+
+#[allow(dead_code)]
+struct CachePolicyConfigDeserializer;
+impl CachePolicyConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyConfig, XmlParseError> {
+        deserialize_elements::<_, CachePolicyConfig, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Comment" => {
+                    obj.comment = Some(StringDeserializer::deserialize("Comment", stack)?);
+                }
+                "DefaultTTL" => {
+                    obj.default_ttl = Some(LongDeserializer::deserialize("DefaultTTL", stack)?);
+                }
+                "MaxTTL" => {
+                    obj.max_ttl = Some(LongDeserializer::deserialize("MaxTTL", stack)?);
+                }
+                "MinTTL" => {
+                    obj.min_ttl = LongDeserializer::deserialize("MinTTL", stack)?;
+                }
+                "Name" => {
+                    obj.name = StringDeserializer::deserialize("Name", stack)?;
+                }
+                "ParametersInCacheKeyAndForwardedToOrigin" => {
+                    obj.parameters_in_cache_key_and_forwarded_to_origin = Some(
+                        ParametersInCacheKeyAndForwardedToOriginDeserializer::deserialize(
+                            "ParametersInCacheKeyAndForwardedToOrigin",
+                            stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct CachePolicyConfigSerializer;
+impl CachePolicyConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CachePolicyConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.comment {
+            write_characters_element(writer, "Comment", &value.to_string())?;
+        }
+        if let Some(ref value) = obj.default_ttl {
+            write_characters_element(writer, "DefaultTTL", &value.to_string())?;
+        }
+        if let Some(ref value) = obj.max_ttl {
+            write_characters_element(writer, "MaxTTL", &value.to_string())?;
+        }
+        write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        if let Some(ref value) = obj.parameters_in_cache_key_and_forwarded_to_origin {
+            &ParametersInCacheKeyAndForwardedToOriginSerializer::serialize(
+                &mut writer,
+                "ParametersInCacheKeyAndForwardedToOrigin",
+                value,
+            )?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct CachePolicyCookieBehaviorDeserializer;
+impl CachePolicyCookieBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct CachePolicyCookieBehaviorSerializer;
+impl CachePolicyCookieBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any cookies in viewer requests (and if so, which cookies) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CachePolicyCookiesConfig {
+    /// <p><p>Determines whether any cookies in viewer requests are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Cookies in viewer requests are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any cookies that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The cookies in viewer requests that are listed in the <code>CookieNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allExcept</code> – All cookies in viewer requests that are <i> <b>not</b> </i> listed in the <code>CookieNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All cookies in viewer requests are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
+    pub cookie_behavior: String,
+    pub cookies: Option<CookieNames>,
+}
+
+#[allow(dead_code)]
+struct CachePolicyCookiesConfigDeserializer;
+impl CachePolicyCookiesConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyCookiesConfig, XmlParseError> {
+        deserialize_elements::<_, CachePolicyCookiesConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CookieBehavior" => {
+                        obj.cookie_behavior = CachePolicyCookieBehaviorDeserializer::deserialize(
+                            "CookieBehavior",
+                            stack,
+                        )?;
+                    }
+                    "Cookies" => {
+                        obj.cookies = Some(CookieNamesDeserializer::deserialize("Cookies", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct CachePolicyCookiesConfigSerializer;
+impl CachePolicyCookiesConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CachePolicyCookiesConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        if let Some(ref value) = obj.cookies {
+            &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct CachePolicyHeaderBehaviorDeserializer;
+impl CachePolicyHeaderBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct CachePolicyHeaderBehaviorSerializer;
+impl CachePolicyHeaderBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any HTTP headers (and if so, which headers) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CachePolicyHeadersConfig {
+    /// <p><p>Determines whether any HTTP headers are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – HTTP headers are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any headers that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The HTTP headers that are listed in the <code>Headers</code> type are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
+    pub header_behavior: String,
+    pub headers: Option<Headers>,
+}
+
+#[allow(dead_code)]
+struct CachePolicyHeadersConfigDeserializer;
+impl CachePolicyHeadersConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyHeadersConfig, XmlParseError> {
+        deserialize_elements::<_, CachePolicyHeadersConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HeaderBehavior" => {
+                        obj.header_behavior = CachePolicyHeaderBehaviorDeserializer::deserialize(
+                            "HeaderBehavior",
+                            stack,
+                        )?;
+                    }
+                    "Headers" => {
+                        obj.headers = Some(HeadersDeserializer::deserialize("Headers", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct CachePolicyHeadersConfigSerializer;
+impl CachePolicyHeadersConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CachePolicyHeadersConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        if let Some(ref value) = obj.headers {
+            &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A list of cache policies.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CachePolicyList {
+    /// <p>Contains the cache policies in the list.</p>
+    pub items: Option<Vec<CachePolicySummary>>,
+    /// <p>The maximum number of cache policies requested.</p>
+    pub max_items: i64,
+    /// <p>If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing cache policies where you left off.</p>
+    pub next_marker: Option<String>,
+    /// <p>The total number of cache policies returned in the response.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct CachePolicyListDeserializer;
+impl CachePolicyListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyList, XmlParseError> {
+        deserialize_elements::<_, CachePolicyList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        CachePolicySummaryListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "MaxItems" => {
+                    obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct CachePolicyQueryStringBehaviorDeserializer;
+impl CachePolicyQueryStringBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct CachePolicyQueryStringBehaviorSerializer;
+impl CachePolicyQueryStringBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any URL query strings in viewer requests (and if so, which query strings) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CachePolicyQueryStringsConfig {
+    /// <p><p>Determines whether any URL query strings in viewer requests are included in the cache key and automatically included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Query strings in viewer requests are not included in the cache key and are not automatically included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any query strings that are listed in an <code>OriginRequestPolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The query strings in viewer requests that are listed in the <code>QueryStringNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allExcept</code> – All query strings in viewer requests that are <i> <b>not</b> </i> listed in the <code>QueryStringNames</code> type are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All query strings in viewer requests are included in the cache key and are automatically included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
+    pub query_string_behavior: String,
+    /// <p>Contains the specific query strings in viewer requests that either <i> <b>are</b> </i> or <i> <b>are not</b> </i> included in the cache key and automatically included in requests that CloudFront sends to the origin. The behavior depends on whether the <code>QueryStringBehavior</code> field in the <code>CachePolicyQueryStringsConfig</code> type is set to <code>whitelist</code> (the listed query strings <i> <b>are</b> </i> included) or <code>allExcept</code> (the listed query strings <i> <b>are not</b> </i> included, but all other query strings are).</p>
+    pub query_strings: Option<QueryStringNames>,
+}
+
+#[allow(dead_code)]
+struct CachePolicyQueryStringsConfigDeserializer;
+impl CachePolicyQueryStringsConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicyQueryStringsConfig, XmlParseError> {
+        deserialize_elements::<_, CachePolicyQueryStringsConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "QueryStringBehavior" => {
+                        obj.query_string_behavior =
+                            CachePolicyQueryStringBehaviorDeserializer::deserialize(
+                                "QueryStringBehavior",
+                                stack,
+                            )?;
+                    }
+                    "QueryStrings" => {
+                        obj.query_strings = Some(QueryStringNamesDeserializer::deserialize(
+                            "QueryStrings",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct CachePolicyQueryStringsConfigSerializer;
+impl CachePolicyQueryStringsConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CachePolicyQueryStringsConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(
+            writer,
+            "QueryStringBehavior",
+            &obj.query_string_behavior.to_string(),
+        )?;
+        if let Some(ref value) = obj.query_strings {
+            &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>Contains a cache policy.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CachePolicySummary {
+    /// <p>The cache policy.</p>
+    pub cache_policy: CachePolicy,
+    /// <p>The type of cache policy, either <code>managed</code> (created by AWS) or <code>custom</code> (created in this AWS account).</p>
+    pub type_: String,
+}
+
+#[allow(dead_code)]
+struct CachePolicySummaryDeserializer;
+impl CachePolicySummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CachePolicySummary, XmlParseError> {
+        deserialize_elements::<_, CachePolicySummary, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CachePolicy" => {
+                    obj.cache_policy = CachePolicyDeserializer::deserialize("CachePolicy", stack)?;
+                }
+                "Type" => {
+                    obj.type_ = CachePolicyTypeDeserializer::deserialize("Type", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct CachePolicySummaryListDeserializer;
+impl CachePolicySummaryListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CachePolicySummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "CachePolicySummary" {
+                obj.push(CachePolicySummaryDeserializer::deserialize(
+                    "CachePolicySummary",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct CachePolicyTypeDeserializer;
+impl CachePolicyTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct CachePolicyTypeSerializer;
+impl CachePolicyTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1200,14 +1767,14 @@ impl CookieNameListSerializer {
     }
 }
 
-/// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html"> Caching Content Based on Request Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>Contains a list of cookie names.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookieNames {
-    /// <p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior. It must contain the same number of items that is specified in the <code>Quantity</code> field.</p> <p>When you set <code>Forward = whitelist</code> (in the <code>CookiePreferences</code> object), this field must contain at least one item.</p>
+    /// <p>A list of cookie names.</p>
     pub items: Option<Vec<String>>,
-    /// <p>The number of different cookies that you want CloudFront to forward to the origin for this cache behavior. The value must equal the number of items that are in the <code>Items</code> field.</p> <p>When you set <code>Forward = whitelist</code> (in the <code>CookiePreferences</code> object), this value must be <code>1</code> or higher.</p>
+    /// <p>The number of cookie names in the <code>Items</code> list.</p>
     pub quantity: i64,
 }
 
@@ -1256,63 +1823,47 @@ impl CookieNamesSerializer {
     }
 }
 
-/// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">Caching Content Based on Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use <code>CookiesConfig</code> in a cache policy. See <code>CachePolicy</code>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use <code>CookiesConfig</code> in an origin request policy. See <code>OriginRequestPolicy</code>.</p> <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">Caching Content Based on Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookiePreference {
-    /// <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element.</p>
     pub forward: String,
-    /// <p>Required if you specify <code>whitelist</code> for the value of <code>Forward</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or <code>none</code> for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to <code>all</code> or <code>none</code> and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href="https://docs.aws.amazon.com/general/latest/gr/xrefaws_service_limits.html#limits_cloudfront"> CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Required if you specify <code>whitelist</code> for the value of <code>Forward</code>. A complex type that specifies how many different cookies you want CloudFront to forward to the origin for this cache behavior and, if you want to forward selected cookies, the names of those cookies.</p> <p>If you specify <code>all</code> or <code>none</code> for the value of <code>Forward</code>, omit <code>WhitelistedNames</code>. If you change the value of <code>Forward</code> from <code>whitelist</code> to <code>all</code> or <code>none</code> and you don't delete the <code>WhitelistedNames</code> element and its child elements, CloudFront deletes them automatically.</p> <p>For the current limit on the number of cookie names that you can whitelist for each cache behavior, see <a href="https://docs.aws.amazon.com/general/latest/gr/xrefaws_service_limits.html#limits_cloudfront"> CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
     pub whitelisted_names: Option<CookieNames>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCachePolicyRequest {
+    /// <p>A cache policy configuration.</p>
+    pub cache_policy_config: CachePolicyConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateCachePolicyResult {
+    /// <p>A cache policy.</p>
+    pub cache_policy: Option<CachePolicy>,
+    /// <p>The current version of the cache policy.</p>
+    pub e_tag: Option<String>,
+    /// <p>The fully qualified URI of the cache policy just created.</p>
+    pub location: Option<String>,
+}
+
 #[allow(dead_code)]
-struct CookiePreferenceDeserializer;
-impl CookiePreferenceDeserializer {
+struct CreateCachePolicyResultDeserializer;
+impl CreateCachePolicyResultDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CookiePreference, XmlParseError> {
-        deserialize_elements::<_, CookiePreference, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Forward" => {
-                    obj.forward = ItemSelectionDeserializer::deserialize("Forward", stack)?;
-                }
-                "WhitelistedNames" => {
-                    obj.whitelisted_names = Some(CookieNamesDeserializer::deserialize(
-                        "WhitelistedNames",
-                        stack,
-                    )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
+    ) -> Result<CreateCachePolicyResult, XmlParseError> {
+        Ok(CreateCachePolicyResult {
+            cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
+            ..CreateCachePolicyResult::default()
         })
     }
 }
-
-pub struct CookiePreferenceSerializer;
-impl CookiePreferenceSerializer {
-    #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(
-        mut writer: &mut EventWriter<W>,
-        name: &str,
-        obj: &CookiePreference,
-    ) -> Result<(), xml::writer::Error>
-    where
-        W: Write,
-    {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        write_characters_element(writer, "Forward", &obj.forward.to_string())?;
-        if let Some(ref value) = obj.whitelisted_names {
-            &CookieNamesSerializer::serialize(&mut writer, "WhitelistedNames", value)?;
-        }
-        writer.write(xml::writer::XmlEvent::end_element())
-    }
-}
-
 /// <p>The request to create a new origin access identity (OAI). An origin access identity is a special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all or just some of your Amazon S3 content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1537,19 +2088,119 @@ impl CreateInvalidationResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateKeyGroupRequest {
+    /// <p>A key group configuration.</p>
+    pub key_group_config: KeyGroupConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateKeyGroupResult {
+    /// <p>The identifier for this version of the key group.</p>
+    pub e_tag: Option<String>,
+    /// <p>The key group that was just created.</p>
+    pub key_group: Option<KeyGroup>,
+    /// <p>The URL of the key group.</p>
+    pub location: Option<String>,
+}
+
+#[allow(dead_code)]
+struct CreateKeyGroupResultDeserializer;
+impl CreateKeyGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateKeyGroupResult, XmlParseError> {
+        Ok(CreateKeyGroupResult {
+            key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
+            ..CreateKeyGroupResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMonitoringSubscriptionRequest {
+    /// <p>The ID of the distribution that you are enabling metrics for.</p>
+    pub distribution_id: String,
+    /// <p>A monitoring subscription. This structure contains information about whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
+    pub monitoring_subscription: MonitoringSubscription,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateMonitoringSubscriptionResult {
+    /// <p>A monitoring subscription. This structure contains information about whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
+    pub monitoring_subscription: Option<MonitoringSubscription>,
+}
+
+#[allow(dead_code)]
+struct CreateMonitoringSubscriptionResultDeserializer;
+impl CreateMonitoringSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateMonitoringSubscriptionResult, XmlParseError> {
+        Ok(CreateMonitoringSubscriptionResult {
+            monitoring_subscription: Some(MonitoringSubscriptionDeserializer::deserialize(
+                "MonitoringSubscription",
+                stack,
+            )?),
+            ..CreateMonitoringSubscriptionResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateOriginRequestPolicyRequest {
+    /// <p>An origin request policy configuration.</p>
+    pub origin_request_policy_config: OriginRequestPolicyConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateOriginRequestPolicyResult {
+    /// <p>The current version of the origin request policy.</p>
+    pub e_tag: Option<String>,
+    /// <p>The fully qualified URI of the origin request policy just created.</p>
+    pub location: Option<String>,
+    /// <p>An origin request policy.</p>
+    pub origin_request_policy: Option<OriginRequestPolicy>,
+}
+
+#[allow(dead_code)]
+struct CreateOriginRequestPolicyResultDeserializer;
+impl CreateOriginRequestPolicyResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateOriginRequestPolicyResult, XmlParseError> {
+        Ok(CreateOriginRequestPolicyResult {
+            origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
+                "OriginRequestPolicy",
+                stack,
+            )?),
+            ..CreateOriginRequestPolicyResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicKeyRequest {
-    /// <p>The request to add a public key to CloudFront.</p>
+    /// <p>A CloudFront public key configuration.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePublicKeyResult {
-    /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
+    /// <p>The identifier for this version of the public key.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new public key resource just created.</p>
+    /// <p>The URL of the public key.</p>
     pub location: Option<String>,
-    /// <p>Returned when you add a public key.</p>
+    /// <p>The public key.</p>
     pub public_key: Option<PublicKey>,
 }
 
@@ -1565,6 +2216,72 @@ impl CreatePublicKeyResultDeserializer {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..CreatePublicKeyResult::default()
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateRealtimeLogConfigRequest {
+    /// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data.</p>
+    pub end_points: Vec<EndPoint>,
+    /// <p>A list of fields to include in each real-time log record.</p> <p>For more information about fields, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields">Real-time log configuration fields</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub fields: Vec<String>,
+    /// <p>A unique name to identify this real-time log configuration.</p>
+    pub name: String,
+    /// <p>The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. You must provide an integer between 1 and 100, inclusive.</p>
+    pub sampling_rate: i64,
+}
+
+pub struct CreateRealtimeLogConfigRequestSerializer;
+impl CreateRealtimeLogConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CreateRealtimeLogConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        EndPointListSerializer::serialize(&mut writer, "EndPoints", &obj.end_points)?;
+        FieldListSerializer::serialize(&mut writer, "Fields", &obj.fields)?;
+        StringSerializer::serialize(&mut writer, "Name", &obj.name)?;
+        LongSerializer::serialize(&mut writer, "SamplingRate", &obj.sampling_rate)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateRealtimeLogConfigResult {
+    /// <p>A real-time log configuration.</p>
+    pub realtime_log_config: Option<RealtimeLogConfig>,
+}
+
+#[allow(dead_code)]
+struct CreateRealtimeLogConfigResultDeserializer;
+impl CreateRealtimeLogConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateRealtimeLogConfigResult, XmlParseError> {
+        deserialize_elements::<_, CreateRealtimeLogConfigResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "RealtimeLogConfig" => {
+                        obj.realtime_log_config = Some(RealtimeLogConfigDeserializer::deserialize(
+                            "RealtimeLogConfig",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
@@ -1972,26 +2689,26 @@ impl CustomOriginConfigSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
+    /// <p>The unique identifier of the cache policy that is attached to the default cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub cache_policy_id: Option<String>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
-    /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    pub default_ttl: Option<i64>,
     /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for the default cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
-    /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
-    pub forwarded_values: ForwardedValues,
     /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
-    /// <p>The maximum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    pub max_ttl: Option<i64>,
-    /// <p>The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>You must specify <code>0</code> for <code>MinTTL</code> if you configure CloudFront to forward all headers to your origin (under <code>Headers</code>, if you specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>).</p>
-    pub min_ttl: i64,
+    /// <p>The unique identifier of the origin request policy that is attached to the default cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">Using the managed origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub origin_request_policy_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the real-time log configuration that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html">Real-time logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub realtime_log_config_arn: Option<String>,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
     /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they use the default cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
-    pub trusted_signers: TrustedSigners,
+    /// <p>A list of key groups that CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted key groups, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with a private key whose corresponding public key is in the key group. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub trusted_key_groups: Option<TrustedKeyGroups>,
+    /// <p><important> <p>We recommend using <code>TrustedKeyGroups</code> instead of <code>TrustedSigners</code>.</p> </important> <p>A list of AWS account IDs whose public keys CloudFront can use to validate signed URLs or signed cookies.</p> <p>When a cache behavior contains trusted signers, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with the private key of a CloudFront key pair in a trusted signer’s AWS account. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p></p>
+    pub trusted_signers: Option<TrustedSigners>,
     /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
@@ -2012,21 +2729,18 @@ impl DefaultCacheBehaviorDeserializer {
                         stack,
                     )?);
                 }
+                "CachePolicyId" => {
+                    obj.cache_policy_id =
+                        Some(StringDeserializer::deserialize("CachePolicyId", stack)?);
+                }
                 "Compress" => {
                     obj.compress = Some(BooleanDeserializer::deserialize("Compress", stack)?);
-                }
-                "DefaultTTL" => {
-                    obj.default_ttl = Some(LongDeserializer::deserialize("DefaultTTL", stack)?);
                 }
                 "FieldLevelEncryptionId" => {
                     obj.field_level_encryption_id = Some(StringDeserializer::deserialize(
                         "FieldLevelEncryptionId",
                         stack,
                     )?);
-                }
-                "ForwardedValues" => {
-                    obj.forwarded_values =
-                        ForwardedValuesDeserializer::deserialize("ForwardedValues", stack)?;
                 }
                 "LambdaFunctionAssociations" => {
                     obj.lambda_function_associations =
@@ -2035,11 +2749,17 @@ impl DefaultCacheBehaviorDeserializer {
                             stack,
                         )?);
                 }
-                "MaxTTL" => {
-                    obj.max_ttl = Some(LongDeserializer::deserialize("MaxTTL", stack)?);
+                "OriginRequestPolicyId" => {
+                    obj.origin_request_policy_id = Some(StringDeserializer::deserialize(
+                        "OriginRequestPolicyId",
+                        stack,
+                    )?);
                 }
-                "MinTTL" => {
-                    obj.min_ttl = LongDeserializer::deserialize("MinTTL", stack)?;
+                "RealtimeLogConfigArn" => {
+                    obj.realtime_log_config_arn = Some(StringDeserializer::deserialize(
+                        "RealtimeLogConfigArn",
+                        stack,
+                    )?);
                 }
                 "SmoothStreaming" => {
                     obj.smooth_streaming =
@@ -2049,9 +2769,17 @@ impl DefaultCacheBehaviorDeserializer {
                     obj.target_origin_id =
                         StringDeserializer::deserialize("TargetOriginId", stack)?;
                 }
+                "TrustedKeyGroups" => {
+                    obj.trusted_key_groups = Some(TrustedKeyGroupsDeserializer::deserialize(
+                        "TrustedKeyGroups",
+                        stack,
+                    )?);
+                }
                 "TrustedSigners" => {
-                    obj.trusted_signers =
-                        TrustedSignersDeserializer::deserialize("TrustedSigners", stack)?;
+                    obj.trusted_signers = Some(TrustedSignersDeserializer::deserialize(
+                        "TrustedSigners",
+                        stack,
+                    )?);
                 }
                 "ViewerProtocolPolicy" => {
                     obj.viewer_protocol_policy = ViewerProtocolPolicyDeserializer::deserialize(
@@ -2081,20 +2809,15 @@ impl DefaultCacheBehaviorSerializer {
         if let Some(ref value) = obj.allowed_methods {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
+        if let Some(ref value) = obj.cache_policy_id {
+            write_characters_element(writer, "CachePolicyId", &value.to_string())?;
+        }
         if let Some(ref value) = obj.compress {
             write_characters_element(writer, "Compress", &value.to_string())?;
-        }
-        if let Some(ref value) = obj.default_ttl {
-            write_characters_element(writer, "DefaultTTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
             write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
         }
-        ForwardedValuesSerializer::serialize(
-            &mut writer,
-            "ForwardedValues",
-            &obj.forwarded_values,
-        )?;
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
                 &mut writer,
@@ -2102,15 +2825,22 @@ impl DefaultCacheBehaviorSerializer {
                 value,
             )?;
         }
-        if let Some(ref value) = obj.max_ttl {
-            write_characters_element(writer, "MaxTTL", &value.to_string())?;
+        if let Some(ref value) = obj.origin_request_policy_id {
+            write_characters_element(writer, "OriginRequestPolicyId", &value.to_string())?;
         }
-        write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
+        if let Some(ref value) = obj.realtime_log_config_arn {
+            write_characters_element(writer, "RealtimeLogConfigArn", &value.to_string())?;
+        }
         if let Some(ref value) = obj.smooth_streaming {
             write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
         write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
-        TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
+        if let Some(ref value) = obj.trusted_key_groups {
+            &TrustedKeyGroupsSerializer::serialize(&mut writer, "TrustedKeyGroups", value)?;
+        }
+        if let Some(ref value) = obj.trusted_signers {
+            &TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", value)?;
+        }
         write_characters_element(
             writer,
             "ViewerProtocolPolicy",
@@ -2118,6 +2848,15 @@ impl DefaultCacheBehaviorSerializer {
         )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCachePolicyRequest {
+    /// <p>The unique identifier for the cache policy that you are deleting. To get the identifier, you can use <code>ListCachePolicies</code>.</p>
+    pub id: String,
+    /// <p>The version of the cache policy that you are deleting. The version is the cache policy’s <code>ETag</code> value, which you can get using <code>ListCachePolicies</code>, <code>GetCachePolicy</code>, or <code>GetCachePolicyConfig</code>.</p>
+    pub if_match: Option<String>,
 }
 
 /// <p>Deletes a origin access identity.</p>
@@ -2160,6 +2899,52 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteKeyGroupRequest {
+    /// <p>The identifier of the key group that you are deleting. To get the identifier, use <code>ListKeyGroups</code>.</p>
+    pub id: String,
+    /// <p>The version of the key group that you are deleting. The version is the key group’s <code>ETag</code> value. To get the <code>ETag</code>, use <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p>
+    pub if_match: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMonitoringSubscriptionRequest {
+    /// <p>The ID of the distribution that you are disabling metrics for.</p>
+    pub distribution_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteMonitoringSubscriptionResult {}
+
+#[allow(dead_code)]
+struct DeleteMonitoringSubscriptionResultDeserializer;
+impl DeleteMonitoringSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteMonitoringSubscriptionResult, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = DeleteMonitoringSubscriptionResult::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOriginRequestPolicyRequest {
+    /// <p>The unique identifier for the origin request policy that you are deleting. To get the identifier, you can use <code>ListOriginRequestPolicies</code>.</p>
+    pub id: String,
+    /// <p>The version of the origin request policy that you are deleting. The version is the origin request policy’s <code>ETag</code> value, which you can get using <code>ListOriginRequestPolicies</code>, <code>GetOriginRequestPolicy</code>, or <code>GetOriginRequestPolicyConfig</code>.</p>
+    pub if_match: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicKeyRequest {
     /// <p>The ID of the public key you want to remove from CloudFront.</p>
     pub id: String,
@@ -2167,6 +2952,37 @@ pub struct DeletePublicKeyRequest {
     pub if_match: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteRealtimeLogConfigRequest {
+    /// <p>The Amazon Resource Name (ARN) of the real-time log configuration to delete.</p>
+    pub arn: Option<String>,
+    /// <p>The name of the real-time log configuration to delete.</p>
+    pub name: Option<String>,
+}
+
+pub struct DeleteRealtimeLogConfigRequestSerializer;
+impl DeleteRealtimeLogConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DeleteRealtimeLogConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        if let Some(ref value) = obj.arn {
+            &StringSerializer::serialize(&mut writer, "ARN", value)?;
+        }
+        if let Some(ref value) = obj.name {
+            &StringSerializer::serialize(&mut writer, "Name", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
 /// <p>The request to delete a streaming distribution.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2183,8 +2999,10 @@ pub struct DeleteStreamingDistributionRequest {
 pub struct Distribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
-    /// <p>CloudFront automatically adds this element to the response only if you've set up the distribution to serve private content with signed URLs. The element lists the key pair IDs that CloudFront is aware of for each trusted signer. The <code>Signer</code> child element lists the AWS account number of the trusted signer (or an empty <code>Self</code> element if the signer is you). The <code>Signer</code> element also includes the IDs of any active key pairs associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create working signed URLs.</p>
-    pub active_trusted_signers: ActiveTrustedSigners,
+    /// <p>CloudFront automatically adds this field to the response if you’ve configured a cache behavior in this distribution to serve private content using key groups. This field contains a list of key groups and the public keys in each key group that CloudFront can use to verify the signatures of signed URLs or signed cookies.</p>
+    pub active_trusted_key_groups: Option<ActiveTrustedKeyGroups>,
+    /// <p><important> <p>We recommend using <code>TrustedKeyGroups</code> instead of <code>TrustedSigners</code>.</p> </important> <p>CloudFront automatically adds this field to the response if you’ve configured a cache behavior in this distribution to serve private content using trusted signers. This field contains a list of AWS account IDs and the active CloudFront key pairs in each account that CloudFront can use to verify the signatures of signed URLs or signed cookies.</p></p>
+    pub active_trusted_signers: Option<ActiveTrustedSigners>,
     /// <p>AWS services in China customers must file for an Internet Content Provider (ICP) recordal if they want to serve content publicly on an alternate domain name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal provides the ICP recordal status for CNAMEs associated with distributions.</p> <p>For more information about ICP recordals, see <a href="https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html"> Signup, Accounts, and Credentials</a> in <i>Getting Started with AWS services in China</i>.</p>
     pub alias_icp_recordals: Option<Vec<AliasICPRecordal>>,
     /// <p>The current configuration information for the distribution. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/distribution ID/config</code> resource.</p>
@@ -2214,11 +3032,19 @@ impl DistributionDeserializer {
                 "ARN" => {
                     obj.arn = StringDeserializer::deserialize("ARN", stack)?;
                 }
+                "ActiveTrustedKeyGroups" => {
+                    obj.active_trusted_key_groups =
+                        Some(ActiveTrustedKeyGroupsDeserializer::deserialize(
+                            "ActiveTrustedKeyGroups",
+                            stack,
+                        )?);
+                }
                 "ActiveTrustedSigners" => {
-                    obj.active_trusted_signers = ActiveTrustedSignersDeserializer::deserialize(
-                        "ActiveTrustedSigners",
-                        stack,
-                    )?;
+                    obj.active_trusted_signers =
+                        Some(ActiveTrustedSignersDeserializer::deserialize(
+                            "ActiveTrustedSigners",
+                            stack,
+                        )?);
                 }
                 "AliasICPRecordals" => {
                     obj.alias_icp_recordals.get_or_insert(vec![]).extend(
@@ -2283,7 +3109,7 @@ pub struct DistributionConfig {
     pub origin_groups: Option<OriginGroups>,
     /// <p>A complex type that contains information about origins for this distribution. </p>
     pub origins: Origins,
-    /// <p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes (such as Price Class 100) map to CloudFront regions, see <a href="http://aws.amazon.com/cloudfront/pricing/">Amazon CloudFront Pricing</a>. For price class information, scroll down to see the table at the bottom of the page.</p>
+    /// <p>The price class that corresponds with the maximum price that you want to pay for CloudFront service. If you specify <code>PriceClass_All</code>, CloudFront responds to requests for your objects from all CloudFront edge locations.</p> <p>If you specify a price class other than <code>PriceClass_All</code>, CloudFront serves your objects from the CloudFront edge location that has the lowest latency among the edge locations in your price class. Viewers who are in or near regions that are excluded from your specified price class may encounter slower performance.</p> <p>For more information about price classes, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html">Choosing the Price Class for a CloudFront Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>. For information about CloudFront pricing, including how price classes (such as Price Class 100) map to CloudFront regions, see <a href="http://aws.amazon.com/cloudfront/pricing/">Amazon CloudFront Pricing</a>.</p>
     pub price_class: Option<String>,
     /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
     pub restrictions: Option<Restrictions>,
@@ -2478,6 +3304,78 @@ impl DistributionConfigWithTagsSerializer {
     }
 }
 
+/// <p>A list of distribution IDs.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DistributionIdList {
+    /// <p>A flag that indicates whether more distribution IDs remain to be listed. If your results were truncated, you can make a subsequent request using the <code>Marker</code> request field to retrieve more distribution IDs in the list.</p>
+    pub is_truncated: bool,
+    /// <p>Contains the distribution IDs in the list.</p>
+    pub items: Option<Vec<String>>,
+    /// <p>The value provided in the <code>Marker</code> request field.</p>
+    pub marker: String,
+    /// <p>The maximum number of distribution IDs requested.</p>
+    pub max_items: i64,
+    /// <p>Contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing distribution IDs where you left off.</p>
+    pub next_marker: Option<String>,
+    /// <p>The total number of distribution IDs returned in the response.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct DistributionIdListDeserializer;
+impl DistributionIdListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DistributionIdList, XmlParseError> {
+        deserialize_elements::<_, DistributionIdList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated = BooleanDeserializer::deserialize("IsTruncated", stack)?;
+                }
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        DistributionIdListSummaryDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = StringDeserializer::deserialize("Marker", stack)?;
+                }
+                "MaxItems" => {
+                    obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct DistributionIdListSummaryDeserializer;
+impl DistributionIdListSummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "DistributionId" {
+                obj.push(StringDeserializer::deserialize("DistributionId", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>A distribution list.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -2841,6 +3739,102 @@ impl EncryptionEntityListSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         for element in obj {
             EncryptionEntitySerializer::serialize(writer, "EncryptionEntity", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
+    }
+}
+
+/// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data in a real-time log configuration.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EndPoint {
+    /// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data.</p>
+    pub kinesis_stream_config: Option<KinesisStreamConfig>,
+    /// <p>The type of data stream where you are sending real-time log data. The only valid value is <code>Kinesis</code>.</p>
+    pub stream_type: String,
+}
+
+#[allow(dead_code)]
+struct EndPointDeserializer;
+impl EndPointDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndPoint, XmlParseError> {
+        deserialize_elements::<_, EndPoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "KinesisStreamConfig" => {
+                    obj.kinesis_stream_config = Some(KinesisStreamConfigDeserializer::deserialize(
+                        "KinesisStreamConfig",
+                        stack,
+                    )?);
+                }
+                "StreamType" => {
+                    obj.stream_type = StringDeserializer::deserialize("StreamType", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct EndPointSerializer;
+impl EndPointSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &EndPoint,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.kinesis_stream_config {
+            &KinesisStreamConfigSerializer::serialize(&mut writer, "KinesisStreamConfig", value)?;
+        }
+        write_characters_element(writer, "StreamType", &obj.stream_type.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct EndPointListDeserializer;
+impl EndPointListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EndPoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EndPointDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct EndPointListSerializer;
+impl EndPointListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<EndPoint>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            EndPointSerializer::serialize(writer, "EndPoint", element)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())?;
         Ok(())
@@ -3388,6 +4382,45 @@ impl FieldLevelEncryptionSummaryListDeserializer {
     }
 }
 #[allow(dead_code)]
+struct FieldListDeserializer;
+impl FieldListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "Field" {
+                obj.push(StringDeserializer::deserialize("Field", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct FieldListSerializer;
+impl FieldListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            StringSerializer::serialize(writer, "Field", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
+    }
+}
+
+#[allow(dead_code)]
 struct FieldPatternListDeserializer;
 impl FieldPatternListDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -3506,76 +4539,17 @@ impl FormatSerializer {
     }
 }
 
-/// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
+/// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include values in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send values to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForwardedValues {
-    /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include cookies in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send cookies to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub cookies: CookiePreference,
-    /// <p>A complex type that specifies the <code>Headers</code>, if any, that you want CloudFront to forward to the origin for this cache behavior (whitelisted headers). For the headers that you specify, CloudFront also caches separate versions of a specified object that is based on the header values in viewer requests.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html"> Caching Content Based on Request Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include headers in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send headers to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A complex type that specifies the <code>Headers</code>, if any, that you want CloudFront to forward to the origin for this cache behavior (whitelisted headers). For the headers that you specify, CloudFront also caches separate versions of a specified object that is based on the header values in viewer requests.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html"> Caching Content Based on Request Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub headers: Option<Headers>,
-    /// <p>Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. CloudFront behavior depends on the value of <code>QueryString</code> and on the values that you specify for <code>QueryStringCacheKeys</code>, if any:</p> <p>If you specify true for <code>QueryString</code> and you don't specify any values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin and caches based on all query string parameters. Depending on how many query string parameters and values you have, this can adversely affect performance because CloudFront must forward more requests to the origin.</p> <p>If you specify true for <code>QueryString</code> and you specify one or more values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin, but it only caches based on the query string parameters that you specify.</p> <p>If you specify false for <code>QueryString</code>, CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html">Configuring CloudFront to Cache Based on Query String Parameters</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include query strings in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send query strings to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Indicates whether you want CloudFront to forward query strings to the origin that is associated with this cache behavior and cache based on the query string parameters. CloudFront behavior depends on the value of <code>QueryString</code> and on the values that you specify for <code>QueryStringCacheKeys</code>, if any:</p> <p>If you specify true for <code>QueryString</code> and you don't specify any values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin and caches based on all query string parameters. Depending on how many query string parameters and values you have, this can adversely affect performance because CloudFront must forward more requests to the origin.</p> <p>If you specify true for <code>QueryString</code> and you specify one or more values for <code>QueryStringCacheKeys</code>, CloudFront forwards all query string parameters to the origin, but it only caches based on the query string parameters that you specify.</p> <p>If you specify false for <code>QueryString</code>, CloudFront doesn't forward any query string parameters to the origin, and doesn't cache based on query string parameters.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html">Configuring CloudFront to Cache Based on Query String Parameters</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub query_string: bool,
-    /// <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.</p>
+    /// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include query strings in the cache key, use a cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you want to send query strings to the origin but not include them in the cache key, use an origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for this cache behavior.</p>
     pub query_string_cache_keys: Option<QueryStringCacheKeys>,
-}
-
-#[allow(dead_code)]
-struct ForwardedValuesDeserializer;
-impl ForwardedValuesDeserializer {
-    #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ForwardedValues, XmlParseError> {
-        deserialize_elements::<_, ForwardedValues, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Cookies" => {
-                    obj.cookies = CookiePreferenceDeserializer::deserialize("Cookies", stack)?;
-                }
-                "Headers" => {
-                    obj.headers = Some(HeadersDeserializer::deserialize("Headers", stack)?);
-                }
-                "QueryString" => {
-                    obj.query_string = BooleanDeserializer::deserialize("QueryString", stack)?;
-                }
-                "QueryStringCacheKeys" => {
-                    obj.query_string_cache_keys =
-                        Some(QueryStringCacheKeysDeserializer::deserialize(
-                            "QueryStringCacheKeys",
-                            stack,
-                        )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-
-pub struct ForwardedValuesSerializer;
-impl ForwardedValuesSerializer {
-    #[allow(unused_variables, warnings)]
-    pub fn serialize<W>(
-        mut writer: &mut EventWriter<W>,
-        name: &str,
-        obj: &ForwardedValues,
-    ) -> Result<(), xml::writer::Error>
-    where
-        W: Write,
-    {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        CookiePreferenceSerializer::serialize(&mut writer, "Cookies", &obj.cookies)?;
-        if let Some(ref value) = obj.headers {
-            &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
-        }
-        write_characters_element(writer, "QueryString", &obj.query_string.to_string())?;
-        if let Some(ref value) = obj.query_string_cache_keys {
-            &QueryStringCacheKeysSerializer::serialize(&mut writer, "QueryStringCacheKeys", value)?;
-        }
-        writer.write(xml::writer::XmlEvent::end_element())
-    }
 }
 
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
@@ -3665,6 +4639,69 @@ impl GeoRestrictionTypeSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCachePolicyConfigRequest {
+    /// <p>The unique identifier for the cache policy. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetCachePolicyConfigResult {
+    /// <p>The cache policy configuration.</p>
+    pub cache_policy_config: Option<CachePolicyConfig>,
+    /// <p>The current version of the cache policy.</p>
+    pub e_tag: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GetCachePolicyConfigResultDeserializer;
+impl GetCachePolicyConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCachePolicyConfigResult, XmlParseError> {
+        Ok(GetCachePolicyConfigResult {
+            cache_policy_config: Some(CachePolicyConfigDeserializer::deserialize(
+                "CachePolicyConfig",
+                stack,
+            )?),
+            ..GetCachePolicyConfigResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCachePolicyRequest {
+    /// <p>The unique identifier for the cache policy. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetCachePolicyResult {
+    /// <p>The cache policy.</p>
+    pub cache_policy: Option<CachePolicy>,
+    /// <p>The current version of the cache policy.</p>
+    pub e_tag: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GetCachePolicyResultDeserializer;
+impl GetCachePolicyResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCachePolicyResult, XmlParseError> {
+        Ok(GetCachePolicyResult {
+            cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
+            ..GetCachePolicyResult::default()
+        })
+    }
+}
 /// <p>The origin access identity's configuration information. For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html">CloudFrontOriginAccessIdentityConfig</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3984,17 +5021,177 @@ impl GetInvalidationResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetKeyGroupConfigRequest {
+    /// <p>The identifier of the key group whose configuration you are getting. To get the identifier, use <code>ListKeyGroups</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetKeyGroupConfigResult {
+    /// <p>The identifier for this version of the key group.</p>
+    pub e_tag: Option<String>,
+    /// <p>The key group configuration.</p>
+    pub key_group_config: Option<KeyGroupConfig>,
+}
+
+#[allow(dead_code)]
+struct GetKeyGroupConfigResultDeserializer;
+impl GetKeyGroupConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetKeyGroupConfigResult, XmlParseError> {
+        Ok(GetKeyGroupConfigResult {
+            key_group_config: Some(KeyGroupConfigDeserializer::deserialize(
+                "KeyGroupConfig",
+                stack,
+            )?),
+            ..GetKeyGroupConfigResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetKeyGroupRequest {
+    /// <p>The identifier of the key group that you are getting. To get the identifier, use <code>ListKeyGroups</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetKeyGroupResult {
+    /// <p>The identifier for this version of the key group.</p>
+    pub e_tag: Option<String>,
+    /// <p>The key group.</p>
+    pub key_group: Option<KeyGroup>,
+}
+
+#[allow(dead_code)]
+struct GetKeyGroupResultDeserializer;
+impl GetKeyGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetKeyGroupResult, XmlParseError> {
+        Ok(GetKeyGroupResult {
+            key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
+            ..GetKeyGroupResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMonitoringSubscriptionRequest {
+    /// <p>The ID of the distribution that you are getting metrics information for.</p>
+    pub distribution_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetMonitoringSubscriptionResult {
+    /// <p>A monitoring subscription. This structure contains information about whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
+    pub monitoring_subscription: Option<MonitoringSubscription>,
+}
+
+#[allow(dead_code)]
+struct GetMonitoringSubscriptionResultDeserializer;
+impl GetMonitoringSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetMonitoringSubscriptionResult, XmlParseError> {
+        Ok(GetMonitoringSubscriptionResult {
+            monitoring_subscription: Some(MonitoringSubscriptionDeserializer::deserialize(
+                "MonitoringSubscription",
+                stack,
+            )?),
+            ..GetMonitoringSubscriptionResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetOriginRequestPolicyConfigRequest {
+    /// <p>The unique identifier for the origin request policy. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetOriginRequestPolicyConfigResult {
+    /// <p>The current version of the origin request policy.</p>
+    pub e_tag: Option<String>,
+    /// <p>The origin request policy configuration.</p>
+    pub origin_request_policy_config: Option<OriginRequestPolicyConfig>,
+}
+
+#[allow(dead_code)]
+struct GetOriginRequestPolicyConfigResultDeserializer;
+impl GetOriginRequestPolicyConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetOriginRequestPolicyConfigResult, XmlParseError> {
+        Ok(GetOriginRequestPolicyConfigResult {
+            origin_request_policy_config: Some(OriginRequestPolicyConfigDeserializer::deserialize(
+                "OriginRequestPolicyConfig",
+                stack,
+            )?),
+            ..GetOriginRequestPolicyConfigResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetOriginRequestPolicyRequest {
+    /// <p>The unique identifier for the origin request policy. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetOriginRequestPolicyResult {
+    /// <p>The current version of the origin request policy.</p>
+    pub e_tag: Option<String>,
+    /// <p>The origin request policy.</p>
+    pub origin_request_policy: Option<OriginRequestPolicy>,
+}
+
+#[allow(dead_code)]
+struct GetOriginRequestPolicyResultDeserializer;
+impl GetOriginRequestPolicyResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetOriginRequestPolicyResult, XmlParseError> {
+        Ok(GetOriginRequestPolicyResult {
+            origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
+                "OriginRequestPolicy",
+                stack,
+            )?),
+            ..GetOriginRequestPolicyResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyConfigRequest {
-    /// <p>Request the ID for the public key configuration.</p>
+    /// <p>The identifier of the public key whose configuration you are getting.</p>
     pub id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyConfigResult {
-    /// <p>The current version of the public key configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
+    /// <p>The identifier for this version of the public key configuration.</p>
     pub e_tag: Option<String>,
-    /// <p>Return the result for the public key configuration.</p>
+    /// <p>A public key configuration.</p>
     pub public_key_config: Option<PublicKeyConfig>,
 }
 
@@ -4018,16 +5215,16 @@ impl GetPublicKeyConfigResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
-    /// <p>Request the ID for the public key.</p>
+    /// <p>The identifier of the public key you are getting.</p>
     pub id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyResult {
-    /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
+    /// <p>The identifier for this version of the public key.</p>
     pub e_tag: Option<String>,
-    /// <p>Return the public key.</p>
+    /// <p>The public key.</p>
     pub public_key: Option<PublicKey>,
 }
 
@@ -4043,6 +5240,70 @@ impl GetPublicKeyResultDeserializer {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..GetPublicKeyResult::default()
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetRealtimeLogConfigRequest {
+    /// <p>The Amazon Resource Name (ARN) of the real-time log configuration to get.</p>
+    pub arn: Option<String>,
+    /// <p>The name of the real-time log configuration to get.</p>
+    pub name: Option<String>,
+}
+
+pub struct GetRealtimeLogConfigRequestSerializer;
+impl GetRealtimeLogConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &GetRealtimeLogConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        if let Some(ref value) = obj.arn {
+            &StringSerializer::serialize(&mut writer, "ARN", value)?;
+        }
+        if let Some(ref value) = obj.name {
+            &StringSerializer::serialize(&mut writer, "Name", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetRealtimeLogConfigResult {
+    /// <p>A real-time log configuration.</p>
+    pub realtime_log_config: Option<RealtimeLogConfig>,
+}
+
+#[allow(dead_code)]
+struct GetRealtimeLogConfigResultDeserializer;
+impl GetRealtimeLogConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetRealtimeLogConfigResult, XmlParseError> {
+        deserialize_elements::<_, GetRealtimeLogConfigResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "RealtimeLogConfig" => {
+                        obj.realtime_log_config = Some(RealtimeLogConfigDeserializer::deserialize(
+                            "RealtimeLogConfig",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
@@ -4156,14 +5417,14 @@ impl HeaderListSerializer {
     }
 }
 
-/// <p>A complex type that specifies the request headers, if any, that you want CloudFront to base caching on for this cache behavior. </p> <p>For the headers that you specify, CloudFront caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure CloudFront to cache your content based on values in the <code>product</code> header. CloudFront forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+/// <p>Contains a list of HTTP header names.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Headers {
-    /// <p>A list that contains one <code>Name</code> element for each header that you want CloudFront to use for caching in this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>
+    /// <p>A list of HTTP header names.</p>
     pub items: Option<Vec<String>>,
-    /// <p><p>The number of different headers that you want CloudFront to base caching on for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>CloudFront doesn&#39;t cache the objects that are associated with this cache behavior. Instead, CloudFront sends every request to the origin. </p> </important> </li> <li> <p> <b>Forward a whitelist of headers you specify</b>: Specify the number of headers that you want CloudFront to base caching on. Then specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in the specified headers.</p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn&#39;t cache based on the values in the request headers.</p> </li> </ul> <p>Regardless of which option you choose, CloudFront forwards headers to your origin based on whether the origin is an S3 bucket or a custom origin. See the following documentation:</p> <ul> <li> <p> <b>S3 bucket</b>: See <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorS3Origin.html#request-s3-removed-headers">HTTP Request Headers That CloudFront Removes or Updates</a> </p> </li> <li> <p> <b>Custom origin</b>: See <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorCustomOrigin.html#request-custom-headers-behavior">HTTP Request Headers and CloudFront Behavior</a> </p> </li> </ul></p>
+    /// <p>The number of header names in the <code>Items</code> list.</p>
     pub quantity: i64,
 }
 
@@ -4476,30 +5737,248 @@ impl InvalidationSummaryListDeserializer {
         })
     }
 }
+/// <p>A list of identifiers for the public keys that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct KGKeyPairIds {
+    /// <p>The identifier of the key group that contains the public keys.</p>
+    pub key_group_id: Option<String>,
+    pub key_pair_ids: Option<KeyPairIds>,
+}
+
 #[allow(dead_code)]
-struct ItemSelectionDeserializer;
-impl ItemSelectionDeserializer {
+struct KGKeyPairIdsDeserializer;
+impl KGKeyPairIdsDeserializer {
     #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KGKeyPairIds, XmlParseError> {
+        deserialize_elements::<_, KGKeyPairIds, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "KeyGroupId" => {
+                    obj.key_group_id = Some(StringDeserializer::deserialize("KeyGroupId", stack)?);
+                }
+                "KeyPairIds" => {
+                    obj.key_pair_ids =
+                        Some(KeyPairIdsDeserializer::deserialize("KeyPairIds", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct KGKeyPairIdsListDeserializer;
+impl KGKeyPairIdsListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<KGKeyPairIds>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "KeyGroup" {
+                obj.push(KGKeyPairIdsDeserializer::deserialize("KeyGroup", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A key group.</p> <p>A key group contains a list of public keys that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">CloudFront signed URLs and signed cookies</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct KeyGroup {
+    /// <p>The identifier for the key group.</p>
+    pub id: String,
+    /// <p>The key group configuration.</p>
+    pub key_group_config: KeyGroupConfig,
+    /// <p>The date and time when the key group was last modified.</p>
+    pub last_modified_time: String,
+}
+
+#[allow(dead_code)]
+struct KeyGroupDeserializer;
+impl KeyGroupDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeyGroup, XmlParseError> {
+        deserialize_elements::<_, KeyGroup, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = StringDeserializer::deserialize("Id", stack)?;
+                }
+                "KeyGroupConfig" => {
+                    obj.key_group_config =
+                        KeyGroupConfigDeserializer::deserialize("KeyGroupConfig", stack)?;
+                }
+                "LastModifiedTime" => {
+                    obj.last_modified_time =
+                        TimestampDeserializer::deserialize("LastModifiedTime", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A key group configuration.</p> <p>A key group contains a list of public keys that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">CloudFront signed URLs and signed cookies</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct KeyGroupConfig {
+    /// <p>A comment to describe the key group.</p>
+    pub comment: Option<String>,
+    /// <p>A list of the identifiers of the public keys in the key group.</p>
+    pub items: Vec<String>,
+    /// <p>A name to identify the key group.</p>
+    pub name: String,
+}
+
+#[allow(dead_code)]
+struct KeyGroupConfigDeserializer;
+impl KeyGroupConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeyGroupConfig, XmlParseError> {
+        deserialize_elements::<_, KeyGroupConfig, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Comment" => {
+                    obj.comment = Some(StringDeserializer::deserialize("Comment", stack)?);
+                }
+                "Items" => {
+                    obj.items
+                        .extend(PublicKeyIdListDeserializer::deserialize("Items", stack)?);
+                }
+                "Name" => {
+                    obj.name = StringDeserializer::deserialize("Name", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 
-pub struct ItemSelectionSerializer;
-impl ItemSelectionSerializer {
+pub struct KeyGroupConfigSerializer;
+impl KeyGroupConfigSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &String,
+        obj: &KeyGroupConfig,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
-        write_characters_element(writer, name, obj)
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.comment {
+            write_characters_element(writer, "Comment", &value.to_string())?;
+        }
+        PublicKeyIdListSerializer::serialize(&mut writer, "Items", &obj.items)?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
+/// <p>A list of key groups.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct KeyGroupList {
+    /// <p>A list of key groups.</p>
+    pub items: Option<Vec<KeyGroupSummary>>,
+    /// <p>The maximum number of key groups requested.</p>
+    pub max_items: i64,
+    /// <p>If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing key groups.</p>
+    pub next_marker: Option<String>,
+    /// <p>The number of key groups returned in the response.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct KeyGroupListDeserializer;
+impl KeyGroupListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeyGroupList, XmlParseError> {
+        deserialize_elements::<_, KeyGroupList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        KeyGroupSummaryListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "MaxItems" => {
+                    obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Contains information about a key group.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct KeyGroupSummary {
+    /// <p>A key group.</p>
+    pub key_group: KeyGroup,
+}
+
+#[allow(dead_code)]
+struct KeyGroupSummaryDeserializer;
+impl KeyGroupSummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KeyGroupSummary, XmlParseError> {
+        deserialize_elements::<_, KeyGroupSummary, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "KeyGroup" => {
+                    obj.key_group = KeyGroupDeserializer::deserialize("KeyGroup", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct KeyGroupSummaryListDeserializer;
+impl KeyGroupSummaryListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<KeyGroupSummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "KeyGroupSummary" {
+                obj.push(KeyGroupSummaryDeserializer::deserialize(
+                    "KeyGroupSummary",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct KeyPairIdListDeserializer;
 impl KeyPairIdListDeserializer {
@@ -4518,13 +5997,13 @@ impl KeyPairIdListDeserializer {
         })
     }
 }
-/// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
+/// <p>A list of CloudFront key pair identifiers.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPairIds {
-    /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
+    /// <p>A list of CloudFront key pair identifiers.</p>
     pub items: Option<Vec<String>>,
-    /// <p>The number of active CloudFront key pairs for <code>AwsAccountNumber</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
+    /// <p>The number of key pair identifiers in the list.</p>
     pub quantity: i64,
 }
 
@@ -4552,6 +6031,58 @@ impl KeyPairIdsDeserializer {
         })
     }
 }
+/// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct KinesisStreamConfig {
+    /// <p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that CloudFront can use to send real-time log data to your Kinesis data stream.</p> <p>For more information the IAM role, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-iam-role">Real-time log configuration IAM role</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub role_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream where you are sending real-time log data.</p>
+    pub stream_arn: String,
+}
+
+#[allow(dead_code)]
+struct KinesisStreamConfigDeserializer;
+impl KinesisStreamConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<KinesisStreamConfig, XmlParseError> {
+        deserialize_elements::<_, KinesisStreamConfig, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RoleARN" => {
+                    obj.role_arn = StringDeserializer::deserialize("RoleARN", stack)?;
+                }
+                "StreamARN" => {
+                    obj.stream_arn = StringDeserializer::deserialize("StreamARN", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct KinesisStreamConfigSerializer;
+impl KinesisStreamConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &KinesisStreamConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "RoleARN", &obj.role_arn.to_string())?;
+        write_characters_element(writer, "StreamARN", &obj.stream_arn.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 #[allow(dead_code)]
 struct LambdaFunctionARNDeserializer;
 impl LambdaFunctionARNDeserializer {
@@ -4581,7 +6112,7 @@ impl LambdaFunctionARNSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociation {
-    /// <p><p>Specifies the event type that triggers a Lambda function invocation. You can specify the following values:</p> <ul> <li> <p> <code>viewer-request</code>: The function executes when CloudFront receives a request from a viewer and before it checks to see whether the requested object is in the edge cache. </p> </li> <li> <p> <code>origin-request</code>: The function executes only when CloudFront forwards a request to your origin. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>origin-response</code>: The function executes after CloudFront receives a response from the origin and before it caches the object in the response. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>viewer-response</code>: The function executes before CloudFront returns the requested object to the viewer. The function executes regardless of whether the object was already in the edge cache.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> </ul></p>
+    /// <p><p>Specifies the event type that triggers a Lambda function invocation. You can specify the following values:</p> <ul> <li> <p> <code>viewer-request</code>: The function executes when CloudFront receives a request from a viewer and before it checks to see whether the requested object is in the edge cache. </p> </li> <li> <p> <code>origin-request</code>: The function executes only when CloudFront sends a request to your origin. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>origin-response</code>: The function executes after CloudFront receives a response from the origin and before it caches the object in the response. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>viewer-response</code>: The function executes before CloudFront returns the requested object to the viewer. The function executes regardless of whether the object was already in the edge cache.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> </ul></p>
     pub event_type: String,
     /// <p>A flag that allows a Lambda function to have read access to the body content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-include-body-access.html">Accessing the Request Body by Choosing the Include Body Option</a> in the Amazon CloudFront Developer Guide.</p>
     pub include_body: Option<bool>,
@@ -4752,6 +6283,41 @@ impl LambdaFunctionAssociationsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListCachePoliciesRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of cache policies. The response includes cache policies in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of cache policies that you want in the response.</p>
+    pub max_items: Option<String>,
+    /// <p><p>A filter to return only the specified kinds of cache policies. Valid values are:</p> <ul> <li> <p> <code>managed</code> – Returns only the managed policies created by AWS.</p> </li> <li> <p> <code>custom</code> – Returns only the custom policies created in your AWS account.</p> </li> </ul></p>
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListCachePoliciesResult {
+    /// <p>A list of cache policies.</p>
+    pub cache_policy_list: Option<CachePolicyList>,
+}
+
+#[allow(dead_code)]
+struct ListCachePoliciesResultDeserializer;
+impl ListCachePoliciesResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListCachePoliciesResult, XmlParseError> {
+        Ok(ListCachePoliciesResult {
+            cache_policy_list: Some(CachePolicyListDeserializer::deserialize(
+                "CachePolicyList",
+                stack,
+            )?),
+            ..ListCachePoliciesResult::default()
+        })
+    }
+}
 /// <p>The request to list origin access identities. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4786,6 +6352,174 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
                 )?,
             ),
             ..ListCloudFrontOriginAccessIdentitiesResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDistributionsByCachePolicyIdRequest {
+    /// <p>The ID of the cache policy whose associated distribution IDs you want to list.</p>
+    pub cache_policy_id: String,
+    /// <p>Use this field when paginating results to indicate where to begin in your list of distribution IDs. The response includes distribution IDs in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of distribution IDs that you want in the response.</p>
+    pub max_items: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListDistributionsByCachePolicyIdResult {
+    /// <p>A list of distribution IDs.</p>
+    pub distribution_id_list: Option<DistributionIdList>,
+}
+
+#[allow(dead_code)]
+struct ListDistributionsByCachePolicyIdResultDeserializer;
+impl ListDistributionsByCachePolicyIdResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsByCachePolicyIdResult, XmlParseError> {
+        Ok(ListDistributionsByCachePolicyIdResult {
+            distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
+                "DistributionIdList",
+                stack,
+            )?),
+            ..ListDistributionsByCachePolicyIdResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDistributionsByKeyGroupRequest {
+    /// <p>The ID of the key group whose associated distribution IDs you are listing.</p>
+    pub key_group_id: String,
+    /// <p>Use this field when paginating results to indicate where to begin in your list of distribution IDs. The response includes distribution IDs in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of distribution IDs that you want in the response.</p>
+    pub max_items: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListDistributionsByKeyGroupResult {
+    pub distribution_id_list: Option<DistributionIdList>,
+}
+
+#[allow(dead_code)]
+struct ListDistributionsByKeyGroupResultDeserializer;
+impl ListDistributionsByKeyGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsByKeyGroupResult, XmlParseError> {
+        Ok(ListDistributionsByKeyGroupResult {
+            distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
+                "DistributionIdList",
+                stack,
+            )?),
+            ..ListDistributionsByKeyGroupResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDistributionsByOriginRequestPolicyIdRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of distribution IDs. The response includes distribution IDs in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of distribution IDs that you want in the response.</p>
+    pub max_items: Option<String>,
+    /// <p>The ID of the origin request policy whose associated distribution IDs you want to list.</p>
+    pub origin_request_policy_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListDistributionsByOriginRequestPolicyIdResult {
+    /// <p>A list of distribution IDs.</p>
+    pub distribution_id_list: Option<DistributionIdList>,
+}
+
+#[allow(dead_code)]
+struct ListDistributionsByOriginRequestPolicyIdResultDeserializer;
+impl ListDistributionsByOriginRequestPolicyIdResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsByOriginRequestPolicyIdResult, XmlParseError> {
+        Ok(ListDistributionsByOriginRequestPolicyIdResult {
+            distribution_id_list: Some(DistributionIdListDeserializer::deserialize(
+                "DistributionIdList",
+                stack,
+            )?),
+            ..ListDistributionsByOriginRequestPolicyIdResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDistributionsByRealtimeLogConfigRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of distributions. The response includes distributions in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of distributions that you want in the response.</p>
+    pub max_items: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the real-time log configuration whose associated distributions you want to list.</p>
+    pub realtime_log_config_arn: Option<String>,
+    /// <p>The name of the real-time log configuration whose associated distributions you want to list.</p>
+    pub realtime_log_config_name: Option<String>,
+}
+
+pub struct ListDistributionsByRealtimeLogConfigRequestSerializer;
+impl ListDistributionsByRealtimeLogConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ListDistributionsByRealtimeLogConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        if let Some(ref value) = obj.marker {
+            &StringSerializer::serialize(&mut writer, "Marker", value)?;
+        }
+        if let Some(ref value) = obj.max_items {
+            &StringSerializer::serialize(&mut writer, "MaxItems", value)?;
+        }
+        if let Some(ref value) = obj.realtime_log_config_arn {
+            &StringSerializer::serialize(&mut writer, "RealtimeLogConfigArn", value)?;
+        }
+        if let Some(ref value) = obj.realtime_log_config_name {
+            &StringSerializer::serialize(&mut writer, "RealtimeLogConfigName", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListDistributionsByRealtimeLogConfigResult {
+    pub distribution_list: Option<DistributionList>,
+}
+
+#[allow(dead_code)]
+struct ListDistributionsByRealtimeLogConfigResultDeserializer;
+impl ListDistributionsByRealtimeLogConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListDistributionsByRealtimeLogConfigResult, XmlParseError> {
+        Ok(ListDistributionsByRealtimeLogConfigResult {
+            distribution_list: Some(DistributionListDeserializer::deserialize(
+                "DistributionList",
+                stack,
+            )?),
+            ..ListDistributionsByRealtimeLogConfigResult::default()
         })
     }
 }
@@ -4968,6 +6702,74 @@ impl ListInvalidationsResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListKeyGroupsRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of key groups. The response includes key groups in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of key groups that you want in the response.</p>
+    pub max_items: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListKeyGroupsResult {
+    /// <p>A list of key groups.</p>
+    pub key_group_list: Option<KeyGroupList>,
+}
+
+#[allow(dead_code)]
+struct ListKeyGroupsResultDeserializer;
+impl ListKeyGroupsResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListKeyGroupsResult, XmlParseError> {
+        Ok(ListKeyGroupsResult {
+            key_group_list: Some(KeyGroupListDeserializer::deserialize(
+                "KeyGroupList",
+                stack,
+            )?),
+            ..ListKeyGroupsResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOriginRequestPoliciesRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of origin request policies. The response includes origin request policies in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of origin request policies that you want in the response.</p>
+    pub max_items: Option<String>,
+    /// <p><p>A filter to return only the specified kinds of origin request policies. Valid values are:</p> <ul> <li> <p> <code>managed</code> – Returns only the managed policies created by AWS.</p> </li> <li> <p> <code>custom</code> – Returns only the custom policies created in your AWS account.</p> </li> </ul></p>
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListOriginRequestPoliciesResult {
+    /// <p>A list of origin request policies.</p>
+    pub origin_request_policy_list: Option<OriginRequestPolicyList>,
+}
+
+#[allow(dead_code)]
+struct ListOriginRequestPoliciesResultDeserializer;
+impl ListOriginRequestPoliciesResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListOriginRequestPoliciesResult, XmlParseError> {
+        Ok(ListOriginRequestPoliciesResult {
+            origin_request_policy_list: Some(OriginRequestPolicyListDeserializer::deserialize(
+                "OriginRequestPolicyList",
+                stack,
+            )?),
+            ..ListOriginRequestPoliciesResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of public keys. The results include public keys in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last public key on that page). </p>
     pub marker: Option<String>,
@@ -4996,6 +6798,39 @@ impl ListPublicKeysResultDeserializer {
                 stack,
             )?),
             ..ListPublicKeysResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListRealtimeLogConfigsRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of real-time log configurations. The response includes real-time log configurations in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of real-time log configurations that you want in the response.</p>
+    pub max_items: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListRealtimeLogConfigsResult {
+    /// <p>A list of real-time log configurations.</p>
+    pub realtime_log_configs: Option<RealtimeLogConfigs>,
+}
+
+#[allow(dead_code)]
+struct ListRealtimeLogConfigsResultDeserializer;
+impl ListRealtimeLogConfigsResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListRealtimeLogConfigsResult, XmlParseError> {
+        Ok(ListRealtimeLogConfigsResult {
+            realtime_log_configs: Some(RealtimeLogConfigsDeserializer::deserialize(
+                "RealtimeLogConfigs",
+                stack,
+            )?),
+            ..ListRealtimeLogConfigsResult::default()
         })
     }
 }
@@ -5279,7 +7114,63 @@ impl MinimumProtocolVersionSerializer {
     }
 }
 
-/// <p>An origin.</p> <p>An origin is the location where content is stored, and from which CloudFront gets content to serve to viewers. To specify an origin:</p> <ul> <li> <p>Use the <code>S3OriginConfig</code> type to specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting.</p> </li> <li> <p>Use the <code>CustomOriginConfig</code> type to specify various other kinds of content containers or HTTP servers, including:</p> <ul> <li> <p>An Amazon S3 bucket that is configured with static website hosting</p> </li> <li> <p>An Elastic Load Balancing load balancer</p> </li> <li> <p>An AWS Elemental MediaPackage origin</p> </li> <li> <p>An AWS Elemental MediaStore container</p> </li> <li> <p>Any other HTTP server, running on an Amazon EC2 instance or any other kind of host</p> </li> </ul> </li> </ul> <p>For the current maximum number of origins that you can specify per distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions">General Quotas on Web Distributions</a> in the <i>Amazon CloudFront Developer Guide</i> (quotas were formerly referred to as limits).</p>
+/// <p>A monitoring subscription. This structure contains information about whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MonitoringSubscription {
+    /// <p>A subscription configuration for additional CloudWatch metrics.</p>
+    pub realtime_metrics_subscription_config: Option<RealtimeMetricsSubscriptionConfig>,
+}
+
+#[allow(dead_code)]
+struct MonitoringSubscriptionDeserializer;
+impl MonitoringSubscriptionDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MonitoringSubscription, XmlParseError> {
+        deserialize_elements::<_, MonitoringSubscription, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RealtimeMetricsSubscriptionConfig" => {
+                    obj.realtime_metrics_subscription_config =
+                        Some(RealtimeMetricsSubscriptionConfigDeserializer::deserialize(
+                            "RealtimeMetricsSubscriptionConfig",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct MonitoringSubscriptionSerializer;
+impl MonitoringSubscriptionSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &MonitoringSubscription,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.realtime_metrics_subscription_config {
+            &RealtimeMetricsSubscriptionConfigSerializer::serialize(
+                &mut writer,
+                "RealtimeMetricsSubscriptionConfig",
+                value,
+            )?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>An origin.</p> <p>An origin is the location where content is stored, and from which CloudFront gets content to serve to viewers. To specify an origin:</p> <ul> <li> <p>Use <code>S3OriginConfig</code> to specify an Amazon S3 bucket that is not configured with static website hosting.</p> </li> <li> <p>Use <code>CustomOriginConfig</code> to specify all other kinds of origins, including:</p> <ul> <li> <p>An Amazon S3 bucket that is configured with static website hosting</p> </li> <li> <p>An Elastic Load Balancing load balancer</p> </li> <li> <p>An AWS Elemental MediaPackage endpoint</p> </li> <li> <p>An AWS Elemental MediaStore container</p> </li> <li> <p>Any other HTTP server, running on an Amazon EC2 instance or any other kind of host</p> </li> </ul> </li> </ul> <p>For the current maximum number of origins that you can specify per distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions">General Quotas on Web Distributions</a> in the <i>Amazon CloudFront Developer Guide</i> (quotas were formerly referred to as limits).</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5288,9 +7179,9 @@ pub struct Origin {
     pub connection_attempts: Option<i64>,
     /// <p>The number of seconds that CloudFront waits when trying to establish a connection to the origin. The minimum timeout is 1 second, the maximum is 10 seconds, and the default (if you don’t specify otherwise) is 10 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#origin-connection-timeout">Origin Connection Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub connection_timeout: Option<i64>,
-    /// <p>A list of HTTP header names and values that CloudFront adds to requests it sends to the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html">Adding Custom Headers to Origin Requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>A list of HTTP header names and values that CloudFront adds to the requests that it sends to the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html">Adding Custom Headers to Origin Requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub custom_headers: Option<CustomHeaders>,
-    /// <p>Use this type to specify an origin that is a content container or HTTP server, including an Amazon S3 bucket that is configured with static website hosting. To specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting, use the <code>S3OriginConfig</code> type instead.</p>
+    /// <p>Use this type to specify an origin that is not an Amazon S3 bucket, with one exception. If the Amazon S3 bucket is configured with static website hosting, use this type. If the Amazon S3 bucket is not configured with static website hosting, use the <code>S3OriginConfig</code> type instead.</p>
     pub custom_origin_config: Option<CustomOriginConfig>,
     /// <p>The domain name for the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName">Origin Domain Name</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub domain_name: String,
@@ -5298,7 +7189,9 @@ pub struct Origin {
     pub id: String,
     /// <p>An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath">Origin Path</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_path: Option<String>,
-    /// <p>Use this type to specify an origin that is an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting. To specify any other type of origin, including an Amazon S3 bucket that is configured with static website hosting, use the <code>CustomOriginConfig</code> type instead.</p>
+    /// <p>CloudFront Origin Shield. Using Origin Shield can help reduce the load on your origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html">Using Origin Shield</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub origin_shield: Option<OriginShield>,
+    /// <p>Use this type to specify an origin that is an Amazon S3 bucket that is not configured with static website hosting. To specify any other type of origin, including an Amazon S3 bucket that is configured with static website hosting, use the <code>CustomOriginConfig</code> type instead.</p>
     pub s3_origin_config: Option<S3OriginConfig>,
 }
 
@@ -5342,6 +7235,12 @@ impl OriginDeserializer {
                 "OriginPath" => {
                     obj.origin_path = Some(StringDeserializer::deserialize("OriginPath", stack)?);
                 }
+                "OriginShield" => {
+                    obj.origin_shield = Some(OriginShieldDeserializer::deserialize(
+                        "OriginShield",
+                        stack,
+                    )?);
+                }
                 "S3OriginConfig" => {
                     obj.s3_origin_config = Some(S3OriginConfigDeserializer::deserialize(
                         "S3OriginConfig",
@@ -5384,6 +7283,9 @@ impl OriginSerializer {
         if let Some(ref value) = obj.origin_path {
             write_characters_element(writer, "OriginPath", &value.to_string())?;
         }
+        if let Some(ref value) = obj.origin_shield {
+            &OriginShieldSerializer::serialize(&mut writer, "OriginShield", value)?;
+        }
         if let Some(ref value) = obj.s3_origin_config {
             &S3OriginConfigSerializer::serialize(&mut writer, "S3OriginConfig", value)?;
         }
@@ -5396,7 +7298,7 @@ impl OriginSerializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginCustomHeader {
-    /// <p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>The name of a header that you want CloudFront to send to your origin. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html">Adding Custom Headers to Origin Requests</a> in the <i> Amazon CloudFront Developer Guide</i>.</p>
     pub header_name: String,
     /// <p>The value for the header that you specified in the <code>HeaderName</code> field.</p>
     pub header_value: String,
@@ -5902,6 +7804,628 @@ impl OriginProtocolPolicySerializer {
     }
 }
 
+/// <p>An origin request policy.</p> <p>When it’s attached to a cache behavior, the origin request policy determines the values that CloudFront includes in requests that it sends to the origin. Each request that CloudFront sends to the origin includes the following:</p> <ul> <li> <p>The request body and the URL path (without the domain name) from the viewer request.</p> </li> <li> <p>The headers that CloudFront automatically includes in every origin request, including <code>Host</code>, <code>User-Agent</code>, and <code>X-Amz-Cf-Id</code>.</p> </li> <li> <p>All HTTP headers, cookies, and URL query strings that are specified in the cache policy or the origin request policy. These can include items from the viewer request and, in the case of headers, additional ones that are added by CloudFront.</p> </li> </ul> <p>CloudFront sends a request when it can’t find an object in its cache that matches the request. If you want to send values to the origin and also include them in the cache key, use <code>CachePolicy</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct OriginRequestPolicy {
+    /// <p>The unique identifier for the origin request policy.</p>
+    pub id: String,
+    /// <p>The date and time when the origin request policy was last modified.</p>
+    pub last_modified_time: String,
+    /// <p>The origin request policy configuration.</p>
+    pub origin_request_policy_config: OriginRequestPolicyConfig,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyDeserializer;
+impl OriginRequestPolicyDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicy, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = StringDeserializer::deserialize("Id", stack)?;
+                }
+                "LastModifiedTime" => {
+                    obj.last_modified_time =
+                        TimestampDeserializer::deserialize("LastModifiedTime", stack)?;
+                }
+                "OriginRequestPolicyConfig" => {
+                    obj.origin_request_policy_config =
+                        OriginRequestPolicyConfigDeserializer::deserialize(
+                            "OriginRequestPolicyConfig",
+                            stack,
+                        )?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>An origin request policy configuration.</p> <p>This configuration determines the values that CloudFront includes in requests that it sends to the origin. Each request that CloudFront sends to the origin includes the following:</p> <ul> <li> <p>The request body and the URL path (without the domain name) from the viewer request.</p> </li> <li> <p>The headers that CloudFront automatically includes in every origin request, including <code>Host</code>, <code>User-Agent</code>, and <code>X-Amz-Cf-Id</code>.</p> </li> <li> <p>All HTTP headers, cookies, and URL query strings that are specified in the cache policy or the origin request policy. These can include items from the viewer request and, in the case of headers, additional ones that are added by CloudFront.</p> </li> </ul> <p>CloudFront sends a request when it can’t find an object in its cache that matches the request. If you want to send values to the origin and also include them in the cache key, use <code>CachePolicy</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OriginRequestPolicyConfig {
+    /// <p>A comment to describe the origin request policy.</p>
+    pub comment: Option<String>,
+    /// <p>The cookies from viewer requests to include in origin requests.</p>
+    pub cookies_config: OriginRequestPolicyCookiesConfig,
+    /// <p>The HTTP headers to include in origin requests. These can include headers from viewer requests and additional headers added by CloudFront.</p>
+    pub headers_config: OriginRequestPolicyHeadersConfig,
+    /// <p>A unique name to identify the origin request policy.</p>
+    pub name: String,
+    /// <p>The URL query strings from viewer requests to include in origin requests.</p>
+    pub query_strings_config: OriginRequestPolicyQueryStringsConfig,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyConfigDeserializer;
+impl OriginRequestPolicyConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyConfig, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicyConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Comment" => {
+                        obj.comment = Some(StringDeserializer::deserialize("Comment", stack)?);
+                    }
+                    "CookiesConfig" => {
+                        obj.cookies_config =
+                            OriginRequestPolicyCookiesConfigDeserializer::deserialize(
+                                "CookiesConfig",
+                                stack,
+                            )?;
+                    }
+                    "HeadersConfig" => {
+                        obj.headers_config =
+                            OriginRequestPolicyHeadersConfigDeserializer::deserialize(
+                                "HeadersConfig",
+                                stack,
+                            )?;
+                    }
+                    "Name" => {
+                        obj.name = StringDeserializer::deserialize("Name", stack)?;
+                    }
+                    "QueryStringsConfig" => {
+                        obj.query_strings_config =
+                            OriginRequestPolicyQueryStringsConfigDeserializer::deserialize(
+                                "QueryStringsConfig",
+                                stack,
+                            )?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct OriginRequestPolicyConfigSerializer;
+impl OriginRequestPolicyConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginRequestPolicyConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.comment {
+            write_characters_element(writer, "Comment", &value.to_string())?;
+        }
+        OriginRequestPolicyCookiesConfigSerializer::serialize(
+            &mut writer,
+            "CookiesConfig",
+            &obj.cookies_config,
+        )?;
+        OriginRequestPolicyHeadersConfigSerializer::serialize(
+            &mut writer,
+            "HeadersConfig",
+            &obj.headers_config,
+        )?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
+        OriginRequestPolicyQueryStringsConfigSerializer::serialize(
+            &mut writer,
+            "QueryStringsConfig",
+            &obj.query_strings_config,
+        )?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyCookieBehaviorDeserializer;
+impl OriginRequestPolicyCookieBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct OriginRequestPolicyCookieBehaviorSerializer;
+impl OriginRequestPolicyCookieBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any cookies in viewer requests (and if so, which cookies) are included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OriginRequestPolicyCookiesConfig {
+    /// <p><p>Determines whether cookies in viewer requests are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Cookies in viewer requests are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any cookies that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The cookies in viewer requests that are listed in the <code>CookieNames</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All cookies in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
+    pub cookie_behavior: String,
+    pub cookies: Option<CookieNames>,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyCookiesConfigDeserializer;
+impl OriginRequestPolicyCookiesConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyCookiesConfig, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicyCookiesConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CookieBehavior" => {
+                        obj.cookie_behavior =
+                            OriginRequestPolicyCookieBehaviorDeserializer::deserialize(
+                                "CookieBehavior",
+                                stack,
+                            )?;
+                    }
+                    "Cookies" => {
+                        obj.cookies = Some(CookieNamesDeserializer::deserialize("Cookies", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct OriginRequestPolicyCookiesConfigSerializer;
+impl OriginRequestPolicyCookiesConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginRequestPolicyCookiesConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "CookieBehavior", &obj.cookie_behavior.to_string())?;
+        if let Some(ref value) = obj.cookies {
+            &CookieNamesSerializer::serialize(&mut writer, "Cookies", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyHeaderBehaviorDeserializer;
+impl OriginRequestPolicyHeaderBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct OriginRequestPolicyHeaderBehaviorSerializer;
+impl OriginRequestPolicyHeaderBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any HTTP headers (and if so, which headers) are included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OriginRequestPolicyHeadersConfig {
+    /// <p><p>Determines whether any HTTP headers are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – HTTP headers are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any headers that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The HTTP headers that are listed in the <code>Headers</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allViewer</code> – All HTTP headers in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>allViewerAndWhitelistCloudFront</code> – All HTTP headers in viewer requests and the additional CloudFront headers that are listed in the <code>Headers</code> type are included in requests that CloudFront sends to the origin. The additional headers are added by CloudFront.</p> </li> </ul></p>
+    pub header_behavior: String,
+    pub headers: Option<Headers>,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyHeadersConfigDeserializer;
+impl OriginRequestPolicyHeadersConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyHeadersConfig, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicyHeadersConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HeaderBehavior" => {
+                        obj.header_behavior =
+                            OriginRequestPolicyHeaderBehaviorDeserializer::deserialize(
+                                "HeaderBehavior",
+                                stack,
+                            )?;
+                    }
+                    "Headers" => {
+                        obj.headers = Some(HeadersDeserializer::deserialize("Headers", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct OriginRequestPolicyHeadersConfigSerializer;
+impl OriginRequestPolicyHeadersConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginRequestPolicyHeadersConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "HeaderBehavior", &obj.header_behavior.to_string())?;
+        if let Some(ref value) = obj.headers {
+            &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A list of origin request policies.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct OriginRequestPolicyList {
+    /// <p>Contains the origin request policies in the list.</p>
+    pub items: Option<Vec<OriginRequestPolicySummary>>,
+    /// <p>The maximum number of origin request policies requested.</p>
+    pub max_items: i64,
+    /// <p>If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing origin request policies where you left off.</p>
+    pub next_marker: Option<String>,
+    /// <p>The total number of origin request policies returned in the response.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyListDeserializer;
+impl OriginRequestPolicyListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyList, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicyList, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Items" => {
+                        obj.items.get_or_insert(vec![]).extend(
+                            OriginRequestPolicySummaryListDeserializer::deserialize(
+                                "Items", stack,
+                            )?,
+                        );
+                    }
+                    "MaxItems" => {
+                        obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                    }
+                    "Quantity" => {
+                        obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct OriginRequestPolicyQueryStringBehaviorDeserializer;
+impl OriginRequestPolicyQueryStringBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct OriginRequestPolicyQueryStringBehaviorSerializer;
+impl OriginRequestPolicyQueryStringBehaviorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>An object that determines whether any URL query strings in viewer requests (and if so, which query strings) are included in requests that CloudFront sends to the origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OriginRequestPolicyQueryStringsConfig {
+    /// <p><p>Determines whether any URL query strings in viewer requests are included in requests that CloudFront sends to the origin. Valid values are:</p> <ul> <li> <p> <code>none</code> – Query strings in viewer requests are not included in requests that CloudFront sends to the origin. Even when this field is set to <code>none</code>, any query strings that are listed in a <code>CachePolicy</code> <i>are</i> included in origin requests.</p> </li> <li> <p> <code>whitelist</code> – The query strings in viewer requests that are listed in the <code>QueryStringNames</code> type are included in requests that CloudFront sends to the origin.</p> </li> <li> <p> <code>all</code> – All query strings in viewer requests are included in requests that CloudFront sends to the origin.</p> </li> </ul></p>
+    pub query_string_behavior: String,
+    /// <p>Contains a list of the query strings in viewer requests that are included in requests that CloudFront sends to the origin.</p>
+    pub query_strings: Option<QueryStringNames>,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicyQueryStringsConfigDeserializer;
+impl OriginRequestPolicyQueryStringsConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicyQueryStringsConfig, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicyQueryStringsConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "QueryStringBehavior" => {
+                        obj.query_string_behavior =
+                            OriginRequestPolicyQueryStringBehaviorDeserializer::deserialize(
+                                "QueryStringBehavior",
+                                stack,
+                            )?;
+                    }
+                    "QueryStrings" => {
+                        obj.query_strings = Some(QueryStringNamesDeserializer::deserialize(
+                            "QueryStrings",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct OriginRequestPolicyQueryStringsConfigSerializer;
+impl OriginRequestPolicyQueryStringsConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginRequestPolicyQueryStringsConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(
+            writer,
+            "QueryStringBehavior",
+            &obj.query_string_behavior.to_string(),
+        )?;
+        if let Some(ref value) = obj.query_strings {
+            &QueryStringNamesSerializer::serialize(&mut writer, "QueryStrings", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>Contains an origin request policy.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct OriginRequestPolicySummary {
+    /// <p>The origin request policy.</p>
+    pub origin_request_policy: OriginRequestPolicy,
+    /// <p>The type of origin request policy, either <code>managed</code> (created by AWS) or <code>custom</code> (created in this AWS account).</p>
+    pub type_: String,
+}
+
+#[allow(dead_code)]
+struct OriginRequestPolicySummaryDeserializer;
+impl OriginRequestPolicySummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginRequestPolicySummary, XmlParseError> {
+        deserialize_elements::<_, OriginRequestPolicySummary, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "OriginRequestPolicy" => {
+                        obj.origin_request_policy = OriginRequestPolicyDeserializer::deserialize(
+                            "OriginRequestPolicy",
+                            stack,
+                        )?;
+                    }
+                    "Type" => {
+                        obj.type_ =
+                            OriginRequestPolicyTypeDeserializer::deserialize("Type", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct OriginRequestPolicySummaryListDeserializer;
+impl OriginRequestPolicySummaryListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<OriginRequestPolicySummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "OriginRequestPolicySummary" {
+                obj.push(OriginRequestPolicySummaryDeserializer::deserialize(
+                    "OriginRequestPolicySummary",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct OriginRequestPolicyTypeDeserializer;
+impl OriginRequestPolicyTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct OriginRequestPolicyTypeSerializer;
+impl OriginRequestPolicyTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>CloudFront Origin Shield.</p> <p>Using Origin Shield can help reduce the load on your origin. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html">Using Origin Shield</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OriginShield {
+    /// <p>A flag that specifies whether Origin Shield is enabled.</p> <p>When it’s enabled, CloudFront routes all requests through Origin Shield, which can help protect your origin. When it’s disabled, CloudFront might send requests directly to your origin from multiple edge locations or regional edge caches.</p>
+    pub enabled: bool,
+    /// <p>The AWS Region for Origin Shield.</p> <p>Specify the AWS Region that has the lowest latency to your origin. To specify a region, use the region code, not the region name. For example, specify the US East (Ohio) region as <code>us-east-2</code>.</p> <p>When you enable CloudFront Origin Shield, you must specify the AWS Region for Origin Shield. For the list of AWS Regions that you can specify, and for help choosing the best Region for your origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html#choose-origin-shield-region">Choosing the AWS Region for Origin Shield</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub origin_shield_region: Option<String>,
+}
+
+#[allow(dead_code)]
+struct OriginShieldDeserializer;
+impl OriginShieldDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<OriginShield, XmlParseError> {
+        deserialize_elements::<_, OriginShield, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Enabled" => {
+                    obj.enabled = BooleanDeserializer::deserialize("Enabled", stack)?;
+                }
+                "OriginShieldRegion" => {
+                    obj.origin_shield_region = Some(OriginShieldRegionDeserializer::deserialize(
+                        "OriginShieldRegion",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct OriginShieldSerializer;
+impl OriginShieldSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &OriginShield,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
+        if let Some(ref value) = obj.origin_shield_region {
+            write_characters_element(writer, "OriginShieldRegion", &value.to_string())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct OriginShieldRegionDeserializer;
+impl OriginShieldRegionDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct OriginShieldRegionSerializer;
+impl OriginShieldRegionSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
 /// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -5955,14 +8479,14 @@ impl OriginSslProtocolsSerializer {
     }
 }
 
-/// <p>A complex type that contains information about origins and origin groups for this distribution. </p>
+/// <p>Contains information about the origins for this distribution.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origins {
-    /// <p>A complex type that contains origins or origin groups for this distribution.</p>
+    /// <p>A list of origins.</p>
     pub items: Vec<Origin>,
-    /// <p>The number of origins or origin groups for this distribution.</p>
+    /// <p>The number of origins for this distribution.</p>
     pub quantity: i64,
 }
 
@@ -6004,6 +8528,112 @@ impl OriginsSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         OriginListSerializer::serialize(&mut writer, "Items", &obj.items)?;
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>This object determines the values that CloudFront includes in the cache key. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find an object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ParametersInCacheKeyAndForwardedToOrigin {
+    /// <p>An object that determines whether any cookies in viewer requests (and if so, which cookies) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+    pub cookies_config: CachePolicyCookiesConfig,
+    /// <p>A flag that can affect whether the <code>Accept-Encoding</code> HTTP header is included in the cache key and included in requests that CloudFront sends to the origin.</p> <p>This field is related to the <code>EnableAcceptEncodingGzip</code> field. If one or both of these fields is <code>true</code> <i>and</i> the viewer request includes the <code>Accept-Encoding</code> header, then CloudFront does the following:</p> <ul> <li> <p>Normalizes the value of the viewer’s <code>Accept-Encoding</code> header</p> </li> <li> <p>Includes the normalized header in the cache key</p> </li> <li> <p>Includes the normalized header in the request to the origin, if a request is necessary</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-policy-compressed-objects">Compression support</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you set this value to <code>true</code>, and this cache behavior also has an origin request policy attached, do not include the <code>Accept-Encoding</code> header in the origin request policy. CloudFront always includes the <code>Accept-Encoding</code> header in origin requests when the value of this field is <code>true</code>, so including this header in an origin request policy has no effect.</p> <p>If both of these fields are <code>false</code>, then CloudFront treats the <code>Accept-Encoding</code> header the same as any other HTTP header in the viewer request. By default, it’s not included in the cache key and it’s not included in origin requests. In this case, you can manually add <code>Accept-Encoding</code> to the headers whitelist like any other HTTP header.</p>
+    pub enable_accept_encoding_brotli: Option<bool>,
+    /// <p>A flag that can affect whether the <code>Accept-Encoding</code> HTTP header is included in the cache key and included in requests that CloudFront sends to the origin.</p> <p>This field is related to the <code>EnableAcceptEncodingBrotli</code> field. If one or both of these fields is <code>true</code> <i>and</i> the viewer request includes the <code>Accept-Encoding</code> header, then CloudFront does the following:</p> <ul> <li> <p>Normalizes the value of the viewer’s <code>Accept-Encoding</code> header</p> </li> <li> <p>Includes the normalized header in the cache key</p> </li> <li> <p>Includes the normalized header in the request to the origin, if a request is necessary</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-policy-compressed-objects">Compression support</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you set this value to <code>true</code>, and this cache behavior also has an origin request policy attached, do not include the <code>Accept-Encoding</code> header in the origin request policy. CloudFront always includes the <code>Accept-Encoding</code> header in origin requests when the value of this field is <code>true</code>, so including this header in an origin request policy has no effect.</p> <p>If both of these fields are <code>false</code>, then CloudFront treats the <code>Accept-Encoding</code> header the same as any other HTTP header in the viewer request. By default, it’s not included in the cache key and it’s not included in origin requests. In this case, you can manually add <code>Accept-Encoding</code> to the headers whitelist like any other HTTP header.</p>
+    pub enable_accept_encoding_gzip: bool,
+    /// <p>An object that determines whether any HTTP headers (and if so, which headers) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+    pub headers_config: CachePolicyHeadersConfig,
+    /// <p>An object that determines whether any URL query strings in viewer requests (and if so, which query strings) are included in the cache key and automatically included in requests that CloudFront sends to the origin.</p>
+    pub query_strings_config: CachePolicyQueryStringsConfig,
+}
+
+#[allow(dead_code)]
+struct ParametersInCacheKeyAndForwardedToOriginDeserializer;
+impl ParametersInCacheKeyAndForwardedToOriginDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ParametersInCacheKeyAndForwardedToOrigin, XmlParseError> {
+        deserialize_elements::<_, ParametersInCacheKeyAndForwardedToOrigin, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CookiesConfig" => {
+                        obj.cookies_config = CachePolicyCookiesConfigDeserializer::deserialize(
+                            "CookiesConfig",
+                            stack,
+                        )?;
+                    }
+                    "EnableAcceptEncodingBrotli" => {
+                        obj.enable_accept_encoding_brotli = Some(BooleanDeserializer::deserialize(
+                            "EnableAcceptEncodingBrotli",
+                            stack,
+                        )?);
+                    }
+                    "EnableAcceptEncodingGzip" => {
+                        obj.enable_accept_encoding_gzip =
+                            BooleanDeserializer::deserialize("EnableAcceptEncodingGzip", stack)?;
+                    }
+                    "HeadersConfig" => {
+                        obj.headers_config = CachePolicyHeadersConfigDeserializer::deserialize(
+                            "HeadersConfig",
+                            stack,
+                        )?;
+                    }
+                    "QueryStringsConfig" => {
+                        obj.query_strings_config =
+                            CachePolicyQueryStringsConfigDeserializer::deserialize(
+                                "QueryStringsConfig",
+                                stack,
+                            )?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct ParametersInCacheKeyAndForwardedToOriginSerializer;
+impl ParametersInCacheKeyAndForwardedToOriginSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ParametersInCacheKeyAndForwardedToOrigin,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        CachePolicyCookiesConfigSerializer::serialize(
+            &mut writer,
+            "CookiesConfig",
+            &obj.cookies_config,
+        )?;
+        if let Some(ref value) = obj.enable_accept_encoding_brotli {
+            write_characters_element(writer, "EnableAcceptEncodingBrotli", &value.to_string())?;
+        }
+        write_characters_element(
+            writer,
+            "EnableAcceptEncodingGzip",
+            &obj.enable_accept_encoding_gzip.to_string(),
+        )?;
+        CachePolicyHeadersConfigSerializer::serialize(
+            &mut writer,
+            "HeadersConfig",
+            &obj.headers_config,
+        )?;
+        CachePolicyQueryStringsConfigSerializer::serialize(
+            &mut writer,
+            "QueryStringsConfig",
+            &obj.query_strings_config,
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6124,15 +8754,15 @@ impl PriceClassSerializer {
     }
 }
 
-/// <p>A complex data type of public keys you add to CloudFront to use with features like field-level encryption.</p>
+/// <p>A public key that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKey {
-    /// <p>A time you added a public key to CloudFront.</p>
+    /// <p>The date and time when the public key was uploaded.</p>
     pub created_time: String,
-    /// <p>A unique ID assigned to a public key you've added to CloudFront.</p>
+    /// <p>The identifier of the public key.</p>
     pub id: String,
-    /// <p>A complex data type for a public key you add to CloudFront to use with features like field-level encryption.</p>
+    /// <p>Configuration information about a public key that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
@@ -6162,18 +8792,18 @@ impl PublicKeyDeserializer {
         })
     }
 }
-/// <p>Information about a public key you add to CloudFront to use with features like field-level encryption.</p>
+/// <p>Configuration information about a public key that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicKeyConfig {
-    /// <p>A unique number that ensures that the request can't be replayed.</p>
+    /// <p>A string included in the request to help make sure that the request can’t be replayed.</p>
     pub caller_reference: String,
-    /// <p>An optional comment about a public key.</p>
+    /// <p>A comment to describe the public key.</p>
     pub comment: Option<String>,
-    /// <p>The encoded public key that you want to add to CloudFront to use with features like field-level encryption.</p>
+    /// <p>The public key that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
     pub encoded_key: String,
-    /// <p>The name for a public key you add to CloudFront to use with features like field-level encryption.</p>
+    /// <p>A name to help identify the public key.</p>
     pub name: String,
 }
 
@@ -6229,17 +8859,56 @@ impl PublicKeyConfigSerializer {
     }
 }
 
-/// <p>A list of public keys you've added to CloudFront to use with features like field-level encryption.</p>
+#[allow(dead_code)]
+struct PublicKeyIdListDeserializer;
+impl PublicKeyIdListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "PublicKey" {
+                obj.push(StringDeserializer::deserialize("PublicKey", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct PublicKeyIdListSerializer;
+impl PublicKeyIdListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            StringSerializer::serialize(writer, "PublicKey", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
+    }
+}
+
+/// <p>A list of public keys that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeyList {
-    /// <p>An array of information about a public key you add to CloudFront to use with features like field-level encryption.</p>
+    /// <p>A list of public keys.</p>
     pub items: Option<Vec<PublicKeySummary>>,
-    /// <p>The maximum number of public keys you want in the response body. </p>
+    /// <p>The maximum number of public keys you want in the response.</p>
     pub max_items: i64,
     /// <p>If there are more elements to be listed, this element is present and contains the value that you can use for the <code>Marker</code> request parameter to continue listing your public keys where you left off.</p>
     pub next_marker: Option<String>,
-    /// <p>The number of public keys you added to CloudFront to use with features like field-level encryption.</p>
+    /// <p>The number of public keys in the list.</p>
     pub quantity: i64,
 }
 
@@ -6273,19 +8942,19 @@ impl PublicKeyListDeserializer {
         })
     }
 }
-/// <p>A complex data type for public key information. </p>
+/// <p>Contains information about a public key.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeySummary {
-    /// <p> Comment for public key information summary. </p>
+    /// <p>A comment to describe the public key.</p>
     pub comment: Option<String>,
-    /// <p> Creation time for public key information summary. </p>
+    /// <p>The date and time when the public key was uploaded.</p>
     pub created_time: String,
-    /// <p> Encoded key for public key information summary. </p>
+    /// <p>The public key.</p>
     pub encoded_key: String,
-    /// <p> ID for public key information summary. </p>
+    /// <p>The identifier of the public key.</p>
     pub id: String,
-    /// <p> Name for public key information summary. </p>
+    /// <p>A name to help identify the public key.</p>
     pub name: String,
 }
 
@@ -6556,10 +9225,8 @@ impl QueryArgProfilesSerializer {
     }
 }
 
-/// <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for a cache behavior. </p>
+/// <p>This field is deprecated. We recommend that you use a cache policy or an origin request policy instead of this field.</p> <p>If you want to include query strings in the cache key, use <code>QueryStringsConfig</code> in a cache policy. See <code>CachePolicy</code>.</p> <p>If you want to send query strings to the origin but not include them in the cache key, use <code>QueryStringsConfig</code> in an origin request policy. See <code>OriginRequestPolicy</code>.</p> <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for a cache behavior. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
-#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringCacheKeys {
     /// <p>A list that contains the query string parameters that you want CloudFront to use as a basis for caching for a cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>
     pub items: Option<Vec<String>>,
@@ -6567,19 +9234,30 @@ pub struct QueryStringCacheKeys {
     pub quantity: i64,
 }
 
+/// <p>Contains a list of query string names.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct QueryStringNames {
+    /// <p>A list of query string names.</p>
+    pub items: Option<Vec<String>>,
+    /// <p>The number of query string names in the <code>Items</code> list.</p>
+    pub quantity: i64,
+}
+
 #[allow(dead_code)]
-struct QueryStringCacheKeysDeserializer;
-impl QueryStringCacheKeysDeserializer {
+struct QueryStringNamesDeserializer;
+impl QueryStringNamesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<QueryStringCacheKeys, XmlParseError> {
-        deserialize_elements::<_, QueryStringCacheKeys, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<QueryStringNames, XmlParseError> {
+        deserialize_elements::<_, QueryStringNames, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
                     obj.items.get_or_insert(vec![]).extend(
-                        QueryStringCacheKeysListDeserializer::deserialize("Items", stack)?,
+                        QueryStringNamesListDeserializer::deserialize("Items", stack)?,
                     );
                 }
                 "Quantity" => {
@@ -6592,20 +9270,20 @@ impl QueryStringCacheKeysDeserializer {
     }
 }
 
-pub struct QueryStringCacheKeysSerializer;
-impl QueryStringCacheKeysSerializer {
+pub struct QueryStringNamesSerializer;
+impl QueryStringNamesSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
         name: &str,
-        obj: &QueryStringCacheKeys,
+        obj: &QueryStringNames,
     ) -> Result<(), xml::writer::Error>
     where
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.items {
-            &QueryStringCacheKeysListSerializer::serialize(&mut writer, "Items", value)?;
+            &QueryStringNamesListSerializer::serialize(&mut writer, "Items", value)?;
         }
         write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
@@ -6613,8 +9291,8 @@ impl QueryStringCacheKeysSerializer {
 }
 
 #[allow(dead_code)]
-struct QueryStringCacheKeysListDeserializer;
-impl QueryStringCacheKeysListDeserializer {
+struct QueryStringNamesListDeserializer;
+impl QueryStringNamesListDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
@@ -6631,8 +9309,8 @@ impl QueryStringCacheKeysListDeserializer {
     }
 }
 
-pub struct QueryStringCacheKeysListSerializer;
-impl QueryStringCacheKeysListSerializer {
+pub struct QueryStringNamesListSerializer;
+impl QueryStringNamesListSerializer {
     #[allow(unused_variables, warnings)]
     pub fn serialize<W>(
         mut writer: &mut EventWriter<W>,
@@ -6648,6 +9326,204 @@ impl QueryStringCacheKeysListSerializer {
         }
         writer.write(xml::writer::XmlEvent::end_element())?;
         Ok(())
+    }
+}
+
+/// <p>A real-time log configuration.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct RealtimeLogConfig {
+    /// <p>The Amazon Resource Name (ARN) of this real-time log configuration.</p>
+    pub arn: String,
+    /// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data for this real-time log configuration.</p>
+    pub end_points: Vec<EndPoint>,
+    /// <p>A list of fields that are included in each real-time log record. In an API response, the fields are provided in the same order in which they are sent to the Amazon Kinesis data stream.</p> <p>For more information about fields, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields">Real-time log configuration fields</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub fields: Vec<String>,
+    /// <p>The unique name of this real-time log configuration.</p>
+    pub name: String,
+    /// <p>The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. The sampling rate is an integer between 1 and 100, inclusive.</p>
+    pub sampling_rate: i64,
+}
+
+#[allow(dead_code)]
+struct RealtimeLogConfigDeserializer;
+impl RealtimeLogConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RealtimeLogConfig, XmlParseError> {
+        deserialize_elements::<_, RealtimeLogConfig, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ARN" => {
+                    obj.arn = StringDeserializer::deserialize("ARN", stack)?;
+                }
+                "EndPoints" => {
+                    obj.end_points
+                        .extend(EndPointListDeserializer::deserialize("EndPoints", stack)?);
+                }
+                "Fields" => {
+                    obj.fields
+                        .extend(FieldListDeserializer::deserialize("Fields", stack)?);
+                }
+                "Name" => {
+                    obj.name = StringDeserializer::deserialize("Name", stack)?;
+                }
+                "SamplingRate" => {
+                    obj.sampling_rate = LongDeserializer::deserialize("SamplingRate", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct RealtimeLogConfigListDeserializer;
+impl RealtimeLogConfigListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<RealtimeLogConfig>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RealtimeLogConfigDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A list of real-time log configurations.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct RealtimeLogConfigs {
+    /// <p>A flag that indicates whether there are more real-time log configurations than are contained in this list.</p>
+    pub is_truncated: bool,
+    /// <p>Contains the list of real-time log configurations.</p>
+    pub items: Option<Vec<RealtimeLogConfig>>,
+    /// <p>This parameter indicates where this list of real-time log configurations begins. This list includes real-time log configurations that occur after the marker.</p>
+    pub marker: String,
+    /// <p>The maximum number of real-time log configurations requested.</p>
+    pub max_items: i64,
+    /// <p>If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing real-time log configurations where you left off. </p>
+    pub next_marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct RealtimeLogConfigsDeserializer;
+impl RealtimeLogConfigsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RealtimeLogConfigs, XmlParseError> {
+        deserialize_elements::<_, RealtimeLogConfigs, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated = BooleanDeserializer::deserialize("IsTruncated", stack)?;
+                }
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        RealtimeLogConfigListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = StringDeserializer::deserialize("Marker", stack)?;
+                }
+                "MaxItems" => {
+                    obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A subscription configuration for additional CloudWatch metrics.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RealtimeMetricsSubscriptionConfig {
+    /// <p>A flag that indicates whether additional CloudWatch metrics are enabled for a given CloudFront distribution.</p>
+    pub realtime_metrics_subscription_status: String,
+}
+
+#[allow(dead_code)]
+struct RealtimeMetricsSubscriptionConfigDeserializer;
+impl RealtimeMetricsSubscriptionConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RealtimeMetricsSubscriptionConfig, XmlParseError> {
+        deserialize_elements::<_, RealtimeMetricsSubscriptionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "RealtimeMetricsSubscriptionStatus" => {
+                        obj.realtime_metrics_subscription_status =
+                            RealtimeMetricsSubscriptionStatusDeserializer::deserialize(
+                                "RealtimeMetricsSubscriptionStatus",
+                                stack,
+                            )?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+pub struct RealtimeMetricsSubscriptionConfigSerializer;
+impl RealtimeMetricsSubscriptionConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &RealtimeMetricsSubscriptionConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(
+            writer,
+            "RealtimeMetricsSubscriptionStatus",
+            &obj.realtime_metrics_subscription_status.to_string(),
+        )?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct RealtimeMetricsSubscriptionStatusDeserializer;
+impl RealtimeMetricsSubscriptionStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct RealtimeMetricsSubscriptionStatusSerializer;
+impl RealtimeMetricsSubscriptionStatusSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6845,13 +9721,13 @@ impl SSLSupportMethodSerializer {
     }
 }
 
-/// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
+/// <p>A list of AWS accounts and the active CloudFront key pairs in each account that CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Signer {
-    /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
+    /// <p>An AWS account number that contains active CloudFront key pairs that CloudFront can use to verify the signatures of signed URLs and signed cookies. If the AWS account that owns the key pairs is the same account that owns the CloudFront distribution, the value of this field is <code>self</code>.</p>
     pub aws_account_number: Option<String>,
-    /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p>
+    /// <p>A list of CloudFront key pair identifiers.</p>
     pub key_pair_ids: Option<KeyPairIds>,
 }
 
@@ -7748,16 +10624,117 @@ impl TimestampDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/DistributionConfig.html">DistributionConfig</a> in the <i>Amazon CloudFront API Reference</i>.</p>
+#[allow(dead_code)]
+struct TrustedKeyGroupIdListDeserializer;
+impl TrustedKeyGroupIdListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "KeyGroup" {
+                obj.push(StringDeserializer::deserialize("KeyGroup", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct TrustedKeyGroupIdListSerializer;
+impl TrustedKeyGroupIdListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            StringSerializer::serialize(writer, "KeyGroup", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
+    }
+}
+
+/// <p>A list of key groups whose public keys CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TrustedKeyGroups {
+    /// <p>This field is <code>true</code> if any of the key groups in the list have public keys that CloudFront can use to verify the signatures of signed URLs and signed cookies. If not, this field is <code>false</code>.</p>
+    pub enabled: bool,
+    /// <p>A list of key groups identifiers.</p>
+    pub items: Option<Vec<String>>,
+    /// <p>The number of key groups in the list.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct TrustedKeyGroupsDeserializer;
+impl TrustedKeyGroupsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrustedKeyGroups, XmlParseError> {
+        deserialize_elements::<_, TrustedKeyGroups, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Enabled" => {
+                    obj.enabled = BooleanDeserializer::deserialize("Enabled", stack)?;
+                }
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        TrustedKeyGroupIdListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct TrustedKeyGroupsSerializer;
+impl TrustedKeyGroupsSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &TrustedKeyGroups,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
+        if let Some(ref value) = obj.items {
+            &TrustedKeyGroupIdListSerializer::serialize(&mut writer, "Items", value)?;
+        }
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A list of AWS accounts whose public keys CloudFront can use to verify the signatures of signed URLs and signed cookies.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TrustedSigners {
-    /// <p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>
+    /// <p>This field is <code>true</code> if any of the AWS accounts have public keys that CloudFront can use to verify the signatures of signed URLs and signed cookies. If not, this field is <code>false</code>.</p>
     pub enabled: bool,
-    /// <p> <b>Optional</b>: A complex type that contains trusted signers for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
+    /// <p>A list of AWS account identifiers.</p>
     pub items: Option<Vec<String>>,
-    /// <p>The number of trusted signers for this cache behavior.</p>
+    /// <p>The number of AWS accounts in the list.</p>
     pub quantity: i64,
 }
 
@@ -7820,6 +10797,40 @@ pub struct UntagResourceRequest {
     pub tag_keys: TagKeys,
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateCachePolicyRequest {
+    /// <p>A cache policy configuration.</p>
+    pub cache_policy_config: CachePolicyConfig,
+    /// <p>The unique identifier for the cache policy that you are updating. The identifier is returned in a cache behavior’s <code>CachePolicyId</code> field in the response to <code>GetDistributionConfig</code>.</p>
+    pub id: String,
+    /// <p>The version of the cache policy that you are updating. The version is returned in the cache policy’s <code>ETag</code> field in the response to <code>GetCachePolicyConfig</code>.</p>
+    pub if_match: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UpdateCachePolicyResult {
+    /// <p>A cache policy.</p>
+    pub cache_policy: Option<CachePolicy>,
+    /// <p>The current version of the cache policy.</p>
+    pub e_tag: Option<String>,
+}
+
+#[allow(dead_code)]
+struct UpdateCachePolicyResultDeserializer;
+impl UpdateCachePolicyResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateCachePolicyResult, XmlParseError> {
+        Ok(UpdateCachePolicyResult {
+            cache_policy: Some(CachePolicyDeserializer::deserialize("CachePolicy", stack)?),
+            ..UpdateCachePolicyResult::default()
+        })
+    }
+}
 /// <p>The request to update an origin access identity.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7978,21 +10989,92 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateKeyGroupRequest {
+    /// <p>The identifier of the key group that you are updating.</p>
+    pub id: String,
+    /// <p>The version of the key group that you are updating. The version is the key group’s <code>ETag</code> value.</p>
+    pub if_match: Option<String>,
+    /// <p>The key group configuration.</p>
+    pub key_group_config: KeyGroupConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UpdateKeyGroupResult {
+    /// <p>The identifier for this version of the key group.</p>
+    pub e_tag: Option<String>,
+    /// <p>The key group that was just updated.</p>
+    pub key_group: Option<KeyGroup>,
+}
+
+#[allow(dead_code)]
+struct UpdateKeyGroupResultDeserializer;
+impl UpdateKeyGroupResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateKeyGroupResult, XmlParseError> {
+        Ok(UpdateKeyGroupResult {
+            key_group: Some(KeyGroupDeserializer::deserialize("KeyGroup", stack)?),
+            ..UpdateKeyGroupResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateOriginRequestPolicyRequest {
+    /// <p>The unique identifier for the origin request policy that you are updating. The identifier is returned in a cache behavior’s <code>OriginRequestPolicyId</code> field in the response to <code>GetDistributionConfig</code>.</p>
+    pub id: String,
+    /// <p>The version of the origin request policy that you are updating. The version is returned in the origin request policy’s <code>ETag</code> field in the response to <code>GetOriginRequestPolicyConfig</code>.</p>
+    pub if_match: Option<String>,
+    /// <p>An origin request policy configuration.</p>
+    pub origin_request_policy_config: OriginRequestPolicyConfig,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UpdateOriginRequestPolicyResult {
+    /// <p>The current version of the origin request policy.</p>
+    pub e_tag: Option<String>,
+    /// <p>An origin request policy.</p>
+    pub origin_request_policy: Option<OriginRequestPolicy>,
+}
+
+#[allow(dead_code)]
+struct UpdateOriginRequestPolicyResultDeserializer;
+impl UpdateOriginRequestPolicyResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateOriginRequestPolicyResult, XmlParseError> {
+        Ok(UpdateOriginRequestPolicyResult {
+            origin_request_policy: Some(OriginRequestPolicyDeserializer::deserialize(
+                "OriginRequestPolicy",
+                stack,
+            )?),
+            ..UpdateOriginRequestPolicyResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublicKeyRequest {
-    /// <p>ID of the public key to be updated.</p>
+    /// <p>The identifier of the public key that you are updating.</p>
     pub id: String,
     /// <p>The value of the <code>ETag</code> header that you received when retrieving the public key to update. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
-    /// <p>Request to update public key information.</p>
+    /// <p>A public key configuration.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdatePublicKeyResult {
-    /// <p>The current version of the update public key result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
+    /// <p>The identifier of the current version of the public key.</p>
     pub e_tag: Option<String>,
-    /// <p>Return the results of updating the public key.</p>
+    /// <p>The public key.</p>
     pub public_key: Option<PublicKey>,
 }
 
@@ -8008,6 +11090,85 @@ impl UpdatePublicKeyResultDeserializer {
             public_key: Some(PublicKeyDeserializer::deserialize("PublicKey", stack)?),
             ..UpdatePublicKeyResult::default()
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRealtimeLogConfigRequest {
+    /// <p>The Amazon Resource Name (ARN) for this real-time log configuration.</p>
+    pub arn: Option<String>,
+    /// <p>Contains information about the Amazon Kinesis data stream where you are sending real-time log data.</p>
+    pub end_points: Option<Vec<EndPoint>>,
+    /// <p>A list of fields to include in each real-time log record.</p> <p>For more information about fields, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html#understand-real-time-log-config-fields">Real-time log configuration fields</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub fields: Option<Vec<String>>,
+    /// <p>The name for this real-time log configuration.</p>
+    pub name: Option<String>,
+    /// <p>The sampling rate for this real-time log configuration. The sampling rate determines the percentage of viewer requests that are represented in the real-time log data. You must provide an integer between 1 and 100, inclusive.</p>
+    pub sampling_rate: Option<i64>,
+}
+
+pub struct UpdateRealtimeLogConfigRequestSerializer;
+impl UpdateRealtimeLogConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &UpdateRealtimeLogConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        if let Some(ref value) = obj.arn {
+            &StringSerializer::serialize(&mut writer, "ARN", value)?;
+        }
+        if let Some(ref value) = obj.end_points {
+            &EndPointListSerializer::serialize(&mut writer, "EndPoints", value)?;
+        }
+        if let Some(ref value) = obj.fields {
+            &FieldListSerializer::serialize(&mut writer, "Fields", value)?;
+        }
+        if let Some(ref value) = obj.name {
+            &StringSerializer::serialize(&mut writer, "Name", value)?;
+        }
+        if let Some(ref value) = obj.sampling_rate {
+            &LongSerializer::serialize(&mut writer, "SamplingRate", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UpdateRealtimeLogConfigResult {
+    /// <p>A real-time log configuration.</p>
+    pub realtime_log_config: Option<RealtimeLogConfig>,
+}
+
+#[allow(dead_code)]
+struct UpdateRealtimeLogConfigResultDeserializer;
+impl UpdateRealtimeLogConfigResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateRealtimeLogConfigResult, XmlParseError> {
+        deserialize_elements::<_, UpdateRealtimeLogConfigResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "RealtimeLogConfig" => {
+                        obj.realtime_log_config = Some(RealtimeLogConfigDeserializer::deserialize(
+                            "RealtimeLogConfig",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>The request to update a streaming distribution.</p>
@@ -8062,7 +11223,7 @@ pub struct ViewerCertificate {
     pub iam_certificate_id: Option<String>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
     pub minimum_protocol_version: Option<String>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> <li> <p> <code>static-ip</code> - Do not specify this value unless your distribution has been enabled for this feature by the CloudFront team. If you have a use case that requires static IP addresses for a distribution, contact CloudFront through the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a>.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
     pub ssl_support_method: Option<String>,
 }
 
@@ -8165,6 +11326,118 @@ impl ViewerProtocolPolicySerializer {
     }
 }
 
+/// Errors returned by CreateCachePolicy
+#[derive(Debug, PartialEq)]
+pub enum CreateCachePolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>A cache policy with this name already exists. You must provide a unique name. To modify an existing cache policy, use <code>UpdateCachePolicy</code>.</p>
+    CachePolicyAlreadyExists(String),
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
+    InconsistentQuantities(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>You have reached the maximum number of cache policies for this AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyCachePolicies(String),
+    /// <p>The number of cookies in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyCookiesInCachePolicy(String),
+    /// <p>The number of headers in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyHeadersInCachePolicy(String),
+    /// <p>The number of query strings in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyQueryStringsInCachePolicy(String),
+}
+
+impl CreateCachePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCachePolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(CreateCachePolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CachePolicyAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateCachePolicyError::CachePolicyAlreadyExists(parsed_error.message),
+                        )
+                    }
+                    "InconsistentQuantities" => {
+                        return RusotoError::Service(
+                            CreateCachePolicyError::InconsistentQuantities(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(CreateCachePolicyError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCachePolicies" => {
+                        return RusotoError::Service(CreateCachePolicyError::TooManyCachePolicies(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCookiesInCachePolicy" => {
+                        return RusotoError::Service(
+                            CreateCachePolicyError::TooManyCookiesInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyHeadersInCachePolicy" => {
+                        return RusotoError::Service(
+                            CreateCachePolicyError::TooManyHeadersInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyQueryStringsInCachePolicy" => {
+                        return RusotoError::Service(
+                            CreateCachePolicyError::TooManyQueryStringsInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateCachePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCachePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCachePolicyError::CachePolicyAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateCachePolicyError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+            CreateCachePolicyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateCachePolicyError::TooManyCachePolicies(ref cause) => write!(f, "{}", cause),
+            CreateCachePolicyError::TooManyCookiesInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCachePolicyError::TooManyHeadersInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateCachePolicyError::TooManyQueryStringsInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateCachePolicyError {}
 /// Errors returned by CreateCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFrontOriginAccessIdentityError {
@@ -8275,10 +11548,14 @@ pub enum CreateDistributionError {
     InvalidWebACLId(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
     /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
@@ -8289,12 +11566,22 @@ pub enum CreateDistributionError {
     TooManyDistributionCNAMEs(String),
     /// <p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
     TooManyDistributions(String),
+    /// <p>The maximum number of distributions have been associated with the specified cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToCachePolicy(String),
     /// <p>The maximum number of distributions have been associated with the specified configuration for field-level encryption.</p>
     TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(String),
+    /// <p>The number of distributions that reference this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToKeyGroup(String),
+    /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToOriginRequestPolicy(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
+    /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
+    TooManyDistributionsWithSingleFunctionARN(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
+    /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyKeyGroupsAssociatedToDistribution(String),
     /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
     /// <p>Your request contains too many origin custom headers.</p>
@@ -8307,6 +11594,8 @@ pub enum CreateDistributionError {
     TooManyQueryStringParameters(String),
     /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
+    /// <p>The specified key group does not exist.</p>
+    TrustedKeyGroupDoesNotExist(String),
     /// <p>One or more of your trusted signers don't exist.</p>
     TrustedSignerDoesNotExist(String),
 }
@@ -8319,7 +11608,7 @@ impl CreateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8365,22 +11654,30 @@ CreateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TrustedKeyGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
@@ -8445,10 +11742,14 @@ pub enum CreateDistributionWithTagsError {
     InvalidWebACLId(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
     /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
@@ -8459,12 +11760,22 @@ pub enum CreateDistributionWithTagsError {
     TooManyDistributionCNAMEs(String),
     /// <p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
     TooManyDistributions(String),
+    /// <p>The maximum number of distributions have been associated with the specified cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToCachePolicy(String),
     /// <p>The maximum number of distributions have been associated with the specified configuration for field-level encryption.</p>
     TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(String),
+    /// <p>The number of distributions that reference this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToKeyGroup(String),
+    /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToOriginRequestPolicy(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
+    /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
+    TooManyDistributionsWithSingleFunctionARN(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
+    /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyKeyGroupsAssociatedToDistribution(String),
     /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
     /// <p>Your request contains too many origin custom headers.</p>
@@ -8477,6 +11788,8 @@ pub enum CreateDistributionWithTagsError {
     TooManyQueryStringParameters(String),
     /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
+    /// <p>The specified key group does not exist.</p>
+    TrustedKeyGroupDoesNotExist(String),
     /// <p>One or more of your trusted signers don't exist.</p>
     TrustedSignerDoesNotExist(String),
 }
@@ -8491,7 +11804,7 @@ impl CreateDistributionWithTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8538,22 +11851,30 @@ CreateDistributionWithTagsError::InvalidTagging(ref cause) => write!(f, "{}", ca
 CreateDistributionWithTagsError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::MissingBody(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributions(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
@@ -8779,6 +12100,254 @@ impl fmt::Display for CreateInvalidationError {
     }
 }
 impl Error for CreateInvalidationError {}
+/// Errors returned by CreateKeyGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateKeyGroupError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>A key group with this name already exists. You must provide a unique name. To modify an existing key group, use <code>UpdateKeyGroup</code>.</p>
+    KeyGroupAlreadyExists(String),
+    /// <p>You have reached the maximum number of key groups for this AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyKeyGroups(String),
+    /// <p>The number of public keys in this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyPublicKeysInKeyGroup(String),
+}
+
+impl CreateKeyGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(CreateKeyGroupError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "KeyGroupAlreadyExists" => {
+                        return RusotoError::Service(CreateKeyGroupError::KeyGroupAlreadyExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyKeyGroups" => {
+                        return RusotoError::Service(CreateKeyGroupError::TooManyKeyGroups(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyPublicKeysInKeyGroup" => {
+                        return RusotoError::Service(
+                            CreateKeyGroupError::TooManyPublicKeysInKeyGroup(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateKeyGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateKeyGroupError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateKeyGroupError::KeyGroupAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateKeyGroupError::TooManyKeyGroups(ref cause) => write!(f, "{}", cause),
+            CreateKeyGroupError::TooManyPublicKeysInKeyGroup(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateKeyGroupError {}
+/// Errors returned by CreateMonitoringSubscription
+#[derive(Debug, PartialEq)]
+pub enum CreateMonitoringSubscriptionError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The specified distribution does not exist.</p>
+    NoSuchDistribution(String),
+}
+
+impl CreateMonitoringSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateMonitoringSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(
+                            CreateMonitoringSubscriptionError::AccessDenied(parsed_error.message),
+                        )
+                    }
+                    "NoSuchDistribution" => {
+                        return RusotoError::Service(
+                            CreateMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateMonitoringSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMonitoringSubscriptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateMonitoringSubscriptionError::NoSuchDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateMonitoringSubscriptionError {}
+/// Errors returned by CreateOriginRequestPolicy
+#[derive(Debug, PartialEq)]
+pub enum CreateOriginRequestPolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
+    InconsistentQuantities(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>An origin request policy with this name already exists. You must provide a unique name. To modify an existing origin request policy, use <code>UpdateOriginRequestPolicy</code>.</p>
+    OriginRequestPolicyAlreadyExists(String),
+    /// <p>The number of cookies in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyCookiesInOriginRequestPolicy(String),
+    /// <p>The number of headers in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyHeadersInOriginRequestPolicy(String),
+    /// <p>You have reached the maximum number of origin request policies for this AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyOriginRequestPolicies(String),
+    /// <p>The number of query strings in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyQueryStringsInOriginRequestPolicy(String),
+}
+
+impl CreateOriginRequestPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOriginRequestPolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(CreateOriginRequestPolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::InconsistentQuantities(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::InvalidArgument(parsed_error.message),
+                        )
+                    }
+                    "OriginRequestPolicyAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyCookiesInOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyHeadersInOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyOriginRequestPolicies" => {
+                        return RusotoError::Service(
+                            CreateOriginRequestPolicyError::TooManyOriginRequestPolicies(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(
+                        CreateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(
+                            parsed_error.message,
+                        ),
+                    ),
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateOriginRequestPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateOriginRequestPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateOriginRequestPolicyError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOriginRequestPolicyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOriginRequestPolicyError::TooManyOriginRequestPolicies(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateOriginRequestPolicyError {}
 /// Errors returned by CreatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicKeyError {
@@ -8839,6 +12408,82 @@ impl fmt::Display for CreatePublicKeyError {
     }
 }
 impl Error for CreatePublicKeyError {}
+/// Errors returned by CreateRealtimeLogConfig
+#[derive(Debug, PartialEq)]
+pub enum CreateRealtimeLogConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>A real-time log configuration with this name already exists. You must provide a unique name. To modify an existing real-time log configuration, use <code>UpdateRealtimeLogConfig</code>.</p>
+    RealtimeLogConfigAlreadyExists(String),
+    /// <p>You have reached the maximum number of real-time log configurations for this AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyRealtimeLogConfigs(String),
+}
+
+impl CreateRealtimeLogConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRealtimeLogConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(CreateRealtimeLogConfigError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(CreateRealtimeLogConfigError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RealtimeLogConfigAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateRealtimeLogConfigError::RealtimeLogConfigAlreadyExists(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyRealtimeLogConfigs" => {
+                        return RusotoError::Service(
+                            CreateRealtimeLogConfigError::TooManyRealtimeLogConfigs(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateRealtimeLogConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateRealtimeLogConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeLogConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateRealtimeLogConfigError::RealtimeLogConfigAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateRealtimeLogConfigError::TooManyRealtimeLogConfigs(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateRealtimeLogConfigError {}
 /// Errors returned by CreateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionError {
@@ -9108,6 +12753,90 @@ impl fmt::Display for CreateStreamingDistributionWithTagsError {
     }
 }
 impl Error for CreateStreamingDistributionWithTagsError {}
+/// Errors returned by DeleteCachePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteCachePolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>Cannot delete the cache policy because it is attached to one or more cache behaviors.</p>
+    CachePolicyInUse(String),
+    /// <p>You cannot delete a managed policy.</p>
+    IllegalDelete(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+}
+
+impl DeleteCachePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCachePolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(DeleteCachePolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CachePolicyInUse" => {
+                        return RusotoError::Service(DeleteCachePolicyError::CachePolicyInUse(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IllegalDelete" => {
+                        return RusotoError::Service(DeleteCachePolicyError::IllegalDelete(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(DeleteCachePolicyError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(DeleteCachePolicyError::NoSuchCachePolicy(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(DeleteCachePolicyError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteCachePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCachePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteCachePolicyError::CachePolicyInUse(ref cause) => write!(f, "{}", cause),
+            DeleteCachePolicyError::IllegalDelete(ref cause) => write!(f, "{}", cause),
+            DeleteCachePolicyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeleteCachePolicyError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
+            DeleteCachePolicyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCachePolicyError {}
 /// Errors returned by DeleteCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum DeleteCloudFrontOriginAccessIdentityError {
@@ -9115,7 +12844,7 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     AccessDenied(String),
     /// <p>The Origin Access Identity specified is already in use.</p>
     CloudFrontOriginAccessIdentityInUse(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
@@ -9178,7 +12907,7 @@ pub enum DeleteDistributionError {
     AccessDenied(String),
     /// <p>The specified CloudFront distribution is not disabled. You must disable the distribution before you can delete it.</p>
     DistributionNotDisabled(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
@@ -9254,7 +12983,7 @@ pub enum DeleteFieldLevelEncryptionConfigError {
     AccessDenied(String),
     /// <p>The specified configuration for field-level encryption is in use.</p>
     FieldLevelEncryptionConfigInUse(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
@@ -9352,7 +13081,7 @@ pub enum DeleteFieldLevelEncryptionProfileError {
     AccessDenied(String),
     /// <p>The specified profile for field-level encryption is in use.</p>
     FieldLevelEncryptionProfileInUse(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
@@ -9439,12 +13168,236 @@ impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
     }
 }
 impl Error for DeleteFieldLevelEncryptionProfileError {}
+/// Errors returned by DeleteKeyGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteKeyGroupError {
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>A resource that was specified is not valid.</p>
+    NoSuchResource(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+    /// <p>Cannot delete this resource because it is in use.</p>
+    ResourceInUse(String),
+}
+
+impl DeleteKeyGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKeyGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(DeleteKeyGroupError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchResource" => {
+                        return RusotoError::Service(DeleteKeyGroupError::NoSuchResource(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(DeleteKeyGroupError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return RusotoError::Service(DeleteKeyGroupError::ResourceInUse(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteKeyGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteKeyGroupError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeleteKeyGroupError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+            DeleteKeyGroupError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            DeleteKeyGroupError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteKeyGroupError {}
+/// Errors returned by DeleteMonitoringSubscription
+#[derive(Debug, PartialEq)]
+pub enum DeleteMonitoringSubscriptionError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The specified distribution does not exist.</p>
+    NoSuchDistribution(String),
+}
+
+impl DeleteMonitoringSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteMonitoringSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(
+                            DeleteMonitoringSubscriptionError::AccessDenied(parsed_error.message),
+                        )
+                    }
+                    "NoSuchDistribution" => {
+                        return RusotoError::Service(
+                            DeleteMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteMonitoringSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMonitoringSubscriptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteMonitoringSubscriptionError::NoSuchDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteMonitoringSubscriptionError {}
+/// Errors returned by DeleteOriginRequestPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteOriginRequestPolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>You cannot delete a managed policy.</p>
+    IllegalDelete(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+    /// <p>Cannot delete the origin request policy because it is attached to one or more cache behaviors.</p>
+    OriginRequestPolicyInUse(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+}
+
+impl DeleteOriginRequestPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOriginRequestPolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(DeleteOriginRequestPolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IllegalDelete" => {
+                        return RusotoError::Service(DeleteOriginRequestPolicyError::IllegalDelete(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(
+                            DeleteOriginRequestPolicyError::InvalidIfMatchVersion(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            DeleteOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "OriginRequestPolicyInUse" => {
+                        return RusotoError::Service(
+                            DeleteOriginRequestPolicyError::OriginRequestPolicyInUse(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(
+                            DeleteOriginRequestPolicyError::PreconditionFailed(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteOriginRequestPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOriginRequestPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteOriginRequestPolicyError::IllegalDelete(ref cause) => write!(f, "{}", cause),
+            DeleteOriginRequestPolicyError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOriginRequestPolicyError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOriginRequestPolicyError::OriginRequestPolicyInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOriginRequestPolicyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteOriginRequestPolicyError {}
 /// Errors returned by DeletePublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeletePublicKeyError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
@@ -9515,12 +13468,88 @@ impl fmt::Display for DeletePublicKeyError {
     }
 }
 impl Error for DeletePublicKeyError {}
+/// Errors returned by DeleteRealtimeLogConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteRealtimeLogConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+    /// <p>Cannot delete the real-time log configuration because it is attached to one or more cache behaviors.</p>
+    RealtimeLogConfigInUse(String),
+}
+
+impl DeleteRealtimeLogConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRealtimeLogConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(DeleteRealtimeLogConfigError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(DeleteRealtimeLogConfigError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchRealtimeLogConfig" => {
+                        return RusotoError::Service(
+                            DeleteRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "RealtimeLogConfigInUse" => {
+                        return RusotoError::Service(
+                            DeleteRealtimeLogConfigError::RealtimeLogConfigInUse(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteRealtimeLogConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteRealtimeLogConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeLogConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DeleteRealtimeLogConfigError::NoSuchRealtimeLogConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRealtimeLogConfigError::RealtimeLogConfigInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteRealtimeLogConfigError {}
 /// Errors returned by DeleteStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamingDistributionError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
@@ -9609,6 +13638,110 @@ impl fmt::Display for DeleteStreamingDistributionError {
     }
 }
 impl Error for DeleteStreamingDistributionError {}
+/// Errors returned by GetCachePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetCachePolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+}
+
+impl GetCachePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCachePolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(GetCachePolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(GetCachePolicyError::NoSuchCachePolicy(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetCachePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCachePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCachePolicyError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCachePolicyError {}
+/// Errors returned by GetCachePolicyConfig
+#[derive(Debug, PartialEq)]
+pub enum GetCachePolicyConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+}
+
+impl GetCachePolicyConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCachePolicyConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(GetCachePolicyConfigError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(GetCachePolicyConfigError::NoSuchCachePolicy(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetCachePolicyConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCachePolicyConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCachePolicyConfigError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCachePolicyConfigError {}
 /// Errors returned by GetCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityError {
@@ -10089,6 +14222,262 @@ impl fmt::Display for GetInvalidationError {
     }
 }
 impl Error for GetInvalidationError {}
+/// Errors returned by GetKeyGroup
+#[derive(Debug, PartialEq)]
+pub enum GetKeyGroupError {
+    /// <p>A resource that was specified is not valid.</p>
+    NoSuchResource(String),
+}
+
+impl GetKeyGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchResource" => {
+                        return RusotoError::Service(GetKeyGroupError::NoSuchResource(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetKeyGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetKeyGroupError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetKeyGroupError {}
+/// Errors returned by GetKeyGroupConfig
+#[derive(Debug, PartialEq)]
+pub enum GetKeyGroupConfigError {
+    /// <p>A resource that was specified is not valid.</p>
+    NoSuchResource(String),
+}
+
+impl GetKeyGroupConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyGroupConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchResource" => {
+                        return RusotoError::Service(GetKeyGroupConfigError::NoSuchResource(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetKeyGroupConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetKeyGroupConfigError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetKeyGroupConfigError {}
+/// Errors returned by GetMonitoringSubscription
+#[derive(Debug, PartialEq)]
+pub enum GetMonitoringSubscriptionError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The specified distribution does not exist.</p>
+    NoSuchDistribution(String),
+}
+
+impl GetMonitoringSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMonitoringSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(GetMonitoringSubscriptionError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return RusotoError::Service(
+                            GetMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetMonitoringSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMonitoringSubscriptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetMonitoringSubscriptionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetMonitoringSubscriptionError {}
+/// Errors returned by GetOriginRequestPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetOriginRequestPolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+}
+
+impl GetOriginRequestPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOriginRequestPolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(GetOriginRequestPolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            GetOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetOriginRequestPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetOriginRequestPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOriginRequestPolicyError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetOriginRequestPolicyError {}
+/// Errors returned by GetOriginRequestPolicyConfig
+#[derive(Debug, PartialEq)]
+pub enum GetOriginRequestPolicyConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+}
+
+impl GetOriginRequestPolicyConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetOriginRequestPolicyConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(
+                            GetOriginRequestPolicyConfigError::AccessDenied(parsed_error.message),
+                        )
+                    }
+                    "NoSuchOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            GetOriginRequestPolicyConfigError::NoSuchOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetOriginRequestPolicyConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetOriginRequestPolicyConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetOriginRequestPolicyConfigError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetOriginRequestPolicyConfigError {}
 /// Errors returned by GetPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetPublicKeyError {
@@ -10193,6 +14582,68 @@ impl fmt::Display for GetPublicKeyConfigError {
     }
 }
 impl Error for GetPublicKeyConfigError {}
+/// Errors returned by GetRealtimeLogConfig
+#[derive(Debug, PartialEq)]
+pub enum GetRealtimeLogConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+}
+
+impl GetRealtimeLogConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRealtimeLogConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(GetRealtimeLogConfigError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(GetRealtimeLogConfigError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchRealtimeLogConfig" => {
+                        return RusotoError::Service(
+                            GetRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetRealtimeLogConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetRealtimeLogConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetRealtimeLogConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetRealtimeLogConfigError::NoSuchRealtimeLogConfig(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetRealtimeLogConfigError {}
 /// Errors returned by GetStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionError {
@@ -10307,6 +14758,66 @@ impl fmt::Display for GetStreamingDistributionConfigError {
     }
 }
 impl Error for GetStreamingDistributionConfigError {}
+/// Errors returned by ListCachePolicies
+#[derive(Debug, PartialEq)]
+pub enum ListCachePoliciesError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+}
+
+impl ListCachePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCachePoliciesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(ListCachePoliciesError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(ListCachePoliciesError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(ListCachePoliciesError::NoSuchCachePolicy(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListCachePoliciesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListCachePoliciesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListCachePoliciesError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListCachePoliciesError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListCachePoliciesError {}
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
@@ -10401,6 +14912,256 @@ impl fmt::Display for ListDistributionsError {
     }
 }
 impl Error for ListDistributionsError {}
+/// Errors returned by ListDistributionsByCachePolicyId
+#[derive(Debug, PartialEq)]
+pub enum ListDistributionsByCachePolicyIdError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+}
+
+impl ListDistributionsByCachePolicyIdError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDistributionsByCachePolicyIdError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(
+                            ListDistributionsByCachePolicyIdError::AccessDenied(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            ListDistributionsByCachePolicyIdError::InvalidArgument(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(
+                            ListDistributionsByCachePolicyIdError::NoSuchCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListDistributionsByCachePolicyIdError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDistributionsByCachePolicyIdError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDistributionsByCachePolicyIdError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDistributionsByCachePolicyIdError::NoSuchCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListDistributionsByCachePolicyIdError {}
+/// Errors returned by ListDistributionsByKeyGroup
+#[derive(Debug, PartialEq)]
+pub enum ListDistributionsByKeyGroupError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>A resource that was specified is not valid.</p>
+    NoSuchResource(String),
+}
+
+impl ListDistributionsByKeyGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDistributionsByKeyGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            ListDistributionsByKeyGroupError::InvalidArgument(parsed_error.message),
+                        )
+                    }
+                    "NoSuchResource" => {
+                        return RusotoError::Service(
+                            ListDistributionsByKeyGroupError::NoSuchResource(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListDistributionsByKeyGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDistributionsByKeyGroupError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListDistributionsByKeyGroupError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDistributionsByKeyGroupError {}
+/// Errors returned by ListDistributionsByOriginRequestPolicyId
+#[derive(Debug, PartialEq)]
+pub enum ListDistributionsByOriginRequestPolicyIdError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+}
+
+impl ListDistributionsByOriginRequestPolicyIdError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDistributionsByOriginRequestPolicyIdError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(
+                            ListDistributionsByOriginRequestPolicyIdError::AccessDenied(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            ListDistributionsByOriginRequestPolicyIdError::InvalidArgument(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchOriginRequestPolicy" => return RusotoError::Service(
+                        ListDistributionsByOriginRequestPolicyIdError::NoSuchOriginRequestPolicy(
+                            parsed_error.message,
+                        ),
+                    ),
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListDistributionsByOriginRequestPolicyIdError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDistributionsByOriginRequestPolicyIdError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDistributionsByOriginRequestPolicyIdError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListDistributionsByOriginRequestPolicyIdError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListDistributionsByOriginRequestPolicyIdError {}
+/// Errors returned by ListDistributionsByRealtimeLogConfig
+#[derive(Debug, PartialEq)]
+pub enum ListDistributionsByRealtimeLogConfigError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl ListDistributionsByRealtimeLogConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDistributionsByRealtimeLogConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            ListDistributionsByRealtimeLogConfigError::InvalidArgument(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListDistributionsByRealtimeLogConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDistributionsByRealtimeLogConfigError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListDistributionsByRealtimeLogConfigError {}
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
@@ -10615,6 +15376,114 @@ impl fmt::Display for ListInvalidationsError {
     }
 }
 impl Error for ListInvalidationsError {}
+/// Errors returned by ListKeyGroups
+#[derive(Debug, PartialEq)]
+pub enum ListKeyGroupsError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl ListKeyGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeyGroupsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(ListKeyGroupsError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListKeyGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListKeyGroupsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListKeyGroupsError {}
+/// Errors returned by ListOriginRequestPolicies
+#[derive(Debug, PartialEq)]
+pub enum ListOriginRequestPoliciesError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+}
+
+impl ListOriginRequestPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOriginRequestPoliciesError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(ListOriginRequestPoliciesError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            ListOriginRequestPoliciesError::InvalidArgument(parsed_error.message),
+                        )
+                    }
+                    "NoSuchOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            ListOriginRequestPoliciesError::NoSuchOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListOriginRequestPoliciesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOriginRequestPoliciesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListOriginRequestPoliciesError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListOriginRequestPoliciesError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListOriginRequestPoliciesError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
@@ -10659,6 +15528,70 @@ impl fmt::Display for ListPublicKeysError {
     }
 }
 impl Error for ListPublicKeysError {}
+/// Errors returned by ListRealtimeLogConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListRealtimeLogConfigsError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+}
+
+impl ListRealtimeLogConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRealtimeLogConfigsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(ListRealtimeLogConfigsError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(ListRealtimeLogConfigsError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchRealtimeLogConfig" => {
+                        return RusotoError::Service(
+                            ListRealtimeLogConfigsError::NoSuchRealtimeLogConfig(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListRealtimeLogConfigsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListRealtimeLogConfigsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListRealtimeLogConfigsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListRealtimeLogConfigsError::NoSuchRealtimeLogConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListRealtimeLogConfigsError {}
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
@@ -10909,18 +15842,154 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
-/// Errors returned by UpdateCloudFrontOriginAccessIdentity
+/// Errors returned by UpdateCachePolicy
 #[derive(Debug, PartialEq)]
-pub enum UpdateCloudFrontOriginAccessIdentityError {
+pub enum UpdateCachePolicyError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>A cache policy with this name already exists. You must provide a unique name. To modify an existing cache policy, use <code>UpdateCachePolicy</code>.</p>
+    CachePolicyAlreadyExists(String),
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
     /// <p>An argument is invalid.</p>
     InvalidArgument(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+    /// <p>The number of cookies in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyCookiesInCachePolicy(String),
+    /// <p>The number of headers in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyHeadersInCachePolicy(String),
+    /// <p>The number of query strings in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyQueryStringsInCachePolicy(String),
+}
+
+impl UpdateCachePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCachePolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(UpdateCachePolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CachePolicyAlreadyExists" => {
+                        return RusotoError::Service(
+                            UpdateCachePolicyError::CachePolicyAlreadyExists(parsed_error.message),
+                        )
+                    }
+                    "IllegalUpdate" => {
+                        return RusotoError::Service(UpdateCachePolicyError::IllegalUpdate(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return RusotoError::Service(
+                            UpdateCachePolicyError::InconsistentQuantities(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(UpdateCachePolicyError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(UpdateCachePolicyError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchCachePolicy" => {
+                        return RusotoError::Service(UpdateCachePolicyError::NoSuchCachePolicy(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(UpdateCachePolicyError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCookiesInCachePolicy" => {
+                        return RusotoError::Service(
+                            UpdateCachePolicyError::TooManyCookiesInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyHeadersInCachePolicy" => {
+                        return RusotoError::Service(
+                            UpdateCachePolicyError::TooManyHeadersInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyQueryStringsInCachePolicy" => {
+                        return RusotoError::Service(
+                            UpdateCachePolicyError::TooManyQueryStringsInCachePolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateCachePolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateCachePolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::CachePolicyAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::InconsistentQuantities(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            UpdateCachePolicyError::TooManyCookiesInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCachePolicyError::TooManyHeadersInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateCachePolicyError::TooManyQueryStringsInCachePolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateCachePolicyError {}
+/// Errors returned by UpdateCloudFrontOriginAccessIdentity
+#[derive(Debug, PartialEq)]
+pub enum UpdateCloudFrontOriginAccessIdentityError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The update contains modifications that are not allowed.</p>
+    IllegalUpdate(String),
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
+    InconsistentQuantities(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
@@ -10996,7 +16065,7 @@ pub enum UpdateDistributionError {
     CNAMEAlreadyExists(String),
     /// <p>The specified configuration for field-level encryption can't be associated with the specified cache behavior.</p>
     IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
@@ -11012,7 +16081,7 @@ pub enum UpdateDistributionError {
     InvalidGeoRestrictionParameter(String),
     /// <p>The headers specified are not valid for an Amazon S3 origin.</p>
     InvalidHeadersForS3Origin(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified Lambda function association is invalid.</p>
     InvalidLambdaFunctionAssociation(String),
@@ -11042,12 +16111,16 @@ pub enum UpdateDistributionError {
     InvalidWebACLId(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
+    /// <p>The cache policy does not exist.</p>
+    NoSuchCachePolicy(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
     /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
@@ -11058,12 +16131,22 @@ pub enum UpdateDistributionError {
     TooManyCookieNamesInWhiteList(String),
     /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyDistributionCNAMEs(String),
+    /// <p>The maximum number of distributions have been associated with the specified cache policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToCachePolicy(String),
     /// <p>The maximum number of distributions have been associated with the specified configuration for field-level encryption.</p>
     TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(String),
+    /// <p>The number of distributions that reference this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToKeyGroup(String),
+    /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsAssociatedToOriginRequestPolicy(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
+    /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
+    TooManyDistributionsWithSingleFunctionARN(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
+    /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyKeyGroupsAssociatedToDistribution(String),
     /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
     /// <p>Your request contains too many origin custom headers.</p>
@@ -11076,6 +16159,8 @@ pub enum UpdateDistributionError {
     TooManyQueryStringParameters(String),
     /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
+    /// <p>The specified key group does not exist.</p>
+    TrustedKeyGroupDoesNotExist(String),
     /// <p>One or more of your trusted signers don't exist.</p>
     TrustedSignerDoesNotExist(String),
 }
@@ -11088,7 +16173,7 @@ impl UpdateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -11133,23 +16218,31 @@ UpdateDistributionError::InvalidTTLOrder(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidViewerCertificate(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidWebACLId(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::MissingBody(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionCNAMEs(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyOriginCustomHeaders(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyOriginGroupsPerDistribution(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyOrigins(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyQueryStringParameters(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyTrustedSigners(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TrustedKeyGroupDoesNotExist(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TrustedSignerDoesNotExist(ref cause) => write!(f, "{}", cause)
                         }
     }
@@ -11160,13 +16253,13 @@ impl Error for UpdateDistributionError {}
 pub enum UpdateFieldLevelEncryptionConfigError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
     /// <p>An argument is invalid.</p>
     InvalidArgument(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
@@ -11235,13 +16328,13 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     FieldLevelEncryptionProfileAlreadyExists(String),
     /// <p>The maximum size of a profile for field-level encryption was exceeded.</p>
     FieldLevelEncryptionProfileSizeExceeded(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
     /// <p>An argument is invalid.</p>
     InvalidArgument(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
@@ -11300,6 +16393,242 @@ UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns
     }
 }
 impl Error for UpdateFieldLevelEncryptionProfileError {}
+/// Errors returned by UpdateKeyGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateKeyGroupError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>A key group with this name already exists. You must provide a unique name. To modify an existing key group, use <code>UpdateKeyGroup</code>.</p>
+    KeyGroupAlreadyExists(String),
+    /// <p>A resource that was specified is not valid.</p>
+    NoSuchResource(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+    /// <p>The number of public keys in this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyPublicKeysInKeyGroup(String),
+}
+
+impl UpdateKeyGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateKeyGroupError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(UpdateKeyGroupError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(UpdateKeyGroupError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "KeyGroupAlreadyExists" => {
+                        return RusotoError::Service(UpdateKeyGroupError::KeyGroupAlreadyExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchResource" => {
+                        return RusotoError::Service(UpdateKeyGroupError::NoSuchResource(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(UpdateKeyGroupError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyPublicKeysInKeyGroup" => {
+                        return RusotoError::Service(
+                            UpdateKeyGroupError::TooManyPublicKeysInKeyGroup(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateKeyGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateKeyGroupError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateKeyGroupError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            UpdateKeyGroupError::KeyGroupAlreadyExists(ref cause) => write!(f, "{}", cause),
+            UpdateKeyGroupError::NoSuchResource(ref cause) => write!(f, "{}", cause),
+            UpdateKeyGroupError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            UpdateKeyGroupError::TooManyPublicKeysInKeyGroup(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateKeyGroupError {}
+/// Errors returned by UpdateOriginRequestPolicy
+#[derive(Debug, PartialEq)]
+pub enum UpdateOriginRequestPolicyError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>The update contains modifications that are not allowed.</p>
+    IllegalUpdate(String),
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
+    InconsistentQuantities(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The origin request policy does not exist.</p>
+    NoSuchOriginRequestPolicy(String),
+    /// <p>An origin request policy with this name already exists. You must provide a unique name. To modify an existing origin request policy, use <code>UpdateOriginRequestPolicy</code>.</p>
+    OriginRequestPolicyAlreadyExists(String),
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+    /// <p>The number of cookies in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyCookiesInOriginRequestPolicy(String),
+    /// <p>The number of headers in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyHeadersInOriginRequestPolicy(String),
+    /// <p>The number of query strings in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyQueryStringsInOriginRequestPolicy(String),
+}
+
+impl UpdateOriginRequestPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOriginRequestPolicyError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(UpdateOriginRequestPolicyError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IllegalUpdate" => {
+                        return RusotoError::Service(UpdateOriginRequestPolicyError::IllegalUpdate(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::InconsistentQuantities(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::InvalidArgument(parsed_error.message),
+                        )
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::InvalidIfMatchVersion(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "NoSuchOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::NoSuchOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "OriginRequestPolicyAlreadyExists" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::PreconditionFailed(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyCookiesInOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyHeadersInOriginRequestPolicy" => {
+                        return RusotoError::Service(
+                            UpdateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "TooManyQueryStringsInOriginRequestPolicy" => return RusotoError::Service(
+                        UpdateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(
+                            parsed_error.message,
+                        ),
+                    ),
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateOriginRequestPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateOriginRequestPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateOriginRequestPolicyError::IllegalUpdate(ref cause) => write!(f, "{}", cause),
+            UpdateOriginRequestPolicyError::InconsistentQuantities(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateOriginRequestPolicyError::InvalidIfMatchVersion(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::NoSuchOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::OriginRequestPolicyAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+            UpdateOriginRequestPolicyError::TooManyCookiesInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::TooManyHeadersInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateOriginRequestPolicyError::TooManyQueryStringsInOriginRequestPolicy(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateOriginRequestPolicyError {}
 /// Errors returned by UpdatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdatePublicKeyError {
@@ -11307,11 +16636,11 @@ pub enum UpdatePublicKeyError {
     AccessDenied(String),
     /// <p>You can't change the value of a public key.</p>
     CannotChangeImmutablePublicKeyFields(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>An argument is invalid.</p>
     InvalidArgument(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
@@ -11396,6 +16725,70 @@ impl fmt::Display for UpdatePublicKeyError {
     }
 }
 impl Error for UpdatePublicKeyError {}
+/// Errors returned by UpdateRealtimeLogConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateRealtimeLogConfigError {
+    /// <p>Access denied.</p>
+    AccessDenied(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+}
+
+impl UpdateRealtimeLogConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRealtimeLogConfigError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return RusotoError::Service(UpdateRealtimeLogConfigError::AccessDenied(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(UpdateRealtimeLogConfigError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchRealtimeLogConfig" => {
+                        return RusotoError::Service(
+                            UpdateRealtimeLogConfigError::NoSuchRealtimeLogConfig(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateRealtimeLogConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRealtimeLogConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateRealtimeLogConfigError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateRealtimeLogConfigError::NoSuchRealtimeLogConfig(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateRealtimeLogConfigError {}
 /// Errors returned by UpdateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamingDistributionError {
@@ -11403,13 +16796,13 @@ pub enum UpdateStreamingDistributionError {
     AccessDenied(String),
     /// <p>The CNAME specified is already defined for CloudFront.</p>
     CNAMEAlreadyExists(String),
-    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>The update contains modifications that are not allowed.</p>
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
     /// <p>An argument is invalid.</p>
     InvalidArgument(String),
-    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
     InvalidIfMatchVersion(String),
     /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
@@ -11577,6 +16970,12 @@ impl Error for UpdateStreamingDistributionError {}
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 #[async_trait]
 pub trait CloudFront {
+    /// <p>Creates a cache policy.</p> <p>After you create a cache policy, you can attach it to one or more cache behaviors. When it’s attached to a cache behavior, the cache policy determines the following:</p> <ul> <li> <p>The values that CloudFront includes in the <i>cache key</i>. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> </li> <li> <p>The default, minimum, and maximum time to live (TTL) values that you want objects to stay in the CloudFront cache.</p> </li> </ul> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find an object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p> <p>For more information about cache policies, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html">Controlling the cache key</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    async fn create_cache_policy(
+        &self,
+        input: CreateCachePolicyRequest,
+    ) -> Result<CreateCachePolicyResult, RusotoError<CreateCachePolicyError>>;
+
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     async fn create_cloud_front_origin_access_identity(
         &self,
@@ -11622,11 +17021,35 @@ pub trait CloudFront {
         input: CreateInvalidationRequest,
     ) -> Result<CreateInvalidationResult, RusotoError<CreateInvalidationError>>;
 
-    /// <p>Add a new public key to CloudFront to use, for example, for field-level encryption. You can add a maximum of 10 public keys with one AWS account.</p>
+    /// <p>Creates a key group that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">CloudFront signed URLs and signed cookies</a>.</p> <p>To create a key group, you must specify at least one public key for the key group. After you create a key group, you can reference it from one or more cache behaviors. When you reference a key group in a cache behavior, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with a private key whose corresponding public key is in the key group. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    async fn create_key_group(
+        &self,
+        input: CreateKeyGroupRequest,
+    ) -> Result<CreateKeyGroupResult, RusotoError<CreateKeyGroupError>>;
+
+    /// <p>Enables additional CloudWatch metrics for the specified CloudFront distribution. The additional metrics incur an additional cost.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/viewing-cloudfront-metrics.html#monitoring-console.distributions-additional">Viewing additional CloudFront distribution metrics</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    async fn create_monitoring_subscription(
+        &self,
+        input: CreateMonitoringSubscriptionRequest,
+    ) -> Result<CreateMonitoringSubscriptionResult, RusotoError<CreateMonitoringSubscriptionError>>;
+
+    /// <p>Creates an origin request policy.</p> <p>After you create an origin request policy, you can attach it to one or more cache behaviors. When it’s attached to a cache behavior, the origin request policy determines the values that CloudFront includes in requests that it sends to the origin. Each request that CloudFront sends to the origin includes the following:</p> <ul> <li> <p>The request body and the URL path (without the domain name) from the viewer request.</p> </li> <li> <p>The headers that CloudFront automatically includes in every origin request, including <code>Host</code>, <code>User-Agent</code>, and <code>X-Amz-Cf-Id</code>.</p> </li> <li> <p>All HTTP headers, cookies, and URL query strings that are specified in the cache policy or the origin request policy. These can include items from the viewer request and, in the case of headers, additional ones that are added by CloudFront.</p> </li> </ul> <p>CloudFront sends a request when it can’t find a valid object in its cache that matches the request. If you want to send values to the origin and also include them in the cache key, use <code>CachePolicy</code>.</p> <p>For more information about origin request policies, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html">Controlling origin requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    async fn create_origin_request_policy(
+        &self,
+        input: CreateOriginRequestPolicyRequest,
+    ) -> Result<CreateOriginRequestPolicyResult, RusotoError<CreateOriginRequestPolicyError>>;
+
+    /// <p>Uploads a public key to CloudFront that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
     async fn create_public_key(
         &self,
         input: CreatePublicKeyRequest,
     ) -> Result<CreatePublicKeyResult, RusotoError<CreatePublicKeyError>>;
+
+    /// <p>Creates a real-time log configuration.</p> <p>After you create a real-time log configuration, you can attach it to one or more cache behaviors to send real-time log data to the specified Amazon Kinesis data stream.</p> <p>For more information about real-time log configurations, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html">Real-time logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    async fn create_realtime_log_config(
+        &self,
+        input: CreateRealtimeLogConfigRequest,
+    ) -> Result<CreateRealtimeLogConfigResult, RusotoError<CreateRealtimeLogConfigError>>;
 
     /// <p><p>Creates a new RTMP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
     async fn create_streaming_distribution(
@@ -11642,6 +17065,12 @@ pub trait CloudFront {
         CreateStreamingDistributionWithTagsResult,
         RusotoError<CreateStreamingDistributionWithTagsError>,
     >;
+
+    /// <p>Deletes a cache policy.</p> <p>You cannot delete a cache policy if it’s attached to a cache behavior. First update your distributions to remove the cache policy from all cache behaviors, then delete the cache policy.</p> <p>To delete a cache policy, you must provide the policy’s identifier and version. To get these values, you can use <code>ListCachePolicies</code> or <code>GetCachePolicy</code>.</p>
+    async fn delete_cache_policy(
+        &self,
+        input: DeleteCachePolicyRequest,
+    ) -> Result<(), RusotoError<DeleteCachePolicyError>>;
 
     /// <p>Delete an origin access identity. </p>
     async fn delete_cloud_front_origin_access_identity(
@@ -11667,17 +17096,53 @@ pub trait CloudFront {
         input: DeleteFieldLevelEncryptionProfileRequest,
     ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionProfileError>>;
 
+    /// <p>Deletes a key group.</p> <p>You cannot delete a key group that is referenced in a cache behavior. First update your distributions to remove the key group from all cache behaviors, then delete the key group.</p> <p>To delete a key group, you must provide the key group’s identifier and version. To get these values, use <code>ListKeyGroups</code> followed by <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p>
+    async fn delete_key_group(
+        &self,
+        input: DeleteKeyGroupRequest,
+    ) -> Result<(), RusotoError<DeleteKeyGroupError>>;
+
+    /// <p>Disables additional CloudWatch metrics for the specified CloudFront distribution.</p>
+    async fn delete_monitoring_subscription(
+        &self,
+        input: DeleteMonitoringSubscriptionRequest,
+    ) -> Result<DeleteMonitoringSubscriptionResult, RusotoError<DeleteMonitoringSubscriptionError>>;
+
+    /// <p>Deletes an origin request policy.</p> <p>You cannot delete an origin request policy if it’s attached to any cache behaviors. First update your distributions to remove the origin request policy from all cache behaviors, then delete the origin request policy.</p> <p>To delete an origin request policy, you must provide the policy’s identifier and version. To get the identifier, you can use <code>ListOriginRequestPolicies</code> or <code>GetOriginRequestPolicy</code>.</p>
+    async fn delete_origin_request_policy(
+        &self,
+        input: DeleteOriginRequestPolicyRequest,
+    ) -> Result<(), RusotoError<DeleteOriginRequestPolicyError>>;
+
     /// <p>Remove a public key you previously added to CloudFront.</p>
     async fn delete_public_key(
         &self,
         input: DeletePublicKeyRequest,
     ) -> Result<(), RusotoError<DeletePublicKeyError>>;
 
+    /// <p>Deletes a real-time log configuration.</p> <p>You cannot delete a real-time log configuration if it’s attached to a cache behavior. First update your distributions to remove the real-time log configuration from all cache behaviors, then delete the real-time log configuration.</p> <p>To delete a real-time log configuration, you can provide the configuration’s name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to delete.</p>
+    async fn delete_realtime_log_config(
+        &self,
+        input: DeleteRealtimeLogConfigRequest,
+    ) -> Result<(), RusotoError<DeleteRealtimeLogConfigError>>;
+
     /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     async fn delete_streaming_distribution(
         &self,
         input: DeleteStreamingDistributionRequest,
     ) -> Result<(), RusotoError<DeleteStreamingDistributionError>>;
+
+    /// <p>Gets a cache policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get a cache policy, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    async fn get_cache_policy(
+        &self,
+        input: GetCachePolicyRequest,
+    ) -> Result<GetCachePolicyResult, RusotoError<GetCachePolicyError>>;
+
+    /// <p>Gets a cache policy configuration.</p> <p>To get a cache policy configuration, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    async fn get_cache_policy_config(
+        &self,
+        input: GetCachePolicyConfigRequest,
+    ) -> Result<GetCachePolicyConfigResult, RusotoError<GetCachePolicyConfigError>>;
 
     /// <p>Get the information about an origin access identity. </p>
     async fn get_cloud_front_origin_access_identity(
@@ -11745,17 +17210,53 @@ pub trait CloudFront {
         input: GetInvalidationRequest,
     ) -> Result<GetInvalidationResult, RusotoError<GetInvalidationError>>;
 
-    /// <p>Get the public key information.</p>
+    /// <p>Gets a key group, including the date and time when the key group was last modified.</p> <p>To get a key group, you must provide the key group’s identifier. If the key group is referenced in a distribution’s cache behavior, you can get the key group’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the key group is not referenced in a cache behavior, you can get the identifier using <code>ListKeyGroups</code>.</p>
+    async fn get_key_group(
+        &self,
+        input: GetKeyGroupRequest,
+    ) -> Result<GetKeyGroupResult, RusotoError<GetKeyGroupError>>;
+
+    /// <p>Gets a key group configuration.</p> <p>To get a key group configuration, you must provide the key group’s identifier. If the key group is referenced in a distribution’s cache behavior, you can get the key group’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the key group is not referenced in a cache behavior, you can get the identifier using <code>ListKeyGroups</code>.</p>
+    async fn get_key_group_config(
+        &self,
+        input: GetKeyGroupConfigRequest,
+    ) -> Result<GetKeyGroupConfigResult, RusotoError<GetKeyGroupConfigError>>;
+
+    /// <p>Gets information about whether additional CloudWatch metrics are enabled for the specified CloudFront distribution.</p>
+    async fn get_monitoring_subscription(
+        &self,
+        input: GetMonitoringSubscriptionRequest,
+    ) -> Result<GetMonitoringSubscriptionResult, RusotoError<GetMonitoringSubscriptionError>>;
+
+    /// <p>Gets an origin request policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get an origin request policy, you must provide the policy’s identifier. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    async fn get_origin_request_policy(
+        &self,
+        input: GetOriginRequestPolicyRequest,
+    ) -> Result<GetOriginRequestPolicyResult, RusotoError<GetOriginRequestPolicyError>>;
+
+    /// <p>Gets an origin request policy configuration.</p> <p>To get an origin request policy configuration, you must provide the policy’s identifier. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    async fn get_origin_request_policy_config(
+        &self,
+        input: GetOriginRequestPolicyConfigRequest,
+    ) -> Result<GetOriginRequestPolicyConfigResult, RusotoError<GetOriginRequestPolicyConfigError>>;
+
+    /// <p>Gets a public key.</p>
     async fn get_public_key(
         &self,
         input: GetPublicKeyRequest,
     ) -> Result<GetPublicKeyResult, RusotoError<GetPublicKeyError>>;
 
-    /// <p>Return public key configuration informaation</p>
+    /// <p>Gets a public key configuration.</p>
     async fn get_public_key_config(
         &self,
         input: GetPublicKeyConfigRequest,
     ) -> Result<GetPublicKeyConfigResult, RusotoError<GetPublicKeyConfigError>>;
+
+    /// <p>Gets a real-time log configuration.</p> <p>To get a real-time log configuration, you can provide the configuration’s name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to get.</p>
+    async fn get_realtime_log_config(
+        &self,
+        input: GetRealtimeLogConfigRequest,
+    ) -> Result<GetRealtimeLogConfigResult, RusotoError<GetRealtimeLogConfigError>>;
 
     /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
     async fn get_streaming_distribution(
@@ -11772,6 +17273,12 @@ pub trait CloudFront {
         RusotoError<GetStreamingDistributionConfigError>,
     >;
 
+    /// <p>Gets a list of cache policies.</p> <p>You can optionally apply a filter to return only the managed policies created by AWS, or only the custom policies created in your AWS account.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_cache_policies(
+        &self,
+        input: ListCachePoliciesRequest,
+    ) -> Result<ListCachePoliciesResult, RusotoError<ListCachePoliciesError>>;
+
     /// <p>Lists origin access identities.</p>
     async fn list_cloud_front_origin_access_identities(
         &self,
@@ -11786,6 +17293,39 @@ pub trait CloudFront {
         &self,
         input: ListDistributionsRequest,
     ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>>;
+
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified cache policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_distributions_by_cache_policy_id(
+        &self,
+        input: ListDistributionsByCachePolicyIdRequest,
+    ) -> Result<
+        ListDistributionsByCachePolicyIdResult,
+        RusotoError<ListDistributionsByCachePolicyIdError>,
+    >;
+
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that references the specified key group.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_distributions_by_key_group(
+        &self,
+        input: ListDistributionsByKeyGroupRequest,
+    ) -> Result<ListDistributionsByKeyGroupResult, RusotoError<ListDistributionsByKeyGroupError>>;
+
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified origin request policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_distributions_by_origin_request_policy_id(
+        &self,
+        input: ListDistributionsByOriginRequestPolicyIdRequest,
+    ) -> Result<
+        ListDistributionsByOriginRequestPolicyIdResult,
+        RusotoError<ListDistributionsByOriginRequestPolicyIdError>,
+    >;
+
+    /// <p>Gets a list of distributions that have a cache behavior that’s associated with the specified real-time log configuration.</p> <p>You can specify the real-time log configuration by its name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to list distributions for.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request. </p>
+    async fn list_distributions_by_realtime_log_config(
+        &self,
+        input: ListDistributionsByRealtimeLogConfigRequest,
+    ) -> Result<
+        ListDistributionsByRealtimeLogConfigResult,
+        RusotoError<ListDistributionsByRealtimeLogConfigError>,
+    >;
 
     /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     async fn list_distributions_by_web_acl_id(
@@ -11817,11 +17357,29 @@ pub trait CloudFront {
         input: ListInvalidationsRequest,
     ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>>;
 
+    /// <p>Gets a list of key groups.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_key_groups(
+        &self,
+        input: ListKeyGroupsRequest,
+    ) -> Result<ListKeyGroupsResult, RusotoError<ListKeyGroupsError>>;
+
+    /// <p>Gets a list of origin request policies.</p> <p>You can optionally apply a filter to return only the managed policies created by AWS, or only the custom policies created in your AWS account.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_origin_request_policies(
+        &self,
+        input: ListOriginRequestPoliciesRequest,
+    ) -> Result<ListOriginRequestPoliciesResult, RusotoError<ListOriginRequestPoliciesError>>;
+
     /// <p>List all public keys that have been added to CloudFront for this account.</p>
     async fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
     ) -> Result<ListPublicKeysResult, RusotoError<ListPublicKeysError>>;
+
+    /// <p>Gets a list of real-time log configurations.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request. </p>
+    async fn list_realtime_log_configs(
+        &self,
+        input: ListRealtimeLogConfigsRequest,
+    ) -> Result<ListRealtimeLogConfigsResult, RusotoError<ListRealtimeLogConfigsError>>;
 
     /// <p>List streaming distributions. </p>
     async fn list_streaming_distributions(
@@ -11846,6 +17404,12 @@ pub trait CloudFront {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
+
+    /// <p><p>Updates a cache policy configuration.</p> <p>When you update a cache policy configuration, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update a cache policy configuration:</p> <ol> <li> <p>Use <code>GetCachePolicyConfig</code> to get the current configuration.</p> </li> <li> <p>Locally modify the fields in the cache policy configuration that you want to update.</p> </li> <li> <p>Call <code>UpdateCachePolicy</code> by providing the entire cache policy configuration, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    async fn update_cache_policy(
+        &self,
+        input: UpdateCachePolicyRequest,
+    ) -> Result<UpdateCachePolicyResult, RusotoError<UpdateCachePolicyError>>;
 
     /// <p>Update an origin access identity. </p>
     async fn update_cloud_front_origin_access_identity(
@@ -11880,11 +17444,29 @@ pub trait CloudFront {
         RusotoError<UpdateFieldLevelEncryptionProfileError>,
     >;
 
+    /// <p><p>Updates a key group.</p> <p>When you update a key group, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update a key group:</p> <ol> <li> <p>Get the current key group with <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p> </li> <li> <p>Locally modify the fields in the key group that you want to update. For example, add or remove public key IDs.</p> </li> <li> <p>Call <code>UpdateKeyGroup</code> with the entire key group object, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    async fn update_key_group(
+        &self,
+        input: UpdateKeyGroupRequest,
+    ) -> Result<UpdateKeyGroupResult, RusotoError<UpdateKeyGroupError>>;
+
+    /// <p><p>Updates an origin request policy configuration.</p> <p>When you update an origin request policy configuration, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update an origin request policy configuration:</p> <ol> <li> <p>Use <code>GetOriginRequestPolicyConfig</code> to get the current configuration.</p> </li> <li> <p>Locally modify the fields in the origin request policy configuration that you want to update.</p> </li> <li> <p>Call <code>UpdateOriginRequestPolicy</code> by providing the entire origin request policy configuration, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    async fn update_origin_request_policy(
+        &self,
+        input: UpdateOriginRequestPolicyRequest,
+    ) -> Result<UpdateOriginRequestPolicyResult, RusotoError<UpdateOriginRequestPolicyError>>;
+
     /// <p>Update public key information. Note that the only value you can change is the comment.</p>
     async fn update_public_key(
         &self,
         input: UpdatePublicKeyRequest,
     ) -> Result<UpdatePublicKeyResult, RusotoError<UpdatePublicKeyError>>;
+
+    /// <p>Updates a real-time log configuration.</p> <p>When you update a real-time log configuration, all the parameters are updated with the values provided in the request. You cannot update some parameters independent of others. To update a real-time log configuration:</p> <ol> <li> <p>Call <code>GetRealtimeLogConfig</code> to get the current real-time log configuration.</p> </li> <li> <p>Locally modify the parameters in the real-time log configuration that you want to update.</p> </li> <li> <p>Call this API (<code>UpdateRealtimeLogConfig</code>) by providing the entire real-time log configuration, including the parameters that you modified and those that you didn’t.</p> </li> </ol> <p>You cannot update a real-time log configuration’s <code>Name</code> or <code>ARN</code>.</p>
+    async fn update_realtime_log_config(
+        &self,
+        input: UpdateRealtimeLogConfigRequest,
+    ) -> Result<UpdateRealtimeLogConfigResult, RusotoError<UpdateRealtimeLogConfigError>>;
 
     /// <p>Update a streaming distribution. </p>
     async fn update_streaming_distribution(
@@ -11932,6 +17514,39 @@ impl CloudFrontClient {
 
 #[async_trait]
 impl CloudFront for CloudFrontClient {
+    /// <p>Creates a cache policy.</p> <p>After you create a cache policy, you can attach it to one or more cache behaviors. When it’s attached to a cache behavior, the cache policy determines the following:</p> <ul> <li> <p>The values that CloudFront includes in the <i>cache key</i>. These values can include HTTP headers, cookies, and URL query strings. CloudFront uses the cache key to find an object in its cache that it can return to the viewer.</p> </li> <li> <p>The default, minimum, and maximum time to live (TTL) values that you want objects to stay in the CloudFront cache.</p> </li> </ul> <p>The headers, cookies, and query strings that are included in the cache key are automatically included in requests that CloudFront sends to the origin. CloudFront sends a request when it can’t find an object in its cache that matches the request’s cache key. If you want to send values to the origin but <i>not</i> include them in the cache key, use <code>OriginRequestPolicy</code>.</p> <p>For more information about cache policies, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html">Controlling the cache key</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_cache_policy(
+        &self,
+        input: CreateCachePolicyRequest,
+    ) -> Result<CreateCachePolicyResult, RusotoError<CreateCachePolicyError>> {
+        let request_uri = "/2020-05-31/cache-policy";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        CachePolicyConfigSerializer::serialize(
+            &mut writer,
+            "CachePolicyConfig",
+            &input.cache_policy_config,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateCachePolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
     async fn create_cloud_front_origin_access_identity(
@@ -11941,7 +17556,7 @@ impl CloudFront for CloudFrontClient {
         CreateCloudFrontOriginAccessIdentityResult,
         RusotoError<CreateCloudFrontOriginAccessIdentityError>,
     > {
-        let request_uri = "/2019-03-26/origin-access-identity/cloudfront";
+        let request_uri = "/2020-05-31/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -11980,7 +17595,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: CreateDistributionRequest,
     ) -> Result<CreateDistributionResult, RusotoError<CreateDistributionError>> {
-        let request_uri = "/2019-03-26/distribution";
+        let request_uri = "/2020-05-31/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12014,7 +17629,7 @@ impl CloudFront for CloudFrontClient {
         input: CreateDistributionWithTagsRequest,
     ) -> Result<CreateDistributionWithTagsResult, RusotoError<CreateDistributionWithTagsError>>
     {
-        let request_uri = "/2019-03-26/distribution";
+        let request_uri = "/2020-05-31/distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12053,7 +17668,7 @@ impl CloudFront for CloudFrontClient {
         CreateFieldLevelEncryptionConfigResult,
         RusotoError<CreateFieldLevelEncryptionConfigError>,
     > {
-        let request_uri = "/2019-03-26/field-level-encryption";
+        let request_uri = "/2020-05-31/field-level-encryption";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12092,7 +17707,7 @@ impl CloudFront for CloudFrontClient {
         CreateFieldLevelEncryptionProfileResult,
         RusotoError<CreateFieldLevelEncryptionProfileError>,
     > {
-        let request_uri = "/2019-03-26/field-level-encryption-profile";
+        let request_uri = "/2020-05-31/field-level-encryption-profile";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12129,7 +17744,7 @@ impl CloudFront for CloudFrontClient {
         input: CreateInvalidationRequest,
     ) -> Result<CreateInvalidationResult, RusotoError<CreateInvalidationError>> {
         let request_uri = format!(
-            "/2019-03-26/distribution/{distribution_id}/invalidation",
+            "/2020-05-31/distribution/{distribution_id}/invalidation",
             distribution_id = input.distribution_id
         );
 
@@ -12157,13 +17772,111 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
-    /// <p>Add a new public key to CloudFront to use, for example, for field-level encryption. You can add a maximum of 10 public keys with one AWS account.</p>
+    /// <p>Creates a key group that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">CloudFront signed URLs and signed cookies</a>.</p> <p>To create a key group, you must specify at least one public key for the key group. After you create a key group, you can reference it from one or more cache behaviors. When you reference a key group in a cache behavior, CloudFront requires signed URLs or signed cookies for all requests that match the cache behavior. The URLs or cookies must be signed with a private key whose corresponding public key is in the key group. The signed URL or cookie contains information about which public key CloudFront should use to verify the signature. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving private content</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_key_group(
+        &self,
+        input: CreateKeyGroupRequest,
+    ) -> Result<CreateKeyGroupResult, RusotoError<CreateKeyGroupError>> {
+        let request_uri = "/2020-05-31/key-group";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        KeyGroupConfigSerializer::serialize(&mut writer, "KeyGroupConfig", &input.key_group_config);
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateKeyGroupError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Enables additional CloudWatch metrics for the specified CloudFront distribution. The additional metrics incur an additional cost.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/viewing-cloudfront-metrics.html#monitoring-console.distributions-additional">Viewing additional CloudFront distribution metrics</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_monitoring_subscription(
+        &self,
+        input: CreateMonitoringSubscriptionRequest,
+    ) -> Result<CreateMonitoringSubscriptionResult, RusotoError<CreateMonitoringSubscriptionError>>
+    {
+        let request_uri = format!(
+            "/2020-05-31/distributions/{distribution_id}/monitoring-subscription",
+            distribution_id = input.distribution_id
+        );
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        MonitoringSubscriptionSerializer::serialize(
+            &mut writer,
+            "MonitoringSubscription",
+            &input.monitoring_subscription,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateMonitoringSubscriptionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Creates an origin request policy.</p> <p>After you create an origin request policy, you can attach it to one or more cache behaviors. When it’s attached to a cache behavior, the origin request policy determines the values that CloudFront includes in requests that it sends to the origin. Each request that CloudFront sends to the origin includes the following:</p> <ul> <li> <p>The request body and the URL path (without the domain name) from the viewer request.</p> </li> <li> <p>The headers that CloudFront automatically includes in every origin request, including <code>Host</code>, <code>User-Agent</code>, and <code>X-Amz-Cf-Id</code>.</p> </li> <li> <p>All HTTP headers, cookies, and URL query strings that are specified in the cache policy or the origin request policy. These can include items from the viewer request and, in the case of headers, additional ones that are added by CloudFront.</p> </li> </ul> <p>CloudFront sends a request when it can’t find a valid object in its cache that matches the request. If you want to send values to the origin and also include them in the cache key, use <code>CachePolicy</code>.</p> <p>For more information about origin request policies, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html">Controlling origin requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_origin_request_policy(
+        &self,
+        input: CreateOriginRequestPolicyRequest,
+    ) -> Result<CreateOriginRequestPolicyResult, RusotoError<CreateOriginRequestPolicyError>> {
+        let request_uri = "/2020-05-31/origin-request-policy";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        OriginRequestPolicyConfigSerializer::serialize(
+            &mut writer,
+            "OriginRequestPolicyConfig",
+            &input.origin_request_policy_config,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateOriginRequestPolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Uploads a public key to CloudFront that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
     #[allow(unused_variables, warnings)]
     async fn create_public_key(
         &self,
         input: CreatePublicKeyRequest,
     ) -> Result<CreatePublicKeyResult, RusotoError<CreatePublicKeyError>> {
-        let request_uri = "/2019-03-26/public-key";
+        let request_uri = "/2020-05-31/public-key";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12190,6 +17903,39 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Creates a real-time log configuration.</p> <p>After you create a real-time log configuration, you can attach it to one or more cache behaviors to send real-time log data to the specified Amazon Kinesis data stream.</p> <p>For more information about real-time log configurations, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/real-time-logs.html">Real-time logs</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_realtime_log_config(
+        &self,
+        input: CreateRealtimeLogConfigRequest,
+    ) -> Result<CreateRealtimeLogConfigResult, RusotoError<CreateRealtimeLogConfigError>> {
+        let request_uri = "/2020-05-31/realtime-log-config";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        CreateRealtimeLogConfigRequestSerializer::serialize(
+            &mut writer,
+            "CreateRealtimeLogConfigRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateRealtimeLogConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p><p>Creates a new RTMP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
     #[allow(unused_variables, warnings)]
     async fn create_streaming_distribution(
@@ -12197,7 +17943,7 @@ impl CloudFront for CloudFrontClient {
         input: CreateStreamingDistributionRequest,
     ) -> Result<CreateStreamingDistributionResult, RusotoError<CreateStreamingDistributionError>>
     {
-        let request_uri = "/2019-03-26/streaming-distribution";
+        let request_uri = "/2020-05-31/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12233,7 +17979,7 @@ impl CloudFront for CloudFrontClient {
         CreateStreamingDistributionWithTagsResult,
         RusotoError<CreateStreamingDistributionWithTagsError>,
     > {
-        let request_uri = "/2019-03-26/streaming-distribution";
+        let request_uri = "/2020-05-31/streaming-distribution";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -12269,6 +18015,26 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Deletes a cache policy.</p> <p>You cannot delete a cache policy if it’s attached to a cache behavior. First update your distributions to remove the cache policy from all cache behaviors, then delete the cache policy.</p> <p>To delete a cache policy, you must provide the policy’s identifier and version. To get these values, you can use <code>ListCachePolicies</code> or <code>GetCachePolicy</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_cache_policy(
+        &self,
+        input: DeleteCachePolicyRequest,
+    ) -> Result<(), RusotoError<DeleteCachePolicyError>> {
+        let request_uri = format!("/2020-05-31/cache-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteCachePolicyError::from_response)
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Delete an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     async fn delete_cloud_front_origin_access_identity(
@@ -12276,7 +18042,7 @@ impl CloudFront for CloudFrontClient {
         input: DeleteCloudFrontOriginAccessIdentityRequest,
     ) -> Result<(), RusotoError<DeleteCloudFrontOriginAccessIdentityError>> {
         let request_uri = format!(
-            "/2019-03-26/origin-access-identity/cloudfront/{id}",
+            "/2020-05-31/origin-access-identity/cloudfront/{id}",
             id = input.id
         );
 
@@ -12301,7 +18067,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: DeleteDistributionRequest,
     ) -> Result<(), RusotoError<DeleteDistributionError>> {
-        let request_uri = format!("/2019-03-26/distribution/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
@@ -12321,7 +18087,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: DeleteFieldLevelEncryptionConfigRequest,
     ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionConfigError>> {
-        let request_uri = format!("/2019-03-26/field-level-encryption/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/field-level-encryption/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
@@ -12345,7 +18111,7 @@ impl CloudFront for CloudFrontClient {
         input: DeleteFieldLevelEncryptionProfileRequest,
     ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionProfileError>> {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption-profile/{id}",
+            "/2020-05-31/field-level-encryption-profile/{id}",
             id = input.id
         );
 
@@ -12364,13 +18130,77 @@ impl CloudFront for CloudFrontClient {
         Ok(())
     }
 
+    /// <p>Deletes a key group.</p> <p>You cannot delete a key group that is referenced in a cache behavior. First update your distributions to remove the key group from all cache behaviors, then delete the key group.</p> <p>To delete a key group, you must provide the key group’s identifier and version. To get these values, use <code>ListKeyGroups</code> followed by <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_key_group(
+        &self,
+        input: DeleteKeyGroupRequest,
+    ) -> Result<(), RusotoError<DeleteKeyGroupError>> {
+        let request_uri = format!("/2020-05-31/key-group/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteKeyGroupError::from_response)
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Disables additional CloudWatch metrics for the specified CloudFront distribution.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_monitoring_subscription(
+        &self,
+        input: DeleteMonitoringSubscriptionRequest,
+    ) -> Result<DeleteMonitoringSubscriptionResult, RusotoError<DeleteMonitoringSubscriptionError>>
+    {
+        let request_uri = format!(
+            "/2020-05-31/distributions/{distribution_id}/monitoring-subscription",
+            distribution_id = input.distribution_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteMonitoringSubscriptionError::from_response)
+            .await?;
+
+        let result = DeleteMonitoringSubscriptionResult::default();
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Deletes an origin request policy.</p> <p>You cannot delete an origin request policy if it’s attached to any cache behaviors. First update your distributions to remove the origin request policy from all cache behaviors, then delete the origin request policy.</p> <p>To delete an origin request policy, you must provide the policy’s identifier and version. To get the identifier, you can use <code>ListOriginRequestPolicies</code> or <code>GetOriginRequestPolicy</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_origin_request_policy(
+        &self,
+        input: DeleteOriginRequestPolicyRequest,
+    ) -> Result<(), RusotoError<DeleteOriginRequestPolicyError>> {
+        let request_uri = format!("/2020-05-31/origin-request-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteOriginRequestPolicyError::from_response)
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Remove a public key you previously added to CloudFront.</p>
     #[allow(unused_variables, warnings)]
     async fn delete_public_key(
         &self,
         input: DeletePublicKeyRequest,
     ) -> Result<(), RusotoError<DeletePublicKeyError>> {
-        let request_uri = format!("/2019-03-26/public-key/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/public-key/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
@@ -12384,13 +18214,40 @@ impl CloudFront for CloudFrontClient {
         Ok(())
     }
 
+    /// <p>Deletes a real-time log configuration.</p> <p>You cannot delete a real-time log configuration if it’s attached to a cache behavior. First update your distributions to remove the real-time log configuration from all cache behaviors, then delete the real-time log configuration.</p> <p>To delete a real-time log configuration, you can provide the configuration’s name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to delete.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_realtime_log_config(
+        &self,
+        input: DeleteRealtimeLogConfigRequest,
+    ) -> Result<(), RusotoError<DeleteRealtimeLogConfigError>> {
+        let request_uri = "/2020-05-31/delete-realtime-log-config/";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        DeleteRealtimeLogConfigRequestSerializer::serialize(
+            &mut writer,
+            "DeleteRealtimeLogConfigRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteRealtimeLogConfigError::from_response)
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
     async fn delete_streaming_distribution(
         &self,
         input: DeleteStreamingDistributionRequest,
     ) -> Result<(), RusotoError<DeleteStreamingDistributionError>> {
-        let request_uri = format!("/2019-03-26/streaming-distribution/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
@@ -12404,6 +18261,54 @@ impl CloudFront for CloudFrontClient {
         Ok(())
     }
 
+    /// <p>Gets a cache policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get a cache policy, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_cache_policy(
+        &self,
+        input: GetCachePolicyRequest,
+    ) -> Result<GetCachePolicyResult, RusotoError<GetCachePolicyError>> {
+        let request_uri = format!("/2020-05-31/cache-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetCachePolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a cache policy configuration.</p> <p>To get a cache policy configuration, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_cache_policy_config(
+        &self,
+        input: GetCachePolicyConfigRequest,
+    ) -> Result<GetCachePolicyConfigResult, RusotoError<GetCachePolicyConfigError>> {
+        let request_uri = format!("/2020-05-31/cache-policy/{id}/config", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetCachePolicyConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetCachePolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Get the information about an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     async fn get_cloud_front_origin_access_identity(
@@ -12414,7 +18319,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<GetCloudFrontOriginAccessIdentityError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/origin-access-identity/cloudfront/{id}",
+            "/2020-05-31/origin-access-identity/cloudfront/{id}",
             id = input.id
         );
 
@@ -12447,7 +18352,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<GetCloudFrontOriginAccessIdentityConfigError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/origin-access-identity/cloudfront/{id}/config",
+            "/2020-05-31/origin-access-identity/cloudfront/{id}/config",
             id = input.id
         );
 
@@ -12479,7 +18384,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: GetDistributionRequest,
     ) -> Result<GetDistributionResult, RusotoError<GetDistributionError>> {
-        let request_uri = format!("/2019-03-26/distribution/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12503,7 +18408,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: GetDistributionConfigRequest,
     ) -> Result<GetDistributionConfigResult, RusotoError<GetDistributionConfigError>> {
-        let request_uri = format!("/2019-03-26/distribution/{id}/config", id = input.id);
+        let request_uri = format!("/2020-05-31/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12527,7 +18432,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: GetFieldLevelEncryptionRequest,
     ) -> Result<GetFieldLevelEncryptionResult, RusotoError<GetFieldLevelEncryptionError>> {
-        let request_uri = format!("/2019-03-26/field-level-encryption/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/field-level-encryption/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12553,7 +18458,7 @@ impl CloudFront for CloudFrontClient {
     ) -> Result<GetFieldLevelEncryptionConfigResult, RusotoError<GetFieldLevelEncryptionConfigError>>
     {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption/{id}/config",
+            "/2020-05-31/field-level-encryption/{id}/config",
             id = input.id
         );
 
@@ -12583,7 +18488,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<GetFieldLevelEncryptionProfileError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption-profile/{id}",
+            "/2020-05-31/field-level-encryption-profile/{id}",
             id = input.id
         );
 
@@ -12613,7 +18518,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<GetFieldLevelEncryptionProfileConfigError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption-profile/{id}/config",
+            "/2020-05-31/field-level-encryption-profile/{id}/config",
             id = input.id
         );
 
@@ -12646,7 +18551,7 @@ impl CloudFront for CloudFrontClient {
         input: GetInvalidationRequest,
     ) -> Result<GetInvalidationResult, RusotoError<GetInvalidationError>> {
         let request_uri = format!(
-            "/2019-03-26/distribution/{distribution_id}/invalidation/{id}",
+            "/2020-05-31/distribution/{distribution_id}/invalidation/{id}",
             distribution_id = input.distribution_id,
             id = input.id
         );
@@ -12667,13 +18572,140 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
-    /// <p>Get the public key information.</p>
+    /// <p>Gets a key group, including the date and time when the key group was last modified.</p> <p>To get a key group, you must provide the key group’s identifier. If the key group is referenced in a distribution’s cache behavior, you can get the key group’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the key group is not referenced in a cache behavior, you can get the identifier using <code>ListKeyGroups</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_key_group(
+        &self,
+        input: GetKeyGroupRequest,
+    ) -> Result<GetKeyGroupResult, RusotoError<GetKeyGroupError>> {
+        let request_uri = format!("/2020-05-31/key-group/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetKeyGroupError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a key group configuration.</p> <p>To get a key group configuration, you must provide the key group’s identifier. If the key group is referenced in a distribution’s cache behavior, you can get the key group’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the key group is not referenced in a cache behavior, you can get the identifier using <code>ListKeyGroups</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_key_group_config(
+        &self,
+        input: GetKeyGroupConfigRequest,
+    ) -> Result<GetKeyGroupConfigResult, RusotoError<GetKeyGroupConfigError>> {
+        let request_uri = format!("/2020-05-31/key-group/{id}/config", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetKeyGroupConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetKeyGroupConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets information about whether additional CloudWatch metrics are enabled for the specified CloudFront distribution.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_monitoring_subscription(
+        &self,
+        input: GetMonitoringSubscriptionRequest,
+    ) -> Result<GetMonitoringSubscriptionResult, RusotoError<GetMonitoringSubscriptionError>> {
+        let request_uri = format!(
+            "/2020-05-31/distributions/{distribution_id}/monitoring-subscription",
+            distribution_id = input.distribution_id
+        );
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetMonitoringSubscriptionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetMonitoringSubscriptionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets an origin request policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get an origin request policy, you must provide the policy’s identifier. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_origin_request_policy(
+        &self,
+        input: GetOriginRequestPolicyRequest,
+    ) -> Result<GetOriginRequestPolicyResult, RusotoError<GetOriginRequestPolicyError>> {
+        let request_uri = format!("/2020-05-31/origin-request-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetOriginRequestPolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets an origin request policy configuration.</p> <p>To get an origin request policy configuration, you must provide the policy’s identifier. If the origin request policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the origin request policy is not attached to a cache behavior, you can get the identifier using <code>ListOriginRequestPolicies</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_origin_request_policy_config(
+        &self,
+        input: GetOriginRequestPolicyConfigRequest,
+    ) -> Result<GetOriginRequestPolicyConfigResult, RusotoError<GetOriginRequestPolicyConfigError>>
+    {
+        let request_uri = format!(
+            "/2020-05-31/origin-request-policy/{id}/config",
+            id = input.id
+        );
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetOriginRequestPolicyConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetOriginRequestPolicyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a public key.</p>
     #[allow(unused_variables, warnings)]
     async fn get_public_key(
         &self,
         input: GetPublicKeyRequest,
     ) -> Result<GetPublicKeyResult, RusotoError<GetPublicKeyError>> {
-        let request_uri = format!("/2019-03-26/public-key/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/public-key/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12691,13 +18723,13 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
-    /// <p>Return public key configuration informaation</p>
+    /// <p>Gets a public key configuration.</p>
     #[allow(unused_variables, warnings)]
     async fn get_public_key_config(
         &self,
         input: GetPublicKeyConfigRequest,
     ) -> Result<GetPublicKeyConfigResult, RusotoError<GetPublicKeyConfigError>> {
-        let request_uri = format!("/2019-03-26/public-key/{id}/config", id = input.id);
+        let request_uri = format!("/2020-05-31/public-key/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12715,13 +18747,46 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a real-time log configuration.</p> <p>To get a real-time log configuration, you can provide the configuration’s name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to get.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_realtime_log_config(
+        &self,
+        input: GetRealtimeLogConfigRequest,
+    ) -> Result<GetRealtimeLogConfigResult, RusotoError<GetRealtimeLogConfigError>> {
+        let request_uri = "/2020-05-31/get-realtime-log-config/";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        GetRealtimeLogConfigRequestSerializer::serialize(
+            &mut writer,
+            "GetRealtimeLogConfigRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, GetRealtimeLogConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
     #[allow(unused_variables, warnings)]
     async fn get_streaming_distribution(
         &self,
         input: GetStreamingDistributionRequest,
     ) -> Result<GetStreamingDistributionResult, RusotoError<GetStreamingDistributionError>> {
-        let request_uri = format!("/2019-03-26/streaming-distribution/{id}", id = input.id);
+        let request_uri = format!("/2020-05-31/streaming-distribution/{id}", id = input.id);
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12749,7 +18814,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<GetStreamingDistributionConfigError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/streaming-distribution/{id}/config",
+            "/2020-05-31/streaming-distribution/{id}/config",
             id = input.id
         );
 
@@ -12769,6 +18834,42 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a list of cache policies.</p> <p>You can optionally apply a filter to return only the managed policies created by AWS, or only the custom policies created in your AWS account.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_cache_policies(
+        &self,
+        input: ListCachePoliciesRequest,
+    ) -> Result<ListCachePoliciesResult, RusotoError<ListCachePoliciesError>> {
+        let request_uri = "/2020-05-31/cache-policy";
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        if let Some(ref x) = input.type_ {
+            params.put("Type", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListCachePoliciesError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListCachePoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Lists origin access identities.</p>
     #[allow(unused_variables, warnings)]
     async fn list_cloud_front_origin_access_identities(
@@ -12778,7 +18879,7 @@ impl CloudFront for CloudFrontClient {
         ListCloudFrontOriginAccessIdentitiesResult,
         RusotoError<ListCloudFrontOriginAccessIdentitiesError>,
     > {
-        let request_uri = "/2019-03-26/origin-access-identity/cloudfront";
+        let request_uri = "/2020-05-31/origin-access-identity/cloudfront";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12817,7 +18918,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: ListDistributionsRequest,
     ) -> Result<ListDistributionsResult, RusotoError<ListDistributionsError>> {
-        let request_uri = "/2019-03-26/distribution";
+        let request_uri = "/2020-05-31/distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12844,6 +18945,172 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified cache policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_distributions_by_cache_policy_id(
+        &self,
+        input: ListDistributionsByCachePolicyIdRequest,
+    ) -> Result<
+        ListDistributionsByCachePolicyIdResult,
+        RusotoError<ListDistributionsByCachePolicyIdError>,
+    > {
+        let request_uri = format!(
+            "/2020-05-31/distributionsByCachePolicyId/{cache_policy_id}",
+            cache_policy_id = input.cache_policy_id
+        );
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(
+                request,
+                ListDistributionsByCachePolicyIdError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsByCachePolicyIdResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that references the specified key group.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_distributions_by_key_group(
+        &self,
+        input: ListDistributionsByKeyGroupRequest,
+    ) -> Result<ListDistributionsByKeyGroupResult, RusotoError<ListDistributionsByKeyGroupError>>
+    {
+        let request_uri = format!(
+            "/2020-05-31/distributionsByKeyGroupId/{key_group_id}",
+            key_group_id = input.key_group_id
+        );
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListDistributionsByKeyGroupError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsByKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a list of distribution IDs for distributions that have a cache behavior that’s associated with the specified origin request policy.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_distributions_by_origin_request_policy_id(
+        &self,
+        input: ListDistributionsByOriginRequestPolicyIdRequest,
+    ) -> Result<
+        ListDistributionsByOriginRequestPolicyIdResult,
+        RusotoError<ListDistributionsByOriginRequestPolicyIdError>,
+    > {
+        let request_uri = format!(
+            "/2020-05-31/distributionsByOriginRequestPolicyId/{origin_request_policy_id}",
+            origin_request_policy_id = input.origin_request_policy_id
+        );
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(
+                request,
+                ListDistributionsByOriginRequestPolicyIdError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsByOriginRequestPolicyIdResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a list of distributions that have a cache behavior that’s associated with the specified real-time log configuration.</p> <p>You can specify the real-time log configuration by its name or its Amazon Resource Name (ARN). You must provide at least one. If you provide both, CloudFront uses the name to identify the real-time log configuration to list distributions for.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request. </p>
+    #[allow(unused_variables, warnings)]
+    async fn list_distributions_by_realtime_log_config(
+        &self,
+        input: ListDistributionsByRealtimeLogConfigRequest,
+    ) -> Result<
+        ListDistributionsByRealtimeLogConfigResult,
+        RusotoError<ListDistributionsByRealtimeLogConfigError>,
+    > {
+        let request_uri = "/2020-05-31/distributionsByRealtimeLogConfig/";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        ListDistributionsByRealtimeLogConfigRequestSerializer::serialize(
+            &mut writer,
+            "ListDistributionsByRealtimeLogConfigRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(
+                request,
+                ListDistributionsByRealtimeLogConfigError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsByRealtimeLogConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     #[allow(unused_variables, warnings)]
     async fn list_distributions_by_web_acl_id(
@@ -12852,7 +19119,7 @@ impl CloudFront for CloudFrontClient {
     ) -> Result<ListDistributionsByWebACLIdResult, RusotoError<ListDistributionsByWebACLIdError>>
     {
         let request_uri = format!(
-            "/2019-03-26/distributionsByWebACLId/{web_acl_id}",
+            "/2020-05-31/distributionsByWebACLId/{web_acl_id}",
             web_acl_id = input.web_acl_id
         );
 
@@ -12890,7 +19157,7 @@ impl CloudFront for CloudFrontClient {
         ListFieldLevelEncryptionConfigsResult,
         RusotoError<ListFieldLevelEncryptionConfigsError>,
     > {
-        let request_uri = "/2019-03-26/field-level-encryption";
+        let request_uri = "/2020-05-31/field-level-encryption";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12926,7 +19193,7 @@ impl CloudFront for CloudFrontClient {
         ListFieldLevelEncryptionProfilesResult,
         RusotoError<ListFieldLevelEncryptionProfilesError>,
     > {
-        let request_uri = "/2019-03-26/field-level-encryption-profile";
+        let request_uri = "/2020-05-31/field-level-encryption-profile";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -12963,7 +19230,7 @@ impl CloudFront for CloudFrontClient {
         input: ListInvalidationsRequest,
     ) -> Result<ListInvalidationsResult, RusotoError<ListInvalidationsError>> {
         let request_uri = format!(
-            "/2019-03-26/distribution/{distribution_id}/invalidation",
+            "/2020-05-31/distribution/{distribution_id}/invalidation",
             distribution_id = input.distribution_id
         );
 
@@ -12992,13 +19259,82 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a list of key groups.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_key_groups(
+        &self,
+        input: ListKeyGroupsRequest,
+    ) -> Result<ListKeyGroupsResult, RusotoError<ListKeyGroupsError>> {
+        let request_uri = "/2020-05-31/key-group";
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListKeyGroupsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListKeyGroupsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets a list of origin request policies.</p> <p>You can optionally apply a filter to return only the managed policies created by AWS, or only the custom policies created in your AWS account.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_origin_request_policies(
+        &self,
+        input: ListOriginRequestPoliciesRequest,
+    ) -> Result<ListOriginRequestPoliciesResult, RusotoError<ListOriginRequestPoliciesError>> {
+        let request_uri = "/2020-05-31/origin-request-policy";
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        if let Some(ref x) = input.type_ {
+            params.put("Type", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListOriginRequestPoliciesError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListOriginRequestPoliciesResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>List all public keys that have been added to CloudFront for this account.</p>
     #[allow(unused_variables, warnings)]
     async fn list_public_keys(
         &self,
         input: ListPublicKeysRequest,
     ) -> Result<ListPublicKeysResult, RusotoError<ListPublicKeysError>> {
-        let request_uri = "/2019-03-26/public-key";
+        let request_uri = "/2020-05-31/public-key";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -13025,6 +19361,39 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a list of real-time log configurations.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request. </p>
+    #[allow(unused_variables, warnings)]
+    async fn list_realtime_log_configs(
+        &self,
+        input: ListRealtimeLogConfigsRequest,
+    ) -> Result<ListRealtimeLogConfigsResult, RusotoError<ListRealtimeLogConfigsError>> {
+        let request_uri = "/2020-05-31/realtime-log-config";
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListRealtimeLogConfigsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListRealtimeLogConfigsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>List streaming distributions. </p>
     #[allow(unused_variables, warnings)]
     async fn list_streaming_distributions(
@@ -13032,7 +19401,7 @@ impl CloudFront for CloudFrontClient {
         input: ListStreamingDistributionsRequest,
     ) -> Result<ListStreamingDistributionsResult, RusotoError<ListStreamingDistributionsError>>
     {
-        let request_uri = "/2019-03-26/streaming-distribution";
+        let request_uri = "/2020-05-31/streaming-distribution";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -13065,7 +19434,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>> {
-        let request_uri = "/2019-03-26/tagging";
+        let request_uri = "/2020-05-31/tagging";
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
@@ -13093,7 +19462,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
-        let request_uri = "/2019-03-26/tagging";
+        let request_uri = "/2020-05-31/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -13119,7 +19488,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
-        let request_uri = "/2019-03-26/tagging";
+        let request_uri = "/2020-05-31/tagging";
 
         let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
 
@@ -13139,6 +19508,40 @@ impl CloudFront for CloudFrontClient {
         Ok(())
     }
 
+    /// <p><p>Updates a cache policy configuration.</p> <p>When you update a cache policy configuration, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update a cache policy configuration:</p> <ol> <li> <p>Use <code>GetCachePolicyConfig</code> to get the current configuration.</p> </li> <li> <p>Locally modify the fields in the cache policy configuration that you want to update.</p> </li> <li> <p>Call <code>UpdateCachePolicy</code> by providing the entire cache policy configuration, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    #[allow(unused_variables, warnings)]
+    async fn update_cache_policy(
+        &self,
+        input: UpdateCachePolicyRequest,
+    ) -> Result<UpdateCachePolicyResult, RusotoError<UpdateCachePolicyError>> {
+        let request_uri = format!("/2020-05-31/cache-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut writer = EventWriter::new(Vec::new());
+        CachePolicyConfigSerializer::serialize(
+            &mut writer,
+            "CachePolicyConfig",
+            &input.cache_policy_config,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, UpdateCachePolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateCachePolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Update an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     async fn update_cloud_front_origin_access_identity(
@@ -13149,7 +19552,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<UpdateCloudFrontOriginAccessIdentityError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/origin-access-identity/cloudfront/{id}/config",
+            "/2020-05-31/origin-access-identity/cloudfront/{id}/config",
             id = input.id
         );
 
@@ -13191,7 +19594,7 @@ impl CloudFront for CloudFrontClient {
         &self,
         input: UpdateDistributionRequest,
     ) -> Result<UpdateDistributionResult, RusotoError<UpdateDistributionError>> {
-        let request_uri = format!("/2019-03-26/distribution/{id}/config", id = input.id);
+        let request_uri = format!("/2020-05-31/distribution/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
@@ -13229,7 +19632,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<UpdateFieldLevelEncryptionConfigError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption/{id}/config",
+            "/2020-05-31/field-level-encryption/{id}/config",
             id = input.id
         );
 
@@ -13272,7 +19675,7 @@ impl CloudFront for CloudFrontClient {
         RusotoError<UpdateFieldLevelEncryptionProfileError>,
     > {
         let request_uri = format!(
-            "/2019-03-26/field-level-encryption-profile/{id}/config",
+            "/2020-05-31/field-level-encryption-profile/{id}/config",
             id = input.id
         );
 
@@ -13305,13 +19708,77 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p><p>Updates a key group.</p> <p>When you update a key group, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update a key group:</p> <ol> <li> <p>Get the current key group with <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p> </li> <li> <p>Locally modify the fields in the key group that you want to update. For example, add or remove public key IDs.</p> </li> <li> <p>Call <code>UpdateKeyGroup</code> with the entire key group object, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    #[allow(unused_variables, warnings)]
+    async fn update_key_group(
+        &self,
+        input: UpdateKeyGroupRequest,
+    ) -> Result<UpdateKeyGroupResult, RusotoError<UpdateKeyGroupError>> {
+        let request_uri = format!("/2020-05-31/key-group/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut writer = EventWriter::new(Vec::new());
+        KeyGroupConfigSerializer::serialize(&mut writer, "KeyGroupConfig", &input.key_group_config);
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, UpdateKeyGroupError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateKeyGroupResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Updates an origin request policy configuration.</p> <p>When you update an origin request policy configuration, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update an origin request policy configuration:</p> <ol> <li> <p>Use <code>GetOriginRequestPolicyConfig</code> to get the current configuration.</p> </li> <li> <p>Locally modify the fields in the origin request policy configuration that you want to update.</p> </li> <li> <p>Call <code>UpdateOriginRequestPolicy</code> by providing the entire origin request policy configuration, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
+    #[allow(unused_variables, warnings)]
+    async fn update_origin_request_policy(
+        &self,
+        input: UpdateOriginRequestPolicyRequest,
+    ) -> Result<UpdateOriginRequestPolicyResult, RusotoError<UpdateOriginRequestPolicyError>> {
+        let request_uri = format!("/2020-05-31/origin-request-policy/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+
+        let mut writer = EventWriter::new(Vec::new());
+        OriginRequestPolicyConfigSerializer::serialize(
+            &mut writer,
+            "OriginRequestPolicyConfig",
+            &input.origin_request_policy_config,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, UpdateOriginRequestPolicyError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateOriginRequestPolicyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Update public key information. Note that the only value you can change is the comment.</p>
     #[allow(unused_variables, warnings)]
     async fn update_public_key(
         &self,
         input: UpdatePublicKeyRequest,
     ) -> Result<UpdatePublicKeyResult, RusotoError<UpdatePublicKeyError>> {
-        let request_uri = format!("/2019-03-26/public-key/{id}/config", id = input.id);
+        let request_uri = format!("/2020-05-31/public-key/{id}/config", id = input.id);
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
@@ -13339,6 +19806,39 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Updates a real-time log configuration.</p> <p>When you update a real-time log configuration, all the parameters are updated with the values provided in the request. You cannot update some parameters independent of others. To update a real-time log configuration:</p> <ol> <li> <p>Call <code>GetRealtimeLogConfig</code> to get the current real-time log configuration.</p> </li> <li> <p>Locally modify the parameters in the real-time log configuration that you want to update.</p> </li> <li> <p>Call this API (<code>UpdateRealtimeLogConfig</code>) by providing the entire real-time log configuration, including the parameters that you modified and those that you didn’t.</p> </li> </ol> <p>You cannot update a real-time log configuration’s <code>Name</code> or <code>ARN</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn update_realtime_log_config(
+        &self,
+        input: UpdateRealtimeLogConfigRequest,
+    ) -> Result<UpdateRealtimeLogConfigResult, RusotoError<UpdateRealtimeLogConfigError>> {
+        let request_uri = "/2020-05-31/realtime-log-config/";
+
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        UpdateRealtimeLogConfigRequestSerializer::serialize(
+            &mut writer,
+            "UpdateRealtimeLogConfigRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, UpdateRealtimeLogConfigError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateRealtimeLogConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Update a streaming distribution. </p>
     #[allow(unused_variables, warnings)]
     async fn update_streaming_distribution(
@@ -13347,7 +19847,7 @@ impl CloudFront for CloudFrontClient {
     ) -> Result<UpdateStreamingDistributionResult, RusotoError<UpdateStreamingDistributionError>>
     {
         let request_uri = format!(
-            "/2019-03-26/streaming-distribution/{id}/config",
+            "/2020-05-31/streaming-distribution/{id}/config",
             id = input.id
         );
 

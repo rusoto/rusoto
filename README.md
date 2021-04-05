@@ -1,29 +1,11 @@
 # ![Rusoto](./assets/logo-wide.png)
 
-<table>
-    <tr>
-        <td><strong>Linux / OS X</strong></td>
-        <td><a href="https://dev.azure.com/matthewkmayer/Rusoto/_build?definitionId=1" title="Pipelines Build Status"><img src="https://dev.azure.com/matthewkmayer/Rusoto/_apis/build/status/rusoto.rusoto?branchName=master" alt="pipelines-badge"></img></a></td>
-    </tr>
-    <tr>
-        <td><strong>Windows</strong></td>
-        <td><a href="https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master" title="Appveyor Build Status"><img src="https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true" alt="appveyor-badge"></img></a></td>
-    </tr>
-    <tr>
-        <td><strong>Ceph and Minio support</strong></td>
-        <td><a href='https://semaphoreci.com/matthewkmayer/rusoto'> <img src='https://semaphoreci.com/api/v1/matthewkmayer/rusoto/branches/master/badge.svg' alt='Build Status'></a></td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <a href="https://docs.rs/rusoto_core" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
-            <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
-            <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
-            <img src="https://tokei.rs/b1/github/rusoto/rusoto"></img>
-            <a href="https://deps.rs/repo/github/rusoto/rusoto" title="Dependency Status"><img src="https://deps.rs/repo/github/rusoto/rusoto/status.svg" alt="dependency-status-badge"></img></a>
-            <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
-        </td>
-    </tr>
-</table>
+<a href="https://github.com/rusoto/rusoto/actions?query=workflow%3A%22Build+and+test%22"><img src="https://github.com/rusoto/rusoto/workflows/Build%20and%20test/badge.svg"></a>
+<a href="https://docs.rs/rusoto_core" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+<a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
+<a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
+<a href="https://deps.rs/repo/github/rusoto/rusoto" title="Dependency Status"><img src="https://deps.rs/repo/github/rusoto/rusoto/status.svg" alt="dependency-status-badge"></img></a>
+<a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
 
 **Rusoto is an AWS SDK for Rust**
 
@@ -36,6 +18,20 @@ You may be looking for:
 * [API documentation][api-documentation]
 * [Getting help with Rusoto][rusoto-help]
 
+## Maintenance status
+
+⚠️ Rusoto is in **maintenance mode.** ⚠️
+
+The current maintainers only have the bandwidth to review dependency bumps and
+obvious bugfixes. Our bandwidth for reviewing new features is extremely limited.
+
+While you are welcome to submit PRs that implement new features or refactor
+existing code, they are unlikely to be merged unless we can find more active
+maintainers.
+
+Please see [Meta: future of Rusoto (#1651)](https://github.com/rusoto/rusoto/issues/1651)
+for details.
+
 ## Installation
 
 Rusoto is available on [crates.io](https://crates.io/crates/rusoto_core).
@@ -45,16 +41,16 @@ For example, to include only S3 and SQS:
 
 ```toml
 [dependencies]
-rusoto_core = "0.45.0"
-rusoto_sqs = "0.45.0"
-rusoto_s3 = "0.45.0"
+rusoto_core = "0.46.0"
+rusoto_sqs = "0.46.0"
+rusoto_s3 = "0.46.0"
 ```
 
 ## Migration notes
 
 Breaking changes and migration details are documented at [https://rusoto.org/migrations.html](https://rusoto.org/migrations.html).
 
-Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem.
+Note that from v0.43.0 onward, Rusoto uses Rust's `std::future::Future`, and the Tokio 0.2 ecosystem. From v0.46.0 onward, Rusoto uses the Tokio 1.0 ecosystem.
 
 ## Usage
 
@@ -114,7 +110,7 @@ See [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 ## Supported OSs, Rust versions and non-AWS projects
 
-Linux, OSX and Windows are supported and tested via Azure Pipelines and Appveyor.
+Linux, macOS and Windows are supported and tested via [GitHub actions](https://github.com/rusoto/rusoto/actions?query=workflow%3A%22Build+and+test%22).
 
 Rust stable, beta and nightly are supported.
 

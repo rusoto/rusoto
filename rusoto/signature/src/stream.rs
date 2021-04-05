@@ -5,22 +5,23 @@ use std::task::{Context, Poll};
 
 use bytes::{BufMut, Bytes, BytesMut};
 use futures::{future, stream, Stream, StreamExt};
-use pin_project::pin_project;
-use tokio::io::AsyncRead;
+use pin_project_lite::pin_project;
+use tokio::io::{AsyncRead, ReadBuf};
 
-/// Stream of bytes.
-#[pin_project]
-pub struct ByteStream {
-    size_hint: Option<usize>,
-    #[pin]
-    inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static>>,
+pin_project! {
+    /// Stream of bytes.
+    pub struct ByteStream {
+        size_hint: Option<usize>,
+        #[pin]
+        inner: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + 'static>>,
+    }
 }
 
 impl ByteStream {
     /// Create a new `ByteStream` by wrapping a `futures` stream.
     pub fn new<S>(stream: S) -> ByteStream
     where
-        S: Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, io::Error>> + Send + 'static,
     {
         ByteStream {
             size_hint: None,
@@ -32,7 +33,7 @@ impl ByteStream {
     /// size_hint to satisy S3's `PutObject` API.
     pub fn new_with_size<S>(stream: S, size_hint: usize) -> ByteStream
     where
-        S: Stream<Item = Result<Bytes, io::Error>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, io::Error>> + Send + 'static,
     {
         ByteStream {
             size_hint: Some(size_hint),
@@ -45,12 +46,12 @@ impl ByteStream {
     }
 
     /// Return an implementation of `AsyncRead` that uses async i/o to consume the stream.
-    pub fn into_async_read(self) -> impl AsyncRead + Send + Sync {
+    pub fn into_async_read(self) -> impl AsyncRead + Send {
         ImplAsyncRead::new(self.inner)
     }
 
     /// Return an implementation of `Read` that uses blocking i/o to consume the stream.
-    pub fn into_blocking_read(self) -> impl io::Read + Send + Sync {
+    pub fn into_blocking_read(self) -> impl io::Read + Send {
         ImplBlockingRead::new(self.inner)
     }
 }
@@ -79,15 +80,16 @@ impl Stream for ByteStream {
     }
 }
 
-#[pin_project]
-struct ImplAsyncRead {
-    buffer: BytesMut,
-    #[pin]
-    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>>,
+pin_project! {
+    struct ImplAsyncRead {
+        buffer: BytesMut,
+        #[pin]
+        stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>>,
+    }
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
         ImplAsyncRead {
             buffer: BytesMut::new(),
             stream: stream.fuse(),
@@ -99,34 +101,34 @@ impl AsyncRead for ImplAsyncRead {
     fn poll_read(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,
-        buf: &mut [u8],
-    ) -> Poll<io::Result<usize>> {
+        buf: &mut ReadBuf,
+    ) -> Poll<io::Result<()>> {
         let this = self.project();
         if this.buffer.is_empty() {
             match futures::ready!(this.stream.poll_next(cx)) {
-                None => return Poll::Ready(Ok(0)),
+                None => return Poll::Ready(Ok(())),
                 Some(Err(e)) => return Poll::Ready(Err(e)),
                 Some(Ok(bytes)) => {
                     this.buffer.put(bytes);
                 }
             }
         }
-        let available = std::cmp::min(buf.len(), this.buffer.len());
+        let available = std::cmp::min(buf.remaining(), this.buffer.len());
         let bytes = this.buffer.split_to(available);
-        let (left, _) = buf.split_at_mut(available);
-        left.copy_from_slice(&bytes[..available]);
-        Poll::Ready(Ok(available))
+        buf.put_slice(&bytes);
+        Poll::Ready(Ok(()))
     }
 }
 
-#[pin_project]
-struct ImplBlockingRead {
-    #[pin]
-    inner: ImplAsyncRead,
+pin_project! {
+    struct ImplBlockingRead {
+        #[pin]
+        inner: ImplAsyncRead,
+    }
 }
 
 impl ImplBlockingRead {
-    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
         ImplBlockingRead {
             inner: ImplAsyncRead::new(stream),
         }
@@ -135,9 +137,15 @@ impl ImplBlockingRead {
 
 impl io::Read for ImplBlockingRead {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
-        let mut rt = tokio::runtime::Runtime::new()?;
+        let rt = tokio::runtime::Runtime::new()?;
         rt.block_on(future::poll_fn(|cx| {
-            tokio::io::AsyncRead::poll_read(Pin::new(&mut self.inner), cx, buf)
+            let mut buf = ReadBuf::new(buf);
+            futures::ready!(AsyncRead::poll_read(
+                Pin::new(&mut self.inner),
+                cx,
+                &mut buf
+            ))?;
+            Poll::Ready(Ok(buf.filled().len()))
         }))
     }
 }

@@ -1,12 +1,10 @@
-# Semaphore CI
+# Additional CI tests
 
-This directory contains test scripts run on [Semaphore CI](https://semaphoreci.com/matthewkmayer/rusoto).
+This directory contains test scripts that run integration tests against
+Ceph and MinIO.
 
-## Setup On Semaphore CI
-
-1. Create a Semaphore project
-2. Select a *platform* in the setting with *native Docker* support
-3. Have this command executed: `.semaphoreci/run.sh`
+These tests were historically run on [Semaphore CI](https://semaphoreci.com),
+but now run on GitHub Actions with the rest of the CI jobs.
 
 ## Setting Environment Variables
 

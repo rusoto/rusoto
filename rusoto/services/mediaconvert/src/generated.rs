@@ -157,6 +157,15 @@ pub struct AssociateCertificateRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
 
+/// <p>When you mimic a multi-channel audio layout with multiple mono-channel tracks, you can tag each channel layout manually. For example, you would tag the tracks that contain your left, right, and center audio with Left (L), Right (R), and Center (C), respectively. When you don&#39;t specify a value, MediaConvert labels your track as Center (C) by default. To use audio layout tagging, your output must be in a QuickTime (.mov) container; your audio codec must be AAC, WAV, or AIFF; and you must set up your audio track to have only one channel.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AudioChannelTaggingSettings {
+    /// <p>You can add a tag for this mono-channel audio track to mimic its placement in a multi-channel layout.  For example, if this track is the left surround channel, choose Left surround (LS).</p>
+    #[serde(rename = "ChannelTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_tag: Option<String>,
+}
+
 /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings * VORBIS, VorbisSettings * OPUS, OpusSettings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioCodecSettings {
@@ -209,6 +218,10 @@ pub struct AudioCodecSettings {
 /// <p>Description of audio output</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioDescription {
+    /// <p>When you mimic a multi-channel audio layout with multiple mono-channel tracks, you can tag each channel layout manually. For example, you would tag the tracks that contain your left, right, and center audio with Left (L), Right (R), and Center (C), respectively. When you don&#39;t specify a value, MediaConvert labels your track as Center (C) by default. To use audio layout tagging, your output must be in a QuickTime (.mov) container; your audio codec must be AAC, WAV, or AIFF; and you must set up your audio track to have only one channel.</p>
+    #[serde(rename = "AudioChannelTaggingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_channel_tagging_settings: Option<AudioChannelTaggingSettings>,
     /// <p>Advanced audio normalization settings. Ignore these settings unless you need to comply with a loudness standard.</p>
     #[serde(rename = "AudioNormalizationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -334,6 +347,32 @@ pub struct AudioSelectorGroup {
     pub audio_selector_names: Option<Vec<String>>,
 }
 
+/// <p>Use automated ABR to have MediaConvert set up the renditions in your ABR package for you automatically, based on characteristics of your input video. This feature optimizes video quality while minimizing the overall size of your ABR package.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AutomatedAbrSettings {
+    /// <p>Optional. The maximum target bit rate used in your automated ABR stack. Use this value to set an upper limit on the bandwidth consumed by the highest-quality rendition. This is the rendition that is delivered to viewers with the fastest internet connections. If you don&#39;t specify a value, MediaConvert uses 8,000,000 (8 mb/s) by default.</p>
+    #[serde(rename = "MaxAbrBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_abr_bitrate: Option<i64>,
+    /// <p>Optional. The maximum number of renditions that MediaConvert will create in your automated ABR stack. The number of renditions is determined automatically, based on analysis of each job, but will never exceed this limit. When you set this to Auto in the console, which is equivalent to excluding it from your JSON job specification, MediaConvert defaults to a limit of 15.</p>
+    #[serde(rename = "MaxRenditions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_renditions: Option<i64>,
+    /// <p>Optional. The minimum target bitrate used in your automated ABR stack. Use this value to set a lower limit on the bitrate of video delivered to viewers with slow internet connections. If you don&#39;t specify a value, MediaConvert uses 600,000 (600 kb/s) by default.</p>
+    #[serde(rename = "MinAbrBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_abr_bitrate: Option<i64>,
+}
+
+/// <p>Use automated encoding to have MediaConvert choose your encoding settings for you, based on characteristics of your input video.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AutomatedEncodingSettings {
+    /// <p>Use automated ABR to have MediaConvert set up the renditions in your ABR package for you automatically, based on characteristics of your input video. This feature optimizes video quality while minimizing the overall size of your ABR package.</p>
+    #[serde(rename = "AbrSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abr_settings: Option<AutomatedAbrSettings>,
+}
+
 /// <p>Settings for quality-defined variable bitrate encoding with the AV1 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Av1QvbrSettings {
@@ -350,7 +389,7 @@ pub struct Av1QvbrSettings {
 /// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Av1Settings {
-    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    /// <p>Specify the strength of any adaptive quantization filters that you enable. The value that you choose here applies to Spatial adaptive quantization (spatialAdaptiveQuantization).</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
@@ -358,7 +397,7 @@ pub struct Av1Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -394,7 +433,7 @@ pub struct Av1Settings {
     #[serde(rename = "Slices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slices: Option<i64>,
-    /// <p>Adjust quantization within each frame based on spatial variation of content complexity.</p>
+    /// <p>Keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on spatial variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas that can sustain more distortion with no noticeable visual degradation and uses more bits on areas where any small distortion will be noticeable. For example, complex textured blocks are encoded with fewer bits and smooth textured blocks are encoded with more bits. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen with a lot of complex texture, you might choose to disable this feature. Related setting: When you enable spatial adaptive quantization, set the value for Adaptive quantization (adaptiveQuantization) depending on your content. For homogeneous content, such as cartoons and video games, set it to Low. For content with a wider variety of textures, set it to High or Higher.</p>
     #[serde(rename = "SpatialAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_adaptive_quantization: Option<String>,
@@ -407,6 +446,43 @@ pub struct AvailBlanking {
     #[serde(rename = "AvailBlankingImage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_blanking_image: Option<String>,
+}
+
+/// <p>Required when you set your output video codec to AVC-Intra. For more information about the AVC-I settings, see the relevant specification. For detailed information about SD and HD in AVC-I, see https://ieeexplore.ieee.org/document/7290936.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AvcIntraSettings {
+    /// <p>Specify the AVC-Intra class of your output. The AVC-Intra class selection determines the output video bit rate depending on the frame rate of the output. Outputs with higher class values have higher bitrates and improved image quality.</p>
+    #[serde(rename = "AvcIntraClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avc_intra_class: Option<String>,
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
+    #[serde(rename = "InterlaceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interlace_mode: Option<String>,
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
+    #[serde(rename = "SlowPal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slow_pal: Option<String>,
+    /// <p>When you do frame rate conversion from 23.976 frames per second (fps) to 29.97 fps, and your output scan type is interlaced, you can optionally enable hard telecine (HARD) to create a smoother picture. When you keep the default value, None (NONE), MediaConvert does a standard frame rate conversion to 29.97 without doing anything with the field polarity to create a smoother picture.</p>
+    #[serde(rename = "Telecine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub telecine: Option<String>,
 }
 
 /// <p>Burn-In Destination Settings.</p>
@@ -706,7 +782,7 @@ pub struct CmafGroupSettings {
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_url: Option<String>,
-    /// <p>When set to ENABLED, sets #EXT-X-ALLOW-CACHE:no tag, which prevents client from saving media segments for later replay.</p>
+    /// <p>Disable this setting only when your workflow requires the #EXT-X-ALLOW-CACHE:no tag. Otherwise, keep the default value Enabled (ENABLED) and control caching in your video distribution set up. For example, use the Cache-Control http header.</p>
     #[serde(rename = "ClientCache")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_cache: Option<String>,
@@ -779,6 +855,10 @@ pub struct CmafGroupSettings {
 /// <p>Settings for MP4 segments in CMAF</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmfcSettings {
+    /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
+    #[serde(rename = "AudioDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_duration: Option<String>,
     /// <p>Use this setting only when you specify SCTE-35 markers from ESAM. Choose INSERT to put SCTE-35 markers in this output at the insertion points that you specify in an ESAM XML document. Provide the document in the setting SCC XML (sccXml).</p>
     #[serde(rename = "Scte35Esam")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -886,11 +966,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>Optional. When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html.</p>
+    /// <p>Optional. When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html.</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<String>,
-    /// <p>Required. The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html.</p>
+    /// <p>Required. The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html.</p>
     #[serde(rename = "Role")]
     pub role: String,
     /// <p>JobSettings contains all the transcode settings for a job.</p>
@@ -904,11 +984,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "StatusUpdateInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_update_interval: Option<String>,
-    /// <p>Optional. The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
+    /// <p>Optional. The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.  Use standard AWS tags on your job for automatic integration with AWS services and for custom integrations and workflows.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Optional. User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs.</p>
+    /// <p>Optional. User-defined metadata that you want to associate with an MediaConvert job. You specify metadata in key/value pairs.  Use only for existing integrations or workflows that rely on job metadata tags. Otherwise, we recommend that you use standard AWS tags.</p>
     #[serde(rename = "UserMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_metadata: Option<::std::collections::HashMap<String, String>>,
@@ -917,7 +997,7 @@ pub struct CreateJobRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
-    /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job: Option<Job>,
@@ -1105,6 +1185,10 @@ pub struct DashIsoGroupSettings {
     #[serde(rename = "MinBufferTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_buffer_time: Option<i64>,
+    /// <p>Keep this setting at the default value of 0, unless you are troubleshooting a problem with how devices play back the end of your video asset. If you know that player devices are hanging on the final segment of your video because the length of your final segment is too short, use this setting to specify a minimum final segment length, in seconds. Choose a value that is greater than or equal to 1 and less than your segment length. When you specify a value for this setting, the encoder will combine any final segment that is shorter than the length that you specify with the previous segment. For example, your segment length is 3 seconds and your final segment is .5 seconds without a minimum final segment length; when you set the minimum final segment length to 1, your final segment is 3.5 seconds.</p>
+    #[serde(rename = "MinFinalSegmentLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_final_segment_length: Option<f64>,
     /// <p>Specify whether your DASH profile is on-demand or main. When you choose Main profile (MAIN<em>PROFILE), the service signals  urn:mpeg:dash:profile:isoff-main:2011 in your .mpd DASH manifest. When you choose On-demand (ON</em>DEMAND<em>PROFILE), the service signals urn:mpeg:dash:profile:isoff-on-demand:2011 in your .mpd. When you choose On-demand, you must also set the output group setting Segment control (SegmentControl) to Single file (SINGLE</em>FILE).</p>
     #[serde(rename = "MpdProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1709,7 +1793,7 @@ pub struct GetJobRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
-    /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job: Option<Job>,
@@ -1786,7 +1870,7 @@ pub struct H264QvbrSettings {
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value H_264.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264Settings {
-    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    /// <p>Keep the default value, Auto (AUTO), for this setting to have MediaConvert automatically apply the best types of quantization for your video content. When you want to apply your quantization settings manually, you must set H264AdaptiveQuantization to a value other than Auto (AUTO). Use this setting to specify the strength of any adaptive quantization filters that you enable. If you don&#39;t want MediaConvert to do any adaptive quantization in this transcode, set Adaptive quantization (H264AdaptiveQuantization) to Off (OFF). Related settings: The value that you choose here applies to the following settings: H264FlickerAdaptiveQuantization, H264SpatialAdaptiveQuantization, and H264TemporalAdaptiveQuantization.</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
@@ -1810,11 +1894,11 @@ pub struct H264Settings {
     #[serde(rename = "EntropyEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entropy_encoding: Option<String>,
-    /// <p>Choosing FORCE_FIELD disables PAFF encoding for interlaced outputs.</p>
+    /// <p>Keep the default value, PAFF, to have MediaConvert use PAFF encoding for interlaced outputs. Choose Force field (FORCE_FIELD) to disable PAFF encoding and create separate interlaced fields.</p>
     #[serde(rename = "FieldEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_encoding: Option<String>,
-    /// <p>Adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
+    /// <p>Only use this setting when you change the default value, AUTO, for the setting H264AdaptiveQuantization. When you keep all defaults, excluding H264AdaptiveQuantization and all other adaptive quantization from your JSON job specification, MediaConvert automatically applies the best types of quantization for your video content. When you set H264AdaptiveQuantization to a value other than AUTO, the default value for H264FlickerAdaptiveQuantization is Disabled (DISABLED). Change this value to Enabled (ENABLED) to reduce I-frame pop. I-frame pop appears as a visual flicker that can arise when the encoder saves bits by copying some macroblocks many times from frame to frame, and then refreshes them at the I-frame. When you enable this setting, the encoder updates these macroblocks slightly more often to smooth out the flicker. To manually enable or disable H264FlickerAdaptiveQuantization, you must set Adaptive quantization (H264AdaptiveQuantization) to a value other than AUTO.</p>
     #[serde(rename = "FlickerAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flicker_adaptive_quantization: Option<String>,
@@ -1822,7 +1906,7 @@ pub struct H264Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -1830,7 +1914,7 @@ pub struct H264Settings {
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -1858,9 +1942,7 @@ pub struct H264Settings {
     #[serde(rename = "HrdBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hrd_buffer_size: Option<i64>,
-    /// <p>Use Interlace mode (InterlaceMode) to choose the scan line type for the output. * Top Field First (TOP<em>FIELD) and Bottom Field First (BOTTOM</em>FIELD) produce interlaced output with the entire output having the same field polarity (top or bottom first). * Follow, Default Top (FOLLOW<em>TOP</em>FIELD) and Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) use the same field polarity as the source. Therefore, behavior depends on the input scan type, as follows.
-    /// - If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;.
-    /// - If the source is progressive, the output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose.</p>
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
@@ -1916,15 +1998,15 @@ pub struct H264Settings {
     #[serde(rename = "Slices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slices: Option<i64>,
-    /// <p>Enables Slow PAL rate conversion. 23.976fps and 24fps input is relabeled as 25fps, and audio is sped up correspondingly.</p>
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_pal: Option<String>,
-    /// <p>Softness. Selects quantizer matrix, larger values reduce high-frequency content in the encoded image.</p>
+    /// <p>Ignore this setting unless you need to comply with a specification that requires a specific value. If you don&#39;t have a specification requirement, we recommend that you adjust the softness of your output by using a lower value for the setting Sharpness (sharpness) or by enabling a noise reducer filter (noiseReducerFilter). The Softness (softness) setting specifies the quantization matrices that the encoder uses. Keep the default value, 0, for flat quantization. Choose the value 1 or 16 to use the default JVT softening quantization matricies from the H.264 specification. Choose a value from 17 to 128 to use planar interpolation. Increasing values from 17 to 128 result in increasing reduction of high-frequency data. The value 128 results in the softest video.</p>
     #[serde(rename = "Softness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub softness: Option<i64>,
-    /// <p>Adjust quantization within each frame based on spatial variation of content complexity.</p>
+    /// <p>Only use this setting when you change the default value, Auto (AUTO), for the setting H264AdaptiveQuantization. When you keep all defaults, excluding H264AdaptiveQuantization and all other adaptive quantization from your JSON job specification, MediaConvert automatically applies the best types of quantization for your video content. When you set H264AdaptiveQuantization to a value other than AUTO, the default value for H264SpatialAdaptiveQuantization is Enabled (ENABLED). Keep this default value to adjust quantization within each frame based on spatial variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas that can sustain more distortion with no noticeable visual degradation and uses more bits on areas where any small distortion will be noticeable. For example, complex textured blocks are encoded with fewer bits and smooth textured blocks are encoded with more bits. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen with a lot of complex texture, you might choose to set H264SpatialAdaptiveQuantization to Disabled (DISABLED). Related setting: When you enable spatial adaptive quantization, set the value for Adaptive quantization (H264AdaptiveQuantization) depending on your content. For homogeneous content, such as cartoons and video games, set it to Low. For content with a wider variety of textures, set it to High or Higher. To manually enable or disable H264SpatialAdaptiveQuantization, you must set Adaptive quantization (H264AdaptiveQuantization) to a value other than AUTO.</p>
     #[serde(rename = "SpatialAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_adaptive_quantization: Option<String>,
@@ -1932,11 +2014,11 @@ pub struct H264Settings {
     #[serde(rename = "Syntax")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub syntax: Option<String>,
-    /// <p>This field applies only if the Streams &gt; Advanced &gt; Framerate (framerate) field  is set to 29.970. This field works with the Streams &gt; Advanced &gt; Preprocessors &gt; Deinterlacer  field (deinterlace<em>mode) and the Streams &gt; Advanced &gt; Interlaced Mode field (interlace</em>mode)  to identify the scan type for the output: Progressive, Interlaced, Hard Telecine or Soft Telecine. - Hard: produces 29.97i output from 23.976 input. - Soft: produces 23.976; the player converts this output to 29.97i.</p>
+    /// <p>When you do frame rate conversion from 23.976 frames per second (fps) to 29.97 fps, and your output scan type is interlaced, you can optionally enable hard or soft telecine to create a smoother picture. Hard telecine (HARD) produces a 29.97i output. Soft telecine (SOFT) produces an output with a 23.976 output that signals to the video player device to do the conversion during play back. When you keep the default value, None (NONE), MediaConvert does a standard frame rate conversion to 29.97 without doing anything with the field polarity to create a smoother picture.</p>
     #[serde(rename = "Telecine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub telecine: Option<String>,
-    /// <p>Adjust quantization within each frame based on temporal variation of content complexity.</p>
+    /// <p>Only use this setting when you change the default value, AUTO, for the setting H264AdaptiveQuantization. When you keep all defaults, excluding H264AdaptiveQuantization and all other adaptive quantization from your JSON job specification, MediaConvert automatically applies the best types of quantization for your video content. When you set H264AdaptiveQuantization to a value other than AUTO, the default value for H264TemporalAdaptiveQuantization is Enabled (ENABLED). Keep this default value to adjust quantization within each frame based on temporal variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas of the frame that aren&#39;t moving and uses more bits on complex objects with sharp edges that move a lot. For example, this feature improves the readability of text tickers on newscasts and scoreboards on sports matches. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen that doesn&#39;t have moving objects with sharp edges, such as sports athletes&#39; faces, you might choose to set H264TemporalAdaptiveQuantization to Disabled (DISABLED). Related setting: When you enable temporal quantization, adjust the strength of the filter with the setting Adaptive quantization (adaptiveQuantization). To manually enable or disable H264TemporalAdaptiveQuantization, you must set Adaptive quantization (H264AdaptiveQuantization) to a value other than AUTO.</p>
     #[serde(rename = "TemporalAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporal_adaptive_quantization: Option<String>,
@@ -1966,7 +2048,7 @@ pub struct H265QvbrSettings {
 /// <p>Settings for H265 codec</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H265Settings {
-    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    /// <p>Specify the strength of any adaptive quantization filters that you enable. The value that you choose here applies to the following settings: Flicker adaptive quantization (flickerAdaptiveQuantization), Spatial adaptive quantization (spatialAdaptiveQuantization), and Temporal adaptive quantization (temporalAdaptiveQuantization).</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
@@ -1990,7 +2072,7 @@ pub struct H265Settings {
     #[serde(rename = "DynamicSubGop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_sub_gop: Option<String>,
-    /// <p>Adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
+    /// <p>Enable this setting to have the encoder reduce I-frame pop. I-frame pop appears as a visual flicker that can arise when the encoder saves bits by copying some macroblocks many times from frame to frame, and then refreshes them at the I-frame. When you enable this setting, the encoder updates these macroblocks slightly more often to smooth out the flicker. This setting is disabled by default. Related setting: In addition to enabling this setting, you must also set adaptiveQuantization to a value other than Off (OFF).</p>
     #[serde(rename = "FlickerAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flicker_adaptive_quantization: Option<String>,
@@ -1998,15 +2080,15 @@ pub struct H265Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Frame rate denominator.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -2034,7 +2116,7 @@ pub struct H265Settings {
     #[serde(rename = "HrdBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hrd_buffer_size: Option<i64>,
-    /// <p>Choose the scan line type for the output. Choose Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Choose Top Field First (TOP<em>FIELD) or Bottom Field First (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Choose Follow, Default Top (FOLLOW<em>TOP</em>FIELD) or Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) to create an interlaced output with the same field polarity as the source. If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;. If the source is progressive, your output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose. If you don&#39;t choose a value, the service will default to Progressive (PROGRESSIVE).</p>
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
@@ -2090,11 +2172,11 @@ pub struct H265Settings {
     #[serde(rename = "Slices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slices: Option<i64>,
-    /// <p>Enables Slow PAL rate conversion. 23.976fps and 24fps input is relabeled as 25fps, and audio is sped up correspondingly.</p>
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_pal: Option<String>,
-    /// <p>Adjust quantization within each frame based on spatial variation of content complexity.</p>
+    /// <p>Keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on spatial variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas that can sustain more distortion with no noticeable visual degradation and uses more bits on areas where any small distortion will be noticeable. For example, complex textured blocks are encoded with fewer bits and smooth textured blocks are encoded with more bits. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen with a lot of complex texture, you might choose to disable this feature. Related setting: When you enable spatial adaptive quantization, set the value for Adaptive quantization (adaptiveQuantization) depending on your content. For homogeneous content, such as cartoons and video games, set it to Low. For content with a wider variety of textures, set it to High or Higher.</p>
     #[serde(rename = "SpatialAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_adaptive_quantization: Option<String>,
@@ -2102,7 +2184,7 @@ pub struct H265Settings {
     #[serde(rename = "Telecine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub telecine: Option<String>,
-    /// <p>Adjust quantization within each frame based on temporal variation of content complexity.</p>
+    /// <p>Keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on temporal variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas of the frame that aren&#39;t moving and uses more bits on complex objects with sharp edges that move a lot. For example, this feature improves the readability of text tickers on newscasts and scoreboards on sports matches. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen that doesn&#39;t have moving objects with sharp edges, such as sports athletes&#39; faces, you might choose to disable this feature. Related setting: When you enable temporal quantization, adjust the strength of the filter with the setting Adaptive quantization (adaptiveQuantization).</p>
     #[serde(rename = "TemporalAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporal_adaptive_quantization: Option<String>,
@@ -2255,6 +2337,10 @@ pub struct HlsGroupSettings {
     #[serde(rename = "AdditionalManifests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_manifests: Option<Vec<HlsAdditionalManifest>>,
+    /// <p>Ignore this setting unless you are using FairPlay DRM with Verimatrix and you encounter playback issues. Keep the default value, Include (INCLUDE), to output audio-only headers. Choose Exclude (EXCLUDE) to remove the audio-only headers from your audio segments.</p>
+    #[serde(rename = "AudioOnlyHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_only_header: Option<String>,
     /// <p>A partial URI prefix that will be prepended to each output in the media .m3u8 file. Can be used if base manifest is delivered from a different URL than the main .m3u8 file.</p>
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2267,7 +2353,7 @@ pub struct HlsGroupSettings {
     #[serde(rename = "CaptionLanguageSetting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_language_setting: Option<String>,
-    /// <p>When set to ENABLED, sets #EXT-X-ALLOW-CACHE:no tag, which prevents client from saving media segments for later replay.</p>
+    /// <p>Disable this setting only when your workflow requires the #EXT-X-ALLOW-CACHE:no tag. Otherwise, keep the default value Enabled (ENABLED) and control caching in your video distribution set up. For example, use the Cache-Control http header.</p>
     #[serde(rename = "ClientCache")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_cache: Option<String>,
@@ -2461,7 +2547,7 @@ pub struct Input {
     #[serde(rename = "FileInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_input: Option<String>,
-    /// <p>Use Filter enable (InputFilterEnable) to specify how the transcoding service applies the denoise and deblock filters. You must also enable the filters separately, with Denoise (InputDenoiseFilter) and Deblock (InputDeblockFilter). * Auto - The transcoding service determines whether to apply filtering, depending on input type and quality. * Disable - The input is not filtered. This is true even if you use the API to enable them in (InputDeblockFilter) and (InputDeblockFilter). * Force - The in put is filtered regardless of input type.</p>
+    /// <p>Specify how the transcoding service applies the denoise and deblock filters. You must also enable the filters separately, with Denoise (InputDenoiseFilter) and Deblock (InputDeblockFilter). * Auto - The transcoding service determines whether to apply filtering, depending on input type and quality. * Disable - The input is not filtered. This is true even if you use the API to enable them in (InputDeblockFilter) and (InputDeblockFilter). * Force - The input is filtered regardless of input type.</p>
     #[serde(rename = "FilterEnable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_enable: Option<String>,
@@ -2477,6 +2563,10 @@ pub struct Input {
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_clippings: Option<Vec<InputClipping>>,
+    /// <p>When you have a progressive segmented frame (PsF) input, use this setting to flag the input as PsF. MediaConvert doesn&#39;t automatically detect PsF. Therefore, flagging your input as PsF results in better preservation of video quality when you do deinterlacing and frame rate conversion. If you don&#39;t specify, the default value is Auto (AUTO). Auto is the correct setting for all inputs that are not PsF. Don&#39;t set this value to PsF when your input is interlaced. Doing so creates horizontal interlacing artifacts.</p>
+    #[serde(rename = "InputScanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_scan_type: Option<String>,
     /// <p>Use Selection placement (position) to define the video area in your output frame. The area outside of the rectangle that you specify here is black. If you specify a value here, it will override any value that you specify in the output setting Selection placement (position). If you specify a value here, this will override any AFD values in your input, even if you set Respond to AFD (RespondToAfd) to Respond (RESPOND). If you specify a value here, this will ignore anything that you specify for the setting Scaling Behavior (scalingBehavior).</p>
     #[serde(rename = "Position")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2568,7 +2658,7 @@ pub struct InputTemplate {
     #[serde(rename = "DenoiseFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub denoise_filter: Option<String>,
-    /// <p>Use Filter enable (InputFilterEnable) to specify how the transcoding service applies the denoise and deblock filters. You must also enable the filters separately, with Denoise (InputDenoiseFilter) and Deblock (InputDeblockFilter). * Auto - The transcoding service determines whether to apply filtering, depending on input type and quality. * Disable - The input is not filtered. This is true even if you use the API to enable them in (InputDeblockFilter) and (InputDeblockFilter). * Force - The in put is filtered regardless of input type.</p>
+    /// <p>Specify how the transcoding service applies the denoise and deblock filters. You must also enable the filters separately, with Denoise (InputDenoiseFilter) and Deblock (InputDeblockFilter). * Auto - The transcoding service determines whether to apply filtering, depending on input type and quality. * Disable - The input is not filtered. This is true even if you use the API to enable them in (InputDeblockFilter) and (InputDeblockFilter). * Force - The input is filtered regardless of input type.</p>
     #[serde(rename = "FilterEnable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_enable: Option<String>,
@@ -2584,6 +2674,10 @@ pub struct InputTemplate {
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_clippings: Option<Vec<InputClipping>>,
+    /// <p>When you have a progressive segmented frame (PsF) input, use this setting to flag the input as PsF. MediaConvert doesn&#39;t automatically detect PsF. Therefore, flagging your input as PsF results in better preservation of video quality when you do deinterlacing and frame rate conversion. If you don&#39;t specify, the default value is Auto (AUTO). Auto is the correct setting for all inputs that are not PsF. Don&#39;t set this value to PsF when your input is interlaced. Doing so creates horizontal interlacing artifacts.</p>
+    #[serde(rename = "InputScanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_scan_type: Option<String>,
     /// <p>Use Selection placement (position) to define the video area in your output frame. The area outside of the rectangle that you specify here is black. If you specify a value here, it will override any value that you specify in the output setting Selection placement (position). If you specify a value here, this will override any AFD values in your input, even if you set Respond to AFD (RespondToAfd) to Respond (RESPOND). If you specify a value here, this will ignore anything that you specify for the setting Scaling Behavior (scalingBehavior).</p>
     #[serde(rename = "Position")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2659,7 +2753,7 @@ pub struct InsertableImage {
     pub width: Option<i64>,
 }
 
-/// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+/// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
@@ -2723,7 +2817,7 @@ pub struct Job {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>When you create a job, you can specify a queue to send it to. If you don&#39;t specify, the job will go to the default queue. For more about queues, see the User Guide topic at https://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<String>,
@@ -2735,7 +2829,7 @@ pub struct Job {
     #[serde(rename = "RetryCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_count: Option<i64>,
-    /// <p>The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html</p>
+    /// <p>The IAM role you use for creating this job. For details about permissions, see the User Guide topic at the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html</p>
     #[serde(rename = "Role")]
     pub role: String,
     /// <p>JobSettings contains all the transcode settings for a job.</p>
@@ -2804,6 +2898,10 @@ pub struct JobSettings {
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
+    /// <p>Ignore these settings unless you are using Nielsen non-linear watermarking. Specify the values that  MediaConvert uses to generate and place Nielsen watermarks in your output audio. In addition to  specifying these values, you also need to set up your cloud TIC server. These settings apply to  every output in your job. The MediaConvert implementation is currently with the following Nielsen versions: Nielsen Watermark SDK Version 5.2.1 Nielsen NLM Watermark Engine Version 1.2.7 Nielsen Watermark Authenticator [SID_TIC] Version [5.0.0]</p>
+    #[serde(rename = "NielsenNonLinearWatermark")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_non_linear_watermark: Option<NielsenNonLinearWatermarkSettings>,
     /// <p>(OutputGroups) contains one group of settings for each set of outputs that share a common package type. All unpackaged files (MPEG-4, MPEG-2 TS, Quicktime, MXF, and no container) are grouped in a single output group as well. Required in (OutputGroups) is a group of settings that apply to the whole group. This required object depends on the value you set for (Type) under (OutputGroups)&gt;(OutputGroupSettings). Type, settings object pairs are as follows. * FILE<em>GROUP</em>SETTINGS, FileGroupSettings * HLS<em>GROUP</em>SETTINGS, HlsGroupSettings * DASH<em>ISO</em>GROUP<em>SETTINGS, DashIsoGroupSettings * MS</em>SMOOTH<em>GROUP</em>SETTINGS, MsSmoothGroupSettings * CMAF<em>GROUP</em>SETTINGS, CmafGroupSettings</p>
     #[serde(rename = "OutputGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2812,7 +2910,7 @@ pub struct JobSettings {
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_config: Option<TimecodeConfig>,
-    /// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in your job. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
+    /// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in any HLS outputs. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
     #[serde(rename = "TimedMetadataInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timed_metadata_insertion: Option<TimedMetadataInsertion>,
@@ -2901,6 +2999,10 @@ pub struct JobTemplateSettings {
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
+    /// <p>Ignore these settings unless you are using Nielsen non-linear watermarking. Specify the values that  MediaConvert uses to generate and place Nielsen watermarks in your output audio. In addition to  specifying these values, you also need to set up your cloud TIC server. These settings apply to  every output in your job. The MediaConvert implementation is currently with the following Nielsen versions: Nielsen Watermark SDK Version 5.2.1 Nielsen NLM Watermark Engine Version 1.2.7 Nielsen Watermark Authenticator [SID_TIC] Version [5.0.0]</p>
+    #[serde(rename = "NielsenNonLinearWatermark")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nielsen_non_linear_watermark: Option<NielsenNonLinearWatermarkSettings>,
     /// <p>(OutputGroups) contains one group of settings for each set of outputs that share a common package type. All unpackaged files (MPEG-4, MPEG-2 TS, Quicktime, MXF, and no container) are grouped in a single output group as well. Required in (OutputGroups) is a group of settings that apply to the whole group. This required object depends on the value you set for (Type) under (OutputGroups)&gt;(OutputGroupSettings). Type, settings object pairs are as follows. * FILE<em>GROUP</em>SETTINGS, FileGroupSettings * HLS<em>GROUP</em>SETTINGS, HlsGroupSettings * DASH<em>ISO</em>GROUP<em>SETTINGS, DashIsoGroupSettings * MS</em>SMOOTH<em>GROUP</em>SETTINGS, MsSmoothGroupSettings * CMAF<em>GROUP</em>SETTINGS, CmafGroupSettings</p>
     #[serde(rename = "OutputGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2909,7 +3011,7 @@ pub struct JobTemplateSettings {
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_config: Option<TimecodeConfig>,
-    /// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in your job. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
+    /// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in any HLS outputs. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
     #[serde(rename = "TimedMetadataInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timed_metadata_insertion: Option<TimedMetadataInsertion>,
@@ -3096,6 +3198,10 @@ pub struct M2tsSettings {
     #[serde(rename = "AudioBufferModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_buffer_model: Option<String>,
+    /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
+    #[serde(rename = "AudioDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_duration: Option<String>,
     /// <p>The number of audio frames to insert for each PES packet.</p>
     #[serde(rename = "AudioFramesPerPes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3241,6 +3347,10 @@ pub struct M2tsSettings {
 /// <p>Settings for TS segments in HLS</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct M3u8Settings {
+    /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
+    #[serde(rename = "AudioDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_duration: Option<String>,
     /// <p>The number of audio frames to insert for each PES packet.</p>
     #[serde(rename = "AudioFramesPerPes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3377,7 +3487,7 @@ pub struct MovSettings {
     #[serde(rename = "Mpeg2FourCCControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mpeg_2_four_cc_control: Option<String>,
-    /// <p>If set to OMNEON, inserts Omneon-compatible padding</p>
+    /// <p>To make this output compatible with Omenon, keep the default value, OMNEON. Unless you need Omneon compatibility, set this value to NONE. When you keep the default value, OMNEON, MediaConvert increases the length of the edit list atom. This might cause file rejections when a recipient of the output file doesn&#39;t expct this extra padding.</p>
     #[serde(rename = "PaddingControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub padding_control: Option<String>,
@@ -3432,6 +3542,10 @@ pub struct Mp3Settings {
 /// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mp4Settings {
+    /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
+    #[serde(rename = "AudioDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_duration: Option<String>,
     /// <p>When enabled, file composition times will start at zero, composition times in the &#39;ctts&#39; (composition time to sample) box for B-frames will be negative, and a &#39;cslg&#39; (composition shift least greatest) box will be included per 14496-1 amendment 1. This improves compatibility with Apple players and tools.</p>
     #[serde(rename = "CslgAtom")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3457,6 +3571,14 @@ pub struct Mp4Settings {
 /// <p>Settings for MP4 segments in DASH</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MpdSettings {
+    /// <p>Optional. Choose Include (INCLUDE) to have MediaConvert mark up your DASH manifest with <Accessibility> elements for embedded 608 captions. This markup isn&#39;t generally required, but some video players require it to discover and play embedded 608 captions. Keep the default value, Exclude (EXCLUDE), to leave these elements out. When you enable this setting, this is the markup that MediaConvert includes in your manifest: <Accessibility schemeIdUri="urn:scte:dash:cc:cea-608:2015" value="CC1=eng"/></p>
+    #[serde(rename = "AccessibilityCaptionHints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accessibility_caption_hints: Option<String>,
+    /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
+    #[serde(rename = "AudioDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_duration: Option<String>,
     /// <p>Use this setting only in DASH output groups that include sidecar TTML or IMSC captions.  You specify sidecar captions in a separate output from your audio and video. Choose Raw (RAW) for captions in a single XML file in a raw container. Choose Fragmented MPEG-4 (FRAGMENTED_MP4) for captions in XML format contained within fragmented MP4 files. This set of fragmented MP4 files is separate from your video and audio fragmented MP4 files.</p>
     #[serde(rename = "CaptionContainerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3474,7 +3596,7 @@ pub struct MpdSettings {
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value MPEG2.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mpeg2Settings {
-    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    /// <p>Specify the strength of any adaptive quantization filters that you enable. The value that you choose here applies to the following settings: Spatial adaptive quantization (spatialAdaptiveQuantization), and Temporal adaptive quantization (temporalAdaptiveQuantization).</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
@@ -3498,15 +3620,15 @@ pub struct Mpeg2Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Frame rate denominator.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -3530,9 +3652,7 @@ pub struct Mpeg2Settings {
     #[serde(rename = "HrdBufferSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hrd_buffer_size: Option<i64>,
-    /// <p>Use Interlace mode (InterlaceMode) to choose the scan line type for the output. * Top Field First (TOP<em>FIELD) and Bottom Field First (BOTTOM</em>FIELD) produce interlaced output with the entire output having the same field polarity (top or bottom first). * Follow, Default Top (FOLLOW<em>TOP</em>FIELD) and Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) use the same field polarity as the source. Therefore, behavior depends on the input scan type.
-    /// - If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;.
-    /// - If the source is progressive, the output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose.</p>
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
@@ -3576,27 +3696,27 @@ pub struct Mpeg2Settings {
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scene_change_detect: Option<String>,
-    /// <p>Enables Slow PAL rate conversion. 23.976fps and 24fps input is relabeled as 25fps, and audio is sped up correspondingly.</p>
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_pal: Option<String>,
-    /// <p>Softness. Selects quantizer matrix, larger values reduce high-frequency content in the encoded image.</p>
+    /// <p>Ignore this setting unless you need to comply with a specification that requires a specific value. If you don&#39;t have a specification requirement, we recommend that you adjust the softness of your output by using a lower value for the setting Sharpness (sharpness) or by enabling a noise reducer filter (noiseReducerFilter). The Softness (softness) setting specifies the quantization matrices that the encoder uses. Keep the default value, 0, to use the AWS Elemental default matrices. Choose a value from 17 to 128 to use planar interpolation. Increasing values from 17 to 128 result in increasing reduction of high-frequency data. The value 128 results in the softest video.</p>
     #[serde(rename = "Softness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub softness: Option<i64>,
-    /// <p>Adjust quantization within each frame based on spatial variation of content complexity.</p>
+    /// <p>Keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on spatial variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas that can sustain more distortion with no noticeable visual degradation and uses more bits on areas where any small distortion will be noticeable. For example, complex textured blocks are encoded with fewer bits and smooth textured blocks are encoded with more bits. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen with a lot of complex texture, you might choose to disable this feature. Related setting: When you enable spatial adaptive quantization, set the value for Adaptive quantization (adaptiveQuantization) depending on your content. For homogeneous content, such as cartoons and video games, set it to Low. For content with a wider variety of textures, set it to High or Higher.</p>
     #[serde(rename = "SpatialAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_adaptive_quantization: Option<String>,
-    /// <p>Produces a Type D-10 compatible bitstream (SMPTE 356M-2001).</p>
+    /// <p>Specify whether this output&#39;s video uses the D10 syntax. Keep the default value to  not use the syntax. Related settings: When you choose D10 (D<em>10) for your MXF  profile (profile), you must also set this value to to D10 (D</em>10).</p>
     #[serde(rename = "Syntax")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub syntax: Option<String>,
-    /// <p>Only use Telecine (Mpeg2Telecine) when you set Framerate (Framerate) to 29.970. Set Telecine (Mpeg2Telecine) to Hard (hard) to produce a 29.97i output from a 23.976 input. Set it to Soft (soft) to produce 23.976 output and leave converstion to the player.</p>
+    /// <p>When you do frame rate conversion from 23.976 frames per second (fps) to 29.97 fps, and your output scan type is interlaced, you can optionally enable hard or soft telecine to create a smoother picture. Hard telecine (HARD) produces a 29.97i output. Soft telecine (SOFT) produces an output with a 23.976 output that signals to the video player device to do the conversion during play back. When you keep the default value, None (NONE), MediaConvert does a standard frame rate conversion to 29.97 without doing anything with the field polarity to create a smoother picture.</p>
     #[serde(rename = "Telecine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub telecine: Option<String>,
-    /// <p>Adjust quantization within each frame based on temporal variation of content complexity.</p>
+    /// <p>Keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on temporal variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas of the frame that aren&#39;t moving and uses more bits on complex objects with sharp edges that move a lot. For example, this feature improves the readability of text tickers on newscasts and scoreboards on sports matches. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen that doesn&#39;t have moving objects with sharp edges, such as sports athletes&#39; faces, you might choose to disable this feature. Related setting: When you enable temporal quantization, adjust the strength of the filter with the setting Adaptive quantization (adaptiveQuantization).</p>
     #[serde(rename = "TemporalAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporal_adaptive_quantization: Option<String>,
@@ -3664,6 +3784,10 @@ pub struct MxfSettings {
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub afd_signaling: Option<String>,
+    /// <p>Specify the MXF profile, also called shim, for this output. When you choose Auto, MediaConvert chooses a profile based on the video codec and resolution. For a list of codecs supported with each MXF profile, see https://docs.aws.amazon.com/mediaconvert/latest/ug/codecs-supported-with-each-mxf-profile.html. For more information about the automatic selection behavior, see https://docs.aws.amazon.com/mediaconvert/latest/ug/default-automatic-selection-of-mxf-profiles.html.</p>
+    #[serde(rename = "Profile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile: Option<String>,
 }
 
 /// <p>For forensic video watermarking, MediaConvert supports Nagra NexGuard File Marker watermarking. MediaConvert supports both PreRelease Content (NGPR/G2) and OTT Streaming workflows.</p>
@@ -3698,6 +3822,55 @@ pub struct NielsenConfiguration {
     #[serde(rename = "DistributorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor_id: Option<String>,
+}
+
+/// <p>Ignore these settings unless you are using Nielsen non-linear watermarking. Specify the values that  MediaConvert uses to generate and place Nielsen watermarks in your output audio. In addition to  specifying these values, you also need to set up your cloud TIC server. These settings apply to  every output in your job. The MediaConvert implementation is currently with the following Nielsen versions: Nielsen Watermark SDK Version 5.2.1 Nielsen NLM Watermark Engine Version 1.2.7 Nielsen Watermark Authenticator [SID_TIC] Version [5.0.0]</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct NielsenNonLinearWatermarkSettings {
+    /// <p>Choose the type of Nielsen watermarks that you want in your outputs. When you choose NAES 2 and NW (NAES2<em>AND</em>NW), you must provide a value for the setting SID (sourceId). When you choose CBET (CBET), you must provide a value for the setting CSID (cbetSourceId). When you choose NAES 2, NW, and CBET (NAES2<em>AND</em>NW<em>AND</em>CBET), you must provide values for both of these settings.</p>
+    #[serde(rename = "ActiveWatermarkProcess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_watermark_process: Option<String>,
+    /// <p>Optional. Use this setting when you want the service to include an ADI file in the Nielsen  metadata .zip file. To provide an ADI file, store it in Amazon S3 and provide a URL to it  here. The URL should be in the following format: S3://bucket/path/ADI-file. For more information about the metadata .zip file, see the setting Metadata destination (metadataDestination).</p>
+    #[serde(rename = "AdiFilename")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adi_filename: Option<String>,
+    /// <p>Use the asset ID that you provide to Nielsen to uniquely identify this asset. Required for all Nielsen non-linear watermarking.</p>
+    #[serde(rename = "AssetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub asset_id: Option<String>,
+    /// <p>Use the asset name that you provide to Nielsen for this asset. Required for all Nielsen non-linear watermarking.</p>
+    #[serde(rename = "AssetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub asset_name: Option<String>,
+    /// <p>Use the CSID that Nielsen provides to you. This CBET source ID should be unique to your Nielsen account but common to all of your output assets that have CBET watermarking. Required when you choose a value for the setting Watermark types (ActiveWatermarkProcess) that includes CBET.</p>
+    #[serde(rename = "CbetSourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cbet_source_id: Option<String>,
+    /// <p>Optional. If this asset uses an episode ID with Nielsen, provide it here.</p>
+    #[serde(rename = "EpisodeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub episode_id: Option<String>,
+    /// <p>Specify the Amazon S3 location where you want MediaConvert to save your Nielsen non-linear metadata .zip file. This Amazon S3 bucket must be in the same Region as the one where you do your MediaConvert transcoding. If you want to include an ADI file in this .zip file, use the setting ADI file (adiFilename) to specify it. MediaConvert delivers the Nielsen metadata .zip files only to your metadata destination Amazon S3 bucket. It doesn&#39;t deliver the .zip files to Nielsen. You are responsible for delivering the metadata .zip files to Nielsen.</p>
+    #[serde(rename = "MetadataDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_destination: Option<String>,
+    /// <p>Use the SID that Nielsen provides to you. This source ID should be unique to your Nielsen account but common to all of your output assets. Required for all Nielsen non-linear watermarking. This ID should be unique to your Nielsen account but common to all of your output assets. Required for all Nielsen non-linear watermarking.</p>
+    #[serde(rename = "SourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_id: Option<i64>,
+    /// <p>Required. Specify whether your source content already contains Nielsen non-linear watermarks. When you set this value to Watermarked (WATERMARKED), the service fails the job. Nielsen requires that you add non-linear watermarking to only clean content that doesn&#39;t already  have non-linear Nielsen watermarks.</p>
+    #[serde(rename = "SourceWatermarkStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_watermark_status: Option<String>,
+    /// <p>Specify the endpoint for the TIC server that you have deployed and configured in the AWS Cloud. Required for all Nielsen non-linear watermarking. MediaConvert can&#39;t connect directly to a TIC server. Instead, you must use API Gateway to provide a RESTful interface between MediaConvert and a TIC server that you deploy in your AWS account. For more information on deploying a TIC server in your AWS account and the required API Gateway, contact Nielsen support.</p>
+    #[serde(rename = "TicServerUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tic_server_url: Option<String>,
+    /// <p>To create assets that have the same TIC values in each audio track, keep the default value Share TICs (SAME<em>TICS</em>PER<em>TRACK). To create assets that have unique TIC values for each audio track, choose Use unique TICs (RESERVE</em>UNIQUE<em>TICS</em>PER_TRACK).</p>
+    #[serde(rename = "UniqueTicPerAudioTrack")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unique_tic_per_audio_track: Option<String>,
 }
 
 /// <p>Enable the Noise reducer (NoiseReducer) feature to remove noise from your video output if necessary. Enable or disable this feature for each output individually. This setting is disabled by default. When you enable Noise reducer (NoiseReducer), you must also select a value for Noise reducer filter (NoiseReducerFilter).</p>
@@ -3754,7 +3927,7 @@ pub struct NoiseReducerTemporalFilterSettings {
     #[serde(rename = "AggressiveMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggressive_mode: Option<i64>,
-    /// <p>Optional. When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL), you can optionally use this setting to apply additional sharpening. The default behavior, Auto (AUTO) allows the transcoder to determine whether to apply filtering, depending on input type and quality.</p>
+    /// <p>Optional. When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL), you can use this setting to apply sharpening. The default behavior, Auto (AUTO), allows the transcoder to determine whether to apply filtering, depending on input type and quality. When you set Noise reducer to Temporal, your output bandwidth is reduced. When Post temporal sharpening is also enabled, that bandwidth reduction is smaller.</p>
     #[serde(rename = "PostTemporalSharpening")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub post_temporal_sharpening: Option<String>,
@@ -3848,6 +4021,10 @@ pub struct OutputDetail {
 /// <p>Group of outputs</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputGroup {
+    /// <p>Use automated encoding to have MediaConvert choose your encoding settings for you, based on characteristics of your input video.</p>
+    #[serde(rename = "AutomatedEncodingSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automated_encoding_settings: Option<AutomatedEncodingSettings>,
     /// <p>Use Custom Group Name (CustomName) to specify a name for the output group. This value is displayed on the console and can make your job settings JSON more human-readable. It does not affect your outputs. Use up to twelve characters that are either letters, numbers, spaces, or underscores.</p>
     #[serde(rename = "CustomName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3991,21 +4168,19 @@ pub struct ProresSettings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Frame rate denominator.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
-    /// <p>Use Interlace mode (InterlaceMode) to choose the scan line type for the output. * Top Field First (TOP<em>FIELD) and Bottom Field First (BOTTOM</em>FIELD) produce interlaced output with the entire output having the same field polarity (top or bottom first). * Follow, Default Top (FOLLOW<em>TOP</em>FIELD) and Follow, Default Bottom (FOLLOW<em>BOTTOM</em>FIELD) use the same field polarity as the source. Therefore, behavior depends on the input scan type.
-    /// - If the source is interlaced, the output will be interlaced with the same polarity as the source (it will follow the source). The output could therefore be a mix of &quot;top field first&quot; and &quot;bottom field first&quot;.
-    /// - If the source is progressive, the output will be interlaced with &quot;top field first&quot; or &quot;bottom field first&quot; polarity, depending on which of the Follow options you chose.</p>
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
@@ -4021,11 +4196,11 @@ pub struct ProresSettings {
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
-    /// <p>Enables Slow PAL rate conversion. 23.976fps and 24fps input is relabeled as 25fps, and audio is sped up correspondingly.</p>
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slow_pal: Option<String>,
-    /// <p>Only use Telecine (ProresTelecine) when you set Framerate (Framerate) to 29.970. Set Telecine (ProresTelecine) to Hard (hard) to produce a 29.97i output from a 23.976 input. Set it to Soft (soft) to produce 23.976 output and leave converstion to the player.</p>
+    /// <p>When you do frame rate conversion from 23.976 frames per second (fps) to 29.97 fps, and your output scan type is interlaced, you can optionally enable hard telecine (HARD) to create a smoother picture. When you keep the default value, None (NONE), MediaConvert does a standard frame rate conversion to 29.97 without doing anything with the field polarity to create a smoother picture.</p>
     #[serde(rename = "Telecine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub telecine: Option<String>,
@@ -4382,7 +4557,7 @@ pub struct TimecodeConfig {
     pub timestamp_offset: Option<String>,
 }
 
-/// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in your job. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
+/// <p>Enable Timed metadata insertion (TimedMetadataInsertion) to include ID3 tags in any HLS outputs. To include timed metadata, you must enable it here, enable it in each output container, and specify tags and timecodes in ID3 insertion (Id3Insertion) objects.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimedMetadataInsertion {
     /// <p>Id3Insertions contains the array of Id3Insertion instances.</p>
@@ -4550,13 +4725,54 @@ pub struct UpdateQueueResponse {
     pub queue: Option<Queue>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VP8, Vp8Settings * VP9, Vp9Settings</p>
+/// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VC3</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Vc3Settings {
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>Optional. Choose the scan line type for this output. If you don&#39;t specify a value, MediaConvert will create a progressive output.</p>
+    #[serde(rename = "InterlaceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interlace_mode: Option<String>,
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output by relabeling the video frames and resampling your audio. Note that enabling this setting will slightly reduce the duration of your video. Related settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
+    #[serde(rename = "SlowPal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slow_pal: Option<String>,
+    /// <p>When you do frame rate conversion from 23.976 frames per second (fps) to 29.97 fps, and your output scan type is interlaced, you can optionally enable hard telecine (HARD) to create a smoother picture. When you keep the default value, None (NONE), MediaConvert does a standard frame rate conversion to 29.97 without doing anything with the field polarity to create a smoother picture.</p>
+    #[serde(rename = "Telecine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub telecine: Option<String>,
+    /// <p>Specify the VC3 class to choose the quality characteristics for this output. VC3 class, together with the settings Framerate (framerateNumerator and framerateDenominator) and Resolution (height and width), determine your output bitrate. For example, say that your video resolution is 1920x1080 and your framerate is 29.97. Then Class 145 (CLASS<em>145) gives you an output with a bitrate of approximately 145 Mbps and Class 220 (CLASS</em>220) gives you and output with a bitrate of approximately 220 Mbps. VC3 class also specifies the color bit depth of your output.</p>
+    #[serde(rename = "Vc3Class")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vc_3_class: Option<String>,
+}
+
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoCodecSettings {
     /// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
     #[serde(rename = "Av1Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub av_1_settings: Option<Av1Settings>,
+    /// <p>Required when you set your output video codec to AVC-Intra. For more information about the AVC-I settings, see the relevant specification. For detailed information about SD and HD in AVC-I, see https://ieeexplore.ieee.org/document/7290936.</p>
+    #[serde(rename = "AvcIntraSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avc_intra_settings: Option<AvcIntraSettings>,
     /// <p>Specifies the video codec. This must be equal to one of the enum values defined by the object  VideoCodec.</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4581,6 +4797,10 @@ pub struct VideoCodecSettings {
     #[serde(rename = "ProresSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prores_settings: Option<ProresSettings>,
+    /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VC3</p>
+    #[serde(rename = "Vc3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vc_3_settings: Option<Vc3Settings>,
     /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VP8.</p>
     #[serde(rename = "Vp8Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4602,7 +4822,7 @@ pub struct VideoDescription {
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VP8, Vp8Settings * VP9, Vp9Settings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
@@ -4764,7 +4984,7 @@ pub struct Vp8Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use Drop duplicate (DUPLICATE_DROP) conversion. When you choose Interpolate (INTERPOLATE) instead, the conversion produces smoother motion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -4821,7 +5041,7 @@ pub struct Vp9Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use Drop duplicate (DUPLICATE_DROP) conversion. When you choose Interpolate (INTERPOLATE) instead, the conversion produces smoother motion.</p>
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,

@@ -13,49 +13,42 @@ license = "MIT"
 name = "rusoto_core"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.45.0"
+version = "0.46.0"
 homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
 
-[badges]
-appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
-azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
-
 [build-dependencies]
-rustc_version = "0.2"
+rustc_version = "0.3"
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.5"
+bytes = "1.0"
 crc32fast = "1.2"
 futures = "0.3"
 http = "0.2"
-hyper = "0.13.1"
-hyper-rustls = { version = "0.20", optional = true }
-hyper-tls = { version = "0.4", optional = true }
+hyper = { version = "0.14", features = ["client", "http1", "http2", "tcp"] }
+hyper-rustls = { version = "0.22", optional = true }
+hyper-tls = { version = "0.5.0", optional = true }
 lazy_static = "1.4"
 log = "0.4"
-md5 = "0.7"
-percent-encoding = "2.1"
-pin-project = "0.4"
-base64 = "0.12"
+base64 = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "0.2", features = ["tcp", "time", "rt-core", "fs"] }
+tokio = { version = "1.0", features = ["time", "io-util"] }
 xml-rs = "0.8"
 flate2 = { version = "1.0", optional = true }
 
 [dependencies.rusoto_credential]
 path = "../credential"
-version = "0.45.0"
+version = "0.46.0"
 
 [dependencies.rusoto_signature]
 path = "../signature"
-version = "0.45.0"
+version = "0.46.0"
 
 [dev-dependencies]
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "1.0", features = ["macros"] }
 env_logger = "0.7"
 rand = "0.7"
 serde_json = "1.0.1"
