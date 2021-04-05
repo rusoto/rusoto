@@ -22,8 +22,8 @@ codegen-units = 2
 debug = false
 
 [dependencies]
-hyper = "0.13.1"
-hyper-proxy = "0.7.0"
+hyper = "0.14.5"
+hyper-proxy = "0.9.1"
 rusoto_credential = { path = "../rusoto/credential" }
 rusoto_core = { path = "../rusoto/core", default-features = false }
 
