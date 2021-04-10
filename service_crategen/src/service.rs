@@ -216,11 +216,11 @@ impl<'b> Service<'b> {
             "rest-json" => {
                 dependencies.insert(
                     "serde".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
+                    cargo::Dependency::Simple("1.0.103".into()),
                 );
                 dependencies.insert(
                     "serde_derive".to_owned(),
-                    cargo::Dependency::Simple("1.0.2".into()),
+                    cargo::Dependency::Simple("1.0.103".into()),
                 );
                 // some rest-json services don't use the `serde_json` crate:
                 if self.needs_serde_json_crate() {
