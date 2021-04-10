@@ -19,8 +19,8 @@ targets = []
 [dependencies]
 async-trait = "0.1"
 bytes = "1.0"
-serde = "1.0.2"
-serde_derive = "1.0.2"
+serde = "1.0.103"
+serde_derive = "1.0.103"
 
 [dependencies.futures]
 version = "0.3"
