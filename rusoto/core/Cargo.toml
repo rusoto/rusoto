@@ -22,7 +22,7 @@ edition = "2018"
 rustc_version = "0.3"
 
 [dependencies]
-async-trait = "0.1"
+async-trait = "0.1.9"
 bytes = "1.0"
 crc32fast = "1.2"
 futures = "0.3"
