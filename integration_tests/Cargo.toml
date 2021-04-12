@@ -653,7 +653,7 @@ path = "../rusoto/services/ram"
 async-trait = "0.1.31"
 env_logger = "0.7"
 bytes = "1.0"
-futures = "0.3"
+futures = { version = "0.3", default-features = false, features = ["std", "async-await"] }
 log = "0.4"
 rand = "0.7"
 time = "0.2"

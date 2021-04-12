@@ -21,7 +21,7 @@ edition = "2018"
 [dependencies]
 async-trait = "0.1"
 chrono = "0.4"
-futures = "0.3"
+futures = { version = "0.3", default-features = false, features = ["std", "async-await"] }
 http = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
