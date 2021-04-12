@@ -131,8 +131,8 @@ impl<'b> Service<'b> {
                 path: None,
                 version: Some("0.3".to_owned()),
                 optional: None,
-                default_features: None,
-                features: None,
+                default_features: Some(false),
+                features: Some(vec!["std".to_owned(), "async-await".to_owned()]),
             },
         );
         dependencies.insert(

@@ -23,7 +23,7 @@ rustc_version = "0.3"
 bytes = "1.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 digest = "0.9.0"
-futures = "0.3"
+futures = { version = "0.3", default-features = false, features = ["std", "async-await"] }
 hmac = "0.10"
 http = "0.2"
 hyper = { version = "0.14", features = ["stream"] }
