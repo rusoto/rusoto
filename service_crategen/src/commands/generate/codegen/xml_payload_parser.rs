@@ -382,7 +382,7 @@ fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> Strin
         ShapeType::Double => "|s| Ok(f64::from_str(&s).unwrap())",
         ShapeType::Float => "|s| Ok(f32::from_str(&s).unwrap())",
         ShapeType::Blob => "|s| Ok(s.into())",
-        ShapeType::Boolean => "|s| Ok(bool::from_str(&s).unwrap())",
+        ShapeType::Boolean => "|s| Ok(bool::from_str(&s.to_lowercase()).unwrap())",
         _ => panic!("Unknown primitive shape type"),
     };
 
