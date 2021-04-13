@@ -638,7 +638,9 @@ struct BooleanObjectTypeDeserializer;
 impl BooleanObjectTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -646,7 +648,9 @@ struct BooleanTypeDeserializer;
 impl BooleanTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]

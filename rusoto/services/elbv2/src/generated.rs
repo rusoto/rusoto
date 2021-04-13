@@ -975,7 +975,9 @@ struct AuthenticateOidcActionUseExistingClientSecretDeserializer;
 impl AuthenticateOidcActionUseExistingClientSecretDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -1660,7 +1662,9 @@ struct DefaultDeserializer;
 impl DefaultDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2828,7 +2832,9 @@ struct HealthCheckEnabledDeserializer;
 impl HealthCheckEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -3082,7 +3088,9 @@ struct IsDefaultDeserializer;
 impl IsDefaultDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>
@@ -6184,7 +6192,9 @@ struct TargetGroupStickinessEnabledDeserializer;
 impl TargetGroupStickinessEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Information about how traffic will be distributed between multiple target groups in a forward rule.</p>

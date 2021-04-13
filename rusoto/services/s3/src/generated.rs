@@ -1001,7 +1001,9 @@ struct BucketKeyEnabledDeserializer;
 impl BucketKeyEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 
@@ -2632,7 +2634,9 @@ struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Information about the delete marker.</p>
@@ -3713,7 +3717,9 @@ struct ExpiredObjectDeleteMarkerDeserializer;
 impl ExpiredObjectDeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 
@@ -6604,7 +6610,9 @@ struct IsEnabledDeserializer;
 impl IsEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 
@@ -6628,7 +6636,9 @@ struct IsLatestDeserializer;
 impl IsLatestDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -6636,7 +6646,9 @@ struct IsPublicDeserializer;
 impl IsPublicDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -6644,7 +6656,9 @@ struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Specifies JSON as object's input serialization format.</p>
@@ -13687,7 +13701,9 @@ struct SettingDeserializer;
 impl SettingDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 

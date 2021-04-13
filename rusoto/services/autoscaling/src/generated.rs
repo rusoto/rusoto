@@ -337,7 +337,9 @@ struct AssociatePublicIpAddressDeserializer;
 impl AssociatePublicIpAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -1187,7 +1189,9 @@ struct BlockDeviceEbsDeleteOnTerminationDeserializer;
 impl BlockDeviceEbsDeleteOnTerminationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -1195,7 +1199,9 @@ struct BlockDeviceEbsEncryptedDeserializer;
 impl BlockDeviceEbsEncryptedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -1386,7 +1392,9 @@ struct CapacityRebalanceEnabledDeserializer;
 impl CapacityRebalanceEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -3115,7 +3123,9 @@ struct DisableScaleInDeserializer;
 impl DisableScaleInDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Describes information used to set up an Amazon EBS volume specified in a block device mapping.</p>
@@ -3223,7 +3233,9 @@ struct EbsOptimizedDeserializer;
 impl EbsOptimizedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -3875,7 +3887,9 @@ struct InstanceProtectedDeserializer;
 impl InstanceProtectedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Describes an instance refresh for an Auto Scaling group. </p>
@@ -5410,7 +5424,9 @@ struct MonitoringEnabledDeserializer;
 impl MonitoringEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
@@ -5418,7 +5434,9 @@ struct NoDeviceDeserializer;
 impl NoDeviceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Describes a notification.</p>
@@ -5821,7 +5839,9 @@ struct PropagateAtLaunchDeserializer;
 impl PropagateAtLaunchDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -6377,7 +6397,9 @@ struct ScalingPolicyEnabledDeserializer;
 impl ScalingPolicyEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]

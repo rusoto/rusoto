@@ -373,7 +373,9 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 /// <p>Container for the parameters to the <code><a>BuildSuggester</a></code> operation. Specifies the name of the domain you want to update.</p>
@@ -3263,7 +3265,9 @@ struct MultiAZDeserializer;
 impl MultiAZDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
+        xml_util::deserialize_primitive(tag_name, stack, |s| {
+            Ok(bool::from_str(&s.to_lowercase()).unwrap())
+        })
     }
 }
 #[allow(dead_code)]
