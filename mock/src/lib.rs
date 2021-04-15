@@ -31,6 +31,25 @@
 //!    // );
 //! }
 //! ```
+//! 
+//! # Note regarding XML-based AWS Services
+//! 
+//! Some AWS services such as SQS and STS return responses in XML format rather than JSON.
+//! 
+//! In these cases, parsing may fail with `ParseError("Expected StartElement got None")`.
+//! 
+//! Valid XML examples can be found in the API documentation for an API call such as
+//! [this one for STS AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html#API_AssumeRole_Example_1_Response).
+//! 
+//! These can be used to create a `MockRequestDispatcher` like so:
+//! 
+//! ```rust
+//! MockRequestDispatcher::default().with_body(r#"
+//! <AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
+//!   ... etc
+//! </AssumeRoleResponse>
+//! "#)
+//! ```
 #![deny(missing_docs)]
 use std::fs::File;
 use std::io::Read;
