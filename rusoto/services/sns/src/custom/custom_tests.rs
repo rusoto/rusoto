@@ -13,7 +13,7 @@ use rusoto_core::Region;
 #[tokio::test]
 async fn should_serialize_map_parameters_in_create_platform_application_request_body() {
     let mock =
-        MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
+        MockRequestDispatcher::with_status(200).with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
@@ -63,7 +63,7 @@ async fn should_serialize_map_parameters_in_create_platform_application_request_
 #[tokio::test]
 async fn should_serialize_map_parameters_in_create_platform_endpoint_request_body() {
     let mock =
-        MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
+        MockRequestDispatcher::with_status(200).with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
@@ -97,7 +97,7 @@ async fn should_serialize_map_parameters_in_create_platform_endpoint_request_bod
 #[tokio::test]
 async fn should_serialize_map_parameters_in_set_platform_application_attributes_request_body() {
     let mock =
-        MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
+        MockRequestDispatcher::with_status(200).with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
@@ -135,7 +135,7 @@ async fn should_serialize_map_parameters_in_set_platform_application_attributes_
 #[tokio::test]
 async fn should_serialize_map_parameters_in_set_endpoint_attributes_request_body() {
     let mock =
-        MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
+        MockRequestDispatcher::with_status(200).with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
@@ -198,7 +198,7 @@ async fn should_serialize_map_parameters_in_get_sms_attributes_request_body() {
 #[tokio::test]
 async fn should_serialize_map_parameters_in_set_sms_attributes_request_body() {
     let mock =
-        MockRequestDispatcher::with_status(200).with_request_checker(|request: &SignedRequest| {
+        MockRequestDispatcher::with_status(200).with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
 
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {

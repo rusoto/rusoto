@@ -11,7 +11,7 @@ use serde_urlencoded;
 async fn should_serialize_complex_metric_data_params() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body("")
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {

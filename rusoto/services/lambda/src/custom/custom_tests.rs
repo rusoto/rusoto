@@ -36,7 +36,7 @@ async fn should_parse_invocation_response() {
         .with_body(r#"{"arbitrary":"json"}"#)
         .with_header("X-Amz-Function-Error", "Handled")
         .with_header("X-Amz-Log-Result", "foo bar baz")
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
                 assert_eq!(b"raw payload", buffer.as_ref());
