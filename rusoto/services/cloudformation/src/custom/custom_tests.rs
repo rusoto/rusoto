@@ -47,7 +47,7 @@ async fn should_serialize_list_parameters_in_request_body() {
             </ResponseMetadata>
         </ListStacksResponse>"#,
         )
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {

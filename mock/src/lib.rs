@@ -72,7 +72,7 @@ pub struct MockRequestDispatcher {
     outcome: RequestOutcome,
     body: Vec<u8>,
     headers: HeaderMap<String>,
-    request_checker: Option<Box<dyn Fn(&SignedRequest) + Send + Sync>>,
+    request_checker: Option<Box<dyn Fn(SignedRequest) + Send + Sync>>,
 }
 
 enum RequestOutcome {
@@ -125,7 +125,7 @@ impl MockRequestDispatcher {
     /// to AWS
     pub fn with_request_checker<F>(mut self, checker: F) -> MockRequestDispatcher
     where
-        F: Fn(&SignedRequest) + Send + Sync + 'static,
+        F: Fn(SignedRequest) + Send + Sync + 'static,
     {
         self.request_checker = Some(Box::new(checker));
         self
@@ -146,7 +146,7 @@ impl DispatchSignedRequest for MockRequestDispatcher {
         _timeout: Option<Duration>,
     ) -> rusoto_core::request::DispatchSignedRequestFuture {
         if self.request_checker.is_some() {
-            self.request_checker.as_ref().unwrap()(&request);
+            self.request_checker.as_ref().unwrap()(request);
         }
         match self.outcome {
             RequestOutcome::Performed(ref status) => futures::future::ready(Ok(HttpResponse {

@@ -212,7 +212,7 @@ async fn list_multipart_upload_parts_happy_path() {
                 <Size>5242880</Size>
             </Part>
         </ListPartsResult>"#)
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/rusoto1440826511/testfile.zip");
             assert!(request.payload.is_none());
@@ -318,7 +318,7 @@ fn bench_parse_list_buckets_response(b: &mut Bencher) {
         </ListAllMyBucketsResult>
         "#,
         )
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/");
             assert!(request.payload.is_none());
@@ -355,7 +355,7 @@ async fn should_parse_sample_list_buckets_response() {
         </ListAllMyBucketsResult>
         "#,
         )
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/");
             assert!(request.payload.is_none());
@@ -421,7 +421,7 @@ async fn should_serialize_complicated_request() {
 
     let mock = MockRequestDispatcher::with_status(200)
         .with_body("")
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/bucket/key");
             assert_eq!(

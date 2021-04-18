@@ -37,7 +37,7 @@ async fn should_serialize_map_parameters_in_request_body() {
             </ResponseMetadata>
         </SendMessageResponse>"#,
         )
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             println!("{:#?}", request.params);
 
             assert_eq!("POST", request.method);
@@ -115,7 +115,7 @@ async fn should_fix_issue_323() {
             </ResponseMetadata>
         </ReceiveMessageResponse>"#,
         )
-        .with_request_checker(|request: &SignedRequest| {
+        .with_request_checker(|request: SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
             if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
@@ -182,9 +182,8 @@ async fn test_parse_queue_does_not_exist_error() {
 
 #[tokio::test]
 async fn should_deserialize_map_parameters_in_response_body() {
-    let mock = MockRequestDispatcher::with_status(200)
-        .with_body(
-            r#"<?xml version="1.0" encoding="UTF-8"?>
+    let mock = MockRequestDispatcher::with_status(200).with_body(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
         <ReceiveMessageResponse>
             <ReceiveMessageResult>
             <Message>
@@ -215,7 +214,7 @@ async fn should_deserialize_map_parameters_in_response_body() {
             </RequestId>
             </ResponseMetadata>
         </ReceiveMessageResponse>"#,
-        );
+    );
 
     let request = ReceiveMessageRequest {
         queue_url: "foo".to_owned(),
@@ -240,8 +239,5 @@ async fn should_deserialize_map_parameters_in_response_body() {
         },
     );
 
-    assert_eq!(
-        message_attributes,
-        message.message_attributes.unwrap(),
-    );
+    assert_eq!(message_attributes, message.message_attributes.unwrap(),);
 }
