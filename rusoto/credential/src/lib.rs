@@ -545,7 +545,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn auto_refreshing_provider_does_not_caches_on_ok() {
+    async fn auto_refreshing_provider_caches_on_ok() {
         let err_provider = ProviderStub {
             responses: Mutex::new(vec![
                 Ok(AwsCredentials::new(
