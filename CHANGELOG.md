@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Swap the non-RustCrypto `md5` crate for the RustCrypto `md-5` crate, to match
   usage of RustCrypto `sha2` crate
 - Remove `Sync` constraint on `ByteStream`-related functions.
+- Avoid caching `CredentialError` in `AutoRefreshingProvider`.
 ## [0.46.0] - 2021-01-05
 
 - Display `rusoto_core::Client` in docs
