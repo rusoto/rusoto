@@ -60,6 +60,7 @@ encoding = ["flate2"]
 nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]
+rustls-webpki = ["hyper-rustls/webpki-tokio"]
 unstable = []
 
 [package.metadata.docs.rs]
