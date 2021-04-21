@@ -223,8 +223,11 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(feature = "rustls")]
+        #[cfg(all(feature = "rustls", not(feature = "rustls-webpki")))]
         let connector = HttpsConnector::with_native_roots();
+
+        #[cfg(feature = "rustls-webpki")]
+        let connector = HttpsConnector::with_webpki_roots();
 
         Ok(Self::from_connector(connector))
     }
@@ -234,8 +237,11 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(feature = "rustls")]
+        #[cfg(all(feature = "rustls", not(feature = "rustls-webpki")))]
         let connector = HttpsConnector::with_native_roots();
+
+        #[cfg(feature = "rustls-webpki")]
+        let connector = HttpsConnector::with_webpki_roots();
 
         Ok(Self::from_connector_with_config(connector, config))
     }
