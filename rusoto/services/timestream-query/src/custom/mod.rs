@@ -112,7 +112,7 @@ impl TimestreamQueryEndpointClient {
         input: CancelQueryRequest,
     ) -> Result<CancelQueryResponse, RusotoError<CancelQueryError>> {
         self.update_endpoint().await.map_err(|e| match e {
-            // Remap any DescribeEndpointError to WriteRecordErrors
+            // Remap any DescribeEndpointError to ThrottlingErrors
             RusotoError::Service(DescribeEndpointsError::Throttling(s)) => {
                 RusotoError::Service(CancelQueryError::Throttling(s))
             }
@@ -137,7 +137,7 @@ impl TimestreamQueryEndpointClient {
         input: QueryRequest,
     ) -> Result<QueryResponse, RusotoError<QueryError>> {
         self.update_endpoint().await.map_err(|e| match e {
-            // Remap any DescribeEndpointError to WriteRecordErrors
+            // Remap any DescribeEndpointError to TrhottelingErrors
             RusotoError::Service(DescribeEndpointsError::Throttling(s)) => {
                 RusotoError::Service(QueryError::Throttling(s))
             }
