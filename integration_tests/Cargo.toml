@@ -589,6 +589,10 @@ path = "../rusoto/services/support"
 optional = true
 path = "../rusoto/services/swf"
 
+[dependencies.rusoto_timestream_write]
+optional = true
+path = "../rusoto/services/timestream-write"
+
 [dependencies.rusoto_timestream_query]
 optional = true
 path = "../rusoto/services/timestream-query"
@@ -809,6 +813,7 @@ all = [
 	"sts",
 	"support",
 	"swf",
+	"timestream-write",
 	"timestream-query",
 	"transcribe",
 	"transfer",
@@ -968,6 +973,7 @@ storagegateway = ["rusoto_storagegateway"]
 sts = ["rusoto_sts", "rusoto_ec2"]
 support = ["rusoto_support"]
 swf = ["rusoto_swf"]
+timestream-write = ["rusoto_timestream_write"]
 timestream-query = ["rusoto_timestream_query"]
 transcribe = ["rusoto_transcribe"]
 transfer = ["rusoto_transfer"]
