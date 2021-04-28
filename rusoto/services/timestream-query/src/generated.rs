@@ -164,9 +164,31 @@ pub struct QueryResponse {
     /// <p> A unique ID for the given query. </p>
     #[serde(rename = "QueryId")]
     pub query_id: String,
+    /// <p>Information about the status of the query, including progress and bytes scannned.</p>
+    #[serde(rename = "QueryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_status: Option<QueryStatus>,
     /// <p> The result set rows returned by the query. </p>
     #[serde(rename = "Rows")]
     pub rows: Vec<Row>,
+}
+
+/// <p>Information about the status of the query, including progress and bytes scannned.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct QueryStatus {
+    /// <p>The amount of data scanned by the query in bytes that you will be charged for. This is a cumulative sum and represents the total amount of data that you will be charged for since the query was started. The charge is applied only once and is either applied when the query completes execution or when the query is cancelled. </p>
+    #[serde(rename = "CumulativeBytesMetered")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cumulative_bytes_metered: Option<i64>,
+    /// <p>The amount of data scanned by the query in bytes. This is a cumulative sum and represents the total amount of bytes scanned since the query was started. </p>
+    #[serde(rename = "CumulativeBytesScanned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cumulative_bytes_scanned: Option<i64>,
+    /// <p>The progress of the query, expressed as a percentage.</p>
+    #[serde(rename = "ProgressPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress_percentage: Option<f64>,
 }
 
 /// <p>Represents a single row in the query results.</p>

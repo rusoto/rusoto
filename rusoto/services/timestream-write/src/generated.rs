@@ -28,7 +28,7 @@ use serde::{Deserialize, Serialize};
 impl TimestreamWriteClient {
     fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
         let mut request = SignedRequest::new(http_method, "timestream", &self.region, request_uri);
-        request.set_endpoint_prefix("ingest-cell1.timestream".to_string());
+        request.set_endpoint_prefix("ingest.timestream".to_string());
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
 
@@ -210,7 +210,7 @@ pub struct Dimension {
     #[serde(rename = "DimensionValueType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dimension_value_type: Option<String>,
-    /// <p> Dimension represents the meta data attributes of the time series. For example, the name and availability zone of an EC2 instance or the name of the manufacturer of a wind turbine are dimensions. <i>Dimension names can only contain alphanumeric characters and underscores. Dimension names cannot end with an underscore.</i> </p>
+    /// <p> Dimension represents the meta data attributes of the time series. For example, the name and availability zone of an EC2 instance or the name of the manufacturer of a wind turbine are dimensions. </p> <p>For constraints on Dimension names, see <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html#limits.naming">Naming Constraints</a>.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The value of the dimension.</p>
@@ -323,7 +323,7 @@ pub struct Record {
     #[serde(rename = "MeasureValueType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub measure_value_type: Option<String>,
-    /// <p> Contains the time at which the measure value for the data point was collected. </p>
+    /// <p> Contains the time at which the measure value for the data point was collected. The time value plus the unit provides the time elapsed since the epoch. For example, if the time value is <code>12345</code> and the unit is <code>ms</code>, then <code>12345 ms</code> have elapsed since the epoch. </p>
     #[serde(rename = "Time")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<String>,
@@ -331,12 +331,18 @@ pub struct Record {
     #[serde(rename = "TimeUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_unit: Option<String>,
+    /// <p>64-bit attribute used for record updates. Write requests for duplicate data with a higher version number will update the existing measure value and version. In cases where the measure value is the same, <code>Version</code> will still be updated . Default value is to 1.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// <p> Records that were not successfully inserted into Timestream due to data validation issues that must be resolved prior to reinserting time series data into the system. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct RejectedRecord {
-    /// <p> The reason why a record was not successfully inserted into Timestream. Possible causes of failure include: </p> <ul> <li> <p> Records with duplicate data where there are multiple records with the same dimensions, timestamps, and measure names but different measure values. </p> </li> <li> <p> Records with timestamps that lie outside the retention duration of the memory store </p> </li> <li> <p> Records with dimensions or measures that exceed the Timestream defined limits. </p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html">Access Management</a> in the Timestream Developer Guide. </p>
+    /// <p>The existing version of the record. This value is populated in scenarios where an identical record exists with a higher version than the version in the write request.</p>
+    pub existing_version: Option<i64>,
+    /// <p> The reason why a record was not successfully inserted into Timestream. Possible causes of failure include: </p> <ul> <li> <p> Records with duplicate data where there are multiple records with the same dimensions, timestamps, and measure names but different measure values. </p> </li> <li> <p> Records with timestamps that lie outside the retention duration of the memory store </p> <note> <p>When the retention window is updated, you will receive a <code>RejectedRecords</code> exception if you immediately try to ingest data within the new window. To avoid a <code>RejectedRecords</code> exception, wait until the duration of the new window to ingest new data. For further information, see <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/best-practices.html#configuration"> Best Practices for Configuring Timestream</a> and <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/storage.html">the explanation of how storage works in Timestream</a>.</p> </note> </li> <li> <p> Records with dimensions or measures that exceed the Timestream defined limits. </p> </li> </ul> <p> For more information, see <a href="https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html">Access Management</a> in the Timestream Developer Guide. </p>
     pub reason: Option<String>,
     /// <p> The index of the record in the input request for WriteRecords. Indexes begin with 0. </p>
     pub record_index: Option<i64>,
@@ -975,6 +981,8 @@ pub enum ListTagsForResourceError {
     InvalidEndpoint(String),
     /// <p>The operation tried to access a nonexistent resource. The resource might not be specified correctly, or its status might not be ACTIVE.</p>
     ResourceNotFound(String),
+    /// <p> Too many requests were made by a user exceeding service quotas. The request was throttled.</p>
+    Throttling(String),
 }
 
 impl ListTagsForResourceError {
@@ -989,6 +997,9 @@ impl ListTagsForResourceError {
                         err.msg,
                     ))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1002,6 +1013,7 @@ impl fmt::Display for ListTagsForResourceError {
         match *self {
             ListTagsForResourceError::InvalidEndpoint(ref cause) => write!(f, "{}", cause),
             ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1015,6 +1027,8 @@ pub enum TagResourceError {
     ResourceNotFound(String),
     /// <p> Instance quota of resource exceeded for this account.</p>
     ServiceQuotaExceeded(String),
+    /// <p> Too many requests were made by a user exceeding service quotas. The request was throttled.</p>
+    Throttling(String),
 }
 
 impl TagResourceError {
@@ -1030,6 +1044,9 @@ impl TagResourceError {
                 "ServiceQuotaExceededException" => {
                     return RusotoError::Service(TagResourceError::ServiceQuotaExceeded(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(TagResourceError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1044,6 +1061,7 @@ impl fmt::Display for TagResourceError {
             TagResourceError::InvalidEndpoint(ref cause) => write!(f, "{}", cause),
             TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             TagResourceError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1057,6 +1075,8 @@ pub enum UntagResourceError {
     ResourceNotFound(String),
     /// <p> Instance quota of resource exceeded for this account.</p>
     ServiceQuotaExceeded(String),
+    /// <p> Too many requests were made by a user exceeding service quotas. The request was throttled.</p>
+    Throttling(String),
 }
 
 impl UntagResourceError {
@@ -1072,6 +1092,9 @@ impl UntagResourceError {
                 "ServiceQuotaExceededException" => {
                     return RusotoError::Service(UntagResourceError::ServiceQuotaExceeded(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UntagResourceError::Throttling(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1086,6 +1109,7 @@ impl fmt::Display for UntagResourceError {
             UntagResourceError::InvalidEndpoint(ref cause) => write!(f, "{}", cause),
             UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             UntagResourceError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1279,13 +1303,13 @@ pub trait TimestreamWrite {
         input: CreateTableRequest,
     ) -> Result<CreateTableResponse, RusotoError<CreateTableError>>;
 
-    /// <p>Deletes a given Timestream database. <i>This is an irreversible operation. After a database is deleted, the time series data from its tables cannot be recovered.</i> </p> <p>All tables in the database must be deleted first, or a ValidationException error will be thrown. </p>
+    /// <p>Deletes a given Timestream database. <i>This is an irreversible operation. After a database is deleted, the time series data from its tables cannot be recovered.</i> </p> <p>All tables in the database must be deleted first, or a ValidationException error will be thrown. </p> <p>Due to the nature of distributed retries, the operation can return either success or a ResourceNotFoundException. Clients should consider them equivalent.</p>
     async fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
     ) -> Result<(), RusotoError<DeleteDatabaseError>>;
 
-    /// <p>Deletes a given Timestream table. This is an irreversible operation. After a Timestream database table is deleted, the time series data stored in the table cannot be recovered. </p>
+    /// <p>Deletes a given Timestream table. This is an irreversible operation. After a Timestream database table is deleted, the time series data stored in the table cannot be recovered. </p> <p>Due to the nature of distributed retries, the operation can return either success or a ResourceNotFoundException. Clients should consider them equivalent.</p>
     async fn delete_table(
         &self,
         input: DeleteTableRequest,
@@ -1432,7 +1456,7 @@ impl TimestreamWrite for TimestreamWriteClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTableResponse, _>()
     }
 
-    /// <p>Deletes a given Timestream database. <i>This is an irreversible operation. After a database is deleted, the time series data from its tables cannot be recovered.</i> </p> <p>All tables in the database must be deleted first, or a ValidationException error will be thrown. </p>
+    /// <p>Deletes a given Timestream database. <i>This is an irreversible operation. After a database is deleted, the time series data from its tables cannot be recovered.</i> </p> <p>All tables in the database must be deleted first, or a ValidationException error will be thrown. </p> <p>Due to the nature of distributed retries, the operation can return either success or a ResourceNotFoundException. Clients should consider them equivalent.</p>
     async fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
@@ -1449,7 +1473,7 @@ impl TimestreamWrite for TimestreamWriteClient {
         Ok(())
     }
 
-    /// <p>Deletes a given Timestream table. This is an irreversible operation. After a Timestream database table is deleted, the time series data stored in the table cannot be recovered. </p>
+    /// <p>Deletes a given Timestream table. This is an irreversible operation. After a Timestream database table is deleted, the time series data stored in the table cannot be recovered. </p> <p>Due to the nature of distributed retries, the operation can return either success or a ResourceNotFoundException. Clients should consider them equivalent.</p>
     async fn delete_table(
         &self,
         input: DeleteTableRequest,
