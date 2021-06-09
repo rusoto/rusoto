@@ -335,7 +335,8 @@ impl SignedRequest {
         self.params
             .insert("X-Amz-Date".into(), Some(current_time_fmted.to_string()));
 
-        self.canonical_query_string = build_canonical_query_string(&self.params);
+        self.canonical_query_string =
+            build_canonical_query_string(&self.params, !should_include_token(self.service.as_str()));
 
         debug!("canonical_uri: {:?}", self.canonical_uri);
         debug!("canonical_headers: {:?}", canonical_headers);
@@ -400,7 +401,7 @@ impl SignedRequest {
             self.scheme(),
             hostname,
             self.canonical_uri,
-            build_canonical_query_string(&self.params)
+            build_canonical_query_string(&self.params, should_include_token(self.service.as_str()))
         )
     }
 
@@ -411,7 +412,8 @@ impl SignedRequest {
     pub fn complement(&mut self) {
         // build the canonical request
         self.canonical_uri = self.canonical_path();
-        self.canonical_query_string = build_canonical_query_string(&self.params);
+        self.canonical_query_string =
+            build_canonical_query_string(&self.params, should_include_token(self.service.as_str()));
         // Gotta remove and re-add headers since by default they append the value.  If we're following
         // a 307 redirect we end up with Three Stooges in the headers with duplicate values.
         self.remove_header("host");
@@ -681,6 +683,14 @@ fn skipped_headers(header: &str) -> bool {
     ["authorization", "content-length", "user-agent"].contains(&header)
 }
 
+/// Whether to include `X-Amz-Security-Token` in the canonical (signed) request,
+/// or at the end, after the signature is calculated.
+///
+/// Read more about this in the note: [HERE](https://docs.aws.amazon.com/general/latest/gr/sigv4-add-signature-to-request.html)
+fn should_include_token(service: &str) -> bool {
+    ["iotdevicegateway"].contains(&service)
+}
+
 /// Returns standardised URI
 fn canonical_uri(path: &str, region: &Region) -> String {
     let endpoint_path = match region {
@@ -698,13 +708,16 @@ fn canonical_uri(path: &str, region: &Region) -> String {
 /// Canonicalizes query while iterating through the given paramaters
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
-fn build_canonical_query_string(params: &Params) -> String {
+fn build_canonical_query_string(params: &Params, include_token: bool) -> String {
     if params.is_empty() {
         return String::new();
     }
 
     let mut output = String::new();
     for (key, val) in params.iter() {
+        if !include_token && key.as_str() == "X-Amz-Security-Token" {
+            continue;
+        }
         if !output.is_empty() {
             output.push_str("&");
         }
@@ -904,7 +917,7 @@ mod tests {
         let mut params = Params::new();
         for code in start..end {
             params.insert("k".to_owned(), Some((code as char).to_string()));
-            let enc = build_canonical_query_string(&params);
+            let enc = build_canonical_query_string(&params, should_include_token("s3"));
             let expected = format!("k=%{:02X}", code);
             assert_eq!(expected, enc);
         }
@@ -920,7 +933,7 @@ mod tests {
         request.add_param("arg1%7B", "arg1%7B");
         request.add_param("arg2%7B+%2B", "+%2B");
         assert_eq!(
-            super::build_canonical_query_string(&request.params),
+            super::build_canonical_query_string(&request.params, should_include_token("s3")),
             "arg1%257B=arg1%257B&arg2%257B%2B%252B=%2B%252B"
         );
         assert_eq!(
@@ -940,7 +953,7 @@ mod tests {
             "key:with@funny&characters",
             "value with/funny%characters/Рускии",
         );
-        let canonical_query_string = super::build_canonical_query_string(&request.params);
+        let canonical_query_string = super::build_canonical_query_string(&request.params, should_include_token("s3"));
         assert_eq!("key%3Awith%40funny%26characters=value%20with%2Ffunny%25characters%2F%D0%A0%D1%83%D1%81%D0%BA%D0%B8%D0%B8",
                    canonical_query_string);
         let canonical_uri_string = super::canonical_uri(&request.path, &Region::default());
@@ -953,7 +966,7 @@ mod tests {
     fn query_string_literal_plus() {
         let mut params = Params::new();
         params.insert("key".into(), Some("val+ue".into()));
-        let encoded = build_canonical_query_string(&params);
+        let encoded = build_canonical_query_string(&params, should_include_token("s3"));
         assert_eq!("key=val%2Bue", encoded);
     }
 
