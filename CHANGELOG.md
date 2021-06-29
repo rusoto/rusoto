@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Update to `serde_urlencoded` 0.7
-- Update to `rustc_version` 0.3
+- Update to `rustc_version` 0.4
+- Update to `shlex` 1.0
+- Update to  `hmac` 0.4
 - Replace `time`-related types in `rusoto_signature` with `chrono` types, to
   match `rusoto_credential`
 - Swap the non-RustCrypto `md5` crate for the RustCrypto `md-5` crate, to match
   usage of RustCrypto `sha2` crate
 - Remove `Sync` constraint on `ByteStream`-related functions.
-- Update minimum versions of async-trait, percent-encoding, and serde.
+- Update incorrect minimum versions of `async-trait`, `percent-encoding`, and
+  `serde`
+- Avoid unnecessary calls to `to_string`
+- Remove unpublished and outdated `helpers` crate
+
 ## [0.46.0] - 2021-01-05
 
 - Display `rusoto_core::Client` in docs
