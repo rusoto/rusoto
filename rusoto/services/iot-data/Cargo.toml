@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_iot_data"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.46.0"
+version = "0.47.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -26,7 +26,7 @@ serde_derive = "1.0.103"
 version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.46.0"
+version = "0.47.0"
 path = "../../core"
 default-features = false
 
@@ -34,7 +34,7 @@ default-features = false
 tokio = "1.0"
 
 [dev-dependencies.rusoto_mock]
-version = "0.46.0"
+version = "0.47.0"
 path = "../../../mock"
 default-features = false
 

@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+(Please put changes here.)
+
+## [0.47.0] - 2021-06-29
+
 - Update to botocore 1.20.102
 - Update to `serde_urlencoded` 0.7
 - Update to `rustc_version` 0.4
@@ -412,7 +416,8 @@ such as an S3 key returned in `list_objects_v2`
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
 
-[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.46.0...HEAD
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.47.0...HEAD
+[0.47.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.46.0...rusoto-v0.47.0
 [0.46.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.45.0...rusoto-v0.46.0
 [0.45.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.44.0...rusoto-v0.45.0
 [0.44.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.43.0...rusoto-v0.44.0
