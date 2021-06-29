@@ -17,14 +17,14 @@ homepage = "https://www.rusoto.org/"
 edition = "2018"
 
 [build-dependencies]
-rustc_version = "0.3"
+rustc_version = "0.4"
 
 [dependencies]
 bytes = "1.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 digest = "0.9.0"
 futures = "0.3"
-hmac = "0.10"
+hmac = "0.11"
 http = "0.2"
 hyper = { version = "0.14", features = ["stream"] }
 log = "0.4.1"
